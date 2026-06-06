@@ -16,6 +16,13 @@ export const nav: NavSection[] = [
   },
   {
     title: 'Components',
-    items: [{ label: 'Button', to: '/components/button' }],
+    items: [
+      { label: 'Button', to: '/components/button' },
+      { label: 'Card', to: '/components/card' },
+      { label: 'Chip', to: '/components/chip' },
+      { label: 'Input', to: '/components/input' },
+      { label: 'Modal', to: '/components/modal' },
+      { label: 'Switch', to: '/components/switch' },
+    ],
   },
 ]
