@@ -75,7 +75,7 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 | Phase | Work | Output | Est. |
 | --- | --- | --- | --- |
 | **P0** ✅ | Extract `@kun/tokens` (CSS) + `@kun/core` (cn/variants/types/utils) | shared foundation | done |
-| **P1** | Decouple `@kun/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
+| **P1** 🚧 | Decouple `@kun/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
 | **P2** | `@kun/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject Nuxt image/icon | existing Nuxt DX, zero regression | 1–2 d |
 | **P3** | `@kun/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
 | **P4** | React interactive components on Ark UI/Zag | React feature parity | 2–3 wk |
@@ -85,7 +85,33 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 upgrade a "Nuxt-only" library into "any-Vue-project + cross-framework
 foundation laid." React is an opt-in increment from P3 on.
 
-## 6. P1 decoupling checklist (when we start the Vue layer)
+## 6. P1 decoupling checklist
+
+**Status:** the package, Vite library build (JS + scoped CSS), and vue-tsc
+type emission are established, and the decoupling pattern is proven on
+`KunButton`, `KunCard`, `KunIcon`, `KunRipple` — verified by an SSR render
+test (renders `<button>` / `<a href>` correctly with no Nuxt runtime). The
+items below are the full P1 scope; the remaining ~40 components port
+mechanically against the same pattern.
+
+- [x] Replace Nuxt auto-imports with explicit imports (the four landed
+  components do this; consider `unplugin-auto-import` +
+  `unplugin-vue-components` later for in-repo DX parity).
+- [x] Abstract the Nuxt module touch-points behind injectable config slots:
+  - [x] `NuxtLink` → `config.linkComponent` (default `<a>`; pass `href` for
+    string tags, `to` for RouterLink/NuxtLink components).
+  - [x] `@nuxt/icon` (`<NuxtIcon>`) → `config.iconComponent` (default
+    `@iconify/vue`; same Iconify names so call sites are unchanged).
+  - [ ] `@nuxt/image` (`<NuxtImg>`) → `config.imageComponent` — add when
+    porting `Image.vue`.
+- [ ] Rework `useKunMessage` to mount its container without stealing the
+  Nuxt app context (framework-neutral teleport target).
+- [ ] Port `sanitize.ts` off `import.meta.server` (inject an `isServer`
+  flag) before it can move into a shared package.
+- [x] Consume `@kun/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
+  `kunRoundedClasses`) instead of in-package copies.
+
+### Original checklist (full P1 scope)
 
 - Replace Nuxt auto-imports with explicit imports (or `unplugin-auto-import`
   + `unplugin-vue-components` for DX parity outside Nuxt).

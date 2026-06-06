@@ -1,0 +1,45 @@
+{
+  "name": "@kun/ui-vue",
+  "version": "0.0.1",
+  "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kun/ui-nuxt for Nuxt sugar.",
+  "type": "module",
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "build": "vite build && vue-tsc -p tsconfig.build.json",
+    "dev": "vite build --watch",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@iconify/vue": "^5.0.1",
+    "@kun/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@kun/tokens": "workspace:*",
+    "@types/node": "^22.10.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.16",
+    "vue": "^3.5.35",
+    "vue-tsc": "^3.3.3"
+  }
+}
