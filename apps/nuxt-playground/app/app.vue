@@ -77,6 +77,19 @@ const tabItems: KunTabItem[] = [
       </KunTooltip>
     </section>
 
+    <section class="flex flex-wrap items-center gap-4">
+      <!-- KunLink → NuxtLink; KunImage → @nuxt/image (KunNuxtImg wrapper) -->
+      <KunLink to="/about" color="primary">Internal link</KunLink>
+      <KunImage
+        src="/test.png"
+        provider="none"
+        alt="via @nuxt/image"
+        :width="64"
+        :height="64"
+        :skeleton="false"
+      />
+    </section>
+
     <!-- Mounted once; renders all toasts (Teleported to body). -->
     <KunMessageProvider />
   </div>

@@ -1,7 +1,11 @@
 import type { App, Plugin } from 'vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
+import KunDivider from './components/Divider.vue'
 import KunIcon from './components/Icon.vue'
+import KunImage from './components/Image.vue'
+import KunImageNative from './components/ImageNative.vue'
+import KunLink from './components/Link.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunPopover from './components/Popover.vue'
@@ -14,7 +18,11 @@ import KunTooltip from './components/Tooltip.vue'
 export {
   KunButton,
   KunCard,
+  KunDivider,
   KunIcon,
+  KunImage,
+  KunImageNative,
+  KunLink,
   KunMessageProvider,
   KunModal,
   KunPopover,
@@ -58,12 +66,20 @@ export type {
   KunTooltipProps,
   KunPopoverProps,
   KunPopoverPosition,
+  KunImageProps,
+  KunImageNativeProps,
+  KunLinkProps,
+  KunDividerProps,
 } from './components/types'
 
 const components = {
   KunButton,
   KunCard,
+  KunDivider,
   KunIcon,
+  KunImage,
+  KunImageNative,
+  KunLink,
   KunMessageProvider,
   KunModal,
   KunPopover,

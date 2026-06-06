@@ -39,6 +39,14 @@ export interface KunUIConfig {
    *  Return type is `unknown` so router helpers with polymorphic returns
    *  (Nuxt's `navigateTo`) assign cleanly; callers may `await` it. */
   navigate: (href: string) => unknown
+
+  /** Element/component KunImage renders for the actual image. Default
+   *  `'img'` (native — KunImage keeps its skeleton/aspect/objectFit logic
+   *  and passes only standard HTML img attributes). The Nuxt layer injects
+   *  an `@nuxt/image` `<NuxtImg>` wrapper so the optimization props
+   *  (provider/format/quality/densities/sizes/placeholder/preload) take
+   *  effect; with the native default those props are omitted. */
+  imageComponent: Component | string
 }
 
 const KUN_UI_CONFIG_KEY: InjectionKey<KunUIConfig> = Symbol('kun-ui-config')
@@ -52,6 +60,7 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
   navigate: (href: string) => {
     if (typeof window !== 'undefined') window.location.assign(href)
   },
+  imageComponent: 'img',
 }
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {

@@ -93,10 +93,12 @@ type emission are established, and the decoupling pattern is proven on
 focus-trap + body-scroll-lock), the **message/toast system** (re-architected
 off its Nuxt-context hack onto a store + mounted provider), and
 `KunTab` / `KunTooltip` / `KunPopover` (the latter two on `@floating-ui/vue`;
-Tab's `navigateTo` coupling replaced by an injectable `config.navigate`) —
-all verified through both the Vite playground and Nuxt SSR prerender. The
-items below are the full P1 scope; the remaining ~30 components port
-mechanically against the same pattern.
+Tab's `navigateTo` coupling replaced by an injectable `config.navigate`),
+plus `KunImage` / `KunImageNative` / `KunLink` / `KunDivider` (Image completes
+the Nuxt-module trio via the `config.imageComponent` slot) — all verified
+through both the Vite playground and Nuxt SSR prerender. The items below are
+the full P1 scope; the remaining ~26 components port mechanically against the
+same pattern.
 
 - [x] Replace Nuxt auto-imports with explicit imports (the four landed
   components do this; consider `unplugin-auto-import` +
@@ -106,8 +108,9 @@ mechanically against the same pattern.
     string tags, `to` for RouterLink/NuxtLink components).
   - [x] `@nuxt/icon` (`<NuxtIcon>`) → `config.iconComponent`, used ONLY as a
     fallback for icons not in the bundled registry (see icons below).
-  - [ ] `@nuxt/image` (`<NuxtImg>`) → `config.imageComponent` — add when
-    porting `Image.vue`.
+  - [x] `@nuxt/image` (`<NuxtImg>`) → `config.imageComponent` (default native
+    `<img>`; KunImage forwards the optimization props only to an injected
+    component). **All three Nuxt modules (Link/Icon/Image) now decoupled.**
 - [x] Rework `useKunMessage` to mount its container without stealing the
   Nuxt app context — replaced the imperative `render()` + stolen
   `vueApp._context` with a pure module store + a mounted `<KunMessageProvider>`

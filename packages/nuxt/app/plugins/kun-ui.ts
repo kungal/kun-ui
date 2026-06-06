@@ -1,5 +1,6 @@
 import { installKunUIConfig } from '@kungal/ui-vue'
 import KunNuxtIcon from '../components/KunNuxtIcon.vue'
+import KunNuxtImg from '../components/KunNuxtImg.vue'
 
 // Inject the Nuxt-flavoured implementations into KunUI's config at the app
 // level (server + client). This is the entire bridge that restores the
@@ -7,6 +8,7 @@ import KunNuxtIcon from '../components/KunNuxtIcon.vue'
 //   - linkComponent → NuxtLink  (SSR-aware client-side navigation; KunUI
 //     passes the destination as `to` because it's a component, not a tag)
 //   - iconComponent → @nuxt/icon (via the KunNuxtIcon wrapper)
+//   - imageComponent → @nuxt/image (via the KunNuxtImg wrapper)
 //   - navigate → navigateTo  (imperative router nav for Tab `href`, etc.)
 //
 // `defineNuxtPlugin` / `defineNuxtLink` / `navigateTo` are Nuxt auto-imports.
@@ -16,6 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   installKunUIConfig(nuxtApp.vueApp, {
     linkComponent: NuxtLink,
     iconComponent: KunNuxtIcon,
+    imageComponent: KunNuxtImg,
     navigate: (href: string) => navigateTo(href),
   })
 })

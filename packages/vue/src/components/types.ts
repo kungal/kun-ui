@@ -108,3 +108,69 @@ export interface KunPopoverProps {
   autoPosition?: boolean
   rounded?: KunUIRounded
 }
+
+// ── Image ──────────────────────────────────────────────────────────────
+export interface KunImageProps {
+  src: string
+  alt?: string
+  loading?: 'lazy' | 'eager'
+  className?: string
+  ariaLabel?: string
+  width?: string | number
+  height?: string | number
+  // Renders a sibling skeleton overlay while loading (Radix-Avatar
+  // 3-state machine). Default true; set false for a bare element.
+  skeleton?: boolean
+  // CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image
+  // is absolutely positioned and fills the box.
+  aspectRatio?: string
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
+  // Classes for the inner image (wrapper gets `className`).
+  imageClassName?: string
+  decoding?: 'sync' | 'async' | 'auto'
+  fetchpriority?: 'high' | 'low' | 'auto'
+  // ── @nuxt/image optimization props — only applied when an image
+  //    component is injected (Nuxt). Ignored by the native <img> default.
+  placeholder?:
+    | string
+    | number
+    | boolean
+    | [w: number, h: number, q?: number, b?: number]
+  format?: string
+  quality?: string | number
+  preload?: boolean | { fetchPriority: 'auto' | 'high' | 'low' }
+  provider?: 'ipx' | 'none' | (string & {})
+  densities?: string
+  sizes?: string
+}
+
+export interface KunImageNativeProps {
+  src: string
+  alt?: string
+  ariaLabel?: string
+  width?: string | number
+  height?: string | number
+  className?: string
+}
+
+// ── Link ───────────────────────────────────────────────────────────────
+export interface KunLinkProps {
+  href?: string
+  to?: string | Record<string, string>
+  color?: KunUIColor
+  underline?: 'none' | 'hover' | 'always'
+  size?: KunUISize
+  className?: string
+  rel?: string
+  target?: '_blank' | '_self' | '_parent' | '_top'
+  isShowAnchorIcon?: boolean
+}
+
+// ── Divider ────────────────────────────────────────────────────────────
+export interface KunDividerProps {
+  orientation?: 'horizontal' | 'vertical'
+  color?: KunUIColor
+  borderStyle?: 'solid' | 'dashed'
+  className?: string
+  withLabel?: boolean
+}

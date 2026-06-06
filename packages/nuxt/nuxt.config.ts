@@ -8,7 +8,11 @@ import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 const KUN_COMPONENTS = [
   'KunButton',
   'KunCard',
+  'KunDivider',
   'KunIcon',
+  'KunImage',
+  'KunImageNative',
+  'KunLink',
   'KunMessageProvider',
   'KunModal',
   'KunPopover',
