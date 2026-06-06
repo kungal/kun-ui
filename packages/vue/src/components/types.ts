@@ -377,3 +377,57 @@ export interface KunDrawerProps {
   className?: string
   innerClassName?: string
 }
+
+// ── Copy ───────────────────────────────────────────────────────────────
+export interface KunCopyProps {
+  text: string
+  name?: string
+  variant?: KunUIVariant
+  color?: KunUIColor
+  size?: KunUISize
+  rounded?: KunUIRounded
+  className?: string
+}
+
+// ── Rating ─────────────────────────────────────────────────────────────
+export interface KunRatingProps {
+  max?: number
+  readonly?: boolean
+  disabled?: boolean
+  size?: 'sm' | 'md' | 'lg'
+  ariaLabel?: string
+}
+
+// ── Null (empty state) ─────────────────────────────────────────────────
+export interface KunNullProps {
+  description?: string
+  isShowSticker?: boolean
+}
+
+// ── Brand ──────────────────────────────────────────────────────────────
+export interface KunBrandProps {
+  name: string
+  iconSrc?: string
+  iconAlt?: string
+  iconClass?: string
+  badge?: string
+  badgeColor?: KunUIColor
+  to?: string
+  nameClass?: string
+}
+
+// ── ScrollShadow ───────────────────────────────────────────────────────
+export interface KunScrollShadowProps {
+  axis?: 'horizontal' | 'vertical'
+  shadowColor?: string
+  shadowSize?: string
+  className?: string
+  contentClass?: string
+}
+
+// ── Pagination ─────────────────────────────────────────────────────────
+export interface KunPaginationProps {
+  currentPage: number
+  totalPage: number
+  isLoading?: boolean
+}

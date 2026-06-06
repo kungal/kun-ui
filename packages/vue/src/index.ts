@@ -1,13 +1,17 @@
 import type { App, Plugin } from 'vue'
 import KunBadge from './components/Badge.vue'
+import KunBrand from './components/Brand.vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
 import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
 import KunContextMenu from './components/ContextMenu.vue'
+import KunCopy from './components/Copy.vue'
 import KunDivider from './components/Divider.vue'
 import KunDropdown from './components/Dropdown.vue'
 import KunDrawer from './components/Drawer.vue'
+import KunFadeCard from './components/FadeCard.vue'
+import KunFavicon from './components/Favicon.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
@@ -17,11 +21,15 @@ import KunLink from './components/Link.vue'
 import KunLoading from './components/Loading.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
+import KunNull from './components/Null.vue'
+import KunPagination from './components/Pagination.vue'
 import KunPopover from './components/Popover.vue'
 import KunProgress from './components/Progress.vue'
 import KunRadioGroup from './components/RadioGroup.vue'
+import KunRating from './components/Rating.vue'
 import KunSelect from './components/Select.vue'
 import KunRipple from './components/Ripple.vue'
+import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSlider from './components/Slider.vue'
 import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
@@ -32,14 +40,18 @@ import KunTooltip from './components/Tooltip.vue'
 // globally with the KunUI plugin (below).
 export {
   KunBadge,
+  KunBrand,
   KunButton,
   KunCard,
   KunCheckBox,
   KunChip,
   KunContextMenu,
+  KunCopy,
   KunDivider,
   KunDrawer,
   KunDropdown,
+  KunFadeCard,
+  KunFavicon,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -49,10 +61,14 @@ export {
   KunLoading,
   KunMessageProvider,
   KunModal,
+  KunNull,
+  KunPagination,
   KunPopover,
   KunProgress,
   KunRadioGroup,
+  KunRating,
   KunRipple,
+  KunScrollShadow,
   KunSelect,
   KunSlider,
   KunSwitch,
@@ -72,6 +88,9 @@ export {
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
+export { useKunCopy } from './composables/useKunCopy'
+// Re-export framework-agnostic helpers consumers commonly reach for.
+export { getRandomSticker, decodeIfEncoded } from '@kungal/core'
 
 // Message (toast) system — imperative trigger + read store. Mount
 // <KunMessageProvider/> once near your app root.
@@ -125,18 +144,28 @@ export type {
   KunDrawerProps,
   KunDrawerPlacement,
   KunDrawerSize,
+  KunCopyProps,
+  KunRatingProps,
+  KunNullProps,
+  KunBrandProps,
+  KunScrollShadowProps,
+  KunPaginationProps,
 } from './components/types'
 
 const components = {
   KunBadge,
+  KunBrand,
   KunButton,
   KunCard,
   KunCheckBox,
   KunChip,
   KunContextMenu,
+  KunCopy,
   KunDivider,
   KunDrawer,
   KunDropdown,
+  KunFadeCard,
+  KunFavicon,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -146,10 +175,14 @@ const components = {
   KunLoading,
   KunMessageProvider,
   KunModal,
+  KunNull,
+  KunPagination,
   KunPopover,
   KunProgress,
   KunRadioGroup,
+  KunRating,
   KunRipple,
+  KunScrollShadow,
   KunSelect,
   KunSlider,
   KunSwitch,
