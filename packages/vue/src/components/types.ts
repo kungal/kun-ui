@@ -174,3 +174,57 @@ export interface KunDividerProps {
   className?: string
   withLabel?: boolean
 }
+
+// ── Badge ──────────────────────────────────────────────────────────────
+export interface KunBadgeProps {
+  variant?: 'dot' | 'count'
+  count?: number
+  max?: number
+  showZero?: boolean
+  show?: boolean
+  color?: KunUIColor
+  size?: 'sm' | 'md' | 'lg'
+  placement?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+  className?: string
+}
+
+// ── Chip ───────────────────────────────────────────────────────────────
+export interface KunChipProps {
+  className?: string
+  color?: KunUIColor
+  size?: KunUISize
+  variant?: KunUIVariant
+}
+
+// ── Progress ───────────────────────────────────────────────────────────
+export interface KunProgressProps {
+  value?: number
+  max?: number
+  variant?: KunUIVariant | 'gradient' | 'circle' | 'striped'
+  color?: KunUIColor
+  size?: KunUISize
+  rounded?: KunUIRounded
+  showLabel?: boolean
+  indeterminate?: boolean
+  className?: string
+}
+
+// ── Info ───────────────────────────────────────────────────────────────
+export interface KunInfoProps {
+  title?: string
+  description?: string
+  className?: string
+  color?: KunUIColor
+  variant?: KunUIVariant
+  icon?: string
+  rounded?: KunUIRounded
+}
+
+// ── Loading ────────────────────────────────────────────────────────────
+export interface KunLoadingProps {
+  loading?: boolean
+  description?: string
+  /** Image shown while loading. Default '/kun.webp' (must exist in the
+   *  consuming app's public dir). */
+  src?: string
+}

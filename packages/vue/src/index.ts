@@ -1,14 +1,19 @@
 import type { App, Plugin } from 'vue'
+import KunBadge from './components/Badge.vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
+import KunChip from './components/Chip.vue'
 import KunDivider from './components/Divider.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
+import KunInfo from './components/Info.vue'
 import KunLink from './components/Link.vue'
+import KunLoading from './components/Loading.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunPopover from './components/Popover.vue'
+import KunProgress from './components/Progress.vue'
 import KunRipple from './components/Ripple.vue'
 import KunTab from './components/Tab.vue'
 import KunTooltip from './components/Tooltip.vue'
@@ -16,16 +21,21 @@ import KunTooltip from './components/Tooltip.vue'
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
 export {
+  KunBadge,
   KunButton,
   KunCard,
+  KunChip,
   KunDivider,
   KunIcon,
   KunImage,
   KunImageNative,
+  KunInfo,
   KunLink,
+  KunLoading,
   KunMessageProvider,
   KunModal,
   KunPopover,
+  KunProgress,
   KunRipple,
   KunTab,
   KunTooltip,
@@ -70,19 +80,29 @@ export type {
   KunImageNativeProps,
   KunLinkProps,
   KunDividerProps,
+  KunBadgeProps,
+  KunChipProps,
+  KunProgressProps,
+  KunInfoProps,
+  KunLoadingProps,
 } from './components/types'
 
 const components = {
+  KunBadge,
   KunButton,
   KunCard,
+  KunChip,
   KunDivider,
   KunIcon,
   KunImage,
   KunImageNative,
+  KunInfo,
   KunLink,
+  KunLoading,
   KunMessageProvider,
   KunModal,
   KunPopover,
+  KunProgress,
   KunRipple,
   KunTab,
   KunTooltip,
