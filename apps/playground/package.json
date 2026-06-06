@@ -1,5 +1,5 @@
 {
-  "name": "@kun/ui-playground",
+  "name": "@kungal/ui-playground",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,9 +11,9 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@kun/core": "workspace:*",
-    "@kun/tokens": "workspace:*",
-    "@kun/ui-vue": "workspace:*",
+    "@kungal/core": "workspace:*",
+    "@kungal/tokens": "workspace:*",
+    "@kungal/ui-vue": "workspace:*",
     "vue": "^3.5.35"
   },
   "devDependencies": {

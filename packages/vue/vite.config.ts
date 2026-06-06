@@ -16,9 +16,15 @@ export default defineConfig({
       cssFileName: 'style',
     },
     rollupOptions: {
-      // Keep the framework + shared packages external — they are peer/
-      // runtime deps the consumer already has, not things to inline.
-      external: ['vue', '@kun/core', '@iconify/vue'],
+      // Externalize the framework + every runtime dependency (incl. their
+      // subpath imports like @vueuse/integrations/useFocusTrap) so they are
+      // not inlined — consumers dedupe them via node_modules.
+      external: (id) =>
+        id === 'vue' ||
+        id === '@kungal/core' ||
+        id === '@iconify/vue' ||
+        id === 'focus-trap' ||
+        id.startsWith('@vueuse/'),
     },
   },
 })

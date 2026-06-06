@@ -3,7 +3,7 @@ import type {
   KunUIColor,
   KunUISize,
   KunUIRounded,
-} from '@kun/core'
+} from '@kungal/core'
 
 export interface KunButtonProps {
   variant?: KunUIVariant
@@ -34,4 +34,13 @@ export interface KunCardProps {
   rounded?: KunUIRounded
   color?: KunUIColor | 'background'
   darkBorder?: boolean
+}
+
+export interface KunModalProps {
+  className?: string
+  innerClassName?: string
+  isDismissable?: boolean
+  isShowCloseButton?: boolean
+  withContainer?: boolean
+  rounded?: KunUIRounded
 }

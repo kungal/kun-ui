@@ -1,7 +1,7 @@
-# @kun/ui-nuxt
+# @kungal/ui-nuxt
 
 The **Nuxt Layer** for KunUI. It wraps the Nuxt-decoupled
-[`@kun/ui-vue`](../vue) package and restores the full Nuxt developer
+[`@kungal/ui-vue`](../vue) package and restores the full Nuxt developer
 experience on top of it:
 
 - **auto-imports** every KunUI component (`<KunButton>`, `<KunCard>`,
@@ -14,7 +14,7 @@ experience on top of it:
 - registers `@nuxt/icon` + `@nuxt/image`.
 
 It deliberately does **not** own a Tailwind entry — your app keeps one
-stylesheet that imports Tailwind + `@kun/tokens` and declares the
+stylesheet that imports Tailwind + `@kungal/tokens` and declares the
 `@source` scan (that path is node_modules-layout-specific). See below.
 
 Net effect: a Nuxt app consuming this layer behaves like the original
@@ -26,7 +26,7 @@ are now framework-decoupled and shared with the (future) React layer.
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  extends: ['@kun/ui-nuxt'],
+  extends: ['@kungal/ui-nuxt'],
 })
 ```
 
@@ -36,9 +36,9 @@ Add one Tailwind entry stylesheet in your app and register it
 ```css
 /* assets/css/main.css */
 @import 'tailwindcss';
-@import '@kun/tokens';
-@source '../../node_modules/@kun/ui-vue/dist'; /* component classes */
-@source '../../node_modules/@kun/core/dist';   /* variant × color matrix */
+@import '@kungal/tokens';
+@source '../../node_modules/@kungal/ui-vue/dist'; /* component classes */
+@source '../../node_modules/@kungal/core/dist';   /* variant × color matrix */
 ```
 
 (Tailwind v4 in Nuxt also needs the `@tailwindcss/vite` plugin in
@@ -54,7 +54,7 @@ Add one Tailwind entry stylesheet in your app and register it
 
 ## How the bridge works
 
-`@kun/ui-vue` deliberately has no Nuxt dependency — its `linkComponent` /
+`@kungal/ui-vue` deliberately has no Nuxt dependency — its `linkComponent` /
 `iconComponent` config slots default to a plain `<a>` and `@iconify/vue`.
 This layer's plugin (`app/plugins/kun-ui.ts`) calls `installKunUIConfig`
 at the app level with `NuxtLink` + a thin `@nuxt/icon` wrapper, so every

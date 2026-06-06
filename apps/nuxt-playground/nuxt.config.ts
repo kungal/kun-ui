@@ -1,11 +1,11 @@
 import tailwindcss from '@tailwindcss/vite'
 
-// Minimal consumer of the @kun/ui-nuxt layer. Everything KunUI-related
+// Minimal consumer of the @kungal/ui-nuxt layer. Everything KunUI-related
 // (component auto-imports, NuxtLink/@nuxt/icon injection, @nuxt/icon +
 // @nuxt/image modules) comes from `extends`. The app only owns its
 // Tailwind entry — see app/assets/css/main.css.
 export default defineNuxtConfig({
-  extends: ['@kun/ui-nuxt'],
+  extends: ['@kungal/ui-nuxt'],
 
   css: ['~/assets/css/main.css'],
 

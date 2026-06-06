@@ -1,14 +1,14 @@
 /*
- * @kun/tokens/base — opinionated base layer (OPTIONAL).
+ * @kungal/tokens/base — opinionated base layer (OPTIONAL).
  *
  * Global resets + page background + scrollbar/font helpers that KunUI
  * apps generally want. Kept separate from tokens.css so a host app that
  * only wants the design tokens (colors/radius/z/animations) can import
- * `@kun/tokens/css` alone and NOT have its global element styles touched.
+ * `@kungal/tokens/css` alone and NOT have its global element styles touched.
  *
  * Import after tokens.css if you want it:
- *   @import '@kun/tokens/css';
- *   @import '@kun/tokens/base.css';
+ *   @import '@kungal/tokens/css';
+ *   @import '@kungal/tokens/base.css';
  */
 
 @layer base {

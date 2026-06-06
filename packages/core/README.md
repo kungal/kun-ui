@@ -1,4 +1,4 @@
-# @kun/core
+# @kungal/core
 
 The **framework-agnostic foundation** every KunUI render layer is built
 on. Pure TypeScript — no Vue, no React, no DOM coupling. Ships dual
@@ -37,6 +37,6 @@ const rounded = useMemo(() => resolveRounded(rounded, 'lg', cfg.rounded), [round
 ## Build
 
 ```bash
-pnpm --filter @kun/core build      # tsup → dist (esm + cjs + d.ts)
-pnpm --filter @kun/core typecheck
+pnpm --filter @kungal/core build      # tsup → dist (esm + cjs + d.ts)
+pnpm --filter @kungal/core typecheck
 ```

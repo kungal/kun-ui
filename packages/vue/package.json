@@ -1,8 +1,12 @@
 {
-  "name": "@kun/ui-vue",
+  "name": "@kungal/ui-vue",
   "version": "0.0.1",
-  "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kun/ui-nuxt for Nuxt sugar.",
+  "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kungal/ui-nuxt for Nuxt sugar.",
   "type": "module",
+  "license": "AGPL-3.0-only",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "*.css",
     "*.vue"
@@ -28,13 +32,16 @@
   },
   "dependencies": {
     "@iconify/vue": "^5.0.1",
-    "@kun/core": "workspace:*"
+    "@kungal/core": "workspace:*",
+    "@vueuse/core": "^14.3.0",
+    "@vueuse/integrations": "^14.3.0",
+    "focus-trap": "^8.2.1"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@kun/tokens": "workspace:*",
+    "@kungal/tokens": "workspace:*",
     "@types/node": "^22.10.0",
     "@vitejs/plugin-vue": "^6.0.7",
     "typescript": "^5.7.0",

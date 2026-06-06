@@ -2,7 +2,7 @@ import type { KunUIRounded } from './types'
 
 // Static class map for the 5-bucket Kun radius system. All keys are literal
 // strings so the Tailwind JIT picks them up — the `rounded-kun-*` utilities
-// come from the --radius-kun-* tokens shipped by @kun/tokens.
+// come from the --radius-kun-* tokens shipped by @kungal/tokens.
 export const kunRoundedClasses: Record<KunUIRounded, string> = {
   none: 'rounded-kun-none',
   sm: 'rounded-kun-sm',

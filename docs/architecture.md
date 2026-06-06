@@ -15,10 +15,10 @@ So we split KunUI by **portability**, not by component:
 
 | Asset | Portability | Where it lives |
 | --- | --- | --- |
-| Design tokens (colors, radius, z-index, animations) — pure CSS | 🟢 100% | `@kun/tokens` |
-| `cn()`, variant×color matrix, type vocabulary, small utils — pure TS | 🟢 100% | `@kun/core` |
-| Component *logic patterns* (controlled/uncontrolled, precedence chains) | 🟡 portable as logic, not as code | resolver fns in `@kun/core`; reactive wrappers per framework |
-| Vue SFC render + Nuxt coupling | 🔴 0% | `@kun/ui-vue` / `@kun/ui-nuxt` (Vue only) |
+| Design tokens (colors, radius, z-index, animations) — pure CSS | 🟢 100% | `@kungal/tokens` |
+| `cn()`, variant×color matrix, type vocabulary, small utils — pure TS | 🟢 100% | `@kungal/core` |
+| Component *logic patterns* (controlled/uncontrolled, precedence chains) | 🟡 portable as logic, not as code | resolver fns in `@kungal/core`; reactive wrappers per framework |
+| Vue SFC render + Nuxt coupling | 🔴 0% | `@kungal/ui-vue` / `@kungal/ui-nuxt` (Vue only) |
 
 ## 2. How deeply the source is coupled to Nuxt
 
@@ -59,11 +59,11 @@ date-picker/dropdown/drawer accessibility & positioning.
 ```
 kun-ui/
 ├─ packages/
-│  ├─ tokens/   @kun/tokens   pure CSS tokens                  ✅ landed
-│  ├─ core/     @kun/core     pure TS (cn/variants/types/utils) ✅ landed
-│  ├─ vue/      @kun/ui-vue   Vue 3 components, Nuxt-decoupled  ⏳
-│  ├─ nuxt/     @kun/ui-nuxt  thin Nuxt Layer over ui-vue       ⏳
-│  └─ react/    @kun/ui-react React components on Ark UI        ⏳
+│  ├─ tokens/   @kungal/tokens   pure CSS tokens                  ✅ landed
+│  ├─ core/     @kungal/core     pure TS (cn/variants/types/utils) ✅ landed
+│  ├─ vue/      @kungal/ui-vue   Vue 3 components, Nuxt-decoupled  ⏳
+│  ├─ nuxt/     @kungal/ui-nuxt  thin Nuxt Layer over ui-vue       ⏳
+│  └─ react/    @kungal/ui-react React components on Ark UI        ⏳
 └─ docs/
 ```
 
@@ -74,10 +74,10 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 
 | Phase | Work | Output | Est. |
 | --- | --- | --- | --- |
-| **P0** ✅ | Extract `@kun/tokens` (CSS) + `@kun/core` (cn/variants/types/utils) | shared foundation | done |
-| **P1** 🚧 | Decouple `@kun/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
-| **P2** ✅ | `@kun/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
-| **P3** | `@kun/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
+| **P0** ✅ | Extract `@kungal/tokens` (CSS) + `@kungal/core` (cn/variants/types/utils) | shared foundation | done |
+| **P1** 🚧 | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
+| **P2** ✅ | `@kungal/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
+| **P3** | `@kungal/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
 | **P4** | React interactive components on Ark UI/Zag | React feature parity | 2–3 wk |
 | **P5** (optional) | Sink primitive logic into Zag machines shared by Vue+React | single source of truth | long-term |
 
@@ -108,7 +108,7 @@ mechanically against the same pattern.
   Nuxt app context (framework-neutral teleport target).
 - [ ] Port `sanitize.ts` off `import.meta.server` (inject an `isServer`
   flag) before it can move into a shared package.
-- [x] Consume `@kun/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
+- [x] Consume `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of in-package copies.
 
 ### Original checklist (full P1 scope)
@@ -125,5 +125,5 @@ mechanically against the same pattern.
   in plain Vue.
 - Port `sanitize.ts` off `import.meta.server` (inject an `isServer` flag)
   before it can move into a shared package.
-- Keep consuming `@kun/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
+- Keep consuming `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of the in-package copies.

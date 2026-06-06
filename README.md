@@ -3,8 +3,8 @@
 A **cross-framework** component library. One design language, one shared
 brain, multiple render layers.
 
-> Status: **bootstrapping (P0).** The foundation packages — `@kun/tokens`
-> and `@kun/core` — are in place. The Vue/Nuxt and React render layers
+> Status: **bootstrapping (P0).** The foundation packages — `@kungal/tokens`
+> and `@kungal/core` — are in place. The Vue/Nuxt and React render layers
 > are planned (see [`docs/architecture.md`](./docs/architecture.md)).
 
 ## Why this exists
@@ -19,14 +19,14 @@ there is, KunUI splits into layers by **how portable each asset actually
 is**, and reuses the portable parts everywhere:
 
 ```
-@kun/tokens   pure CSS design tokens          ← 100% shared
-@kun/core     pure TS (cn, variants, types)    ← 100% shared
-@kun/ui-vue   Vue 3 components (no Nuxt dep)    ← Vue render layer   (P1, in progress)
-@kun/ui-nuxt  thin Nuxt Layer over ui-vue      ← Nuxt sugar          (P2, done)
-@kun/ui-react React components (Ark UI inside)  ← React render layer  (planned)
+@kungal/tokens   pure CSS design tokens          ← 100% shared
+@kungal/core     pure TS (cn, variants, types)    ← 100% shared
+@kungal/ui-vue   Vue 3 components (no Nuxt dep)    ← Vue render layer   (P1, in progress)
+@kungal/ui-nuxt  thin Nuxt Layer over ui-vue      ← Nuxt sugar          (P2, done)
+@kungal/ui-react React components (Ark UI inside)  ← React render layer  (planned)
 ```
 
-`ui-vue` and `ui-react` both consume `@kun/tokens` + `@kun/core`, so the
+`ui-vue` and `ui-react` both consume `@kungal/tokens` + `@kungal/core`, so the
 two stacks are visually identical by construction — same colors, same
 radius, same variant matrix.
 
@@ -34,11 +34,11 @@ radius, same variant matrix.
 
 | Package | What | State |
 | --- | --- | --- |
-| [`@kun/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
-| [`@kun/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
-| [`@kun/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — pattern + Button/Card/Icon/Ripple landed |
-| [`@kun/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
-| `@kun/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
+| [`@kungal/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
+| [`@kungal/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
+| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — pattern + Button/Card/Icon/Ripple landed |
+| [`@kungal/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
+| `@kungal/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 
 ## Develop
 

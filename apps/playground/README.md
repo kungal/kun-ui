@@ -1,12 +1,12 @@
-# @kun/ui-playground
+# @kungal/ui-playground
 
 Local dev sandbox for **eyeballing KunUI components** while building them —
 every Button variant × color, sizes, states, Cards, Icons, plus a dark-mode
 toggle and a token palette strip. Not published.
 
 ```bash
-pnpm --filter @kun/ui-playground dev      # start the dev server
-pnpm --filter @kun/ui-playground build    # production build (verifies wiring)
+pnpm --filter @kungal/ui-playground dev      # start the dev server
+pnpm --filter @kungal/ui-playground build    # production build (verifies wiring)
 ```
 
 It demonstrates the exact host-side wiring any KunUI consumer needs
@@ -14,12 +14,12 @@ It demonstrates the exact host-side wiring any KunUI consumer needs
 
 ```css
 @import 'tailwindcss';
-@import '@kun/tokens';
+@import '@kungal/tokens';
 @source '../../../packages/core/src';  /* variant matrix + maps */
 @source '../../../packages/vue/src';   /* component classes */
 ```
 
-plus `import '@kun/ui-vue/style.css'` in `main.ts` for component scoped
+plus `import '@kungal/ui-vue/style.css'` in `main.ts` for component scoped
 styles, and toggling `.kun-dark-mode` on `<html>` for dark mode.
 
 > When porting a new component in P1, drop it into a section here to verify

@@ -1,4 +1,4 @@
-# @kun/tokens
+# @kungal/tokens
 
 KunUI's design tokens as **pure, framework-agnostic CSS**. This is the
 single source of truth for the visual language — semantic color scales
@@ -12,7 +12,7 @@ plain HTML.
 ## Install
 
 ```bash
-pnpm add @kun/tokens tailwindcss
+pnpm add @kungal/tokens tailwindcss
 ```
 
 ## Usage
@@ -22,19 +22,19 @@ Tailwind's scanner at whichever KunUI render layer you use:
 
 ```css
 @import 'tailwindcss';
-@import '@kun/tokens';                     /* tokens + opinionated base */
-@source '../node_modules/@kun/ui-vue';     /* or @kun/ui-react */
+@import '@kungal/tokens';                     /* tokens + opinionated base */
+@source '../node_modules/@kungal/ui-vue';     /* or @kungal/ui-react */
 ```
 
 ### Entry points
 
 | Import | Contents |
 | --- | --- |
-| `@kun/tokens` / `@kun/tokens/index.css` | tokens **+** base layer (resets, page bg, scrollbar/font) |
-| `@kun/tokens/css` | tokens **only** (`@theme`, colors, radius, z-index, animations) |
-| `@kun/tokens/base.css` | opinionated base layer only |
+| `@kungal/tokens` / `@kungal/tokens/index.css` | tokens **+** base layer (resets, page bg, scrollbar/font) |
+| `@kungal/tokens/css` | tokens **only** (`@theme`, colors, radius, z-index, animations) |
+| `@kungal/tokens/base.css` | opinionated base layer only |
 
-Use `@kun/tokens/css` when the host app wants the design tokens but owns
+Use `@kungal/tokens/css` when the host app wants the design tokens but owns
 its own global element styling.
 
 ## Dark mode

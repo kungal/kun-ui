@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunRoundedClasses, type KunUIColor } from '@kun/core'
+import { cn, kunRoundedClasses, type KunUIColor } from '@kungal/core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
 import { useKunUIConfig } from '../config/useKunUIConfig'

@@ -10,7 +10,7 @@ importers:
 
   apps/nuxt-playground:
     dependencies:
-      '@kun/ui-nuxt':
+      '@kungal/ui-nuxt':
         specifier: workspace:*
         version: link:../../packages/nuxt
     devDependencies:
@@ -29,13 +29,13 @@ importers:
 
   apps/playground:
     dependencies:
-      '@kun/core':
+      '@kungal/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@kun/tokens':
+      '@kungal/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
-      '@kun/ui-vue':
+      '@kungal/ui-vue':
         specifier: workspace:*
         version: link:../../packages/vue
       vue:
@@ -79,10 +79,10 @@ importers:
 
   packages/nuxt:
     dependencies:
-      '@kun/tokens':
+      '@kungal/tokens':
         specifier: workspace:*
         version: link:../tokens
-      '@kun/ui-vue':
+      '@kungal/ui-vue':
         specifier: workspace:*
         version: link:../vue
       '@nuxt/icon':
@@ -116,11 +116,20 @@ importers:
       '@iconify/vue':
         specifier: ^5.0.1
         version: 5.0.1(vue@3.5.35(typescript@5.9.3))
-      '@kun/core':
+      '@kungal/core':
         specifier: workspace:*
         version: link:../core
+      '@vueuse/core':
+        specifier: ^14.3.0
+        version: 14.3.0(vue@3.5.35(typescript@5.9.3))
+      '@vueuse/integrations':
+        specifier: ^14.3.0
+        version: 14.3.0(focus-trap@8.2.1)(fuse.js@7.4.2)(vue@3.5.35(typescript@5.9.3))
+      focus-trap:
+        specifier: ^8.2.1
+        version: 8.2.1
     devDependencies:
-      '@kun/tokens':
+      '@kungal/tokens':
         specifier: workspace:*
         version: link:../tokens
       '@types/node':
@@ -1894,6 +1903,9 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
+  '@types/web-bluetooth@0.0.21':
+    resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
+
   '@unhead/vue@2.1.15':
     resolution: {integrity: sha512-SSByXfEjhzPn8gXdEdgpYqpLMPSkLUH2HVE0GxZfOtNsJ0GgOHQs0g9T67ZZ1z0kTELLKdtOtYrzrbv9+ffF7g==}
     peerDependencies:
@@ -1997,6 +2009,61 @@ packages:
 
   '@vue/shared@3.5.35':
     resolution: {integrity: sha512-zSbjL7gRXwks2ZQLRGCajBtBXEOXW9Ddhn/HvSdrGkE2dqGnumzW8XtusRrxrE9LvqtiqDXQ+A60Hp6mvdYxfA==}
+
+  '@vueuse/core@14.3.0':
+    resolution: {integrity: sha512-aHfz47g0ZhMtTVHmIzMVpJy8ePhhOy68GY5bv110+5DVtZ+W7BsOx+m61UNQqfrWyPztIHIanWa3E2tib3NFIw==}
+    peerDependencies:
+      vue: ^3.5.0
+
+  '@vueuse/integrations@14.3.0':
+    resolution: {integrity: sha512-76I5FT2ESvCmCaSwapI+a/u/CFtNXmzl9f9lNp1hRtx8vKB8hfiokJr8IvQqcQG5ckGXElyXK516b54ozV3MvA==}
+    peerDependencies:
+      async-validator: ^4
+      axios: ^1
+      change-case: ^5
+      drauu: ^0.4
+      focus-trap: ^7 || ^8
+      fuse.js: ^7
+      idb-keyval: ^6
+      jwt-decode: ^4
+      nprogress: ^0.2
+      qrcode: ^1.5
+      sortablejs: ^1
+      universal-cookie: ^7 || ^8
+      vue: ^3.5.0
+    peerDependenciesMeta:
+      async-validator:
+        optional: true
+      axios:
+        optional: true
+      change-case:
+        optional: true
+      drauu:
+        optional: true
+      focus-trap:
+        optional: true
+      fuse.js:
+        optional: true
+      idb-keyval:
+        optional: true
+      jwt-decode:
+        optional: true
+      nprogress:
+        optional: true
+      qrcode:
+        optional: true
+      sortablejs:
+        optional: true
+      universal-cookie:
+        optional: true
+
+  '@vueuse/metadata@14.3.0':
+    resolution: {integrity: sha512-BwxmbAzwAVF50+MW57GXOUEV61nFBGnlBvrTqj49PqWJu3uw7hdu72ztXeZ33RdZtDY6kO+bfCAE1PCn88Tktw==}
+
+  '@vueuse/shared@14.3.0':
+    resolution: {integrity: sha512-bZpge9eSXwa4ToSiqJ7j6KRwhAsneMFoSz3LMWKQDkqimm3D/tbFlrklrs/IOqC8tEcYmXQZJ6N0UrjhBirVCg==}
+    peerDependencies:
+      vue: ^3.5.0
 
   abbrev@3.0.1:
     resolution: {integrity: sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg==}
@@ -2602,6 +2669,9 @@ packages:
 
   fix-dts-default-cjs-exports@1.0.1:
     resolution: {integrity: sha512-pVIECanWFC61Hzl2+oOCtoJ3F17kglZC/6N94eRWycFgBH35hHx0Li604ZIzhseh97mf2p0cv7vVrOZGoqhlEg==}
+
+  focus-trap@8.2.1:
+    resolution: {integrity: sha512-6CxwrrFRquH7pDXb1mWxudkU9LSfYBMRZutpgddb2o6iwCk7cIRrBhyY3c8SGKcmIKdeMTrGSNg4Bedh2RSF/w==}
 
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
@@ -3748,6 +3818,9 @@ packages:
     resolution: {integrity: sha512-XDpWUOPC6FEibaLzjfe0ucaV0YrOjYotGJO1WpF0Zd+n6ZGEQUsSugaoLq9QkEZtAfQIxT42UChcssDVPP3+/w==}
     engines: {node: '>=16'}
     hasBin: true
+
+  tabbable@6.4.0:
+    resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==}
 
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
@@ -5771,6 +5844,8 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
+  '@types/web-bluetooth@0.0.21': {}
+
   '@unhead/vue@2.1.15(vue@3.5.35(typescript@5.9.3))':
     dependencies:
       hookable: 6.1.1
@@ -5953,6 +6028,28 @@ snapshots:
       vue: 3.5.35(typescript@5.9.3)
 
   '@vue/shared@3.5.35': {}
+
+  '@vueuse/core@14.3.0(vue@3.5.35(typescript@5.9.3))':
+    dependencies:
+      '@types/web-bluetooth': 0.0.21
+      '@vueuse/metadata': 14.3.0
+      '@vueuse/shared': 14.3.0(vue@3.5.35(typescript@5.9.3))
+      vue: 3.5.35(typescript@5.9.3)
+
+  '@vueuse/integrations@14.3.0(focus-trap@8.2.1)(fuse.js@7.4.2)(vue@3.5.35(typescript@5.9.3))':
+    dependencies:
+      '@vueuse/core': 14.3.0(vue@3.5.35(typescript@5.9.3))
+      '@vueuse/shared': 14.3.0(vue@3.5.35(typescript@5.9.3))
+      vue: 3.5.35(typescript@5.9.3)
+    optionalDependencies:
+      focus-trap: 8.2.1
+      fuse.js: 7.4.2
+
+  '@vueuse/metadata@14.3.0': {}
+
+  '@vueuse/shared@14.3.0(vue@3.5.35(typescript@5.9.3))':
+    dependencies:
+      vue: 3.5.35(typescript@5.9.3)
 
   abbrev@3.0.1: {}
 
@@ -6543,6 +6640,10 @@ snapshots:
       magic-string: 0.30.21
       mlly: 1.8.2
       rollup: 4.61.1
+
+  focus-trap@8.2.1:
+    dependencies:
+      tabbable: 6.4.0
 
   foreground-child@3.3.1:
     dependencies:
@@ -7961,6 +8062,8 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
       sax: 1.6.0
+
+  tabbable@6.4.0: {}
 
   tagged-tag@1.0.0: {}
 

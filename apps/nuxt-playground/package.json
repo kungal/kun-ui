@@ -1,9 +1,9 @@
 {
-  "name": "@kun/nuxt-playground",
+  "name": "@kungal/nuxt-playground",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Minimal Nuxt app that consumes @kun/ui-nuxt — verifies the layer's auto-imports + NuxtLink/@nuxt/icon injection under SSR.",
+  "description": "Minimal Nuxt app that consumes @kungal/ui-nuxt — verifies the layer's auto-imports + NuxtLink/@nuxt/icon injection under SSR.",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
@@ -11,7 +11,7 @@
     "nuxt:prepare": "nuxt prepare"
   },
   "dependencies": {
-    "@kun/ui-nuxt": "workspace:*"
+    "@kungal/ui-nuxt": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.0",

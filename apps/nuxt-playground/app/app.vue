@@ -1,8 +1,10 @@
-<!--
-  No <script> imports: KunButton / KunCard / KunIcon are auto-imported by
-  the @kun/ui-nuxt layer. href links render as NuxtLink and icons via
-  @nuxt/icon, both injected by the layer's plugin — see the rendered HTML.
--->
+<script setup lang="ts">
+// `ref` is a Nuxt auto-import; KunButton / KunCard / KunIcon / KunModal are
+// auto-imported by the @kungal/ui-nuxt layer. Proves the hardest component
+// (Teleport + focus-trap + @vueuse deps) resolves through the Nuxt build.
+const modalOpen = ref(false)
+</script>
+
 <template>
   <div class="flex min-h-screen flex-col gap-6 p-8">
     <h1 class="text-2xl font-bold">
@@ -32,5 +34,19 @@
       <span class="font-medium">Card as NuxtLink</span>
       <span class="text-default-500 text-sm">href → renders &lt;a&gt;</span>
     </KunCard>
+
+    <section>
+      <KunButton color="primary" @click="modalOpen = true">Open modal</KunButton>
+      <KunModal v-model="modalOpen">
+        <div class="flex max-w-sm flex-col gap-3">
+          <h3 class="text-lg font-semibold">KunModal under Nuxt SSR</h3>
+          <p class="text-default-600 text-sm">
+            Teleport + focus-trap + body-scroll-lock, all resolving through
+            the Nuxt build.
+          </p>
+          <KunButton color="primary" @click="modalOpen = false">Close</KunButton>
+        </div>
+      </KunModal>
+    </section>
   </div>
 </template>

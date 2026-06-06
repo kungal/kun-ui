@@ -1,8 +1,12 @@
 {
-  "name": "@kun/ui-nuxt",
+  "name": "@kungal/ui-nuxt",
   "version": "0.0.1",
-  "description": "KunUI Nuxt Layer — wraps @kun/ui-vue, auto-imports the components, and injects NuxtLink + @nuxt/icon so existing Nuxt apps keep their exact DX.",
+  "description": "KunUI Nuxt Layer — wraps @kungal/ui-vue, auto-imports the components, and injects NuxtLink + @nuxt/icon so existing Nuxt apps keep their exact DX.",
   "type": "module",
+  "license": "AGPL-3.0-only",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./nuxt.config.ts",
   "files": [
     "app",
@@ -12,8 +16,8 @@
     "clean": "rm -rf .nuxt"
   },
   "dependencies": {
-    "@kun/tokens": "workspace:*",
-    "@kun/ui-vue": "workspace:*",
+    "@kungal/tokens": "workspace:*",
+    "@kungal/ui-vue": "workspace:*",
     "@nuxt/icon": "^2.2.3",
     "@nuxt/image": "^2.0.0",
     "@nuxt/kit": "^4.4.7"

@@ -1,5 +1,5 @@
 import { inject, provide, type App, type Component, type InjectionKey } from 'vue'
-import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kun/core'
+import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kungal/core'
 
 // Global KunUI defaults applied to every component in a Vue subtree (or the
 // whole app if provided at root). Each component still accepts per-instance
@@ -9,7 +9,7 @@ import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kun/core'
 //
 // Beyond `rounded`, this config is where KunUI decouples from Nuxt: the
 // `linkComponent` / `iconComponent` slots let the host swap in NuxtLink /
-// @nuxt/icon (done by @kun/ui-nuxt) without the components hard-importing
+// @nuxt/icon (done by @kungal/ui-nuxt) without the components hard-importing
 // any Nuxt API. In a plain Vue app the defaults are a native `<a>` and
 // `@iconify/vue`.
 export interface KunUIConfig {

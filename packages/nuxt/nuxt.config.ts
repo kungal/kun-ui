@@ -1,11 +1,17 @@
 import { defineNuxtModule, addComponent } from '@nuxt/kit'
 
-// The components live in the framework-agnostic-friendly @kun/ui-vue
+// The components live in the framework-agnostic-friendly @kungal/ui-vue
 // package (already compiled). Rather than re-authoring SFCs in this layer,
 // register each named export as a Nuxt auto-import so downstream templates
 // can use `<KunButton>` etc. with no import — and Nuxt generates the
 // component types, so the tags stay type-checked in consumer templates.
-const KUN_COMPONENTS = ['KunButton', 'KunCard', 'KunIcon', 'KunRipple']
+const KUN_COMPONENTS = [
+  'KunButton',
+  'KunCard',
+  'KunIcon',
+  'KunModal',
+  'KunRipple',
+]
 
 export default defineNuxtConfig({
   modules: [
@@ -15,7 +21,7 @@ export default defineNuxtConfig({
       meta: { name: 'kun-ui-components' },
       setup() {
         for (const name of KUN_COMPONENTS) {
-          addComponent({ name, export: name, filePath: '@kun/ui-vue' })
+          addComponent({ name, export: name, filePath: '@kungal/ui-vue' })
         }
       },
     }),
@@ -33,7 +39,7 @@ export default defineNuxtConfig({
 })
 
 // NOTE on styling: this layer intentionally does NOT own a Tailwind entry.
-// The consuming app owns one stylesheet that imports Tailwind + @kun/tokens
+// The consuming app owns one stylesheet that imports Tailwind + @kungal/tokens
 // and declares the @source scan for the KunUI class sites (the scan path is
 // node_modules-layout-specific, so only the app can write it correctly).
 // See this package's README.

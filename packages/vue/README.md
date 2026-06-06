@@ -1,4 +1,4 @@
-# @kun/ui-vue
+# @kungal/ui-vue
 
 KunUI's **Vue 3 component layer, decoupled from Nuxt**. The same components
 that ship in the Nuxt layer, but with every Nuxt dependency replaced by an
@@ -13,7 +13,7 @@ app (Vite, Astro, Laravel, plain `createApp`, …), not just Nuxt.
 ## Install
 
 ```bash
-pnpm add @kun/ui-vue @kun/tokens vue
+pnpm add @kungal/ui-vue @kungal/tokens vue
 ```
 
 ## Usage
@@ -21,8 +21,8 @@ pnpm add @kun/ui-vue @kun/tokens vue
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import KunUI from '@kun/ui-vue'
-import '@kun/ui-vue/style.css' // component scoped styles (ripple, etc.)
+import KunUI from '@kungal/ui-vue'
+import '@kungal/ui-vue/style.css' // component scoped styles (ripple, etc.)
 import App from './App.vue'
 
 createApp(App).use(KunUI).mount('#app')
@@ -31,8 +31,8 @@ createApp(App).use(KunUI).mount('#app')
 ```css
 /* app.css */
 @import 'tailwindcss';
-@import '@kun/tokens';
-@source '../node_modules/@kun/ui-vue/dist'; /* let Tailwind scan the lib */
+@import '@kungal/tokens';
+@source '../node_modules/@kungal/ui-vue/dist'; /* let Tailwind scan the lib */
 ```
 
 ```vue
@@ -43,25 +43,25 @@ createApp(App).use(KunUI).mount('#app')
 ```
 
 Prefer explicit imports (tree-shaking) over the global plugin? Skip
-`.use(KunUI)` and `import { KunButton } from '@kun/ui-vue'` per file.
+`.use(KunUI)` and `import { KunButton } from '@kungal/ui-vue'` per file.
 
 ## How it's decoupled from Nuxt
 
 The Nuxt original leaned on auto-imports and three Nuxt modules. Here:
 
-| Nuxt original | `@kun/ui-vue` replacement |
+| Nuxt original | `@kungal/ui-vue` replacement |
 | --- | --- |
-| auto-imported `computed`/`ref`/`cn`/components | explicit `import` from `vue` / `@kun/core` / sibling files |
+| auto-imported `computed`/`ref`/`cn`/components | explicit `import` from `vue` / `@kungal/core` / sibling files |
 | `defineNuxtLink()` for `href` buttons/cards | `config.linkComponent` (default `<a>`; inject `RouterLink`/`NuxtLink`) |
 | `@nuxt/icon` `<Icon>` | `config.iconComponent` (default `@iconify/vue`; inject `NuxtIcon`) |
-| `@kun/ui` Nuxt-layer Tailwind tokens | `@kun/tokens` package |
-| in-package `cn` / variant matrix / radius | `@kun/core` (shared with the React layer) |
+| `@kungal/ui` Nuxt-layer Tailwind tokens | `@kungal/tokens` package |
+| in-package `cn` / variant matrix / radius | `@kungal/core` (shared with the React layer) |
 
 ### Configuring the injectable slots
 
 ```ts
 import { RouterLink } from 'vue-router'
-import { provideKunUIConfig } from '@kun/ui-vue'
+import { provideKunUIConfig } from '@kungal/ui-vue'
 
 // in a root component's setup()
 provideKunUIConfig({
@@ -70,12 +70,12 @@ provideKunUIConfig({
 })
 ```
 
-`@kun/ui-nuxt` (planned, P2) calls `provideKunUIConfig` with `NuxtLink` +
+`@kungal/ui-nuxt` (planned, P2) calls `provideKunUIConfig` with `NuxtLink` +
 `@nuxt/icon` so the Nuxt DX is identical to today.
 
 ## Build
 
 ```bash
-pnpm --filter @kun/ui-vue build      # vite (JS+CSS) + vue-tsc (types)
-pnpm --filter @kun/ui-vue typecheck
+pnpm --filter @kungal/ui-vue build      # vite (JS+CSS) + vue-tsc (types)
+pnpm --filter @kungal/ui-vue typecheck
 ```

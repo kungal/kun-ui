@@ -3,8 +3,9 @@ import { ref, watchEffect } from 'vue'
 import ButtonShowcase from './sections/ButtonShowcase.vue'
 import CardShowcase from './sections/CardShowcase.vue'
 import IconShowcase from './sections/IconShowcase.vue'
+import ModalShowcase from './sections/ModalShowcase.vue'
 
-// Dark mode is driven by the `.kun-dark-mode` class on <html>: @kun/tokens
+// Dark mode is driven by the `.kun-dark-mode` class on <html>: @kungal/tokens
 // both flips its CSS variables under that selector AND wires the Tailwind
 // `dark:` variant to `&:is(.kun-dark-mode *)`.
 const dark = ref(false)
@@ -43,7 +44,7 @@ const swatch: Record<(typeof colors)[number], string> = {
           Kun<span class="text-primary">UI</span> Playground
         </h1>
         <p class="text-default-500 text-sm">
-          @kun/ui-vue · decoupled from Nuxt · powered by @kun/tokens + @kun/core
+          @kungal/ui-vue · decoupled from Nuxt · powered by @kungal/tokens + @kungal/core
         </p>
       </div>
       <KunButton
@@ -72,6 +73,7 @@ const swatch: Record<(typeof colors)[number], string> = {
 
       <ButtonShowcase />
       <CardShowcase />
+      <ModalShowcase />
       <IconShowcase />
     </main>
   </div>

@@ -1,5 +1,5 @@
 /*
- * @kun/tokens — KunUI design tokens (framework-agnostic).
+ * @kungal/tokens — KunUI design tokens (framework-agnostic).
  *
  * This file is the single source of truth for KunUI's visual language:
  * the semantic color scales, the radius buckets, the z-index layering,
@@ -11,8 +11,8 @@
  * USAGE — import it AFTER Tailwind in your app's entry stylesheet:
  *
  *   @import 'tailwindcss';
- *   @import '@kun/tokens/css';            // this file
- *   @source '../node_modules/@kun/ui-vue';  // scan whichever KunUI render
+ *   @import '@kungal/tokens/css';            // this file
+ *   @source '../node_modules/@kungal/ui-vue';  // scan whichever KunUI render
  *                                            // layer you use (vue/react)
  *
  * Deliberately NOT included here (they are consumer-/package-specific):
@@ -136,7 +136,7 @@
    * app, or per-subtree via the render layer's config provider.
    * Tailwind v4 @theme auto-generates the utility classes:
    *   rounded-kun-none / -sm / -md / -lg / -full
-   * The framework-agnostic class map lives in @kun/core (kunRoundedClasses). */
+   * The framework-agnostic class map lives in @kungal/core (kunRoundedClasses). */
   --radius-kun-none: 0;
   --radius-kun-sm: 0.25rem;
   --radius-kun-md: 0.5rem;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { KunUIColor } from '@kun/core'
+import type { KunUIColor } from '@kungal/core'
 
 const colors: (KunUIColor | 'background')[] = [
   'background',
