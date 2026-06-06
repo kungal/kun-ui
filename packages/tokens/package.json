@@ -1,0 +1,27 @@
+{
+  "name": "@kun/tokens",
+  "version": "0.0.1",
+  "description": "KunUI design tokens — framework-agnostic Tailwind v4 theme (semantic colors, radius, z-index, animations).",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": "./src/index.css",
+    "./css": "./src/tokens.css",
+    "./tokens.css": "./src/tokens.css",
+    "./base.css": "./src/base.css",
+    "./index.css": "./src/index.css"
+  },
+  "scripts": {
+    "build": "echo \"@kun/tokens ships CSS source, no build step\"",
+    "typecheck": "echo \"@kun/tokens has no TypeScript\"",
+    "clean": "echo \"@kun/tokens has nothing to clean\""
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4.0.0"
+  }
+}

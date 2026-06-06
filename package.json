@@ -1,0 +1,21 @@
+{
+  "name": "kun-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "KunUI — cross-framework component library. Shared design tokens + framework-agnostic core, with Vue/Nuxt and (planned) React render layers.",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/*\" build",
+    "typecheck": "pnpm -r --filter \"./packages/*\" typecheck",
+    "clean": "pnpm -r --filter \"./packages/*\" clean"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.28.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+/*
+ * @kun/tokens/base — opinionated base layer (OPTIONAL).
+ *
+ * Global resets + page background + scrollbar/font helpers that KunUI
+ * apps generally want. Kept separate from tokens.css so a host app that
+ * only wants the design tokens (colors/radius/z/animations) can import
+ * `@kun/tokens/css` alone and NOT have its global element styles touched.
+ *
+ * Import after tokens.css if you want it:
+ *   @import '@kun/tokens/css';
+ *   @import '@kun/tokens/base.css';
+ */
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-default-200, currentColor);
+    color: var(--color-foreground);
+  }
+
+  span {
+    color: inherit;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
+  /* Root container needs a SOLID background. Otherwise dark mode only
+   * swaps the CSS variables and `bg-background` (hsla at
+   * --kun-global-opacity = 0.7) composites over unpainted browser-default
+   * white → muddy gray instead of black. Solid hsl() (not hsla) since
+   * nothing sits behind the root. */
+  html,
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  body {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      Helvetica Neue,
+      Helvetica,
+      Arial,
+      PingFang SC,
+      Hiragino Sans GB,
+      Microsoft YaHei,
+      sans-serif !important;
+    text-autospace: normal;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-visible {
+    scrollbar-width: thin;
+    -ms-overflow-style: thin;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    display: block;
+  }
+}

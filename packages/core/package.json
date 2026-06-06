@@ -1,0 +1,34 @@
+{
+  "name": "@kun/core",
+  "version": "0.0.1",
+  "description": "KunUI framework-agnostic core — design types, cn(), variant matrix, radius system, utils. No Vue/React.",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.7.0"
+  }
+}
