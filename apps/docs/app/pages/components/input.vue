@@ -11,21 +11,18 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Input</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunInput&gt;</code> — text input with
-      <code class="text-primary">v-model</code>, label, helper / error text, sizes.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Basic</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Error &amp; disabled</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">错误与禁用</h2>
     <Demo title="States.vue" :source="StatesSrc"><States /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Sizes</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">尺寸</h2>
     <Demo title="Sizes.vue" :source="SizesSrc"><Sizes /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunInput.props" />
   </article>
 </template>

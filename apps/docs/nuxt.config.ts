@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   // (title/description/OG/canonical) is set by useKunSeoMeta() in app.vue.
   app: {
     head: {
-      htmlAttrs: { lang: 'en' },
+      htmlAttrs: { lang: 'zh-CN' },
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },

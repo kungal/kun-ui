@@ -16,10 +16,10 @@ defineProps<{ rows: PropRow[] }>()
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-default-200 text-default-500 border-b text-left">
-          <th class="px-4 py-2 font-medium">Prop</th>
-          <th class="px-4 py-2 font-medium">Type</th>
-          <th class="px-4 py-2 font-medium">Default</th>
-          <th class="px-4 py-2 font-medium">Description</th>
+          <th class="px-4 py-2 font-medium">属性</th>
+          <th class="px-4 py-2 font-medium">类型</th>
+          <th class="px-4 py-2 font-medium">默认值</th>
+          <th class="px-4 py-2 font-medium">说明</th>
         </tr>
       </thead>
       <tbody>

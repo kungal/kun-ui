@@ -11,11 +11,11 @@ export interface NavSection {
 
 export const nav: NavSection[] = [
   {
-    title: 'Getting Started',
-    items: [{ label: 'Introduction', to: '/' }],
+    title: '开始使用',
+    items: [{ label: '简介', to: '/' }],
   },
   {
-    title: 'Components',
+    title: '组件',
     items: [
       { label: 'Avatar', to: '/components/avatar' },
       { label: 'AvatarGroup', to: '/components/avatargroup' },

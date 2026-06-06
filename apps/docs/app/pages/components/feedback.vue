@@ -6,7 +6,7 @@ import AlertSrc from '~/examples/feedback/Alert.vue?raw'
 import Loli from '~/examples/feedback/Loli.vue'
 import LoliSrc from '~/examples/feedback/Loli.vue?raw'
 
-const setup = `<!-- Mount each host ONCE near your app root (e.g. app.vue). -->
+const setup = `<!-- 在应用根部(如 app.vue)各挂载一次即可。 -->
 <template>
   <NuxtPage />
   <KunMessageProvider />
@@ -18,39 +18,34 @@ const setup = `<!-- Mount each host ONCE near your app root (e.g. app.vue). -->
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Feedback</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      Toasts, confirm dialogs and the mascot are <strong>store + provider</strong>
-      systems: mount each host once, then trigger from anywhere with a composable —
-      no component instance needed.
-    </p>
+    <DocIntro />
 
     <KunInfo
       class="mt-6"
       color="info"
       icon="lucide:info"
-      title="Mount the providers once"
-      description="Add the provider hosts near your app root. In a Nuxt app they (and the composables) are auto-imported."
+      title="Provider 只需挂载一次"
+      description="把这些 Provider 宿主组件放在应用根部即可。在 Nuxt 应用中,它们(以及这些组合式)会被自动导入。"
     />
     <div class="mt-3">
       <Code lang="vue" :code="setup" />
     </div>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Toasts — useKunMessage()</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">消息提示 — useKunMessage()</h2>
     <p class="text-default-600 mb-1 text-sm">
-      <code class="text-primary">useKunMessage(message, type, duration=3000, richText=false, position='top-center')</code>.
-      With <code class="text-primary">richText=true</code> the message is raw HTML —
-      sanitize it yourself.
+      <code class="text-primary">useKunMessage(message, type, duration=3000, richText=false, position='top-center')</code>。
+      当 <code class="text-primary">richText=true</code> 时,消息为原始 HTML —— 请自行 sanitize。
     </p>
     <Demo title="Toast.vue" :source="ToastSrc"><Toast /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Confirm dialog — useKunAlert()</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">确认弹窗 — useKunAlert()</h2>
     <p class="text-default-600 mb-1 text-sm">
-      <code class="text-primary">useKunAlert(opts?)</code> returns
-      <code class="text-primary">Promise&lt;boolean&gt;</code>.
+      <code class="text-primary">useKunAlert(opts?)</code> 返回
+      <code class="text-primary">Promise&lt;boolean&gt;</code>(确认为 true,取消为 false)。
     </p>
     <Demo title="Alert.vue" :source="AlertSrc"><Alert /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Mascot — useKunLoliInfo()</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">看板娘 — useKunLoliInfo()</h2>
     <p class="text-default-600 mb-1 text-sm">
       <code class="text-primary">useKunLoliInfo(message, durationSeconds?)</code>.
     </p>

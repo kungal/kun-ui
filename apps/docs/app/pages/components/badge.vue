@@ -7,16 +7,12 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Badge</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunBadge&gt;</code> — a count or dot badge that
-      wraps a trigger (button, icon…). <code class="text-primary">max</code> caps
-      the displayed count.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Count &amp; dot</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">计数与圆点</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunBadge.props" />
   </article>
 </template>

@@ -7,24 +7,20 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Icon</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunIcon&gt;</code> — renders an inline SVG from
-      the bundled registry; it <strong>never</strong> fetches from the Iconify API.
-      It inherits text color, so <code class="text-primary">text-*</code> tints it.
-    </p>
+    <DocIntro />
 
     <KunInfo
       class="mt-6"
       color="info"
       icon="lucide:info"
-      title="Bundled only"
-      description="Use bundled names like lucide:check. Register your own with registerKunIcon(s) from @kungal/core; unknown names fall back to the injected iconComponent (@nuxt/icon under the Nuxt layer)."
+      title="仅限内置"
+      description="使用 lucide:check 这类内置名称。自定义图标用 @kungal/core 的 registerKunIcon(s) 注册;未知名称会回退到注入的 iconComponent(Nuxt 层下为 @nuxt/icon)。"
     />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Basic</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunIcon.props" />
   </article>
 </template>

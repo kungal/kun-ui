@@ -7,15 +7,12 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Popover</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunPopover&gt;</code> — a floating panel anchored to
-      a <code class="text-primary">#trigger</code> slot; content goes in the default slot.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Basic</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunPopover.props" />
   </article>
 </template>

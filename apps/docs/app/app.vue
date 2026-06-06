@@ -25,7 +25,7 @@ watchEffect(() => {
       <NuxtLink to="/" class="flex items-center gap-2">
         <KunFavicon class="size-7" />
         <span class="text-lg font-bold">Kun<span class="text-primary">UI</span></span>
-        <KunChip size="sm" color="primary">Docs</KunChip>
+        <KunChip size="sm" color="primary">文档</KunChip>
       </NuxtLink>
 
       <div class="flex items-center gap-3">
@@ -38,7 +38,7 @@ watchEffect(() => {
           color="secondary"
           @click="dark = !dark"
         >
-          {{ dark ? '🌙 Dark' : '☀️ Light' }}
+          {{ dark ? '🌙 深色' : '☀️ 浅色' }}
         </KunButton>
       </div>
     </header>

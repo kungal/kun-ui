@@ -7,16 +7,12 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Avatar</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunAvatar&gt;</code> — a user avatar from a
-      <code class="text-primary">KunUser</code>; falls back to a sticker when the
-      image is empty, and navigates to the user link on click.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Sizes</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">尺寸</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunAvatar.props" />
   </article>
 </template>

@@ -20,30 +20,27 @@ const buttonProps = meta.KunButton.props
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Button</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunButton&gt;</code> — color, variant and size
-      options, a loading state, and link rendering via <code class="text-primary">href</code>.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Basic</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Colors</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">颜色</h2>
     <Demo title="Colors.vue" :source="ColorsSrc"><Colors /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Variants</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">变体</h2>
     <Demo title="Variants.vue" :source="VariantsSrc"><Variants /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Sizes</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">尺寸</h2>
     <Demo title="Sizes.vue" :source="SizesSrc"><Sizes /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">States &amp; events</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">状态与事件</h2>
     <Demo title="States.vue" :source="StatesSrc"><States /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">As a link</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">作为链接</h2>
     <Demo title="AsLink.vue" :source="AsLinkSrc"><AsLink /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="buttonProps" />
   </article>
 </template>

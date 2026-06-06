@@ -11,21 +11,18 @@ import meta from '~/generated/component-meta.json'
 <template>
   <article class="mx-auto max-w-3xl">
     <h1 class="text-3xl font-bold tracking-tight">Card</h1>
-    <p class="text-default-600 mt-3 text-lg">
-      <code class="text-primary">&lt;KunCard&gt;</code> — a container with color,
-      border and hover options; becomes a link with <code class="text-primary">href</code>.
-    </p>
+    <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Basic</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Colors</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">颜色</h2>
     <Demo title="Colors.vue" :source="ColorsSrc"><Colors /></Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">Hoverable &amp; clickable</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">可悬停与可点击</h2>
     <Demo title="Hoverable.vue" :source="HoverableSrc"><Hoverable /></Demo>
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">Props</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunCard.props" />
   </article>
 </template>
