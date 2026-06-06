@@ -3,11 +3,43 @@
 A **cross-framework** component library. One design language, one shared
 brain, multiple render layers.
 
-> Status: **P0–P2 complete.** Shared foundation (`@kungal/tokens` +
-> `@kungal/core`), the full Vue layer (`@kungal/ui-vue`, **all 53 components
-> migrated, Nuxt-decoupled**), and the Nuxt layer (`@kungal/ui-nuxt`) are
-> done. React (`@kungal/ui-react`) is the next phase. See
-> [`docs/architecture.md`](./docs/architecture.md).
+> Status: **P0–P2 complete and published to npm (`0.1.x`).** Shared foundation
+> (`@kungal/tokens` + `@kungal/core`), the full Vue layer (`@kungal/ui-vue`,
+> **all 53 components migrated, Nuxt-decoupled**), and the Nuxt layer
+> (`@kungal/ui-nuxt`) are done. React (`@kungal/ui-react`) is the next phase.
+> See [`docs/architecture.md`](./docs/architecture.md).
+
+## Use it in your project
+
+**→ Full step-by-step setup: [`docs/INTEGRATION.md`](./docs/INTEGRATION.md).**
+
+Nuxt:
+
+```bash
+pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({ extends: ['@kungal/ui-nuxt'], css: ['~/assets/css/main.css'] })
+```
+
+Plain Vue (Vite):
+
+```bash
+pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+```ts
+import { KunUI } from '@kungal/ui-vue'
+createApp(App).use(KunUI).mount('#app')
+```
+
+Both need a Tailwind v4 entry stylesheet (`tailwindcss` + `@kungal/tokens` +
+`@kungal/ui-vue/style.css` + `@source` directives) — the
+[integration guide](./docs/INTEGRATION.md) has the exact CSS, dark mode, icon
+registration, the `KunUIConfig` slots, and the **"KunUI never sanitizes HTML"**
+security note.
 
 ## Why this exists
 
