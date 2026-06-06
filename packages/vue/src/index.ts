@@ -12,6 +12,7 @@ export { KunButton, KunCard, KunIcon, KunRipple }
 export {
   useKunUIConfig,
   provideKunUIConfig,
+  installKunUIConfig,
   KUN_UI_DEFAULT_CONFIG,
   type KunUIConfig,
 } from './config/useKunUIConfig'

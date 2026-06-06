@@ -1,4 +1,4 @@
-import { inject, provide, type Component, type InjectionKey } from 'vue'
+import { inject, provide, type App, type Component, type InjectionKey } from 'vue'
 import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kun/core'
 
 // Global KunUI defaults applied to every component in a Vue subtree (or the
@@ -25,9 +25,10 @@ export interface KunUIConfig {
   linkComponent: Component | string
 
   /** Component rendered for icons. Default `null` → `@iconify/vue`. The Nuxt
-   *  layer injects `@nuxt/icon`'s Icon. The injected component receives a
-   *  `name` prop holding an Iconify name (e.g. `'lucide:x'`). */
-  iconComponent: Component | null
+   *  layer injects `@nuxt/icon` (via a thin wrapper). The injected component
+   *  receives a `name` prop holding an Iconify name (e.g. `'lucide:x'`). A
+   *  string is treated as a globally-registered component tag. */
+  iconComponent: Component | string | null
 }
 
 const KUN_UI_CONFIG_KEY: InjectionKey<KunUIConfig> = Symbol('kun-ui-config')
@@ -42,6 +43,17 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {
   provide(KUN_UI_CONFIG_KEY, { ...KUN_UI_DEFAULT_CONFIG, ...config })
+}
+
+// App-level installer — same as provideKunUIConfig but for contexts where
+// there is no active setup() (e.g. a Nuxt plugin that has the vueApp but
+// not a component instance). `app.provide` makes the config visible to
+// every KunUI component in the app, on both server and client.
+export const installKunUIConfig = (
+  app: App,
+  config: Partial<KunUIConfig> = {}
+): void => {
+  app.provide(KUN_UI_CONFIG_KEY, { ...KUN_UI_DEFAULT_CONFIG, ...config })
 }
 
 export const useKunUIConfig = (): KunUIConfig =>
