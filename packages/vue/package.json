@@ -31,6 +31,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.11",
     "@kungal/core": "workspace:*",
     "@vueuse/core": "^14.3.0",
     "@vueuse/integrations": "^14.3.0",

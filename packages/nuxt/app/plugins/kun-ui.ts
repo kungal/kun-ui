@@ -7,13 +7,15 @@ import KunNuxtIcon from '../components/KunNuxtIcon.vue'
 //   - linkComponent → NuxtLink  (SSR-aware client-side navigation; KunUI
 //     passes the destination as `to` because it's a component, not a tag)
 //   - iconComponent → @nuxt/icon (via the KunNuxtIcon wrapper)
+//   - navigate → navigateTo  (imperative router nav for Tab `href`, etc.)
 //
-// `defineNuxtPlugin` / `defineNuxtLink` are Nuxt auto-imports.
+// `defineNuxtPlugin` / `defineNuxtLink` / `navigateTo` are Nuxt auto-imports.
 export default defineNuxtPlugin((nuxtApp) => {
   const NuxtLink = defineNuxtLink({})
 
   installKunUIConfig(nuxtApp.vueApp, {
     linkComponent: NuxtLink,
     iconComponent: KunNuxtIcon,
+    navigate: (href: string) => navigateTo(href),
   })
 })

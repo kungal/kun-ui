@@ -11,7 +11,10 @@ const KUN_COMPONENTS = [
   'KunIcon',
   'KunMessageProvider',
   'KunModal',
+  'KunPopover',
   'KunRipple',
+  'KunTab',
+  'KunTooltip',
 ]
 
 // Composables auto-imported for DX parity with the original Nuxt-native lib

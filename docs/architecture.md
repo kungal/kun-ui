@@ -90,10 +90,12 @@ foundation laid." React is an opt-in increment from P3 on.
 **Status:** the package, Vite library build (JS + scoped CSS), and vue-tsc
 type emission are established, and the decoupling pattern is proven on
 `KunButton`, `KunCard`, `KunIcon`, `KunRipple`, `KunModal` (Teleport +
-focus-trap + body-scroll-lock), and the **message/toast system** (re-
-architected off its Nuxt-context hack onto a store + mounted provider) —
+focus-trap + body-scroll-lock), the **message/toast system** (re-architected
+off its Nuxt-context hack onto a store + mounted provider), and
+`KunTab` / `KunTooltip` / `KunPopover` (the latter two on `@floating-ui/vue`;
+Tab's `navigateTo` coupling replaced by an injectable `config.navigate`) —
 all verified through both the Vite playground and Nuxt SSR prerender. The
-items below are the full P1 scope; the remaining ~33 components port
+items below are the full P1 scope; the remaining ~30 components port
 mechanically against the same pattern.
 
 - [x] Replace Nuxt auto-imports with explicit imports (the four landed

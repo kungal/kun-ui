@@ -31,6 +31,14 @@ export interface KunUIConfig {
    *  `name` prop holding an Iconify name (e.g. `'lucide:x'`). A string is
    *  treated as a globally-registered component tag. */
   iconComponent: Component | string | null
+
+  /** Imperative navigation for components that navigate on interaction
+   *  (e.g. Tab with an `href`). Default does a full-page
+   *  `window.location.assign`. A vue-router app can inject
+   *  `(href) => router.push(href)`; the Nuxt layer injects `navigateTo`.
+   *  Return type is `unknown` so router helpers with polymorphic returns
+   *  (Nuxt's `navigateTo`) assign cleanly; callers may `await` it. */
+  navigate: (href: string) => unknown
 }
 
 const KUN_UI_CONFIG_KEY: InjectionKey<KunUIConfig> = Symbol('kun-ui-config')
@@ -41,6 +49,9 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
   rounded: KUN_DEFAULT_ROUNDED,
   linkComponent: 'a',
   iconComponent: null,
+  navigate: (href: string) => {
+    if (typeof window !== 'undefined') window.location.assign(href)
+  },
 }
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {

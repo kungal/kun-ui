@@ -25,8 +25,15 @@ const props = withDefaults(
 )
 
 const config = useKunUIConfig()
+// `inline-block` + `align-[-0.125em]` + 1em default size mirrors Iconify's
+// rendering so icons size with font-size and sit on the text baseline.
+// `w-*`/`h-*` utility classes override the 1em (CSS beats the attribute).
 const classes = computed(() =>
-  cn('inline-block shrink-0 text-inherit', props.class, props.className)
+  cn(
+    'inline-block size-[1em] shrink-0 align-[-0.125em] text-inherit',
+    props.class,
+    props.className
+  )
 )
 
 // Bundled / consumer-registered icon data (inline SVG, no fetch).

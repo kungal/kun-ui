@@ -1,8 +1,12 @@
 <script setup lang="ts">
-// `ref` is a Nuxt auto-import; KunButton / KunCard / KunIcon / KunModal are
-// auto-imported by the @kungal/ui-nuxt layer. Proves the hardest component
-// (Teleport + focus-trap + @vueuse deps) resolves through the Nuxt build.
+import type { KunTabItem } from '@kungal/ui-vue'
+// `ref` is a Nuxt auto-import; the Kun* components come from the layer.
 const modalOpen = ref(false)
+const tab = ref('a')
+const tabItems: KunTabItem[] = [
+  { value: 'a', textValue: 'Overview' },
+  { value: 'b', textValue: 'Details' },
+]
 </script>
 
 <template>
@@ -62,6 +66,15 @@ const modalOpen = ref(false)
       >
         Error (bottom-right)
       </KunButton>
+    </section>
+
+    <section class="flex flex-wrap items-center gap-4">
+      <!-- KunTab (navigate via injected navigateTo) + KunTooltip
+           (@floating-ui) resolving through the Nuxt build -->
+      <KunTab v-model="tab" :items="tabItems" variant="pills" />
+      <KunTooltip text="Tooltip under Nuxt">
+        <KunButton variant="bordered">Hover me</KunButton>
+      </KunTooltip>
     </section>
 
     <!-- Mounted once; renders all toasts (Teleported to body). -->

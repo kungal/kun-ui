@@ -4,11 +4,24 @@ import KunCard from './components/Card.vue'
 import KunIcon from './components/Icon.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
+import KunPopover from './components/Popover.vue'
 import KunRipple from './components/Ripple.vue'
+import KunTab from './components/Tab.vue'
+import KunTooltip from './components/Tooltip.vue'
 
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
-export { KunButton, KunCard, KunIcon, KunMessageProvider, KunModal, KunRipple }
+export {
+  KunButton,
+  KunCard,
+  KunIcon,
+  KunMessageProvider,
+  KunModal,
+  KunPopover,
+  KunRipple,
+  KunTab,
+  KunTooltip,
+}
 
 // Config + composables
 export {
@@ -36,6 +49,15 @@ export type {
   KunButtonProps,
   KunCardProps,
   KunModalProps,
+  KunTabProps,
+  KunTabItem,
+  KunTabVariant,
+  KunTabColor,
+  KunTabSize,
+  KunTabOrientation,
+  KunTooltipProps,
+  KunPopoverProps,
+  KunPopoverPosition,
 } from './components/types'
 
 const components = {
@@ -44,7 +66,10 @@ const components = {
   KunIcon,
   KunMessageProvider,
   KunModal,
+  KunPopover,
   KunRipple,
+  KunTab,
+  KunTooltip,
 }
 
 // Vue plugin: `app.use(KunUI)` registers every component globally under its
