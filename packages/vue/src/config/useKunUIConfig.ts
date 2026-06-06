@@ -40,6 +40,10 @@ export interface KunUIConfig {
    *  (Nuxt's `navigateTo`) assign cleanly; callers may `await` it. */
   navigate: (href: string) => unknown
 
+  /** Path template KunAvatar navigates to on click. `{id}` is replaced with
+   *  the user id. Default `/user/{id}/info`; override per app. */
+  userLinkTemplate: string
+
   /** Element/component KunImage renders for the actual image. Default
    *  `'img'` (native — KunImage keeps its skeleton/aspect/objectFit logic
    *  and passes only standard HTML img attributes). The Nuxt layer injects
@@ -61,6 +65,7 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
     if (typeof window !== 'undefined') window.location.assign(href)
   },
   imageComponent: 'img',
+  userLinkTemplate: '/user/{id}/info',
 }
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {

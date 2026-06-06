@@ -121,8 +121,17 @@ raw `<Icon>` fixed to `<KunIcon>`; `i-lucide-plus` → bundled `lucide:plus`)
 — **46 components total**, all verified through both the Vite playground and
 Nuxt SSR prerender. NOTE: the lib is a single eager bundle today — per-
 component entry splitting (so e.g. Upload's cropper is tree-shakeable) is a
-future optimization. The items below are the full P1 scope; what remains is
-the app-coupled tail (Header, Avatar/Group/User, alert Alert/Loli). (Avatar/Group are deferred: they couple to the app's KunUser
+future optimization.
+
+Then the people batch `KunAvatar` / `KunAvatarGroup` / `KunUserChip` /
+`KunHeader`: the `KunUser` data model now lives in `@kungal/core` (minimal
+`{id,name,avatar}`); Avatar navigates via `config.navigate` +
+`config.userLinkTemplate` (default `/user/{id}/info`) instead of a hardcoded
+`navigateTo`, and falls back to the deterministic `getRandomSticker`. The
+`user/User.vue` component was renamed `KunUserChip` to avoid colliding with
+the `KunUser` type (apps never used `<KunUser>`). Header was actually clean
+(just heading props). **50 components total.** Only the loli/alert system
+(`alert/Alert`, `alert/Loli`) remains. (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small
 data-model decision first.)
 

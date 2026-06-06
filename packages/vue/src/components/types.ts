@@ -3,6 +3,7 @@ import type {
   KunUIColor,
   KunUISize,
   KunUIRounded,
+  KunUser,
 } from '@kungal/core'
 
 export interface KunButtonProps {
@@ -545,4 +546,43 @@ export interface KunUploadProps {
   hint?: string
   className?: string
   rounded?: KunUIRounded
+}
+
+// ── Avatar / Group / User chip ─────────────────────────────────────────
+export type KunAvatarSize = KunUISize | 'original' | 'original-sm'
+
+export interface KunAvatarProps {
+  // Nullable — upstream user hydration can return a missing brief; Avatar
+  // falls back to a deterministic sticker.
+  user: KunUser | null | undefined
+  size?: KunAvatarSize
+  isNavigation?: boolean
+  className?: string
+  imageClassName?: string
+  // Accepted but unused (kept so existing call sites don't TS-error).
+  disableFloating?: boolean
+  floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
+}
+
+export interface KunAvatarGroupProps {
+  users: KunUser[]
+  ellipsis?: boolean
+  visibleCount?: number
+  total?: number
+}
+
+export interface KunUserChipProps {
+  user: KunUser | null | undefined
+  size?: KunAvatarSize
+  description?: string
+  className?: string
+  disableFloating?: boolean
+  floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
+}
+
+// ── Header ─────────────────────────────────────────────────────────────
+export interface KunHeaderProps {
+  name?: string
+  description?: string
+  scale?: 'h1' | 'h2' | 'h3'
 }

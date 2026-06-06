@@ -36,7 +36,7 @@ radius, same variant matrix.
 | --- | --- | --- |
 | [`@kungal/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
 | [`@kungal/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
-| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — 46 components landed. display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link/Brand/Favicon/Null/Markdown; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu/Lightbox(+Gallery/GalleryItem); form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup/DatePicker/FileInput/TagInput/Upload; content: Content/Text; util: Copy/Rating/Pagination/ScrollShadow/FadeCard |
+| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — 50 components landed. display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link/Brand/Favicon/Null/Markdown; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu/Lightbox(+Gallery/GalleryItem); form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup/DatePicker/FileInput/TagInput/Upload; content: Content/Text; people: Avatar/AvatarGroup/UserChip/Header; util: Copy/Rating/Pagination/ScrollShadow/FadeCard |
 | [`@kungal/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
 | `@kungal/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 

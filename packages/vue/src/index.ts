@@ -1,4 +1,6 @@
 import type { App, Plugin } from 'vue'
+import KunAvatar from './components/Avatar.vue'
+import KunAvatarGroup from './components/AvatarGroup.vue'
 import KunBadge from './components/Badge.vue'
 import KunBrand from './components/Brand.vue'
 import KunButton from './components/Button.vue'
@@ -15,6 +17,7 @@ import KunDrawer from './components/Drawer.vue'
 import KunFadeCard from './components/FadeCard.vue'
 import KunFavicon from './components/Favicon.vue'
 import KunFileInput from './components/FileInput.vue'
+import KunHeader from './components/Header.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
@@ -45,10 +48,13 @@ import KunText from './components/Text.vue'
 import KunTextarea from './components/Textarea.vue'
 import KunTooltip from './components/Tooltip.vue'
 import KunUpload from './components/Upload.vue'
+import KunUserChip from './components/UserChip.vue'
 
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
 export {
+  KunAvatar,
+  KunAvatarGroup,
   KunBadge,
   KunBrand,
   KunButton,
@@ -65,6 +71,7 @@ export {
   KunFadeCard,
   KunFavicon,
   KunFileInput,
+  KunHeader,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -95,6 +102,7 @@ export {
   KunTextarea,
   KunTooltip,
   KunUpload,
+  KunUserChip,
 }
 
 // Config + composables
@@ -190,9 +198,19 @@ export type {
   KunTagInputInvalidReason,
   KunTagInputValidator,
   KunUploadProps,
+  KunAvatarProps,
+  KunAvatarSize,
+  KunAvatarGroupProps,
+  KunUserChipProps,
+  KunHeaderProps,
 } from './components/types'
 
+// User data model (lives in @kungal/core; re-exported here for convenience).
+export type { KunUser } from '@kungal/core'
+
 const components = {
+  KunAvatar,
+  KunAvatarGroup,
   KunBadge,
   KunBrand,
   KunButton,
@@ -209,6 +227,7 @@ const components = {
   KunFadeCard,
   KunFavicon,
   KunFileInput,
+  KunHeader,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -239,6 +258,7 @@ const components = {
   KunTextarea,
   KunTooltip,
   KunUpload,
+  KunUserChip,
 }
 
 // Vue plugin: `app.use(KunUI)` registers every component globally under its
