@@ -7,7 +7,13 @@
   "scripts": {
     "build": "pnpm -r --filter \"./packages/*\" build",
     "typecheck": "pnpm -r --filter \"./packages/*\" typecheck",
-    "clean": "pnpm -r --filter \"./packages/*\" clean"
+    "clean": "pnpm -r --filter \"./packages/*\" clean",
+    "changeset": "changeset",
+    "ci:version": "changeset version",
+    "ci:publish": "pnpm -r --filter \"./packages/*\" build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
   },
   "engines": {
     "node": ">=20"

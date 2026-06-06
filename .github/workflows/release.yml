@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Only one release run at a time; a newer push supersedes an in-flight one.
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write # create the "Version Packages" PR, commits and git tags
+  pull-requests: write # open / update that PR
+  id-token: write # OIDC token for npm trusted publishing (no NPM_TOKEN needed)
+
+jobs:
+  release:
+    name: Version or Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # npm >= 11.5.1 is required for OIDC trusted publishing + auto-provenance.
+      - run: npm install -g npm@latest
+
+      - name: Create Release PR or publish to npm
+        uses: changesets/action@v1
+        with:
+          # When changesets exist -> open/refresh the "Version Packages" PR.
+          # When none remain (that PR was merged) -> build + publish.
+          version: pnpm ci:version
+          publish: pnpm ci:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No NPM_TOKEN: authentication happens via OIDC (id-token: write).
+          # Provenance is emitted automatically under trusted publishing.

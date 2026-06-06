@@ -1,9 +1,16 @@
 {
   "name": "@kungal/ui-vue",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kungal/ui-nuxt for Nuxt sugar.",
   "type": "module",
   "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kungal/kun-ui.git",
+    "directory": "packages/vue"
+  },
+  "homepage": "https://github.com/kungal/kun-ui#readme",
+  "bugs": "https://github.com/kungal/kun-ui/issues",
   "publishConfig": {
     "access": "public"
   },

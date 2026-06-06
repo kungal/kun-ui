@@ -1,9 +1,16 @@
 {
   "name": "@kungal/tokens",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "KunUI design tokens — framework-agnostic Tailwind v4 theme (semantic colors, radius, z-index, animations).",
   "type": "module",
   "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kungal/kun-ui.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/kungal/kun-ui#readme",
+  "bugs": "https://github.com/kungal/kun-ui/issues",
   "publishConfig": {
     "access": "public"
   },

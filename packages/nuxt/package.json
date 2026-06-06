@@ -1,9 +1,16 @@
 {
   "name": "@kungal/ui-nuxt",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "KunUI Nuxt Layer — wraps @kungal/ui-vue, auto-imports the components, and injects NuxtLink + @nuxt/icon so existing Nuxt apps keep their exact DX.",
   "type": "module",
   "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kungal/kun-ui.git",
+    "directory": "packages/nuxt"
+  },
+  "homepage": "https://github.com/kungal/kun-ui#readme",
+  "bugs": "https://github.com/kungal/kun-ui/issues",
   "publishConfig": {
     "access": "public"
   },

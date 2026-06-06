@@ -1,9 +1,16 @@
 {
   "name": "@kungal/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "KunUI framework-agnostic core — design types, cn(), variant matrix, radius system, utils. No Vue/React.",
   "type": "module",
   "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kungal/kun-ui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/kungal/kun-ui#readme",
+  "bugs": "https://github.com/kungal/kun-ui/issues",
   "publishConfig": {
     "access": "public"
   },
