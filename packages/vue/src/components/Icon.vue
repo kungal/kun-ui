@@ -63,3 +63,15 @@ const data = computed(() => (props.name ? getKunIcon(props.name) : undefined))
 
   <!-- 3. Otherwise render nothing — never fetch. -->
 </template>
+
+<style scoped>
+/* The bundled icon bodies paint with `currentColor`, but @kungal/tokens' base
+ * layer sets an explicit `color` on EVERY element (`*`). That rule also lands
+ * on the v-html'd inner nodes (<g>/<path>/<circle>), pinning them to the
+ * foreground color and defeating inheritance — so `text-*` on (or above)
+ * <KunIcon> wouldn't color the icon. Force the inner nodes to inherit the
+ * svg's own color. This rule is unlayered, so it wins over the base `*` rule. */
+:deep(*) {
+  color: inherit;
+}
+</style>

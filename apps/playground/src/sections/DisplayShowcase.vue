@@ -14,10 +14,6 @@ const colors: KunUIColor[] = [
 
 const progress = ref(60)
 const loadingDemo = ref(false)
-
-const demoImg = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><rect width="200" height="200" fill="url(#g)"/></svg>'
-)}`
 </script>
 
 <template>
@@ -68,7 +64,8 @@ const demoImg = `data:image/svg+xml;utf8,${encodeURIComponent(
       <KunButton size="sm" variant="bordered" @click="loadingDemo = !loadingDemo">
         Toggle overlay
       </KunButton>
-      <KunLoading :loading="loadingDemo" :src="demoImg" description="Loading…">
+      <!-- No :src → shows the bundled default loading mascot. -->
+      <KunLoading :loading="loadingDemo" description="加载中…">
         <KunCard color="default" class-name="h-32">
           <span>Content behind the loading overlay</span>
         </KunCard>
