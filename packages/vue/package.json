@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kungal/ui-nuxt for Nuxt sugar.",
   "type": "module",
+  "keywords": ["kungal", "kun-ui", "vue", "vue3", "components", "component-library", "ui", "design-system"],
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",

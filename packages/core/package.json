@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "KunUI framework-agnostic core — design types, cn(), variant matrix, radius system, utils. No Vue/React.",
   "type": "module",
+  "keywords": ["kungal", "kun-ui", "classnames", "cn", "tailwind-merge", "variants", "design-system"],
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
