@@ -10,7 +10,7 @@ import type { KunNullProps } from './types'
 defineOptions({ name: 'KunNull' })
 
 withDefaults(defineProps<KunNullProps>(), {
-  description: '请填满这只萝莉吧, 因为这里空空如也',
+  description: '莲说这里什么都没有',
   isShowSticker: true,
   src: KUN_NULL_IMAGE,
 })

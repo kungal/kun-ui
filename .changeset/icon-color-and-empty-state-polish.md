@@ -10,4 +10,5 @@ Fix KunIcon color inheritance and polish the loading/empty states:
   didn't actually color the icon. The inner nodes now inherit the icon's color.
 - **KunLoading / KunNull**: larger default image (`w-72` / `w-60`) shown at its
   natural aspect ratio instead of being squished into a square.
-- **KunNull**: the empty-state caption is now muted (`text-default-500`).
+- **KunNull**: the empty-state caption is now muted (`text-default-500`), and
+  the default caption text changed to `莲说这里什么都没有`.

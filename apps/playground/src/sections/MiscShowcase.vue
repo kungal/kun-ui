@@ -47,7 +47,7 @@ const fadeShown = ref(true)
 
     <h3 class="text-base font-medium">Null (empty state) &amp; Favicon</h3>
     <div class="flex flex-wrap items-center gap-8">
-      <KunNull description="莲说这里什么都没有" />
+      <KunNull />
       <div class="size-16"><KunFavicon /></div>
     </div>
   </section>
