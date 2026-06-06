@@ -89,10 +89,11 @@ foundation laid." React is an opt-in increment from P3 on.
 
 **Status:** the package, Vite library build (JS + scoped CSS), and vue-tsc
 type emission are established, and the decoupling pattern is proven on
-`KunButton`, `KunCard`, `KunIcon`, `KunRipple` — verified by an SSR render
-test (renders `<button>` / `<a href>` correctly with no Nuxt runtime). The
-items below are the full P1 scope; the remaining ~40 components port
-mechanically against the same pattern.
+`KunButton`, `KunCard`, `KunIcon`, `KunRipple`, and `KunModal` (the hardest
+case — Teleport + focus-trap + body-scroll-lock, verified through both the
+Vite playground and Nuxt SSR prerender). The items below are the full P1
+scope; the remaining ~35 components port mechanically against the same
+pattern.
 
 - [x] Replace Nuxt auto-imports with explicit imports (the four landed
   components do this; consider `unplugin-auto-import` +
