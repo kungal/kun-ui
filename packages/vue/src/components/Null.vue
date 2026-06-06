@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { getRandomSticker } from '@kungal/core'
-import KunImage from './Image.vue'
+import KunImageNative from './ImageNative.vue'
+import { KUN_NULL_IMAGE } from '../assets/nullImage'
 import type { KunNullProps } from './types'
 
-// Empty-state placeholder with a deterministic sticker (stable per
-// `description`). The sticker comes from the KunUI CDN — see
-// getRandomSticker in @kungal/core.
+// Empty-state placeholder. The default image is bundled (base64 data URI) —
+// no network/CDN request, no consumer asset. Rendered as a plain <img>
+// (KunImageNative) since a data URI needs no optimization pipeline. Override
+// the image via `src`, or hide it entirely with `isShowSticker={false}`.
 defineOptions({ name: 'KunNull' })
 
 withDefaults(defineProps<KunNullProps>(), {
   description: '请填满这只萝莉吧, 因为这里空空如也',
   isShowSticker: true,
+  src: KUN_NULL_IMAGE,
 })
 </script>
 
 <template>
   <div class="m-auto flex flex-col items-center gap-3">
-    <KunImage
+    <KunImageNative
       v-if="isShowSticker"
-      :src="getRandomSticker(description || '')"
-      class-name="h-32 w-32 rounded-2xl"
-      loading="lazy"
-      alt="blank galgame"
+      :src="src"
+      class-name="w-44 h-auto rounded-2xl"
+      alt="empty"
     />
     <span>{{ description }}</span>
   </div>

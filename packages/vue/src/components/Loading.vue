@@ -2,17 +2,19 @@
 import { computed, useSlots } from 'vue'
 import { cn } from '@kungal/core'
 import KunImageNative from './ImageNative.vue'
+import { KUN_LOADING_IMAGE } from '../assets/loadingImage'
 import type { KunLoadingProps } from './types'
 
 // Two modes: with default slot → overlay spinner over the wrapped content;
 // without → standalone centered loader. Uses KunImageNative so the loading
-// image is a plain <img> (no optimization pipeline needed).
+// image is a plain <img> (no optimization pipeline needed). The default image
+// is bundled (base64 data URI) — no network/CDN request, no consumer asset.
 defineOptions({ name: 'KunLoading' })
 
 const props = withDefaults(defineProps<KunLoadingProps>(), {
   loading: false,
   description: '正在摸鱼中...咕咕咕',
-  src: '/kun.webp',
+  src: KUN_LOADING_IMAGE,
 })
 
 const slots = useSlots()
@@ -40,7 +42,7 @@ const isWrapperMode = computed(() => !!slots.default)
             <KunImageNative
               alt="loading"
               :src="src"
-              class-name="h-48 w-48 rounded-lg"
+              class-name="w-56 h-auto rounded-lg"
             />
             <span class="info text-xl">{{ description }}</span>
           </div>
@@ -52,7 +54,7 @@ const isWrapperMode = computed(() => !!slots.default)
       <KunImageNative
         alt="loading"
         :src="src"
-        class-name="h-48 w-48 rounded-lg"
+        class-name="w-56 h-auto rounded-lg"
       />
       <span class="info">{{ description }}</span>
     </div>

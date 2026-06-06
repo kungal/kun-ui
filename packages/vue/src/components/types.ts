@@ -225,8 +225,9 @@ export interface KunInfoProps {
 export interface KunLoadingProps {
   loading?: boolean
   description?: string
-  /** Image shown while loading. Default '/kun.webp' (must exist in the
-   *  consuming app's public dir). */
+  /** Image shown while loading. Defaults to a bundled mascot (base64 data
+   *  URI — no network request, no consumer asset needed). Pass any URL or
+   *  data URI to override. */
   src?: string
 }
 
@@ -402,7 +403,11 @@ export interface KunRatingProps {
 // ── Null (empty state) ─────────────────────────────────────────────────
 export interface KunNullProps {
   description?: string
+  /** Show the empty-state image. Default true. */
   isShowSticker?: boolean
+  /** The empty-state image. Defaults to a bundled mascot (base64 data URI —
+   *  no network/CDN request). Pass any URL or data URI to override. */
+  src?: string
 }
 
 // ── Brand ──────────────────────────────────────────────────────────────
