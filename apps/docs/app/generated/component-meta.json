@@ -1,0 +1,2300 @@
+{
+  "KunAlertProvider": {
+    "props": []
+  },
+  "KunAvatar": {
+    "props": [
+      {
+        "name": "user",
+        "type": "KunUser | null",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disableFloating",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "floatingPosition",
+        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "required": false
+      },
+      {
+        "name": "imageClassName",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "isNavigation",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "size",
+        "type": "KunAvatarSize",
+        "required": false,
+        "default": "\"md\""
+      }
+    ]
+  },
+  "KunAvatarGroup": {
+    "props": [
+      {
+        "name": "users",
+        "type": "KunUser[]",
+        "required": true
+      },
+      {
+        "name": "ellipsis",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "total",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "visibleCount",
+        "type": "number",
+        "required": false,
+        "default": "5"
+      }
+    ]
+  },
+  "KunBadge": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"danger\""
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "99"
+      },
+      {
+        "name": "placement",
+        "type": "\"top-right\" | \"top-left\" | \"bottom-right\" | \"bottom-left\"",
+        "required": false,
+        "default": "\"top-right\""
+      },
+      {
+        "name": "show",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "showZero",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "\"md\" | \"sm\" | \"lg\"",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "variant",
+        "type": "\"count\" | \"dot\"",
+        "required": false,
+        "default": "\"count\""
+      }
+    ]
+  },
+  "KunBrand": {
+    "props": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "badge",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "badgeColor",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "iconAlt",
+        "type": "string",
+        "required": false,
+        "default": "\"logo\""
+      },
+      {
+        "name": "iconClass",
+        "type": "string",
+        "required": false,
+        "default": "\"size-10 rounded-2xl\""
+      },
+      {
+        "name": "iconSrc",
+        "type": "string",
+        "required": false,
+        "default": "\"/favicon.webp\""
+      },
+      {
+        "name": "nameClass",
+        "type": "string",
+        "required": false,
+        "default": "\"text-xl\""
+      },
+      {
+        "name": "to",
+        "type": "string",
+        "required": false,
+        "default": "\"/\""
+      }
+    ]
+  },
+  "KunButton": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "icon",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "iconPosition",
+        "type": "\"left\" | \"right\"",
+        "required": false,
+        "default": "\"left\""
+      },
+      {
+        "name": "isIconOnly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "\"lg\""
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "target",
+        "type": "\"_self\" | \"_blank\" | \"_parent\" | \"_top\"",
+        "required": false,
+        "default": "\"_self\""
+      },
+      {
+        "name": "type",
+        "type": "\"button\" | \"submit\" | \"reset\"",
+        "required": false,
+        "default": "\"button\""
+      },
+      {
+        "name": "variant",
+        "type": "KunUIVariant",
+        "required": false,
+        "default": "\"solid\""
+      }
+    ]
+  },
+  "KunCard": {
+    "props": [
+      {
+        "name": "bordered",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "clickable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor | \"background\"",
+        "required": false,
+        "default": "\"background\""
+      },
+      {
+        "name": "contentClass",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "isHoverable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "isTransparent",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunCheckBox": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "type",
+        "type": "\"multiple\" | \"single\"",
+        "required": false,
+        "default": "\"multiple\""
+      },
+      {
+        "name": "value",
+        "type": "string | number | boolean",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunChip": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"sm\""
+      },
+      {
+        "name": "variant",
+        "type": "KunUIVariant",
+        "required": false,
+        "default": "\"flat\""
+      }
+    ]
+  },
+  "KunContent": {
+    "props": [
+      {
+        "name": "content",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunContextMenu": {
+    "props": [
+      {
+        "name": "visible",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "items",
+        "type": "KunContextMenuItem[]",
+        "required": false,
+        "default": "[]"
+      },
+      {
+        "name": "padding",
+        "type": "number",
+        "required": false,
+        "default": "12"
+      },
+      {
+        "name": "position",
+        "type": "{ x: number; y: number; } | null",
+        "required": false,
+        "default": "{ x: 0, y: 0 }"
+      },
+      {
+        "name": "width",
+        "type": "number",
+        "required": false,
+        "default": "192"
+      }
+    ]
+  },
+  "KunCopy": {
+    "props": [
+      {
+        "name": "text",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "\"lg\""
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "variant",
+        "type": "KunUIVariant",
+        "required": false,
+        "default": "\"light\""
+      }
+    ]
+  },
+  "KunDatePicker": {
+    "props": [
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "format",
+        "type": "string",
+        "required": false,
+        "default": "\"yyyy-MM-dd\""
+      },
+      {
+        "name": "isDateDisabled",
+        "type": "((date: Date) => boolean)",
+        "required": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "maxDate",
+        "type": "string | Date",
+        "required": false
+      },
+      {
+        "name": "minDate",
+        "type": "string | Date",
+        "required": false
+      },
+      {
+        "name": "mode",
+        "type": "KunDatePickerMode",
+        "required": false,
+        "default": "\"single\""
+      },
+      {
+        "name": "modelValue",
+        "type": "string | [string | null, string | null] | null",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "months",
+        "type": "string[]",
+        "required": false
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"请选择日期\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "valueFormat",
+        "type": "string",
+        "required": false,
+        "default": "\"yyyy-MM-dd\""
+      },
+      {
+        "name": "weekdays",
+        "type": "string[]",
+        "required": false
+      }
+    ]
+  },
+  "KunDivider": {
+    "props": [
+      {
+        "name": "borderStyle",
+        "type": "\"solid\" | \"dashed\"",
+        "required": false,
+        "default": "\"solid\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "orientation",
+        "type": "\"horizontal\" | \"vertical\"",
+        "required": false,
+        "default": "\"horizontal\""
+      },
+      {
+        "name": "withLabel",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      }
+    ]
+  },
+  "KunDrawer": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "innerClassName",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "isDismissable",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "isShowCloseButton",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "placement",
+        "type": "KunDrawerPlacement",
+        "required": false,
+        "default": "\"right\""
+      },
+      {
+        "name": "responsive",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunDrawerSize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "withContainer",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      }
+    ]
+  },
+  "KunDropdown": {
+    "props": [
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "items",
+        "type": "KunContextMenuItem[]",
+        "required": false,
+        "default": "[]"
+      },
+      {
+        "name": "menuClass",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "minWidth",
+        "type": "number",
+        "required": false,
+        "default": "192"
+      },
+      {
+        "name": "position",
+        "type": "Placement",
+        "required": false,
+        "default": "\"bottom-start\""
+      },
+      {
+        "name": "triggerClass",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunFadeCard": {
+    "props": []
+  },
+  "KunFavicon": {
+    "props": []
+  },
+  "KunFileInput": {
+    "props": [
+      {
+        "name": "accept",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "files",
+        "type": "File[]",
+        "required": false,
+        "default": "[]"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "maxSize",
+        "type": "number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "modelValue",
+        "type": "File | null",
+        "required": false,
+        "default": "null"
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "showFileName",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "triggerColor",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "triggerIcon",
+        "type": "string",
+        "required": false,
+        "default": "\"lucide:upload\""
+      },
+      {
+        "name": "triggerSize",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "triggerText",
+        "type": "string",
+        "required": false,
+        "default": "\"选择文件\""
+      },
+      {
+        "name": "triggerVariant",
+        "type": "KunUIVariant",
+        "required": false,
+        "default": "\"flat\""
+      }
+    ]
+  },
+  "KunHeader": {
+    "props": [
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "scale",
+        "type": "\"h1\" | \"h2\" | \"h3\"",
+        "required": false,
+        "default": "\"h1\""
+      }
+    ]
+  },
+  "KunIcon": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunImage": {
+    "props": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": false,
+        "default": "\"image\""
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "aspectRatio",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "decoding",
+        "type": "\"sync\" | \"async\" | \"auto\"",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "densities",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "fetchpriority",
+        "type": "\"auto\" | \"high\" | \"low\"",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "format",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "height",
+        "type": "string | number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "imageClassName",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "loading",
+        "type": "\"lazy\" | \"eager\"",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "objectFit",
+        "type": "\"fill\" | \"none\" | \"cover\" | \"contain\" | \"scale-down\"",
+        "required": false,
+        "default": "\"cover\""
+      },
+      {
+        "name": "placeholder",
+        "type": "string | number | boolean | [w: number, h: number, q?: number, b?: number]",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "preload",
+        "type": "boolean | { fetchPriority: \"auto\" | \"high\" | \"low\"; }",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "provider",
+        "type": "\"none\" | \"ipx\" | (string & {})",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "quality",
+        "type": "string | number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "sizes",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "skeleton",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunImageNative": {
+    "props": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": false,
+        "default": "\"image\""
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "height",
+        "type": "string | number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunInfo": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "variant",
+        "type": "KunUIVariant",
+        "required": false,
+        "default": "\"flat\""
+      }
+    ]
+  },
+  "KunInput": {
+    "props": [
+      {
+        "name": "autofocus",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "helperText",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "modelValue",
+        "type": "string | number",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "required": false,
+        "default": "\"text\""
+      }
+    ]
+  },
+  "KunLightbox": {
+    "props": [
+      {
+        "name": "images",
+        "type": "KunLightboxImage[]",
+        "required": true
+      },
+      {
+        "name": "isOpen",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "initialIndex",
+        "type": "number",
+        "required": false
+      }
+    ]
+  },
+  "KunLightboxGallery": {
+    "props": []
+  },
+  "KunLightboxGalleryItem": {
+    "props": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "as",
+        "type": "string",
+        "required": false,
+        "default": "\"span\""
+      },
+      {
+        "name": "wrap",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      }
+    ]
+  },
+  "KunLink": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "isShowAnchorIcon",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "rel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "target",
+        "type": "\"_self\" | \"_blank\" | \"_parent\" | \"_top\"",
+        "required": false,
+        "default": "\"_self\""
+      },
+      {
+        "name": "to",
+        "type": "string | Record<string, string>",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "underline",
+        "type": "\"none\" | \"always\" | \"hover\"",
+        "required": false,
+        "default": "\"always\""
+      }
+    ]
+  },
+  "KunLoading": {
+    "props": [
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"正在摸鱼中...咕咕咕\""
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "src",
+        "type": "string",
+        "required": false,
+        "default": "KUN_LOADING_IMAGE",
+        "description": "Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed). Pass any URL or data URI to override."
+      }
+    ]
+  },
+  "KunLoli": {
+    "props": [
+      {
+        "name": "duration",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "message",
+        "type": "string",
+        "required": true
+      }
+    ]
+  },
+  "KunLoliProvider": {
+    "props": []
+  },
+  "KunMarkdown": {
+    "props": []
+  },
+  "KunMessageProvider": {
+    "props": []
+  },
+  "KunModal": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "innerClassName",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "isDismissable",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "isShowCloseButton",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "withContainer",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      }
+    ]
+  },
+  "KunNull": {
+    "props": [
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"莲说这里什么都没有\""
+      },
+      {
+        "name": "isShowSticker",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Show the empty-state image. Default true."
+      },
+      {
+        "name": "src",
+        "type": "string",
+        "required": false,
+        "default": "KUN_NULL_IMAGE",
+        "description": "The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request). Pass any URL or data URI to override."
+      }
+    ]
+  },
+  "KunPagination": {
+    "props": [
+      {
+        "name": "currentPage",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "totalPage",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "isLoading",
+        "type": "boolean",
+        "required": false
+      }
+    ]
+  },
+  "KunPopover": {
+    "props": [
+      {
+        "name": "autoPosition",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "innerClass",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "position",
+        "type": "KunPopoverPosition",
+        "required": false,
+        "default": "\"bottom-start\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunProgress": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "indeterminate",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "100"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "showLabel",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "variant",
+        "type": "KunUIVariant | \"gradient\" | \"circle\" | \"striped\"",
+        "required": false,
+        "default": "\"solid\""
+      }
+    ]
+  },
+  "KunRadioGroup": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "T",
+        "required": true
+      },
+      {
+        "name": "options",
+        "type": "readonly KunRadioOption<T>[]",
+        "required": true
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "orientation",
+        "type": "KunRadioOrientation",
+        "required": false,
+        "default": "\"vertical\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "variant",
+        "type": "KunRadioVariant",
+        "required": false,
+        "default": "\"classic\""
+      }
+    ]
+  },
+  "KunRating": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"rating\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "5"
+      },
+      {
+        "name": "modelValue",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "\"md\" | \"sm\" | \"lg\"",
+        "required": false,
+        "default": "\"md\""
+      }
+    ]
+  },
+  "KunRipple": {
+    "props": [
+      {
+        "name": "ripples",
+        "type": "RippleType[]",
+        "required": true
+      }
+    ]
+  },
+  "KunScrollShadow": {
+    "props": [
+      {
+        "name": "axis",
+        "type": "\"horizontal\" | \"vertical\"",
+        "required": false,
+        "default": "\"horizontal\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "contentClass",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "shadowColor",
+        "type": "string",
+        "required": false,
+        "default": "\"var(--color-background)\""
+      },
+      {
+        "name": "shadowSize",
+        "type": "string",
+        "required": false,
+        "default": "\"2rem\""
+      }
+    ]
+  },
+  "KunSelect": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "T",
+        "required": true
+      },
+      {
+        "name": "options",
+        "type": "readonly KunSelectOption<T>[]",
+        "required": true
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunSlider": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "77"
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "required": false,
+        "default": "17"
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "default": "1"
+      }
+    ]
+  },
+  "KunSwitch": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "labelClassName",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunTab": {
+    "props": [
+      {
+        "name": "items",
+        "type": "KunTabItem[]",
+        "required": true
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "disableAnimation",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "iconSize",
+        "type": "string",
+        "required": false,
+        "default": "\"1em\""
+      },
+      {
+        "name": "innerClassName",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "orientation",
+        "type": "KunTabOrientation",
+        "required": false,
+        "default": "\"horizontal\""
+      },
+      {
+        "name": "scrollable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "KunTabSize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "variant",
+        "type": "KunTabVariant",
+        "required": false,
+        "default": "\"underlined\""
+      }
+    ]
+  },
+  "KunTagInput": {
+    "props": [
+      {
+        "name": "allowDuplicates",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "caseSensitive",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "confirmOnBlur",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "helperText",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "maxTagLength",
+        "type": "number",
+        "required": false,
+        "default": "100"
+      },
+      {
+        "name": "maxTags",
+        "type": "number",
+        "required": false,
+        "default": "Number.POSITIVE_INFINITY"
+      },
+      {
+        "name": "minTagLength",
+        "type": "number",
+        "required": false,
+        "default": "1"
+      },
+      {
+        "name": "modelValue",
+        "type": "string[]",
+        "required": false,
+        "default": "[]"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "respectComposition",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "showCounter",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "splitChars",
+        "type": "(string | RegExp)[]",
+        "required": false,
+        "default": "[\"\\n\", \",\", \"，\", \";\"]"
+      },
+      {
+        "name": "splitOnPaste",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "transform",
+        "type": "((raw: string) => string)",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "trim",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "validate",
+        "type": "KunTagInputValidator",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "variant",
+        "type": "KunTagInputVariant",
+        "required": false,
+        "default": "\"bordered\""
+      }
+    ]
+  },
+  "KunText": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "content",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunTextarea": {
+    "props": [
+      {
+        "name": "autofocus",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "autoGrow",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "maxHeight",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "maxlength",
+        "type": "number",
+        "required": false,
+        "default": "100007"
+      },
+      {
+        "name": "minlength",
+        "type": "number",
+        "required": false,
+        "default": "1"
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "resize",
+        "type": "\"none\" | \"horizontal\" | \"vertical\" | \"both\"",
+        "required": false,
+        "default": "\"none\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "rows",
+        "type": "number",
+        "required": false,
+        "default": "4"
+      },
+      {
+        "name": "showCharCount",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      }
+    ]
+  },
+  "KunTooltip": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "delayHide",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "delayShow",
+        "type": "number",
+        "required": false,
+        "default": "100"
+      },
+      {
+        "name": "hideOnMobile",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "position",
+        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "required": false,
+        "default": "\"top\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunUpload": {
+    "props": [
+      {
+        "name": "aspect",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "size",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "initialImage",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunUserChip": {
+    "props": [
+      {
+        "name": "user",
+        "type": "KunUser | null",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disableFloating",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "floatingPosition",
+        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "required": false,
+        "default": "\"top\""
+      },
+      {
+        "name": "size",
+        "type": "KunAvatarSize",
+        "required": false,
+        "default": "\"md\""
+      }
+    ]
+  }
+}

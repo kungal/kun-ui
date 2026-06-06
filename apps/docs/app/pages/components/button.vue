@@ -11,22 +11,10 @@ import States from '~/examples/button/States.vue'
 import StatesSrc from '~/examples/button/States.vue?raw'
 import AsLink from '~/examples/button/AsLink.vue'
 import AsLinkSrc from '~/examples/button/AsLink.vue?raw'
+import meta from '~/generated/component-meta.json'
 
-// Hand-fed from KunButtonProps; follow-up: auto-generate from the TS interface.
-const buttonProps = [
-  { name: 'color', type: 'KunUIColor', default: "'primary'", description: 'Semantic color.' },
-  { name: 'variant', type: 'KunUIVariant', default: "'solid'", description: 'solid · bordered · light · flat · faded · shadow · ghost.' },
-  { name: 'size', type: 'KunUISize', default: "'md'", description: 'xs · sm · md · lg · xl.' },
-  { name: 'rounded', type: 'KunUIRounded', default: "'lg'", description: 'Corner radius bucket.' },
-  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable interaction.' },
-  { name: 'loading', type: 'boolean', default: 'false', description: 'Show a spinner and block clicks.' },
-  { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Stretch to container width.' },
-  { name: 'isIconOnly', type: 'boolean', default: 'false', description: 'Square icon-only button.' },
-  { name: 'iconPosition', type: "'left' | 'right'", default: "'left'", description: 'Slot/icon side.' },
-  { name: 'href', type: 'string', default: "''", description: 'Render as a link (NuxtLink in Nuxt, <a> in plain Vue).' },
-  { name: 'target', type: "'_blank' | '_self' | '_parent' | '_top'", default: "'_self'", description: 'Link target when href is set.' },
-  { name: 'type', type: "'button' | 'submit' | 'reset'", default: "'button'", description: 'Native button type.' },
-]
+// Props table generated from KunButtonProps — see scripts/gen-meta.mjs.
+const buttonProps = meta.KunButton.props
 </script>
 
 <template>

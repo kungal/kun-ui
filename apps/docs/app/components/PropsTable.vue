@@ -1,9 +1,10 @@
 <script setup lang="ts">
-// Hand-fed for now. Follow-up: auto-generate these rows from the component's
-// TypeScript prop interface (vue-component-meta) so they never drift.
+// Rows come from app/generated/component-meta.json (produced by `pnpm gen:meta`
+// from the TypeScript prop interfaces) — no hand-maintained, drift-prone tables.
 interface PropRow {
   name: string
   type: string
+  required?: boolean
   default?: string
   description?: string
 }
@@ -25,9 +26,12 @@ defineProps<{ rows: PropRow[] }>()
         <tr
           v-for="r in rows"
           :key="r.name"
-          class="border-default-100 align-top last:border-0 [&:not(:last-child)]:border-b"
+          class="border-default-100 align-top [&:not(:last-child)]:border-b"
         >
-          <td class="text-primary px-4 py-2 font-mono whitespace-nowrap">{{ r.name }}</td>
+          <td class="px-4 py-2 font-mono whitespace-nowrap">
+            <span class="text-primary">{{ r.name }}</span>
+            <span v-if="r.required" class="text-danger" title="required">&nbsp;*</span>
+          </td>
           <td class="text-default-600 px-4 py-2 font-mono">{{ r.type }}</td>
           <td class="text-default-500 px-4 py-2 font-mono whitespace-nowrap">
             {{ r.default ?? '—' }}
