@@ -260,7 +260,10 @@ const sizeText: Record<string, string> = {
 const containerClasses = computed(() =>
   cn(
     'flex flex-wrap items-center transition-shadow',
-    roundedClass,
+    // .value: this cn() runs in <script>, where refs are NOT auto-unwrapped
+    // (unlike templates) — passing the bare ref leaks its internal keys as
+    // class names and causes an SSR hydration mismatch.
+    roundedClass.value,
     sizeMinH[props.size],
     sizePadding[props.size],
     sizeText[props.size],

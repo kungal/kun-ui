@@ -6,3 +6,5 @@ dist
 .turbo/
 .DS_Store
 *.log
+.vscode/
+.playwright-mcp/

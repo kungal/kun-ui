@@ -15,7 +15,7 @@ const WANT = {
   lucide: [
     'x', 'check', 'info', 'circle-check', 'circle-x', 'triangle-alert',
     'chevron-right', 'chevron-left', 'chevron-down', 'chevrons-right',
-    'chevrons-left', 'arrow-right', 'arrow-left', 'plus', 'zoom-in', 'zoom-out',
+    'chevrons-left', 'arrow-right', 'arrow-left', 'plus', 'upload', 'zoom-in', 'zoom-out',
     'rotate-cw', 'rotate-ccw', 'refresh-ccw', 'external-link', 'download',
     'copy', 'calendar', 'lollipop',
   ],
