@@ -1,0 +1,12 @@
+# Keep the build context small + force a clean install/build inside Docker.
+**/node_modules
+**/.nuxt
+**/.output
+**/dist
+**/.turbo
+.git
+*.log
+.playwright-mcp
+.vscode
+.changeset
+apps/playground/dist

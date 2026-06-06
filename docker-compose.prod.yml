@@ -1,0 +1,15 @@
+# Production compose for the KunUI docs site, consumed by Dokploy.
+# CI (.github/workflows/docs-image.yml) builds + pushes the image to GHCR;
+# Dokploy pulls it (no build on the production server) and routes ui.kungal.com
+# to it via its built-in Traefik. Map the domain in the app's Domains tab:
+#   ui.kungal.com  ·  path /  ·  service docs  ·  container port 6757
+name: kun-ui-docs
+services:
+  docs:
+    image: ghcr.io/kungal/kun-ui-docs:latest
+    expose: ['6757'] # internal only; Traefik reverse-proxies it
+    restart: unless-stopped
+networks:
+  default:
+    name: dokploy-network
+    external: true

@@ -182,7 +182,16 @@ lines.push('## Composables', '')
 for (const [name, summary] of composables) lines.push(`- ${name}: ${summary}`)
 lines.push('')
 lines.push(coreExports, '')
-writeFileSync(join(root, 'llms.txt'), lines.join('\n'))
+
+// Write to the repo root (canonical, GitHub-visible) AND the docs site's
+// public/ so the live site serves /llms.txt (and /llms-full.txt).
+const publicDir = join(root, 'apps/docs/public')
+const writeBoth = (name, content) => {
+  writeFileSync(join(root, name), content)
+  writeFileSync(join(publicDir, name), content)
+}
+
+writeBoth('llms.txt', lines.join('\n'))
 
 // ── llms-full.txt ───────────────────────────────────────────────────────
 const integration = readFileSync(join(root, 'docs/INTEGRATION.md'), 'utf8')
@@ -205,7 +214,7 @@ for (const [cat, rows] of groupBy(components, 1)) {
 full.push('# Composable reference', '')
 for (const [name, summary] of composables) full.push(`- **${name}** — ${summary}`)
 full.push('', coreExports, '')
-writeFileSync(join(root, 'llms-full.txt'), full.join('\n'))
+writeBoth('llms-full.txt', full.join('\n'))
 
 const n = components.length
 console.log(`Generated llms.txt + llms-full.txt (${n} components, base: ${DOCS_BASE})`)

@@ -9,6 +9,10 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Dev server port (production listens on the same port via NITRO_PORT in the
+  // Docker image). 6757 by request — never the default 3000.
+  devServer: { port: 6757 },
+
   // Site favicons / PWA manifest (assets live in app's public/). The page
   // title is set per-route in app.vue.
   app: {
