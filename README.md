@@ -41,6 +41,11 @@ Both need a Tailwind v4 entry stylesheet (`tailwindcss` + `@kungal/tokens` +
 registration, the `KunUIConfig` slots, and the **"KunUI never sanitizes HTML"**
 security note.
 
+**Using an AI tool (Claude Code, Cursor, …)?** Point it at
+[`llms.txt`](./llms.txt) (compact index) or [`llms-full.txt`](./llms-full.txt)
+(full docs), and see [docs/USING-WITH-AI.md](./docs/USING-WITH-AI.md) for a
+paste-able `AGENTS.md`/`CLAUDE.md` rules block.
+
 ## Why this exists
 
 The original KunUI is a mature, deeply Nuxt-coupled Vue component library

@@ -8,6 +8,7 @@
     "build": "pnpm -r --filter \"./packages/*\" build",
     "typecheck": "pnpm -r --filter \"./packages/*\" typecheck",
     "clean": "pnpm -r --filter \"./packages/*\" clean",
+    "gen:llms": "node scripts/gen-llms.mjs",
     "changeset": "changeset",
     "ci:version": "changeset version",
     "ci:publish": "pnpm -r --filter \"./packages/*\" build && changeset publish"

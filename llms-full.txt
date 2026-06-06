@@ -1,0 +1,621 @@
+# KunUI — full documentation for LLMs
+
+> Cross-framework component library — 53 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+
+This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
+
+---
+
+# Critical rules
+
+## HTML is never sanitized
+
+KunUI ships no sanitizer. KunContent (the `content` prop, rendered via v-html) and useKunMessage(msg, type, dur, richText=true) render raw HTML exactly as given. Sanitize untrusted/user HTML yourself (e.g. DOMPurify) BEFORE passing it in. Fully-trusted/author content may be passed directly.
+
+## Icons are bundled, never fetched
+
+KunIcon renders inline SVG from an in-memory registry seeded with the icons the components need — it NEVER calls the Iconify API at runtime. Use bundled names like `lucide:check`. Register your own with registerKunIcon(name, {body}) / registerKunIcons({...}) from @kungal/core at startup. Unknown names render the injected iconComponent fallback (the Nuxt layer wires @nuxt/icon; plain Vue renders nothing).
+
+## The consumer owns the Tailwind entry
+
+KunUI does NOT ship one all-in-one stylesheet. Your app's CSS entry must contain: `@import 'tailwindcss';` then `@import '@kungal/tokens';` then `@import '@kungal/ui-vue/style.css';` (scoped component styles) plus `@source` directives pointing at @kungal/ui-vue and @kungal/core so Tailwind generates the utility classes the components use. Under pnpm, install @kungal/ui-vue and @kungal/core as DIRECT deps so the @import/@source resolve. Dark mode = toggle the `kun-dark-mode` class on <html>.
+
+---
+
+# KunUI Integration Guide
+
+How to add KunUI to your own project and integrate it yourself. This guide is
+accurate to the **published `0.1.x`** packages and is meant to be read by a
+consuming project (Nuxt or plain Vue) with **no changes required on the KunUI
+side**.
+
+> TL;DR — KunUI is Tailwind-v4-native. You install the packages, and **your app
+> owns its Tailwind entry stylesheet**. There are exactly three CSS lines you
+> must add (`tailwindcss`, `@kungal/tokens`, `@kungal/ui-vue/style.css`) plus a
+> couple of `@source` directives so Tailwind generates the classes the
+> components use. Everything else is auto-wired.
+
+---
+
+## 1. Package map — what to install
+
+All four packages are published under the `@kungal` scope and **share one
+version** (lockstep semver — always install matching versions).
+
+| Package | What it is | Install it when |
+| --- | --- | --- |
+| `@kungal/tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
+| `@kungal/core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
+| `@kungal/ui-vue` | The Vue 3 component layer (53 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
+
+`@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/tokens`, and
+`@kungal/ui-vue` depends on `@kungal/core`, so you never install the lower
+layers by hand — but you **do** add `@kungal/tokens` explicitly because you
+reference it from your CSS.
+
+---
+
+## 2. Requirements
+
+- **Node** ≥ 20
+- **Tailwind CSS v4** — required. KunUI components are styled with Tailwind
+  utility classes that **your** Tailwind build generates (see §5). v3 will not
+  work.
+- **Vue** ≥ 3.5 (peer dependency)
+- **Nuxt** ≥ 4 — only for the `@kungal/ui-nuxt` layer.
+
+---
+
+## 3. Quick start — Nuxt (recommended)
+
+### 3.1 Install
+
+```bash
+pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+> Why install `@kungal/ui-vue` and `@kungal/core` explicitly, when
+> `@kungal/ui-nuxt` already depends on them? Because your **CSS** references
+> them directly (`@import '@kungal/ui-vue/style.css'` and the `@source` lines in
+> §3.3). Under pnpm's strict `node_modules`, only your *direct* dependencies are
+> resolvable by name — so list them. (With npm/yarn flat installs this is
+> optional, but listing them is always safe and explicit.)
+
+### 3.2 `nuxt.config.ts`
+
+```ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineNuxtConfig({
+  // Pull in the whole KunUI layer: component auto-imports, composable
+  // auto-imports, and NuxtLink / @nuxt/icon / @nuxt/image wiring.
+  extends: ['@kungal/ui-nuxt'],
+
+  // Your app owns its Tailwind entry stylesheet (see 3.3).
+  css: ['~/assets/css/main.css'],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
+  compatibilityDate: '2025-01-01',
+})
+```
+
+### 3.3 `app/assets/css/main.css`
+
+```css
+@import 'tailwindcss';
+@import '@kungal/tokens';            /* theme tokens + opinionated base layer */
+@import '@kungal/ui-vue/style.css';  /* scoped component styles (transitions, etc.) */
+
+/*
+ * Tailwind must scan the KunUI packages so it generates the utility classes
+ * the components reference (e.g. `inline-flex`, `bg-primary`, `rounded-kun-md`).
+ * Paths are relative to THIS file — adjust the depth so they resolve to wherever
+ * node_modules holds the packages (3 levels up for app/assets/css/*).
+ */
+@source '../../../node_modules/@kungal/ui-vue';
+@source '../../../node_modules/@kungal/core';
+```
+
+That's it. `<KunButton>`, `<KunModal>`, `useKunMessage()`, etc. are now
+available everywhere with no per-file imports. Links render as `NuxtLink`,
+icons resolve through the bundled registry (and fall back to `@nuxt/icon`),
+images use `@nuxt/image`.
+
+### 3.4 Mount the overlay providers once
+
+Toasts, confirm dialogs and the mascot need their host components mounted once
+near the app root (e.g. in `app.vue`):
+
+```vue
+<template>
+  <NuxtPage />
+  <KunMessageProvider />
+  <KunAlertProvider />
+  <KunLoliProvider />
+</template>
+```
+
+(Only mount the ones you use — see §8.)
+
+---
+
+## 4. Quick start — plain Vue (Vite)
+
+### 4.1 Install
+
+```bash
+pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+(`@kungal/core` is listed explicitly because your CSS `@source`s it — see the
+note in §3.1.)
+
+### 4.2 `vite.config.ts`
+
+```ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [vue(), tailwindcss()],
+})
+```
+
+### 4.3 `src/assets/main.css`
+
+```css
+@import 'tailwindcss';
+@import '@kungal/tokens';
+@import '@kungal/ui-vue/style.css';
+
+/* Relative to this file. For src/assets/main.css node_modules is 2 levels up. */
+@source '../../node_modules/@kungal/ui-vue';
+@source '../../node_modules/@kungal/core';
+```
+
+### 4.4 `src/main.ts`
+
+```ts
+import { createApp } from 'vue'
+import { KunUI } from '@kungal/ui-vue'
+import App from './App.vue'
+import './assets/main.css'
+
+createApp(App)
+  .use(KunUI) // registers every component globally under its Kun* name
+  .mount('#app')
+```
+
+`app.use(KunUI)` is the plain-Vue parity for the Nuxt auto-import DX. Prefer
+tree-shaking instead? Skip the plugin and import components directly:
+
+```ts
+import { KunButton, KunModal } from '@kungal/ui-vue'
+```
+
+### 4.5 Wire links/navigation for a router app (optional)
+
+By default KunUI renders links as native `<a>` and navigates with
+`window.location.assign`. In a `vue-router` app, inject `RouterLink` and
+`router.push` once (see §7):
+
+```ts
+import { createApp } from 'vue'
+import { createRouter, createWebHistory, RouterLink } from 'vue-router'
+import { KunUI, installKunUIConfig } from '@kungal/ui-vue'
+import App from './App.vue'
+import './assets/main.css'
+
+const app = createApp(App)
+const router = createRouter({ history: createWebHistory(), routes: [/* … */] })
+
+app.use(router).use(KunUI)
+installKunUIConfig(app, {
+  linkComponent: RouterLink,
+  navigate: (href) => router.push(href),
+})
+app.mount('#app')
+```
+
+---
+
+## 5. CSS & theming (the part that matters)
+
+KunUI deliberately does **not** ship a single all-in-one stylesheet. The split
+exists so you stay in control of your Tailwind build and bundle size.
+
+What you import, and why:
+
+| Line | Why it's required |
+| --- | --- |
+| `@import 'tailwindcss';` | Your app owns the Tailwind entry. KunUI's CSS never imports Tailwind for you. Must come **first**. |
+| `@import '@kungal/tokens';` | Registers the design tokens via Tailwind v4 `@theme` (semantic colors with 50–950 scales, `rounded-kun-*`, `z-kun-*`, animation keyframes, the `dark` variant) plus an opinionated base layer (page background, font stack, `.scrollbar-hide`/`.scrollbar-visible`). Must come **after** Tailwind. |
+| `@import '@kungal/ui-vue/style.css';` | The components' **scoped** styles (modal/drawer/lightbox transitions, spoiler blur, Loli mascot, toast list animations). ~6 KB. Without it those effects silently break. |
+| `@source '…/@kungal/ui-vue';`<br>`@source '…/@kungal/core';` | Tailwind v4 ignores `node_modules` by default. These tell it to scan the compiled KunUI packages so it generates the utility classes the components reference. Without them components render **unstyled**. |
+
+### Tokens-only (no base layer)
+
+If you don't want KunUI touching global element styles (page background, font
+stack), import the tokens without the base layer:
+
+```css
+@import 'tailwindcss';
+@import '@kungal/tokens/css';   /* tokens only — no html/body/base resets */
+@import '@kungal/ui-vue/style.css';
+```
+
+Subpaths: `@kungal/tokens` (tokens **+** base), `@kungal/tokens/css` (tokens
+only), `@kungal/tokens/base.css` (base only).
+
+### Dark mode
+
+KunUI's `dark:` variant is wired to a class on a **parent** element:
+`@custom-variant dark (&:is(.kun-dark-mode *))`. Toggle the `kun-dark-mode`
+class on `<html>`:
+
+```ts
+document.documentElement.classList.toggle('kun-dark-mode', isDark)
+```
+
+Using `@nuxtjs/color-mode`? Point its `classSuffix`/class at `kun-dark-mode`,
+or mirror its state onto that class.
+
+### Overridable knobs
+
+`@kungal/tokens` exposes two `:root` custom properties you may override:
+
+```css
+:root {
+  --kun-global-opacity: 0.7;  /* alpha of "glassy" surfaces (Card/Modal/topbar) */
+  --kun-background-blur: 0px;  /* backdrop blur strength for those surfaces */
+}
+```
+
+### Troubleshooting CSS
+
+- **Components look unstyled / layout is broken** → a `@source` path isn't
+  resolving to `node_modules`. Fix the relative depth (it's relative to the CSS
+  file), or point it at wherever your package manager places `@kungal/ui-vue`
+  (in a pnpm monorepo deps may resolve at the workspace root).
+- **Transitions / spoilers / mascot missing** → you forgot
+  `@import '@kungal/ui-vue/style.css';`.
+- **Dark mode doesn't switch** → ensure `@kungal/tokens` is imported *after*
+  `tailwindcss`, and that you toggle `.kun-dark-mode` on `<html>`.
+
+---
+
+## 6. Icons — bundled, never fetched
+
+KunUI **never fetches icons from the Iconify API at runtime.** `<KunIcon>`
+renders inline SVG from an in-memory registry that is seeded with the icons the
+components need. This is intentional: runtime icon fetches are fragile under SSR
+and add network dependencies.
+
+```vue
+<KunIcon name="lucide:check" class="text-success text-2xl" />
+```
+
+### Register your own icons
+
+Add icons to the registry once at startup (any Iconify-style `{ body }` payload,
+or your own SVG inner markup using `currentColor`):
+
+```ts
+import { registerKunIcon, registerKunIcons } from '@kungal/core'
+
+registerKunIcon('lucide:rocket', {
+  body: '<path d="…" fill="currentColor"/>',
+  width: 24,
+  height: 24,
+})
+
+// or in bulk (e.g. icons extracted from @iconify-json/* at build time):
+registerKunIcons({
+  'lucide:star': { body: '<path …/>' },
+  'lucide:heart': { body: '<path …/>' },
+})
+```
+
+In Nuxt, do this in a plugin (`app/plugins/kun-icons.ts`); in plain Vue, before
+`mount()`.
+
+### Unknown icons
+
+If `<KunIcon>` is asked for a name not in the registry, it renders the
+`iconComponent` fallback (see §7) — `null` by default in plain Vue (renders
+nothing). The Nuxt layer sets the fallback to an `@nuxt/icon` wrapper, so in
+Nuxt unknown names still resolve through `@nuxt/icon`. API: `getKunIcon(name)`,
+`hasKunIcon(name)`, `registerKunIcon(s)` — all from `@kungal/core`.
+
+---
+
+## 7. Configuration — `KunUIConfig` (the decoupling slots)
+
+KunUI stays framework-agnostic by reading a small injectable config. Precedence
+for any component:
+
+```
+per-instance prop  >  KunUIConfig provider  >  built-in default
+```
+
+| Slot | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `rounded` | `KunUIRounded` | `'md'` | Default corner radius for components that don't pass `rounded`. |
+| `linkComponent` | `Component \| string` | `'a'` | What renders for navigational elements with an `href` (Button, Card…). Inject `RouterLink` / `NuxtLink`. |
+| `navigate` | `(href: string) => unknown` | `window.location.assign` | Imperative navigation (e.g. Tab with an `href`). Inject `router.push` / `navigateTo`. |
+| `imageComponent` | `Component \| string` | `'img'` | What `KunImage` renders. The Nuxt layer injects `<NuxtImg>`. |
+| `iconComponent` | `Component \| string \| null` | `null` | Fallback renderer for icons not in the registry. The Nuxt layer injects an `@nuxt/icon` wrapper. |
+| `userLinkTemplate` | `string` | `'/user/{id}/info'` | Path `KunAvatar` navigates to; `{id}` is replaced. |
+
+**In Nuxt** all of these are set for you by `@kungal/ui-nuxt` — you usually
+don't touch this.
+
+**In plain Vue** set them with either:
+
+- `installKunUIConfig(app, partialConfig)` — from `main.ts` (has the `app`, no
+  active `setup()`), or
+- `provideKunUIConfig(partialConfig)` — inside a component `setup()` (e.g. your
+  root component), scopes config to that subtree.
+
+```ts
+import { provideKunUIConfig } from '@kungal/ui-vue'
+
+provideKunUIConfig({
+  rounded: 'lg',
+  userLinkTemplate: '/u/{id}',
+})
+```
+
+`useKunUIConfig()` reads the resolved config if you're building wrappers.
+
+---
+
+## 8. Toasts, confirm dialogs & mascot
+
+These are **store + provider** systems: mount the provider once, trigger from
+anywhere (event handlers, stores, composables — no component instance needed).
+
+| Trigger | Provider to mount | Signature |
+| --- | --- | --- |
+| `useKunMessage()` | `<KunMessageProvider />` | `(message: string, type: 'warn'\|'success'\|'error'\|'info', duration = 3000, richText = false, position = 'top-center') => string` |
+| `useKunAlert()` | `<KunAlertProvider />` | `(opts?: { title?; message?; … }) => Promise<boolean>` (resolves true on confirm) |
+| `useKunLoliInfo()` | `<KunLoliProvider />` | mascot popup (message, duration) |
+
+```ts
+import { useKunMessage, useKunAlert } from '@kungal/ui-vue' // auto-imported in Nuxt
+
+useKunMessage('Saved!', 'success')
+
+const ok = await useKunAlert({ title: 'Delete?', message: 'This cannot be undone.' })
+if (ok) {
+  /* … */
+}
+```
+
+> ⚠️ `useKunMessage(..., richText = true)` renders the message as **raw HTML**.
+> See §9 — sanitize first.
+
+---
+
+## 9. Security: KunUI never sanitizes HTML
+
+**This is a deliberate, load-bearing design decision. Read it.**
+
+KunUI does **not** sanitize any HTML, anywhere. Components that render raw HTML
+render *exactly* what you give them:
+
+- **`<KunContent :content="html" />`** — renders `html` via `v-html`.
+- **`useKunMessage(msg, type, dur, richText = true)`** — renders `msg` via
+  `v-html`.
+
+If that HTML can contain anything user-controlled, **you must sanitize it
+yourself, in your app, before passing it in.** KunUI intentionally ships no
+sanitizer because running one inside the library under SSR proved unreliable —
+sanitization is the consuming app's responsibility, where you control the
+server/client environment.
+
+```ts
+import DOMPurify from 'dompurify'
+
+const safe = DOMPurify.sanitize(userProvidedHtml)
+```
+
+```vue
+<KunContent :content="safe" />
+```
+
+If your content is fully trusted (authored by you, not user input), you can pass
+it directly — but make that an explicit decision, not an accident.
+
+---
+
+## 10. User model
+
+Components that show a user (`KunAvatar`, `KunAvatarGroup`, `KunUserChip`)
+accept a minimal `KunUser`:
+
+```ts
+import type { KunUser } from '@kungal/ui-vue' // re-exported from @kungal/core
+
+interface KunUser {
+  id: number
+  name: string
+  avatar: string // URL; empty falls back to a deterministic sticker
+}
+```
+
+Your richer app `User` type is structurally compatible as long as it has these
+three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
+
+---
+
+## 11. SSR notes
+
+- All components are SSR-safe and prerender cleanly. Because icons are bundled
+  (§6), SSR never makes a network request to render an icon.
+- Mount the overlay providers (§8) at the app root; they are client-driven but
+  SSR-safe to render.
+- Do sanitization (§9) on the consumer side; under SSR, run DOMPurify with a
+  server DOM (e.g. `jsdom`/`isomorphic-dompurify`) on the server and the native
+  DOM on the client.
+
+---
+
+## 12. Component reference (53)
+
+**Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` ·
+`KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` ·
+`KunNull`
+
+**Buttons & feedback:** `KunButton` · `KunRipple` · `KunLoading` · `KunCopy` ·
+`KunRating`
+
+**Media & content:** `KunImage` · `KunImageNative` · `KunIcon` · `KunBrand` ·
+`KunFavicon` · `KunContent` · `KunText` · `KunMarkdown`
+
+**Navigation & overlays:** `KunLink` · `KunTab` · `KunModal` · `KunDrawer` ·
+`KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunPagination`
+· `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+
+**Forms:** `KunInput` · `KunTextarea` · `KunSelect` · `KunSwitch` ·
+`KunCheckBox` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput`
+· `KunTagInput` · `KunUpload`
+
+**People:** `KunAvatar` · `KunAvatarGroup` · `KunUserChip`
+
+**Overlay providers (mount once):** `KunMessageProvider` · `KunAlertProvider` ·
+`KunLoliProvider` (and the standalone `KunLoli`)
+
+In Nuxt all are auto-imported. In plain Vue they're named exports of
+`@kungal/ui-vue` (or registered globally via `app.use(KunUI)`).
+
+---
+
+## 13. Composable reference
+
+Auto-imported by the Nuxt layer; named exports of `@kungal/ui-vue` otherwise.
+
+| Composable | Purpose |
+| --- | --- |
+| `useKunMessage` / `useKunMessageState` | Trigger / read toasts |
+| `useKunAlert` / `useKunAlertState` | Trigger / read confirm dialogs |
+| `useKunLoliInfo` / `useKunLoliState` | Trigger / read the mascot popup |
+| `useKunUIConfig` | Read the resolved `KunUIConfig` |
+| `provideKunUIConfig` / `installKunUIConfig` | Set `KunUIConfig` |
+| `useKunCopy` | Copy-to-clipboard helper |
+| `useKunUniqueId` | SSR-safe unique id generation |
+| `useResolvedRounded` | Resolve a component's effective radius |
+| `useRipple` | Ripple effect directive/logic |
+| `useFilePicker` | Programmatic file selection |
+| `useContentLightbox` / `useSpoilerContent` | Enhancers used by `KunContent` |
+
+From `@kungal/core` (framework-agnostic): `cn`, `registerKunIcon(s)`,
+`getKunIcon`, `hasKunIcon`, the variant class helpers (`kunBgClasses`, …), and
+the shared types (`KunUIColor`, `KunUISize`, `KunUIVariant`, `KunUIRounded`,
+`KunUser`).
+
+---
+
+## 14. Versioning
+
+The four packages are released together under one version (a Changesets
+`fixed` group). Always install matching versions, and treat the set as one unit
+when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
+
+---
+
+# Component reference
+
+## Layout & display
+
+- **KunCard** — Container/panel with color + variant; renders as a link when given href/to.
+- **KunDivider** — Horizontal/vertical separator with an optional centered label.
+- **KunHeader** — Section heading (scale h1–h6) with brand styling.
+- **KunInfo** — Inline callout box (color, icon, title, description; solid/flat/bordered).
+- **KunProgress** — Progress bar: linear/striped/gradient/circle, indeterminate, optional label.
+- **KunBadge** — Count/dot badge wrapping a trigger (e.g. a button/icon); `max` caps the count.
+- **KunChip** — Small tag/pill with color + variant.
+- **KunScrollShadow** — Horizontal scroll container with edge fade shadows.
+- **KunFadeCard** — Fade + expand transition wrapper for conditional content.
+- **KunNull** — Empty-state placeholder with a bundled mascot image + caption (`description`, `src`, `isShowSticker`).
+
+## Buttons & feedback
+
+- **KunButton** — Button: color/variant/size, loading state; renders as a link with href/to.
+- **KunRipple** — Material-style ripple effect.
+- **KunLoading** — Loading state: overlay over wrapped content (default slot) or standalone; bundled mascot image (`src`, `loading`, `description`).
+- **KunCopy** — Copy-to-clipboard button with feedback.
+- **KunRating** — Star rating input (v-model number).
+
+## Media & content
+
+- **KunImage** — Image with skeleton/aspect/objectFit; uses the injected image component (NuxtImg in Nuxt).
+- **KunImageNative** — Bare <img> with class merging (no optimization pipeline).
+- **KunIcon** — Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.
+- **KunBrand** — Logo + name brand block, links home; optional badge.
+- **KunFavicon** — The KunUI mascot logo SVG.
+- **KunContent** — Renders HTML (`content`) via v-html with spoiler + inline-image lightbox. DOES NOT sanitize — caller must.
+- **KunText** — Safe-wrapping text block (handles long URLs/underscores).
+- **KunMarkdown** — The KunUI markdown glyph.
+
+## Navigation & overlays
+
+- **KunLink** — Styled link; uses the injected link component (NuxtLink in Nuxt).
+- **KunTab** — Tabbed interface (v-model value, items array; variants, orientation).
+- **KunModal** — Dialog teleported to body, focus-trapped, body-scroll-locked, Escape to close (v-model boolean).
+- **KunDrawer** — Slide-in panel from any edge (placement, size; v-model boolean).
+- **KunTooltip** — Hover/focus tooltip (text + trigger slot).
+- **KunPopover** — Floating popover anchored to a trigger slot.
+- **KunDropdown** — Menu of items anchored to a trigger (items array).
+- **KunContextMenu** — Right-click context menu (items array).
+- **KunPagination** — Page navigation (v-model:current-page, total-page) with quick-jump.
+- **KunLightbox** — Image lightbox/viewer (v-model:is-open, images array).
+- **KunLightboxGallery** — Gallery wrapper; click an item to open the lightbox.
+- **KunLightboxGalleryItem** — A single gallery item (src + slot for the thumbnail).
+
+## Forms
+
+- **KunInput** — Text input (v-model) with label/helper/error, sizes, variants.
+- **KunTextarea** — Multiline input (v-model) with optional counter.
+- **KunSelect** — Select dropdown (v-model, options array).
+- **KunSwitch** — Toggle switch (v-model boolean).
+- **KunCheckBox** — Checkbox (v-model boolean).
+- **KunSlider** — Range slider (v-model number; min/max/step).
+- **KunRadioGroup** — Radio group (v-model, options array; card/classic variants).
+- **KunDatePicker** — Date / date-range picker (date-fns based; v-model).
+- **KunFileInput** — File picker button (v-model File | File[]); default trigger icon is bundled.
+- **KunTagInput** — Tag entry input (v-model string[]; split chars, validation, max).
+- **KunUpload** — Drag/drop image upload with crop (size, aspect).
+
+## People
+
+- **KunAvatar** — User avatar (KunUser); navigates to userLinkTemplate on click; sticker fallback.
+- **KunAvatarGroup** — Stacked avatars with +N overflow.
+- **KunUserChip** — Avatar + name + description chip.
+
+## Overlay providers (mount once near app root)
+
+- **KunMessageProvider** — Renders toasts triggered by useKunMessage(). Mount once.
+- **KunAlertProvider** — Renders confirm dialogs triggered by useKunAlert(). Mount once.
+- **KunLoliProvider** — Renders the mascot popup triggered by useKunLoliInfo(). Mount once.
+- **KunLoli** — The standalone mascot popup component.
+
+# Composable reference
+
+- **useKunMessage / useKunMessageState** — Trigger / read toasts. useKunMessage(message, type, duration=3000, richText=false, position="top-center").
+- **useKunAlert / useKunAlertState** — Trigger / read confirm dialogs. useKunAlert(opts?) returns Promise<boolean>.
+- **useKunLoliInfo / useKunLoliState** — Trigger / read the mascot popup.
+- **useKunUIConfig / provideKunUIConfig / installKunUIConfig** — Read/set KunUIConfig (rounded, linkComponent, navigate, imageComponent, iconComponent, userLinkTemplate).
+- **useKunCopy** — Copy-to-clipboard helper.
+- **useKunUniqueId** — SSR-safe unique id generation.
+- **useResolvedRounded** — Resolve a component's effective radius.
+- **useRipple** — Ripple effect logic.
+- **useFilePicker** — Programmatic file selection.
+- **useContentLightbox / useSpoilerContent** — Enhancers used by KunContent.
+
+From @kungal/core (framework-agnostic): cn, registerKunIcon, registerKunIcons, getKunIcon, hasKunIcon, the variant class helpers (kunBgClasses, kunTextClasses, kunRingClasses, …), and types KunUIColor, KunUISize, KunUIVariant, KunUIRounded, KunUser.

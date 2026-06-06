@@ -1,0 +1,124 @@
+# KunUI
+
+> Cross-framework component library — 53 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+
+Packages:
+- @kungal/tokens: Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.
+- @kungal/core: Framework-agnostic TypeScript core: cn(), the variant/class matrix, the radius system, the bundled-icon registry, shared types (KunUIColor, KunUser, …).
+- @kungal/ui-vue: The Vue 3 component layer (works in any Vue 3.5+ app).
+- @kungal/ui-nuxt: A Nuxt 4 layer that wraps @kungal/ui-vue and auto-imports everything + injects NuxtLink / @nuxt/icon / @nuxt/image.
+
+## Critical rules (read before using)
+
+- **HTML is never sanitized.** KunUI ships no sanitizer. KunContent (the `content` prop, rendered via v-html) and useKunMessage(msg, type, dur, richText=true) render raw HTML exactly as given. Sanitize untrusted/user HTML yourself (e.g. DOMPurify) BEFORE passing it in. Fully-trusted/author content may be passed directly.
+- **Icons are bundled, never fetched.** KunIcon renders inline SVG from an in-memory registry seeded with the icons the components need — it NEVER calls the Iconify API at runtime. Use bundled names like `lucide:check`. Register your own with registerKunIcon(name, {body}) / registerKunIcons({...}) from @kungal/core at startup. Unknown names render the injected iconComponent fallback (the Nuxt layer wires @nuxt/icon; plain Vue renders nothing).
+- **The consumer owns the Tailwind entry.** KunUI does NOT ship one all-in-one stylesheet. Your app's CSS entry must contain: `@import 'tailwindcss';` then `@import '@kungal/tokens';` then `@import '@kungal/ui-vue/style.css';` (scoped component styles) plus `@source` directives pointing at @kungal/ui-vue and @kungal/core so Tailwind generates the utility classes the components use. Under pnpm, install @kungal/ui-vue and @kungal/core as DIRECT deps so the @import/@source resolve. Dark mode = toggle the `kun-dark-mode` class on <html>.
+
+## Install
+
+Nuxt — `extends: ["@kungal/ui-nuxt"]` in nuxt.config, then add the CSS entry:
+
+```bash
+pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+Plain Vue — `app.use(KunUI)` (or import components directly):
+
+```bash
+pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+```
+
+See the Integration guide for the required Tailwind entry stylesheet.
+
+## Documentation
+
+- [Integration guide](https://github.com/kungal/kun-ui/blob/main/docs/INTEGRATION.md): Full setup for Nuxt and plain Vue: install, the Tailwind entry CSS, dark mode, icons, KunUIConfig, providers, security, SSR, full reference.
+- [Using KunUI with AI tools](https://github.com/kungal/kun-ui/blob/main/docs/USING-WITH-AI.md): How to point Claude Code / Cursor at KunUI and a paste-able rules block.
+- [Releasing](https://github.com/kungal/kun-ui/blob/main/docs/RELEASING.md): How the four packages are versioned and published (Changesets + npm OIDC).
+- [Architecture](https://github.com/kungal/kun-ui/blob/main/docs/architecture.md): Why the library is split into tokens / core / vue / nuxt.
+
+## Components
+
+In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or register globally via app.use(KunUI)).
+
+### Layout & display
+- KunCard: Container/panel with color + variant; renders as a link when given href/to.
+- KunDivider: Horizontal/vertical separator with an optional centered label.
+- KunHeader: Section heading (scale h1–h6) with brand styling.
+- KunInfo: Inline callout box (color, icon, title, description; solid/flat/bordered).
+- KunProgress: Progress bar: linear/striped/gradient/circle, indeterminate, optional label.
+- KunBadge: Count/dot badge wrapping a trigger (e.g. a button/icon); `max` caps the count.
+- KunChip: Small tag/pill with color + variant.
+- KunScrollShadow: Horizontal scroll container with edge fade shadows.
+- KunFadeCard: Fade + expand transition wrapper for conditional content.
+- KunNull: Empty-state placeholder with a bundled mascot image + caption (`description`, `src`, `isShowSticker`).
+
+### Buttons & feedback
+- KunButton: Button: color/variant/size, loading state; renders as a link with href/to.
+- KunRipple: Material-style ripple effect.
+- KunLoading: Loading state: overlay over wrapped content (default slot) or standalone; bundled mascot image (`src`, `loading`, `description`).
+- KunCopy: Copy-to-clipboard button with feedback.
+- KunRating: Star rating input (v-model number).
+
+### Media & content
+- KunImage: Image with skeleton/aspect/objectFit; uses the injected image component (NuxtImg in Nuxt).
+- KunImageNative: Bare <img> with class merging (no optimization pipeline).
+- KunIcon: Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.
+- KunBrand: Logo + name brand block, links home; optional badge.
+- KunFavicon: The KunUI mascot logo SVG.
+- KunContent: Renders HTML (`content`) via v-html with spoiler + inline-image lightbox. DOES NOT sanitize — caller must.
+- KunText: Safe-wrapping text block (handles long URLs/underscores).
+- KunMarkdown: The KunUI markdown glyph.
+
+### Navigation & overlays
+- KunLink: Styled link; uses the injected link component (NuxtLink in Nuxt).
+- KunTab: Tabbed interface (v-model value, items array; variants, orientation).
+- KunModal: Dialog teleported to body, focus-trapped, body-scroll-locked, Escape to close (v-model boolean).
+- KunDrawer: Slide-in panel from any edge (placement, size; v-model boolean).
+- KunTooltip: Hover/focus tooltip (text + trigger slot).
+- KunPopover: Floating popover anchored to a trigger slot.
+- KunDropdown: Menu of items anchored to a trigger (items array).
+- KunContextMenu: Right-click context menu (items array).
+- KunPagination: Page navigation (v-model:current-page, total-page) with quick-jump.
+- KunLightbox: Image lightbox/viewer (v-model:is-open, images array).
+- KunLightboxGallery: Gallery wrapper; click an item to open the lightbox.
+- KunLightboxGalleryItem: A single gallery item (src + slot for the thumbnail).
+
+### Forms
+- KunInput: Text input (v-model) with label/helper/error, sizes, variants.
+- KunTextarea: Multiline input (v-model) with optional counter.
+- KunSelect: Select dropdown (v-model, options array).
+- KunSwitch: Toggle switch (v-model boolean).
+- KunCheckBox: Checkbox (v-model boolean).
+- KunSlider: Range slider (v-model number; min/max/step).
+- KunRadioGroup: Radio group (v-model, options array; card/classic variants).
+- KunDatePicker: Date / date-range picker (date-fns based; v-model).
+- KunFileInput: File picker button (v-model File | File[]); default trigger icon is bundled.
+- KunTagInput: Tag entry input (v-model string[]; split chars, validation, max).
+- KunUpload: Drag/drop image upload with crop (size, aspect).
+
+### People
+- KunAvatar: User avatar (KunUser); navigates to userLinkTemplate on click; sticker fallback.
+- KunAvatarGroup: Stacked avatars with +N overflow.
+- KunUserChip: Avatar + name + description chip.
+
+### Overlay providers (mount once near app root)
+- KunMessageProvider: Renders toasts triggered by useKunMessage(). Mount once.
+- KunAlertProvider: Renders confirm dialogs triggered by useKunAlert(). Mount once.
+- KunLoliProvider: Renders the mascot popup triggered by useKunLoliInfo(). Mount once.
+- KunLoli: The standalone mascot popup component.
+
+## Composables
+
+- useKunMessage / useKunMessageState: Trigger / read toasts. useKunMessage(message, type, duration=3000, richText=false, position="top-center").
+- useKunAlert / useKunAlertState: Trigger / read confirm dialogs. useKunAlert(opts?) returns Promise<boolean>.
+- useKunLoliInfo / useKunLoliState: Trigger / read the mascot popup.
+- useKunUIConfig / provideKunUIConfig / installKunUIConfig: Read/set KunUIConfig (rounded, linkComponent, navigate, imageComponent, iconComponent, userLinkTemplate).
+- useKunCopy: Copy-to-clipboard helper.
+- useKunUniqueId: SSR-safe unique id generation.
+- useResolvedRounded: Resolve a component's effective radius.
+- useRipple: Ripple effect logic.
+- useFilePicker: Programmatic file selection.
+- useContentLightbox / useSpoilerContent: Enhancers used by KunContent.
+
+From @kungal/core (framework-agnostic): cn, registerKunIcon, registerKunIcons, getKunIcon, hasKunIcon, the variant class helpers (kunBgClasses, kunTextClasses, kunRingClasses, …), and types KunUIColor, KunUISize, KunUIVariant, KunUIRounded, KunUser.
