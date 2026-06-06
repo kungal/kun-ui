@@ -95,13 +95,18 @@ off its Nuxt-context hack onto a store + mounted provider), and
 `KunTab` / `KunTooltip` / `KunPopover` (the latter two on `@floating-ui/vue`;
 Tab's `navigateTo` coupling replaced by an injectable `config.navigate`),
 plus `KunImage` / `KunImageNative` / `KunLink` / `KunDivider` (Image completes
-the Nuxt-module trio via the `config.imageComponent` slot), and the
-presentational batch `KunBadge` / `KunChip` / `KunProgress` / `KunInfo` /
-`KunLoading` — **18 components total**, all verified through both the Vite
-playground and Nuxt SSR prerender. The items below are the full P1 scope; the
-remaining ~21 components port mechanically against the same pattern. (Avatar/
-Group are deferred: they couple to the app's KunUser model + getRandomSticker
-+ a hardcoded user route, so they need a small data-model decision first.)
+the Nuxt-module trio via the `config.imageComponent` slot), the presentational
+batch `KunBadge` / `KunChip` / `KunProgress` / `KunInfo` / `KunLoading`, and
+the form-control batch `KunInput` / `KunTextarea` / `KunSwitch` / `KunCheckBox`
+/ `KunSlider` / `KunRadioGroup` (the v-model line; the original's
+`text-red-500` leaks were already `danger-*` here, and Slider's
+`bg-white dark:bg-black` thumb was fixed to `bg-content1`; shared
+`useKunUniqueId` composable ported) — **24 components total**, all verified
+through both the Vite playground and Nuxt SSR prerender. The items below are
+the full P1 scope; the remaining ~15 components port mechanically against the
+same pattern. (Avatar/Group are deferred: they couple to the app's KunUser
+model + getRandomSticker + a hardcoded user route, so they need a small
+data-model decision first.)
 
 - [x] Replace Nuxt auto-imports with explicit imports (the four landed
   components do this; consider `unplugin-auto-import` +

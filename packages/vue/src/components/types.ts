@@ -228,3 +228,95 @@ export interface KunLoadingProps {
    *  consuming app's public dir). */
   src?: string
 }
+
+// ── Input ──────────────────────────────────────────────────────────────
+export interface KunInputProps {
+  label?: string
+  type?: string
+  color?: KunUIColor
+  className?: string
+  placeholder?: string
+  helperText?: string
+  error?: string
+  size?: KunUISize
+  required?: boolean
+  disabled?: boolean
+  darkBorder?: boolean
+  autofocus?: boolean
+  rounded?: KunUIRounded
+}
+
+// ── Textarea ───────────────────────────────────────────────────────────
+export interface KunTextareaProps {
+  placeholder?: string
+  label?: string
+  name?: string
+  hint?: string
+  error?: string
+  maxHeight?: string
+  disabled?: boolean
+  readonly?: boolean
+  required?: boolean
+  autofocus?: boolean
+  showCharCount?: boolean
+  autoGrow?: boolean
+  rows?: number
+  maxlength?: number
+  minlength?: number
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both'
+  darkBorder?: boolean
+  rounded?: KunUIRounded
+}
+
+// ── Switch ─────────────────────────────────────────────────────────────
+export interface KunSwitchProps {
+  label?: string
+  disabled?: boolean
+  className?: string
+  labelClassName?: string
+}
+
+// ── CheckBox ───────────────────────────────────────────────────────────
+export interface KunCheckBoxProps {
+  color?: KunUIColor
+  type?: 'single' | 'multiple'
+  label?: string
+  id?: string
+  name?: string
+  value?: string | number | boolean
+  disabled?: boolean
+  className?: string
+}
+
+// ── Slider ─────────────────────────────────────────────────────────────
+export interface KunSliderProps {
+  min?: number
+  max?: number
+  step?: number
+}
+
+// ── RadioGroup ─────────────────────────────────────────────────────────
+export type KunRadioValue = string | number
+export type KunRadioVariant = 'classic' | 'card'
+export type KunRadioOrientation = 'vertical' | 'horizontal'
+
+export interface KunRadioOption<T extends KunRadioValue = KunRadioValue> {
+  value: T
+  label: string
+  description?: string
+  disabled?: boolean
+}
+
+export interface KunRadioGroupProps<T extends KunRadioValue = KunRadioValue> {
+  options: readonly KunRadioOption<T>[]
+  ariaLabel?: string
+  label?: string
+  variant?: KunRadioVariant
+  orientation?: KunRadioOrientation
+  color?: KunUIColor
+  size?: KunUISize
+  rounded?: KunUIRounded
+  disabled?: boolean
+  error?: string
+  className?: string
+}

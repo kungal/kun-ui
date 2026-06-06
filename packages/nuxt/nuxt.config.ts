@@ -9,20 +9,26 @@ const KUN_COMPONENTS = [
   'KunBadge',
   'KunButton',
   'KunCard',
+  'KunCheckBox',
   'KunChip',
   'KunDivider',
   'KunIcon',
   'KunImage',
   'KunImageNative',
   'KunInfo',
+  'KunInput',
   'KunLink',
   'KunLoading',
   'KunMessageProvider',
   'KunModal',
   'KunPopover',
   'KunProgress',
+  'KunRadioGroup',
   'KunRipple',
+  'KunSlider',
+  'KunSwitch',
   'KunTab',
+  'KunTextarea',
   'KunTooltip',
 ]
 
@@ -35,6 +41,7 @@ const KUN_COMPOSABLES = [
   'provideKunUIConfig',
   'useResolvedRounded',
   'useRipple',
+  'useKunUniqueId',
 ]
 
 export default defineNuxtConfig({

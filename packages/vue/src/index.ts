@@ -2,20 +2,26 @@ import type { App, Plugin } from 'vue'
 import KunBadge from './components/Badge.vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
+import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
 import KunDivider from './components/Divider.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
 import KunInfo from './components/Info.vue'
+import KunInput from './components/Input.vue'
 import KunLink from './components/Link.vue'
 import KunLoading from './components/Loading.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunPopover from './components/Popover.vue'
 import KunProgress from './components/Progress.vue'
+import KunRadioGroup from './components/RadioGroup.vue'
 import KunRipple from './components/Ripple.vue'
+import KunSlider from './components/Slider.vue'
+import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
+import KunTextarea from './components/Textarea.vue'
 import KunTooltip from './components/Tooltip.vue'
 
 // Components — import individually for tree-shaking, or register them all
@@ -24,20 +30,26 @@ export {
   KunBadge,
   KunButton,
   KunCard,
+  KunCheckBox,
   KunChip,
   KunDivider,
   KunIcon,
   KunImage,
   KunImageNative,
   KunInfo,
+  KunInput,
   KunLink,
   KunLoading,
   KunMessageProvider,
   KunModal,
   KunPopover,
   KunProgress,
+  KunRadioGroup,
   KunRipple,
+  KunSlider,
+  KunSwitch,
   KunTab,
+  KunTextarea,
   KunTooltip,
 }
 
@@ -51,6 +63,7 @@ export {
 } from './config/useKunUIConfig'
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
+export { useKunUniqueId } from './composables/useKunUniqueId'
 
 // Message (toast) system — imperative trigger + read store. Mount
 // <KunMessageProvider/> once near your app root.
@@ -85,26 +98,42 @@ export type {
   KunProgressProps,
   KunInfoProps,
   KunLoadingProps,
+  KunInputProps,
+  KunTextareaProps,
+  KunSwitchProps,
+  KunCheckBoxProps,
+  KunSliderProps,
+  KunRadioGroupProps,
+  KunRadioOption,
+  KunRadioValue,
+  KunRadioVariant,
+  KunRadioOrientation,
 } from './components/types'
 
 const components = {
   KunBadge,
   KunButton,
   KunCard,
+  KunCheckBox,
   KunChip,
   KunDivider,
   KunIcon,
   KunImage,
   KunImageNative,
   KunInfo,
+  KunInput,
   KunLink,
   KunLoading,
   KunMessageProvider,
   KunModal,
   KunPopover,
   KunProgress,
+  KunRadioGroup,
   KunRipple,
+  KunSlider,
+  KunSwitch,
   KunTab,
+  KunTextarea,
   KunTooltip,
 }
 
