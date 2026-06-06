@@ -9,8 +9,11 @@ experience on top of it:
   templates stay type-checked;
 - **injects `NuxtLink`** as KunUI's `linkComponent`, so `href` buttons/cards
   render as SSR-aware client-side links (exactly like the original);
-- **injects `@nuxt/icon`** as KunUI's `iconComponent`, so icons render
-  through Nuxt's icon pipeline (not the standalone `@iconify/vue` default);
+- **injects `@nuxt/icon`** as KunUI's `iconComponent` — used only as a
+  *fallback* for icons not in KunUI's bundled set (KunUI's own ~24 icons are
+  bundled inline in `@kungal/core` and never fetched). For consumer icons,
+  install `@iconify-json/*` and use `@nuxt/icon`'s local/client bundle mode so
+  they aren't fetched either, or `registerKunIcons()` from `@kungal/core`;
 - registers `@nuxt/icon` + `@nuxt/image`;
 - **auto-imports the composables** too (`useKunMessage`, `useKunUIConfig`, …)
   so they work with no import, like the original.

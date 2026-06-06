@@ -102,16 +102,27 @@ mechanically against the same pattern.
 - [x] Abstract the Nuxt module touch-points behind injectable config slots:
   - [x] `NuxtLink` → `config.linkComponent` (default `<a>`; pass `href` for
     string tags, `to` for RouterLink/NuxtLink components).
-  - [x] `@nuxt/icon` (`<NuxtIcon>`) → `config.iconComponent` (default
-    `@iconify/vue`; same Iconify names so call sites are unchanged).
+  - [x] `@nuxt/icon` (`<NuxtIcon>`) → `config.iconComponent`, used ONLY as a
+    fallback for icons not in the bundled registry (see icons below).
   - [ ] `@nuxt/image` (`<NuxtImg>`) → `config.imageComponent` — add when
     porting `Image.vue`.
 - [x] Rework `useKunMessage` to mount its container without stealing the
   Nuxt app context — replaced the imperative `render()` + stolen
   `vueApp._context` with a pure module store + a mounted `<KunMessageProvider>`
   (Teleported to body), the Sonner / Naive-UI pattern. No context hack.
-- [ ] Port `sanitize.ts` off `import.meta.server` (inject an `isServer`
-  flag) before it can move into a shared package.
+- [x] **Icons are bundled, never fetched.** `KunIcon` renders inline SVG from
+  a registry in `@kungal/core` (seeded with the ~24 icons KunUI components
+  use, generated from `@iconify-json/*` at build time via
+  `core/scripts/gen-icons.mjs`). `@iconify/vue` (the runtime-fetch path) was
+  dropped. Render order: registry → injected `iconComponent` → nothing.
+  Consumers bundle their own via `registerKunIcons()`, or inject `@nuxt/icon`
+  in local-bundle mode / unplugin-icons. Verified: SSR emits inline `<svg>`,
+  zero Iconify API calls.
+- **Sanitization — OUT OF SCOPE (decided).** The library never sanitizes;
+  consumers must sanitize any HTML they pass (e.g. `richText` toasts,
+  `Content`/`Markdown` bodies). SSR-side sanitization (jsdom/DOMPurify) caused
+  real problems in production, so `sanitize.ts` is intentionally NOT ported.
+  Every `v-html` site documents the trusted-input requirement.
 - [x] Consume `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of in-package copies.
 

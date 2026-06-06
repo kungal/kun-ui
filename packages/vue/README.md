@@ -11,6 +11,33 @@ app (Vite, Astro, Laravel, plain `createApp`, …), not just Nuxt.
 > components port mechanically against the same pattern (see
 > `docs/architecture.md §6`).
 
+## Icons (bundled, never fetched)
+
+`KunIcon` renders **inline SVG from a registry** — it never calls the Iconify
+API (no FOUC, no SSR-empty-then-pop, works offline / behind a firewall). The
+~24 icons KunUI's own components use are bundled in `@kungal/core`, so they
+work with zero setup.
+
+```vue
+<KunIcon name="lucide:circle-check" class="text-success text-2xl" />
+```
+
+Bring your own icons by registering their data (from `@iconify-json/*` at
+build time, or hand-written SVG — bodies use `currentColor`):
+
+```ts
+import { registerKunIcons } from '@kungal/core'
+import lucide from '@iconify-json/lucide/icons.json' // build-time data
+
+registerKunIcons({
+  'lucide:rocket': { body: lucide.icons.rocket.body },
+  'brand:logo': { body: '<path fill="currentColor" d="…"/>' },
+})
+```
+
+Render order: registry → injected `iconComponent` (e.g. `@nuxt/icon` in
+local-bundle mode, unplugin-icons) → nothing. **Never a network fetch.**
+
 ## Messages (toasts)
 
 Imperative trigger + a single mounted provider (the pattern Sonner /

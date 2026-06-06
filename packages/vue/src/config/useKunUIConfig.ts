@@ -10,8 +10,8 @@ import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kungal/core'
 // Beyond `rounded`, this config is where KunUI decouples from Nuxt: the
 // `linkComponent` / `iconComponent` slots let the host swap in NuxtLink /
 // @nuxt/icon (done by @kungal/ui-nuxt) without the components hard-importing
-// any Nuxt API. In a plain Vue app the defaults are a native `<a>` and
-// `@iconify/vue`.
+// any Nuxt API. In a plain Vue app the link default is a native `<a>`, and
+// icons render from the bundled registry (no injected icon component).
 export interface KunUIConfig {
   /** Default border radius bucket for components that don't pass `rounded`
    *  and aren't shape-locked. */
@@ -24,10 +24,12 @@ export interface KunUIConfig {
    *  a component (matching RouterLink/NuxtLink convention). */
   linkComponent: Component | string
 
-  /** Component rendered for icons. Default `null` → `@iconify/vue`. The Nuxt
-   *  layer injects `@nuxt/icon` (via a thin wrapper). The injected component
-   *  receives a `name` prop holding an Iconify name (e.g. `'lucide:x'`). A
-   *  string is treated as a globally-registered component tag. */
+  /** Fallback renderer for icons NOT in the bundled/registered registry
+   *  (KunIcon renders registry icons as inline SVG and never fetches).
+   *  Default `null` → render nothing for unknown icons. The Nuxt layer sets
+   *  this to a thin `@nuxt/icon` wrapper. The injected component receives a
+   *  `name` prop holding an Iconify name (e.g. `'lucide:x'`). A string is
+   *  treated as a globally-registered component tag. */
   iconComponent: Component | string | null
 }
 

@@ -22,7 +22,6 @@ export default defineConfig({
       external: (id) =>
         id === 'vue' ||
         id === '@kungal/core' ||
-        id === '@iconify/vue' ||
         id === 'focus-trap' ||
         id.startsWith('@vueuse/'),
     },

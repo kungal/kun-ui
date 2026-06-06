@@ -30,3 +30,12 @@ export {
 
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
+
+// Icon registry — bundled (no-fetch) icon data + consumer registration.
+export {
+  registerKunIcon,
+  registerKunIcons,
+  getKunIcon,
+  hasKunIcon,
+  type KunIconData,
+} from './icons'

@@ -26,8 +26,9 @@ const modalOpen = ref(false)
       <KunButton href="https://example.com" target="_blank" variant="light">
         External link
       </KunButton>
-      <KunIcon name="lucide:heart" class="text-danger text-2xl" />
-      <KunIcon name="lucide:star" class="text-warning text-2xl" />
+      <!-- bundled icons: inline, no @nuxt/icon fetch -->
+      <KunIcon name="lucide:circle-check" class="text-success text-2xl" />
+      <KunIcon name="lucide:info" class="text-primary text-2xl" />
     </section>
 
     <KunCard href="/about" color="primary" class-name="max-w-sm">

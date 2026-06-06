@@ -15,7 +15,13 @@ ESM/CJS with type declarations.
 | `kunRoundedClasses` | radius bucket → `rounded-kun-*` class map |
 | `resolveRounded(prop, fallback, configDefault)` | pure precedence resolver (prop > built-in > provider) |
 | `KUN_DEFAULT_ROUNDED` | global radius default (`'md'`) |
+| `getKunIcon` / `hasKunIcon` / `registerKunIcon(s)` / `KunIconData` | bundled icon registry (inline SVG, no runtime fetch) seeded with KunUI's own icons; consumers register more |
 | `randomNum`, `decodeIfEncoded` | small pure helpers |
+
+> Icon data is generated from `@iconify-json/*` (devDependencies) into
+> `src/icons-data.ts` by `scripts/gen-icons.mjs` — run `pnpm gen:icons` after
+> adding a name. The generated literal ships; the `@iconify-json` packages do
+> not.
 
 ## Why a separate package
 

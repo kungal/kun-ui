@@ -25,6 +25,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
+    "gen:icons": "node scripts/gen-icons.mjs",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -32,6 +33,8 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.111",
+    "@iconify-json/svg-spinners": "^1.2.4",
     "tsup": "^8.5.0",
     "typescript": "^5.7.0"
   }
