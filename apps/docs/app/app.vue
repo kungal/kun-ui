@@ -1,6 +1,19 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { nav } from '~/nav'
+
+// Per-route page title derived from the path, so each page gets
+// "Button · KunUI" etc. with no per-page boilerplate; "/" → just "KunUI".
+const route = useRoute()
+const pageTitle = computed(() => {
+  if (route.path === '/') return ''
+  const seg = route.path.split('/').filter(Boolean).pop() ?? ''
+  return seg.charAt(0).toUpperCase() + seg.slice(1)
+})
+useHead({
+  title: pageTitle,
+  titleTemplate: (t) => (t ? `${t} · KunUI` : 'KunUI'),
+})
 
 // Dark mode: KunUI's `dark:` variant keys off `.kun-dark-mode` on <html>.
 const dark = ref(false)
