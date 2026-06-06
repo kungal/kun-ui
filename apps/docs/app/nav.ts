@@ -18,6 +18,7 @@ export const nav: NavSection[] = [
     title: 'Components',
     items: [
       { label: 'Avatar', to: '/components/avatar' },
+      { label: 'AvatarGroup', to: '/components/avatargroup' },
       { label: 'Badge', to: '/components/badge' },
       { label: 'Brand', to: '/components/brand' },
       { label: 'Button', to: '/components/button' },
@@ -33,6 +34,7 @@ export const nav: NavSection[] = [
       { label: 'Dropdown', to: '/components/dropdown' },
       { label: 'FadeCard', to: '/components/fadecard' },
       { label: 'Favicon', to: '/components/favicon' },
+      { label: 'Feedback', to: '/components/feedback' },
       { label: 'FileInput', to: '/components/fileinput' },
       { label: 'Header', to: '/components/header' },
       { label: 'Icon', to: '/components/icon' },
@@ -42,6 +44,7 @@ export const nav: NavSection[] = [
       { label: 'Input', to: '/components/input' },
       { label: 'Lightbox', to: '/components/lightbox' },
       { label: 'Link', to: '/components/link' },
+      { label: 'Loading', to: '/components/loading' },
       { label: 'Markdown', to: '/components/markdown' },
       { label: 'Modal', to: '/components/modal' },
       { label: 'Null', to: '/components/null' },
@@ -61,6 +64,7 @@ export const nav: NavSection[] = [
       { label: 'Textarea', to: '/components/textarea' },
       { label: 'Tooltip', to: '/components/tooltip' },
       { label: 'Upload', to: '/components/upload' },
+      { label: 'UserChip', to: '/components/userchip' },
     ],
   },
 ]
