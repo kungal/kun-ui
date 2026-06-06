@@ -479,3 +479,70 @@ export interface KunDatePickerProps {
   months?: string[]
   rounded?: KunUIRounded
 }
+
+// ── FileInput ──────────────────────────────────────────────────────────
+export interface KunFileInputProps {
+  accept?: string
+  multiple?: boolean
+  maxSize?: number
+  hint?: string
+  error?: string
+  disabled?: boolean
+  triggerText?: string
+  triggerIcon?: string
+  triggerVariant?: KunUIVariant
+  triggerColor?: KunUIColor
+  triggerSize?: KunUISize
+  fullWidth?: boolean
+  showFileName?: boolean
+  className?: string
+}
+
+// ── TagInput ───────────────────────────────────────────────────────────
+export type KunTagInputVariant = 'bordered' | 'flat'
+
+export type KunTagInputInvalidReason =
+  | 'duplicate'
+  | 'too-long'
+  | 'too-short'
+  | 'max-reached'
+  | 'custom'
+
+export type KunTagInputValidator = (tag: string, all: string[]) => true | string
+
+export interface KunTagInputProps {
+  label?: string
+  placeholder?: string
+  helperText?: string
+  error?: string
+  maxTags?: number
+  maxTagLength?: number
+  minTagLength?: number
+  allowDuplicates?: boolean
+  caseSensitive?: boolean
+  trim?: boolean
+  transform?: (raw: string) => string
+  validate?: KunTagInputValidator
+  splitChars?: (string | RegExp)[]
+  splitOnPaste?: boolean
+  confirmOnBlur?: boolean
+  respectComposition?: boolean
+  color?: KunUIColor
+  size?: KunUISize
+  variant?: KunTagInputVariant
+  disabled?: boolean
+  readonly?: boolean
+  showCounter?: boolean
+  rounded?: KunUIRounded
+  className?: string
+}
+
+// ── Upload ─────────────────────────────────────────────────────────────
+export interface KunUploadProps {
+  size: number
+  aspect: number
+  initialImage?: string
+  hint?: string
+  className?: string
+  rounded?: KunUIRounded
+}

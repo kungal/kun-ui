@@ -14,6 +14,7 @@ import KunDropdown from './components/Dropdown.vue'
 import KunDrawer from './components/Drawer.vue'
 import KunFadeCard from './components/FadeCard.vue'
 import KunFavicon from './components/Favicon.vue'
+import KunFileInput from './components/FileInput.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
@@ -39,9 +40,11 @@ import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSlider from './components/Slider.vue'
 import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
+import KunTagInput from './components/TagInput.vue'
 import KunText from './components/Text.vue'
 import KunTextarea from './components/Textarea.vue'
 import KunTooltip from './components/Tooltip.vue'
+import KunUpload from './components/Upload.vue'
 
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
@@ -61,6 +64,7 @@ export {
   KunDropdown,
   KunFadeCard,
   KunFavicon,
+  KunFileInput,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -86,9 +90,11 @@ export {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunTagInput,
   KunText,
   KunTextarea,
   KunTooltip,
+  KunUpload,
 }
 
 // Config + composables
@@ -105,6 +111,12 @@ export { useKunUniqueId } from './composables/useKunUniqueId'
 export { useKunCopy } from './composables/useKunCopy'
 export { useSpoilerContent } from './composables/useSpoilerContent'
 export { useContentLightbox } from './composables/useContentLightbox'
+export {
+  useFilePicker,
+  type KunFilePickerOptions,
+  type KunFilePickerReturn,
+} from './composables/useFilePicker'
+export { checkImageValid, resizeImage } from './utils/handleFileChange'
 // Re-export framework-agnostic helpers consumers commonly reach for.
 export { getRandomSticker, decodeIfEncoded } from '@kungal/core'
 
@@ -172,6 +184,12 @@ export type {
   KunTextProps,
   KunDatePickerProps,
   KunDatePickerMode,
+  KunFileInputProps,
+  KunTagInputProps,
+  KunTagInputVariant,
+  KunTagInputInvalidReason,
+  KunTagInputValidator,
+  KunUploadProps,
 } from './components/types'
 
 const components = {
@@ -190,6 +208,7 @@ const components = {
   KunDropdown,
   KunFadeCard,
   KunFavicon,
+  KunFileInput,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -215,9 +234,11 @@ const components = {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunTagInput,
   KunText,
   KunTextarea,
   KunTooltip,
+  KunUpload,
 }
 
 // Vue plugin: `app.use(KunUI)` registers every component globally under its

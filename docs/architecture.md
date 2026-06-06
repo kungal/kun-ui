@@ -114,10 +114,15 @@ content/lightbox cluster `KunLightbox` (+`Gallery`/`GalleryItem`) /
 `useContentLightbox` composables ported; Content drops `kunSanitize` and
 renders trusted HTML via v-html per the sanitize decision), and `KunDatePicker`
 (single/range, `@floating-ui` + a `useCalendar` composable on **date-fns**;
-no Nuxt coupling) — **43 components total**, all verified through both the Vite
-playground and Nuxt SSR prerender. The items below are the full P1 scope; what
-remains is the complex/app-coupled tail (Upload/FileInput/TagInput, Header,
-Avatar/Group/User, alert Alert/Loli). (Avatar/Group are deferred: they couple to the app's KunUser
+no Nuxt coupling), and the file-input batch `KunFileInput` / `KunTagInput` /
+`KunUpload` (`useFilePicker` + `handleFileChange` canvas-resize util ported;
+Upload keeps `vue-advanced-cropper` as an externalized dep; FileInput's stray
+raw `<Icon>` fixed to `<KunIcon>`; `i-lucide-plus` → bundled `lucide:plus`)
+— **46 components total**, all verified through both the Vite playground and
+Nuxt SSR prerender. NOTE: the lib is a single eager bundle today — per-
+component entry splitting (so e.g. Upload's cropper is tree-shakeable) is a
+future optimization. The items below are the full P1 scope; what remains is
+the app-coupled tail (Header, Avatar/Group/User, alert Alert/Loli). (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small
 data-model decision first.)
 

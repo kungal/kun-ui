@@ -21,6 +21,7 @@ const KUN_COMPONENTS = [
   'KunDropdown',
   'KunFadeCard',
   'KunFavicon',
+  'KunFileInput',
   'KunIcon',
   'KunImage',
   'KunImageNative',
@@ -46,9 +47,11 @@ const KUN_COMPONENTS = [
   'KunSlider',
   'KunSwitch',
   'KunTab',
+  'KunTagInput',
   'KunText',
   'KunTextarea',
   'KunTooltip',
+  'KunUpload',
 ]
 
 // Composables auto-imported for DX parity with the original Nuxt-native lib
@@ -64,6 +67,7 @@ const KUN_COMPOSABLES = [
   'useKunCopy',
   'useSpoilerContent',
   'useContentLightbox',
+  'useFilePicker',
   'getRandomSticker',
   'decodeIfEncoded',
 ]

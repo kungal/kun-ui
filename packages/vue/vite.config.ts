@@ -24,9 +24,11 @@ export default defineConfig({
         id === '@kungal/core' ||
         id === 'focus-trap' ||
         id === 'date-fns' ||
+        id === 'vue-advanced-cropper' ||
         id.startsWith('@vueuse/') ||
         id.startsWith('@floating-ui/') ||
-        id.startsWith('date-fns/'),
+        id.startsWith('date-fns/') ||
+        id.startsWith('vue-advanced-cropper/'),
     },
   },
 })
