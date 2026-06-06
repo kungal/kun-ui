@@ -11,7 +11,25 @@ experience on top of it:
   render as SSR-aware client-side links (exactly like the original);
 - **injects `@nuxt/icon`** as KunUI's `iconComponent`, so icons render
   through Nuxt's icon pipeline (not the standalone `@iconify/vue` default);
-- registers `@nuxt/icon` + `@nuxt/image`.
+- registers `@nuxt/icon` + `@nuxt/image`;
+- **auto-imports the composables** too (`useKunMessage`, `useKunUIConfig`, …)
+  so they work with no import, like the original.
+
+### Messages (toasts)
+
+`useKunMessage()` is auto-imported. Mount the provider once (e.g. in
+`app.vue` or your default layout) — it Teleports to body:
+
+```vue
+<template>
+  <NuxtPage />
+  <KunMessageProvider />
+</template>
+```
+
+```ts
+useKunMessage('Saved', 'success') // from anywhere, no import
+```
 
 It deliberately does **not** own a Tailwind entry — your app keeps one
 stylesheet that imports Tailwind + `@kungal/tokens` and declares the

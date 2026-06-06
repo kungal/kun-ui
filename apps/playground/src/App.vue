@@ -4,6 +4,7 @@ import ButtonShowcase from './sections/ButtonShowcase.vue'
 import CardShowcase from './sections/CardShowcase.vue'
 import IconShowcase from './sections/IconShowcase.vue'
 import ModalShowcase from './sections/ModalShowcase.vue'
+import MessageShowcase from './sections/MessageShowcase.vue'
 
 // Dark mode is driven by the `.kun-dark-mode` class on <html>: @kungal/tokens
 // both flips its CSS variables under that selector AND wires the Tailwind
@@ -74,7 +75,11 @@ const swatch: Record<(typeof colors)[number], string> = {
       <ButtonShowcase />
       <CardShowcase />
       <ModalShowcase />
+      <MessageShowcase />
       <IconShowcase />
     </main>
+
+    <!-- Mounted once; renders all toasts (Teleported to body). -->
+    <KunMessageProvider />
   </div>
 </template>

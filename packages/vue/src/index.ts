@@ -2,12 +2,13 @@ import type { App, Plugin } from 'vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
 import KunIcon from './components/Icon.vue'
+import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunRipple from './components/Ripple.vue'
 
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
-export { KunButton, KunCard, KunIcon, KunModal, KunRipple }
+export { KunButton, KunCard, KunIcon, KunMessageProvider, KunModal, KunRipple }
 
 // Config + composables
 export {
@@ -20,6 +21,16 @@ export {
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 
+// Message (toast) system — imperative trigger + read store. Mount
+// <KunMessageProvider/> once near your app root.
+export {
+  useKunMessage,
+  useKunMessageState,
+  type KunMessageType,
+  type KunMessagePosition,
+  type KunMessageOptions,
+} from './composables/useKunMessage'
+
 // Prop types
 export type {
   KunButtonProps,
@@ -27,7 +38,14 @@ export type {
   KunModalProps,
 } from './components/types'
 
-const components = { KunButton, KunCard, KunIcon, KunModal, KunRipple }
+const components = {
+  KunButton,
+  KunCard,
+  KunIcon,
+  KunMessageProvider,
+  KunModal,
+  KunRipple,
+}
 
 // Vue plugin: `app.use(KunUI)` registers every component globally under its
 // `Kun*` name, so templates can use `<KunButton>` without per-file imports

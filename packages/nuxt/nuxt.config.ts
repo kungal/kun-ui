@@ -1,4 +1,4 @@
-import { defineNuxtModule, addComponent } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 
 // The components live in the framework-agnostic-friendly @kungal/ui-vue
 // package (already compiled). Rather than re-authoring SFCs in this layer,
@@ -9,8 +9,20 @@ const KUN_COMPONENTS = [
   'KunButton',
   'KunCard',
   'KunIcon',
+  'KunMessageProvider',
   'KunModal',
   'KunRipple',
+]
+
+// Composables auto-imported for DX parity with the original Nuxt-native lib
+// (so `useKunMessage(...)` etc. work with no import in any component).
+const KUN_COMPOSABLES = [
+  'useKunMessage',
+  'useKunMessageState',
+  'useKunUIConfig',
+  'provideKunUIConfig',
+  'useResolvedRounded',
+  'useRipple',
 ]
 
 export default defineNuxtConfig({
@@ -22,6 +34,9 @@ export default defineNuxtConfig({
       setup() {
         for (const name of KUN_COMPONENTS) {
           addComponent({ name, export: name, filePath: '@kungal/ui-vue' })
+        }
+        for (const name of KUN_COMPOSABLES) {
+          addImports({ name, as: name, from: '@kungal/ui-vue' })
         }
       },
     }),

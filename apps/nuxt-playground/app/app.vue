@@ -48,5 +48,22 @@ const modalOpen = ref(false)
         </div>
       </KunModal>
     </section>
+
+    <section class="flex flex-wrap gap-2">
+      <!-- useKunMessage is auto-imported by the layer (addImports). -->
+      <KunButton color="success" @click="useKunMessage('Toast from a Nuxt app', 'success')">
+        Show toast
+      </KunButton>
+      <KunButton
+        color="danger"
+        variant="flat"
+        @click="useKunMessage('Error toast', 'error', 4000, false, 'bottom-right')"
+      >
+        Error (bottom-right)
+      </KunButton>
+    </section>
+
+    <!-- Mounted once; renders all toasts (Teleported to body). -->
+    <KunMessageProvider />
   </div>
 </template>

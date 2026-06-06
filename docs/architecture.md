@@ -89,11 +89,12 @@ foundation laid." React is an opt-in increment from P3 on.
 
 **Status:** the package, Vite library build (JS + scoped CSS), and vue-tsc
 type emission are established, and the decoupling pattern is proven on
-`KunButton`, `KunCard`, `KunIcon`, `KunRipple`, and `KunModal` (the hardest
-case — Teleport + focus-trap + body-scroll-lock, verified through both the
-Vite playground and Nuxt SSR prerender). The items below are the full P1
-scope; the remaining ~35 components port mechanically against the same
-pattern.
+`KunButton`, `KunCard`, `KunIcon`, `KunRipple`, `KunModal` (Teleport +
+focus-trap + body-scroll-lock), and the **message/toast system** (re-
+architected off its Nuxt-context hack onto a store + mounted provider) —
+all verified through both the Vite playground and Nuxt SSR prerender. The
+items below are the full P1 scope; the remaining ~33 components port
+mechanically against the same pattern.
 
 - [x] Replace Nuxt auto-imports with explicit imports (the four landed
   components do this; consider `unplugin-auto-import` +
@@ -105,8 +106,10 @@ pattern.
     `@iconify/vue`; same Iconify names so call sites are unchanged).
   - [ ] `@nuxt/image` (`<NuxtImg>`) → `config.imageComponent` — add when
     porting `Image.vue`.
-- [ ] Rework `useKunMessage` to mount its container without stealing the
-  Nuxt app context (framework-neutral teleport target).
+- [x] Rework `useKunMessage` to mount its container without stealing the
+  Nuxt app context — replaced the imperative `render()` + stolen
+  `vueApp._context` with a pure module store + a mounted `<KunMessageProvider>`
+  (Teleported to body), the Sonner / Naive-UI pattern. No context hack.
 - [ ] Port `sanitize.ts` off `import.meta.server` (inject an `isServer`
   flag) before it can move into a shared package.
 - [x] Consume `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,

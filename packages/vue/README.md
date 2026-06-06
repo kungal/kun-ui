@@ -7,8 +7,37 @@ app (Vite, Astro, Laravel, plain `createApp`, …), not just Nuxt.
 
 > Status: **P1 in progress.** The package, build, and decoupling pattern
 > are established and proven on `KunButton`, `KunCard`, `KunIcon`,
-> `KunRipple`. The remaining ~40 components port mechanically against the
-> same pattern (see `docs/architecture.md §6`).
+> `KunRipple`, `KunModal`, and the message/toast system. The remaining
+> components port mechanically against the same pattern (see
+> `docs/architecture.md §6`).
+
+## Messages (toasts)
+
+Imperative trigger + a single mounted provider (the pattern Sonner /
+react-hot-toast / Naive UI use — no detached render, no context hacks).
+Mount the provider **once** near your app root:
+
+```vue
+<!-- App.vue -->
+<template>
+  <RouterView />
+  <KunMessageProvider />  <!-- renders all toasts, Teleported to body -->
+</template>
+```
+
+Then trigger from anywhere:
+
+```ts
+import { useKunMessage } from '@kungal/ui-vue'
+
+useKunMessage('Saved successfully', 'success')
+useKunMessage('Error', 'error', 4000, false, 'bottom-right')
+// signature: (message, type, duration=3000, richText=false, position='top-center')
+```
+
+> `richText: true` renders `message` as raw HTML (like Element Plus
+> `dangerouslyUseHTMLString`). Pass only **trusted / pre-sanitized** HTML —
+> never raw user input.
 
 ## Install
 
