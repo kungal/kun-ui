@@ -1,0 +1,27 @@
+{
+  "name": "@kungal/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "KunUI documentation & demo site — built WITH KunUI (dogfooding). Nuxt 4 + a self-built docs layer (no @nuxt/content): live <Demo> examples, Shiki highlighting, hand-built prose.",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "nuxt:prepare": "nuxt prepare"
+  },
+  "dependencies": {
+    "@kungal/ui-nuxt": "workspace:*",
+    "@kungal/ui-vue": "workspace:*",
+    "@kungal/core": "workspace:*",
+    "@kungal/tokens": "workspace:*",
+    "shiki": "^4.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "nuxt": "^4.4.7",
+    "tailwindcss": "^4.3.0",
+    "vue": "^3.5.35"
+  }
+}
