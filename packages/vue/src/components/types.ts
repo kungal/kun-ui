@@ -431,3 +431,28 @@ export interface KunPaginationProps {
   totalPage: number
   isLoading?: boolean
 }
+
+// ── Lightbox ───────────────────────────────────────────────────────────
+export interface KunLightboxImage {
+  src: string
+  alt?: string
+}
+
+export interface KunLightboxProps {
+  images: KunLightboxImage[]
+  isOpen: boolean
+  initialIndex?: number
+}
+
+// ── Content / Text ─────────────────────────────────────────────────────
+export interface KunContentProps {
+  // Rendered with v-html — the caller MUST pass trusted/pre-sanitized HTML
+  // (KunUI does not sanitize; see docs/architecture.md).
+  content: string
+  className?: string
+}
+
+export interface KunTextProps {
+  content?: string
+  className?: string
+}

@@ -108,11 +108,15 @@ focus-trap; ContextMenu's `import.meta.client` replaced by a runtime
 `KunBrand` / `KunPagination` / `KunScrollShadow` / `KunFadeCard` / `KunNull`
 / `KunFavicon` (`useKunCopy` ported; `getRandomSticker` made deterministic-
 per-id in `@kungal/core` so it drops Nuxt `useState`; Brand's `navigateTo` →
-`config.navigate`; FadeCard's `<ClientOnly>` → a mounted gate) — **36
+`config.navigate`; FadeCard's `<ClientOnly>` → a mounted gate), and the
+content/lightbox cluster `KunLightbox` (+`Gallery`/`GalleryItem`) /
+`KunContent` / `KunText` / `KunMarkdown` (`useSpoilerContent` +
+`useContentLightbox` composables ported; Content drops `kunSanitize` and
+renders trusted HTML via v-html per the sanitize decision) — **42
 components total**, all verified through both the Vite playground and Nuxt SSR
 prerender. The items below are the full P1 scope; what remains is the complex/
-app-coupled tail (DatePicker, Lightbox+Gallery, Upload/FileInput/TagInput,
-Header, Content/Text/Markdown, Avatar/Group/User, alert Alert/Loli). (Avatar/Group are deferred: they couple to the app's KunUser
+app-coupled tail (DatePicker, Upload/FileInput/TagInput, Header,
+Avatar/Group/User, alert Alert/Loli). (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small
 data-model decision first.)
 

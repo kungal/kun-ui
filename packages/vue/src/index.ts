@@ -5,6 +5,7 @@ import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
 import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
+import KunContent from './components/Content.vue'
 import KunContextMenu from './components/ContextMenu.vue'
 import KunCopy from './components/Copy.vue'
 import KunDivider from './components/Divider.vue'
@@ -17,8 +18,12 @@ import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
 import KunInfo from './components/Info.vue'
 import KunInput from './components/Input.vue'
+import KunLightbox from './components/Lightbox.vue'
+import KunLightboxGallery from './components/LightboxGallery.vue'
+import KunLightboxGalleryItem from './components/LightboxGalleryItem.vue'
 import KunLink from './components/Link.vue'
 import KunLoading from './components/Loading.vue'
+import KunMarkdown from './components/Markdown.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunNull from './components/Null.vue'
@@ -33,6 +38,7 @@ import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSlider from './components/Slider.vue'
 import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
+import KunText from './components/Text.vue'
 import KunTextarea from './components/Textarea.vue'
 import KunTooltip from './components/Tooltip.vue'
 
@@ -45,6 +51,7 @@ export {
   KunCard,
   KunCheckBox,
   KunChip,
+  KunContent,
   KunContextMenu,
   KunCopy,
   KunDivider,
@@ -57,8 +64,12 @@ export {
   KunImageNative,
   KunInfo,
   KunInput,
+  KunLightbox,
+  KunLightboxGallery,
+  KunLightboxGalleryItem,
   KunLink,
   KunLoading,
+  KunMarkdown,
   KunMessageProvider,
   KunModal,
   KunNull,
@@ -73,6 +84,7 @@ export {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunText,
   KunTextarea,
   KunTooltip,
 }
@@ -89,6 +101,8 @@ export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
 export { useKunCopy } from './composables/useKunCopy'
+export { useSpoilerContent } from './composables/useSpoilerContent'
+export { useContentLightbox } from './composables/useContentLightbox'
 // Re-export framework-agnostic helpers consumers commonly reach for.
 export { getRandomSticker, decodeIfEncoded } from '@kungal/core'
 
@@ -150,6 +164,10 @@ export type {
   KunBrandProps,
   KunScrollShadowProps,
   KunPaginationProps,
+  KunLightboxImage,
+  KunLightboxProps,
+  KunContentProps,
+  KunTextProps,
 } from './components/types'
 
 const components = {
@@ -159,6 +177,7 @@ const components = {
   KunCard,
   KunCheckBox,
   KunChip,
+  KunContent,
   KunContextMenu,
   KunCopy,
   KunDivider,
@@ -171,8 +190,12 @@ const components = {
   KunImageNative,
   KunInfo,
   KunInput,
+  KunLightbox,
+  KunLightboxGallery,
+  KunLightboxGalleryItem,
   KunLink,
   KunLoading,
+  KunMarkdown,
   KunMessageProvider,
   KunModal,
   KunNull,
@@ -187,6 +210,7 @@ const components = {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunText,
   KunTextarea,
   KunTooltip,
 }
