@@ -7,6 +7,7 @@ import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
 import KunContent from './components/Content.vue'
 import KunContextMenu from './components/ContextMenu.vue'
+import KunDatePicker from './components/DatePicker.vue'
 import KunCopy from './components/Copy.vue'
 import KunDivider from './components/Divider.vue'
 import KunDropdown from './components/Dropdown.vue'
@@ -54,6 +55,7 @@ export {
   KunContent,
   KunContextMenu,
   KunCopy,
+  KunDatePicker,
   KunDivider,
   KunDrawer,
   KunDropdown,
@@ -168,6 +170,8 @@ export type {
   KunLightboxProps,
   KunContentProps,
   KunTextProps,
+  KunDatePickerProps,
+  KunDatePickerMode,
 } from './components/types'
 
 const components = {
@@ -180,6 +184,7 @@ const components = {
   KunContent,
   KunContextMenu,
   KunCopy,
+  KunDatePicker,
   KunDivider,
   KunDrawer,
   KunDropdown,

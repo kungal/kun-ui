@@ -15,6 +15,7 @@ const KUN_COMPONENTS = [
   'KunContent',
   'KunContextMenu',
   'KunCopy',
+  'KunDatePicker',
   'KunDivider',
   'KunDrawer',
   'KunDropdown',

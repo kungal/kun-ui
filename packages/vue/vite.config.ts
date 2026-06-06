@@ -23,8 +23,10 @@ export default defineConfig({
         id === 'vue' ||
         id === '@kungal/core' ||
         id === 'focus-trap' ||
+        id === 'date-fns' ||
         id.startsWith('@vueuse/') ||
-        id.startsWith('@floating-ui/'),
+        id.startsWith('@floating-ui/') ||
+        id.startsWith('date-fns/'),
     },
   },
 })
