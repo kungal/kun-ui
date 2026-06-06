@@ -1,0 +1,270 @@
+<script setup lang="ts">
+import { computed, nextTick, ref, useId } from 'vue'
+import { onClickOutside, useEventListener } from '@vueuse/core'
+import { useFloating, autoUpdate, offset, flip, shift, type Placement } from '@floating-ui/vue'
+import { cn, kunVariantClasses, type KunUIColor } from '@kungal/core'
+import KunIcon from './Icon.vue'
+import type { KunDropdownItem } from './types'
+
+// Click-triggered action menu (WAI-ARIA menu-button pattern). Deliberately
+// NOT built on KunPopover — a menu needs role=menu/menuitem, roving
+// tabindex and arrow-key nav that Popover (role=dialog) can't surface — so
+// it wraps @floating-ui/vue directly while owning its interaction + a11y
+// layer. `useId` is Vue 3.5 native (was a Nuxt auto-import).
+defineOptions({ name: 'KunDropdown' })
+
+const props = withDefaults(
+  defineProps<{
+    items?: KunDropdownItem[]
+    position?: Placement
+    triggerClass?: string
+    menuClass?: string
+    minWidth?: number
+    disabled?: boolean
+  }>(),
+  {
+    items: () => [],
+    position: 'bottom-start',
+    triggerClass: '',
+    menuClass: '',
+    minWidth: 192,
+    disabled: false,
+  }
+)
+
+const emit = defineEmits<{
+  (e: 'select', item: KunDropdownItem): void
+  (e: 'open'): void
+  (e: 'close'): void
+}>()
+
+const isOpen = ref(false)
+const activeIndex = ref(-1)
+const triggerRef = ref<HTMLElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
+const menuId = `kun-dropdown-${useId()}`
+
+const { floatingStyles } = useFloating(triggerRef, menuRef, {
+  placement: computed(() => props.position),
+  open: isOpen,
+  whileElementsMounted: autoUpdate,
+  transform: false,
+  middleware: [offset(6), flip(), shift({ padding: 8 })],
+})
+
+const enabledIndices = () =>
+  props.items.reduce<number[]>((acc, item, i) => {
+    if (!item.disabled) acc.push(i)
+    return acc
+  }, [])
+
+const itemButtons = () =>
+  Array.from(
+    menuRef.value?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? []
+  )
+
+const focusItem = (index: number) => {
+  activeIndex.value = index
+  itemButtons()[index]?.focus()
+}
+
+const open = (focus: 'first' | 'last' | 'none' = 'none') => {
+  if (props.disabled || props.items.length === 0) return
+  if (!isOpen.value) {
+    isOpen.value = true
+    emit('open')
+  }
+  nextTick(() => {
+    const enabled = enabledIndices()
+    if (focus === 'first' && enabled.length) {
+      focusItem(enabled[0]!)
+    } else if (focus === 'last' && enabled.length) {
+      focusItem(enabled[enabled.length - 1]!)
+    } else {
+      activeIndex.value = -1
+      menuRef.value?.focus()
+    }
+  })
+}
+
+const close = (returnFocus = false) => {
+  if (!isOpen.value) return
+  isOpen.value = false
+  activeIndex.value = -1
+  emit('close')
+  if (returnFocus) nextTick(() => triggerRef.value?.focus())
+}
+
+const toggle = () => (isOpen.value ? close() : open('none'))
+
+const move = (delta: number) => {
+  const enabled = enabledIndices()
+  if (!enabled.length) return
+  const pos = enabled.indexOf(activeIndex.value)
+  const nextPos = (pos + delta + enabled.length) % enabled.length
+  focusItem(enabled[nextPos === -1 ? enabled.length - 1 : nextPos]!)
+}
+
+const selectItem = (item: KunDropdownItem) => {
+  if (item.disabled) return
+  emit('select', item)
+  close(true)
+}
+
+const onTriggerKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return
+  switch (e.key) {
+    case 'ArrowDown':
+    case 'Enter':
+    case ' ':
+      e.preventDefault()
+      open('first')
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      open('last')
+      break
+  }
+}
+
+const onMenuKeydown = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'ArrowDown':
+      e.preventDefault()
+      move(1)
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      move(-1)
+      break
+    case 'Home': {
+      e.preventDefault()
+      const first = enabledIndices()[0]
+      if (first !== undefined) focusItem(first)
+      break
+    }
+    case 'End': {
+      e.preventDefault()
+      const enabled = enabledIndices()
+      if (enabled.length) focusItem(enabled[enabled.length - 1]!)
+      break
+    }
+    case 'Enter':
+    case ' ':
+      e.preventDefault()
+      if (activeIndex.value >= 0) selectItem(props.items[activeIndex.value]!)
+      break
+    case 'Escape':
+      e.preventDefault()
+      close(true)
+      break
+    case 'Tab':
+      e.preventDefault()
+      close(true)
+      break
+  }
+}
+
+onClickOutside(triggerRef, (e) => {
+  if (menuRef.value?.contains(e.target as Node)) return
+  close()
+})
+
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && isOpen.value) close(true)
+})
+
+// Keyboard focus highlight (the light variant only defines hover:).
+const focusTint: Record<KunUIColor, string> = {
+  default: 'focus:bg-default/20',
+  primary: 'focus:bg-primary/20',
+  secondary: 'focus:bg-secondary/20',
+  success: 'focus:bg-success/20',
+  warning: 'focus:bg-warning/20',
+  danger: 'focus:bg-danger/20',
+  info: 'focus:bg-info/20',
+}
+
+const itemClass = (item: KunDropdownItem) =>
+  cn(
+    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-lg px-3 py-1.5 text-sm font-medium outline-none transition-colors',
+    kunVariantClasses('light', item.color || 'default'),
+    focusTint[item.color || 'default'],
+    item.disabled && 'pointer-events-none cursor-not-allowed opacity-50'
+  )
+
+defineExpose({
+  open: () => open('none'),
+  close: () => close(),
+  toggle,
+})
+</script>
+
+<template>
+  <div class="relative inline-flex">
+    <div
+      ref="triggerRef"
+      role="button"
+      :tabindex="disabled ? -1 : 0"
+      :class="
+        cn(
+          'inline-flex cursor-pointer items-center',
+          disabled && 'cursor-not-allowed opacity-50',
+          triggerClass
+        )
+      "
+      aria-haspopup="menu"
+      :aria-expanded="isOpen"
+      :aria-disabled="disabled || undefined"
+      :aria-controls="isOpen ? menuId : undefined"
+      @click="disabled || toggle()"
+      @keydown="onTriggerKeydown"
+    >
+      <slot name="trigger" />
+    </div>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-150 ease-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition duration-100 ease-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+      >
+        <div
+          v-if="isOpen && items.length"
+          ref="menuRef"
+          :id="menuId"
+          role="menu"
+          aria-orientation="vertical"
+          tabindex="-1"
+          :class="
+            cn(
+              'border-default-200 bg-background/95 z-kun-popover rounded-xl border p-1 text-sm shadow-2xl outline-none backdrop-blur',
+              menuClass
+            )
+          "
+          :style="[floatingStyles, { minWidth: `${minWidth}px` }]"
+          @keydown="onMenuKeydown"
+        >
+          <button
+            v-for="(item, i) in items"
+            :key="item.key"
+            type="button"
+            role="menuitem"
+            :tabindex="i === activeIndex ? 0 : -1"
+            :disabled="item.disabled"
+            :aria-disabled="item.disabled || undefined"
+            :class="itemClass(item)"
+            @click="selectItem(item)"
+            @mouseenter="!item.disabled && focusItem(i)"
+          >
+            <KunIcon v-if="item.icon" :name="item.icon" class="text-base" />
+            <span>{{ item.label }}</span>
+          </button>
+        </div>
+      </Transition>
+    </Teleport>
+  </div>
+</template>

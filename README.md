@@ -36,7 +36,7 @@ radius, same variant matrix.
 | --- | --- | --- |
 | [`@kungal/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
 | [`@kungal/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
-| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — 24 components landed (display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link; overlay: Modal/Message/Tooltip/Popover/Tab; form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup) |
+| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — 28 components landed (display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu; form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup) |
 | [`@kungal/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
 | `@kungal/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 

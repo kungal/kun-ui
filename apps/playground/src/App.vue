@@ -10,6 +10,7 @@ import FloatingShowcase from './sections/FloatingShowcase.vue'
 import MediaShowcase from './sections/MediaShowcase.vue'
 import DisplayShowcase from './sections/DisplayShowcase.vue'
 import FormShowcase from './sections/FormShowcase.vue'
+import OverlayShowcase from './sections/OverlayShowcase.vue'
 
 // Dark mode is driven by the `.kun-dark-mode` class on <html>: @kungal/tokens
 // both flips its CSS variables under that selector AND wires the Tailwind
@@ -84,6 +85,7 @@ const swatch: Record<(typeof colors)[number], string> = {
       <MediaShowcase />
       <DisplayShowcase />
       <FormShowcase />
+      <OverlayShowcase />
       <ModalShowcase />
       <MessageShowcase />
       <IconShowcase />

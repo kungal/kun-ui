@@ -4,7 +4,10 @@ import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
 import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
+import KunContextMenu from './components/ContextMenu.vue'
 import KunDivider from './components/Divider.vue'
+import KunDropdown from './components/Dropdown.vue'
+import KunDrawer from './components/Drawer.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
@@ -17,6 +20,7 @@ import KunModal from './components/Modal.vue'
 import KunPopover from './components/Popover.vue'
 import KunProgress from './components/Progress.vue'
 import KunRadioGroup from './components/RadioGroup.vue'
+import KunSelect from './components/Select.vue'
 import KunRipple from './components/Ripple.vue'
 import KunSlider from './components/Slider.vue'
 import KunSwitch from './components/Switch.vue'
@@ -32,7 +36,10 @@ export {
   KunCard,
   KunCheckBox,
   KunChip,
+  KunContextMenu,
   KunDivider,
+  KunDrawer,
+  KunDropdown,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -46,6 +53,7 @@ export {
   KunProgress,
   KunRadioGroup,
   KunRipple,
+  KunSelect,
   KunSlider,
   KunSwitch,
   KunTab,
@@ -108,6 +116,15 @@ export type {
   KunRadioValue,
   KunRadioVariant,
   KunRadioOrientation,
+  KunSelectProps,
+  KunSelectOption,
+  KunSelectValue,
+  KunContextMenuItem,
+  KunContextMenuProps,
+  KunDropdownItem,
+  KunDrawerProps,
+  KunDrawerPlacement,
+  KunDrawerSize,
 } from './components/types'
 
 const components = {
@@ -116,7 +133,10 @@ const components = {
   KunCard,
   KunCheckBox,
   KunChip,
+  KunContextMenu,
   KunDivider,
+  KunDrawer,
+  KunDropdown,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -130,6 +150,7 @@ const components = {
   KunProgress,
   KunRadioGroup,
   KunRipple,
+  KunSelect,
   KunSlider,
   KunSwitch,
   KunTab,

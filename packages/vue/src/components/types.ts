@@ -320,3 +320,60 @@ export interface KunRadioGroupProps<T extends KunRadioValue = KunRadioValue> {
   error?: string
   className?: string
 }
+
+// ── Select ─────────────────────────────────────────────────────────────
+export type KunSelectValue = string | number
+
+export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
+  value: T
+  label: string
+}
+
+export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
+  options: readonly KunSelectOption<T>[]
+  label?: string
+  placeholder?: string
+  error?: string
+  disabled?: boolean
+  darkBorder?: boolean
+  ariaLabel?: string
+  className?: string
+  rounded?: KunUIRounded
+}
+
+// ── ContextMenu / Dropdown (shared item model) ─────────────────────────
+export interface KunContextMenuItem {
+  key: string
+  label: string
+  icon?: string
+  color?: KunUIColor
+  disabled?: boolean
+}
+
+// Dropdown reuses the ContextMenu item model verbatim — one source of truth.
+export type KunDropdownItem = KunContextMenuItem
+
+export interface KunContextMenuProps {
+  visible: boolean
+  position?: { x: number; y: number } | null
+  items?: KunContextMenuItem[]
+  width?: number
+  padding?: number
+}
+
+// ── Drawer ─────────────────────────────────────────────────────────────
+export type KunDrawerPlacement = 'left' | 'right' | 'top' | 'bottom'
+export type KunDrawerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+
+export interface KunDrawerProps {
+  placement?: KunDrawerPlacement
+  responsive?: boolean
+  size?: KunDrawerSize
+  title?: string
+  isDismissable?: boolean
+  isShowCloseButton?: boolean
+  withContainer?: boolean
+  rounded?: KunUIRounded
+  className?: string
+  innerClassName?: string
+}

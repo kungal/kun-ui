@@ -101,10 +101,12 @@ the form-control batch `KunInput` / `KunTextarea` / `KunSwitch` / `KunCheckBox`
 / `KunSlider` / `KunRadioGroup` (the v-model line; the original's
 `text-red-500` leaks were already `danger-*` here, and Slider's
 `bg-white dark:bg-black` thumb was fixed to `bg-content1`; shared
-`useKunUniqueId` composable ported) — **24 components total**, all verified
-through both the Vite playground and Nuxt SSR prerender. The items below are
-the full P1 scope; the remaining ~15 components port mechanically against the
-same pattern. (Avatar/Group are deferred: they couple to the app's KunUser
+`useKunUniqueId` composable ported), and the overlay batch `KunSelect` /
+`KunDropdown` / `KunDrawer` / `KunContextMenu` (floating-ui + Teleport +
+focus-trap; ContextMenu's `import.meta.client` replaced by a runtime
+`typeof window` guard) — **28 components total**, all verified through both the
+Vite playground and Nuxt SSR prerender. The items below are the full P1 scope;
+the remaining ~12 components port mechanically against the same pattern. (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small
 data-model decision first.)
 
