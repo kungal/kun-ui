@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+@import '@kun/tokens';
+
+/*
+ * Tailwind only generates utilities it can see referenced in scanned
+ * source. The KunUI classes live in the library packages, not this app:
+ *   - layout/size/state classes are baked into @kun/ui-vue components
+ *   - the variant x color matrix + radius/bg/text maps live in @kun/core
+ * So point the scanner at both package sources. Paths are relative to
+ * this file (apps/playground/src/style.css).
+ */
+@source '../../../packages/core/src';
+@source '../../../packages/vue/src';
