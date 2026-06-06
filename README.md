@@ -3,9 +3,11 @@
 A **cross-framework** component library. One design language, one shared
 brain, multiple render layers.
 
-> Status: **bootstrapping (P0).** The foundation packages — `@kungal/tokens`
-> and `@kungal/core` — are in place. The Vue/Nuxt and React render layers
-> are planned (see [`docs/architecture.md`](./docs/architecture.md)).
+> Status: **P0–P2 complete.** Shared foundation (`@kungal/tokens` +
+> `@kungal/core`), the full Vue layer (`@kungal/ui-vue`, **all 53 components
+> migrated, Nuxt-decoupled**), and the Nuxt layer (`@kungal/ui-nuxt`) are
+> done. React (`@kungal/ui-react`) is the next phase. See
+> [`docs/architecture.md`](./docs/architecture.md).
 
 ## Why this exists
 
@@ -21,7 +23,7 @@ is**, and reuses the portable parts everywhere:
 ```
 @kungal/tokens   pure CSS design tokens          ← 100% shared
 @kungal/core     pure TS (cn, variants, types)    ← 100% shared
-@kungal/ui-vue   Vue 3 components (no Nuxt dep)    ← Vue render layer   (P1, in progress)
+@kungal/ui-vue   Vue 3 components (no Nuxt dep)    ← Vue render layer   (P1, done)
 @kungal/ui-nuxt  thin Nuxt Layer over ui-vue      ← Nuxt sugar          (P2, done)
 @kungal/ui-react React components (Ark UI inside)  ← React render layer  (planned)
 ```
@@ -36,7 +38,7 @@ radius, same variant matrix.
 | --- | --- | --- |
 | [`@kungal/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
 | [`@kungal/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
-| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — 50 components landed. display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link/Brand/Favicon/Null/Markdown; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu/Lightbox(+Gallery/GalleryItem); form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup/DatePicker/FileInput/TagInput/Upload; content: Content/Text; people: Avatar/AvatarGroup/UserChip/Header; util: Copy/Rating/Pagination/ScrollShadow/FadeCard |
+| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | ✅ **P1 complete — all 53 components migrated.** display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link/Brand/Favicon/Null/Markdown; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu/Lightbox(+Gallery/GalleryItem); form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup/DatePicker/FileInput/TagInput/Upload; content: Content/Text; people: Avatar/AvatarGroup/UserChip/Header; alert: AlertProvider/Loli(+Provider); util: Copy/Rating/Pagination/ScrollShadow/FadeCard |
 | [`@kungal/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
 | `@kungal/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 

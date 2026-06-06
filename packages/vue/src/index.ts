@@ -1,4 +1,5 @@
 import type { App, Plugin } from 'vue'
+import KunAlertProvider from './components/AlertProvider.vue'
 import KunAvatar from './components/Avatar.vue'
 import KunAvatarGroup from './components/AvatarGroup.vue'
 import KunBadge from './components/Badge.vue'
@@ -27,6 +28,8 @@ import KunLightbox from './components/Lightbox.vue'
 import KunLightboxGallery from './components/LightboxGallery.vue'
 import KunLightboxGalleryItem from './components/LightboxGalleryItem.vue'
 import KunLink from './components/Link.vue'
+import KunLoli from './components/Loli.vue'
+import KunLoliProvider from './components/LoliProvider.vue'
 import KunLoading from './components/Loading.vue'
 import KunMarkdown from './components/Markdown.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
@@ -53,6 +56,7 @@ import KunUserChip from './components/UserChip.vue'
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
 export {
+  KunAlertProvider,
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
@@ -82,6 +86,8 @@ export {
   KunLightboxGalleryItem,
   KunLink,
   KunLoading,
+  KunLoli,
+  KunLoliProvider,
   KunMarkdown,
   KunMessageProvider,
   KunModal,
@@ -125,6 +131,16 @@ export {
   type KunFilePickerReturn,
 } from './composables/useFilePicker'
 export { checkImageValid, resizeImage } from './utils/handleFileChange'
+export { getRandomLoli, type KunLoliAsset } from './utils/loliAssets'
+
+// Alert (confirm dialog) + Loli mascot — imperative triggers + read stores.
+// Mount <KunAlertProvider/> and <KunLoliProvider/> once near your app root.
+export {
+  useKunAlert,
+  useKunAlertState,
+  type KunAlertOptions,
+} from './composables/useKunAlert'
+export { useKunLoliInfo, useKunLoliState } from './composables/useKunLoliInfo'
 // Re-export framework-agnostic helpers consumers commonly reach for.
 export { getRandomSticker, decodeIfEncoded } from '@kungal/core'
 
@@ -203,12 +219,14 @@ export type {
   KunAvatarGroupProps,
   KunUserChipProps,
   KunHeaderProps,
+  KunLoliProps,
 } from './components/types'
 
 // User data model (lives in @kungal/core; re-exported here for convenience).
 export type { KunUser } from '@kungal/core'
 
 const components = {
+  KunAlertProvider,
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
@@ -238,6 +256,8 @@ const components = {
   KunLightboxGalleryItem,
   KunLink,
   KunLoading,
+  KunLoli,
+  KunLoliProvider,
   KunMarkdown,
   KunMessageProvider,
   KunModal,

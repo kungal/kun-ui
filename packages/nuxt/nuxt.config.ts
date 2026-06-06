@@ -6,6 +6,7 @@ import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 // can use `<KunButton>` etc. with no import — and Nuxt generates the
 // component types, so the tags stay type-checked in consumer templates.
 const KUN_COMPONENTS = [
+  'KunAlertProvider',
   'KunAvatar',
   'KunAvatarGroup',
   'KunBadge',
@@ -35,6 +36,8 @@ const KUN_COMPONENTS = [
   'KunLightboxGalleryItem',
   'KunLink',
   'KunLoading',
+  'KunLoli',
+  'KunLoliProvider',
   'KunMarkdown',
   'KunMessageProvider',
   'KunModal',
@@ -72,7 +75,10 @@ const KUN_COMPOSABLES = [
   'useSpoilerContent',
   'useContentLightbox',
   'useFilePicker',
+  'useKunAlert',
+  'useKunLoliInfo',
   'getRandomSticker',
+  'getRandomLoli',
   'decodeIfEncoded',
 ]
 

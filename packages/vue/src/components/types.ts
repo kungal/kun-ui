@@ -586,3 +586,9 @@ export interface KunHeaderProps {
   description?: string
   scale?: 'h1' | 'h2' | 'h3'
 }
+
+// ── Loli ───────────────────────────────────────────────────────────────
+export interface KunLoliProps {
+  message: string
+  duration: number
+}

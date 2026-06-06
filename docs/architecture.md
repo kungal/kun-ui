@@ -75,7 +75,7 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 | Phase | Work | Output | Est. |
 | --- | --- | --- | --- |
 | **P0** ✅ | Extract `@kungal/tokens` (CSS) + `@kungal/core` (cn/variants/types/utils) | shared foundation | done |
-| **P1** 🚧 | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
+| **P1** ✅ | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; `NuxtLink`/`Icon`/`Image`/`navigate` behind injectable config slots; toast/alert/loli moved off the `render()`+appContext hack to store + provider; icons bundled (no fetch). **All 53 components migrated.** | pure Vue 3 lib (works in any Vue app) | done |
 | **P2** ✅ | `@kungal/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
 | **P3** | `@kungal/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
 | **P4** | React interactive components on Ark UI/Zag | React feature parity | 2–3 wk |
@@ -131,7 +131,16 @@ Then the people batch `KunAvatar` / `KunAvatarGroup` / `KunUserChip` /
 `user/User.vue` component was renamed `KunUserChip` to avoid colliding with
 the `KunUser` type (apps never used `<KunUser>`). Header was actually clean
 (just heading props). **50 components total.** Only the loli/alert system
-(`alert/Alert`, `alert/Loli`) remains. (Avatar/Group are deferred: they couple to the app's KunUser
+(`alert/Alert`, `alert/Loli`) remains.
+
+Final batch — `KunAlertProvider` / `KunLoli` / `KunLoliProvider`
+(`useKunAlert` confirm-promise + `useKunLoliInfo` mascot popup): both moved
+off the same `render()` + stolen-appContext hack onto the store +
+mounted-provider pattern (mount `<KunAlertProvider/>` + `<KunLoliProvider/>`
+once); `loliAssets` → `getRandomLoli()` (per-call random, asset at
+`/alert/{name}.webp`). **53 components total — P1 COMPLETE.** Every component
+from the original Nuxt-layer lib now runs Nuxt-decoupled in `@kungal/ui-vue`,
+with the Nuxt DX restored by `@kungal/ui-nuxt`. Next phase: `@kungal/ui-react`. (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small
 data-model decision first.)
 
