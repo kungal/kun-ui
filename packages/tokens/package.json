@@ -1,9 +1,17 @@
 {
   "name": "@kungal/tokens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "KunUI design tokens — framework-agnostic Tailwind v4 theme (semantic colors, radius, z-index, animations).",
   "type": "module",
-  "keywords": ["kungal", "kun-ui", "design-tokens", "tailwindcss", "tailwind", "theme", "css-variables"],
+  "keywords": [
+    "kungal",
+    "kun-ui",
+    "design-tokens",
+    "tailwindcss",
+    "tailwind",
+    "theme",
+    "css-variables"
+  ],
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
