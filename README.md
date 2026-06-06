@@ -22,7 +22,7 @@ is**, and reuses the portable parts everywhere:
 @kun/tokens   pure CSS design tokens          ← 100% shared
 @kun/core     pure TS (cn, variants, types)    ← 100% shared
 @kun/ui-vue   Vue 3 components (no Nuxt dep)    ← Vue render layer   (P1, in progress)
-@kun/ui-nuxt  thin Nuxt Layer over ui-vue      ← Nuxt sugar          (planned)
+@kun/ui-nuxt  thin Nuxt Layer over ui-vue      ← Nuxt sugar          (P2, done)
 @kun/ui-react React components (Ark UI inside)  ← React render layer  (planned)
 ```
 
@@ -37,7 +37,7 @@ radius, same variant matrix.
 | [`@kun/tokens`](./packages/tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
 | [`@kun/core`](./packages/core) | framework-agnostic TS foundation | ✅ landed |
 | [`@kun/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | 🚧 P1 — pattern + Button/Card/Icon/Ripple landed |
-| `@kun/ui-nuxt` | Nuxt Layer wrapper | ⏳ planned (P2) |
+| [`@kun/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
 | `@kun/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 
 ## Develop

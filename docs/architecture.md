@@ -76,7 +76,7 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 | --- | --- | --- | --- |
 | **P0** ✅ | Extract `@kun/tokens` (CSS) + `@kun/core` (cn/variants/types/utils) | shared foundation | done |
 | **P1** 🚧 | Decouple `@kun/ui-vue` from Nuxt: auto-imports → explicit; abstract `NuxtLink`/`Image`/`Icon` behind injectable adapters; drop the `useKunMessage` appContext hack | pure Vue 3 lib (works in any Vue app) | 1–2 wk |
-| **P2** | `@kun/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject Nuxt image/icon | existing Nuxt DX, zero regression | 1–2 d |
+| **P2** ✅ | `@kun/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
 | **P3** | `@kun/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
 | **P4** | React interactive components on Ark UI/Zag | React feature parity | 2–3 wk |
 | **P5** (optional) | Sink primitive logic into Zag machines shared by Vue+React | single source of truth | long-term |
