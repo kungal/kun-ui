@@ -8,13 +8,12 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  contents: write # create the "Version Packages" PR, commits and git tags
-  pull-requests: write # open / update that PR
+  contents: write # commit the version bump back to main + push git tags
   id-token: write # OIDC token for npm trusted publishing (no NPM_TOKEN needed)
 
 jobs:
   release:
-    name: Version or Publish
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -31,13 +30,32 @@ jobs:
       # npm >= 11.5.1 is required for OIDC trusted publishing + auto-provenance.
       - run: npm install -g npm@latest
 
-      - name: Create Release PR or publish to npm
-        uses: changesets/action@v1
-        with:
-          # When changesets exist -> open/refresh the "Version Packages" PR.
-          # When none remain (that PR was merged) -> build + publish.
-          version: pnpm ci:version
-          publish: pnpm ci:publish
+      # No "Version Packages" PR: when a push to main carries changesets, apply
+      # them, commit the bump straight back to main, then publish to npm. When a
+      # push carries no changesets, `changeset version` is a no-op and we bail
+      # out early — so non-release commits cost one quick, cheap run.
+      #
+      # Workspace deps are `version: link:` in the lockfile (no pinned number),
+      # so a version bump never changes pnpm-lock.yaml — no reinstall needed.
+      - name: Version and publish
+        run: |
+          set -euo pipefail
+
+          pnpm ci:version  # changeset version: bump package.json + CHANGELOG, drop .changeset/*.md
+
+          if git diff --quiet; then
+            echo "No changesets present — nothing to release."
+            exit 0
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "ci: release packages [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"   # commit the bump back to main
+
+          pnpm ci:publish      # build packages + changeset publish (OIDC + provenance)
+          git push origin --tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # No NPM_TOKEN: authentication happens via OIDC (id-token: write).
