@@ -1,5 +1,19 @@
 # @kungal/ui-core
 
+## 0.3.0
+
+### Minor Changes
+
+- 9b8cbae: Remove the `faded` variant.
+
+  `faded` (tinted fill + border) was visually almost indistinguishable from
+  `ghost`, so it's been dropped from `KunUIVariant`. This affects every variant
+  consumer — `KunButton`, `KunChip`, `KunDropdown` and `KunInfo`.
+
+  **Migration:** replace `variant="faded"` with `variant="flat"` (tinted fill, no
+  border) or `variant="bordered"` (visible colored border); `ghost` stays for the
+  outline look it overlapped with.
+
 ## 0.2.5
 
 ## 0.2.4
