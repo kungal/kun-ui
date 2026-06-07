@@ -7,8 +7,8 @@ import type { KunUIVariant, KunUIColor } from './types'
 // All keys MUST be static string literals so the Tailwind JIT picks them
 // up — never construct class names with template strings at runtime.
 // Every entry carries an explicit `border` WIDTH so the outline variants
-// (bordered / faded / ghost) actually render — `border-{color}` alone sets only
-// the color and paints nothing in Tailwind v4. Filled / light variants use a
+// (bordered / ghost) actually render — `border-{color}` alone sets only the
+// color and paints nothing in Tailwind v4. Filled / light variants use a
 // transparent border of the same width so switching variants never shifts the
 // box by a pixel.
 const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
@@ -47,15 +47,6 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
     warning: 'border border-transparent bg-warning/20 text-warning-700 dark:text-warning',
     danger: 'border border-transparent bg-danger/20 text-danger-600 dark:text-danger-500',
     info: 'border border-transparent bg-info/20 text-info-700 dark:text-info-500',
-  },
-  faded: {
-    default: 'border border-default bg-default-100',
-    primary: 'border border-default bg-primary-100 text-primary',
-    secondary: 'border border-default bg-secondary-100 text-secondary',
-    success: 'border border-default bg-success-100 text-success',
-    warning: 'border border-default bg-warning-100 text-warning',
-    danger: 'border border-default bg-danger-100 text-danger',
-    info: 'border border-default bg-info-100 text-info',
   },
   shadow: {
     default: 'border border-transparent shadow-default/40 bg-default text-white',

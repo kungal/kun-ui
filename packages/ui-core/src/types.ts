@@ -6,7 +6,6 @@ export type KunUIVariant =
   | 'bordered'
   | 'light'
   | 'flat'
-  | 'faded'
   | 'shadow'
   | 'ghost'
 

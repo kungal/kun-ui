@@ -33,8 +33,6 @@ const variantClasses = computed(() => {
       return 'bg-opacity-20 border-transparent'
     case 'flat':
       return 'bg-opacity-20 border-transparent shadow-none'
-    case 'faded':
-      return 'bg-opacity-10 border-transparent'
     case 'ghost':
       return 'bg-transparent border-transparent shadow-none hover:bg-opacity-10'
     default:
@@ -78,15 +76,6 @@ const colorVariants: Record<KunUIVariant, Record<KunUIColor, string>> = {
     warning: 'bg-warning/15 text-warning-800 dark:text-warning',
     danger: 'bg-danger/15 text-danger-800 dark:text-danger-500',
     info: 'bg-info/15 text-info-800 dark:text-info-500',
-  },
-  faded: {
-    default: 'border-default bg-default-100',
-    primary: 'border-default bg-primary-100 text-primary',
-    secondary: 'border-default bg-secondary-100 text-secondary',
-    success: 'border-default bg-success-100 text-success',
-    warning: 'border-default bg-warning-100 text-warning',
-    danger: 'border-default bg-danger-100 text-danger',
-    info: 'border-default bg-info-100 text-info',
   },
   shadow: {
     default: ' shadow-default/50 bg-default',
