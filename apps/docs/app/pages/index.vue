@@ -5,17 +5,17 @@ const installCmd =
   'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite'
 
 const features = [
-  { emoji: '🚀', title: 'SSR 优先 · 高性能', desc: '全部组件 SSR 安全、水合零报错,极低运行时开销。' },
-  { emoji: '🧩', title: '53 个组件', desc: '表单、浮层、反馈、展示、人物 —— 一应俱全。' },
-  { emoji: '🎨', title: '设计令牌 + 框架无关核心', desc: '@kungal/tokens 与 @kungal/core,跨框架视觉与 API 一致。' },
-  { emoji: '🖼️', title: '图标全内置 · 绝不联网', desc: '内联 SVG 渲染,运行时绝不请求 Iconify。' },
-  { emoji: '🌙', title: '暗色模式 · 类型安全', desc: '.kun-dark-mode 一键切换,完整 TypeScript 类型。' },
-  { emoji: '🤖', title: 'AI 友好', desc: '内置 llms.txt,Claude Code / Cursor 可直接读懂、用对。' },
+  { icon: 'lucide:zap', title: 'SSR 优先 · 高性能', desc: '全部组件 SSR 安全、水合零报错,极低运行时开销。' },
+  { icon: 'lucide:layout-grid', title: '53 个组件', desc: '表单、浮层、反馈、展示、人物 —— 一应俱全。' },
+  { icon: 'lucide:palette', title: '设计令牌 + 框架无关核心', desc: '@kungal/tokens 与 @kungal/core,跨框架视觉与 API 一致。' },
+  { icon: 'lucide:wifi-off', title: '图标全内置 · 绝不联网', desc: '内联 SVG 渲染,运行时绝不请求 Iconify。' },
+  { icon: 'lucide:moon', title: '暗色模式 · 类型安全', desc: '.kun-dark-mode 一键切换,完整 TypeScript 类型。' },
+  { icon: 'lucide:bot', title: 'AI 友好', desc: '内置 llms.txt,Claude Code / Cursor 可直接读懂、用对。' },
 ]
 
 const showcase = [
-  { name: '鲲 Galgame', url: 'https://www.kungal.com', desc: 'Galgame 中文社区论坛 —— 由 KunUI 构建。' },
-  { name: '摸鱼 MoyuMoe', url: 'https://www.moyu.moe', desc: 'Galgame 补丁 / 资源分享站 —— 由 KunUI 构建。' },
+  { name: '鲲 Galgame 论坛', url: 'https://www.kungal.com', desc: 'Galgame 中文社区论坛 —— 由 KunUI 构建。' },
+  { name: '鲲 Galgame 补丁', url: 'https://www.moyu.moe', desc: 'Galgame 补丁 / 资源分享站 —— 由 KunUI 构建。' },
 ]
 </script>
 
@@ -90,7 +90,7 @@ const showcase = [
         <h2 class="text-center text-3xl font-bold tracking-tight">为什么选择 KunUI</h2>
         <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <KunCard v-for="f in features" :key="f.title" is-hoverable class-name="h-full">
-            <div class="text-3xl">{{ f.emoji }}</div>
+            <KunIcon :name="f.icon" class="text-primary text-3xl" />
             <h3 class="mt-3 text-lg font-semibold">{{ f.title }}</h3>
             <p class="text-default-600 mt-1 text-sm leading-relaxed">{{ f.desc }}</p>
           </KunCard>
@@ -175,10 +175,10 @@ const showcase = [
       >
         <span>© 2026 KunUI · AGPL-3.0 · kungal</span>
         <span class="flex items-center gap-4">
-          <KunLink href="https://github.com/kungal/kun-ui" target="_blank" color="default">GitHub</KunLink>
-          <KunLink href="https://www.npmjs.com/package/@kungal/ui-vue" target="_blank" color="default">npm</KunLink>
-          <KunLink href="https://www.kungal.com" target="_blank" color="default">kungal.com</KunLink>
-          <KunLink href="https://www.moyu.moe" target="_blank" color="default">moyu.moe</KunLink>
+          <KunLink href="https://github.com/kungal/kun-ui" target="_blank" color="default" underline="none">GitHub</KunLink>
+          <KunLink href="https://www.npmjs.com/package/@kungal/ui-vue" target="_blank" color="default" underline="none">npm</KunLink>
+          <KunLink href="https://www.kungal.com" target="_blank" color="default" underline="none">kungal.com</KunLink>
+          <KunLink href="https://www.moyu.moe" target="_blank" color="default" underline="none">moyu.moe</KunLink>
         </span>
       </div>
     </footer>

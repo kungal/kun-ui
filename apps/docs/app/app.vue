@@ -29,23 +29,26 @@ watchEffect(() => {
       class="border-default-200 bg-background/80 z-kun-sticky sticky top-0 flex items-center justify-between border-b px-5 py-3 backdrop-blur"
     >
       <NuxtLink to="/" class="flex items-center gap-2">
-        <KunFavicon class="size-7" />
+        <img src="/favicon.webp" alt="KunUI" class="size-7 rounded-lg" />
         <span class="text-lg font-bold">Kun<span class="text-primary">UI</span></span>
-        <KunChip size="sm" color="primary">文档</KunChip>
       </NuxtLink>
 
-      <div class="flex items-center gap-3">
-        <KunLink href="https://github.com/kungal/kun-ui" target="_blank" color="default">
+      <div class="flex items-center gap-4">
+        <KunLink
+          href="https://github.com/kungal/kun-ui"
+          target="_blank"
+          color="default"
+          underline="none"
+        >
           GitHub
         </KunLink>
-        <KunButton
-          size="sm"
-          variant="bordered"
-          color="secondary"
+        <button
+          type="button"
+          class="text-default-600 hover:text-foreground cursor-pointer text-sm transition-colors"
           @click="dark = !dark"
         >
           {{ dark ? '🌙 深色' : '☀️ 浅色' }}
-        </KunButton>
+        </button>
       </div>
     </header>
 
