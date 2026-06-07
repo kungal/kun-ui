@@ -5,6 +5,7 @@ import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import type { KunModalProps } from './types'
@@ -50,6 +51,21 @@ const applyLock = (shouldLock: boolean) => {
   }
 }
 
+// Claim a fresh z-index on open so the most-recently-opened modal always wins
+// the stack, regardless of template/DOM order. `claimed` keeps claim/release
+// symmetric across modelValue toggles, exactly like `locked` above.
+const { zIndex, claim, release } = useKunOverlayZIndex()
+let claimed = false
+const applyZIndex = (shouldClaim: boolean) => {
+  if (shouldClaim && !claimed) {
+    claim()
+    claimed = true
+  } else if (!shouldClaim && claimed) {
+    release()
+    claimed = false
+  }
+}
+
 // Focus trap on the modal container — focus can't escape via Tab/Shift+Tab
 // while open. `escapeDeactivates: false` because Modal owns the Escape
 // handler below. `returnFocusOnDeactivate` restores focus on close.
@@ -76,6 +92,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
 watch(modelValue, async (v) => {
   applyLock(v)
+  applyZIndex(v)
   if (v) {
     // nextTick so the trap element is mounted before activate() walks its
     // children for focusable nodes.
@@ -89,6 +106,7 @@ watch(modelValue, async (v) => {
 onMounted(async () => {
   if (modelValue.value) {
     applyLock(true)
+    applyZIndex(true)
     await nextTick()
     activate()
   }
@@ -96,6 +114,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   applyLock(false)
+  applyZIndex(false)
   deactivate()
 })
 </script>
@@ -112,6 +131,7 @@ onUnmounted(() => {
             className
           )
         "
+        :style="{ zIndex }"
         @click="handleCloseKunModal"
         tabindex="0"
       >

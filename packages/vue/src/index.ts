@@ -128,6 +128,10 @@ export { useContentLightbox } from './composables/useContentLightbox'
 // Refcounted body scroll-lock shared across overlays (Modal/Drawer/Lightbox
 // use it internally); exported so apps can lock the body for their own overlays.
 export { useBodyScrollLock } from './composables/useBodyScrollLock'
+// Shared z-index allocator so the most-recently-opened overlay always stacks on
+// top (Modal/Drawer use it); exported so apps can stack their own overlays on
+// the same z-kun-modal layer.
+export { useKunOverlayZIndex } from './composables/useKunOverlayZIndex'
 export {
   useFilePicker,
   type KunFilePickerOptions,

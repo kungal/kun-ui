@@ -5,6 +5,7 @@ import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -111,6 +112,21 @@ const applyLock = (shouldLock: boolean) => {
   }
 }
 
+// Claim a fresh z-index on open so the most-recently-opened overlay always
+// wins the stack, regardless of template/DOM order (see useKunOverlayZIndex).
+// `claimed` keeps claim/release symmetric across modelValue toggles.
+const { zIndex, claim, release } = useKunOverlayZIndex()
+let claimed = false
+const applyZIndex = (shouldClaim: boolean) => {
+  if (shouldClaim && !claimed) {
+    claim()
+    claimed = true
+  } else if (!shouldClaim && claimed) {
+    release()
+    claimed = false
+  }
+}
+
 const trapEl = ref<HTMLElement | null>(null)
 const { activate, deactivate } = useFocusTrap(trapEl, {
   immediate: false,
@@ -138,6 +154,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
 watch(modelValue, async (v) => {
   applyLock(v)
+  applyZIndex(v)
   if (v) {
     await nextTick()
     activate()
@@ -149,6 +166,7 @@ watch(modelValue, async (v) => {
 onMounted(async () => {
   if (modelValue.value) {
     applyLock(true)
+    applyZIndex(true)
     await nextTick()
     activate()
   }
@@ -156,6 +174,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   applyLock(false)
+  applyZIndex(false)
   deactivate()
 })
 </script>
@@ -167,6 +186,7 @@ onUnmounted(() => {
         v-if="modelValue"
         ref="trapEl"
         :class="cn('z-kun-modal fixed inset-0', className)"
+        :style="{ zIndex }"
         role="dialog"
         aria-modal="true"
         :aria-labelledby="title ? titleId : undefined"
