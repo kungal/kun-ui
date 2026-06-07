@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
+import { useRoute } from '#imports'
 import { nav } from '~/nav'
 
 // Per-route SEO — title, description, Open Graph, Twitter card, canonical —
 // resolved from site.config (pageMeta) for every route. Reactive, so it
 // updates on client-side navigation.
 useKunSeoMeta()
+
+// The home page is a full-width marketing landing (no sidebar); component
+// pages keep the docs sidebar.
+const route = useRoute()
+const isHome = computed(() => route.path === '/')
 
 // Dark mode: KunUI's `dark:` variant keys off `.kun-dark-mode` on <html>.
 const dark = ref(false)
@@ -43,9 +49,10 @@ watchEffect(() => {
       </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl">
-      <!-- Sidebar -->
+    <div :class="isHome ? '' : 'mx-auto flex max-w-7xl'">
+      <!-- Sidebar (hidden on the full-width home landing) -->
       <aside
+        v-if="!isHome"
         class="border-default-200 sticky top-[57px] hidden h-[calc(100vh-57px)] w-60 shrink-0 overflow-y-auto border-r p-4 md:block"
       >
         <nav class="flex flex-col gap-6">
@@ -69,7 +76,7 @@ watchEffect(() => {
       </aside>
 
       <!-- Content -->
-      <main class="min-w-0 flex-1 px-6 py-10 lg:px-10">
+      <main :class="isHome ? 'min-w-0' : 'min-w-0 flex-1 px-6 py-10 lg:px-10'">
         <NuxtPage />
       </main>
     </div>
