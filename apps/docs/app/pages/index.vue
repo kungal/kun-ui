@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { site } from '~/site.config'
+
 const installCmd =
   'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite'
 
@@ -13,13 +15,31 @@ const cssEntry = `@import 'tailwindcss';
 
 <template>
   <article class="mx-auto max-w-3xl">
-    <h1 class="text-3xl font-bold tracking-tight">
+    <h1 class="text-4xl font-bold tracking-tight">
       Kun<span class="text-primary">UI</span>
     </h1>
-    <p class="text-default-600 mt-3 text-lg">
-      跨框架(Vue / Nuxt)组件库 —— 53 个基于 Tailwind v4 的组件、与框架无关的核心与设计令牌,并提供 Nuxt 层。
+    <p class="text-primary mt-2 text-lg font-medium">{{ site.slogan }}</p>
+    <p class="text-default-600 mt-4 text-lg">
+      面向 <span class="text-foreground font-medium">Vue</span>、<span class="text-foreground font-medium">Nuxt</span>
+      的现代组件库(React、Next.js、SolidJS、SolidStart 规划中)—— 极致 SSR 支持、超低延迟、零外部依赖、生产就绪,助你更快交付 Web 应用。
       <span class="text-foreground font-medium">这个站点本身就是用 KunUI 构建的。</span>
     </p>
+
+    <h2 class="mt-10 mb-3 text-xl font-semibold">支持情况</h2>
+    <div class="flex flex-col gap-3">
+      <KunInfo
+        color="success"
+        icon="lucide:circle-check"
+        title="现已支持 · Vue 3 / Nuxt 4"
+        description="已发布到 npm,生产可用:53 个组件、与框架无关的设计令牌与核心、全部内置图标。"
+      />
+      <KunInfo
+        color="info"
+        icon="lucide:info"
+        title="规划中 · React / Next.js / SolidJS / SolidStart"
+        description="将复用同一套 @kungal/tokens 设计令牌与 @kungal/core 核心,确保跨框架的视觉与 API 一致;尚未发布,敬请期待。"
+      />
+    </div>
 
     <h2 class="mt-10 mb-3 text-xl font-semibold">核心规则</h2>
     <div class="flex flex-col gap-3">

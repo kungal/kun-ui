@@ -17,7 +17,7 @@ const setup = `<!-- 在应用根部(如 app.vue)各挂载一次即可。 -->
 
 <template>
   <article class="mx-auto max-w-3xl">
-    <h1 class="text-3xl font-bold tracking-tight">Feedback</h1>
+    <DocTitle />
     <DocIntro />
 
     <KunInfo

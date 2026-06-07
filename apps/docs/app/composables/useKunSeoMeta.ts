@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useRoute, useSeoMeta, useHead } from '#imports'
-import { site, pageMeta } from '~/site.config'
+import { site, pageMeta, displayLabel } from '~/site.config'
 
 interface KunSeoInput {
   /** Page title (the " · KunUI" suffix is added automatically). */
@@ -26,13 +26,14 @@ export const useKunSeoMeta = (input: KunSeoInput = {}) => {
   const route = useRoute()
 
   const entry = computed(() => pageMeta[route.path])
-  const rawTitle = computed(() => input.title ?? entry.value?.title ?? site.name)
+  // Base = "Input (输入框)" for component pages, "KunUI" for home.
+  const base = computed(() => input.title ?? displayLabel(route.path))
   const description = computed(
     () => input.description ?? entry.value?.description ?? site.description
   )
   // Home stays "KunUI"; everything else becomes "<Page> · KunUI".
   const title = computed(() =>
-    rawTitle.value === site.name ? site.name : `${rawTitle.value} · ${site.name}`
+    base.value === site.name ? site.name : `${base.value} · ${site.name}`
   )
   const url = computed(() => site.url + route.path)
   // OG/Twitter images must be absolute URLs for social scrapers.
