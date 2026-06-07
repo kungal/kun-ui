@@ -21,7 +21,10 @@ const componentRoutes = Object.keys(pageMeta)
 export const nav: NavSection[] = [
   {
     title: '开始使用',
-    items: [{ label: '简介', to: '/' }],
+    items: [
+      { label: '简介', to: '/' },
+      { label: '快速开始', to: '/getting-started' },
+    ],
   },
   {
     title: '组件',

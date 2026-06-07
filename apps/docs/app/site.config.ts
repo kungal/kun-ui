@@ -47,6 +47,7 @@ export interface PageMeta {
 
 export const pageMeta: Record<string, PageMeta> = {
   '/': { title: site.name, description: site.description },
+  '/getting-started': { title: '快速开始', description: '几分钟把 KunUI 接入你的 Vue / Nuxt 项目:安装、CSS 入口、核心规则、暗色模式与反馈 Provider。' },
 
   '/components/avatar': { title: 'Avatar', cn: '头像', description: '基于 KunUser 的用户头像,支持确定性贴纸兜底与点击跳转个人主页。' },
   '/components/avatargroup': { title: 'AvatarGroup', cn: '头像组', description: '层叠头像组,超出部分以 +N 角标展示。' },
@@ -98,9 +99,14 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/userchip': { title: 'UserChip', cn: '用户胶囊', description: 'KunUser 的头像 + 名称 + 描述胶囊。' },
 }
 
+/** pageMeta lookup tolerant of a trailing slash (static hosting serves
+ *  /foo/ while keys are /foo). */
+export const getPageMeta = (path: string): PageMeta | undefined =>
+  pageMeta[path] ?? pageMeta[path !== '/' ? path.replace(/\/$/, '') : path]
+
 /** Display label "Title (中文)" for nav + headings. */
 export const displayLabel = (path: string): string => {
-  const m = pageMeta[path]
+  const m = getPageMeta(path)
   if (!m) return path
   return m.cn ? `${m.title} (${m.cn})` : m.title
 }

@@ -4,11 +4,11 @@
 // place and stays in sync with the SEO meta.
 import { computed } from 'vue'
 import { useRoute } from '#imports'
-import { pageMeta, site } from '~/site.config'
+import { getPageMeta, site } from '~/site.config'
 
 const route = useRoute()
 const description = computed(
-  () => pageMeta[route.path]?.description ?? site.description
+  () => getPageMeta(route.path)?.description ?? site.description
 )
 </script>
 

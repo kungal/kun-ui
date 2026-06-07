@@ -3,10 +3,12 @@
 // useAsyncData, so during `nuxt generate` the highlighted HTML is computed on
 // the server and baked into the prerendered payload — Shiki is dynamically
 // imported, so it never lands in the main client bundle.
-const props = withDefaults(
-  defineProps<{ code: string; lang?: string }>(),
-  { lang: 'vue' }
-)
+//
+// Dual theme: light colors are applied inline (default); dark colors live in
+// CSS variables and are switched on by the .kun-dark-mode class (see <style>).
+const props = withDefaults(defineProps<{ code: string; lang?: string }>(), {
+  lang: 'vue',
+})
 
 // Content-addressed key so identical snippets dedupe and there are no collisions.
 const hash = (s: string) => {
@@ -19,7 +21,10 @@ const { data: html } = await useAsyncData(
   `shiki:${props.lang}:${hash(props.code)}`,
   async () => {
     const { codeToHtml } = await import('shiki')
-    return codeToHtml(props.code, { lang: props.lang, theme: 'github-dark' })
+    return codeToHtml(props.code, {
+      lang: props.lang,
+      themes: { light: 'github-light', dark: 'github-dark' },
+    })
   }
 )
 </script>
@@ -29,10 +34,13 @@ const { data: html } = await useAsyncData(
     <div
       class="absolute top-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100"
     >
-      <KunCopy :text="code" name="复制代码" />
+      <KunCopy :text="code" name="复制代码" variant="solid" color="default" />
     </div>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div class="kun-code rounded-kun-md overflow-hidden text-sm" v-html="html" />
+    <div
+      class="kun-code border-default-200 rounded-kun-md overflow-hidden border text-sm"
+      v-html="html"
+    />
   </div>
 </template>
 
@@ -42,5 +50,15 @@ const { data: html } = await useAsyncData(
   padding: 1rem 1.25rem;
   overflow-x: auto;
   line-height: 1.6;
+}
+</style>
+
+<!-- Global (not scoped): .kun-dark-mode is on <html>, an ancestor. Switch the
+     Shiki dual-theme CSS variables to the dark palette in dark mode. -->
+<style>
+.kun-dark-mode .kun-code .shiki,
+.kun-dark-mode .kun-code .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 </style>

@@ -34,14 +34,14 @@ watchEffect(() => {
       </NuxtLink>
 
       <div class="flex items-center gap-4">
-        <KunLink
+        <a
           href="https://github.com/kungal/kun-ui"
           target="_blank"
-          color="default"
-          underline="none"
+          rel="noopener"
+          class="text-default-600 hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
         >
-          GitHub
-        </KunLink>
+          <KunIcon name="lucide:github" /> GitHub
+        </a>
         <button
           type="button"
           class="text-default-600 hover:text-foreground cursor-pointer text-sm transition-colors"
