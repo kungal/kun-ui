@@ -1,5 +1,15 @@
 # @kungal/ui-vue
 
+## 0.2.1
+
+### Patch Changes
+
+- f48f420: Export `useBodyScrollLock`. The refcounted body scroll-lock composable that
+  KunModal / KunDrawer / KunLightbox already use internally is now public, so apps
+  can lock body scroll for their own overlays through the same shared counter
+  (nested overlays won't unlock the body until the outermost one closes).
+  - @kungal/ui-core@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
