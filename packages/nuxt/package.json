@@ -33,7 +33,7 @@
     "clean": "rm -rf .nuxt"
   },
   "dependencies": {
-    "@kungal/tokens": "workspace:*",
+    "@kungal/ui-tokens": "workspace:*",
     "@kungal/ui-vue": "workspace:*",
     "@nuxt/icon": "^2.2.3",
     "@nuxt/image": "^2.0.0",

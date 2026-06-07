@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import KunAvatar from './Avatar.vue'
 import type { KunUserChipProps } from './types'
 

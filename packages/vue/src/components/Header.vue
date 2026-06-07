@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import type { KunHeaderProps } from './types'
 
 // Page/section heading with title + description + slots. No coupling.

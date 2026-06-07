@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onKeyStroke } from '@vueuse/core'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, decodeIfEncoded } from '@kungal/core'
+import { cn, decodeIfEncoded } from '@kungal/ui-core'
 import { useKunCopy } from '../composables/useKunCopy'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'

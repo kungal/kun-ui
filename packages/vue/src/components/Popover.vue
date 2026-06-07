@@ -9,7 +9,7 @@ import {
   shift,
   type Placement,
 } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import type { KunPopoverProps } from './types'
 

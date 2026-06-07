@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { cn, kunRoundedClasses, type KunUIColor } from '@kungal/core'
+import { cn, kunRoundedClasses, type KunUIColor } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunInputProps } from './types'

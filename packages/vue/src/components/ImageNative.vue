@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import type { KunImageNativeProps } from './types'
 
 // A bare native <img> with class merging — for cases that don't want

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunSwitchProps } from './types'
 

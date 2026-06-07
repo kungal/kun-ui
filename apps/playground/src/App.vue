@@ -18,7 +18,7 @@ import FileShowcase from './sections/FileShowcase.vue'
 import PeopleShowcase from './sections/PeopleShowcase.vue'
 import AlertShowcase from './sections/AlertShowcase.vue'
 
-// Dark mode is driven by the `.kun-dark-mode` class on <html>: @kungal/tokens
+// Dark mode is driven by the `.kun-dark-mode` class on <html>: @kungal/ui-tokens
 // both flips its CSS variables under that selector AND wires the Tailwind
 // `dark:` variant to `&:is(.kun-dark-mode *)`.
 const dark = ref(false)
@@ -57,7 +57,7 @@ const swatch: Record<(typeof colors)[number], string> = {
           Kun<span class="text-primary">UI</span> Playground
         </h1>
         <p class="text-default-500 text-sm">
-          @kungal/ui-vue · decoupled from Nuxt · powered by @kungal/tokens + @kungal/core
+          @kungal/ui-vue · decoupled from Nuxt · powered by @kungal/ui-tokens + @kungal/ui-core
         </p>
       </div>
       <KunButton

@@ -3,7 +3,7 @@ import { type VNode, Comment, Text } from 'vue'
 // Recursively pull the rendered text out of a slot's VNode tree — used by
 // Button to derive a sensible default aria-label from its slot content.
 // Vue-specific (operates on VNodes), so it lives in the Vue layer rather
-// than @kungal/core.
+// than @kungal/ui-core.
 export const extractTextFromVNodes = (nodes: VNode[]): string => {
   let text = ''
   for (const node of nodes) {

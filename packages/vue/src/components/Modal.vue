@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import KunButton from './Button.vue'
@@ -11,7 +11,7 @@ import type { KunModalProps } from './types'
 
 // Nuxt-decoupled Modal. Same behaviour as the Nuxt original — Teleport to
 // body, focus trap, refcounted body scroll-lock, Escape-to-close — but every
-// dependency is an explicit import (vue / @vueuse / @kungal/core / siblings)
+// dependency is an explicit import (vue / @vueuse / @kungal/ui-core / siblings)
 // instead of a Nuxt auto-import.
 defineOptions({ name: 'KunModal' })
 

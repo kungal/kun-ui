@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { registerKunIcon } from '@kungal/core'
+import { registerKunIcon } from '@kungal/ui-core'
 
-// All icons below are BUNDLED in @kungal/core — they render inline, offline,
+// All icons below are BUNDLED in @kungal/ui-core — they render inline, offline,
 // with zero setup and no network fetch. These are the icons KunUI's own
 // components use.
 const bundled = [
@@ -30,7 +30,7 @@ registerKunIcon('custom:heart', {
   <section class="flex flex-col gap-4">
     <h2 class="text-lg font-semibold">Icon (bundled, no fetch)</h2>
     <p class="text-default-500 text-sm">
-      Rendered inline from <code>@kungal/core</code> — no Iconify API call,
+      Rendered inline from <code>@kungal/ui-core</code> — no Iconify API call,
       works offline. The spinner animates.
     </p>
 

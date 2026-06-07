@@ -8,7 +8,7 @@ import type { KunLoliProps } from './types'
 // The loli mascot popup. Usually rendered by <KunLoliProvider> driven by
 // useKunLoliInfo, but usable standalone. Picks a random mascot per mount;
 // the image lives at /alert/{name}.webp in the consuming app's public dir.
-// Animation classes (animate-fadeInUp/swing/etc.) come from @kungal/tokens.
+// Animation classes (animate-fadeInUp/swing/etc.) come from @kungal/ui-tokens.
 defineOptions({ name: 'KunLoli' })
 
 const props = defineProps<KunLoliProps>()

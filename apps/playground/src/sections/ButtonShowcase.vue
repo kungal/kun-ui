@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { KunUIVariant, KunUIColor, KunUISize } from '@kungal/core'
+import type { KunUIVariant, KunUIColor, KunUISize } from '@kungal/ui-core'
 
 const variants: KunUIVariant[] = [
   'solid',

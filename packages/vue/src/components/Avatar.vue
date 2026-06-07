@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, getRandomSticker } from '@kungal/core'
+import { cn, getRandomSticker } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunImage from './Image.vue'
 import type { KunAvatarProps } from './types'

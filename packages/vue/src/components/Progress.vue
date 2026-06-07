@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunBgClasses, kunRoundedClasses, type KunUIColor } from '@kungal/core'
+import { cn, kunBgClasses, kunRoundedClasses, type KunUIColor } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import type { KunProgressProps } from './types'
 

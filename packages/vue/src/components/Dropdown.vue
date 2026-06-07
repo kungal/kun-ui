@@ -2,7 +2,7 @@
 import { computed, nextTick, ref, useId } from 'vue'
 import { onClickOutside, useEventListener } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift, type Placement } from '@floating-ui/vue'
-import { cn, kunVariantClasses, type KunUIColor } from '@kungal/core'
+import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import type { KunDropdownItem } from './types'
 

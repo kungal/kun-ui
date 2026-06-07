@@ -111,7 +111,7 @@ export default defineNuxtConfig({
 })
 
 // NOTE on styling: this layer intentionally does NOT own a Tailwind entry.
-// The consuming app owns one stylesheet that imports Tailwind + @kungal/tokens
+// The consuming app owns one stylesheet that imports Tailwind + @kungal/ui-tokens
 // and declares the @source scan for the KunUI class sites (the scan path is
 // node_modules-layout-specific, so only the app can write it correctly).
 // See this package's README.

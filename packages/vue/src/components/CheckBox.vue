@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, type KunUIColor } from '@kungal/core'
+import { cn, type KunUIColor } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunCheckBoxProps } from './types'

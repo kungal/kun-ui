@@ -3,8 +3,8 @@
 KunUI publishes four public packages, **all locked to one shared version**
 (the `fixed` group in `.changeset/config.json`):
 
-- `@kungal/tokens`
-- `@kungal/core`
+- `@kungal/ui-tokens`
+- `@kungal/ui-core`
 - `@kungal/ui-vue`
 - `@kungal/ui-nuxt`
 

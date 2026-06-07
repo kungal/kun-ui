@@ -4,7 +4,7 @@ import type {
   KunUISize,
   KunUIRounded,
   KunUser,
-} from '@kungal/core'
+} from '@kungal/ui-core'
 
 export interface KunButtonProps {
   variant?: KunUIVariant

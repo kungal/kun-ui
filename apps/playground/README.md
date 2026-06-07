@@ -14,8 +14,8 @@ It demonstrates the exact host-side wiring any KunUI consumer needs
 
 ```css
 @import 'tailwindcss';
-@import '@kungal/tokens';
-@source '../../../packages/core/src';  /* variant matrix + maps */
+@import '@kungal/ui-tokens';
+@source '../../../packages/ui-core/src';  /* variant matrix + maps */
 @source '../../../packages/vue/src';   /* component classes */
 ```
 

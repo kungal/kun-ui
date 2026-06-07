@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import KunImageNative from './ImageNative.vue'
 import { KUN_LOADING_IMAGE } from '../assets/loadingImage'
 import type { KunLoadingProps } from './types'

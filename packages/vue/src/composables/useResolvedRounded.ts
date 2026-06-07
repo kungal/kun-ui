@@ -1,8 +1,8 @@
 import { computed, type ComputedRef } from 'vue'
-import { resolveRounded, type KunUIRounded } from '@kungal/core'
+import { resolveRounded, type KunUIRounded } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 
-// Vue reactive wrapper around @kungal/core's pure `resolveRounded`. Pass the
+// Vue reactive wrapper around @kungal/ui-core's pure `resolveRounded`. Pass the
 // prop accessor as a function so reactivity tracking works inside computed.
 //
 //   const rounded = useResolvedRounded(() => props.rounded)        // prop > provider > default

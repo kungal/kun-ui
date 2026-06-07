@@ -24,8 +24,8 @@ const meta = {
   tagline:
     'Cross-framework component library — 53 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.',
   packages: [
-    ['@kungal/tokens', 'Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.'],
-    ['@kungal/core', 'Framework-agnostic TypeScript core: cn(), the variant/class matrix, the radius system, the bundled-icon registry, shared types (KunUIColor, KunUser, …).'],
+    ['@kungal/ui-tokens', 'Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.'],
+    ['@kungal/ui-core', 'Framework-agnostic TypeScript core: cn(), the variant/class matrix, the radius system, the bundled-icon registry, shared types (KunUIColor, KunUser, …).'],
     ['@kungal/ui-vue', 'The Vue 3 component layer (works in any Vue 3.5+ app).'],
     ['@kungal/ui-nuxt', 'A Nuxt 4 layer that wraps @kungal/ui-vue and auto-imports everything + injects NuxtLink / @nuxt/icon / @nuxt/image.'],
   ],
@@ -39,17 +39,17 @@ const rules = [
   ],
   [
     'Icons are bundled, never fetched',
-    'KunIcon renders inline SVG from an in-memory registry seeded with the icons the components need — it NEVER calls the Iconify API at runtime. Use bundled names like `lucide:check`. Register your own with registerKunIcon(name, {body}) / registerKunIcons({...}) from @kungal/core at startup. Unknown names render the injected iconComponent fallback (the Nuxt layer wires @nuxt/icon; plain Vue renders nothing).',
+    'KunIcon renders inline SVG from an in-memory registry seeded with the icons the components need — it NEVER calls the Iconify API at runtime. Use bundled names like `lucide:check`. Register your own with registerKunIcon(name, {body}) / registerKunIcons({...}) from @kungal/ui-core at startup. Unknown names render the injected iconComponent fallback (the Nuxt layer wires @nuxt/icon; plain Vue renders nothing).',
   ],
   [
     'The consumer owns the Tailwind entry',
-    "KunUI does NOT ship one all-in-one stylesheet. Your app's CSS entry must contain: `@import 'tailwindcss';` then `@import '@kungal/tokens';` then `@import '@kungal/ui-vue/style.css';` (scoped component styles) plus `@source` directives pointing at @kungal/ui-vue and @kungal/core so Tailwind generates the utility classes the components use. Under pnpm, install @kungal/ui-vue and @kungal/core as DIRECT deps so the @import/@source resolve. Dark mode = toggle the `kun-dark-mode` class on <html>.",
+    "KunUI does NOT ship one all-in-one stylesheet. Your app's CSS entry must contain: `@import 'tailwindcss';` then `@import '@kungal/ui-tokens';` then `@import '@kungal/ui-vue/style.css';` (scoped component styles) plus `@source` directives pointing at @kungal/ui-vue and @kungal/ui-core so Tailwind generates the utility classes the components use. Under pnpm, install @kungal/ui-vue and @kungal/ui-core as DIRECT deps so the @import/@source resolve. Dark mode = toggle the `kun-dark-mode` class on <html>.",
   ],
 ]
 
 const install = {
-  nuxt: 'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite',
-  vue: 'pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite',
+  nuxt: 'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite',
+  vue: 'pnpm add @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite',
 }
 
 // Canonical component list (single source of truth). category drives grouping.
@@ -130,7 +130,7 @@ const composables = [
 ]
 
 const coreExports =
-  'From @kungal/core (framework-agnostic): cn, registerKunIcon, registerKunIcons, getKunIcon, hasKunIcon, the variant class helpers (kunBgClasses, kunTextClasses, kunRingClasses, …), and types KunUIColor, KunUISize, KunUIVariant, KunUIRounded, KunUser.'
+  'From @kungal/ui-core (framework-agnostic): cn, registerKunIcon, registerKunIcons, getKunIcon, hasKunIcon, the variant class helpers (kunBgClasses, kunTextClasses, kunRingClasses, …), and types KunUIColor, KunUISize, KunUIVariant, KunUIRounded, KunUser.'
 
 const docs = [
   ['Integration guide', 'docs/INTEGRATION.md', 'Full setup for Nuxt and plain Vue: install, the Tailwind entry CSS, dark mode, icons, KunUIConfig, providers, security, SSR, full reference.'],

@@ -1,4 +1,4 @@
-import { randomNum } from '@kungal/core'
+import { randomNum } from '@kungal/ui-core'
 
 export interface KunLoliAsset {
   loli: string

@@ -1,4 +1,4 @@
-# @kungal/core
+# @kungal/ui-tokens
 
 ## 0.1.1
 

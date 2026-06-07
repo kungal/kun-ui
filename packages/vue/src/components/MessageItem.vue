@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import type { KunMessageType } from '../composables/useKunMessage'
 
 // Internal toast item rendered by <KunMessageProvider>. Decoupled: explicit
-// imports (vue / @kungal/core / sibling KunIcon) instead of Nuxt auto-imports.
+// imports (vue / @kungal/ui-core / sibling KunIcon) instead of Nuxt auto-imports.
 defineOptions({ name: 'KunMessageItem' })
 
 const props = defineProps<{

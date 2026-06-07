@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, type ComponentPublicInstance } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import type { KunImageProps } from './types'

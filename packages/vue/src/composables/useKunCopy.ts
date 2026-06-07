@@ -1,4 +1,4 @@
-import { decodeIfEncoded } from '@kungal/core'
+import { decodeIfEncoded } from '@kungal/ui-core'
 import { useKunMessage } from './useKunMessage'
 
 // Copy text to the clipboard and toast the result. Decodes percent-encoded

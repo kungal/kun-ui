@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue'
 import { useScroll, useElementSize } from '@vueuse/core'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import type { KunScrollShadowProps } from './types'
 
 // Edge fade-out shadows that appear when content is scrolled off either end

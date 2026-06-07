@@ -11,8 +11,8 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@kungal/core": "workspace:*",
-    "@kungal/tokens": "workspace:*",
+    "@kungal/ui-core": "workspace:*",
+    "@kungal/ui-tokens": "workspace:*",
     "@kungal/ui-vue": "workspace:*",
     "vue": "^3.5.35"
   },

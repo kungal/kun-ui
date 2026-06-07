@@ -5,7 +5,7 @@ import {
   kunBgClasses,
   kunTextClasses,
   kunBorderClasses,
-} from '@kungal/core'
+} from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunIcon from './Icon.vue'
 import type { KunTabItem, KunTabColor, KunTabSize, KunTabProps } from './types'
@@ -297,7 +297,7 @@ const tabClasses = (item: KunTabItem) => {
 }
 
 // Soft tint for the light variant's sliding panel (15% — a touch stronger
-// than @kungal/core's kunSoftBgClasses 5%). Static literals for the JIT.
+// than @kungal/ui-core's kunSoftBgClasses 5%). Static literals for the JIT.
 const softBgByColor: Record<KunTabColor, string> = {
   default: 'bg-default/15',
   primary: 'bg-primary/15',

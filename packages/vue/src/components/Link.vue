@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunTextClasses } from '@kungal/core'
+import { cn, kunTextClasses } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunIcon from './Icon.vue'
 import type { KunLinkProps } from './types'

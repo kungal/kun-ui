@@ -15,7 +15,7 @@ app (Vite, Astro, Laravel, plain `createApp`, …), not just Nuxt.
 
 `KunIcon` renders **inline SVG from a registry** — it never calls the Iconify
 API (no FOUC, no SSR-empty-then-pop, works offline / behind a firewall). The
-~24 icons KunUI's own components use are bundled in `@kungal/core`, so they
+~24 icons KunUI's own components use are bundled in `@kungal/ui-core`, so they
 work with zero setup.
 
 ```vue
@@ -26,7 +26,7 @@ Bring your own icons by registering their data (from `@iconify-json/*` at
 build time, or hand-written SVG — bodies use `currentColor`):
 
 ```ts
-import { registerKunIcons } from '@kungal/core'
+import { registerKunIcons } from '@kungal/ui-core'
 import lucide from '@iconify-json/lucide/icons.json' // build-time data
 
 registerKunIcons({
@@ -69,7 +69,7 @@ useKunMessage('Error', 'error', 4000, false, 'bottom-right')
 ## Install
 
 ```bash
-pnpm add @kungal/ui-vue @kungal/tokens vue
+pnpm add @kungal/ui-vue @kungal/ui-tokens vue
 ```
 
 ## Usage
@@ -87,7 +87,7 @@ createApp(App).use(KunUI).mount('#app')
 ```css
 /* app.css */
 @import 'tailwindcss';
-@import '@kungal/tokens';
+@import '@kungal/ui-tokens';
 @source '../node_modules/@kungal/ui-vue/dist'; /* let Tailwind scan the lib */
 ```
 
@@ -107,11 +107,11 @@ The Nuxt original leaned on auto-imports and three Nuxt modules. Here:
 
 | Nuxt original | `@kungal/ui-vue` replacement |
 | --- | --- |
-| auto-imported `computed`/`ref`/`cn`/components | explicit `import` from `vue` / `@kungal/core` / sibling files |
+| auto-imported `computed`/`ref`/`cn`/components | explicit `import` from `vue` / `@kungal/ui-core` / sibling files |
 | `defineNuxtLink()` for `href` buttons/cards | `config.linkComponent` (default `<a>`; inject `RouterLink`/`NuxtLink`) |
 | `@nuxt/icon` `<Icon>` | `config.iconComponent` (default `@iconify/vue`; inject `NuxtIcon`) |
-| `@kungal/ui` Nuxt-layer Tailwind tokens | `@kungal/tokens` package |
-| in-package `cn` / variant matrix / radius | `@kungal/core` (shared with the React layer) |
+| `@kungal/ui` Nuxt-layer Tailwind tokens | `@kungal/ui-tokens` package |
+| in-package `cn` / variant matrix / radius | `@kungal/ui-core` (shared with the React layer) |
 
 ### Configuring the injectable slots
 

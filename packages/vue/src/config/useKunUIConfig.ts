@@ -1,5 +1,5 @@
 import { inject, provide, type App, type Component, type InjectionKey } from 'vue'
-import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kungal/core'
+import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kungal/ui-core'
 
 // Global KunUI defaults applied to every component in a Vue subtree (or the
 // whole app if provided at root). Each component still accepts per-instance

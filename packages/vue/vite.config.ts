@@ -21,7 +21,7 @@ export default defineConfig({
       // not inlined — consumers dedupe them via node_modules.
       external: (id) =>
         id === 'vue' ||
-        id === '@kungal/core' ||
+        id === '@kungal/ui-core' ||
         id === 'focus-trap' ||
         id === 'date-fns' ||
         id === 'vue-advanced-cropper' ||

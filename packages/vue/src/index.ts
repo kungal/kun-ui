@@ -142,7 +142,7 @@ export {
 } from './composables/useKunAlert'
 export { useKunLoliInfo, useKunLoliState } from './composables/useKunLoliInfo'
 // Re-export framework-agnostic helpers consumers commonly reach for.
-export { getRandomSticker, decodeIfEncoded } from '@kungal/core'
+export { getRandomSticker, decodeIfEncoded } from '@kungal/ui-core'
 
 // Message (toast) system — imperative trigger + read store. Mount
 // <KunMessageProvider/> once near your app root.
@@ -222,8 +222,8 @@ export type {
   KunLoliProps,
 } from './components/types'
 
-// User data model (lives in @kungal/core; re-exported here for convenience).
-export type { KunUser } from '@kungal/core'
+// User data model (lives in @kungal/ui-core; re-exported here for convenience).
+export type { KunUser } from '@kungal/ui-core'
 
 const components = {
   KunAlertProvider,

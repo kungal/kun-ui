@@ -40,11 +40,11 @@ non-obvious rules without fetching anything. Copy this block:
   or `useKunMessage(..., richText=true)`, sanitize it yourself (e.g. DOMPurify).
 - Icons are bundled, never fetched. Use `<KunIcon name="lucide:check" />` with
   bundled names; register custom ones with `registerKunIcon(s)` from
-  `@kungal/core`. Never rely on a runtime Iconify fetch.
+  `@kungal/ui-core`. Never rely on a runtime Iconify fetch.
 - The app owns its Tailwind v4 entry stylesheet. It must contain, in order:
-  `@import 'tailwindcss';` · `@import '@kungal/tokens';` ·
+  `@import 'tailwindcss';` · `@import '@kungal/ui-tokens';` ·
   `@import '@kungal/ui-vue/style.css';` and `@source` directives pointing at
-  `@kungal/ui-vue` and `@kungal/core`. Install both as direct deps (pnpm).
+  `@kungal/ui-vue` and `@kungal/ui-core`. Install both as direct deps (pnpm).
 - Dark mode = toggle the `kun-dark-mode` class on `<html>`.
 - Mount `<KunMessageProvider/>`, `<KunAlertProvider/>`, `<KunLoliProvider/>`
   once near the app root if you use toasts / confirm dialogs / the mascot.

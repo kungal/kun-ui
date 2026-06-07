@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunBgClasses } from '@kungal/core'
+import { cn, kunBgClasses } from '@kungal/ui-core'
 import type { KunBadgeProps } from './types'
 
 // Dot / count overlay on the top corner of an anchor (avatar, icon,

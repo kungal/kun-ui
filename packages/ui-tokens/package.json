@@ -1,5 +1,5 @@
 {
-  "name": "@kungal/tokens",
+  "name": "@kungal/ui-tokens",
   "version": "0.1.1",
   "description": "KunUI design tokens — framework-agnostic Tailwind v4 theme (semantic colors, radius, z-index, animations).",
   "type": "module",
@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kungal/kun-ui.git",
-    "directory": "packages/tokens"
+    "directory": "packages/ui-tokens"
   },
   "homepage": "https://github.com/kungal/kun-ui#readme",
   "bugs": "https://github.com/kungal/kun-ui/issues",
@@ -37,9 +37,9 @@
     "./index.css": "./src/index.css"
   },
   "scripts": {
-    "build": "echo \"@kungal/tokens ships CSS source, no build step\"",
-    "typecheck": "echo \"@kungal/tokens has no TypeScript\"",
-    "clean": "echo \"@kungal/tokens has nothing to clean\""
+    "build": "echo \"@kungal/ui-tokens ships CSS source, no build step\"",
+    "typecheck": "echo \"@kungal/ui-tokens has no TypeScript\"",
+    "clean": "echo \"@kungal/ui-tokens has nothing to clean\""
   },
   "peerDependencies": {
     "tailwindcss": "^4.0.0"

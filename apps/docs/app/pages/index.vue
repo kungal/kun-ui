@@ -2,12 +2,12 @@
 import { site } from '~/site.config'
 
 const installCmd =
-  'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite'
+  'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite'
 
 const features = [
   { icon: 'lucide:zap', title: 'SSR 优先 · 高性能', desc: '全部组件 SSR 安全、水合零报错,极低运行时开销。' },
   { icon: 'lucide:layout-grid', title: '53 个组件', desc: '表单、浮层、反馈、展示、人物 —— 一应俱全。' },
-  { icon: 'lucide:palette', title: '设计令牌 + 框架无关核心', desc: '@kungal/tokens 与 @kungal/core,跨框架视觉与 API 一致。' },
+  { icon: 'lucide:palette', title: '设计令牌 + 框架无关核心', desc: '@kungal/ui-tokens 与 @kungal/ui-core,跨框架视觉与 API 一致。' },
   { icon: 'lucide:wifi-off', title: '图标全内置 · 绝不联网', desc: '内联 SVG 渲染,运行时绝不请求 Iconify。' },
   { icon: 'lucide:moon', title: '暗色模式 · 类型安全', desc: '.kun-dark-mode 一键切换,完整 TypeScript 类型。' },
   { icon: 'lucide:bot', title: 'AI 友好', desc: '内置 llms.txt,Claude Code / Cursor 可直接读懂、用对。' },

@@ -15,9 +15,9 @@ So we split KunUI by **portability**, not by component:
 
 | Asset | Portability | Where it lives |
 | --- | --- | --- |
-| Design tokens (colors, radius, z-index, animations) — pure CSS | 🟢 100% | `@kungal/tokens` |
-| `cn()`, variant×color matrix, type vocabulary, small utils — pure TS | 🟢 100% | `@kungal/core` |
-| Component *logic patterns* (controlled/uncontrolled, precedence chains) | 🟡 portable as logic, not as code | resolver fns in `@kungal/core`; reactive wrappers per framework |
+| Design tokens (colors, radius, z-index, animations) — pure CSS | 🟢 100% | `@kungal/ui-tokens` |
+| `cn()`, variant×color matrix, type vocabulary, small utils — pure TS | 🟢 100% | `@kungal/ui-core` |
+| Component *logic patterns* (controlled/uncontrolled, precedence chains) | 🟡 portable as logic, not as code | resolver fns in `@kungal/ui-core`; reactive wrappers per framework |
 | Vue SFC render + Nuxt coupling | 🔴 0% | `@kungal/ui-vue` / `@kungal/ui-nuxt` (Vue only) |
 
 ## 2. How deeply the source is coupled to Nuxt
@@ -59,8 +59,8 @@ date-picker/dropdown/drawer accessibility & positioning.
 ```
 kun-ui/
 ├─ packages/
-│  ├─ tokens/   @kungal/tokens   pure CSS tokens                  ✅ landed
-│  ├─ core/     @kungal/core     pure TS (cn/variants/types/utils) ✅ landed
+│  ├─ tokens/   @kungal/ui-tokens   pure CSS tokens                  ✅ landed
+│  ├─ core/     @kungal/ui-core     pure TS (cn/variants/types/utils) ✅ landed
 │  ├─ vue/      @kungal/ui-vue   Vue 3 components, Nuxt-decoupled  ⏳
 │  ├─ nuxt/     @kungal/ui-nuxt  thin Nuxt Layer over ui-vue       ⏳
 │  └─ react/    @kungal/ui-react React components on Ark UI        ⏳
@@ -74,7 +74,7 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 
 | Phase | Work | Output | Est. |
 | --- | --- | --- | --- |
-| **P0** ✅ | Extract `@kungal/tokens` (CSS) + `@kungal/core` (cn/variants/types/utils) | shared foundation | done |
+| **P0** ✅ | Extract `@kungal/ui-tokens` (CSS) + `@kungal/ui-core` (cn/variants/types/utils) | shared foundation | done |
 | **P1** ✅ | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; `NuxtLink`/`Icon`/`Image`/`navigate` behind injectable config slots; toast/alert/loli moved off the `render()`+appContext hack to store + provider; icons bundled (no fetch). **All 53 components migrated.** | pure Vue 3 lib (works in any Vue app) | done |
 | **P2** ✅ | `@kungal/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
 | **P3** | `@kungal/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
@@ -107,7 +107,7 @@ focus-trap; ContextMenu's `import.meta.client` replaced by a runtime
 `typeof window` guard), and the util batch `KunCopy` / `KunRating` /
 `KunBrand` / `KunPagination` / `KunScrollShadow` / `KunFadeCard` / `KunNull`
 / `KunFavicon` (`useKunCopy` ported; `getRandomSticker` made deterministic-
-per-id in `@kungal/core` so it drops Nuxt `useState`; Brand's `navigateTo` →
+per-id in `@kungal/ui-core` so it drops Nuxt `useState`; Brand's `navigateTo` →
 `config.navigate`; FadeCard's `<ClientOnly>` → a mounted gate), and the
 content/lightbox cluster `KunLightbox` (+`Gallery`/`GalleryItem`) /
 `KunContent` / `KunText` / `KunMarkdown` (`useSpoilerContent` +
@@ -124,7 +124,7 @@ component entry splitting (so e.g. Upload's cropper is tree-shakeable) is a
 future optimization.
 
 Then the people batch `KunAvatar` / `KunAvatarGroup` / `KunUserChip` /
-`KunHeader`: the `KunUser` data model now lives in `@kungal/core` (minimal
+`KunHeader`: the `KunUser` data model now lives in `@kungal/ui-core` (minimal
 `{id,name,avatar}`); Avatar navigates via `config.navigate` +
 `config.userLinkTemplate` (default `/user/{id}/info`) instead of a hardcoded
 `navigateTo`, and falls back to the deterministic `getRandomSticker`. The
@@ -160,7 +160,7 @@ data-model decision first.)
   `vueApp._context` with a pure module store + a mounted `<KunMessageProvider>`
   (Teleported to body), the Sonner / Naive-UI pattern. No context hack.
 - [x] **Icons are bundled, never fetched.** `KunIcon` renders inline SVG from
-  a registry in `@kungal/core` (seeded with the ~24 icons KunUI components
+  a registry in `@kungal/ui-core` (seeded with the ~24 icons KunUI components
   use, generated from `@iconify-json/*` at build time via
   `core/scripts/gen-icons.mjs`). `@iconify/vue` (the runtime-fetch path) was
   dropped. Render order: registry → injected `iconComponent` → nothing.
@@ -172,7 +172,7 @@ data-model decision first.)
   `Content`/`Markdown` bodies). SSR-side sanitization (jsdom/DOMPurify) caused
   real problems in production, so `sanitize.ts` is intentionally NOT ported.
   Every `v-html` site documents the trusted-input requirement.
-- [x] Consume `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
+- [x] Consume `@kungal/ui-core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of in-package copies.
 
 ### Original checklist (full P1 scope)
@@ -189,5 +189,5 @@ data-model decision first.)
   in plain Vue.
 - Port `sanitize.ts` off `import.meta.server` (inject an `isServer` flag)
   before it can move into a shared package.
-- Keep consuming `@kungal/core` (`cn`, `kunVariantClasses`, `resolveRounded`,
+- Keep consuming `@kungal/ui-core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of the in-package copies.

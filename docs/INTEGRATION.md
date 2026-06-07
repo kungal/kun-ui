@@ -7,7 +7,7 @@ side**.
 
 > TL;DR — KunUI is Tailwind-v4-native. You install the packages, and **your app
 > owns its Tailwind entry stylesheet**. There are exactly three CSS lines you
-> must add (`tailwindcss`, `@kungal/tokens`, `@kungal/ui-vue/style.css`) plus a
+> must add (`tailwindcss`, `@kungal/ui-tokens`, `@kungal/ui-vue/style.css`) plus a
 > couple of `@source` directives so Tailwind generates the classes the
 > components use. Everything else is auto-wired.
 
@@ -20,14 +20,14 @@ version** (lockstep semver — always install matching versions).
 
 | Package | What it is | Install it when |
 | --- | --- | --- |
-| `@kungal/tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
-| `@kungal/core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
+| `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
+| `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
 | `@kungal/ui-vue` | The Vue 3 component layer (53 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
-`@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/tokens`, and
-`@kungal/ui-vue` depends on `@kungal/core`, so you never install the lower
-layers by hand — but you **do** add `@kungal/tokens` explicitly because you
+`@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
+`@kungal/ui-vue` depends on `@kungal/ui-core`, so you never install the lower
+layers by hand — but you **do** add `@kungal/ui-tokens` explicitly because you
 reference it from your CSS.
 
 ---
@@ -48,10 +48,10 @@ reference it from your CSS.
 ### 3.1 Install
 
 ```bash
-pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite
 ```
 
-> Why install `@kungal/ui-vue` and `@kungal/core` explicitly, when
+> Why install `@kungal/ui-vue` and `@kungal/ui-core` explicitly, when
 > `@kungal/ui-nuxt` already depends on them? Because your **CSS** references
 > them directly (`@import '@kungal/ui-vue/style.css'` and the `@source` lines in
 > §3.3). Under pnpm's strict `node_modules`, only your *direct* dependencies are
@@ -83,7 +83,7 @@ export default defineNuxtConfig({
 
 ```css
 @import 'tailwindcss';
-@import '@kungal/tokens';            /* theme tokens + opinionated base layer */
+@import '@kungal/ui-tokens';            /* theme tokens + opinionated base layer */
 @import '@kungal/ui-vue/style.css';  /* scoped component styles (transitions, etc.) */
 
 /*
@@ -93,7 +93,7 @@ export default defineNuxtConfig({
  * node_modules holds the packages (3 levels up for app/assets/css/*).
  */
 @source '../../../node_modules/@kungal/ui-vue';
-@source '../../../node_modules/@kungal/core';
+@source '../../../node_modules/@kungal/ui-core';
 ```
 
 That's it. `<KunButton>`, `<KunModal>`, `useKunMessage()`, etc. are now
@@ -124,10 +124,10 @@ near the app root (e.g. in `app.vue`):
 ### 4.1 Install
 
 ```bash
-pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite
+pnpm add @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite
 ```
 
-(`@kungal/core` is listed explicitly because your CSS `@source`s it — see the
+(`@kungal/ui-core` is listed explicitly because your CSS `@source`s it — see the
 note in §3.1.)
 
 ### 4.2 `vite.config.ts`
@@ -146,12 +146,12 @@ export default defineConfig({
 
 ```css
 @import 'tailwindcss';
-@import '@kungal/tokens';
+@import '@kungal/ui-tokens';
 @import '@kungal/ui-vue/style.css';
 
 /* Relative to this file. For src/assets/main.css node_modules is 2 levels up. */
 @source '../../node_modules/@kungal/ui-vue';
-@source '../../node_modules/@kungal/core';
+@source '../../node_modules/@kungal/ui-core';
 ```
 
 ### 4.4 `src/main.ts`
@@ -210,9 +210,9 @@ What you import, and why:
 | Line | Why it's required |
 | --- | --- |
 | `@import 'tailwindcss';` | Your app owns the Tailwind entry. KunUI's CSS never imports Tailwind for you. Must come **first**. |
-| `@import '@kungal/tokens';` | Registers the design tokens via Tailwind v4 `@theme` (semantic colors with 50–950 scales, `rounded-kun-*`, `z-kun-*`, animation keyframes, the `dark` variant) plus an opinionated base layer (page background, font stack, `.scrollbar-hide`/`.scrollbar-visible`). Must come **after** Tailwind. |
+| `@import '@kungal/ui-tokens';` | Registers the design tokens via Tailwind v4 `@theme` (semantic colors with 50–950 scales, `rounded-kun-*`, `z-kun-*`, animation keyframes, the `dark` variant) plus an opinionated base layer (page background, font stack, `.scrollbar-hide`/`.scrollbar-visible`). Must come **after** Tailwind. |
 | `@import '@kungal/ui-vue/style.css';` | The components' **scoped** styles (modal/drawer/lightbox transitions, spoiler blur, Loli mascot, toast list animations). ~6 KB. Without it those effects silently break. |
-| `@source '…/@kungal/ui-vue';`<br>`@source '…/@kungal/core';` | Tailwind v4 ignores `node_modules` by default. These tell it to scan the compiled KunUI packages so it generates the utility classes the components reference. Without them components render **unstyled**. |
+| `@source '…/@kungal/ui-vue';`<br>`@source '…/@kungal/ui-core';` | Tailwind v4 ignores `node_modules` by default. These tell it to scan the compiled KunUI packages so it generates the utility classes the components reference. Without them components render **unstyled**. |
 
 ### Tokens-only (no base layer)
 
@@ -221,12 +221,12 @@ stack), import the tokens without the base layer:
 
 ```css
 @import 'tailwindcss';
-@import '@kungal/tokens/css';   /* tokens only — no html/body/base resets */
+@import '@kungal/ui-tokens/css';   /* tokens only — no html/body/base resets */
 @import '@kungal/ui-vue/style.css';
 ```
 
-Subpaths: `@kungal/tokens` (tokens **+** base), `@kungal/tokens/css` (tokens
-only), `@kungal/tokens/base.css` (base only).
+Subpaths: `@kungal/ui-tokens` (tokens **+** base), `@kungal/ui-tokens/css` (tokens
+only), `@kungal/ui-tokens/base.css` (base only).
 
 ### Dark mode
 
@@ -243,7 +243,7 @@ or mirror its state onto that class.
 
 ### Overridable knobs
 
-`@kungal/tokens` exposes two `:root` custom properties you may override:
+`@kungal/ui-tokens` exposes two `:root` custom properties you may override:
 
 ```css
 :root {
@@ -260,7 +260,7 @@ or mirror its state onto that class.
   (in a pnpm monorepo deps may resolve at the workspace root).
 - **Transitions / spoilers / mascot missing** → you forgot
   `@import '@kungal/ui-vue/style.css';`.
-- **Dark mode doesn't switch** → ensure `@kungal/tokens` is imported *after*
+- **Dark mode doesn't switch** → ensure `@kungal/ui-tokens` is imported *after*
   `tailwindcss`, and that you toggle `.kun-dark-mode` on `<html>`.
 
 ---
@@ -282,7 +282,7 @@ Add icons to the registry once at startup (any Iconify-style `{ body }` payload,
 or your own SVG inner markup using `currentColor`):
 
 ```ts
-import { registerKunIcon, registerKunIcons } from '@kungal/core'
+import { registerKunIcon, registerKunIcons } from '@kungal/ui-core'
 
 registerKunIcon('lucide:rocket', {
   body: '<path d="…" fill="currentColor"/>',
@@ -306,7 +306,7 @@ If `<KunIcon>` is asked for a name not in the registry, it renders the
 `iconComponent` fallback (see §7) — `null` by default in plain Vue (renders
 nothing). The Nuxt layer sets the fallback to an `@nuxt/icon` wrapper, so in
 Nuxt unknown names still resolve through `@nuxt/icon`. API: `getKunIcon(name)`,
-`hasKunIcon(name)`, `registerKunIcon(s)` — all from `@kungal/core`.
+`hasKunIcon(name)`, `registerKunIcon(s)` — all from `@kungal/ui-core`.
 
 ---
 
@@ -416,7 +416,7 @@ Components that show a user (`KunAvatar`, `KunAvatarGroup`, `KunUserChip`)
 accept a minimal `KunUser`:
 
 ```ts
-import type { KunUser } from '@kungal/ui-vue' // re-exported from @kungal/core
+import type { KunUser } from '@kungal/ui-vue' // re-exported from @kungal/ui-core
 
 interface KunUser {
   id: number
@@ -490,7 +490,7 @@ Auto-imported by the Nuxt layer; named exports of `@kungal/ui-vue` otherwise.
 | `useFilePicker` | Programmatic file selection |
 | `useContentLightbox` / `useSpoilerContent` | Enhancers used by `KunContent` |
 
-From `@kungal/core` (framework-agnostic): `cn`, `registerKunIcon(s)`,
+From `@kungal/ui-core` (framework-agnostic): `cn`, `registerKunIcon(s)`,
 `getKunIcon`, `hasKunIcon`, the variant class helpers (`kunBgClasses`, …), and
 the shared types (`KunUIColor`, `KunUISize`, `KunUIVariant`, `KunUIRounded`,
 `KunUser`).

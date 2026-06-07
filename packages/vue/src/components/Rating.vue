@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import type { KunRatingProps } from './types'
 

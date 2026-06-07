@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, kunVariantClasses, type KunUISize } from '@kungal/core'
+import { cn, kunVariantClasses, type KunUISize } from '@kungal/ui-core'
 import type { KunChipProps } from './types'
 
 // Small rounded tag — labels, status pills, taxonomy markers. For dot /

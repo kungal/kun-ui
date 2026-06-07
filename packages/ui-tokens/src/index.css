@@ -1,15 +1,15 @@
 /*
- * @kungal/tokens — convenience entry that pulls in both the design tokens
+ * @kungal/ui-tokens — convenience entry that pulls in both the design tokens
  * and the opinionated base layer.
  *
  * Note: this does NOT `@import 'tailwindcss'` — the consuming app owns
  * that, and must import Tailwind BEFORE this file:
  *
  *   @import 'tailwindcss';
- *   @import '@kungal/tokens';   // tokens + base
+ *   @import '@kungal/ui-tokens';   // tokens + base
  *
  * If you want tokens only (no global element resets), import
- * '@kungal/tokens/css' instead.
+ * '@kungal/ui-tokens/css' instead.
  */
 @import './tokens.css';
 @import './base.css';

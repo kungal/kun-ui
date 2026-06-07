@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, getKunIcon } from '@kungal/core'
+import { cn, getKunIcon } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 
 // KunIcon renders ONLY from the bundled/registered icon registry (inline SVG)
 // or a consumer-injected component. It NEVER fetches from the Iconify API —
 // runtime fetching causes FOUC, SSR-empty-then-pop, offline/firewall
-// failures, and latency. KunUI's own icons are bundled in @kungal/core;
+// failures, and latency. KunUI's own icons are bundled in @kungal/ui-core;
 // consumers register theirs with registerKunIcons() or inject `iconComponent`
 // (e.g. @nuxt/icon in local-bundle mode). Public API (`name`) is unchanged.
 defineOptions({ name: 'KunIcon' })
@@ -65,7 +65,7 @@ const data = computed(() => (props.name ? getKunIcon(props.name) : undefined))
 </template>
 
 <style scoped>
-/* The bundled icon bodies paint with `currentColor`, but @kungal/tokens' base
+/* The bundled icon bodies paint with `currentColor`, but @kungal/ui-tokens' base
  * layer sets an explicit `color` on EVERY element (`*`). That rule also lands
  * on the v-html'd inner nodes (<g>/<path>/<circle>), pinning them to the
  * foreground color and defeating inheritance — so `text-*` on (or above)

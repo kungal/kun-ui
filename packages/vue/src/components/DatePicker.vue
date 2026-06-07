@@ -2,7 +2,7 @@
 import { ref, computed, toRefs, nextTick, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useCalendar } from '../composables/useCalendar'
 import KunButton from './Button.vue'

@@ -4,8 +4,8 @@
   "commit": false,
   "fixed": [
     [
-      "@kungal/tokens",
-      "@kungal/core",
+      "@kungal/ui-tokens",
+      "@kungal/ui-core",
       "@kungal/ui-vue",
       "@kungal/ui-nuxt"
     ]

@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'

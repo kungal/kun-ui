@@ -1,4 +1,4 @@
-import { registerKunIcons } from '@kungal/core'
+import { registerKunIcons } from '@kungal/ui-core'
 
 // Vector icons (lucide) for the marketing landing's feature cards. Bodies are
 // copied verbatim from @iconify-json/lucide so KunIcon renders them correctly —

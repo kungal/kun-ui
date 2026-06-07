@@ -7,7 +7,7 @@ import {
   kunRingClasses,
   kunSoftBgClasses,
   kunRoundedClasses,
-} from '@kungal/core'
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type {

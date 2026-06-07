@@ -11,9 +11,9 @@ experience on top of it:
   render as SSR-aware client-side links (exactly like the original);
 - **injects `@nuxt/icon`** as KunUI's `iconComponent` — used only as a
   *fallback* for icons not in KunUI's bundled set (KunUI's own ~24 icons are
-  bundled inline in `@kungal/core` and never fetched). For consumer icons,
+  bundled inline in `@kungal/ui-core` and never fetched). For consumer icons,
   install `@iconify-json/*` and use `@nuxt/icon`'s local/client bundle mode so
-  they aren't fetched either, or `registerKunIcons()` from `@kungal/core`;
+  they aren't fetched either, or `registerKunIcons()` from `@kungal/ui-core`;
 - registers `@nuxt/icon` + `@nuxt/image`;
 - **auto-imports the composables** too (`useKunMessage`, `useKunUIConfig`, …)
   so they work with no import, like the original.
@@ -35,7 +35,7 @@ useKunMessage('Saved', 'success') // from anywhere, no import
 ```
 
 It deliberately does **not** own a Tailwind entry — your app keeps one
-stylesheet that imports Tailwind + `@kungal/tokens` and declares the
+stylesheet that imports Tailwind + `@kungal/ui-tokens` and declares the
 `@source` scan (that path is node_modules-layout-specific). See below.
 
 Net effect: a Nuxt app consuming this layer behaves like the original
@@ -57,9 +57,9 @@ Add one Tailwind entry stylesheet in your app and register it
 ```css
 /* assets/css/main.css */
 @import 'tailwindcss';
-@import '@kungal/tokens';
+@import '@kungal/ui-tokens';
 @source '../../node_modules/@kungal/ui-vue/dist'; /* component classes */
-@source '../../node_modules/@kungal/core/dist';   /* variant × color matrix */
+@source '../../node_modules/@kungal/ui-core/dist';   /* variant × color matrix */
 ```
 
 (Tailwind v4 in Nuxt also needs the `@tailwindcss/vite` plugin in

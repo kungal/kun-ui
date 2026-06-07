@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import { useSpoilerContent } from '../composables/useSpoilerContent'
 import { useContentLightbox } from '../composables/useContentLightbox'
 import KunLightbox from './Lightbox.vue'

@@ -21,7 +21,7 @@ push to main ─► GitHub Actions (docs-image.yml) build ─► push GHCR
 
 | File | Role |
 | --- | --- |
-| `docker/docs.Dockerfile` | Multi-stage build (build context = repo root): builds `@kungal/core` + `@kungal/ui-vue`, then `nuxt build` for `apps/docs`; run stage = Node + `.output`, `NITRO_PORT=6757`. |
+| `docker/docs.Dockerfile` | Multi-stage build (build context = repo root): builds `@kungal/ui-core` + `@kungal/ui-vue`, then `nuxt build` for `apps/docs`; run stage = Node + `.output`, `NITRO_PORT=6757`. |
 | `.dockerignore` | Keeps the build context small; forces a clean install/build. |
 | `docker-compose.prod.yml` | What Dokploy points at: `image: ghcr.io/kungal/kun-ui-docs:latest`, `expose: ['6757']`, `dokploy-network`. |
 | `.github/workflows/docs-image.yml` | Build → push GHCR (`:latest` + `:<sha>`); optional Dokploy redeploy webhook. |
@@ -60,7 +60,7 @@ redeploy (every build is tagged with its commit sha).
 pnpm --filter @kungal/docs dev
 
 # Production runtime exactly as the image runs it:
-pnpm --filter @kungal/core build
+pnpm --filter @kungal/ui-core build
 pnpm --filter @kungal/ui-vue build
 pnpm --filter @kungal/docs build
 NITRO_PORT=6757 node apps/docs/.output/server/index.mjs   # → http://localhost:6757

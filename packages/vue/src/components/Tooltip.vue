@@ -8,12 +8,12 @@ import {
   shift,
   type Placement,
 } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import type { KunTooltipProps } from './types'
 
 // Nuxt-decoupled Tooltip — explicit imports (vue / @floating-ui/vue /
-// @kungal/core). No Nuxt coupling in the original; this just swaps auto-
+// @kungal/ui-core). No Nuxt coupling in the original; this just swaps auto-
 // imports for explicit ones.
 defineOptions({ name: 'KunTooltip' })
 

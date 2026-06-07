@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import { cn, kunVariantClasses, kunRoundedClasses } from '@kungal/core'
+import { cn, kunVariantClasses, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
 import { extractTextFromVNodes } from '../utils/extractTextFromVNodes'
@@ -12,7 +12,7 @@ import type { KunButtonProps } from './types'
 // Nuxt-decoupled Button. Every dependency that used to come from Nuxt
 // auto-imports is now explicit:
 //   - vue primitives (computed/useSlots) imported from 'vue'
-//   - cn / variant matrix / radius map from @kungal/core
+//   - cn / variant matrix / radius map from @kungal/ui-core
 //   - KunIcon / KunRipple imported as real components (not global refs)
 //   - the NuxtLink (`defineNuxtLink`) is replaced by config.linkComponent
 defineOptions({ name: 'KunButton' })
@@ -73,7 +73,7 @@ const sizeClasses = computed(() => {
   }
 })
 
-// Button delegates the whole variant × color matrix to @kungal/core so the
+// Button delegates the whole variant × color matrix to @kungal/ui-core so the
 // 7 × 7 table lives in exactly one place across every framework layer.
 const colorClasses = computed(() =>
   kunVariantClasses(props.variant, props.color)

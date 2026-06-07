@@ -6,4 +6,4 @@
 
 - c532a02: Add npm `keywords` to every package for better discoverability on the npm registry.
 - Updated dependencies [c532a02]
-  - @kungal/core@0.1.1
+  - @kungal/ui-core@0.1.1

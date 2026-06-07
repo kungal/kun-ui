@@ -1,12 +1,12 @@
 @import 'tailwindcss';
-@import '@kungal/tokens';
+@import '@kungal/ui-tokens';
 
 /*
  * Scan the KunUI package sources so Tailwind generates the classes the
  * components reference. In this monorepo we point at the workspace SRC
  * (robust regardless of pnpm's node_modules layout). A published consumer
- * would instead scan node_modules/@kungal/ui-vue/dist + @kungal/core/dist.
+ * would instead scan node_modules/@kungal/ui-vue/dist + @kungal/ui-core/dist.
  * Paths are relative to this file.
  */
-@source '../../../../../packages/core/src';
+@source '../../../../../packages/ui-core/src';
 @source '../../../../../packages/vue/src';

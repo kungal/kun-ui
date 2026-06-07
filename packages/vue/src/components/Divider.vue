@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, type KunUIColor } from '@kungal/core'
+import { cn, type KunUIColor } from '@kungal/ui-core'
 import type { KunDividerProps } from './types'
 
 defineOptions({ name: 'KunDivider' })

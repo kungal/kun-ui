@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Cropper } from 'vue-advanced-cropper'
-import { cn, kunRoundedClasses } from '@kungal/core'
+import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { checkImageValid, resizeImage } from '../utils/handleFileChange'
 import KunButton from './Button.vue'
@@ -12,7 +12,7 @@ import 'vue-advanced-cropper/dist/style.css'
 import 'vue-advanced-cropper/dist/theme.compact.css'
 
 // Image upload with drag-drop + crop (vue-advanced-cropper) + canvas resize.
-// Emits the final webp Blob. cn/rounded from @kungal/core; no Nuxt coupling.
+// Emits the final webp Blob. cn/rounded from @kungal/ui-core; no Nuxt coupling.
 defineOptions({ name: 'KunUpload' })
 
 const props = withDefaults(defineProps<KunUploadProps>(), {

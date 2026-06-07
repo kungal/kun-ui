@@ -1,4 +1,4 @@
-// @kungal/core — framework-agnostic foundation for every KunUI render layer.
+// @kungal/ui-core — framework-agnostic foundation for every KunUI render layer.
 // Pure TypeScript only: design types, class utilities, the variant matrix,
 // the radius system, and small helpers. NO Vue, NO React, NO DOM/runtime
 // coupling — anything that needs reactivity or a framework lives in the

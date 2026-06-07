@@ -15,8 +15,8 @@
   "dependencies": {
     "@kungal/ui-nuxt": "workspace:*",
     "@kungal/ui-vue": "workspace:*",
-    "@kungal/core": "workspace:*",
-    "@kungal/tokens": "workspace:*",
+    "@kungal/ui-core": "workspace:*",
+    "@kungal/ui-tokens": "workspace:*",
     "shiki": "^4.2.0"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const installNuxt =
-  'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite'
+  'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite'
 const installVue =
-  'pnpm add @kungal/ui-vue @kungal/core @kungal/tokens tailwindcss @tailwindcss/vite'
+  'pnpm add @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite'
 
 const nuxtConfig = `// nuxt.config.ts
 export default defineNuxtConfig({
@@ -12,12 +12,12 @@ export default defineNuxtConfig({
 })`
 
 const cssEntry = `@import 'tailwindcss';
-@import '@kungal/tokens';
+@import '@kungal/ui-tokens';
 @import '@kungal/ui-vue/style.css';
 
 /* 生成组件用到的工具类(路径相对本文件,指向 node_modules) */
 @source '../../node_modules/@kungal/ui-vue';
-@source '../../node_modules/@kungal/core';`
+@source '../../node_modules/@kungal/ui-core';`
 
 const vueMain = `import { createApp } from 'vue'
 import { KunUI } from '@kungal/ui-vue'
@@ -50,7 +50,7 @@ const darkToggle = `document.documentElement.classList.toggle('kun-dark-mode', i
     <Code lang="bash" :code="installVue" />
     <div class="mt-3"><Code lang="ts" :code="vueMain" /></div>
     <p class="text-default-600 mt-3">
-      <code class="text-primary">main.css</code> 与 Nuxt 相同(tailwindcss + @kungal/tokens +
+      <code class="text-primary">main.css</code> 与 Nuxt 相同(tailwindcss + @kungal/ui-tokens +
       @kungal/ui-vue/style.css + 两条 @source)。
     </p>
 
@@ -70,13 +70,13 @@ const darkToggle = `document.documentElement.classList.toggle('kun-dark-mode', i
         color="info"
         icon="lucide:info"
         title="图标全部内置,绝不联网获取"
-        description="KunIcon 从注册表渲染内联 SVG,运行时不调用 Iconify。自定义图标用 @kungal/core 的 registerKunIcon(s) 注册。"
+        description="KunIcon 从注册表渲染内联 SVG,运行时不调用 Iconify。自定义图标用 @kungal/ui-core 的 registerKunIcon(s) 注册。"
       />
       <KunInfo
         color="info"
         icon="lucide:info"
         title="Tailwind 入口由你自己拥有"
-        description="应用 CSS 需 import tailwindcss + @kungal/tokens + @kungal/ui-vue/style.css,并 @source 这些包;pnpm 下三者需作为直接依赖安装。"
+        description="应用 CSS 需 import tailwindcss + @kungal/ui-tokens + @kungal/ui-vue/style.css,并 @source 这些包;pnpm 下三者需作为直接依赖安装。"
       />
     </div>
 

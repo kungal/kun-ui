@@ -17,8 +17,8 @@ WORKDIR /repo
 # ---- deps: copy manifests, install the docs subgraph (+ workspace deps) ----
 FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY packages/tokens/package.json packages/tokens/package.json
-COPY packages/core/package.json   packages/core/package.json
+COPY packages/ui-tokens/package.json packages/ui-tokens/package.json
+COPY packages/ui-core/package.json   packages/ui-core/package.json
 COPY packages/vue/package.json    packages/vue/package.json
 COPY packages/nuxt/package.json   packages/nuxt/package.json
 COPY apps/docs/package.json       apps/docs/package.json
@@ -35,7 +35,7 @@ COPY apps/docs apps/docs
 # dist (style.css) and resolve types. tokens / ui-nuxt ship source (no build).
 # Props tables come from the committed app/generated/component-meta.json, so
 # vue-component-meta is NOT run here.
-RUN pnpm --filter @kungal/core build \
+RUN pnpm --filter @kungal/ui-core build \
  && pnpm --filter @kungal/ui-vue build \
  && pnpm --filter @kungal/docs build
 

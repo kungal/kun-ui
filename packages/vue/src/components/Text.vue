@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import type { KunTextProps } from './types'
 
 // Plain-text block with safe wrapping. Inserts a zero-width space after `_`

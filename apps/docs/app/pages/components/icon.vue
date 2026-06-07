@@ -14,7 +14,7 @@ import meta from '~/generated/component-meta.json'
       color="info"
       icon="lucide:info"
       title="仅限内置"
-      description="使用 lucide:check 这类内置名称。自定义图标用 @kungal/core 的 registerKunIcon(s) 注册;未知名称会回退到注入的 iconComponent(Nuxt 层下为 @nuxt/icon)。"
+      description="使用 lucide:check 这类内置名称。自定义图标用 @kungal/ui-core 的 registerKunIcon(s) 注册;未知名称会回退到注入的 iconComponent(Nuxt 层下为 @nuxt/icon)。"
     />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>

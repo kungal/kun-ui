@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
-import { cn } from '@kungal/core'
+import { cn } from '@kungal/ui-core'
 import { useFilePicker } from '../composables/useFilePicker'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
