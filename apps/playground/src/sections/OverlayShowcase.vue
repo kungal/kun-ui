@@ -59,7 +59,7 @@ const onContext = (e: MouseEvent) => {
 
     <h3 class="mt-2 text-base font-medium">Dropdown (menu)</h3>
     <div class="flex items-center gap-3">
-      <KunDropdown :items="dropdownItems" @select="(i) => (lastAction = i.key)">
+      <KunDropdown :items="dropdownItems" @select="(i: { key: string }) => (lastAction = i.key)">
         <template #trigger>
           <KunButton variant="bordered">Actions ▾</KunButton>
         </template>
@@ -93,7 +93,7 @@ const onContext = (e: MouseEvent) => {
       :position="ctxPos"
       :items="ctxItems"
       @close="ctxVisible = false"
-      @select="(i) => (lastAction = i.key)"
+      @select="(i: { key: string }) => (lastAction = i.key)"
     />
   </section>
 </template>
