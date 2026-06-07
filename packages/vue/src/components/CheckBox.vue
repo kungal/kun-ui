@@ -68,9 +68,9 @@ const colorClasses: Record<KunUIColor, string> = {
         @change="updateValue"
       />
       <div
-        class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
+        class="pointer-events-none absolute inset-0 flex items-center justify-center text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
       >
-        <KunIcon name="lucide:check" />
+        <KunIcon name="lucide:check" class="size-3.5" />
       </div>
     </div>
     <slot />
