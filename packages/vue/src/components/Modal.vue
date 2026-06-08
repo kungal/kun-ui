@@ -84,6 +84,23 @@ const handleCloseKunModal = () => {
   }
 }
 
+// Backdrop dismissal must require that the press STARTED on the backdrop, not
+// merely that the release landed there. A `click` fires on the nearest common
+// ancestor of its mousedown + mouseup, so pressing INSIDE the modal (e.g.
+// selecting text in an input), dragging out, and releasing on the backdrop
+// fires a click ON the backdrop — which would close the modal ("I let go of
+// the mouse and it vanished"). Track where the press began and only treat the
+// click as a dismiss when it began on the backdrop itself.
+const pressedOnBackdrop = ref(false)
+const onBackdropPointerDown = (e: Event) => {
+  pressedOnBackdrop.value = e.target === e.currentTarget
+}
+const onBackdropClick = (e: Event) => {
+  if (e.target === e.currentTarget && pressedOnBackdrop.value) {
+    handleCloseKunModal()
+  }
+}
+
 useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Escape' && modelValue.value) {
     handleCloseKunModal()
@@ -132,7 +149,8 @@ onUnmounted(() => {
           )
         "
         :style="{ zIndex }"
-        @click="handleCloseKunModal"
+        @pointerdown="onBackdropPointerDown"
+        @click="onBackdropClick"
         tabindex="0"
       >
         <div
