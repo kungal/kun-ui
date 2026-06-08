@@ -316,22 +316,32 @@
  * NOT cover the --z-* namespace (only --color / --radius / --spacing /
  * --font etc.), so `class="z-kun-popover"` silently no-ops without these
  * @utility blocks. They are the load-bearing piece of the z-index system,
- * not the @theme declarations above. The value derefs the @theme variable
- * so a consumer's `:root { --z-kun-modal: ... }` override propagates. */
+ * not the @theme declarations above.
+ *
+ * Each value derefs the @theme variable (so a consumer's
+ * `:root { --z-kun-modal: ... }` override still propagates) WITH a literal
+ * fallback. The fallback is load-bearing, NOT cosmetic: Tailwind v4 only emits
+ * a @theme variable to :root when its tree-shaker considers it "used", and a
+ * custom @utility referencing the var does not reliably count as usage across
+ * consumer builds/versions. When it's dropped, `z-index: var(--z-kun-popover)`
+ * resolves to var(<undefined>) → no z-index → the layer stacks at `auto` and
+ * gets covered by any positioned element (carousels, sticky headers, …). The
+ * fallback guarantees a real z-index even when the variable never reaches
+ * :root. Keep the fallbacks in sync with the @theme declarations above. */
 @utility z-kun-sticky {
-  z-index: var(--z-kun-sticky);
+  z-index: var(--z-kun-sticky, 30);
 }
 @utility z-kun-modal {
-  z-index: var(--z-kun-modal);
+  z-index: var(--z-kun-modal, 9000);
 }
 @utility z-kun-popover {
-  z-index: var(--z-kun-popover);
+  z-index: var(--z-kun-popover, 9300);
 }
 @utility z-kun-alert {
-  z-index: var(--z-kun-alert);
+  z-index: var(--z-kun-alert, 9700);
 }
 @utility z-kun-message {
-  z-index: var(--z-kun-message);
+  z-index: var(--z-kun-message, 9999);
 }
 
 @layer base {
