@@ -132,15 +132,25 @@
   --color-info-950: hsl(var(--info-950));
 
   /* Border radius — 5 buckets every KunUI component references.
-   * Override by setting :root { --radius-kun-md: ... } in the consuming
-   * app, or per-subtree via the render layer's config provider.
-   * Tailwind v4 @theme auto-generates the utility classes:
-   *   rounded-kun-none / -sm / -md / -lg / -full
-   * The framework-agnostic class map lives in @kungal/ui-core (kunRoundedClasses). */
+   *
+   * Each scalable bucket multiplies its base by --kun-radius-scale (default 1),
+   * so a single RUNTIME knob drives every KunUI corner at once, live and with no
+   * re-render:
+   *   :root { --kun-radius-scale: 0 }     → square corners everywhere
+   *   :root { --kun-radius-scale: 1.5 }   → 50% rounder everywhere
+   * This is the robust override path: --kun-radius-scale is a NEW consumer-owned
+   * variable the calc() reads, so it never fights Tailwind's own :root
+   * --radius-kun-* declarations (those win the cascade if you try to override
+   * them directly, which is the usual "my :root override does nothing" trap).
+   * `none` and `full` deliberately don't scale — a square stays square, a pill
+   * stays a pill.
+   *
+   * Tailwind v4 @theme auto-generates rounded-kun-none / -sm / -md / -lg / -full;
+   * the framework-agnostic class map lives in @kungal/ui-core (kunRoundedClasses). */
   --radius-kun-none: 0;
-  --radius-kun-sm: 0.25rem;
-  --radius-kun-md: 0.5rem;
-  --radius-kun-lg: 0.75rem;
+  --radius-kun-sm: calc(0.25rem * var(--kun-radius-scale, 1));
+  --radius-kun-md: calc(0.5rem * var(--kun-radius-scale, 1));
+  --radius-kun-lg: calc(0.75rem * var(--kun-radius-scale, 1));
   --radius-kun-full: 9999px;
 
   /* z-index layering — floating UI must stack predictably so a popover
