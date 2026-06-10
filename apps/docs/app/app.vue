@@ -33,7 +33,9 @@ watchEffect(() => {
         <span class="text-lg font-bold">Kun<span class="text-primary">UI</span></span>
       </NuxtLink>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <!-- AI-friendly "copy this page as Markdown" control (every page). -->
+        <CopyPage />
         <a
           href="https://github.com/kungal/kun-ui"
           target="_blank"

@@ -1,0 +1,38 @@
+# AvatarGroup (头像组)
+
+> 层叠头像组,超出部分以 +N 角标展示。
+
+## 示例
+
+### Basic.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = `data:image/svg+xml;utf8,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="%237c3aed"/></svg>'
+)}`
+const users: KunUser[] = Array.from({ length: 4 }, (_, i) => ({
+  id: i + 1,
+  name: `User ${i + 1}`,
+  avatar,
+}))
+</script>
+
+<template>
+  <KunAvatarGroup :users="users" :total="8" />
+</template>
+```
+
+## Props
+
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| `users` * | `KunUser[]` | — |
+| `ellipsis` | `boolean` | `true` |
+| `total` | `number` | `0` |
+| `visibleCount` | `number` | `5` |
+
+---
+本页来源 · KunUI · https://ui.kungal.com/components/avatargroup
