@@ -17,7 +17,12 @@ defineOptions({ name: 'KunImage' })
 
 const props = withDefaults(defineProps<KunImageProps>(), {
   alt: 'image',
-  loading: undefined,
+  // Lazy by default: most images (grids, lists, anything below the fold)
+  // shouldn't all load eagerly at once and saturate the connection, starving
+  // the above-the-fold ones. The aspect-ratio box + skeleton already reserve
+  // space, so deferring causes no layout shift. Pass loading="eager" (and
+  // fetchpriority="high") on the LCP / hero image to opt that one back in.
+  loading: 'lazy',
   className: undefined,
   ariaLabel: undefined,
   width: undefined,

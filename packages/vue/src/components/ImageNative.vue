@@ -8,6 +8,7 @@ defineOptions({ name: 'KunImageNative' })
 
 withDefaults(defineProps<KunImageNativeProps>(), {
   alt: 'image',
+  loading: 'lazy', // lazy by default; pass loading="eager" for an LCP image
   className: undefined,
   ariaLabel: undefined,
   width: undefined,
@@ -20,6 +21,7 @@ withDefaults(defineProps<KunImageNativeProps>(), {
     :class="cn(className)"
     :src="src"
     :alt="alt"
+    :loading="loading"
     :aria-label="ariaLabel"
     :width="width"
     :height="height"

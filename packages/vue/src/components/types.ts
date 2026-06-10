@@ -148,6 +148,7 @@ export interface KunImageProps {
 export interface KunImageNativeProps {
   src: string
   alt?: string
+  loading?: 'lazy' | 'eager'
   ariaLabel?: string
   width?: string | number
   height?: string | number
