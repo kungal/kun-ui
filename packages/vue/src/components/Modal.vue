@@ -25,9 +25,9 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   rounded: undefined,
 })
 
-// Modal's built-in default is 'lg' (rounder than the global 'md' fallback)
-// because the larger surface looks better with more rounding.
-const rounded = useResolvedRounded(() => props.rounded, 'lg')
+// Uniform corner radius: defers to the global config.rounded (default 'md')
+// like every other KunUI surface — set config.rounded once to restyle them all.
+const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const modelValue = defineModel<boolean>({ required: true })

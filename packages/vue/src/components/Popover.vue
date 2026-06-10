@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<KunPopoverProps>(), {
   rounded: undefined,
 })
 
-const rounded = useResolvedRounded(() => props.rounded, 'lg')
+const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const isOpen = ref(false)

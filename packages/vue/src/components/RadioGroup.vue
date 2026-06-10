@@ -37,7 +37,7 @@ const emits = defineEmits<{
   change: [value: T, index: number]
 }>()
 
-const rounded = useResolvedRounded(() => props.rounded, 'md')
+const rounded = useResolvedRounded(() => props.rounded)
 const cardRoundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const kunUniqueId = useKunUniqueId('kun-radio-group')

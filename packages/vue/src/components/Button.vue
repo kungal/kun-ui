@@ -58,16 +58,19 @@ const computedAriaLabel = computed(() => {
 
 const sizeClasses = computed(() => {
   switch (props.size) {
+    // Horizontal padding grows with size while vertical stays tight (py < px),
+    // so larger buttons get wider, not fatter — matching modern libraries
+    // (shadcn lg = px-8, HeroUI fixed heights). `md` is the reference ratio.
     case 'xs':
-      return 'text-xs px-2 py-1'
+      return 'text-xs px-2.5 py-1'
     case 'sm':
-      return 'text-sm px-3 py-1.5'
+      return 'text-sm px-3.5 py-1.5'
     case 'md':
       return 'text-sm px-4 py-2'
     case 'lg':
-      return 'text-base px-5 py-2.5'
+      return 'text-base px-6 py-2'
     case 'xl':
-      return 'text-lg px-6 py-3'
+      return 'text-lg px-8 py-2.5'
     default:
       return 'text-sm px-4 py-2'
   }

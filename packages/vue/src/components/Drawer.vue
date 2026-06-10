@@ -40,7 +40,7 @@ const effectivePlacement = computed<KunDrawerPlacement>(() =>
   props.responsive && isMobile.value ? 'bottom' : props.placement
 )
 
-const rounded = useResolvedRounded(() => props.rounded, 'lg')
+const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const modelValue = defineModel<boolean>({ required: true })

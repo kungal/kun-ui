@@ -49,14 +49,16 @@ const colorClass: Record<KunUIColor, string> = {
 
 const sizeClasses = computed(() => {
   switch (props.size) {
+    // Vertical padding matches KunButton per size (so a button + input in the
+    // same row line up); horizontal stays modest since inputs are full-width.
     case 'xs':
-      return 'text-xs px-2 py-1'
+      return 'text-xs px-2.5 py-1'
     case 'sm':
-      return 'text-sm px-3 py-1.5'
+      return 'text-sm px-3.5 py-1.5'
     case 'lg':
-      return 'text-base px-5 py-2.5'
+      return 'text-base px-5 py-2'
     case 'xl':
-      return 'text-lg px-6 py-3'
+      return 'text-lg px-6 py-2.5'
     case 'md':
     default:
       return 'text-sm px-4 py-2'

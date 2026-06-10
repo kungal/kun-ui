@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<KunUploadProps>(), {
   rounded: undefined,
 })
 
-const rounded = useResolvedRounded(() => props.rounded, 'lg')
+const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const emits = defineEmits<{

@@ -60,7 +60,7 @@ const colorClasses: Record<KunUIColor, string> = {
         :disabled="disabled"
         :class="
           cn(
-            'peer h-5 w-5 appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
+            'peer h-5 w-5 cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
             props.type === 'single' ? 'rounded-full' : 'rounded',
             colorClasses[props.color]
           )
@@ -68,9 +68,9 @@ const colorClasses: Record<KunUIColor, string> = {
         @change="updateValue"
       />
       <div
-        class="pointer-events-none absolute inset-0 flex items-center justify-center text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
+        class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-200 ease-out peer-checked:scale-100 peer-checked:opacity-100"
       >
-        <KunIcon name="lucide:check" class="size-3.5" />
+        <KunIcon name="lucide:check" class="size-3" />
       </div>
     </div>
     <slot />
