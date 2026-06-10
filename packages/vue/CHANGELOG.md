@@ -1,5 +1,11 @@
 # @kungal/ui-vue
 
+## 0.5.1
+
+### Patch Changes
+
+- @kungal/ui-core@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes
