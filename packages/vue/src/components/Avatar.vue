@@ -50,9 +50,18 @@ const sizeClasses = computed(() => {
 const userAvatarSrc = computed(() => {
   const user = props.user
   if (user?.avatar) {
-    return props.size === 'original' || props.size === 'original-sm'
-      ? user.avatar
-      : user.avatar.replace(/\.webp$/, '-100.webp')
+    if (props.size === 'original' || props.size === 'original-sm') {
+      return user.avatar
+    }
+    // The 100px thumbnail's variant separator differs by image family:
+    // content-addressed image_service URLs (…/aa/bb/<hash>.webp) use an
+    // underscore (<hash>_100.webp); legacy path-based avatars use a hyphen
+    // (avatar-100.webp). Detect the two-level-hex hash path so both resolve —
+    // a hardcoded hyphen 404s every new image_service avatar.
+    const sep = /\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]+\.webp$/i.test(user.avatar)
+      ? '_'
+      : '-'
+    return user.avatar.replace(/\.webp$/, `${sep}100.webp`)
   }
   // Deterministic per name so the same unknown user keeps the same sticker.
   return getRandomSticker(user?.name ?? '')
