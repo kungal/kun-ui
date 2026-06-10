@@ -48,23 +48,14 @@ const sizeClasses = computed(() => {
 })
 
 const userAvatarSrc = computed(() => {
-  const user = props.user
-  if (user?.avatar) {
-    if (props.size === 'original' || props.size === 'original-sm') {
-      return user.avatar
-    }
-    // The 100px thumbnail's variant separator differs by image family:
-    // content-addressed image_service URLs (…/aa/bb/<hash>.webp) use an
-    // underscore (<hash>_100.webp); legacy path-based avatars use a hyphen
-    // (avatar-100.webp). Detect the two-level-hex hash path so both resolve —
-    // a hardcoded hyphen 404s every new image_service avatar.
-    const sep = /\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]+\.webp$/i.test(user.avatar)
-      ? '_'
-      : '-'
-    return user.avatar.replace(/\.webp$/, `${sep}100.webp`)
-  }
-  // Deterministic per name so the same unknown user keeps the same sticker.
-  return getRandomSticker(user?.name ?? '')
+  // KunAvatar renders the avatar URL exactly as given — it does NOT derive size
+  // variants. Which URL to show (a pre-sized 100px thumbnail vs the original,
+  // and the CDN's own variant convention like `<hash>_100.webp` vs
+  // `avatar-100.webp`) is the consumer's concern: it knows its image host, so it
+  // passes the resolved URL it wants. `size` here only sets the rendered
+  // dimensions. Empty/missing avatar → a deterministic sticker, stable per name
+  // so the same unknown user always gets the same one.
+  return props.user?.avatar || getRandomSticker(props.user?.name ?? '')
 })
 </script>
 
