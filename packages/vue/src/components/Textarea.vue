@@ -66,7 +66,13 @@ const adjustHeight = () => {
 }
 
 onMounted(() => {
-  if (props.autoGrow && textareaRef.value) adjustHeight()
+  // Defer the first auto-grow measurement to the next frame. Measuring
+  // scrollHeight synchronously here can read a too-tall value before the
+  // textarea is laid out (notably a chat input that first appears on mobile),
+  // which only self-corrected on the first keystroke. rAF runs after layout.
+  if (props.autoGrow && textareaRef.value) {
+    requestAnimationFrame(() => adjustHeight())
+  }
   if (props.autofocus && textareaRef.value) textareaRef.value.focus()
 })
 
