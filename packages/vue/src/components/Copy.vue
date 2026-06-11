@@ -12,7 +12,7 @@ withDefaults(defineProps<KunCopyProps>(), {
   variant: 'light',
   color: 'primary',
   size: 'md',
-  rounded: 'lg',
+  // No `rounded` default: defer to the global config.rounded (default 'md').
   className: '',
 })
 </script>

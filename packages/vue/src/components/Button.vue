@@ -21,7 +21,8 @@ const props = withDefaults(defineProps<KunButtonProps>(), {
   variant: 'solid',
   color: 'primary',
   size: 'md',
-  rounded: 'lg',
+  // No `rounded` default: defer to the global config.rounded (default 'md') so
+  // buttons share one radius with every other component. Pass `rounded` to override.
   type: 'button',
   disabled: false,
   loading: false,

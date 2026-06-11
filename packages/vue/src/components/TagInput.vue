@@ -298,7 +298,7 @@ const chipSizeClass: Record<string, string> = {
 
 const chipClasses = computed(() =>
   cn(
-    'inline-flex items-center rounded-md font-medium select-none',
+    'inline-flex items-center rounded-kun-sm font-medium select-none',
     chipColor[props.color],
     chipSizeClass[props.size],
     'focus:outline-none focus:ring-2',

@@ -123,7 +123,7 @@ const typeStyles = computed(() => {
   <div
     :class="
       cn(
-        'relative mb-3 flex w-full items-center overflow-hidden rounded-xl p-4 ring-1 ring-black/5 transition-all duration-300',
+        'relative mb-3 flex w-full items-center overflow-hidden rounded-kun-lg p-4 ring-1 ring-black/5 transition-all duration-300',
         typeStyles.bg,
         typeStyles.text
       )

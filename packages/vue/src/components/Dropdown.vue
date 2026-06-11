@@ -191,7 +191,7 @@ const focusTint: Record<KunUIColor, string> = {
 
 const itemClass = (item: KunDropdownItem) =>
   cn(
-    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-lg px-3 py-1.5 text-sm font-medium outline-none transition-colors',
+    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-kun-md px-3 py-1.5 text-sm font-medium outline-none transition-colors',
     kunVariantClasses('light', item.color || 'default'),
     focusTint[item.color || 'default'],
     item.disabled && 'pointer-events-none cursor-not-allowed opacity-50'
@@ -245,7 +245,7 @@ defineExpose({
           tabindex="-1"
           :class="
             cn(
-              'border-default-200 bg-background/95 z-kun-popover rounded-xl border p-1 text-sm shadow-2xl outline-none backdrop-blur',
+              'border-default-200 bg-background/95 z-kun-popover rounded-kun-lg border p-1 text-sm shadow-2xl outline-none backdrop-blur',
               menuClass
             )
           "

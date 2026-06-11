@@ -153,7 +153,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           :tabindex="focusableIndex === index && !isOptionDisabled(option) ? 0 : -1"
           :class="
             cn(
-              'group inline-flex cursor-pointer items-center rounded-md p-1 transition-colors focus:outline-none',
+              'group inline-flex cursor-pointer items-center rounded-kun-md p-1 transition-colors focus:outline-none',
               kunRingClasses[color],
               'focus:ring-2',
               sizeClasses.gap,

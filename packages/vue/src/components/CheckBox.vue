@@ -61,7 +61,7 @@ const colorClasses: Record<KunUIColor, string> = {
         :class="
           cn(
             'peer h-5 w-5 cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
-            props.type === 'single' ? 'rounded-full' : 'rounded',
+            props.type === 'single' ? 'rounded-full' : 'rounded-kun-sm',
             colorClasses[props.color]
           )
         "

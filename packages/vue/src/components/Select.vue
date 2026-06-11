@@ -134,14 +134,14 @@ const selectOption = (value: T, index: number) => {
           "
         >
           <ul
-            class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-md text-sm focus:outline-none"
+            class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm focus:outline-none"
             tabindex="-1"
             role="listbox"
           >
             <li
               v-for="(option, index) in options"
               :key="option.value"
-              class="hover:bg-default-100 text-foreground relative flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 select-none"
+              class="hover:bg-default-100 text-foreground relative flex cursor-pointer items-center justify-between rounded-kun-md px-3 py-2 select-none"
               role="option"
               :aria-selected="modelValue === option.value"
               @click="selectOption(option.value, index)"
