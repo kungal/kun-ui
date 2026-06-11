@@ -45,10 +45,9 @@ const fadeShown = ref(true)
       </KunFadeCard>
     </div>
 
-    <h3 class="text-base font-medium">Null (empty state) &amp; Favicon</h3>
+    <h3 class="text-base font-medium">Null (empty state)</h3>
     <div class="flex flex-wrap items-center gap-8">
       <KunNull />
-      <div class="size-16"><KunFavicon /></div>
     </div>
   </section>
 </template>

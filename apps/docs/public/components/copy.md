@@ -20,7 +20,7 @@
 | `className` | `string` | `""` |
 | `color` | `KunUIColor` | `"primary"` |
 | `name` | `string` | `""` |
-| `rounded` | `KunUIRounded` | `"lg"` |
+| `rounded` | `KunUIRounded` | — |
 | `size` | `KunUISize` | `"md"` |
 | `variant` | `KunUIVariant` | `"light"` |
 

@@ -44,7 +44,6 @@ const html = '<p>trusted <strong>html</strong></p>'
       <KunImageNative :src="avatar" alt="n" :width="40" />
       <KunLink to="/about">link</KunLink>
       <KunBrand name="KunUI" to="#" :icon-src="avatar" />
-      <KunFavicon class="size-6" />
       <KunMarkdown class="size-5" />
       <KunCopy text="copy-me" />
       <KunRating v-model="rating" />

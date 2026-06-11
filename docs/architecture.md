@@ -106,7 +106,7 @@ the form-control batch `KunInput` / `KunTextarea` / `KunSwitch` / `KunCheckBox`
 focus-trap; ContextMenu's `import.meta.client` replaced by a runtime
 `typeof window` guard), and the util batch `KunCopy` / `KunRating` /
 `KunBrand` / `KunPagination` / `KunScrollShadow` / `KunFadeCard` / `KunNull`
-/ `KunFavicon` (`useKunCopy` ported; `getRandomSticker` made deterministic-
+(`useKunCopy` ported; `getRandomSticker` made deterministic-
 per-id in `@kungal/ui-core` so it drops Nuxt `useState`; Brand's `navigateTo` →
 `config.navigate`; FadeCard's `<ClientOnly>` → a mounted gate), and the
 content/lightbox cluster `KunLightbox` (+`Gallery`/`GalleryItem`) /

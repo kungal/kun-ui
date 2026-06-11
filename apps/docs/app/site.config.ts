@@ -65,7 +65,6 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/drawer': { title: 'Drawer', cn: '抽屉', description: '从任意边缘滑出的抽屉面板,支持尺寸与标题。' },
   '/components/dropdown': { title: 'Dropdown', cn: '下拉菜单', description: '锚定在触发元素上的下拉菜单。' },
   '/components/fadecard': { title: 'FadeCard', cn: '淡入卡片', description: '淡入淡出 + 展开收起的过渡容器。' },
-  '/components/favicon': { title: 'Favicon', cn: '站点图标', description: 'KunUI 看板娘 logo,内联 SVG。' },
   '/components/feedback': { title: 'Feedback', cn: '反馈', description: '消息提示、确认弹窗与看板娘 —— useKunMessage / useKunAlert / useKunLoliInfo 及其 Provider。' },
   '/components/fileinput': { title: 'FileInput', cn: '文件选择', description: '样式化的文件选择按钮(v-model File | File[]),触发器可自定义。' },
   '/components/header': { title: 'Header', cn: '标题', description: '带样式的区块标题(h1–h3),可带描述。' },

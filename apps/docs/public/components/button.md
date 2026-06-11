@@ -94,7 +94,7 @@
 | `iconPosition` | `"left" \| "right"` | `"left"` |
 | `isIconOnly` | `boolean` | `false` |
 | `loading` | `boolean` | `false` |
-| `rounded` | `KunUIRounded` | `"lg"` |
+| `rounded` | `KunUIRounded` | — |
 | `size` | `KunUISize` | `"md"` |
 | `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |
 | `type` | `"button" \| "submit" \| "reset"` | `"button"` |

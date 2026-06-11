@@ -21,6 +21,7 @@
 | `ariaLabel` | `string` | `undefined` |
 | `className` | `string` | `undefined` |
 | `height` | `string \| number` | `undefined` |
+| `loading` | `"lazy" \| "eager"` | `"lazy"` |
 | `width` | `string \| number` | `undefined` |
 
 ---

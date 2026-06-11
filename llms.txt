@@ -65,7 +65,6 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunImageNative: Bare <img> with class merging (no optimization pipeline).
 - KunIcon: Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.
 - KunBrand: Logo + name brand block, links home; optional badge.
-- KunFavicon: The KunUI mascot logo SVG.
 - KunContent: Renders HTML (`content`) via v-html with spoiler + inline-image lightbox. DOES NOT sanitize — caller must.
 - KunText: Safe-wrapping text block (handles long URLs/underscores).
 - KunMarkdown: The KunUI markdown glyph.

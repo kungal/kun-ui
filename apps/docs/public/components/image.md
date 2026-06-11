@@ -34,7 +34,7 @@
 | `format` | `string` | `undefined` |
 | `height` | `string \| number` | `undefined` |
 | `imageClassName` | `string` | `undefined` |
-| `loading` | `"lazy" \| "eager"` | `undefined` |
+| `loading` | `"lazy" \| "eager"` | `"lazy"` |
 | `objectFit` | `"fill" \| "none" \| "cover" \| "contain" \| "scale-down"` | `"cover"` |
 | `placeholder` | `string \| number \| boolean \| [w: number, h: number, q?: number, b?: number]` | `undefined` |
 | `preload` | `boolean \| { fetchPriority: "auto" \| "high" \| "low"; }` | `undefined` |

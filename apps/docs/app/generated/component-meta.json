@@ -246,8 +246,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "\"lg\""
+        "required": false
       },
       {
         "name": "size",
@@ -501,8 +500,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "\"lg\""
+        "required": false
       },
       {
         "name": "size",
@@ -764,9 +762,6 @@
   "KunFadeCard": {
     "props": []
   },
-  "KunFavicon": {
-    "props": []
-  },
   "KunFileInput": {
     "props": [
       {
@@ -976,7 +971,7 @@
         "name": "loading",
         "type": "\"lazy\" | \"eager\"",
         "required": false,
-        "default": "undefined"
+        "default": "\"lazy\""
       },
       {
         "name": "objectFit",
@@ -1058,6 +1053,12 @@
         "type": "string | number",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "loading",
+        "type": "\"lazy\" | \"eager\"",
+        "required": false,
+        "default": "\"lazy\""
       },
       {
         "name": "width",

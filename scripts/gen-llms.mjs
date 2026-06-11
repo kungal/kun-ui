@@ -76,7 +76,6 @@ const components = [
   ['KunImageNative', 'Media & content', 'Bare <img> with class merging (no optimization pipeline).'],
   ['KunIcon', 'Media & content', 'Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.'],
   ['KunBrand', 'Media & content', 'Logo + name brand block, links home; optional badge.'],
-  ['KunFavicon', 'Media & content', 'The KunUI mascot logo SVG.'],
   ['KunContent', 'Media & content', 'Renders HTML (`content`) via v-html with spoiler + inline-image lightbox. DOES NOT sanitize — caller must.'],
   ['KunText', 'Media & content', 'Safe-wrapping text block (handles long URLs/underscores).'],
   ['KunMarkdown', 'Media & content', 'The KunUI markdown glyph.'],

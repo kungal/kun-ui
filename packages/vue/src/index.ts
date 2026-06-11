@@ -16,7 +16,6 @@ import KunDivider from './components/Divider.vue'
 import KunDropdown from './components/Dropdown.vue'
 import KunDrawer from './components/Drawer.vue'
 import KunFadeCard from './components/FadeCard.vue'
-import KunFavicon from './components/Favicon.vue'
 import KunFileInput from './components/FileInput.vue'
 import KunHeader from './components/Header.vue'
 import KunIcon from './components/Icon.vue'
@@ -73,7 +72,6 @@ export {
   KunDrawer,
   KunDropdown,
   KunFadeCard,
-  KunFavicon,
   KunFileInput,
   KunHeader,
   KunIcon,
@@ -250,7 +248,6 @@ const components = {
   KunDrawer,
   KunDropdown,
   KunFadeCard,
-  KunFavicon,
   KunFileInput,
   KunHeader,
   KunIcon,

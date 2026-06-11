@@ -23,7 +23,6 @@ const KUN_COMPONENTS = [
   'KunDrawer',
   'KunDropdown',
   'KunFadeCard',
-  'KunFavicon',
   'KunFileInput',
   'KunHeader',
   'KunIcon',

@@ -476,7 +476,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 `KunRating`
 
 **Media & content:** `KunImage` · `KunImageNative` · `KunIcon` · `KunBrand` ·
-`KunFavicon` · `KunContent` · `KunText` · `KunMarkdown`
+`KunContent` · `KunText` · `KunMarkdown`
 
 **Navigation & overlays:** `KunLink` · `KunTab` · `KunModal` · `KunDrawer` ·
 `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunPagination`
@@ -558,7 +558,6 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunImageNative** — Bare <img> with class merging (no optimization pipeline).
 - **KunIcon** — Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.
 - **KunBrand** — Logo + name brand block, links home; optional badge.
-- **KunFavicon** — The KunUI mascot logo SVG.
 - **KunContent** — Renders HTML (`content`) via v-html with spoiler + inline-image lightbox. DOES NOT sanitize — caller must.
 - **KunText** — Safe-wrapping text block (handles long URLs/underscores).
 - **KunMarkdown** — The KunUI markdown glyph.

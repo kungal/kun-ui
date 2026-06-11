@@ -452,7 +452,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 `KunRating`
 
 **Media & content:** `KunImage` · `KunImageNative` · `KunIcon` · `KunBrand` ·
-`KunFavicon` · `KunContent` · `KunText` · `KunMarkdown`
+`KunContent` · `KunText` · `KunMarkdown`
 
 **Navigation & overlays:** `KunLink` · `KunTab` · `KunModal` · `KunDrawer` ·
 `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunPagination`
