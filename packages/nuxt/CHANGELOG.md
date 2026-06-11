@@ -1,5 +1,25 @@
 # @kungal/ui-nuxt
 
+## 0.6.0
+
+### Minor Changes
+
+- c15c5fc: Remove the `KunFavicon` component.
+
+  `KunFavicon` was just a static, hardcoded inline SVG of the KunUI lollipop mark
+  with no props — it carried no library value (an app that wants a logo ships its
+  own asset, e.g. via `KunBrand`'s `iconSrc`). It's dropped from the `@kungal/ui-vue`
+  exports and the `@kungal/ui-nuxt` auto-import list.
+
+  **Migration:** if you were rendering `<KunFavicon />`, inline your own logo SVG or
+  `<img>`/`KunImage` pointing at your favicon asset instead.
+
+### Patch Changes
+
+- Updated dependencies [c15c5fc]
+  - @kungal/ui-vue@0.6.0
+  - @kungal/ui-tokens@0.6.0
+
 ## 0.5.2
 
 ### Patch Changes
