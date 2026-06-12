@@ -102,6 +102,8 @@ const menuStyle = computed(() => ({
   top: `${menuPosition.value.y}px`,
   left: `${menuPosition.value.x}px`,
   minWidth: `${props.width}px`,
+  // grow out of the click point
+  transformOrigin: 'top left',
 }))
 
 const handleSelect = (item: KunContextMenuItem) => {
@@ -114,10 +116,10 @@ const handleSelect = (item: KunContextMenuItem) => {
 <template>
   <Teleport to="body">
     <Transition
-      enter-active-class="transition duration-150 ease-out"
+      enter-active-class="transition duration-200 ease-kun-out"
       enter-from-class="opacity-0 scale-95"
       enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-100 ease-in"
+      leave-active-class="transition duration-150 ease-kun-in"
       leave-from-class="opacity-100 scale-100"
       leave-to-class="opacity-0 scale-95"
     >

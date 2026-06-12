@@ -4,6 +4,7 @@ import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
 import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useTransformOrigin } from '../composables/useTransformOrigin'
 import { useCalendar } from '../composables/useCalendar'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -42,13 +43,15 @@ const hoveredDate = ref<Date | null>(null)
 
 onClickOutside(datePickerRef, () => (isOpen.value = false))
 
-const { floatingStyles } = useFloating(datePickerRef, dropdownRef, {
+const { floatingStyles, placement } = useFloating(datePickerRef, dropdownRef, {
   placement: 'bottom-start',
   open: isOpen,
   whileElementsMounted: autoUpdate,
   transform: false,
   middleware: [offset(4), flip(), shift({ padding: 8 })],
 })
+// Grow the calendar out of the trigger edge (post-flip aware).
+const transformOrigin = useTransformOrigin(placement)
 
 const {
   modelValue,
@@ -219,12 +222,12 @@ const isInPreviewRange = (date: Date) => {
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-150 ease-out"
-        enter-from-class="opacity-0 -translate-y-1"
-        enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="transition duration-100 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 -translate-y-1"
+        enter-active-class="transition duration-200 ease-kun-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition duration-150 ease-kun-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
       >
         <div
           v-if="isOpen"
@@ -235,7 +238,7 @@ const isInPreviewRange = (date: Date) => {
               roundedClass
             )
           "
-          :style="[floatingStyles, { minWidth: '260px' }]"
+          :style="[floatingStyles, { minWidth: '260px', transformOrigin }]"
           role="dialog"
           aria-modal="true"
         >

@@ -90,7 +90,7 @@ onUnmounted(() => {
         :style="{ width: fillerWidth }"
       />
       <div
-        class="border-primary bg-content1 absolute top-[50%] cursor-grab rounded-full border-2 active:cursor-grabbing active:border-3"
+        class="border-primary bg-content1 absolute top-[50%] cursor-grab rounded-full border-2 transition-shadow duration-150 hover:ring-4 hover:ring-primary/20 focus-visible:ring-4 focus-visible:ring-primary/40 focus-visible:outline-none active:cursor-grabbing active:border-3 active:ring-4 active:ring-primary/25"
         :class="size.thumb"
         role="slider"
         :style="thumbStyle"

@@ -11,6 +11,7 @@ import {
 } from '@floating-ui/vue'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useTransformOrigin } from '../composables/useTransformOrigin'
 import type { KunPopoverProps } from './types'
 
 // Nuxt-decoupled Popover. `useId` is Vue 3.5 native (was a Nuxt auto-import
@@ -32,7 +33,7 @@ const triggerRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const popoverId = `kun-popover-${useId()}`
 
-const { floatingStyles } = useFloating(triggerRef, popoverRef, {
+const { floatingStyles, placement } = useFloating(triggerRef, popoverRef, {
   placement: props.position as Placement,
   open: isOpen,
   // Re-run computation on scroll / resize / element-size changes. Only
@@ -49,6 +50,8 @@ const { floatingStyles } = useFloating(triggerRef, popoverRef, {
     ...(props.autoPosition ? [flip(), shift({ padding: 8 })] : []),
   ],
 })
+// Grow the popover out of its trigger edge (post-flip aware).
+const transformOrigin = useTransformOrigin(placement)
 
 const toggle = () => {
   isOpen.value = !isOpen.value
@@ -90,10 +93,10 @@ defineExpose({
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-200 ease-out"
+        enter-active-class="transition duration-200 ease-kun-out"
         enter-from-class="transform scale-95 opacity-0"
         enter-to-class="transform scale-100 opacity-100"
-        leave-active-class="transition duration-150 ease-in"
+        leave-active-class="transition duration-150 ease-kun-in"
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
@@ -110,7 +113,7 @@ defineExpose({
               innerClass
             )
           "
-          :style="floatingStyles"
+          :style="[floatingStyles, { transformOrigin }]"
           @click.stop
         >
           <slot />

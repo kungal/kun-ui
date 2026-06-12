@@ -261,26 +261,33 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Backdrop fades; panel slides. Enter and leave share durations so the two
+   finish together; exits run shorter. Panel uses the snappy emphasized settle,
+   backdrop a plain decelerate. */
 .kun-drawer-left-enter-active,
-.kun-drawer-left-leave-active,
 .kun-drawer-right-enter-active,
-.kun-drawer-right-leave-active,
 .kun-drawer-top-enter-active,
+.kun-drawer-bottom-enter-active {
+  transition: opacity var(--kun-dur-base) var(--ease-kun-out);
+}
+.kun-drawer-left-leave-active,
+.kun-drawer-right-leave-active,
 .kun-drawer-top-leave-active,
-.kun-drawer-bottom-enter-active,
 .kun-drawer-bottom-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity var(--kun-dur-exit) var(--ease-kun-in);
 }
 
 .kun-drawer-left-enter-active > div:last-child,
-.kun-drawer-left-leave-active > div:last-child,
 .kun-drawer-right-enter-active > div:last-child,
-.kun-drawer-right-leave-active > div:last-child,
 .kun-drawer-top-enter-active > div:last-child,
+.kun-drawer-bottom-enter-active > div:last-child {
+  transition: transform var(--kun-dur-base) var(--ease-kun-emphasized);
+}
+.kun-drawer-left-leave-active > div:last-child,
+.kun-drawer-right-leave-active > div:last-child,
 .kun-drawer-top-leave-active > div:last-child,
-.kun-drawer-bottom-enter-active > div:last-child,
 .kun-drawer-bottom-leave-active > div:last-child {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--kun-dur-exit) var(--ease-kun-in);
 }
 
 .kun-drawer-left-enter-from,

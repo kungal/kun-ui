@@ -58,7 +58,7 @@ const size = computed(() => switchSizes[props.size])
 
     <div class="relative">
       <div
-        class="rounded-full transition-colors duration-200 ease-in-out"
+        class="rounded-full transition-colors duration-200 ease-kun-standard peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
         :class="[
           size.track,
           modelValue ? 'bg-primary-500' : 'bg-default-500',
@@ -69,7 +69,7 @@ const size = computed(() => switchSizes[props.size])
       <div
         :class="
           cn(
-            'absolute top-0.5 left-0.5 transform rounded-full bg-white transition-transform duration-200 ease-in-out',
+            'absolute top-0.5 left-0.5 transform rounded-full bg-white transition-transform duration-200 ease-kun-emphasized',
             size.thumb,
             modelValue ? size.translate : 'translate-x-0'
           )

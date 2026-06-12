@@ -336,8 +336,11 @@ const showIndicator = computed(
 const indicatorMergedStyle = computed(() => {
   const base = { ...indicatorStyle.value }
   if (!props.disableAnimation) {
+    // The indicator slides via `transform` (compositor); only its width changes
+    // between tabs (a single tiny element, so transitioning width is fine).
+    // Height is constant across same-row tabs — don't transition it.
     base.transition =
-      'transform .25s cubic-bezier(.4,0,.2,1), width .25s cubic-bezier(.4,0,.2,1), height .25s cubic-bezier(.4,0,.2,1)'
+      'transform var(--kun-dur-base) var(--ease-kun-standard), width var(--kun-dur-base) var(--ease-kun-standard)'
   }
   return base
 })

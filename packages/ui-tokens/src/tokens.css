@@ -165,6 +165,20 @@
   --z-kun-alert: 9700;
   --z-kun-message: 9999;
 
+  /* Motion — one easing set + duration scale so every component shares a
+   * rhythm. Asymmetric by design: decelerate on enter, accelerate on exit
+   * (ease in as it arrives, snap away as it leaves). Curves from Material 3;
+   * `emphasized` is the snappy "premium settle" (Radix/Vaul). The --ease-kun-*
+   * names also generate Tailwind `ease-kun-*` utilities. */
+  --ease-kun-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-kun-out: cubic-bezier(0, 0, 0, 1); /* enter / decelerate */
+  --ease-kun-in: cubic-bezier(0.3, 0, 1, 1); /* exit / accelerate */
+  --ease-kun-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --kun-dur-fast: 150ms; /* hover, selection, micro-interactions */
+  --kun-dur-base: 250ms; /* component enter / in-screen transitions */
+  --kun-dur-slow: 350ms; /* larger surfaces */
+  --kun-dur-exit: 180ms; /* exits run ~30% shorter than enters */
+
   /* Animations */
   --animate-shake: shake 1s ease-in-out;
   --animate-bounceInDown: bounceInDown 1s ease-in-out;

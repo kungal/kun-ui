@@ -144,7 +144,7 @@ onUnmounted(() => {
         ref="trapEl"
         :class="
           cn(
-            'bg-default-800/70 dark:bg-background/70 fixed top-0 left-0 z-kun-modal flex h-full w-full items-center justify-center p-3 transition-all',
+            'bg-default-800/70 dark:bg-background/70 fixed top-0 left-0 z-kun-modal flex h-full w-full items-center justify-center p-3',
             className
           )
         "
@@ -157,7 +157,7 @@ onUnmounted(() => {
           v-if="withContainer"
           :class="
             cn(
-              'bg-content1/85 scrollbar-hide relative m-auto max-h-[90vh] min-w-80 overflow-y-auto border p-6 backdrop-blur-[var(--kun-background-blur)] transition-all',
+              'kun-modal-panel bg-content1/85 scrollbar-hide relative m-auto max-h-[90vh] min-w-80 overflow-y-auto border p-6 backdrop-blur-[var(--kun-background-blur)]',
               roundedClass,
               innerClassName
             )
@@ -191,18 +191,27 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.kun-modal-enter-active,
+/* Backdrop fades (opacity only — never scale a full-screen backdrop or its
+   edges uncover). The panel rises + scales in on top of it. */
+.kun-modal-enter-active {
+  transition: opacity var(--kun-dur-base) var(--ease-kun-out);
+}
 .kun-modal-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity var(--kun-dur-exit) var(--ease-kun-in);
 }
-
-.kun-modal-enter-from {
-  opacity: 0;
-  transform: scale(1.1);
-}
-
+.kun-modal-enter-from,
 .kun-modal-leave-to {
   opacity: 0;
-  transform: scale(1.1);
+}
+
+.kun-modal-enter-active .kun-modal-panel {
+  transition: transform var(--kun-dur-base) var(--ease-kun-out);
+}
+.kun-modal-leave-active .kun-modal-panel {
+  transition: transform var(--kun-dur-exit) var(--ease-kun-in);
+}
+.kun-modal-enter-from .kun-modal-panel,
+.kun-modal-leave-to .kun-modal-panel {
+  transform: translateY(8px) scale(0.96);
 }
 </style>

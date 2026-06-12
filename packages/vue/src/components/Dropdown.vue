@@ -4,6 +4,7 @@ import { onClickOutside, useEventListener } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift, type Placement } from '@floating-ui/vue'
 import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
+import { useTransformOrigin } from '../composables/useTransformOrigin'
 import type { KunDropdownItem } from './types'
 
 // Click-triggered action menu (WAI-ARIA menu-button pattern). Deliberately
@@ -44,13 +45,15 @@ const triggerRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
 const menuId = `kun-dropdown-${useId()}`
 
-const { floatingStyles } = useFloating(triggerRef, menuRef, {
+const { floatingStyles, placement } = useFloating(triggerRef, menuRef, {
   placement: computed(() => props.position),
   open: isOpen,
   whileElementsMounted: autoUpdate,
   transform: false,
   middleware: [offset(6), flip(), shift({ padding: 8 })],
 })
+// Grow the menu out of its trigger corner (post-flip aware).
+const transformOrigin = useTransformOrigin(placement)
 
 const enabledIndices = () =>
   props.items.reduce<number[]>((acc, item, i) => {
@@ -229,10 +232,10 @@ defineExpose({
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-150 ease-out"
+        enter-active-class="transition duration-200 ease-kun-out"
         enter-from-class="opacity-0 scale-95"
         enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-100 ease-in"
+        leave-active-class="transition duration-150 ease-kun-in"
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
@@ -249,7 +252,7 @@ defineExpose({
               menuClass
             )
           "
-          :style="[floatingStyles, { minWidth: `${minWidth}px` }]"
+          :style="[floatingStyles, { minWidth: `${minWidth}px`, transformOrigin }]"
           @keydown="onMenuKeydown"
         >
           <button

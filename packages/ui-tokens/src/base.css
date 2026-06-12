@@ -75,3 +75,20 @@
     display: block;
   }
 }
+
+/*
+ * Respect the user's reduced-motion preference (WCAG 2.3.3). "Reduce" means
+ * reduce, not remove: we collapse durations to ~0 rather than 0 so JS that
+ * waits on transitionend / animationend still fires. This is part of the
+ * opinionated base layer — apps that import tokens-only opt out.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -153,7 +153,7 @@ const typeStyles = computed(() => {
     <div
       ref="progressBarRef"
       :key="count"
-      class="progress-bar absolute bottom-0 left-0 h-1"
+      class="progress-bar absolute bottom-0 left-0 h-1 w-full origin-left"
       :class="typeStyles.progress"
     />
   </div>
@@ -164,12 +164,14 @@ const typeStyles = computed(() => {
   color: inherit;
 }
 
+/* scaleX from the left = same visual as width 100%→0%, but on the compositor.
+   linear is correct here — it's a constant-rate countdown. */
 @keyframes shrink {
   from {
-    width: 100%;
+    transform: scaleX(1);
   }
   to {
-    width: 0%;
+    transform: scaleX(0);
   }
 }
 

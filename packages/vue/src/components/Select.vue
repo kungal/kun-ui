@@ -4,6 +4,7 @@ import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/vue'
 import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useTransformOrigin } from '../composables/useTransformOrigin'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunSelectProps, KunSelectValue } from './types'
@@ -36,7 +37,7 @@ const isOpen = ref(false)
 const buttonRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 
-const { floatingStyles } = useFloating(buttonRef, dropdownRef, {
+const { floatingStyles, placement } = useFloating(buttonRef, dropdownRef, {
   placement: 'bottom-start',
   open: isOpen,
   whileElementsMounted: autoUpdate,
@@ -59,6 +60,8 @@ const { floatingStyles } = useFloating(buttonRef, dropdownRef, {
     }),
   ],
 })
+// Grow the listbox out of the trigger edge (post-flip aware).
+const transformOrigin = useTransformOrigin(placement)
 
 onClickOutside(buttonRef, (event) => {
   if (dropdownRef.value?.contains(event.target as Node)) return
@@ -117,17 +120,17 @@ const selectOption = (value: T, index: number) => {
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-150 ease-out"
-        enter-from-class="opacity-0 -translate-y-1"
-        enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="transition duration-100 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 -translate-y-1"
+        enter-active-class="transition duration-200 ease-kun-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition duration-150 ease-kun-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
       >
         <div
           v-if="isOpen"
           ref="dropdownRef"
-          :style="floatingStyles"
+          :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(
               'bg-content1 border-default-200 z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
