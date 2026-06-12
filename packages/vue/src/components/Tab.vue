@@ -250,6 +250,7 @@ const tabClasses = (item: KunTabItem) => {
   const base = cn(
     'relative z-10 inline-flex items-center justify-center cursor-pointer select-none whitespace-nowrap transition-colors',
     sizeClasses[props.size],
+    sizeGap[props.size],
     item.disabled && 'opacity-50 cursor-not-allowed',
     isVertical.value && props.fullWidth && 'w-full'
   )

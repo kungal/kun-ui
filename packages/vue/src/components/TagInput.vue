@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
-import { cn, kunRingClasses, kunRoundedClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunRingClasses,
+  kunRoundedClasses,
+  kunVariantClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
@@ -278,16 +283,6 @@ const containerClasses = computed(() =>
   )
 )
 
-const chipColor: Record<string, string> = {
-  default: 'bg-default/20 text-default-700',
-  primary: 'bg-primary/15 text-primary-700 dark:text-primary',
-  secondary: 'bg-secondary/15 text-secondary-700 dark:text-secondary',
-  success: 'bg-success/15 text-success-700 dark:text-success',
-  warning: 'bg-warning/15 text-warning-700 dark:text-warning',
-  danger: 'bg-danger/15 text-danger-700 dark:text-danger',
-  info: 'bg-info/15 text-info-700 dark:text-info',
-}
-
 const chipSizeClass: Record<string, string> = {
   xs: 'px-1.5 py-0.5 text-xs gap-0.5',
   sm: 'px-2 py-0.5 text-xs gap-1',
@@ -299,7 +294,9 @@ const chipSizeClass: Record<string, string> = {
 const chipClasses = computed(() =>
   cn(
     'inline-flex items-center rounded-kun-sm font-medium select-none',
-    chipColor[props.color],
+    // Tint with the same flat variant every other KunUI chip uses, so a tag's
+    // color matches the rest of the UI instead of a one-off shade.
+    kunVariantClasses('flat', props.color),
     chipSizeClass[props.size],
     'focus:outline-none focus:ring-2',
     kunRingClasses[props.color]

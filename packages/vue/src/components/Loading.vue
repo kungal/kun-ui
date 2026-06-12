@@ -42,7 +42,7 @@ const isWrapperMode = computed(() => !!slots.default)
             <KunImageNative
               alt="loading"
               :src="src"
-              class-name="w-72 h-auto rounded-lg"
+              class-name="w-80 h-auto rounded-lg"
             />
             <span class="info text-xl">{{ description }}</span>
           </div>
@@ -54,7 +54,7 @@ const isWrapperMode = computed(() => !!slots.default)
       <KunImageNative
         alt="loading"
         :src="src"
-        class-name="w-72 h-auto rounded-lg"
+        class-name="w-80 h-auto rounded-lg"
       />
       <span class="info">{{ description }}</span>
     </div>
