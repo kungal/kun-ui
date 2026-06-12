@@ -49,7 +49,7 @@ const colorClasses: Record<KunUIColor, string> = {
 </script>
 
 <template>
-  <div :class="cn('flex cursor-pointer items-center', className)">
+  <div :class="cn('flex cursor-pointer items-center gap-2', className)">
     <div class="relative flex items-center">
       <input
         :id="kunUniqueId"
@@ -79,7 +79,7 @@ const colorClasses: Record<KunUIColor, string> = {
       :for="kunUniqueId"
       :class="
         cn(
-          'text-default-700 ml-2 cursor-pointer text-sm select-none',
+          'text-default-700 cursor-pointer text-sm select-none',
           disabled && 'cursor-not-allowed opacity-50'
         )
       "
