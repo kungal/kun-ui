@@ -45,6 +45,8 @@ import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSlider from './components/Slider.vue'
 import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
+import KunTabPanel from './components/TabPanel.vue'
+import KunTabPanels from './components/TabPanels.vue'
 import KunTagInput from './components/TagInput.vue'
 import KunText from './components/Text.vue'
 import KunTextarea from './components/Textarea.vue'
@@ -101,6 +103,8 @@ export {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunTabPanel,
+  KunTabPanels,
   KunTagInput,
   KunText,
   KunTextarea,
@@ -277,6 +281,8 @@ const components = {
   KunSlider,
   KunSwitch,
   KunTab,
+  KunTabPanel,
+  KunTabPanels,
   KunTagInput,
   KunText,
   KunTextarea,

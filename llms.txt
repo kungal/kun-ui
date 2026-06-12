@@ -71,7 +71,9 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 
 ### Navigation & overlays
 - KunLink: Styled link; uses the injected link component (NuxtLink in Nuxt).
-- KunTab: Tabbed interface (v-model value, items array; variants, orientation).
+- KunTab: Tab bar (v-model value, items array; variants, orientation). Items with `href` render real <a> for crawlable tab-as-route.
+- KunTabPanel: One tab's content. SEO-first: mount=eager (default) SSRs every panel and hides inactive ones with hidden="until-found" (indexable + findable); mount=lazy/unmount opt out. Pairs with KunTab via `value`/`name`.
+- KunTabPanels: Optional wrapper sharing active (v-model) + mount/hiddenStrategy defaults across KunTabPanels, and auto-wiring find-in-page reveal.
 - KunModal: Dialog teleported to body, focus-trapped, body-scroll-locked, Escape to close (v-model boolean).
 - KunDrawer: Slide-in panel from any edge (placement, size; v-model boolean).
 - KunTooltip: Hover/focus tooltip (text + trigger slot).

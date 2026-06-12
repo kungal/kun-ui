@@ -17,7 +17,7 @@ const root = join(here, '..', '..', '..')
 const vuePkg = join(root, 'packages', 'vue')
 const tsconfig = join(vuePkg, 'tsconfig.json')
 
-// The 52 public components. File name = component name without the `Kun` prefix.
+// The 54 public components. File name = component name without the `Kun` prefix.
 const names = [
   'KunAlertProvider', 'KunAvatar', 'KunAvatarGroup', 'KunBadge', 'KunBrand',
   'KunButton', 'KunCard', 'KunCheckBox', 'KunChip', 'KunContent',
@@ -28,7 +28,8 @@ const names = [
   'KunLoading', 'KunLoli', 'KunLoliProvider', 'KunMarkdown', 'KunMessageProvider',
   'KunModal', 'KunNull', 'KunPagination', 'KunPopover', 'KunProgress',
   'KunRadioGroup', 'KunRating', 'KunRipple', 'KunScrollShadow', 'KunSelect',
-  'KunSlider', 'KunSwitch', 'KunTab', 'KunTagInput', 'KunText', 'KunTextarea',
+  'KunSlider', 'KunSwitch', 'KunTab', 'KunTabPanel', 'KunTabPanels',
+  'KunTagInput', 'KunText', 'KunTextarea',
   'KunTooltip', 'KunUpload', 'KunUserChip',
 ]
 

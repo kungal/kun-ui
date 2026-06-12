@@ -52,6 +52,8 @@ const KUN_COMPONENTS = [
   'KunSlider',
   'KunSwitch',
   'KunTab',
+  'KunTabPanel',
+  'KunTabPanels',
   'KunTagInput',
   'KunText',
   'KunTextarea',

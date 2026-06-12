@@ -7,6 +7,7 @@ import {
   kunBorderClasses,
 } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
+import { kunTabId, kunTabPanelId } from '../composables/tabPanelsContext'
 import KunIcon from './Icon.vue'
 import type { KunTabItem, KunTabColor, KunTabSize, KunTabProps } from './types'
 
@@ -196,6 +197,23 @@ const selectTab = async (item: KunTabItem, _idx: number) => {
   }
 }
 
+// `href` tabs render a real <a> / link (crawlable, works without JS). With JS we
+// intercept the click and route through config.navigate (SPA under Nuxt) so we
+// don't double-navigate; without JS the native href is the graceful fallback.
+const tabIs = (item: KunTabItem) => (item.href ? config.linkComponent : 'button')
+const tabBindings = (item: KunTabItem) => {
+  if (!item.href) return { type: 'button', disabled: item.disabled || props.disabled }
+  return typeof config.linkComponent === 'string'
+    ? { href: item.href }
+    : { to: item.href }
+}
+const onTabClick = (e: MouseEvent, item: KunTabItem, idx: number) => {
+  if (item.href) e.preventDefault()
+  void selectTab(item, idx)
+}
+const tabIdFor = (v: string) => kunTabId(props.name, v)
+const panelIdFor = (v: string) => kunTabPanelId(props.name, v)
+
 const isSelected = (item: KunTabItem) => value.value === item.value
 
 const containerClasses = computed(() =>
@@ -356,18 +374,20 @@ const indicatorMergedStyle = computed(() => {
         :style="indicatorMergedStyle"
       />
 
-      <button
+      <component
+        :is="tabIs(item)"
         v-for="(item, index) in items"
         :key="item.value"
-        :ref="(el) => setTabRef(el as Element | null, index)"
-        type="button"
+        :ref="(el: unknown) => setTabRef(el as Element | null, index)"
+        v-bind="tabBindings(item)"
+        :id="tabIdFor(item.value)"
         role="tab"
+        :aria-controls="panelIdFor(item.value)"
         :aria-selected="isSelected(item)"
         :aria-disabled="item.disabled || disabled"
         :tabindex="isSelected(item) && !item.disabled && !disabled ? 0 : -1"
-        :disabled="item.disabled || disabled"
         :class="tabClasses(item)"
-        @click="selectTab(item, index)"
+        @click="onTabClick($event, item, index)"
         @keydown="onKeydown($event, index)"
       >
         <span
@@ -378,7 +398,7 @@ const indicatorMergedStyle = computed(() => {
           <KunIcon :name="item.icon" />
         </span>
         <span v-if="item.textValue">{{ item.textValue }}</span>
-      </button>
+      </component>
     </div>
   </div>
 </template>

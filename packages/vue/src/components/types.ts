@@ -83,6 +83,33 @@ export interface KunTabProps {
   iconSize?: string
   className?: string
   innerClassName?: string
+  // ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via
+  // aria-controls/labelledby). Set a distinct `name` per tab group on a page.
+  name?: string
+}
+
+// ── TabPanel / TabPanels ───────────────────────────────────────────────
+export interface KunTabPanelProps {
+  // Which tab this panel belongs to (matches a KunTabItem `value`).
+  value: string
+  // The active tab value. Optional when wrapped in <KunTabPanels> (inherited).
+  active?: string
+  // eager: SSR all panels, hide inactive (SEO-optimal, default).
+  // lazy: render on first activation then keep. unmount: only active in DOM.
+  mount?: 'eager' | 'lazy' | 'unmount'
+  // Alias for mount="eager" — familiar from Radix/Reka/MUI.
+  forceMount?: boolean
+  // How inactive eager/lazy panels hide. until-found (default) keeps them
+  // findable by in-page search + deep links; display is plain display:none.
+  hiddenStrategy?: 'until-found' | 'display'
+  name?: string
+  className?: string
+}
+
+export interface KunTabPanelsProps {
+  mount?: 'eager' | 'lazy' | 'unmount'
+  hiddenStrategy?: 'until-found' | 'display'
+  name?: string
 }
 
 // ── Tooltip ────────────────────────────────────────────────────────────

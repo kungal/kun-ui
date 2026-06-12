@@ -383,6 +383,12 @@
         "default": "undefined"
       },
       {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
         "name": "type",
         "type": "\"multiple\" | \"single\"",
         "required": false,
@@ -602,6 +608,12 @@
         "type": "KunUIRounded",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
       },
       {
         "name": "valueFormat",
@@ -1744,6 +1756,12 @@
         "type": "KunUIRounded",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
       }
     ]
   },
@@ -1765,6 +1783,12 @@
         "type": "number",
         "required": false,
         "default": "17"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
       },
       {
         "name": "step",
@@ -1804,6 +1828,12 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
       }
     ]
   },
@@ -1862,6 +1892,11 @@
         "default": "\"\""
       },
       {
+        "name": "name",
+        "type": "string",
+        "required": false
+      },
+      {
         "name": "orientation",
         "type": "KunTabOrientation",
         "required": false,
@@ -1884,6 +1919,78 @@
         "type": "KunTabVariant",
         "required": false,
         "default": "\"underlined\""
+      }
+    ]
+  },
+  "KunTabPanel": {
+    "props": [
+      {
+        "name": "value",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "active",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "forceMount",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "hiddenStrategy",
+        "type": "\"until-found\" | \"display\"",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "mount",
+        "type": "\"lazy\" | \"eager\" | \"unmount\"",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      }
+    ]
+  },
+  "KunTabPanels": {
+    "props": [
+      {
+        "name": "hiddenStrategy",
+        "type": "\"until-found\" | \"display\"",
+        "required": false,
+        "default": "\"until-found\""
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "mount",
+        "type": "\"lazy\" | \"eager\" | \"unmount\"",
+        "required": false,
+        "default": "\"eager\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
       }
     ]
   },
@@ -2172,6 +2279,12 @@
         "type": "boolean",
         "required": false,
         "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
       }
     ]
   },
