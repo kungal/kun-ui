@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { cn, kunRoundedClasses } from '@kungal/ui-core'
+import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunTextareaProps } from './types'
@@ -26,6 +26,7 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
   resize: 'none',
   darkBorder: true,
   rounded: undefined,
+  size: 'md',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -122,7 +123,8 @@ defineExpose({
         :autofocus="autofocus"
         :class="
           cn(
-            'scrollbar-hide border-default/20 w-full border p-3 transition duration-150 ease-in-out',
+            'scrollbar-hide border-default/20 w-full border transition duration-150 ease-in-out',
+            kunControlSizeClasses[props.size],
             roundedClass,
             'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
             disabled ? 'text-default-500 cursor-not-allowed shadow-none' : '',

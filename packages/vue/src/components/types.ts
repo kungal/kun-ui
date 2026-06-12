@@ -269,6 +269,7 @@ export interface KunTextareaProps {
   resize?: 'none' | 'vertical' | 'horizontal' | 'both'
   darkBorder?: boolean
   rounded?: KunUIRounded
+  size?: KunUISize
 }
 
 // ── Switch ─────────────────────────────────────────────────────────────
@@ -342,6 +343,7 @@ export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
   ariaLabel?: string
   className?: string
   rounded?: KunUIRounded
+  size?: KunUISize
 }
 
 // ── ContextMenu / Dropdown (shared item model) ─────────────────────────
@@ -485,6 +487,7 @@ export interface KunDatePickerProps {
   weekdays?: string[]
   months?: string[]
   rounded?: KunUIRounded
+  size?: KunUISize
 }
 
 // ── FileInput ──────────────────────────────────────────────────────────

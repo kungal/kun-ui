@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/ui-core'
+import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
@@ -19,6 +19,7 @@ const props = withDefaults(defineProps<KunSelectProps<T>>(), {
   ariaLabel: '',
   className: '',
   rounded: undefined,
+  size: 'md',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -94,7 +95,8 @@ const selectOption = (value: T, index: number) => {
       aria-haspopup="listbox"
       :class="
         cn(
-          'focus:border-primary focus:ring-primary flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left text-sm focus:ring-1 focus:outline-none',
+          'focus:border-primary focus:ring-primary flex w-full cursor-pointer items-center justify-between text-left focus:ring-1 focus:outline-none',
+          kunControlSizeClasses[props.size],
           roundedClass,
           darkBorder && 'dark:border-default-200 border-default/20 border',
           disabled && 'bg-default-100 cursor-not-allowed'

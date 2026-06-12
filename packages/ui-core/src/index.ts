@@ -28,6 +28,8 @@ export {
   resolveRounded,
 } from './rounded'
 
+export { kunControlSizeClasses } from './controlSize'
+
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
 export { getRandomSticker } from './getRandomSticker'

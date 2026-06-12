@@ -240,19 +240,23 @@ const focusInput = () => {
   inputEl.value?.focus()
 }
 
+// Min-heights mirror the kunControlSizeClasses control heights, so an empty
+// TagInput is the same height as a KunInput of the same size.
 const sizeMinH: Record<string, string> = {
-  xs: 'min-h-[30px]',
+  xs: 'min-h-[26px]',
   sm: 'min-h-[34px]',
-  md: 'min-h-[40px]',
-  lg: 'min-h-[48px]',
-  xl: 'min-h-[56px]',
+  md: 'min-h-[38px]',
+  lg: 'min-h-[46px]',
+  xl: 'min-h-[54px]',
 }
+// px/py mirror kunControlSizeClasses (the shared form-control scale); `gap` is
+// extra here for spacing the inner tag chips.
 const sizePadding: Record<string, string> = {
-  xs: 'px-2 py-1 gap-1',
-  sm: 'px-2.5 py-1.5 gap-1.5',
-  md: 'px-3 py-2 gap-2',
-  lg: 'px-3.5 py-2.5 gap-2',
-  xl: 'px-4 py-3 gap-2.5',
+  xs: 'px-2.5 py-1 gap-1',
+  sm: 'px-3.5 py-1.5 gap-1.5',
+  md: 'px-4 py-2 gap-2',
+  lg: 'px-5 py-2.5 gap-2',
+  xl: 'px-6 py-3 gap-2.5',
 }
 const sizeText: Record<string, string> = {
   xs: 'text-xs',

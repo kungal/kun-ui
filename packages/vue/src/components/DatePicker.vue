@@ -2,7 +2,7 @@
 import { ref, computed, toRefs, nextTick, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
-import { cn, kunRoundedClasses } from '@kungal/ui-core'
+import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useCalendar } from '../composables/useCalendar'
 import KunButton from './Button.vue'
@@ -25,6 +25,7 @@ const props = withDefaults(defineProps<KunDatePickerProps>(), {
   format: 'yyyy-MM-dd',
   valueFormat: 'yyyy-MM-dd',
   rounded: undefined,
+  size: 'md',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -189,7 +190,8 @@ const isInPreviewRange = (date: Date) => {
         :disabled="disabled"
         :class="
           cn(
-            'flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left focus:ring-1 focus:outline-none sm:text-sm',
+            'flex w-full cursor-pointer items-center justify-between text-left focus:ring-1 focus:outline-none',
+            kunControlSizeClasses[props.size],
             roundedClass,
             'focus:border-primary-500 focus:ring-primary-500',
             darkBorder && 'dark:border-default-200 border-default-200 border',

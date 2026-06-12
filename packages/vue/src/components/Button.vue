@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import { cn, kunVariantClasses, kunRoundedClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunVariantClasses,
+  kunRoundedClasses,
+  kunControlSizeClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
 import { extractTextFromVNodes } from '../utils/extractTextFromVNodes'
@@ -58,23 +63,9 @@ const computedAriaLabel = computed(() => {
 })
 
 const sizeClasses = computed(() => {
-  switch (props.size) {
-    // Horizontal padding grows with size while vertical stays tight (py < px),
-    // so larger buttons get wider, not fatter — matching modern libraries
-    // (shadcn lg = px-8, HeroUI fixed heights). `md` is the reference ratio.
-    case 'xs':
-      return 'text-xs px-2.5 py-1'
-    case 'sm':
-      return 'text-sm px-3.5 py-1.5'
-    case 'md':
-      return 'text-sm px-4 py-2'
-    case 'lg':
-      return 'text-base px-6 py-2'
-    case 'xl':
-      return 'text-lg px-8 py-2.5'
-    default:
-      return 'text-sm px-4 py-2'
-  }
+  // Shared form-control scale (px:py 2:1, md anchor) so a button lines up with
+  // an input / select / textarea of the same size. See kunControlSizeClasses.
+  return kunControlSizeClasses[props.size]
 })
 
 // Button delegates the whole variant × color matrix to @kungal/ui-core so the
