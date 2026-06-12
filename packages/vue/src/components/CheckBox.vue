@@ -67,7 +67,9 @@ const colorClasses: Record<KunUIColor, string> = {
           cn(
             'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
             size.box,
-            props.type === 'single' ? 'rounded-full' : 'rounded-kun-sm',
+            // A fixed % keeps the box a rounded square at every size — a token
+            // radius (now 12px) would make the small boxes look circular.
+            props.type === 'single' ? 'rounded-full' : 'rounded-[35%]',
             colorClasses[props.color]
           )
         "
