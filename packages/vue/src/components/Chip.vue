@@ -13,12 +13,15 @@ const props = withDefaults(defineProps<KunChipProps>(), {
   variant: 'flat',
 })
 
+// Chips sit on a compact sub-scale — ~0.7× the button height at the same size
+// keyword (a tag is text + tight padding, not a tap target). Vertical padding is
+// deliberately tighter than the form-control scale.
 const sizeClasses: Record<KunUISize, string> = {
   xs: 'px-2 py-0.5 text-xs',
   sm: 'px-2 py-1 text-xs',
-  md: 'px-3 py-1.5 text-sm',
-  lg: 'px-4 py-2 text-sm',
-  xl: 'px-6 py-3 text-base',
+  md: 'px-3 py-1 text-sm',
+  lg: 'px-4 py-1.5 text-sm',
+  xl: 'px-6 py-2 text-base',
 }
 </script>
 

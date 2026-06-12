@@ -28,7 +28,11 @@ export {
   resolveRounded,
 } from './rounded'
 
-export { kunControlSizeClasses } from './controlSize'
+export {
+  kunControlSizeClasses,
+  kunSelectionSizeClasses,
+  type KunSelectionSize,
+} from './controlSize'
 
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'

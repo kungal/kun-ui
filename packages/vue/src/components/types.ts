@@ -278,6 +278,7 @@ export interface KunSwitchProps {
   disabled?: boolean
   className?: string
   labelClassName?: string
+  size?: KunUISize
 }
 
 // ── CheckBox ───────────────────────────────────────────────────────────
@@ -290,6 +291,7 @@ export interface KunCheckBoxProps {
   value?: string | number | boolean
   disabled?: boolean
   className?: string
+  size?: KunUISize
 }
 
 // ── Slider ─────────────────────────────────────────────────────────────
@@ -297,6 +299,7 @@ export interface KunSliderProps {
   min?: number
   max?: number
   step?: number
+  size?: KunUISize
 }
 
 // ── RadioGroup ─────────────────────────────────────────────────────────

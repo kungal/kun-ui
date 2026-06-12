@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onUnmounted, reactive, ref } from 'vue'
+import { type KunUISize } from '@kungal/ui-core'
 import type { KunSliderProps } from './types'
 
 defineOptions({ name: 'KunSlider' })
@@ -9,7 +10,20 @@ const props = withDefaults(defineProps<KunSliderProps>(), {
   min: 17,
   max: 77,
   step: 1,
+  size: 'md',
 })
+
+// Track thickness + thumb scale on clean Tailwind steps; `md` is the original
+// slider size. The thumb auto-centers (translate(-50%,-50%)), so only the
+// dimensions change.
+const sliderSizes: Record<KunUISize, { track: string; thumb: string }> = {
+  xs: { track: 'h-1', thumb: 'size-3.5' },
+  sm: { track: 'h-1.5', thumb: 'size-4' },
+  md: { track: 'h-2', thumb: 'size-5' },
+  lg: { track: 'h-2.5', thumb: 'size-6' },
+  xl: { track: 'h-3', thumb: 'size-7' },
+}
+const size = computed(() => sliderSizes[props.size])
 
 const sliderRef = ref<HTMLElement | null>(null)
 const dragging = ref(false)
@@ -70,13 +84,14 @@ onUnmounted(() => {
     @mousedown.passive="startDrag"
     @touchstart.passive.stop="startDrag"
   >
-    <div class="bg-default relative h-2 w-full rounded-full">
+    <div class="bg-default relative w-full rounded-full" :class="size.track">
       <div
         class="bg-primary absolute h-full rounded-full"
         :style="{ width: fillerWidth }"
       />
       <div
-        class="border-primary bg-content1 absolute top-[50%] size-5 cursor-grab rounded-full border-2 active:cursor-grabbing active:border-3"
+        class="border-primary bg-content1 absolute top-[50%] cursor-grab rounded-full border-2 active:cursor-grabbing active:border-3"
+        :class="size.thumb"
         role="slider"
         :style="thumbStyle"
         @mousedown.passive="startDrag"

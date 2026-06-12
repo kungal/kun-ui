@@ -7,6 +7,7 @@ import {
   kunRingClasses,
   kunSoftBgClasses,
   kunRoundedClasses,
+  kunSelectionSizeClasses,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
@@ -57,20 +58,11 @@ const focusableIndex = computed(() => {
   return props.options.findIndex((o) => !isOptionDisabled(o))
 })
 
+// Radio shares the selection scale with KunCheckBox (identical box sizes), so a
+// radio and a checkbox of the same size match. `indicator` is the shared box.
 const sizeClasses = computed(() => {
-  switch (props.size) {
-    case 'xs':
-      return { indicator: 'size-3', dot: 'size-1.5', text: 'text-xs', gap: 'gap-1.5' }
-    case 'sm':
-      return { indicator: 'size-3.5', dot: 'size-1.5', text: 'text-sm', gap: 'gap-2' }
-    case 'lg':
-      return { indicator: 'size-5', dot: 'size-2.5', text: 'text-base', gap: 'gap-2.5' }
-    case 'xl':
-      return { indicator: 'size-6', dot: 'size-3', text: 'text-lg', gap: 'gap-3' }
-    case 'md':
-    default:
-      return { indicator: 'size-4', dot: 'size-2', text: 'text-sm', gap: 'gap-2' }
-  }
+  const s = kunSelectionSizeClasses[props.size]
+  return { indicator: s.box, dot: s.dot, text: s.text, gap: s.gap }
 })
 
 const selectOption = (option: KunRadioOption<T>, index: number) => {

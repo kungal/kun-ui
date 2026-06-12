@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { cn, type KunUIColor } from '@kungal/ui-core'
+import { cn, kunSelectionSizeClasses, type KunUIColor } from '@kungal/ui-core'
+import { computed } from 'vue'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunCheckBoxProps } from './types'
@@ -15,7 +16,11 @@ const props = withDefaults(defineProps<KunCheckBoxProps>(), {
   value: undefined,
   disabled: false,
   className: '',
+  size: 'md',
 })
+
+// Shared selection scale — a checkbox matches a radio of the same size.
+const size = computed(() => kunSelectionSizeClasses[props.size])
 
 const modelValue = defineModel<boolean>({ default: false })
 
@@ -49,7 +54,7 @@ const colorClasses: Record<KunUIColor, string> = {
 </script>
 
 <template>
-  <div :class="cn('flex cursor-pointer items-center gap-2', className)">
+  <div :class="cn('flex cursor-pointer items-center', size.gap, className)">
     <div class="relative flex items-center">
       <input
         :id="kunUniqueId"
@@ -60,7 +65,8 @@ const colorClasses: Record<KunUIColor, string> = {
         :disabled="disabled"
         :class="
           cn(
-            'peer h-5 w-5 cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
+            'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
+            size.box,
             props.type === 'single' ? 'rounded-full' : 'rounded-kun-sm',
             colorClasses[props.color]
           )
@@ -70,7 +76,7 @@ const colorClasses: Record<KunUIColor, string> = {
       <div
         class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-200 ease-out peer-checked:scale-100 peer-checked:opacity-100"
       >
-        <KunIcon name="lucide:check" class="size-3" />
+        <KunIcon name="lucide:check" :class="size.check" />
       </div>
     </div>
     <slot />
@@ -79,7 +85,8 @@ const colorClasses: Record<KunUIColor, string> = {
       :for="kunUniqueId"
       :class="
         cn(
-          'text-default-700 cursor-pointer text-sm select-none',
+          'text-default-700 cursor-pointer select-none',
+          size.text,
           disabled && 'cursor-not-allowed opacity-50'
         )
       "
