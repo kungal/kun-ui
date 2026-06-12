@@ -5,6 +5,7 @@ import { useFloating, autoUpdate, offset, flip, shift, type Placement } from '@f
 import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunUIConfig } from '../config/useKunUIConfig'
 import type { KunDropdownItem } from './types'
 
 // Click-triggered action menu (WAI-ARIA menu-button pattern). Deliberately
@@ -116,6 +117,24 @@ const selectItem = (item: KunDropdownItem) => {
   if (item.disabled) return
   emit('select', item)
   close(true)
+}
+
+// Items with `href` render a real <a role="menuitem"> (crawlable). The link
+// navigates natively; selectItem still emits/closes. Disabled items can't be
+// <a disabled>, so block their navigation in JS.
+const config = useKunUIConfig()
+const itemBindings = (item: KunDropdownItem) => {
+  if (!item.href) return { type: 'button', disabled: item.disabled }
+  return typeof config.linkComponent === 'string'
+    ? { href: item.href }
+    : { to: item.href }
+}
+const onItemClick = (e: MouseEvent, item: KunDropdownItem) => {
+  if (item.disabled) {
+    e.preventDefault()
+    return
+  }
+  selectItem(item)
 }
 
 const onTriggerKeydown = (e: KeyboardEvent) => {
@@ -255,21 +274,21 @@ defineExpose({
           :style="[floatingStyles, { minWidth: `${minWidth}px`, transformOrigin }]"
           @keydown="onMenuKeydown"
         >
-          <button
+          <component
+            :is="item.href ? config.linkComponent : 'button'"
             v-for="(item, i) in items"
             :key="item.key"
-            type="button"
+            v-bind="itemBindings(item)"
             role="menuitem"
             :tabindex="i === activeIndex ? 0 : -1"
-            :disabled="item.disabled"
             :aria-disabled="item.disabled || undefined"
             :class="itemClass(item)"
-            @click="selectItem(item)"
+            @click="onItemClick($event, item)"
             @mouseenter="!item.disabled && focusItem(i)"
           >
             <KunIcon v-if="item.icon" :name="item.icon" class="text-base" />
             <span>{{ item.label }}</span>
-          </button>
+          </component>
         </div>
       </Transition>
     </Teleport>

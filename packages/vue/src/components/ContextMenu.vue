@@ -138,6 +138,7 @@ const handleSelect = (item: KunContextMenuItem) => {
           size="sm"
           class-name="justify-start gap-2 w-full"
           :disabled="item.disabled"
+          :href="item.href"
           @click.stop="handleSelect(item)"
         >
           <KunIcon v-if="item.icon" :name="item.icon" class="text-base" />

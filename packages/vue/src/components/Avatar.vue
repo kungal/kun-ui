@@ -19,13 +19,14 @@ const props = withDefaults(defineProps<KunAvatarProps>(), {
 
 const config = useKunUIConfig()
 
-const handleClickAvatar = async (event: MouseEvent) => {
-  event.preventDefault()
-  if (!props.isNavigation || !props.user?.id) return
-  await config.navigate(
-    config.userLinkTemplate.replace('{id}', String(props.user.id))
-  )
-}
+// Navigates to the user profile → render a real <a>/link (crawlable) when there
+// is a user to link to. Otherwise a plain, non-interactive <div>.
+const isLink = computed(() => props.isNavigation && !!props.user?.id)
+const linkProps = computed(() => {
+  if (!isLink.value) return {}
+  const href = config.userLinkTemplate.replace('{id}', String(props.user?.id))
+  return typeof config.linkComponent === 'string' ? { href } : { to: href }
+})
 
 const sizeClasses = computed(() => {
   switch (props.size) {
@@ -60,20 +61,22 @@ const userAvatarSrc = computed(() => {
 </script>
 
 <template>
-  <div
+  <component
+    :is="isLink ? config.linkComponent : 'div'"
+    v-bind="linkProps"
     :class="
       cn(
-        'flex shrink-0 cursor-pointer justify-center rounded-full transition duration-150 ease-in-out hover:scale-110',
+        'flex shrink-0 justify-center rounded-full transition duration-150 ease-in-out',
+        isLink && 'cursor-pointer hover:scale-110',
         sizeClasses,
         className
       )
     "
-    @click="handleClickAvatar($event)"
   >
     <KunImage
       :class-name="cn('inline-block rounded-full', sizeClasses, props.imageClassName)"
       :src="userAvatarSrc"
       :alt="user?.name ?? '未知用户'"
     />
-  </div>
+  </component>
 </template>

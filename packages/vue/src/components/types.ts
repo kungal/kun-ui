@@ -383,6 +383,9 @@ export interface KunContextMenuItem {
   icon?: string
   color?: KunUIColor
   disabled?: boolean
+  // When set, the item renders as a real <a>/link (crawlable) instead of a
+  // button — for navigational menus. Omit for action items.
+  href?: string
 }
 
 // Dropdown reuses the ContextMenu item model verbatim — one source of truth.
@@ -469,6 +472,9 @@ export interface KunPaginationProps {
   currentPage: number
   totalPage: number
   isLoading?: boolean
+  // Map a page number to its URL. When provided, the numbered page controls
+  // render real <a href> (crawlable pagination) instead of plain buttons.
+  pageHref?: (page: number) => string
 }
 
 // ── Lightbox ───────────────────────────────────────────────────────────
@@ -615,6 +621,9 @@ export interface KunUserChipProps {
   size?: KunAvatarSize
   description?: string
   className?: string
+  // When true (default) and the user has an id, the whole chip is a real
+  // <a>/link to the user's profile (crawlable, name as anchor text).
+  isNavigation?: boolean
   disableFloating?: boolean
   floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
 }

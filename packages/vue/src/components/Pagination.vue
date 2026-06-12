@@ -111,6 +111,7 @@ onKeyStroke('ArrowRight', (e) => {
               :variant="currentPage === page ? 'solid' : 'light'"
               size="sm"
               :disabled="isLoading"
+              :href="pageHref ? pageHref(Number(page)) : undefined"
               @click="handlePageChange(Number(page))"
             >
               {{ page }}
