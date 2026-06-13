@@ -10,6 +10,8 @@ defineOptions({ name: 'KunMarkdown', inheritAttrs: false })
     height="15"
     viewBox="0 0 15 15"
     fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
     v-bind="$attrs"
   >
     <path

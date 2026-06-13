@@ -162,6 +162,8 @@ export interface KunPopoverProps {
 export interface KunImageProps {
   src: string
   alt?: string
+  // Shown if `src` fails to load (broken URL, 404). Resets when `src` changes.
+  fallbackSrc?: string
   loading?: 'lazy' | 'eager'
   className?: string
   ariaLabel?: string
@@ -222,6 +224,7 @@ export interface KunDividerProps {
   color?: KunUIColor
   borderStyle?: 'solid' | 'dashed'
   className?: string
+  /** @deprecated No-op — a label renders automatically when default-slot content is present. */
   withLabel?: boolean
 }
 
@@ -247,6 +250,9 @@ export interface KunChipProps {
   color?: KunUIColor
   size?: KunUISize
   variant?: KunUIVariant
+  // Render a × that emits `close` (removable tag — filters, tag inputs).
+  closable?: boolean
+  disabled?: boolean
 }
 
 // ── Progress ───────────────────────────────────────────────────────────
@@ -597,6 +603,8 @@ export interface KunCopyProps {
   size?: KunUISize
   rounded?: KunUIRounded
   className?: string
+  // Label shown briefly after a successful copy. Default '已复制'.
+  copiedText?: string
 }
 
 // ── Rating ─────────────────────────────────────────────────────────────
@@ -637,6 +645,8 @@ export interface KunScrollShadowProps {
   shadowSize?: string
   className?: string
   contentClass?: string
+  // Accessible name for the scrollable region. Default 'scrollable content'.
+  ariaLabel?: string
 }
 
 // ── Pagination ─────────────────────────────────────────────────────────
@@ -794,7 +804,11 @@ export interface KunAvatarGroupProps {
   users: KunUser[]
   ellipsis?: boolean
   visibleCount?: number
+  // Grand total for the "+N" overflow chip. Defaults to users.length, so the
+  // overflow shows even without passing it explicitly.
   total?: number
+  // Accessible name for the group (default derived from the count).
+  ariaLabel?: string
 }
 
 export interface KunUserChipProps {

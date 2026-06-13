@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type ComponentPublicInstance } from 'vue'
+import { computed, ref, watch, type ComponentPublicInstance } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
 import { useKunUIConfig } from '../config/useKunUIConfig'
@@ -17,6 +17,7 @@ defineOptions({ name: 'KunImage' })
 
 const props = withDefaults(defineProps<KunImageProps>(), {
   alt: 'image',
+  fallbackSrc: undefined,
   // Lazy by default: most images (grids, lists, anything below the fold)
   // shouldn't all load eagerly at once and saturate the connection, starving
   // the above-the-fold ones. The aspect-ratio box + skeleton already reserve
@@ -47,12 +48,28 @@ const imageComponent = computed(() => config.imageComponent ?? 'img')
 const isNative = computed(() => typeof imageComponent.value === 'string')
 
 const imgEl = ref<ComponentPublicInstance | HTMLImageElement | null>(null)
-const srcRef = computed(() => props.src)
+
+// On load error, swap to `fallbackSrc` (once); reset when `src` changes.
+const failed = ref(false)
+const effectiveSrc = computed(() =>
+  failed.value && props.fallbackSrc ? props.fallbackSrc : props.src
+)
+watch(
+  () => props.src,
+  () => (failed.value = false)
+)
+
+const srcRef = computed(() => effectiveSrc.value)
 const { status, onLoad, onError } = useImageLoadingStatus(imgEl, srcRef)
+
+const handleError = () => {
+  onError()
+  if (!failed.value && props.fallbackSrc) failed.value = true
+}
 
 // Standard HTML <img> attributes — safe on both native and injected.
 const baseBindings = computed<Record<string, unknown>>(() => ({
-  src: props.src,
+  src: effectiveSrc.value,
   alt: props.alt,
   loading: props.loading,
   width: props.width,
@@ -108,6 +125,7 @@ const wrap = computed(() => props.skeleton)
     v-if="!wrap"
     v-bind="imgBindings"
     :class="cn(className, imageClassName)"
+    @error="handleError"
   />
   <div
     v-else
@@ -146,7 +164,7 @@ const wrap = computed(() => props.skeleton)
         )
       "
       @load="onLoad"
-      @error="onError"
+      @error="handleError"
     />
   </div>
 </template>

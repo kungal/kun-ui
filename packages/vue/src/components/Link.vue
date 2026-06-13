@@ -54,8 +54,20 @@ const sizeClasses = computed(() => {
 
 const dest = computed(() => props.to || props.href || '')
 
+// target="_blank" without rel="noopener" is a tabnabbing risk — auto-add it
+// (merged with any caller-supplied rel). Modern browsers imply noopener, but
+// being explicit covers older ones and is the documented best practice.
+const computedRel = computed(() => {
+  const parts = new Set((props.rel || '').split(/\s+/).filter(Boolean))
+  if (props.target === '_blank') {
+    parts.add('noopener')
+    parts.add('noreferrer')
+  }
+  return parts.size ? [...parts].join(' ') : undefined
+})
+
 const linkBindings = computed<Record<string, unknown>>(() => {
-  const common = { rel: props.rel, target: props.target }
+  const common = { rel: computedRel.value, target: props.target }
   if (typeof config.linkComponent === 'string') {
     // native <a> takes a string href
     return {

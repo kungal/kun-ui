@@ -115,6 +115,8 @@ const rootBindings = computed<Record<string, unknown>>(() => {
     return {
       ...dest,
       target: props.target,
+      // target="_blank" without rel="noopener" is a tabnabbing risk.
+      rel: props.target === '_blank' ? 'noopener noreferrer' : undefined,
       role: 'link',
       'aria-label': computedAriaLabel.value,
     }

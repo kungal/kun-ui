@@ -76,6 +76,7 @@ const userAvatarSrc = computed(() => {
     <KunImage
       :class-name="cn('inline-block rounded-full', sizeClasses, props.imageClassName)"
       :src="userAvatarSrc"
+      :fallback-src="getRandomSticker(user?.name ?? '')"
       :alt="user?.name ?? '未知用户'"
     />
   </component>

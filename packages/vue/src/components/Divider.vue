@@ -35,6 +35,7 @@ const colorClasses: Record<KunUIColor, string> = {
       )
     "
     role="separator"
+    :aria-orientation="orientation === 'vertical' ? 'vertical' : undefined"
   >
     <div
       :class="[

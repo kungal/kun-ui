@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<KunScrollShadowProps>(), {
   shadowSize: '2rem',
   className: '',
   contentClass: '',
+  ariaLabel: 'scrollable content',
 })
 
 const scrollContainer = ref<HTMLElement | null>(null)
@@ -92,7 +93,7 @@ const shadowStyles = computed(() => {
       ref="scrollContainer"
       tabindex="0"
       role="region"
-      :aria-label="props.className || 'scrollable content'"
+      :aria-label="ariaLabel"
       :class="
         cn(
           'scrollbar-hide',

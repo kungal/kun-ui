@@ -14,6 +14,7 @@ const colors: KunUIColor[] = [
 
 const progress = ref(60)
 const loadingDemo = ref(false)
+const chipTags = ref(['vue', 'react', 'solid'])
 </script>
 
 <template>
@@ -25,6 +26,15 @@ const loadingDemo = ref(false)
       <KunChip v-for="c in colors" :key="c" :color="c">{{ c }}</KunChip>
       <KunChip color="primary" variant="solid">solid</KunChip>
       <KunChip color="primary" variant="bordered">bordered</KunChip>
+      <KunChip
+        v-for="t in chipTags"
+        :key="`tag-${t}`"
+        color="secondary"
+        :closable="true"
+        @close="chipTags = chipTags.filter((x) => x !== t)"
+      >
+        {{ t }}
+      </KunChip>
     </div>
 
     <h3 class="mt-2 text-base font-medium">Badge</h3>
