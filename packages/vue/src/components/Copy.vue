@@ -24,7 +24,9 @@ const copied = ref(false)
 let timer: ReturnType<typeof setTimeout> | null = null
 
 const doCopy = async () => {
-  await useKunCopy(props.text)
+  // Only flip to the "copied" affordance on a REAL successful write — otherwise
+  // the button would falsely show ✓/已复制 while useKunCopy toasts a failure.
+  if (!(await useKunCopy(props.text))) return
   copied.value = true
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => (copied.value = false), 1500)

@@ -67,6 +67,13 @@ const handleError = () => {
   if (!failed.value && props.fallbackSrc) failed.value = true
 }
 
+// Also swap on error detected via the cache-race path (syncFromDom sets
+// status='error' for a broken-in-cache src WITHOUT firing @error) — otherwise
+// the fallback would silently never load in exactly that case.
+watch(status, (s) => {
+  if (s === 'error' && !failed.value && props.fallbackSrc) failed.value = true
+})
+
 // Standard HTML <img> attributes — safe on both native and injected.
 const baseBindings = computed<Record<string, unknown>>(() => ({
   src: effectiveSrc.value,

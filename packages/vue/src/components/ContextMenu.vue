@@ -94,6 +94,9 @@ watch(
   () => {
     if (props.visible) {
       updateMenuPosition().then(() => {
+        // The immediate watcher runs during setup(); guard the browser-only
+        // focus work so SSR with :visible="true" doesn't touch `document`.
+        if (typeof document === 'undefined') return
         lastFocused = (document.activeElement as HTMLElement) ?? null
         const first = enabledIndices()[0]
         if (first !== undefined) focusItem(first)

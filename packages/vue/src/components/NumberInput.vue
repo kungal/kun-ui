@@ -140,11 +140,20 @@ const stepBy = (dir: 1 | -1) => {
   inputRef.value?.focus()
 }
 
+// A null (empty) value can always step (it resolves to a base in stepBy); only
+// a concrete value at the bound disables the stepper. The previous `?? min`
+// form wrongly disabled "−" for an empty field with no min (−∞ > −∞ === false).
 const canDecrement = computed(
-  () => !props.disabled && !props.readonly && (modelValue.value ?? props.min) > props.min
+  () =>
+    !props.disabled &&
+    !props.readonly &&
+    (modelValue.value === null || modelValue.value > props.min)
 )
 const canIncrement = computed(
-  () => !props.disabled && !props.readonly && (modelValue.value ?? props.max) < props.max
+  () =>
+    !props.disabled &&
+    !props.readonly &&
+    (modelValue.value === null || modelValue.value < props.max)
 )
 
 const onKeydown = (e: KeyboardEvent) => {

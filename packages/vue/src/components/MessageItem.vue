@@ -73,32 +73,27 @@ let timer: ReturnType<typeof setTimeout> | null = null
 const remainingTime = ref(props.duration)
 const startTime = ref(0)
 
+// Idempotent: pause/resume are each wired to multiple events (mouseenter +
+// pointerdown both pause; mouseleave + pointerup both resume). Without the
+// `!timer` / `timer` guards a single gesture would fire pause twice — each
+// subtracting `Date.now() - startTime` against the SAME startTime — so
+// `remainingTime` is debited twice and the toast dismisses early.
 const pauseTimer = () => {
-  if (props.duration <= 0) {
-    return
-  }
-  if (timer) {
-    clearTimeout(timer)
-  }
+  if (props.duration <= 0 || !timer) return
+  clearTimeout(timer)
+  timer = null
   if (progressBarRef.value) {
     progressBarRef.value.style.animationPlayState = 'paused'
   }
-
-  const elapsed = Date.now() - startTime.value
-  remainingTime.value -= elapsed
+  remainingTime.value -= Date.now() - startTime.value
 }
 
 const resumeTimer = () => {
-  if (props.duration <= 0) {
-    return
-  }
-
+  if (props.duration <= 0 || timer) return
   startTime.value = Date.now()
-
   if (progressBarRef.value) {
     progressBarRef.value.style.animationPlayState = 'running'
   }
-
   timer = setTimeout(() => emit('remove', props.id), remainingTime.value)
 }
 
@@ -116,6 +111,7 @@ watch(
   () => props.count,
   () => {
     if (timer) clearTimeout(timer)
+    timer = null // null it so the idempotent resumeTimer below re-arms
     remainingTime.value = props.duration
     resumeTimer()
   },

@@ -39,6 +39,7 @@ const acOptions: KunAutocompleteOption[] = [
 // NumberInput + PinInput
 const qty = ref<number | null>(3)
 const price = ref<number | null>(19.9)
+const freeNum = ref<number | null>(null)
 const pin = ref('')
 
 // CheckBox indeterminate (select-all)
@@ -136,6 +137,7 @@ const radioOptions: KunRadioOption[] = [
         :step="0.1"
         :precision="2"
       />
+      <KunNumberInput v-model="freeNum" label="Unbounded (empty start)" />
       <div>
         <p class="text-default-700 mb-1 text-sm font-medium">OTP / PIN</p>
         <KunPinInput v-model="pin" :length="6" />

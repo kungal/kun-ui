@@ -49,10 +49,13 @@ const positionClasses: Record<KunMessagePosition, string> = {
 <template>
   <Teleport to="body">
     <!-- Plain positioning container — live-region semantics live on each
-         KunMessageItem (status/polite, or alert/assertive for error/warn). -->
+         KunMessageItem (status/polite, or alert/assertive for error/warn).
+         `data-kun-overlay` keeps toasts interactive above an open Modal/Drawer
+         (which marks the rest of the page inert). -->
     <div
       v-for="(msgs, position) in positionedMessages"
       :key="position"
+      data-kun-overlay
       :class="[
         'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
         positionClasses[position as KunMessagePosition],
