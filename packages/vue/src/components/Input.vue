@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots } from 'vue'
 import {
   cn,
   kunRoundedClasses,
@@ -8,6 +8,7 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import KunIcon from './Icon.vue'
 import type { KunInputProps } from './types'
 
 defineOptions({ name: 'KunInput', inheritAttrs: false })
@@ -19,7 +20,11 @@ const props = withDefaults(defineProps<KunInputProps>(), {
   label: '',
   placeholder: '',
   helperText: '',
+  description: '',
   error: '',
+  isInvalid: false,
+  isClearable: false,
+  revealPassword: false,
   size: 'md',
   required: false,
   disabled: false,
@@ -27,6 +32,38 @@ const props = withDefaults(defineProps<KunInputProps>(), {
   autofocus: false,
   rounded: undefined,
 })
+
+const slots = useSlots()
+
+// `description` is the canonical helper name; `helperText` is the deprecated alias.
+const helper = computed(() => props.description || props.helperText)
+// Invalid styling fires for an error message OR an explicit isInvalid flag.
+const invalid = computed(() => !!props.error || props.isInvalid)
+
+// Password reveal: swap the rendered type without mutating the prop.
+const isPassword = computed(() => props.type === 'password')
+const isRevealed = ref(false)
+const resolvedType = computed(() =>
+  isPassword.value && isRevealed.value ? 'text' : props.type
+)
+
+const hasValue = computed(
+  () => modelValue.value != null && String(modelValue.value).length > 0
+)
+const showClear = computed(
+  () => props.isClearable && !props.disabled && hasValue.value
+)
+const showReveal = computed(
+  () => isPassword.value && props.revealPassword && !props.disabled
+)
+// Right padding grows with the number of trailing controls (suffix slot +
+// clear + reveal) so text never slides under them.
+const trailingCount = computed(
+  () => (slots.suffix ? 1 : 0) + (showClear.value ? 1 : 0) + (showReveal.value ? 1 : 0)
+)
+const rightPadClass = computed(
+  () => ['', 'pr-10', 'pr-[4.5rem]', 'pr-28'][Math.min(trailingCount.value, 3)]
+)
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
@@ -36,6 +73,7 @@ const modelValue = defineModel<string | number>({ default: '' })
 const emits = defineEmits<{
   blur: [event: FocusEvent]
   focus: [event: FocusEvent]
+  clear: []
 }>()
 
 const input = ref<HTMLInputElement | null>(null)
@@ -70,6 +108,12 @@ const handleBlur = (event: FocusEvent) => {
 const handleFocus = (event: FocusEvent) => {
   isFocused.value = true
   emits('focus', event)
+}
+
+const clear = () => {
+  modelValue.value = ''
+  emits('clear')
+  nextTick(() => input.value?.focus())
 }
 
 onMounted(() => {
@@ -121,10 +165,12 @@ defineExpose({
         ref="input"
         v-bind="$attrs"
         :value="modelValue"
-        :type="type"
+        :type="resolvedType"
         :placeholder="placeholder"
         :disabled="disabled"
         :required="required"
+        :aria-invalid="invalid || undefined"
+        :aria-describedby="(helper || error) ? `${kunUniqueId}-desc` : undefined"
         :class="
           cn(
             'border-default/20 block w-full border transition duration-150 ease-in-out focus:border-transparent focus:ring-2',
@@ -133,9 +179,9 @@ defineExpose({
             sizeClasses,
             darkBorder && 'dark:border-default-200',
             $slots.prefix && 'pl-10',
-            $slots.suffix && 'pr-10',
+            rightPadClass,
             disabled && 'bg-default-100 cursor-not-allowed',
-            error ? 'border-danger-300 focus:border-danger focus:ring-danger' : '',
+            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : '',
             className
           )
         "
@@ -152,19 +198,47 @@ defineExpose({
       </div>
 
       <div
-        v-if="$slots.suffix"
-        class="absolute inset-y-0 right-0 flex items-center pr-3"
+        v-if="$slots.suffix || showClear || showReveal"
+        class="absolute inset-y-0 right-0 flex items-center gap-1 pr-3"
       >
         <slot name="suffix" />
+        <button
+          v-if="showClear"
+          type="button"
+          tabindex="-1"
+          class="text-default-400 hover:text-default-600 flex items-center"
+          aria-label="清除"
+          @click="clear"
+        >
+          <KunIcon name="lucide:circle-x" class="size-4" />
+        </button>
+        <button
+          v-if="showReveal"
+          type="button"
+          tabindex="-1"
+          class="text-default-400 hover:text-default-600 flex items-center"
+          :aria-label="isRevealed ? '隐藏密码' : '显示密码'"
+          :aria-pressed="isRevealed"
+          @click="isRevealed = !isRevealed"
+        >
+          <KunIcon :name="isRevealed ? 'lucide:eye-off' : 'lucide:eye'" class="size-4" />
+        </button>
       </div>
     </div>
 
-    <p v-if="helperText && !error" class="text-default-500 mt-1 text-sm">
-      {{ helperText }}
-    </p>
-
-    <p v-if="error" class="text-danger mt-1 text-sm">
+    <p
+      v-if="error"
+      :id="`${kunUniqueId}-desc`"
+      class="text-danger mt-1 text-sm"
+    >
       {{ error }}
+    </p>
+    <p
+      v-else-if="helper"
+      :id="`${kunUniqueId}-desc`"
+      class="text-default-500 mt-1 text-sm"
+    >
+      {{ helper }}
     </p>
   </div>
 </template>

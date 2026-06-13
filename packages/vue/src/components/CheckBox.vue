@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { cn, kunSelectionSizeClasses, type KunUIColor } from '@kungal/ui-core'
-import { computed } from 'vue'
+import { cn, kunSelectionSizeClasses, type KunUIColor, type KunUISize } from '@kungal/ui-core'
+import { computed, ref, watchEffect } from 'vue'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunCheckBoxProps } from './types'
@@ -15,12 +15,23 @@ const props = withDefaults(defineProps<KunCheckBoxProps>(), {
   name: undefined,
   value: undefined,
   disabled: false,
+  indeterminate: false,
+  error: '',
+  description: '',
   className: '',
   size: 'md',
 })
 
 // Shared selection scale — a checkbox matches a radio of the same size.
 const size = computed(() => kunSelectionSizeClasses[props.size])
+// The indeterminate dash: a thin white bar ~60% of the box, scaled per size.
+const dashWidth: Record<KunUISize, string> = {
+  xs: 'w-2',
+  sm: 'w-2.5',
+  md: 'w-2.5',
+  lg: 'w-3',
+  xl: 'w-3.5',
+}
 
 const modelValue = defineModel<boolean>({ default: false })
 
@@ -29,6 +40,13 @@ const emit = defineEmits<{
 }>()
 
 const kunUniqueId = useKunUniqueId('kun-checkbox')
+
+// `indeterminate` is a DOM property, not an attribute — it can't be bound in
+// the template, so mirror the prop onto the element directly.
+const inputRef = ref<HTMLInputElement | null>(null)
+watchEffect(() => {
+  if (inputRef.value) inputRef.value.indeterminate = props.indeterminate
+})
 
 const updateValue = (event: Event) => {
   const checked = (event.target as HTMLInputElement).checked
@@ -51,49 +69,87 @@ const colorClasses: Record<KunUIColor, string> = {
     'border-danger-300 checked:bg-danger checked:border-danger hover:border-danger',
   info: 'border-info-300 checked:bg-info checked:border-info hover:border-info',
 }
+// Filled look for the indeterminate state (no :checked pseudo to lean on).
+const indeterminateColor: Record<KunUIColor, string> = {
+  default: 'bg-default border-default',
+  primary: 'bg-primary border-primary',
+  secondary: 'bg-secondary border-secondary',
+  success: 'bg-success border-success',
+  warning: 'bg-warning border-warning',
+  danger: 'bg-danger border-danger',
+  info: 'bg-info border-info',
+}
 </script>
 
 <template>
-  <div :class="cn('flex cursor-pointer items-center', size.gap, className)">
-    <div class="relative flex items-center">
-      <input
-        :id="kunUniqueId"
-        type="checkbox"
-        :name="name"
-        :value="value"
-        :checked="modelValue"
-        :disabled="disabled"
+  <div>
+    <div :class="cn('flex cursor-pointer items-center', size.gap, className)">
+      <div class="relative flex items-center">
+        <input
+          :id="kunUniqueId"
+          ref="inputRef"
+          type="checkbox"
+          :name="name"
+          :value="value"
+          :checked="modelValue"
+          :disabled="disabled"
+          :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
+          :class="
+            cn(
+              'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
+              size.box,
+              // A fixed % keeps the box a rounded square at every size — a token
+              // radius (now 12px) would make the small boxes look circular.
+              props.type === 'single' ? 'rounded-full' : 'rounded-[35%]',
+              indeterminate ? indeterminateColor[props.color] : colorClasses[props.color]
+            )
+          "
+          @change="updateValue"
+        />
+        <!-- Check glyph (checked, not indeterminate) -->
+        <div
+          v-show="!indeterminate"
+          class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-200 ease-kun-emphasized peer-checked:scale-100 peer-checked:opacity-100"
+        >
+          <KunIcon name="lucide:check" :class="size.check" />
+        </div>
+        <!-- Indeterminate dash -->
+        <div
+          v-show="indeterminate"
+          class="pointer-events-none absolute inset-0 flex items-center justify-center"
+        >
+          <span class="h-0.5 rounded-full bg-white" :class="dashWidth[props.size]" />
+        </div>
+      </div>
+      <slot />
+      <label
+        v-if="label"
+        :for="kunUniqueId"
         :class="
           cn(
-            'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
-            size.box,
-            // A fixed % keeps the box a rounded square at every size — a token
-            // radius (now 12px) would make the small boxes look circular.
-            props.type === 'single' ? 'rounded-full' : 'rounded-[35%]',
-            colorClasses[props.color]
+            'text-default-700 cursor-pointer select-none',
+            size.text,
+            disabled && 'cursor-not-allowed opacity-50'
           )
         "
-        @change="updateValue"
-      />
-      <div
-        class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-200 ease-kun-emphasized peer-checked:scale-100 peer-checked:opacity-100"
       >
-        <KunIcon name="lucide:check" :class="size.check" />
-      </div>
+        {{ label }}
+      </label>
     </div>
-    <slot />
-    <label
-      v-if="label"
-      :for="kunUniqueId"
-      :class="
-        cn(
-          'text-default-700 cursor-pointer select-none',
-          size.text,
-          disabled && 'cursor-not-allowed opacity-50'
-        )
-      "
+
+    <p
+      v-if="error"
+      :id="`${kunUniqueId}-desc`"
+      class="text-danger mt-1 text-sm"
     >
-      {{ label }}
-    </label>
+      {{ error }}
+    </p>
+    <p
+      v-else-if="description"
+      :id="`${kunUniqueId}-desc`"
+      class="text-default-500 mt-1 text-sm"
+    >
+      {{ description }}
+    </p>
   </div>
 </template>

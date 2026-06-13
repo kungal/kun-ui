@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<KunFileInputProps>(), {
   multiple: false,
   maxSize: undefined,
   hint: '',
+  description: '',
   error: '',
   disabled: false,
   triggerText: '选择文件',
@@ -35,6 +36,9 @@ const emit = defineEmits<{
   change: [picked: File[]]
   errorPick: [message: string]
 }>()
+
+// `description` is the canonical helper name; `hint` is the deprecated alias.
+const helper = computed(() => props.description || props.hint)
 
 const { pickFiles, files: pickedFiles } = useFilePicker({
   accept: props.accept || undefined,
@@ -92,7 +96,7 @@ const handlePick = () => {
         {{ displayName }}
       </span>
     </div>
-    <p v-if="hint && !error" class="text-default-400 text-xs">{{ hint }}</p>
+    <p v-if="helper && !error" class="text-default-400 text-xs">{{ helper }}</p>
     <p v-if="error" class="text-danger text-xs">{{ error }}</p>
   </div>
 </template>

@@ -1,0 +1,347 @@
+<script setup lang="ts">
+import { computed, nextTick, ref, watch } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  size as floatingSize,
+} from '@floating-ui/vue'
+import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
+import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
+import KunIcon from './Icon.vue'
+import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
+
+// A combobox: a text field with a suggestion list. v-model is the field text
+// (equals the picked option's label after a selection); @select carries the
+// full option so the parent can read `.value`; @search fires per keystroke for
+// remote/async sources (pair with `manualFilter`).
+defineOptions({ name: 'KunAutocomplete', inheritAttrs: false })
+
+const props = withDefaults(defineProps<KunAutocompleteProps>(), {
+  label: '',
+  placeholder: '',
+  error: '',
+  description: '',
+  isInvalid: false,
+  disabled: false,
+  size: 'md',
+  rounded: undefined,
+  darkBorder: true,
+  clearable: false,
+  allowCustomValue: true,
+  manualFilter: false,
+  noResultText: '无匹配项',
+  name: undefined,
+  ariaLabel: '',
+})
+
+const modelValue = defineModel<string>({ default: '' })
+
+const emit = defineEmits<{
+  select: [option: KunAutocompleteOption]
+  search: [query: string]
+}>()
+
+const rounded = useResolvedRounded(() => props.rounded)
+const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+const kunUniqueId = useKunUniqueId('kun-autocomplete')
+const listId = computed(() => `${kunUniqueId.value}-listbox`)
+
+const invalid = computed(() => !!props.error || props.isInvalid)
+
+const isOpen = ref(false)
+const activeIndex = ref(-1)
+// `dirty` = the user typed since the last selection/open, so we should filter.
+const dirty = ref(false)
+const inputRef = ref<HTMLInputElement | null>(null)
+const triggerRef = ref<HTMLElement | null>(null)
+const dropdownRef = ref<HTMLElement | null>(null)
+const listRef = ref<HTMLElement | null>(null)
+
+const { floatingStyles, placement } = useFloating(triggerRef, dropdownRef, {
+  placement: 'bottom-start',
+  open: isOpen,
+  whileElementsMounted: autoUpdate,
+  transform: false,
+  middleware: [
+    offset(4),
+    flip(),
+    shift({ padding: 8 }),
+    floatingSize({
+      apply({ rects, elements, availableHeight }) {
+        Object.assign(elements.floating.style, {
+          width: `${rects.reference.width}px`,
+          maxHeight: `${Math.min(280, availableHeight - 8)}px`,
+        })
+      },
+    }),
+  ],
+})
+const transformOrigin = useTransformOrigin(placement)
+
+const filtered = computed(() => {
+  if (props.manualFilter || !dirty.value || !modelValue.value.trim()) {
+    return props.options
+  }
+  const q = modelValue.value.trim().toLowerCase()
+  return props.options.filter((o) => o.label.toLowerCase().includes(q))
+})
+
+const activeId = computed(() =>
+  activeIndex.value >= 0 && filtered.value[activeIndex.value]
+    ? `${kunUniqueId.value}-opt-${activeIndex.value}`
+    : undefined
+)
+
+const firstEnabled = () => filtered.value.findIndex((o) => !o.disabled)
+
+const open = () => {
+  if (props.disabled || isOpen.value) return
+  isOpen.value = true
+  activeIndex.value = firstEnabled()
+}
+const close = () => {
+  isOpen.value = false
+}
+
+const scrollActiveIntoView = () => {
+  nextTick(() => {
+    listRef.value
+      ?.querySelector(`[data-index="${activeIndex.value}"]`)
+      ?.scrollIntoView({ block: 'nearest' })
+  })
+}
+
+const moveActive = (dir: 1 | -1) => {
+  const n = filtered.value.length
+  if (!n) return
+  let i = activeIndex.value
+  for (let step = 0; step < n; step++) {
+    i = (i + dir + n) % n
+    if (!filtered.value[i]!.disabled) {
+      activeIndex.value = i
+      break
+    }
+  }
+  scrollActiveIntoView()
+}
+
+const selectOption = (option: KunAutocompleteOption) => {
+  if (option.disabled) return
+  modelValue.value = option.label
+  dirty.value = false
+  emit('select', option)
+  close()
+  nextTick(() => inputRef.value?.focus())
+}
+
+const onInput = (e: Event) => {
+  modelValue.value = (e.target as HTMLInputElement).value
+  dirty.value = true
+  emit('search', modelValue.value)
+  open()
+  activeIndex.value = firstEnabled()
+}
+
+const onKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return
+  switch (e.key) {
+    case 'ArrowDown':
+      e.preventDefault()
+      if (!isOpen.value) open()
+      else moveActive(1)
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      if (isOpen.value) moveActive(-1)
+      break
+    case 'Enter':
+      if (isOpen.value && filtered.value[activeIndex.value]) {
+        e.preventDefault()
+        selectOption(filtered.value[activeIndex.value]!)
+      }
+      break
+    case 'Escape':
+      if (isOpen.value) {
+        e.preventDefault()
+        close()
+      }
+      break
+    case 'Tab':
+      close()
+      break
+  }
+}
+
+const onBlur = () => {
+  // Defer so a click on an option still registers before we validate.
+  setTimeout(() => {
+    if (
+      !props.allowCustomValue &&
+      modelValue.value &&
+      !props.options.some(
+        (o) => o.label.toLowerCase() === modelValue.value.toLowerCase()
+      )
+    ) {
+      modelValue.value = ''
+      emit('search', '')
+    }
+  }, 120)
+}
+
+const clear = () => {
+  modelValue.value = ''
+  dirty.value = true
+  emit('search', '')
+  nextTick(() => inputRef.value?.focus())
+  open()
+}
+
+onClickOutside(triggerRef, (event) => {
+  if (dropdownRef.value?.contains(event.target as Node)) return
+  close()
+})
+
+watch(filtered, () => {
+  if (!isOpen.value) return
+  if (
+    activeIndex.value < 0 ||
+    activeIndex.value >= filtered.value.length ||
+    filtered.value[activeIndex.value]?.disabled
+  ) {
+    activeIndex.value = firstEnabled()
+  }
+})
+
+defineExpose({
+  focus: () => inputRef.value?.focus(),
+  blur: () => inputRef.value?.blur(),
+})
+</script>
+
+<template>
+  <div :class="cn('relative w-full')">
+    <label
+      v-if="label"
+      :for="kunUniqueId"
+      class="text-default-700 mb-1 block text-sm font-medium"
+    >
+      {{ label }}
+    </label>
+
+    <div ref="triggerRef" class="relative">
+      <input
+        :id="kunUniqueId"
+        ref="inputRef"
+        v-bind="$attrs"
+        :value="modelValue"
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        :aria-controls="listId"
+        :aria-expanded="isOpen"
+        :aria-activedescendant="isOpen ? activeId : undefined"
+        :aria-label="ariaLabel || (label ? undefined : 'autocomplete')"
+        :aria-invalid="invalid || undefined"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        autocomplete="off"
+        :class="
+          cn(
+            'border-default/20 focus:border-primary focus:ring-primary block w-full border transition focus:ring-1 focus:outline-none',
+            roundedClass,
+            kunControlSizeClasses[size],
+            clearable && modelValue ? 'pr-9' : '',
+            darkBorder && 'dark:border-default-200',
+            invalid && 'border-danger-300 focus:border-danger focus:ring-danger',
+            disabled && 'bg-default-100 cursor-not-allowed'
+          )
+        "
+        @input="onInput"
+        @focus="open"
+        @keydown="onKeydown"
+        @blur="onBlur"
+      />
+      <button
+        v-if="clearable && modelValue && !disabled"
+        type="button"
+        tabindex="-1"
+        class="text-default-400 hover:text-default-600 absolute inset-y-0 right-0 flex items-center pr-3"
+        aria-label="清除"
+        @click="clear"
+      >
+        <KunIcon name="lucide:circle-x" class="size-4" />
+      </button>
+    </div>
+
+    <input v-if="name" type="hidden" :name="name" :value="modelValue" />
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-kun-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition duration-150 ease-kun-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+      >
+        <div
+          v-if="isOpen && (filtered.length || dirty)"
+          ref="dropdownRef"
+          :style="[floatingStyles, { transformOrigin }]"
+          :class="
+            cn(
+              'bg-content1 border-default-200 z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
+              roundedClass
+            )
+          "
+        >
+          <ul
+            ref="listRef"
+            :id="listId"
+            class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm"
+            role="listbox"
+          >
+            <li
+              v-for="(option, index) in filtered"
+              :id="`${kunUniqueId}-opt-${index}`"
+              :key="option.value"
+              :data-index="index"
+              class="text-foreground relative flex items-center rounded-kun-md px-3 py-2 select-none"
+              :class="[
+                option.disabled
+                  ? 'text-default-300 cursor-not-allowed'
+                  : 'cursor-pointer',
+                index === activeIndex && !option.disabled ? 'bg-default-100' : '',
+              ]"
+              role="option"
+              :aria-selected="index === activeIndex"
+              :aria-disabled="option.disabled || undefined"
+              @click="selectOption(option)"
+              @mousemove="!option.disabled && (activeIndex = index)"
+            >
+              <span class="block min-w-0 flex-1 truncate">{{ option.label }}</span>
+            </li>
+
+            <li
+              v-if="!filtered.length"
+              class="text-default-400 px-3 py-6 text-center text-sm"
+            >
+              {{ noResultText }}
+            </li>
+          </ul>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="description" class="text-default-500 mt-1 text-sm">
+      {{ description }}
+    </p>
+  </div>
+</template>

@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
   label: '',
   name: '',
   hint: '',
+  description: '',
   error: '',
   maxHeight: '',
   disabled: false,
@@ -31,6 +32,9 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+
+// `description` is the canonical helper name; `hint` is the deprecated alias.
+const helper = computed(() => props.description || props.hint)
 
 const modelValue = defineModel<string>({ default: '' })
 
@@ -152,6 +156,6 @@ defineExpose({
     </div>
 
     <div v-if="error" class="text-danger-600 mt-1 text-sm">{{ error }}</div>
-    <div v-else-if="hint" class="text-default-500 mt-1 text-sm">{{ hint }}</div>
+    <div v-else-if="helper" class="text-default-500 mt-1 text-sm">{{ helper }}</div>
   </div>
 </template>

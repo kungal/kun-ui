@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<KunTagInputProps>(), {
   label: '',
   placeholder: '',
   helperText: '',
+  description: '',
   error: '',
   maxTags: Number.POSITIVE_INFINITY,
   maxTagLength: 100,
@@ -42,6 +43,9 @@ const props = withDefaults(defineProps<KunTagInputProps>(), {
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+
+// `description` is the canonical helper name; `helperText` is the deprecated alias.
+const helper = computed(() => props.description || props.helperText)
 
 const tags = defineModel<string[]>({ default: () => [] })
 
@@ -362,7 +366,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
         :placeholder="tags.length === 0 ? placeholder : ''"
         :disabled="disabled"
         :readonly="isAtMax"
-        :aria-describedby="error || helperText ? `${kunUniqueId}-msg` : undefined"
+        :aria-describedby="error || helper ? `${kunUniqueId}-msg` : undefined"
         class="placeholder-default-400 min-w-[80px] flex-1 bg-transparent outline-none disabled:cursor-not-allowed read-only:cursor-not-allowed"
         @keydown="onKeydown"
         @compositionstart="onCompositionStart"
@@ -383,11 +387,11 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
       {{ error }}
     </p>
     <p
-      v-else-if="helperText"
+      v-else-if="helper"
       :id="`${kunUniqueId}-msg`"
       class="text-default-500 mt-1 text-sm"
     >
-      {{ helperText }}
+      {{ helper }}
     </p>
   </div>
 </template>

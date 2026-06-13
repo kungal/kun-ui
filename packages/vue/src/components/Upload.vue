@@ -18,12 +18,16 @@ defineOptions({ name: 'KunUpload' })
 const props = withDefaults(defineProps<KunUploadProps>(), {
   initialImage: '',
   hint: '',
+  description: '',
   className: '',
   rounded: undefined,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+
+// `description` is the canonical helper name; `hint` is the deprecated alias.
+const helper = computed(() => props.description || props.hint)
 
 const emits = defineEmits<{
   setImage: [img: Blob]
@@ -117,7 +121,7 @@ const handleApplyCrop = () => {
         class="absolute inset-0 flex flex-col items-center justify-center"
       >
         <KunIcon name="lucide:plus" class="text-default-500 text-3xl" />
-        <span v-if="hint" class="text-default-500 mt-2 text-sm">{{ hint }}</span>
+        <span v-if="helper" class="text-default-500 mt-2 text-sm">{{ helper }}</span>
       </div>
 
       <img

@@ -271,8 +271,17 @@ export interface KunInputProps {
   color?: KunUIColor
   className?: string
   placeholder?: string
+  /** @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
+  // Helper text below the field (hidden when `error` is set). Canonical name.
+  description?: string
   error?: string
+  // Mark the field invalid (danger ring) without showing an error message.
+  isInvalid?: boolean
+  // Show an X button to clear the value when non-empty.
+  isClearable?: boolean
+  // For type="password": render an eye toggle to reveal/hide the value.
+  revealPassword?: boolean
   size?: KunUISize
   required?: boolean
   disabled?: boolean
@@ -286,7 +295,10 @@ export interface KunTextareaProps {
   placeholder?: string
   label?: string
   name?: string
+  /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
+  // Helper text below the field (hidden when `error` is set). Canonical name.
+  description?: string
   error?: string
   maxHeight?: string
   disabled?: boolean
@@ -304,6 +316,85 @@ export interface KunTextareaProps {
   size?: KunUISize
 }
 
+// ── NumberInput ────────────────────────────────────────────────────────
+export interface KunNumberInputProps {
+  min?: number
+  max?: number
+  step?: number
+  size?: KunUISize
+  color?: KunUIColor
+  label?: string
+  placeholder?: string
+  error?: string
+  // Helper text below the field (hidden when `error` is set).
+  description?: string
+  isInvalid?: boolean
+  disabled?: boolean
+  readonly?: boolean
+  required?: boolean
+  // Show the −/+ stepper buttons (default true).
+  controls?: boolean
+  // Round/display to this many decimal places.
+  precision?: number
+  darkBorder?: boolean
+  rounded?: KunUIRounded
+  // Native form field name (emits a hidden input mirroring the value).
+  name?: string
+  ariaLabel?: string
+}
+
+// ── PinInput (OTP) ─────────────────────────────────────────────────────
+export interface KunPinInputProps {
+  // Number of cells (code length).
+  length?: number
+  // numeric → digits only + inputmode numeric; text → any single char.
+  type?: 'numeric' | 'text'
+  // Render each filled cell as a • (one-time codes / passcodes).
+  mask?: boolean
+  size?: KunUISize
+  color?: KunUIColor
+  disabled?: boolean
+  // Mark every cell invalid (danger ring).
+  isInvalid?: boolean
+  // Focus the first cell on mount.
+  autofocus?: boolean
+  placeholder?: string
+  rounded?: KunUIRounded
+  // Native form field name (emits a hidden input mirroring the joined value).
+  name?: string
+  ariaLabel?: string
+}
+
+// ── Autocomplete (combobox) ────────────────────────────────────────────
+export interface KunAutocompleteOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
+export interface KunAutocompleteProps {
+  options: readonly KunAutocompleteOption[]
+  label?: string
+  placeholder?: string
+  error?: string
+  // Helper text below the field (hidden when `error` is set).
+  description?: string
+  isInvalid?: boolean
+  disabled?: boolean
+  size?: KunUISize
+  rounded?: KunUIRounded
+  darkBorder?: boolean
+  clearable?: boolean
+  // Accept a value the user typed that is not in `options` (free text).
+  allowCustomValue?: boolean
+  // Skip built-in label filtering — you control `options` from `@search`
+  // (remote/async suggestions). Default false (client-side filter).
+  manualFilter?: boolean
+  noResultText?: string
+  name?: string
+  ariaLabel?: string
+}
+
 // ── Switch ─────────────────────────────────────────────────────────────
 export interface KunSwitchProps {
   label?: string
@@ -311,6 +402,10 @@ export interface KunSwitchProps {
   className?: string
   labelClassName?: string
   size?: KunUISize
+  // Error message (red text below). Takes precedence over description.
+  error?: string
+  // Helper text below the switch (hidden when `error` is set).
+  description?: string
 }
 
 // ── CheckBox ───────────────────────────────────────────────────────────
@@ -322,16 +417,46 @@ export interface KunCheckBoxProps {
   name?: string
   value?: string | number | boolean
   disabled?: boolean
+  // Tri-state "some but not all" (e.g. a select-all parent). Visual dash that
+  // overrides the check; the underlying input stays unchecked until toggled.
+  indeterminate?: boolean
+  // Error message (red text below + danger box). Takes precedence over description.
+  error?: string
+  // Helper text below the control (hidden when `error` is set).
+  description?: string
   className?: string
   size?: KunUISize
 }
 
 // ── Slider ─────────────────────────────────────────────────────────────
+export interface KunSliderMark {
+  value: number
+  label?: string
+}
+
 export interface KunSliderProps {
   min?: number
   max?: number
   step?: number
   size?: KunUISize
+  color?: KunUIColor
+  disabled?: boolean
+  // Visible field label (rendered above the track, associates the slider).
+  label?: string
+  // Accessible name when there is no visible label (role="slider" needs a name).
+  ariaLabel?: string
+  // Error message (red text below + danger fill). Takes precedence over description.
+  error?: string
+  // Helper text below the track (hidden when `error` is set).
+  description?: string
+  // Tick marks under the track. Pass numbers (or {value,label}) within [min,max].
+  marks?: (number | KunSliderMark)[]
+  // Show a value bubble above the thumb while hovering / dragging / focused.
+  showTooltip?: boolean
+  // Always render the current value next to the label.
+  showValue?: boolean
+  // Format the value shown in the tooltip / value readout.
+  formatValue?: (value: number) => string
 }
 
 // ── RadioGroup ─────────────────────────────────────────────────────────
@@ -366,6 +491,7 @@ export type KunSelectValue = string | number
 export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
   value: T
   label: string
+  disabled?: boolean
 }
 
 export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
@@ -373,12 +499,27 @@ export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
   label?: string
   placeholder?: string
   error?: string
+  // Helper text under the field (hidden when `error` is set).
+  description?: string
   disabled?: boolean
   darkBorder?: boolean
   ariaLabel?: string
   className?: string
   rounded?: KunUIRounded
   size?: KunUISize
+  // Multi-select: v-model becomes an array; the trigger shows removable chips
+  // and the list stays open while toggling.
+  multiple?: boolean
+  // Render a filter input at the top of the list (client-side label match).
+  searchable?: boolean
+  // Show an X to reset the selection (single) — chips already remove per-item.
+  clearable?: boolean
+  searchPlaceholder?: string
+  // Shown when the filter matches nothing.
+  noResultText?: string
+  // Native form field name — emits hidden input(s) so the value is collected
+  // by the surrounding <form> / FormData.
+  name?: string
 }
 
 // ── ContextMenu / Dropdown (shared item model) ─────────────────────────
@@ -536,7 +677,10 @@ export interface KunFileInputProps {
   accept?: string
   multiple?: boolean
   maxSize?: number
+  /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
+  // Helper text below the trigger (hidden when `error` is set). Canonical name.
+  description?: string
   error?: string
   disabled?: boolean
   triggerText?: string
@@ -564,7 +708,10 @@ export type KunTagInputValidator = (tag: string, all: string[]) => true | string
 export interface KunTagInputProps {
   label?: string
   placeholder?: string
+  /** @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
+  // Helper text below the field (hidden when `error` is set). Canonical name.
+  description?: string
   error?: string
   maxTags?: number
   maxTagLength?: number
@@ -593,7 +740,10 @@ export interface KunUploadProps {
   size: number
   aspect: number
   initialImage?: string
+  /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
+  // Helper text below the dropzone. Canonical name.
+  description?: string
   className?: string
   rounded?: KunUIRounded
 }

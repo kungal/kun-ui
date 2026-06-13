@@ -12,6 +12,8 @@ const props = withDefaults(defineProps<KunSwitchProps>(), {
   disabled: false,
   labelClassName: '',
   size: 'md',
+  error: '',
+  description: '',
 })
 
 const modelValue = defineModel<boolean>({ required: true })
@@ -38,6 +40,7 @@ const size = computed(() => switchSizes[props.size])
 </script>
 
 <template>
+  <div>
   <label
     :class="
       cn(
@@ -53,6 +56,7 @@ const size = computed(() => switchSizes[props.size])
       class="peer sr-only"
       :checked="modelValue"
       :disabled="disabled"
+      :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
       @change="(event) => (modelValue = (event.target as HTMLInputElement).checked)"
     />
 
@@ -92,4 +96,16 @@ const size = computed(() => switchSizes[props.size])
       {{ label }}
     </span>
   </label>
+
+    <p v-if="error" :id="`${kunUniqueId}-desc`" class="text-danger mt-1 text-sm">
+      {{ error }}
+    </p>
+    <p
+      v-else-if="description"
+      :id="`${kunUniqueId}-desc`"
+      class="text-default-500 mt-1 text-sm"
+    >
+      {{ description }}
+    </p>
+  </div>
 </template>

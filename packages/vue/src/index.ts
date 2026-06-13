@@ -1,5 +1,6 @@
 import type { App, Plugin } from 'vue'
 import KunAlertProvider from './components/AlertProvider.vue'
+import KunAutocomplete from './components/Autocomplete.vue'
 import KunAvatar from './components/Avatar.vue'
 import KunAvatarGroup from './components/AvatarGroup.vue'
 import KunBadge from './components/Badge.vue'
@@ -34,7 +35,9 @@ import KunMarkdown from './components/Markdown.vue'
 import KunMessageProvider from './components/MessageProvider.vue'
 import KunModal from './components/Modal.vue'
 import KunNull from './components/Null.vue'
+import KunNumberInput from './components/NumberInput.vue'
 import KunPagination from './components/Pagination.vue'
+import KunPinInput from './components/PinInput.vue'
 import KunPopover from './components/Popover.vue'
 import KunProgress from './components/Progress.vue'
 import KunRadioGroup from './components/RadioGroup.vue'
@@ -58,6 +61,7 @@ import KunUserChip from './components/UserChip.vue'
 // globally with the KunUI plugin (below).
 export {
   KunAlertProvider,
+  KunAutocomplete,
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
@@ -92,7 +96,9 @@ export {
   KunMessageProvider,
   KunModal,
   KunNull,
+  KunNumberInput,
   KunPagination,
+  KunPinInput,
   KunPopover,
   KunProgress,
   KunRadioGroup,
@@ -187,10 +193,15 @@ export type {
   KunInfoProps,
   KunLoadingProps,
   KunInputProps,
+  KunNumberInputProps,
+  KunPinInputProps,
+  KunAutocompleteProps,
+  KunAutocompleteOption,
   KunTextareaProps,
   KunSwitchProps,
   KunCheckBoxProps,
   KunSliderProps,
+  KunSliderMark,
   KunRadioGroupProps,
   KunRadioOption,
   KunRadioValue,
@@ -236,6 +247,7 @@ export type { KunUser } from '@kungal/ui-core'
 
 const components = {
   KunAlertProvider,
+  KunAutocomplete,
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
@@ -270,7 +282,9 @@ const components = {
   KunMessageProvider,
   KunModal,
   KunNull,
+  KunNumberInput,
   KunPagination,
+  KunPinInput,
   KunPopover,
   KunProgress,
   KunRadioGroup,
