@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  type Placement,
-} from '@floating-ui/vue'
+import { type Placement } from '@floating-ui/vue'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunTooltipProps } from './types'
 
@@ -26,6 +20,7 @@ const props = withDefaults(defineProps<KunTooltipProps>(), {
   delayHide: 0,
   hideOnMobile: true,
   rounded: undefined,
+  showArrow: false,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -39,14 +34,16 @@ const tooltipId = useKunUniqueId('kun-tooltip')
 let showTimer: ReturnType<typeof setTimeout> | null = null
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 
-const placement = computed<Placement>(() => props.position)
-
-const { floatingStyles } = useFloating(triggerRef, tooltipRef, {
-  placement,
-  open: isVisible,
-  whileElementsMounted: autoUpdate,
-  middleware: [offset(8), flip(), shift({ padding: 8 })],
-})
+const { floatingStyles, arrowRef, arrowStyles } = useKunFloating(
+  triggerRef,
+  tooltipRef,
+  {
+    placement: () => props.position as Placement,
+    open: isVisible,
+    offset: 8,
+    arrow: props.showArrow,
+  }
+)
 
 const clearTimers = () => {
   if (showTimer) {
@@ -115,6 +112,12 @@ const hide = () => {
           :style="floatingStyles"
         >
           <slot name="content">{{ text }}</slot>
+          <div
+            v-if="showArrow"
+            ref="arrowRef"
+            class="bg-content1 border-default-200 absolute size-2 rotate-45 border"
+            :style="arrowStyles"
+          />
         </div>
       </Transition>
     </Teleport>

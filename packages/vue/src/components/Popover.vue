@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { useEventListener, onClickOutside } from '@vueuse/core'
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  type Placement,
-} from '@floating-ui/vue'
+import { type Placement } from '@floating-ui/vue'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
-import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunFloating } from '../composables/useKunFloating'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunPopoverProps } from './types'
 
-// Nuxt-decoupled Popover. `useId` is Vue 3.5 native (was a Nuxt auto-import
-// in the original); everything else is explicit imports.
+// Nuxt-decoupled Popover. A non-modal dialog anchored to its trigger: it moves
+// focus into the panel on open and returns it to the trigger on close (so it
+// isn't a "dialog" in name only). The trigger slot keeps its OWN semantics —
+// the wrapper no longer forces role="button"/aria-label onto it, so passing a
+// <KunButton> no longer nests a button inside a button.
 defineOptions({ name: 'KunPopover' })
 
 const props = withDefaults(defineProps<KunPopoverProps>(), {
@@ -23,6 +20,7 @@ const props = withDefaults(defineProps<KunPopoverProps>(), {
   innerClass: '',
   autoPosition: false,
   rounded: undefined,
+  showArrow: false,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -31,62 +29,74 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const isOpen = ref(false)
 const triggerRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
-const popoverId = `kun-popover-${useId()}`
+const popoverId = useKunUniqueId('kun-popover')
 
-const { floatingStyles, placement } = useFloating(triggerRef, popoverRef, {
-  placement: props.position as Placement,
-  open: isOpen,
-  // Re-run computation on scroll / resize / element-size changes. Only
-  // attached while open to avoid leaking listeners.
-  whileElementsMounted: autoUpdate,
-  // Position via top/left instead of transform so Vue Transition's
-  // scale-95/scale-100 enter/leave classes don't fight floating-ui's
-  // translate3d on the same element.
-  transform: false,
-  middleware: [
-    offset(8),
-    // autoPosition=false → respect the literal `position` prop;
-    // autoPosition=true → flip + shift into viewport when constrained.
-    ...(props.autoPosition ? [flip(), shift({ padding: 8 })] : []),
-  ],
-})
-// Grow the popover out of its trigger edge (post-flip aware).
-const transformOrigin = useTransformOrigin(placement)
+const { floatingStyles, transformOrigin, arrowRef, arrowStyles } = useKunFloating(
+  triggerRef,
+  popoverRef,
+  {
+    placement: () => props.position as Placement,
+    open: isOpen,
+    offset: 8,
+    constrain: props.autoPosition,
+    arrow: props.showArrow,
+  }
+)
 
-const toggle = () => {
-  isOpen.value = !isOpen.value
+// Remember what had focus so we can restore it when the popover closes.
+let lastFocused: HTMLElement | null = null
+
+const focusPanel = () => {
+  const panel = popoverRef.value
+  if (!panel) return
+  const focusable = panel.querySelector<HTMLElement>(
+    'a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])'
+  )
+  ;(focusable ?? panel).focus({ preventScroll: true })
 }
 
-// Close on outside click — narrowed to the trigger / popover pair.
+const open = () => {
+  if (isOpen.value) return
+  lastFocused = (document.activeElement as HTMLElement) ?? null
+  isOpen.value = true
+  nextTick(focusPanel)
+}
+
+const close = (returnFocus = true) => {
+  if (!isOpen.value) return
+  isOpen.value = false
+  if (returnFocus) nextTick(() => lastFocused?.focus({ preventScroll: true }))
+}
+
+const toggle = () => (isOpen.value ? close() : open())
+
 onClickOutside(triggerRef, (event) => {
   if (popoverRef.value?.contains(event.target as Node)) return
-  isOpen.value = false
+  close(false)
 })
 
 useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && isOpen.value) isOpen.value = false
+  if (e.key === 'Escape' && isOpen.value) close()
 })
 
-// Imperative API for parents who need to close from outside.
 defineExpose({
-  open: () => (isOpen.value = true),
-  close: () => (isOpen.value = false),
+  open,
+  close: () => close(),
   toggle,
 })
 </script>
 
 <template>
   <div class="relative inline-block">
+    <!-- The wrapper opens the popover on click but does NOT claim button
+         semantics — the slotted trigger keeps its own role/label. -->
     <div
       ref="triggerRef"
-      @click="toggle"
-      @keydown.enter="toggle"
-      @keydown.space.prevent="toggle"
-      tabindex="0"
-      role="button"
-      aria-label="popover-trigger"
+      class="inline-block"
+      aria-haspopup="dialog"
       :aria-expanded="isOpen"
-      :aria-controls="popoverId"
+      :aria-controls="isOpen ? popoverId : undefined"
+      @click="toggle"
     >
       <slot name="trigger" />
     </div>
@@ -105,19 +115,25 @@ defineExpose({
           ref="popoverRef"
           :id="popoverId"
           role="dialog"
+          tabindex="-1"
           :aria-label="ariaLabel || 'popover'"
-          :aria-hidden="!isOpen"
           :class="
             cn(
-              'bg-content1 border-default-200 z-kun-popover border shadow-lg',
+              'bg-content1 border-default-200 z-kun-popover border shadow-lg focus:outline-none',
               roundedClass,
               innerClass
             )
           "
           :style="[floatingStyles, { transformOrigin }]"
-          @click.stop
+          @keydown.escape="close()"
         >
           <slot />
+          <div
+            v-if="showArrow"
+            ref="arrowRef"
+            class="bg-content1 border-default-200 size-2 rotate-45 border"
+            :style="arrowStyles"
+          />
         </div>
       </Transition>
     </Teleport>

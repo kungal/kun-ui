@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId } from 'vue'
+import { nextTick, ref, useId } from 'vue'
 import { onClickOutside, useEventListener } from '@vueuse/core'
-import { useFloating, autoUpdate, offset, flip, shift, type Placement } from '@floating-ui/vue'
+import { type Placement } from '@floating-ui/vue'
 import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
-import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import type { KunDropdownItem } from './types'
 
@@ -46,15 +46,12 @@ const triggerRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
 const menuId = `kun-dropdown-${useId()}`
 
-const { floatingStyles, placement } = useFloating(triggerRef, menuRef, {
-  placement: computed(() => props.position),
-  open: isOpen,
-  whileElementsMounted: autoUpdate,
-  transform: false,
-  middleware: [offset(6), flip(), shift({ padding: 8 })],
-})
 // Grow the menu out of its trigger corner (post-flip aware).
-const transformOrigin = useTransformOrigin(placement)
+const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, menuRef, {
+  placement: () => props.position as Placement,
+  open: isOpen,
+  offset: 6,
+})
 
 const enabledIndices = () =>
   props.items.reduce<number[]>((acc, item, i) => {
@@ -111,6 +108,20 @@ const move = (delta: number) => {
   const pos = enabled.indexOf(activeIndex.value)
   const nextPos = (pos + delta + enabled.length) % enabled.length
   focusItem(enabled[nextPos === -1 ? enabled.length - 1 : nextPos]!)
+}
+
+// Type-ahead: typing letters jumps to the next item whose label starts with
+// the typed run (cleared after a short pause). WAI-ARIA menu recommendation.
+let typeBuffer = ''
+let typeTimer: ReturnType<typeof setTimeout> | null = null
+const typeahead = (char: string) => {
+  typeBuffer += char.toLowerCase()
+  if (typeTimer) clearTimeout(typeTimer)
+  typeTimer = setTimeout(() => (typeBuffer = ''), 600)
+  const i = props.items.findIndex(
+    (it) => !it.disabled && it.label.toLowerCase().startsWith(typeBuffer)
+  )
+  if (i >= 0) focusItem(i)
 }
 
 const selectItem = (item: KunDropdownItem) => {
@@ -188,6 +199,11 @@ const onMenuKeydown = (e: KeyboardEvent) => {
       e.preventDefault()
       close(true)
       break
+    default:
+      if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        typeahead(e.key)
+      }
   }
 }
 

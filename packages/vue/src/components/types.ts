@@ -37,6 +37,8 @@ export interface KunCardProps {
   darkBorder?: boolean
 }
 
+export type KunModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+
 export interface KunModalProps {
   className?: string
   innerClassName?: string
@@ -44,6 +46,13 @@ export interface KunModalProps {
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded
+  // Max width of the panel (full = nearly the whole viewport). Default 'md'.
+  size?: KunModalSize
+  // inside (default): the panel body scrolls, capped at 90vh.
+  // outside: the whole overlay scrolls — for panels taller than the viewport.
+  scrollBehavior?: 'inside' | 'outside'
+  // Vertical alignment of the panel. Default 'center'.
+  placement?: 'center' | 'top'
   // Accessible name for the dialog (role="dialog" needs a name; the title is in
   // the slot so it can't be auto-derived).
   ariaLabel?: string
@@ -124,6 +133,8 @@ export interface KunTooltipProps {
   delayHide?: number
   hideOnMobile?: boolean
   rounded?: KunUIRounded
+  // Render a caret pointing at the trigger.
+  showArrow?: boolean
 }
 
 // ── Popover ────────────────────────────────────────────────────────────
@@ -140,6 +151,8 @@ export interface KunPopoverProps {
   rounded?: KunUIRounded
   // Accessible name for the dialog (role="dialog" needs a name).
   ariaLabel?: string
+  // Render a caret pointing at the trigger.
+  showArrow?: boolean
 }
 
 // ── Image ──────────────────────────────────────────────────────────────

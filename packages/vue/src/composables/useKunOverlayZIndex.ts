@@ -15,7 +15,7 @@
 // (KunLightbox renders a native <dialog> in the browser's top layer, which the
 // browser already stacks by open order — so it needs none of this.)
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // Anchor the stack at the `--z-kun-modal` token so a consumer's
 // `:root { --z-kun-modal: … }` override still applies; fall back to the
@@ -30,27 +30,42 @@ const readBase = (): number => {
   return Number.isFinite(parsed) ? parsed : FALLBACK_BASE
 }
 
-let openCount = 0 // overlays currently holding a claim
-let top = 0 // highest offset issued in the current stack session
+// A reactive, open-order stack of claim ids (module-scoped — one shared stack
+// for the whole page). The last entry is the topmost overlay. `top` is a
+// separate monotonic counter for the z-index value so values never collide
+// even as lower overlays close mid-stack; it resets when the stack empties.
+const stack = ref<number[]>([])
+let nextId = 0
+let top = 0
 
 // Per-instance: claim() on open, release() on close/unmount. Callers guard the
 // calls (see Modal/Drawer) so they stay symmetric across modelValue toggles.
+// `isTopmost` lets an overlay gate Escape/backdrop so a stacked Esc only
+// dismisses the overlay on top, not every open overlay at once.
 export const useKunOverlayZIndex = () => {
   const zIndex = ref<number>()
+  const myId = ref<number | null>(null)
 
   const claim = () => {
-    openCount++
+    const id = ++nextId
+    myId.value = id
+    stack.value.push(id)
     zIndex.value = readBase() + ++top
   }
 
   const release = () => {
-    openCount--
-    if (openCount <= 0) {
-      // stack empty → reset so the numbers don't grow unbounded
-      openCount = 0
-      top = 0
-    }
+    if (myId.value === null) return
+    const i = stack.value.indexOf(myId.value)
+    if (i >= 0) stack.value.splice(i, 1)
+    myId.value = null
+    // stack empty → reset so the z-index offsets don't grow unbounded
+    if (stack.value.length === 0) top = 0
   }
 
-  return { zIndex, claim, release }
+  const isTopmost = computed(
+    () =>
+      myId.value !== null && stack.value[stack.value.length - 1] === myId.value
+  )
+
+  return { zIndex, claim, release, isTopmost }
 }

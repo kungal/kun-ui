@@ -1,10 +1,10 @@
 <script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue">
 import { computed, nextTick, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/vue'
+import { size } from '@floating-ui/vue'
 import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
-import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
@@ -50,17 +50,11 @@ const dropdownRef = ref<HTMLElement | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 
-const { floatingStyles, placement } = useFloating(buttonRef, dropdownRef, {
+const { floatingStyles, transformOrigin } = useKunFloating(buttonRef, dropdownRef, {
   placement: 'bottom-start',
   open: isOpen,
-  whileElementsMounted: autoUpdate,
-  // top/left positioning so the Transition's transform classes don't fight
-  // floating-ui's translate3d.
-  transform: false,
+  offset: 4,
   middleware: [
-    offset(4),
-    flip(),
-    shift({ padding: 8 }),
     // Match dropdown width to the trigger; cap height to viewport so the
     // list scrolls instead of overflowing.
     size({
@@ -73,7 +67,6 @@ const { floatingStyles, placement } = useFloating(buttonRef, dropdownRef, {
     }),
   ],
 })
-const transformOrigin = useTransformOrigin(placement)
 
 // ── selection model ──────────────────────────────────────────────────────
 const selected = computed<T[]>(() => {

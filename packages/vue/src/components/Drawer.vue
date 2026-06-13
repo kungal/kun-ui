@@ -6,6 +6,7 @@ import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
+import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -115,7 +116,7 @@ const applyLock = (shouldLock: boolean) => {
 // Claim a fresh z-index on open so the most-recently-opened overlay always
 // wins the stack, regardless of template/DOM order (see useKunOverlayZIndex).
 // `claimed` keeps claim/release symmetric across modelValue toggles.
-const { zIndex, claim, release } = useKunOverlayZIndex()
+const { zIndex, claim, release, isTopmost } = useKunOverlayZIndex()
 let claimed = false
 const applyZIndex = (shouldClaim: boolean) => {
   if (shouldClaim && !claimed) {
@@ -124,6 +125,19 @@ const applyZIndex = (shouldClaim: boolean) => {
   } else if (!shouldClaim && claimed) {
     release()
     claimed = false
+  }
+}
+
+// Mark the page background `inert` while open (stronger than aria-modal alone).
+const { activate: inertOn, deactivate: inertOff } = useKunBackgroundInert()
+let inerted = false
+const applyInert = (shouldInert: boolean) => {
+  if (shouldInert && !inerted) {
+    inertOn()
+    inerted = true
+  } else if (!shouldInert && inerted) {
+    inertOff()
+    inerted = false
   }
 }
 
@@ -149,7 +163,8 @@ const handleCloseButton = () => {
 }
 
 useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && modelValue.value) handleClose()
+  // Only the topmost overlay reacts to Escape (see useKunOverlayZIndex).
+  if (e.key === 'Escape' && modelValue.value && isTopmost.value) handleClose()
 })
 
 watch(modelValue, async (v) => {
@@ -158,7 +173,9 @@ watch(modelValue, async (v) => {
   if (v) {
     await nextTick()
     activate()
+    applyInert(true)
   } else {
+    applyInert(false)
     deactivate()
   }
 })
@@ -169,12 +186,14 @@ onMounted(async () => {
     applyZIndex(true)
     await nextTick()
     activate()
+    applyInert(true)
   }
 })
 
 onUnmounted(() => {
   applyLock(false)
   applyZIndex(false)
+  applyInert(false)
   deactivate()
 })
 </script>
@@ -185,6 +204,7 @@ onUnmounted(() => {
       <div
         v-if="modelValue"
         ref="trapEl"
+        data-kun-overlay
         :class="cn('z-kun-modal fixed inset-0', className)"
         :style="{ zIndex }"
         role="dialog"

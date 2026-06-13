@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  size as floatingSize,
-} from '@floating-ui/vue'
+import { size as floatingSize } from '@floating-ui/vue'
 import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
-import { useTransformOrigin } from '../composables/useTransformOrigin'
+import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
@@ -63,15 +56,11 @@ const triggerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 const listRef = ref<HTMLElement | null>(null)
 
-const { floatingStyles, placement } = useFloating(triggerRef, dropdownRef, {
+const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, dropdownRef, {
   placement: 'bottom-start',
   open: isOpen,
-  whileElementsMounted: autoUpdate,
-  transform: false,
+  offset: 4,
   middleware: [
-    offset(4),
-    flip(),
-    shift({ padding: 8 }),
     floatingSize({
       apply({ rects, elements, availableHeight }) {
         Object.assign(elements.floating.style, {
@@ -82,7 +71,6 @@ const { floatingStyles, placement } = useFloating(triggerRef, dropdownRef, {
     }),
   ],
 })
-const transformOrigin = useTransformOrigin(placement)
 
 const filtered = computed(() => {
   if (props.manualFilter || !dirty.value || !modelValue.value.trim()) {

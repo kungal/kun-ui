@@ -140,6 +140,14 @@ export { useBodyScrollLock } from './composables/useBodyScrollLock'
 // top (Modal/Drawer use it); exported so apps can stack their own overlays on
 // the same z-kun-modal layer.
 export { useKunOverlayZIndex } from './composables/useKunOverlayZIndex'
+// Shared floating-ui setup (offset/flip/shift + transform-origin + optional
+// arrow) used by every KunUI overlay; exported so apps can build their own.
+export {
+  useKunFloating,
+  type UseKunFloatingOptions,
+} from './composables/useKunFloating'
+// Marks the page background `inert` while a modal overlay is open (refcounted).
+export { useKunBackgroundInert } from './composables/useKunBackgroundInert'
 export {
   useFilePicker,
   type KunFilePickerOptions,
@@ -174,6 +182,7 @@ export type {
   KunButtonProps,
   KunCardProps,
   KunModalProps,
+  KunModalSize,
   KunTabProps,
   KunTabItem,
   KunTabVariant,

@@ -6,9 +6,10 @@ import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
+import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
-import type { KunModalProps } from './types'
+import type { KunModalProps, KunModalSize } from './types'
 
 // Nuxt-decoupled Modal. Same behaviour as the Nuxt original — Teleport to
 // body, focus trap, refcounted body scroll-lock, Escape-to-close — but every
@@ -23,12 +24,33 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
+  size: 'md',
+  scrollBehavior: 'inside',
+  placement: 'center',
 })
 
 // Uniform corner radius: defers to the global config.rounded (default 'md')
 // like every other KunUI surface — set config.rounded once to restyle them all.
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+
+// Max width of the panel (content-driven up to the cap; `full` ≈ whole screen).
+const sizeClassMap: Record<KunModalSize, string> = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-2xl',
+  full: 'w-[calc(100vw-1.5rem)] max-w-none',
+}
+const sizeClass = computed(() => sizeClassMap[props.size])
+// Overlay alignment + which element scrolls when content overflows.
+const overlayClass = computed(() => [
+  props.placement === 'top' ? 'items-start' : 'items-center',
+  props.scrollBehavior === 'outside' ? 'overflow-y-auto' : '',
+])
+const panelScrollClass = computed(() =>
+  props.scrollBehavior === 'inside' ? 'max-h-[90vh] overflow-y-auto' : 'my-8'
+)
 
 const modelValue = defineModel<boolean>({ required: true })
 
@@ -54,7 +76,7 @@ const applyLock = (shouldLock: boolean) => {
 // Claim a fresh z-index on open so the most-recently-opened modal always wins
 // the stack, regardless of template/DOM order. `claimed` keeps claim/release
 // symmetric across modelValue toggles, exactly like `locked` above.
-const { zIndex, claim, release } = useKunOverlayZIndex()
+const { zIndex, claim, release, isTopmost } = useKunOverlayZIndex()
 let claimed = false
 const applyZIndex = (shouldClaim: boolean) => {
   if (shouldClaim && !claimed) {
@@ -63,6 +85,20 @@ const applyZIndex = (shouldClaim: boolean) => {
   } else if (!shouldClaim && claimed) {
     release()
     claimed = false
+  }
+}
+
+// Mark the page background `inert` while open (stronger than aria-modal alone).
+// `inerted` keeps the refcount symmetric across modelValue toggles.
+const { activate: inertOn, deactivate: inertOff } = useKunBackgroundInert()
+let inerted = false
+const applyInert = (shouldInert: boolean) => {
+  if (shouldInert && !inerted) {
+    inertOn()
+    inerted = true
+  } else if (!shouldInert && inerted) {
+    inertOff()
+    inerted = false
   }
 }
 
@@ -102,7 +138,9 @@ const onBackdropClick = (e: Event) => {
 }
 
 useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && modelValue.value) {
+  // Only the topmost overlay reacts to Escape, so a stacked Esc dismisses one
+  // layer at a time instead of closing every open modal/drawer at once.
+  if (e.key === 'Escape' && modelValue.value && isTopmost.value) {
     handleCloseKunModal()
   }
 })
@@ -112,10 +150,13 @@ watch(modelValue, async (v) => {
   applyZIndex(v)
   if (v) {
     // nextTick so the trap element is mounted before activate() walks its
-    // children for focusable nodes.
+    // children for focusable nodes. inert AFTER activate() so the focus trap
+    // captures the trigger as its return target before inert blurs it.
     await nextTick()
     activate()
+    applyInert(true)
   } else {
+    applyInert(false)
     deactivate()
   }
 })
@@ -126,12 +167,14 @@ onMounted(async () => {
     applyZIndex(true)
     await nextTick()
     activate()
+    applyInert(true)
   }
 })
 
 onUnmounted(() => {
   applyLock(false)
   applyZIndex(false)
+  applyInert(false)
   deactivate()
 })
 </script>
@@ -142,9 +185,11 @@ onUnmounted(() => {
       <div
         v-if="modelValue"
         ref="trapEl"
+        data-kun-overlay
         :class="
           cn(
-            'bg-default-800/70 dark:bg-background/70 fixed top-0 left-0 z-kun-modal flex h-full w-full items-center justify-center p-3',
+            'bg-default-800/70 dark:bg-background/70 fixed top-0 left-0 z-kun-modal flex h-full w-full justify-center p-3',
+            overlayClass,
             className
           )
         "
@@ -160,7 +205,9 @@ onUnmounted(() => {
           :aria-label="ariaLabel || '对话框'"
           :class="
             cn(
-              'kun-modal-panel bg-content1/85 scrollbar-hide relative m-auto max-h-[90vh] min-w-80 overflow-y-auto border p-6 backdrop-blur-[var(--kun-background-blur)]',
+              'kun-modal-panel bg-content1/85 scrollbar-hide relative mx-auto min-w-80 border p-6 backdrop-blur-[var(--kun-background-blur)]',
+              sizeClass,
+              panelScrollClass,
               roundedClass,
               innerClassName
             )

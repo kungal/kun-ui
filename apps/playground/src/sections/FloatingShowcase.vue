@@ -11,8 +11,8 @@
       <KunTooltip text="I'm a tooltip">
         <KunButton variant="bordered">Hover (top)</KunButton>
       </KunTooltip>
-      <KunTooltip text="Below the trigger" position="bottom">
-        <KunButton variant="bordered">Hover (bottom)</KunButton>
+      <KunTooltip text="Below the trigger" position="bottom" :show-arrow="true">
+        <KunButton variant="bordered">Hover (bottom, arrow)</KunButton>
       </KunTooltip>
       <KunTooltip>
         <KunButton variant="bordered" color="secondary">Rich content</KunButton>
@@ -26,15 +26,18 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-4">
-      <KunPopover :auto-position="true">
+      <KunPopover :auto-position="true" :show-arrow="true">
         <template #trigger>
           <KunButton color="primary">Open popover</KunButton>
         </template>
         <div class="flex w-56 flex-col gap-2 p-4">
           <h4 class="font-semibold">Popover</h4>
           <p class="text-default-600 text-sm">
-            Positioned with floating-ui. Click outside or press Esc to close.
+            Focus moves here on open; returns to the trigger on close.
           </p>
+          <KunButton size="sm" color="primary" class-name="kun-pop-action">
+            Focusable action
+          </KunButton>
         </div>
       </KunPopover>
     </div>
