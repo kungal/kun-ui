@@ -10,6 +10,7 @@ import {
 } from '@floating-ui/vue'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunTooltipProps } from './types'
 
 // Nuxt-decoupled Tooltip — explicit imports (vue / @floating-ui/vue /
@@ -33,6 +34,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const triggerRef = ref<HTMLElement | null>(null)
 const tooltipRef = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
+const tooltipId = useKunUniqueId('kun-tooltip')
 
 let showTimer: ReturnType<typeof setTimeout> | null = null
 let hideTimer: ReturnType<typeof setTimeout> | null = null
@@ -80,8 +82,12 @@ const hide = () => {
   <div
     ref="triggerRef"
     :class="cn('relative inline-block', className)"
+    :aria-describedby="isVisible ? tooltipId : undefined"
     @mouseenter="show"
     @mouseleave="hide"
+    @focusin="show"
+    @focusout="hide"
+    @keydown.escape="hide"
   >
     <slot />
 
@@ -97,6 +103,7 @@ const hide = () => {
         <div
           v-if="isVisible"
           ref="tooltipRef"
+          :id="tooltipId"
           role="tooltip"
           :class="
             cn(

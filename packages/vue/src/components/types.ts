@@ -44,6 +44,9 @@ export interface KunModalProps {
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded
+  // Accessible name for the dialog (role="dialog" needs a name; the title is in
+  // the slot so it can't be auto-derived).
+  ariaLabel?: string
 }
 
 // ── Tab ────────────────────────────────────────────────────────────────
@@ -135,6 +138,8 @@ export interface KunPopoverProps {
   innerClass?: string
   autoPosition?: boolean
   rounded?: KunUIRounded
+  // Accessible name for the dialog (role="dialog" needs a name).
+  ariaLabel?: string
 }
 
 // ── Image ──────────────────────────────────────────────────────────────

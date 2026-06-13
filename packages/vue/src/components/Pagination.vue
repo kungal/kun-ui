@@ -91,12 +91,16 @@ onKeyStroke('ArrowRight', (e) => {
 </script>
 
 <template>
-  <div class="flex w-full flex-wrap items-center justify-between gap-4">
+  <nav
+    aria-label="分页导航"
+    class="flex w-full flex-wrap items-center justify-between gap-4"
+  >
     <div class="mx-auto flex flex-wrap items-center gap-2">
       <div class="mx-auto flex items-center gap-2">
         <KunButton
           :is-icon-only="true"
           variant="light"
+          aria-label="上一页"
           :disabled="isLoading || currentPage === 1"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage === 1 }"
           @click="handlePageChange(currentPage - 1)"
@@ -112,6 +116,8 @@ onKeyStroke('ArrowRight', (e) => {
               size="sm"
               :disabled="isLoading"
               :href="pageHref ? pageHref(Number(page)) : undefined"
+              :aria-label="`第 ${page} 页`"
+              :aria-current="currentPage === page ? 'page' : undefined"
               @click="handlePageChange(Number(page))"
             >
               {{ page }}
@@ -123,6 +129,7 @@ onKeyStroke('ArrowRight', (e) => {
         <KunButton
           :is-icon-only="true"
           variant="light"
+          aria-label="下一页"
           :disabled="isLoading || currentPage === totalPage"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage === totalPage }"
           @click="handlePageChange(currentPage + 1)"
@@ -158,5 +165,5 @@ onKeyStroke('ArrowRight', (e) => {
         跳转
       </KunButton>
     </div>
-  </div>
+  </nav>
 </template>

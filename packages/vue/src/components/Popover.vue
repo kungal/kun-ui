@@ -105,6 +105,7 @@ defineExpose({
           ref="popoverRef"
           :id="popoverId"
           role="dialog"
+          :aria-label="ariaLabel || 'popover'"
           :aria-hidden="!isOpen"
           :class="
             cn(

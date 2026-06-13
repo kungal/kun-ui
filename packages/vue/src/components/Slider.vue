@@ -72,6 +72,38 @@ const updateSliderValue = (e: MouseEvent | TouchEvent) => {
   )
 }
 
+// Keyboard support (WCAG 2.1.1): arrows / Home / End / PageUp / PageDown.
+const onKeydown = (e: KeyboardEvent) => {
+  const s = state.step || 1
+  let next = value.value
+  switch (e.key) {
+    case 'ArrowRight':
+    case 'ArrowUp':
+      next = value.value + s
+      break
+    case 'ArrowLeft':
+    case 'ArrowDown':
+      next = value.value - s
+      break
+    case 'PageUp':
+      next = value.value + s * 10
+      break
+    case 'PageDown':
+      next = value.value - s * 10
+      break
+    case 'Home':
+      next = state.min
+      break
+    case 'End':
+      next = state.max
+      break
+    default:
+      return
+  }
+  e.preventDefault()
+  value.value = Math.min(state.max, Math.max(state.min, next))
+}
+
 onUnmounted(() => {
   stopDrag()
 })
@@ -96,6 +128,7 @@ onUnmounted(() => {
         :style="thumbStyle"
         @mousedown.passive="startDrag"
         @touchstart.passive.stop="startDrag"
+        @keydown="onKeydown"
         :tabindex="0"
         :aria-valuenow="value"
         :aria-valuemin="min"

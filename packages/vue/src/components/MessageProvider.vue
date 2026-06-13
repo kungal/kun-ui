@@ -51,6 +51,9 @@ const positionClasses: Record<KunMessagePosition, string> = {
     <div
       v-for="(msgs, position) in positionedMessages"
       :key="position"
+      role="status"
+      aria-live="polite"
+      :aria-atomic="false"
       :class="[
         'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
         positionClasses[position as KunMessagePosition],

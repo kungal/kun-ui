@@ -69,6 +69,7 @@ const onLeave = () => {
       "
       :disabled="disabled"
       :title="`${val}/${max}`"
+      :aria-label="`${val} / ${max}`"
       @mouseenter="onEnter(val)"
       @mouseleave="onLeave"
       @click="setValue(val)"

@@ -1,12 +1,9 @@
-import { onMounted, ref, useId } from 'vue'
+import { ref, useId, type Ref } from 'vue'
 
-// Stable unique id for label/input `for`/`id` pairing. Deferred to onMounted
-// (matches the original): SSR renders an empty id, the client fills it after
-// mount, avoiding any server/client id divergence. `useId` is Vue 3.5 native.
-export const useKunUniqueId = (id?: string) => {
-  const kunId = ref(id || '')
-  onMounted(() => {
-    kunId.value = `${id ?? ''}${useId()}`
-  })
-  return kunId
-}
+// Stable unique id for label/input `for`/`id` pairing. Vue's `useId()` is
+// guaranteed identical across server and client renders (since 3.4), so we call
+// it synchronously in setup — NOT deferred to onMounted. Deferring would leave
+// the server HTML with empty ids (breaking `<label for>` associations and
+// causing a hydration mismatch when the id appears on the client).
+export const useKunUniqueId = (prefix?: string): Ref<string> =>
+  ref(`${prefix ?? ''}${useId()}`)

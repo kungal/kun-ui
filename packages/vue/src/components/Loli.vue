@@ -73,6 +73,8 @@ onBeforeUnmount(() => {
       </Transition>
 
       <button
+        type="button"
+        aria-label="关闭"
         class="hover:bg-default/40 absolute top-1 right-1 inline-flex cursor-pointer overflow-hidden rounded-full border-transparent bg-transparent p-2 text-sm font-medium transition-all hover:opacity-80 active:scale-[0.97]"
         @click="close"
       >

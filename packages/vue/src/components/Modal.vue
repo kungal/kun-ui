@@ -155,6 +155,9 @@ onUnmounted(() => {
       >
         <div
           v-if="withContainer"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="ariaLabel || '对话框'"
           :class="
             cn(
               'kun-modal-panel bg-content1/85 scrollbar-hide relative m-auto max-h-[90vh] min-w-80 overflow-y-auto border p-6 backdrop-blur-[var(--kun-background-blur)]',
@@ -173,6 +176,7 @@ onUnmounted(() => {
             class-name="absolute top-1 right-1"
             rounded="full"
             :is-icon-only="true"
+            aria-label="关闭"
             @click="
               () => {
                 modelValue = false
