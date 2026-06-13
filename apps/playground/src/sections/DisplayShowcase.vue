@@ -38,6 +38,8 @@ const loadingDemo = ref(false)
       <KunBadge variant="dot" color="success">
         <KunIcon name="lucide:info" class="text-2xl" />
       </KunBadge>
+      <!-- standalone (no anchor slot) + accessible name -->
+      <KunBadge :count="3" color="danger" aria-label="3 条未读" />
     </div>
 
     <h3 class="mt-2 text-base font-medium">Progress</h3>
@@ -45,9 +47,10 @@ const loadingDemo = ref(false)
       <KunProgress :value="progress" :show-label="true" />
       <KunProgress :value="progress" variant="gradient" color="secondary" />
       <KunProgress :value="progress" variant="striped" color="success" />
-      <KunProgress :indeterminate="true" color="primary" />
-      <div class="flex items-center gap-3">
-        <KunProgress :value="progress" variant="circle" color="primary" :show-label="true" />
+      <KunProgress :indeterminate="true" color="primary" aria-label="加载进度" />
+      <div class="flex items-center gap-4">
+        <KunProgress :value="progress" variant="circle" color="primary" :show-label="true" aria-label="进度" />
+        <KunProgress :indeterminate="true" variant="circle" color="secondary" aria-label="加载中" />
         <KunButton size="sm" @click="progress = (progress + 20) % 120">+20</KunButton>
       </div>
     </div>
@@ -70,6 +73,8 @@ const loadingDemo = ref(false)
           <span>Content behind the loading overlay</span>
         </KunCard>
       </KunLoading>
+      <!-- compact spinner variant -->
+      <KunLoading :loading="true" :spinner="true" size="md" description="加载中" />
     </div>
   </section>
 </template>

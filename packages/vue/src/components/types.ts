@@ -53,6 +53,9 @@ export interface KunModalProps {
   scrollBehavior?: 'inside' | 'outside'
   // Vertical alignment of the panel. Default 'center'.
   placement?: 'center' | 'top'
+  // ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts
+  // that need an immediate response. Default 'dialog'.
+  role?: 'dialog' | 'alertdialog'
   // Accessible name for the dialog (role="dialog" needs a name; the title is in
   // the slot so it can't be auto-derived).
   ariaLabel?: string
@@ -233,6 +236,9 @@ export interface KunBadgeProps {
   size?: 'sm' | 'md' | 'lg'
   placement?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
   className?: string
+  // Accessible name (e.g. "5 条未读"). Without an anchor slot the badge renders
+  // standalone (inline), not as a corner overlay.
+  ariaLabel?: string
 }
 
 // ── Chip ───────────────────────────────────────────────────────────────
@@ -254,6 +260,8 @@ export interface KunProgressProps {
   showLabel?: boolean
   indeterminate?: boolean
   className?: string
+  // Accessible name for the progressbar (e.g. "上传进度").
+  ariaLabel?: string
 }
 
 // ── Info ───────────────────────────────────────────────────────────────
@@ -275,6 +283,11 @@ export interface KunLoadingProps {
    *  URI — no network request, no consumer asset needed). Pass any URL or
    *  data URI to override. */
   src?: string
+  // Render a compact spinner icon instead of the full mascot image — for
+  // small inline loading states (next to a button, a table cell, etc.).
+  spinner?: boolean
+  // Spinner size (spinner mode only). Default 'md'.
+  size?: KunUISize
 }
 
 // ── Input ──────────────────────────────────────────────────────────────

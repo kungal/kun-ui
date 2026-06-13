@@ -6,8 +6,11 @@ const last = ref('—')
 
 const confirm = async () => {
   const ok = await useKunAlert({
-    title: '确认操作',
+    title: '删除确认',
     message: '确定要删除吗?此操作不可撤销。',
+    type: 'danger',
+    confirmText: '删除',
+    cancelText: '再想想',
   })
   last.value = ok ? 'confirmed' : 'cancelled'
 }

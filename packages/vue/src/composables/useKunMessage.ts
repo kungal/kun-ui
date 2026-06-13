@@ -39,6 +39,10 @@ export interface KunMessageOptions {
 const messages: Ref<KunMessageOptions[]> = ref([])
 let seed = 0
 
+// Cap concurrently-visible toasts per position so a burst can't fill the
+// screen; the oldest in that position is dropped when the cap is exceeded.
+const MAX_VISIBLE_PER_POSITION = 5
+
 // Read side — consumed by <KunMessageProvider>.
 export const useKunMessageState = () => ({
   messages: computed(() => messages.value),
@@ -90,6 +94,15 @@ export const useKunMessage = (
     messages.value.push(newMessage)
   } else {
     messages.value.unshift(newMessage)
+  }
+
+  // Drop the oldest toast in this position once the cap is exceeded.
+  const samePosition = messages.value.filter((m) => m.position === position)
+  if (samePosition.length > MAX_VISIBLE_PER_POSITION) {
+    const oldest = position.startsWith('top')
+      ? samePosition[0]
+      : samePosition[samePosition.length - 1]
+    if (oldest) messages.value = messages.value.filter((m) => m.id !== oldest.id)
   }
 
   return id

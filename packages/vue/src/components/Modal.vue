@@ -27,6 +27,7 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   size: 'md',
   scrollBehavior: 'inside',
   placement: 'center',
+  role: 'dialog',
 })
 
 // Uniform corner radius: defers to the global config.rounded (default 'md')
@@ -200,7 +201,7 @@ onUnmounted(() => {
       >
         <div
           v-if="withContainer"
-          role="dialog"
+          :role="role"
           aria-modal="true"
           :aria-label="ariaLabel || '对话框'"
           :class="

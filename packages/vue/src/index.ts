@@ -162,6 +162,7 @@ export {
   useKunAlert,
   useKunAlertState,
   type KunAlertOptions,
+  type KunAlertType,
 } from './composables/useKunAlert'
 export { useKunLoliInfo, useKunLoliState } from './composables/useKunLoliInfo'
 // Re-export framework-agnostic helpers consumers commonly reach for.

@@ -48,12 +48,11 @@ const positionClasses: Record<KunMessagePosition, string> = {
 
 <template>
   <Teleport to="body">
+    <!-- Plain positioning container — live-region semantics live on each
+         KunMessageItem (status/polite, or alert/assertive for error/warn). -->
     <div
       v-for="(msgs, position) in positionedMessages"
       :key="position"
-      role="status"
-      aria-live="polite"
-      :aria-atomic="false"
       :class="[
         'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
         positionClasses[position as KunMessagePosition],

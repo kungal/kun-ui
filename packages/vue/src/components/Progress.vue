@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<KunProgressProps>(), {
   showLabel: false,
   indeterminate: false,
   className: '',
+  ariaLabel: '',
 })
 
 const percentage = computed(() => {
@@ -92,8 +93,17 @@ const circleOffset = computed(
     <div
       v-if="variant === 'circle'"
       class="relative inline-flex items-center justify-center"
+      role="progressbar"
+      :aria-label="ariaLabel || undefined"
+      :aria-valuenow="indeterminate ? undefined : percentage"
+      :aria-valuemin="0"
+      :aria-valuemax="max"
     >
-      <svg class="h-24 w-24 -rotate-90 transform" viewBox="0 0 100 100">
+      <svg
+        class="h-24 w-24 -rotate-90 transform"
+        :class="indeterminate && 'animate-spin'"
+        viewBox="0 0 100 100"
+      >
         <circle
           class="text-default-300"
           stroke="currentColor"
@@ -113,37 +123,47 @@ const circleOffset = computed(
           cy="50"
           stroke-linecap="round"
           :stroke-dasharray="circleCircumference"
-          :stroke-dashoffset="circleOffset"
+          :stroke-dashoffset="indeterminate ? circleCircumference * 0.7 : circleOffset"
           style="transition: stroke-dashoffset 0.35s ease"
         />
       </svg>
-      <span v-if="showLabel" class="absolute text-sm font-medium">
+      <span v-if="showLabel && !indeterminate" class="absolute text-sm font-medium">
         {{ percentage }}%
       </span>
     </div>
 
     <div
       v-else
-      class="bg-default-300 w-full overflow-hidden"
+      class="bg-default-300 relative w-full overflow-hidden"
       role="progressbar"
+      :aria-label="ariaLabel || undefined"
       :aria-valuenow="indeterminate ? undefined : percentage"
       :aria-valuemin="0"
       :aria-valuemax="max"
       :class="[sizeClasses, roundedClass, className]"
     >
+      <!-- Indeterminate: a partial bar sweeps across (unknown progress). -->
       <div
+        v-if="indeterminate"
+        :class="
+          cn(
+            'absolute inset-y-0 w-2/5 animate-[kun-progress-indeterminate_1.5s_ease-in-out_infinite]',
+            roundedClass,
+            barClasses
+          )
+        "
+      />
+      <div
+        v-else
         :class="
           cn(
             'flex h-full items-center transition-all duration-500 ease-out',
             barClasses
           )
         "
-        :style="indeterminate ? 'width:100%' : `width:${percentage}%`"
+        :style="`width:${percentage}%`"
       >
-        <span
-          v-if="showLabel && !indeterminate"
-          class="px-2 text-xs font-medium text-white"
-        >
+        <span v-if="showLabel" class="px-2 text-xs font-medium text-white">
           {{ percentage }}%
         </span>
       </div>
@@ -158,6 +178,20 @@ const circleOffset = computed(
   }
   to {
     background-position: 0 0;
+  }
+}
+</style>
+
+<!-- Unscoped: the indeterminate fill references this keyframe via a Tailwind
+     `animate-[…]` class, which is generated outside the scoped layer — so the
+     keyframe name must stay global (un-renamed by Vue's scoped-style rewrite). -->
+<style>
+@keyframes kun-progress-indeterminate {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(350%);
   }
 }
 </style>

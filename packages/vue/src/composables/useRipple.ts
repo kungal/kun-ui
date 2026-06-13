@@ -11,6 +11,9 @@ export type RippleType = {
 
 export const useRipple = () => {
   const ripples = ref<RippleType[]>([])
+  // Monotonic key — Date.now() collides for two clicks in the same millisecond
+  // (duplicate Vue keys → render glitches).
+  let nextKey = 0
   // `ReturnType<typeof setTimeout>` instead of `NodeJS.Timeout` so this
   // composable carries no @types/node dependency — it runs in the browser.
   const timeouts = new Set<ReturnType<typeof setTimeout>>()
@@ -22,7 +25,7 @@ export const useRipple = () => {
     const rect = target.getBoundingClientRect()
 
     ripples.value.push({
-      key: Date.now(),
+      key: ++nextKey,
       size,
       x: event.clientX - rect.left - size / 2,
       y: event.clientY - rect.top - size / 2,

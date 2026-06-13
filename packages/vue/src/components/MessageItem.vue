@@ -25,6 +25,48 @@ const isRichText = computed(() => props.richText ?? false)
 const cssDuration = computed(() => `${props.duration}ms`)
 const progressBarRef = ref<HTMLDivElement | null>(null)
 
+// error / warn interrupt (assertive); info / success are polite.
+const isUrgent = computed(() => props.type === 'error' || props.type === 'warn')
+
+// Swipe-to-dismiss (mainly touch): drag horizontally; past the threshold the
+// toast is removed, otherwise it snaps back.
+const SWIPE_DISMISS_PX = 80
+const dragX = ref(0)
+const dragging = ref(false)
+let startX = 0
+const dragStyle = computed(() =>
+  dragX.value !== 0
+    ? {
+        transform: `translateX(${dragX.value}px)`,
+        opacity: String(Math.max(0, 1 - Math.abs(dragX.value) / 200)),
+        transition: dragging.value ? 'none' : 'transform 0.2s, opacity 0.2s',
+      }
+    : {}
+)
+
+const onPointerDown = (e: PointerEvent) => {
+  // Ignore drags that start on the close button.
+  if ((e.target as HTMLElement).closest('[data-kun-toast-close]')) return
+  dragging.value = true
+  startX = e.clientX
+  pauseTimer()
+  ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+}
+const onPointerMove = (e: PointerEvent) => {
+  if (!dragging.value) return
+  dragX.value = e.clientX - startX
+}
+const onPointerUp = () => {
+  if (!dragging.value) return
+  dragging.value = false
+  if (Math.abs(dragX.value) > SWIPE_DISMISS_PX) {
+    emit('remove', props.id)
+  } else {
+    dragX.value = 0
+    resumeTimer()
+  }
+}
+
 // `ReturnType<typeof setTimeout>` instead of `NodeJS.Timeout` so this carries
 // no @types/node dependency — it runs in the browser.
 let timer: ReturnType<typeof setTimeout> | null = null
@@ -121,15 +163,23 @@ const typeStyles = computed(() => {
 
 <template>
   <div
+    :role="isUrgent ? 'alert' : 'status'"
+    :aria-live="isUrgent ? 'assertive' : 'polite'"
+    aria-atomic="true"
     :class="
       cn(
-        'relative mb-3 flex w-full items-center overflow-hidden rounded-kun-lg p-4 ring-1 ring-black/5 transition-all duration-300',
+        'group relative mb-3 flex w-full touch-pan-y items-center overflow-hidden rounded-kun-lg p-4 ring-1 ring-black/5 transition-all duration-300',
         typeStyles.bg,
         typeStyles.text
       )
     "
+    :style="dragStyle"
     @mouseenter="pauseTimer"
     @mouseleave="resumeTimer"
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerUp"
   >
     <KunIcon
       :name="typeStyles.iconName"
@@ -149,6 +199,16 @@ const typeStyles = computed(() => {
     >
       {{ count }}
     </span>
+
+    <button
+      type="button"
+      data-kun-toast-close
+      aria-label="关闭"
+      class="ml-2 flex size-6 shrink-0 items-center justify-center rounded-full opacity-0 transition hover:bg-black/10 focus-visible:opacity-100 group-hover:opacity-100 dark:hover:bg-white/10"
+      @click="emit('remove', id)"
+    >
+      <KunIcon name="lucide:x" class="size-4" />
+    </button>
 
     <div
       ref="progressBarRef"
