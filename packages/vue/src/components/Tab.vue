@@ -236,13 +236,8 @@ const listClasses = computed(() => {
     : cn('relative flex items-center', sizeGap[props.size])
   switch (props.variant) {
     case 'underlined':
-      return cn(
-        base,
-        isVertical.value
-          ? 'border-l border-kun'
-          : 'border-b border-kun',
-        props.innerClassName
-      )
+      // No static track line — only the sliding active indicator.
+      return cn(base, props.innerClassName)
     case 'solid':
     case 'light':
       return cn(

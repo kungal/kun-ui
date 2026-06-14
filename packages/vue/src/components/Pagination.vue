@@ -95,8 +95,8 @@ onKeyStroke('ArrowRight', (e) => {
     aria-label="分页导航"
     class="flex w-full flex-wrap items-center justify-between gap-4"
   >
-    <div class="mx-auto flex flex-wrap items-center gap-2">
-      <div class="mx-auto flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center gap-2">
         <KunButton
           :is-icon-only="true"
           variant="light"
@@ -140,13 +140,13 @@ onKeyStroke('ArrowRight', (e) => {
         </KunButton>
       </div>
 
-      <div class="text-default-500 mx-auto hidden items-center gap-2 text-sm sm:flex">
+      <div class="text-default-500 hidden items-center gap-2 text-sm sm:flex">
         您可以使用 <KunIcon name="lucide:arrow-left" />
         <KunIcon name="lucide:arrow-right" /> 来进行快速翻页
       </div>
     </div>
 
-    <div class="mx-auto flex items-center gap-2">
+    <div class="flex items-center gap-2">
       <label :for="kunUniqueId" class="text-sm">跳转到页数</label>
       <input
         :id="kunUniqueId"
