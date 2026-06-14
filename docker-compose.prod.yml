@@ -7,6 +7,10 @@ name: kun-ui-docs
 services:
   docs:
     image: ghcr.io/kungal/kun-ui-docs:latest
+    # Always re-pull :latest on (re)deploy. Without this, `docker compose up`
+    # defaults to pull_policy: missing — so a Dokploy redeploy reuses the cached
+    # image and the new build never goes live until the tag is force-pulled.
+    pull_policy: always
     expose: ['6757'] # internal only; Traefik reverse-proxies it
     restart: unless-stopped
 networks:
