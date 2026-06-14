@@ -27,7 +27,7 @@ const emit = defineEmits<{
   <span
     :class="
       cn(
-        'inline-flex cursor-default items-center justify-center gap-1 rounded-full font-medium',
+        'inline-flex cursor-default items-center justify-center gap-1 rounded-full font-medium whitespace-nowrap',
         kunChipSizeClasses[props.size],
         kunVariantClasses(props.variant, props.color),
         disabled && 'pointer-events-none opacity-50',

@@ -175,4 +175,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 
 | **0.22.2** | 修复 `shadow` 按钮变体:之前只设了阴影颜色没设阴影尺寸 → `box-shadow: none`(和 solid 没区别);加 `shadow-lg` 后每个 shadow 按钮真正投出对应颜色的柔和光晕 |
 
+| **0.22.3** | Button/Chip/Badge/TagInput 标签改为不换行(`whitespace-nowrap`,对齐 shadcn/Material 标准);Button 图标 `shrink-0` 防压缩(Tab 早已 nowrap) |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

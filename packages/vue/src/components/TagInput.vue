@@ -298,7 +298,7 @@ const containerClasses = computed(() =>
 // so a tag in the field looks identical to a standalone <KunChip>.
 const chipClasses = computed(() =>
   cn(
-    'inline-flex items-center gap-1 rounded-full font-medium select-none',
+    'inline-flex items-center gap-1 rounded-full font-medium whitespace-nowrap select-none',
     kunVariantClasses('flat', props.color),
     kunChipSizeClasses[props.size],
     kunFocusRingClasses[props.color]

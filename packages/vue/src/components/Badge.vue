@@ -58,7 +58,7 @@ const standalone = computed(() => !slots.default)
 
 const badgeClasses = computed(() =>
   cn(
-    'inline-flex items-center justify-center rounded-full font-medium text-white',
+    'inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap text-white',
     kunBgClasses[props.color],
     props.variant === 'dot' ? dotSize[props.size] : countSize[props.size],
     // Anchored overlay: corner-positioned + ringed. Standalone: plain inline.

@@ -149,7 +149,10 @@ const handleKunButtonClick = (event: MouseEvent) => {
     v-bind="rootBindings"
     :class="
       cn(
-        'relative inline-flex cursor-pointer items-center justify-center gap-1 overflow-hidden font-medium transition-all hover:opacity-80 active:scale-[0.97]',
+        // A button label is one atomic action — keep it on a single line
+        // (`whitespace-nowrap`) and never let the icons squish (`[&_svg]:shrink-0`),
+        // matching shadcn / Material's button behaviour.
+        'relative inline-flex cursor-pointer items-center justify-center gap-1 overflow-hidden font-medium whitespace-nowrap transition-all hover:opacity-80 active:scale-[0.97] [&_svg]:shrink-0',
         // Offset ring (gap against the fill) so the keyboard-focus ring reads on
         // solid buttons too — same recipe as every other control, just spaced out.
         cn(kunFocusRingClasses[color], 'focus-visible:ring-offset-2 focus-visible:ring-offset-background'),
@@ -169,11 +172,11 @@ const handleKunButtonClick = (event: MouseEvent) => {
       class="text-sm"
       name="svg-spinners:90-ring-with-bg"
     />
-    <span v-if="icon && iconPosition === 'left'" class="mr-2">
+    <span v-if="icon && iconPosition === 'left'" class="mr-2 shrink-0">
       <slot name="icon" />
     </span>
     <slot />
-    <span v-if="icon && iconPosition === 'right'" class="ml-2">
+    <span v-if="icon && iconPosition === 'right'" class="ml-2 shrink-0">
       <slot name="icon" />
     </span>
 
