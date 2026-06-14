@@ -40,6 +40,11 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: ['/', '/sitemap.xml'],
+      // Avatar/UserChip navigation demos render real profile links via the
+      // default userLinkTemplate (/user/{id}/info). Those routes live in the
+      // host galgame app, not this docs site, so skip them when crawling —
+      // otherwise the prerenderer 404s on them and fails the build.
+      ignore: ['/user/'],
     },
   },
 
