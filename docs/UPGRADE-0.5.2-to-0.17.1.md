@@ -164,5 +164,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 | **0.18.0** | 统一中性边框:新增 `--color-kun-border` token + `border-kun` 工具类,全部结构性 hairline(输入/卡片/分割线/浮层/Tab…)收敛到单一值并正确翻转亮↔暗;修复 Divider 暗色偏淡;弃用各输入/Card 的 `darkBorder`(no-op,可移除) |
 | **0.18.1** | Tab `underlined` 去静态轨道线;修 FadeCard 不触发动画;Pagination 去 `mx-auto` 让 `justify-between` 生效 |
 | **0.19.0** | Tab 新增 `align`('start'/'center'/'end');**统一聚焦环**:全控件改用 `focus-visible` + 2px + `{color}/50` 单一配方(新 `kunFocusRingClasses`/`kunFocusRingWithinClasses`),Button/CheckBox 补上缺失的 focus ring,复合控件改 `focus-within` 环、内层不重复;弃用 `kunRingClasses` |
+| **0.19.1** | Card header 去下边框、footer 改细线分隔(去灰底);Tab item 圆角 `sm`→`md`(与整体一致)、容器 →`lg`;Message toast 加 `shadow-lg` 立体感 |
 
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

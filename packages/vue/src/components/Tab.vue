@@ -243,13 +243,13 @@ const listClasses = computed(() => {
     case 'light':
       return cn(
         base,
-        'border border-kun rounded-kun-md p-1 bg-content2/30',
+        'border border-kun rounded-kun-lg p-1 bg-content2/30',
         props.innerClassName
       )
     case 'bordered':
       return cn(
         base,
-        'border border-kun rounded-kun-md p-1',
+        'border border-kun rounded-kun-lg p-1',
         props.innerClassName
       )
     case 'pills':
@@ -286,13 +286,13 @@ const tabClasses = (item: KunTabItem) => {
     case 'solid':
       return cn(
         base,
-        'rounded-kun-sm',
+        'rounded-kun-md',
         selected ? 'text-white' : 'text-default-500 hover:text-foreground'
       )
     case 'light':
       return cn(
         base,
-        'rounded-kun-sm',
+        'rounded-kun-md',
         selected
           ? kunTextClasses[props.color]
           : 'text-default-500 hover:text-foreground'
@@ -300,7 +300,7 @@ const tabClasses = (item: KunTabItem) => {
     case 'bordered':
       return cn(
         base,
-        'rounded-kun-sm border',
+        'rounded-kun-md border',
         selected
           ? cn(kunBorderClasses[props.color], kunTextClasses[props.color])
           : 'border-transparent text-default-500 hover:text-foreground'
@@ -339,9 +339,9 @@ const indicatorClasses = computed(() => {
         isVertical.value ? 'left-0 top-0' : 'bottom-0 left-0'
       )
     case 'solid':
-      return cn('absolute top-0 left-0 rounded-kun-sm', kunBgClasses[props.color])
+      return cn('absolute top-0 left-0 rounded-kun-md', kunBgClasses[props.color])
     case 'light':
-      return cn('absolute top-0 left-0 rounded-kun-sm', softBgByColor[props.color])
+      return cn('absolute top-0 left-0 rounded-kun-md', softBgByColor[props.color])
     default:
       return null
   }

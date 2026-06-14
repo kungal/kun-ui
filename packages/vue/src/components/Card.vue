@@ -94,7 +94,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
     "
     @click="handleKunCardClick"
   >
-    <div v-if="$slots.header" class="border-b">
+    <div v-if="$slots.header">
       <slot name="header" />
     </div>
 
@@ -106,7 +106,10 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
       <slot />
     </div>
 
-    <div v-if="$slots.footer" class="bg-default-100 border-t px-3 py-2">
+    <!-- Footer: a hairline separator (unified border token) over the card's own
+         surface — no gray fill, no double padding. `-mt-3` cancels the parent
+         gap so the rule sits flush under the content, then `pt-3` re-spaces. -->
+    <div v-if="$slots.footer" class="border-kun -mt-3 border-t pt-3">
       <slot name="footer" />
     </div>
 
