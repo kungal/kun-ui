@@ -6,7 +6,9 @@ const value = ref('vue')
 const options: KunSelectOption[] = [
   { value: 'vue', label: 'Vue' },
   { value: 'react', label: 'React' },
+  { value: 'solid', label: 'Solid' },
   { value: 'svelte', label: 'Svelte' },
+  { value: 'angular', label: 'Angular', disabled: true },
 ]
 </script>
 

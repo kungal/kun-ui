@@ -13,12 +13,12 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <KunAutocomplete
-    v-model="value"
-    :options="options"
-    label="City"
-    placeholder="Type a city…"
-    :clearable="true"
-    class-name="max-w-xs"
-  />
+  <div class="max-w-xs">
+    <KunAutocomplete
+      v-model="value"
+      :options="options"
+      label="City"
+      placeholder="Type a city…"
+    />
+  </div>
 </template>

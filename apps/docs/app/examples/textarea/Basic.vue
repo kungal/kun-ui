@@ -9,9 +9,8 @@ const text = ref('')
       v-model="text"
       label="Bio"
       placeholder="Tell us about yourself"
+      description="A short description about yourself."
       :rows="4"
-      :maxlength="200"
-      show-char-count
     />
   </div>
 </template>
