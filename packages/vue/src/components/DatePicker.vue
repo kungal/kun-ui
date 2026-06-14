@@ -2,7 +2,12 @@
 import { ref, computed, toRefs, nextTick, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
-import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunRoundedClasses,
+  kunControlSizeClasses,
+  kunFocusRingClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
 import { useCalendar } from '../composables/useCalendar'
@@ -193,10 +198,10 @@ const isInPreviewRange = (date: Date) => {
         :disabled="disabled"
         :class="
           cn(
-            'flex w-full cursor-pointer items-center justify-between text-left focus:ring-1 focus:outline-none',
+            'flex w-full cursor-pointer items-center justify-between text-left transition-[color,box-shadow]',
             kunControlSizeClasses[props.size],
             roundedClass,
-            'focus:border-primary-500 focus:ring-primary-500',
+            kunFocusRingClasses.primary,
             'border-kun border',
             disabled && 'bg-default-100 cursor-not-allowed'
           )
@@ -276,7 +281,10 @@ const isInPreviewRange = (date: Date) => {
                 :disabled="day.isDisabled"
                 :class="
                   cn(
-                    'focus:ring-primary/40 flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors focus:ring-2 focus:outline-none',
+                    cn(
+                      'flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors',
+                      kunFocusRingClasses.primary
+                    ),
                     !day.isCurrentMonth && 'text-default-400',
                     day.isToday && 'border-primary bg-primary/20 border',
                     !day.isSelected && !day.isDisabled && 'hover:bg-default/20',

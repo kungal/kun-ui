@@ -2,7 +2,8 @@
 import { computed, nextTick, ref } from 'vue'
 import {
   cn,
-  kunRingClasses,
+  kunFocusRingClasses,
+  kunFocusRingWithinClasses,
   kunRoundedClasses,
   kunVariantClasses,
 } from '@kungal/ui-core'
@@ -282,8 +283,9 @@ const containerClasses = computed(() =>
     sizeText[props.size],
     props.variant === 'bordered' && cn('border', !props.error && 'border-kun'),
     props.variant === 'flat' && 'bg-content2',
-    kunRingClasses[props.color],
-    'focus-within:ring-2',
+    props.error
+      ? kunFocusRingWithinClasses.danger
+      : kunFocusRingWithinClasses[props.color],
     props.error && 'border-danger',
     props.disabled && 'opacity-50 cursor-not-allowed bg-default-100',
     props.readonly && 'cursor-default',
@@ -306,8 +308,7 @@ const chipClasses = computed(() =>
     // color matches the rest of the UI instead of a one-off shade.
     kunVariantClasses('flat', props.color),
     chipSizeClass[props.size],
-    'focus:outline-none focus:ring-2',
-    kunRingClasses[props.color]
+    kunFocusRingClasses[props.color]
   )
 )
 

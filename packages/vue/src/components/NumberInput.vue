@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import {
   cn,
   kunRoundedClasses,
-  type KunUIColor,
+  kunFocusRingWithinClasses,
   type KunUISize,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
@@ -58,16 +58,6 @@ const sizeMap: Record<KunUISize, { text: string; py: string; btn: string }> = {
   xl: { text: 'text-lg', py: 'py-3', btn: 'px-4' },
 }
 const sz = computed(() => sizeMap[props.size])
-
-const focusRing: Record<KunUIColor, string> = {
-  default: 'focus-within:ring-default focus-within:border-default',
-  primary: 'focus-within:ring-primary focus-within:border-primary',
-  secondary: 'focus-within:ring-secondary focus-within:border-secondary',
-  success: 'focus-within:ring-success focus-within:border-success',
-  warning: 'focus-within:ring-warning focus-within:border-warning',
-  danger: 'focus-within:ring-danger focus-within:border-danger',
-  info: 'focus-within:ring-info focus-within:border-info',
-}
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const focused = ref(false)
@@ -198,12 +188,12 @@ defineExpose({
     <div
       :class="
         cn(
-          'flex w-full items-stretch overflow-hidden border transition focus-within:ring-2',
+          'flex w-full items-stretch overflow-hidden border transition-[color,box-shadow]',
           roundedClass,
           sz.text,
           invalid
-            ? 'border-danger-300 focus-within:border-danger focus-within:ring-danger'
-            : cn('border-kun', focusRing[color]),
+            ? cn('border-danger-300', kunFocusRingWithinClasses.danger)
+            : cn('border-kun', kunFocusRingWithinClasses[color]),
           disabled && 'bg-default-100 cursor-not-allowed'
         )
       "

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunRoundedClasses,
+  kunControlSizeClasses,
+  kunFocusRingClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunTextareaProps } from './types'
@@ -127,10 +132,12 @@ defineExpose({
         :autofocus="autofocus"
         :class="
           cn(
-            'scrollbar-hide border-kun w-full border transition duration-150 ease-in-out',
+            'scrollbar-hide w-full border transition-[color,box-shadow] duration-150 ease-in-out',
             kunControlSizeClasses[props.size],
             roundedClass,
-            'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+            error
+              ? cn('border-danger-300', kunFocusRingClasses.danger)
+              : cn('border-kun', kunFocusRingClasses.primary),
             disabled ? 'text-default-500 cursor-not-allowed shadow-none' : '',
             resize === 'none'
               ? 'resize-none'

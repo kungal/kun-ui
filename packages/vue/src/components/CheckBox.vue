@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { cn, kunSelectionSizeClasses, type KunUIColor, type KunUISize } from '@kungal/ui-core'
+import {
+  cn,
+  kunSelectionSizeClasses,
+  kunFocusRingClasses,
+  type KunUIColor,
+  type KunUISize,
+} from '@kungal/ui-core'
 import { computed, ref, watchEffect } from 'vue'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
@@ -97,6 +103,7 @@ const indeterminateColor: Record<KunUIColor, string> = {
           :class="
             cn(
               'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
+              kunFocusRingClasses[props.color],
               size.box,
               // A fixed % keeps the box a rounded square at every size — a token
               // radius (now 12px) would make the small boxes look circular.

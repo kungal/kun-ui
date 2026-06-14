@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<KunTabProps>(), {
   size: 'md',
   orientation: 'horizontal',
   fullWidth: false,
+  align: 'center',
   disabled: false,
   disableAnimation: false,
   scrollable: false,
@@ -258,10 +259,17 @@ const listClasses = computed(() => {
   }
 })
 
+const alignClass: Record<NonNullable<KunTabProps['align']>, string> = {
+  start: 'justify-start',
+  center: 'justify-center',
+  end: 'justify-end',
+}
+
 const tabClasses = (item: KunTabItem) => {
   const selected = isSelected(item)
   const base = cn(
-    'relative z-10 inline-flex items-center justify-center cursor-pointer select-none whitespace-nowrap transition-colors',
+    'relative z-10 inline-flex items-center cursor-pointer select-none whitespace-nowrap transition-colors',
+    alignClass[props.align],
     sizeClasses[props.size],
     sizeGap[props.size],
     item.disabled && 'opacity-50 cursor-not-allowed',

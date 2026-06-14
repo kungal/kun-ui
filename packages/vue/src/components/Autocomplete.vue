@@ -2,7 +2,12 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size as floatingSize } from '@floating-ui/vue'
-import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunRoundedClasses,
+  kunControlSizeClasses,
+  kunFocusRingClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
@@ -241,11 +246,13 @@ defineExpose({
         autocomplete="off"
         :class="
           cn(
-            'focus:border-primary focus:ring-primary block w-full border transition focus:ring-1 focus:outline-none',
+            'block w-full border transition-[color,box-shadow]',
             roundedClass,
             kunControlSizeClasses[size],
             clearable && modelValue ? 'pr-9' : '',
-            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
+            invalid
+              ? cn('border-danger-300', kunFocusRingClasses.danger)
+              : cn('border-kun', kunFocusRingClasses.primary),
             disabled && 'bg-default-100 cursor-not-allowed'
           )
         "

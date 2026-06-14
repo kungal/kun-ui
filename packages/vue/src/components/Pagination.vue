@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onKeyStroke } from '@vueuse/core'
-import { cn } from '@kungal/ui-core'
+import { cn, kunFocusRingClasses } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -157,7 +157,10 @@ onKeyStroke('ArrowRight', (e) => {
         :max="totalPage"
         :class="
           cn(
-            'focus:ring-primary border-kun w-24 rounded-kun-md border px-2 py-1 text-sm focus:ring-1 focus:outline-none',
+            cn(
+              'border-kun w-24 rounded-kun-md border px-2 py-1 text-sm transition-[color,box-shadow]',
+              kunFocusRingClasses.primary
+            ),
             isLoading && 'cursor-not-allowed opacity-50'
           )
         "

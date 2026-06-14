@@ -19,6 +19,8 @@ export {
   kunTextClasses,
   kunBorderClasses,
   kunRingClasses,
+  kunFocusRingClasses,
+  kunFocusRingWithinClasses,
   kunSoftBgClasses,
 } from './variants'
 

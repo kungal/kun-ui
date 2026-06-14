@@ -4,7 +4,7 @@ import {
   cn,
   kunBgClasses,
   kunBorderClasses,
-  kunRingClasses,
+  kunFocusRingClasses,
   kunSoftBgClasses,
   kunRoundedClasses,
   kunSelectionSizeClasses,
@@ -145,9 +145,8 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           :tabindex="focusableIndex === index && !isOptionDisabled(option) ? 0 : -1"
           :class="
             cn(
-              'group inline-flex cursor-pointer items-center rounded-kun-md p-1 transition-colors focus:outline-none',
-              kunRingClasses[color],
-              'focus:ring-2',
+              'group inline-flex cursor-pointer items-center rounded-kun-md p-1 transition-colors',
+              kunFocusRingClasses[color],
               sizeClasses.gap,
               sizeClasses.text,
               isOptionDisabled(option) && 'cursor-not-allowed opacity-50'
@@ -193,8 +192,8 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           :tabindex="focusableIndex === index && !isOptionDisabled(option) ? 0 : -1"
           :class="
             cn(
-              'relative flex cursor-pointer items-start border-2 p-3 transition-all focus:outline-none focus:ring-2',
-              kunRingClasses[color],
+              'relative flex cursor-pointer items-start border-2 p-3 transition-all',
+              kunFocusRingClasses[color],
               sizeClasses.gap,
               sizeClasses.text,
               cardRoundedClass,

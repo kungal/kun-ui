@@ -106,6 +106,11 @@ export const kunBorderClasses: Record<KunUIColor, string> = {
   info: 'border-info',
 }
 
+/**
+ * @deprecated Use {@link kunFocusRingClasses} (or {@link kunFocusRingWithinClasses}
+ * for composite widgets). This mixed `:focus` + `:focus-within` so a mouse click
+ * lit the ring, and used a different opacity from the rest of the library.
+ */
 export const kunRingClasses: Record<KunUIColor, string> = {
   default: 'focus-within:ring-default/40 focus:ring-default/40',
   primary: 'focus-within:ring-primary/40 focus:ring-primary/40',
@@ -114,6 +119,46 @@ export const kunRingClasses: Record<KunUIColor, string> = {
   warning: 'focus-within:ring-warning/40 focus:ring-warning/40',
   danger: 'focus-within:ring-danger/40 focus:ring-danger/40',
   info: 'focus-within:ring-info/40 focus:ring-info/40',
+}
+
+/**
+ * Unified focus ring — ONE recipe for every directly-focusable control (inputs,
+ * textarea, select trigger, buttons, checkbox/radio, links, tabs, menu items…).
+ * Keyboard focus only (`:focus-visible`, so a mouse click on a button shows no
+ * ring; text fields still show it on click via the browser's focus-visible
+ * heuristic). A flush 2px ring in the control's semantic color at 50% — replaces
+ * the old scatter of `:focus`/`:focus-within` × `ring-1|2|4` × `/25|/40|/50|full`.
+ * Pair with `border-kun` at rest; on an invalid control use the `danger` entry.
+ */
+export const kunFocusRingClasses: Record<KunUIColor, string> = {
+  default: 'outline-none focus-visible:ring-2 focus-visible:ring-default/50',
+  primary: 'outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+  secondary: 'outline-none focus-visible:ring-2 focus-visible:ring-secondary/50',
+  success: 'outline-none focus-visible:ring-2 focus-visible:ring-success/50',
+  warning: 'outline-none focus-visible:ring-2 focus-visible:ring-warning/50',
+  danger: 'outline-none focus-visible:ring-2 focus-visible:ring-danger/50',
+  info: 'outline-none focus-visible:ring-2 focus-visible:ring-info/50',
+}
+
+/**
+ * Composite-widget variant of {@link kunFocusRingClasses}: the focusable element
+ * is an inner `<input>` but the ring should sit on the WRAPPER. Put this on the
+ * wrapper and give the inner input `outline-none` (and no ring of its own) so
+ * there's exactly one indicator. Used by KunNumberInput / KunTagInput.
+ *
+ * Uses `focus-within` (not `has-[:focus-visible]`): for a text-field wrapper the
+ * two are equivalent — a text input matches `:focus-visible` on click too — and
+ * `focus-within` is a native variant that reliably compiles, whereas the
+ * `has-[:focus-visible]` arbitrary variant isn't extracted from this TS source.
+ */
+export const kunFocusRingWithinClasses: Record<KunUIColor, string> = {
+  default: 'focus-within:ring-2 focus-within:ring-default/50',
+  primary: 'focus-within:ring-2 focus-within:ring-primary/50',
+  secondary: 'focus-within:ring-2 focus-within:ring-secondary/50',
+  success: 'focus-within:ring-2 focus-within:ring-success/50',
+  warning: 'focus-within:ring-2 focus-within:ring-warning/50',
+  danger: 'focus-within:ring-2 focus-within:ring-danger/50',
+  info: 'focus-within:ring-2 focus-within:ring-info/50',
 }
 
 // Very light tint of the semantic color — "selected card" backgrounds in

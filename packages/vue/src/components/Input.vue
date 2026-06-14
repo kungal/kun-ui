@@ -4,7 +4,7 @@ import {
   cn,
   kunRoundedClasses,
   kunControlSizeClasses,
-  type KunUIColor,
+  kunFocusRingClasses,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
@@ -79,16 +79,6 @@ const emits = defineEmits<{
 const input = ref<HTMLInputElement | null>(null)
 const isFocused = ref(false)
 const kunUniqueId = useKunUniqueId('kun-input')
-
-const colorClass: Record<KunUIColor, string> = {
-  default: 'focus:ring-default',
-  primary: 'focus:ring-primary',
-  secondary: 'focus:ring-secondary',
-  success: 'focus:ring-success',
-  warning: 'focus:ring-warning',
-  danger: 'focus:ring-danger',
-  info: 'focus:ring-info',
-}
 
 const sizeClasses = computed(() => {
   // Shared form-control scale, so a button + input in the same row line up.
@@ -173,14 +163,15 @@ defineExpose({
         :aria-describedby="(helper || error) ? `${kunUniqueId}-desc` : undefined"
         :class="
           cn(
-            'block w-full border transition duration-150 ease-in-out focus:border-transparent focus:ring-2',
+            'block w-full border transition-[color,box-shadow] duration-150 ease-in-out',
             roundedClass,
-            colorClass[color],
             sizeClasses,
             $slots.prefix && 'pl-10',
             rightPadClass,
             disabled && 'bg-default-100 cursor-not-allowed',
-            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
+            invalid
+              ? cn('border-danger-300', kunFocusRingClasses.danger)
+              : cn('border-kun', kunFocusRingClasses[color]),
             className
           )
         "

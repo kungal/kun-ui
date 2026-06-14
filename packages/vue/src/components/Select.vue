@@ -2,7 +2,12 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size } from '@floating-ui/vue'
-import { cn, kunRoundedClasses, kunControlSizeClasses } from '@kungal/ui-core'
+import {
+  cn,
+  kunRoundedClasses,
+  kunControlSizeClasses,
+  kunFocusRingClasses,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
@@ -302,11 +307,13 @@ watch(filtered, () => {
       :aria-disabled="disabled || undefined"
       :class="
         cn(
-          'focus:border-primary focus:ring-primary flex w-full cursor-pointer items-center justify-between gap-2 text-left focus:ring-1 focus:outline-none',
+          'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
           kunControlSizeClasses[props.size],
           roundedClass,
           'border',
-          error ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
+          error
+            ? cn('border-danger-300', kunFocusRingClasses.danger)
+            : cn('border-kun', kunFocusRingClasses.primary),
           disabled && 'bg-default-100 cursor-not-allowed'
         )
       "
@@ -398,7 +405,7 @@ watch(filtered, () => {
               :aria-controls="listId"
               :aria-expanded="isOpen"
               :aria-activedescendant="activeId"
-              class="border-kun focus:border-primary focus:ring-primary w-full rounded-kun-sm border px-2.5 py-1.5 text-sm focus:ring-1 focus:outline-none"
+              class="border-kun w-full rounded-kun-sm border px-2.5 py-1.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
               @keydown="onKeydown"
             />
           </div>

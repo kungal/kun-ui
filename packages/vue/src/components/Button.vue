@@ -5,6 +5,7 @@ import {
   kunVariantClasses,
   kunRoundedClasses,
   kunControlSizeClasses,
+  kunFocusRingClasses,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
@@ -149,6 +150,9 @@ const handleKunButtonClick = (event: MouseEvent) => {
     :class="
       cn(
         'relative inline-flex cursor-pointer items-center justify-center gap-1 overflow-hidden font-medium transition-all hover:opacity-80 active:scale-[0.97]',
+        // Offset ring (gap against the fill) so the keyboard-focus ring reads on
+        // solid buttons too — same recipe as every other control, just spaced out.
+        cn(kunFocusRingClasses[color], 'focus-visible:ring-offset-2 focus-visible:ring-offset-background'),
         sizeClasses,
         colorClasses,
         roundedClass,
