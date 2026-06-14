@@ -177,4 +177,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 
 | **0.22.3** | Button/Chip/Badge/TagInput 标签改为不换行(`whitespace-nowrap`,对齐 shadcn/Material 标准);Button 图标 `shrink-0` 防压缩(Tab 早已 nowrap) |
 
+| **0.22.4** | 单行校验收尾:Dropdown/ContextMenu 菜单项 `truncate`(+图标 shrink-0)、UserChip 姓名/描述 `truncate`;Tooltip 由强制 `nowrap` 改 `max-w-xs`(长内容换行不再撑屏) |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

@@ -104,7 +104,7 @@ const hide = () => {
           role="tooltip"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border px-3 py-2 text-sm font-medium whitespace-nowrap shadow-kun-sm',
+              'bg-content1 border-kun z-kun-popover max-w-xs border px-3 py-2 text-sm font-medium shadow-kun-sm',
               roundedClass,
               hideOnMobile && 'hidden sm:block'
             )

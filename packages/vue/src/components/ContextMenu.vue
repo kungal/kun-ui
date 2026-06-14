@@ -259,8 +259,8 @@ const itemClass = (item: KunContextMenuItem) =>
           @click="onItemClick($event, item)"
           @mouseenter="!item.disabled && focusItem(i)"
         >
-          <KunIcon v-if="item.icon" :name="item.icon" class="text-base" />
-          <span>{{ item.label }}</span>
+          <KunIcon v-if="item.icon" :name="item.icon" class="shrink-0 text-base" />
+          <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
         </component>
       </div>
     </Transition>

@@ -48,9 +48,9 @@ const linkProps = computed(() => {
       :is-navigation="false"
     />
 
-    <div class="flex flex-col text-sm">
-      <span>{{ user?.name || '未知用户' }}</span>
-      <span v-if="description" class="text-default-500">{{ description }}</span>
+    <div class="flex min-w-0 flex-col text-sm">
+      <span class="truncate">{{ user?.name || '未知用户' }}</span>
+      <span v-if="description" class="text-default-500 truncate">{{ description }}</span>
     </div>
   </component>
 </template>
