@@ -21,6 +21,9 @@ const MIN_SCALE = 1
 const MAX_SCALE = 5
 const SWIPE_THRESHOLD = 50
 const ZOOM_STEP = 0.5
+// Pointer travel (px) past which a press is treated as a drag, not a click —
+// so the click that ends a pan/swipe doesn't dismiss the viewer.
+const DRAG_MOVE_PX = 6
 
 const currentIndex = ref(props.initialIndex || 0)
 const scale = ref(1)
@@ -35,6 +38,8 @@ const DOUBLE_TAP_PX = 30
 const rotation = ref(0)
 const position = reactive({ x: 0, y: 0 })
 const isDragging = ref(false)
+// Whether the active press has travelled past DRAG_MOVE_PX; gates backdrop close.
+const pointerMoved = ref(false)
 const dragStart = reactive({ x: 0, y: 0 })
 const lastTouch = reactive({ x: 0, y: 0 })
 const lastTouchDistance = ref(0)
@@ -149,6 +154,14 @@ const onDialogClick = (e: MouseEvent) => {
   }
 }
 
+// Click the dark area around the image to dismiss. The image and every control
+// carry @click.stop, so a click that reaches here is on the backdrop. A click
+// that is the tail of a drag / pan / swipe (pointerMoved) must not close.
+const onBackdropClick = () => {
+  if (pointerMoved.value) return
+  emit('update:isOpen', false)
+}
+
 const next = () => {
   slideDir.value = 'slide-next'
   resetTransform()
@@ -210,6 +223,7 @@ const handleWheel = (e: WheelEvent) => {
 
 const startDrag = (e: MouseEvent | TouchEvent) => {
   isDragging.value = true
+  pointerMoved.value = false
   dragStartTime.value = Date.now()
   const point = 'touches' in e ? e.touches[0] : e
   dragStart.x = point!.clientX - position.x
@@ -221,6 +235,12 @@ const startDrag = (e: MouseEvent | TouchEvent) => {
 const onDrag = (e: MouseEvent | TouchEvent) => {
   if (!isDragging.value) return
   const point = 'touches' in e ? e.touches[0] : e
+  if (
+    Math.abs(point!.clientX - initialDragPosition.x) > DRAG_MOVE_PX ||
+    Math.abs(point!.clientY - initialDragPosition.y) > DRAG_MOVE_PX
+  ) {
+    pointerMoved.value = true
+  }
   if (scale.value <= 1) {
     position.x = point!.clientX - initialDragPosition.x
     return
@@ -426,6 +446,7 @@ onUnmounted(() => {
       <div
         ref="containerRef"
         class="kun-lightbox-stage relative flex h-full w-full touch-none items-center justify-center overflow-hidden"
+        @click="onBackdropClick"
         @wheel.prevent="handleWheel"
         @mousedown="startDrag"
         @mousemove="onDrag"
