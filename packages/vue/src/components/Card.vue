@@ -106,10 +106,9 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
       <slot />
     </div>
 
-    <!-- Footer: a hairline separator (unified border token) over the card's own
-         surface — no gray fill, no double padding. `-mt-3` cancels the parent
-         gap so the rule sits flush under the content, then `pt-3` re-spaces. -->
-    <div v-if="$slots.footer" class="border-kun -mt-3 border-t pt-3">
+    <!-- Footer: no separator line — just a section, spaced from the content by
+         the card's own `gap-3` (matches the borderless header). -->
+    <div v-if="$slots.footer">
       <slot name="footer" />
     </div>
 

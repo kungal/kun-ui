@@ -32,6 +32,7 @@ const props = withDefaults(defineProps<KunDatePickerProps>(), {
   valueFormat: 'yyyy-MM-dd',
   rounded: undefined,
   size: 'md',
+  color: 'default',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -201,7 +202,7 @@ const isInPreviewRange = (date: Date) => {
             'flex w-full cursor-pointer items-center justify-between text-left transition-[color,box-shadow]',
             kunControlSizeClasses[props.size],
             roundedClass,
-            kunFocusRingClasses.primary,
+            kunFocusRingClasses[color],
             'border-kun border',
             disabled && 'bg-default-100 cursor-not-allowed'
           )
@@ -283,7 +284,7 @@ const isInPreviewRange = (date: Date) => {
                   cn(
                     cn(
                       'flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors',
-                      kunFocusRingClasses.primary
+                      kunFocusRingClasses[color]
                     ),
                     !day.isCurrentMonth && 'text-default-400',
                     day.isToday && 'border-primary bg-primary/20 border',

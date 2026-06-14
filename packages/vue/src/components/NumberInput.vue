@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<KunNumberInputProps>(), {
   max: Number.POSITIVE_INFINITY,
   step: 1,
   size: 'md',
-  color: 'primary',
+  color: 'default',
   label: '',
   placeholder: '',
   error: '',

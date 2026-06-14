@@ -169,4 +169,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 
 | **0.21.0** | sizing/spacing 一致性:表单 label 统一(Textarea/DatePicker 补 `text-default-700`、DatePicker `mb-2`→`mb-1`)、error 文字统一(`text-danger mt-1`);新增 `kunChipSizeClasses`,KunChip 与 KunTagInput 标签共用同一 chip 尺寸 + 药丸形 |
 
+| **0.22.0** | 聚焦环颜色统一:全部文本控件 ring 跟随 `color`、默认 `'default'`(灰环);Textarea/Select/Autocomplete/DatePicker 新增 `color` prop,NumberInput 默认 `'primary'`→`'default'`;Card footer 去掉 top border |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

@@ -340,6 +340,8 @@ export interface KunInputProps {
 
 // ── Textarea ───────────────────────────────────────────────────────────
 export interface KunTextareaProps {
+  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  color?: KunUIColor
   placeholder?: string
   label?: string
   name?: string
@@ -433,6 +435,8 @@ export interface KunAutocompleteOption {
 }
 
 export interface KunAutocompleteProps {
+  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  color?: KunUIColor
   options: readonly KunAutocompleteOption[]
   label?: string
   placeholder?: string
@@ -561,6 +565,8 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
 }
 
 export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
+  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  color?: KunUIColor
   options: readonly KunSelectOption<T>[]
   label?: string
   placeholder?: string
@@ -728,6 +734,8 @@ export interface KunTextProps {
 export type KunDatePickerMode = 'single' | 'range'
 
 export interface KunDatePickerProps {
+  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  color?: KunUIColor
   modelValue?: string | null | [string | null, string | null]
   mode?: KunDatePickerMode
   label?: string

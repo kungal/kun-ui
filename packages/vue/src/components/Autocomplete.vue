@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<KunAutocompleteProps>(), {
   size: 'md',
   rounded: undefined,
   darkBorder: true,
+  color: 'default',
   clearable: false,
   allowCustomValue: true,
   manualFilter: false,
@@ -252,7 +253,7 @@ defineExpose({
             clearable && modelValue ? 'pr-9' : '',
             invalid
               ? cn('border-danger-300', kunFocusRingClasses.danger)
-              : cn('border-kun', kunFocusRingClasses.primary),
+              : cn('border-kun', kunFocusRingClasses[color]),
             disabled && 'bg-default-100 cursor-not-allowed'
           )
         "

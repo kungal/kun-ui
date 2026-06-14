@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<KunSelectProps<T>>(), {
   error: '',
   description: '',
   darkBorder: true,
+  color: 'default',
   ariaLabel: '',
   className: '',
   rounded: undefined,
@@ -313,7 +314,7 @@ watch(filtered, () => {
           'border',
           error
             ? cn('border-danger-300', kunFocusRingClasses.danger)
-            : cn('border-kun', kunFocusRingClasses.primary),
+            : cn('border-kun', kunFocusRingClasses[color]),
           disabled && 'bg-default-100 cursor-not-allowed'
         )
       "
@@ -405,7 +406,12 @@ watch(filtered, () => {
               :aria-controls="listId"
               :aria-expanded="isOpen"
               :aria-activedescendant="activeId"
-              class="border-kun w-full rounded-kun-sm border px-2.5 py-1.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              :class="
+                cn(
+                  'border-kun w-full rounded-kun-sm border px-2.5 py-1.5 text-sm',
+                  kunFocusRingClasses[color]
+                )
+              "
               @keydown="onKeydown"
             />
           </div>

@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
   darkBorder: true,
   rounded: undefined,
   size: 'md',
+  color: 'default',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -141,7 +142,7 @@ defineExpose({
             roundedClass,
             error
               ? cn('border-danger-300', kunFocusRingClasses.danger)
-              : cn('border-kun', kunFocusRingClasses.primary),
+              : cn('border-kun', kunFocusRingClasses[color]),
             disabled ? 'text-default-500 cursor-not-allowed shadow-none' : '',
             resize === 'none'
               ? 'resize-none'
