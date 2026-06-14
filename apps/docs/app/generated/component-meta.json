@@ -2,6 +2,117 @@
   "KunAlertProvider": {
     "props": []
   },
+  "KunAutocomplete": {
+    "props": [
+      {
+        "name": "options",
+        "type": "readonly KunAutocompleteOption[]",
+        "required": true
+      },
+      {
+        "name": "allowCustomValue",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "isInvalid",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "manualFilter",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "noResultText",
+        "type": "string",
+        "required": false,
+        "default": "\"无匹配项\""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      }
+    ]
+  },
   "KunAvatar": {
     "props": [
       {
@@ -53,6 +164,12 @@
         "required": true
       },
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
         "name": "ellipsis",
         "type": "boolean",
         "required": false,
@@ -62,7 +179,7 @@
         "name": "total",
         "type": "number",
         "required": false,
-        "default": "0"
+        "default": "undefined"
       },
       {
         "name": "visibleCount",
@@ -74,6 +191,11 @@
   },
   "KunBadge": {
     "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false
+      },
       {
         "name": "className",
         "type": "string",
@@ -159,7 +281,7 @@
         "name": "iconClass",
         "type": "string",
         "required": false,
-        "default": "\"size-10 rounded-2xl\""
+        "default": "\"size-10 rounded-kun-lg\""
       },
       {
         "name": "iconSrc",
@@ -353,16 +475,34 @@
         "default": "\"default\""
       },
       {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
         "default": "false"
       },
       {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "id",
         "type": "string",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "indeterminate",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       },
       {
         "name": "label",
@@ -411,10 +551,22 @@
         "default": "\"\""
       },
       {
+        "name": "closable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
         "name": "color",
         "type": "KunUIColor",
         "required": false,
         "default": "\"default\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       },
       {
         "name": "size",
@@ -498,6 +650,12 @@
         "default": "\"primary\""
       },
       {
+        "name": "copiedText",
+        "type": "string",
+        "required": false,
+        "default": "\"已复制\""
+      },
+      {
         "name": "name",
         "type": "string",
         "required": false,
@@ -529,6 +687,12 @@
         "type": "boolean",
         "required": false,
         "default": "true"
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
       },
       {
         "name": "darkBorder",
@@ -789,6 +953,12 @@
         "default": "\"\""
       },
       {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
@@ -951,6 +1121,12 @@
       },
       {
         "name": "densities",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "fallbackSrc",
         "type": "string",
         "required": false,
         "default": "undefined"
@@ -1153,6 +1329,12 @@
         "default": "true"
       },
       {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
@@ -1169,6 +1351,18 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "isClearable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "isInvalid",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       },
       {
         "name": "label",
@@ -1190,6 +1384,12 @@
       },
       {
         "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "revealPassword",
         "type": "boolean",
         "required": false,
         "default": "false"
@@ -1335,6 +1535,18 @@
         "default": "false"
       },
       {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "spinner",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
         "name": "src",
         "type": "string",
         "required": false,
@@ -1374,6 +1586,11 @@
         "required": true
       },
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false
+      },
+      {
         "name": "className",
         "type": "string",
         "required": false,
@@ -1398,10 +1615,34 @@
         "default": "true"
       },
       {
+        "name": "placement",
+        "type": "\"top\" | \"center\"",
+        "required": false,
+        "default": "\"center\""
+      },
+      {
+        "name": "role",
+        "type": "\"dialog\" | \"alertdialog\"",
+        "required": false,
+        "default": "\"dialog\""
+      },
+      {
         "name": "rounded",
         "type": "KunUIRounded",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "scrollBehavior",
+        "type": "\"inside\" | \"outside\"",
+        "required": false,
+        "default": "\"inside\""
+      },
+      {
+        "name": "size",
+        "type": "KunModalSize",
+        "required": false,
+        "default": "\"md\""
       },
       {
         "name": "withContainer",
@@ -1435,6 +1676,130 @@
       }
     ]
   },
+  "KunNumberInput": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
+        "name": "controls",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "darkBorder",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "isInvalid",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "Number.POSITIVE_INFINITY"
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "required": false,
+        "default": "Number.NEGATIVE_INFINITY"
+      },
+      {
+        "name": "modelValue",
+        "type": "number | null",
+        "required": false,
+        "default": "null"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "precision",
+        "type": "number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "default": "1"
+      }
+    ]
+  },
   "KunPagination": {
     "props": [
       {
@@ -1451,11 +1816,103 @@
         "name": "isLoading",
         "type": "boolean",
         "required": false
+      },
+      {
+        "name": "pageHref",
+        "type": "((page: number) => string)",
+        "required": false
+      }
+    ]
+  },
+  "KunPinInput": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"验证码\""
+      },
+      {
+        "name": "autofocus",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "isInvalid",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "length",
+        "type": "number",
+        "required": false,
+        "default": "6"
+      },
+      {
+        "name": "mask",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "type",
+        "type": "\"text\" | \"numeric\"",
+        "required": false,
+        "default": "\"numeric\""
       }
     ]
   },
   "KunPopover": {
     "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false
+      },
       {
         "name": "autoPosition",
         "type": "boolean",
@@ -1479,11 +1936,23 @@
         "type": "KunUIRounded",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "showArrow",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       }
     ]
   },
   "KunProgress": {
     "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
       {
         "name": "className",
         "type": "string",
@@ -1666,6 +2135,12 @@
   "KunScrollShadow": {
     "props": [
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"scrollable content\""
+      },
+      {
         "name": "axis",
         "type": "\"horizontal\" | \"vertical\"",
         "required": false,
@@ -1701,7 +2176,7 @@
     "props": [
       {
         "name": "modelValue",
-        "type": "T",
+        "type": "T | T[] | null",
         "required": true
       },
       {
@@ -1722,10 +2197,28 @@
         "default": "\"\""
       },
       {
+        "name": "clearable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
         "default": "true"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
       },
       {
         "name": "disabled",
@@ -1746,6 +2239,24 @@
         "default": "\"\""
       },
       {
+        "name": "multiple",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "noResultText",
+        "type": "string",
+        "required": false,
+        "default": "\"无匹配项\""
+      },
+      {
         "name": "placeholder",
         "type": "string",
         "required": false,
@@ -1756,6 +2267,18 @@
         "type": "KunUIRounded",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "searchable",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "searchPlaceholder",
+        "type": "string",
+        "required": false,
+        "default": "\"搜索…\""
       },
       {
         "name": "size",
@@ -1773,16 +2296,70 @@
         "required": true
       },
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "formatValue",
+        "type": "((value: number) => string)",
+        "required": false
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "marks",
+        "type": "(number | KunSliderMark)[]",
+        "required": false
+      },
+      {
         "name": "max",
         "type": "number",
         "required": false,
-        "default": "77"
+        "default": "100"
       },
       {
         "name": "min",
         "type": "number",
         "required": false,
-        "default": "17"
+        "default": "0"
+      },
+      {
+        "name": "showTooltip",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "showValue",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       },
       {
         "name": "size",
@@ -1812,10 +2389,22 @@
         "default": "\"\""
       },
       {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
         "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
       },
       {
         "name": "label",
@@ -1848,6 +2437,12 @@
         "name": "modelValue",
         "type": "string",
         "required": true
+      },
+      {
+        "name": "align",
+        "type": "\"start\" | \"end\" | \"center\"",
+        "required": false,
+        "default": "\"center\""
       },
       {
         "name": "className",
@@ -2027,6 +2622,12 @@
         "default": "true"
       },
       {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
@@ -2179,10 +2780,22 @@
         "default": "false"
       },
       {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"default\""
+      },
+      {
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
         "default": "true"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
       },
       {
         "name": "disabled",
@@ -2327,6 +2940,12 @@
         "default": "undefined"
       },
       {
+        "name": "showArrow",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
         "name": "text",
         "type": "string",
         "required": false,
@@ -2348,6 +2967,12 @@
       },
       {
         "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "description",
         "type": "string",
         "required": false,
         "default": "\"\""
@@ -2402,6 +3027,12 @@
         "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
         "required": false,
         "default": "\"top\""
+      },
+      {
+        "name": "isNavigation",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
       },
       {
         "name": "size",

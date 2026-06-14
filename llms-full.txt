@@ -1,6 +1,6 @@
 # KunUI — full documentation for LLMs
 
-> Cross-framework component library — 53 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 57 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
 
@@ -583,7 +583,10 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 
 - **KunInput** — Text input (v-model) with label/helper/error, sizes, variants.
 - **KunTextarea** — Multiline input (v-model) with optional counter.
-- **KunSelect** — Select dropdown (v-model, options array).
+- **KunNumberInput** — Numeric input (v-model number|null) with steppers, min/max/step, precision, clamping.
+- **KunPinInput** — OTP / PIN segmented input (v-model string): per-cell entry, paste, masking, complete event.
+- **KunSelect** — Select dropdown (v-model, options array); single/multiple, searchable, clearable.
+- **KunAutocomplete** — Combobox: a text field (v-model string) with a filtered suggestion list; allowCustomValue / manualFilter.
 - **KunSwitch** — Toggle switch (v-model boolean).
 - **KunCheckBox** — Checkbox (v-model boolean).
 - **KunSlider** — Range slider (v-model number; min/max/step).

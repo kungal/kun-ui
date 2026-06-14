@@ -22,7 +22,7 @@ const DOCS_BASE = process.argv[2] || 'https://github.com/kungal/kun-ui/blob/main
 const meta = {
   name: 'KunUI',
   tagline:
-    'Cross-framework component library — 53 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.',
+    'Cross-framework component library — 57 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.',
   packages: [
     ['@kungal/ui-tokens', 'Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.'],
     ['@kungal/ui-core', 'Framework-agnostic TypeScript core: cn(), the variant/class matrix, the radius system, the bundled-icon registry, shared types (KunUIColor, KunUser, …).'],
@@ -97,7 +97,10 @@ const components = [
   // Forms
   ['KunInput', 'Forms', 'Text input (v-model) with label/helper/error, sizes, variants.'],
   ['KunTextarea', 'Forms', 'Multiline input (v-model) with optional counter.'],
-  ['KunSelect', 'Forms', 'Select dropdown (v-model, options array).'],
+  ['KunNumberInput', 'Forms', 'Numeric input (v-model number|null) with steppers, min/max/step, precision, clamping.'],
+  ['KunPinInput', 'Forms', 'OTP / PIN segmented input (v-model string): per-cell entry, paste, masking, complete event.'],
+  ['KunSelect', 'Forms', 'Select dropdown (v-model, options array); single/multiple, searchable, clearable.'],
+  ['KunAutocomplete', 'Forms', 'Combobox: a text field (v-model string) with a filtered suggestion list; allowCustomValue / manualFilter.'],
   ['KunSwitch', 'Forms', 'Toggle switch (v-model boolean).'],
   ['KunCheckBox', 'Forms', 'Checkbox (v-model boolean).'],
   ['KunSlider', 'Forms', 'Range slider (v-model number; min/max/step).'],

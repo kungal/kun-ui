@@ -7,6 +7,7 @@ import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 // component types, so the tags stay type-checked in consumer templates.
 const KUN_COMPONENTS = [
   'KunAlertProvider',
+  'KunAutocomplete',
   'KunAvatar',
   'KunAvatarGroup',
   'KunBadge',
@@ -41,7 +42,9 @@ const KUN_COMPONENTS = [
   'KunMessageProvider',
   'KunModal',
   'KunNull',
+  'KunNumberInput',
   'KunPagination',
+  'KunPinInput',
   'KunPopover',
   'KunProgress',
   'KunRadioGroup',

@@ -49,6 +49,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/': { title: site.name, description: site.description },
   '/getting-started': { title: '快速开始', description: '几分钟把 KunUI 接入你的 Vue / Nuxt 项目:安装、CSS 入口、核心规则、暗色模式与反馈 Provider。' },
 
+  '/components/autocomplete': { title: 'Autocomplete', cn: '自动完成', description: '组合框:文本输入 + 过滤建议列表(v-model 字符串);支持 allowCustomValue 与手动过滤。' },
   '/components/avatar': { title: 'Avatar', cn: '头像', description: '基于 KunUser 的用户头像,支持确定性贴纸兜底与点击跳转个人主页。' },
   '/components/avatargroup': { title: 'AvatarGroup', cn: '头像组', description: '层叠头像组,超出部分以 +N 角标展示。' },
   '/components/badge': { title: 'Badge', cn: '徽标', description: '包裹触发元素的计数或圆点角标;max 限制显示的最大计数。' },
@@ -79,7 +80,9 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/markdown': { title: 'Markdown', cn: 'Markdown 字形', description: 'KunUI markdown 字形(内联 SVG)。' },
   '/components/modal': { title: 'Modal', cn: '对话框', description: '传送到 body 的对话框,焦点锁定、滚动锁定,可按 Esc 关闭。' },
   '/components/null': { title: 'Null', cn: '空状态', description: '空状态占位,内置看板娘图片与文案。' },
+  '/components/numberinput': { title: 'NumberInput', cn: '数字输入框', description: '数字输入(v-model number|null),带步进按钮、min/max/step、小数精度与自动钳制。' },
   '/components/pagination': { title: 'Pagination', cn: '分页', description: '分页导航(v-model:current-page + total-page),带快速跳页。' },
+  '/components/pininput': { title: 'PinInput', cn: 'PIN 输入框', description: 'OTP / PIN 分段输入(v-model 字符串):逐格输入、粘贴分发、掩码、填满触发 complete。' },
   '/components/popover': { title: 'Popover', cn: '气泡卡片', description: '锚定在触发槽上的浮层面板。' },
   '/components/progress': { title: 'Progress', cn: '进度条', description: '进度条:实心 / 条纹 / 渐变 / 环形,支持不确定态与标签。' },
   '/components/radiogroup': { title: 'RadioGroup', cn: '单选组', description: '单选组(v-model + options),支持经典 / 卡片变体。' },

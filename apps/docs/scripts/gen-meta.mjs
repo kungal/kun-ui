@@ -17,16 +17,16 @@ const root = join(here, '..', '..', '..')
 const vuePkg = join(root, 'packages', 'vue')
 const tsconfig = join(vuePkg, 'tsconfig.json')
 
-// The 54 public components. File name = component name without the `Kun` prefix.
+// The 57 public components. File name = component name without the `Kun` prefix.
 const names = [
-  'KunAlertProvider', 'KunAvatar', 'KunAvatarGroup', 'KunBadge', 'KunBrand',
+  'KunAlertProvider', 'KunAutocomplete', 'KunAvatar', 'KunAvatarGroup', 'KunBadge', 'KunBrand',
   'KunButton', 'KunCard', 'KunCheckBox', 'KunChip', 'KunContent',
   'KunContextMenu', 'KunCopy', 'KunDatePicker', 'KunDivider', 'KunDrawer',
   'KunDropdown', 'KunFadeCard', 'KunFileInput', 'KunHeader',
   'KunIcon', 'KunImage', 'KunImageNative', 'KunInfo', 'KunInput',
   'KunLightbox', 'KunLightboxGallery', 'KunLightboxGalleryItem', 'KunLink',
   'KunLoading', 'KunLoli', 'KunLoliProvider', 'KunMarkdown', 'KunMessageProvider',
-  'KunModal', 'KunNull', 'KunPagination', 'KunPopover', 'KunProgress',
+  'KunModal', 'KunNull', 'KunNumberInput', 'KunPagination', 'KunPinInput', 'KunPopover', 'KunProgress',
   'KunRadioGroup', 'KunRating', 'KunRipple', 'KunScrollShadow', 'KunSelect',
   'KunSlider', 'KunSwitch', 'KunTab', 'KunTabPanel', 'KunTabPanels',
   'KunTagInput', 'KunText', 'KunTextarea',
