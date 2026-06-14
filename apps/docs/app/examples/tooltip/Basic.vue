@@ -1,8 +1,5 @@
 <template>
-  <KunTooltip text="Hello from a tooltip" position="top">
-    <KunButton variant="bordered">Hover me</KunButton>
-  </KunTooltip>
-  <KunTooltip text="On the right" position="right">
-    <KunButton variant="bordered">And me</KunButton>
+  <KunTooltip text="我是一个提示框">
+    <KunButton variant="bordered">悬停我</KunButton>
   </KunTooltip>
 </template>
