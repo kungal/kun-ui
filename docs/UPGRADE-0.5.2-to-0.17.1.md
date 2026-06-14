@@ -160,5 +160,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 | **0.16.0** | 反馈批:Progress 圆环 ARIA+不定态;Loading aria+spinner;toast assertive+关闭+上限+滑动;useKunAlert 可定制+alertdialog;Badge 独立/aria;Ripple key |
 | **0.17.0** | 导航批:ScrollShadow aria;Link/Button `_blank` noopener;AvatarGroup;Chip 可关闭/插槽;Copy 反馈;Image `fallbackSrc`;Pagination prev/next 可爬 |
 | **0.17.1** | CR 修复:Copy 误报成功 / toast 提前消失 / NumberInput 步进 / Image 缓存回退 / ContextMenu SSR / toast inert / PinInput |
+| **0.17.2** | 修复:Modal / Drawer / Tab 指示器 / toast / FadeCard 动画在下游构建中消失(`--kun-dur-*` 被 Tailwind tree-shake 出 `:root`,现镜像进普通 `:root`)。纯 CSS,无 API 变更 |
 
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

@@ -368,6 +368,30 @@
   z-index: var(--z-kun-message, 9999);
 }
 
+/* Motion tokens, mirrored into a plain :root so they ALWAYS reach the document.
+ *
+ * Exact same tree-shaking trap as the z-index fallbacks above: Tailwind v4 only
+ * emits an @theme variable to :root when its scanner sees it "used", and these
+ * are read ONLY via `var(--kun-dur-base)` / `var(--ease-kun-out)` inside
+ * component <style> blocks and inline styles — which Tailwind never scans. The
+ * duration tokens have no utility namespace at all, so @theme drops every one
+ * of them in a normal consumer build; the component transitions then resolve to
+ * `var(<undefined>)`, the whole `transition` shorthand is invalidated, and the
+ * Modal / Drawer / FadeCard / Tab-indicator / toast animations silently vanish.
+ * This plain :root (not @theme → never tree-shaken) guarantees a real value in
+ * every build. The easings are ALSO kept in @theme above — that is what
+ * generates the `ease-kun-*` utilities — so keep the two lists in sync. */
+:root {
+  --ease-kun-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-kun-out: cubic-bezier(0, 0, 0, 1);
+  --ease-kun-in: cubic-bezier(0.3, 0, 1, 1);
+  --ease-kun-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --kun-dur-fast: 150ms;
+  --kun-dur-base: 250ms;
+  --kun-dur-slow: 350ms;
+  --kun-dur-exit: 180ms;
+}
+
 @layer base {
   :root {
     /* Content color */
