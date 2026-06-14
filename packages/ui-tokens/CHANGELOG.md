@@ -1,5 +1,52 @@
 # @kungal/ui-tokens
 
+## 0.20.0
+
+### Minor Changes
+
+- 40e8abf: feat: unified elevation scale + misc token cleanups
+
+  **Elevation scale** — floating surfaces were assigned `shadow-md` / `shadow-lg` /
+  `shadow-2xl` ad hoc, so same-kind surfaces disagreed (Select & Autocomplete
+  option lists were `shadow-lg`, but Dropdown & ContextMenu menus were `shadow-2xl`;
+  Modal had no shadow at all). New three-tier scale in `@kungal/ui-tokens` —
+  `--shadow-kun-sm` / `-md` / `-lg`, generating `shadow-kun-sm|md|lg` utilities
+  (they compose with `ring-*` via `--tw-shadow`, so a ringed toast still gets its
+  elevation). Applied by tier:
+
+  - **sm** — tooltips, slider value bubble
+  - **md** — popovers, dropdowns, context menus, select/autocomplete/date lists, toasts
+  - **lg** — modals (now actually elevated), drawers
+
+  **Misc consistency cleanups:**
+
+  - Raw Tailwind radii routed through the token scale: `KunBrand` / `KunNull`
+    `rounded-2xl` → `rounded-kun-lg`; `KunLoading` `rounded-lg` → `rounded-kun-md`
+    (so `--kun-radius-scale` now affects them too). The dark `KunLightbox` viewer
+    chrome keeps its own radii intentionally.
+  - `KunNumberInput` stepper buttons: `disabled:opacity-40` → `disabled:opacity-50`
+    to match every other disabled control.
+
+- 40e8abf: feat: route component transitions through the motion scale
+
+  Transitions hardcoded raw `duration-150/200/300` and raw `ease-in/out/in-out`
+  that didn't match the designed motion tokens (overlay enters were `200ms` but
+  `--kun-dur-base` is `250ms`; some controls used symmetric `ease-in-out` while the
+  rest used the asymmetric `ease-kun-*` curves). Now unified:
+
+  - New `duration-kun-fast | base | slow | exit` utilities bound to `--kun-dur-*`
+    (with literal fallbacks). Every component transition routes through them, so a
+    global motion retune via the tokens actually propagates.
+  - Mapped by role, preserving the asymmetric rhythm (enter decelerates, exit
+    accelerates): overlay **enter → base**, **leave → exit**, hover/selection/focus
+    **micro → fast**, skeleton/fade/large **→ slow**.
+  - Remaining raw `ease-in-out` / `ease-out` Tailwind classes (Avatar, Input,
+    Textarea, Progress) switched to `ease-kun-standard` / `ease-kun-out`; scoped-style
+    easings (Content, Ripple) now read `var(--ease-kun-*)`. The looping indeterminate
+    progress keyframe and the dark Lightbox viewer keep their own timing.
+
+  Net effect: a single, consistent motion feel across every control. No API changes.
+
 ## 0.19.1
 
 ## 0.19.0

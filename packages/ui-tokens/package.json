@@ -1,6 +1,6 @@
 {
   "name": "@kungal/ui-tokens",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "KunUI design tokens — framework-agnostic Tailwind v4 theme (semantic colors, radius, z-index, animations).",
   "type": "module",
   "keywords": [
