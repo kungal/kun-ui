@@ -1,5 +1,12 @@
 # @kungal/ui-vue
 
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [be17775]
+  - @kungal/ui-core@0.22.1
+
 ## 0.22.0
 
 ### Minor Changes
