@@ -201,10 +201,9 @@ defineExpose({
           'flex w-full items-stretch overflow-hidden border transition focus-within:ring-2',
           roundedClass,
           sz.text,
-          darkBorder ? 'dark:border-default-200 border-default/20' : 'border-default/20',
           invalid
             ? 'border-danger-300 focus-within:border-danger focus-within:ring-danger'
-            : focusRing[color],
+            : cn('border-kun', focusRing[color]),
           disabled && 'bg-default-100 cursor-not-allowed'
         )
       "

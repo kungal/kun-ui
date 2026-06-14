@@ -368,6 +368,27 @@
   z-index: var(--z-kun-message, 9999);
 }
 
+/* Canonical neutral border — the SINGLE source of truth for every structural
+ * hairline (inputs, cards, dividers, popovers, tabs, tables…). Defaults to the
+ * `default-200` step, which already flips light↔dark (light ≈ L90% zinc-200,
+ * dark ≈ L26% zinc-700), so one utility stays consistent across modes AND
+ * components — no more per-component `border-default/20` + `dark:border-…`
+ * juggling that only coincidentally matched. Retheme every border at once by
+ * overriding `--color-kun-border` (set it in `.kun-dark-mode` too if you give
+ * it a fixed, non-flipping value). Plain :root + literal fallback on the
+ * utility → never tree-shaken (same reasoning as the z-index / motion blocks).
+ *
+ * `border-kun` sets border-COLOR only; pair it with a width class
+ * (`border` / `border-b` / `border-t` / `border-l`). Conditional `border-danger-*`
+ * / `focus:border-*` still win (apply `border-kun` only in the non-error branch
+ * so two plain border-color utilities never fight over source order). */
+:root {
+  --color-kun-border: hsl(var(--default-200));
+}
+@utility border-kun {
+  border-color: var(--color-kun-border, hsl(var(--default-200)));
+}
+
 /* Motion tokens, mirrored into a plain :root so they ALWAYS reach the document.
  *
  * Exact same tree-shaking trap as the z-index fallbacks above: Tailwind v4 only

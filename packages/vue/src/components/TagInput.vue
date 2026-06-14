@@ -280,7 +280,7 @@ const containerClasses = computed(() =>
     sizeMinH[props.size],
     sizePadding[props.size],
     sizeText[props.size],
-    props.variant === 'bordered' && 'border border-default-200',
+    props.variant === 'bordered' && cn('border', !props.error && 'border-kun'),
     props.variant === 'flat' && 'bg-content2',
     kunRingClasses[props.color],
     'focus-within:ring-2',

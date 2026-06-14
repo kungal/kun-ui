@@ -241,12 +241,11 @@ defineExpose({
         autocomplete="off"
         :class="
           cn(
-            'border-default/20 focus:border-primary focus:ring-primary block w-full border transition focus:ring-1 focus:outline-none',
+            'focus:border-primary focus:ring-primary block w-full border transition focus:ring-1 focus:outline-none',
             roundedClass,
             kunControlSizeClasses[size],
             clearable && modelValue ? 'pr-9' : '',
-            darkBorder && 'dark:border-default-200',
-            invalid && 'border-danger-300 focus:border-danger focus:ring-danger',
+            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
             disabled && 'bg-default-100 cursor-not-allowed'
           )
         "
@@ -284,7 +283,7 @@ defineExpose({
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(
-              'bg-content1 border-default-200 z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
+              'bg-content1 border-kun z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
               roundedClass
             )
           "

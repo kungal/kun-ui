@@ -17,7 +17,9 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-default-200, currentColor);
+    /* Global default border color = the canonical neutral border token, so a
+     * bare `border` (no explicit color) matches `border-kun` everywhere. */
+    border-color: var(--color-kun-border, var(--color-default-200, currentColor));
     color: var(--color-foreground);
   }
 

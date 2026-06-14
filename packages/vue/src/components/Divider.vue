@@ -15,7 +15,7 @@ withDefaults(defineProps<KunDividerProps>(), {
 // Soft 20% border tint (the full-opacity kunBorderClasses would be too
 // strong for a separator). Static literals for the JIT.
 const colorClasses: Record<KunUIColor, string> = {
-  default: 'border-default/20',
+  default: 'border-kun',
   primary: 'border-primary/20',
   secondary: 'border-secondary/20',
   success: 'border-success/20',

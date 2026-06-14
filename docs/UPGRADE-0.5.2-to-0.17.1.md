@@ -161,5 +161,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 | **0.17.0** | 导航批:ScrollShadow aria;Link/Button `_blank` noopener;AvatarGroup;Chip 可关闭/插槽;Copy 反馈;Image `fallbackSrc`;Pagination prev/next 可爬 |
 | **0.17.1** | CR 修复:Copy 误报成功 / toast 提前消失 / NumberInput 步进 / Image 缓存回退 / ContextMenu SSR / toast inert / PinInput |
 | **0.17.2** | 修复:Modal / Drawer / Tab 指示器 / toast / FadeCard 动画在下游构建中消失(`--kun-dur-*` 被 Tailwind tree-shake 出 `:root`,现镜像进普通 `:root`)。纯 CSS,无 API 变更 |
+| **0.18.0** | 统一中性边框:新增 `--color-kun-border` token + `border-kun` 工具类,全部结构性 hairline(输入/卡片/分割线/浮层/Tab…)收敛到单一值并正确翻转亮↔暗;修复 Divider 暗色偏淡;弃用各输入/Card 的 `darkBorder`(no-op,可移除) |
 
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

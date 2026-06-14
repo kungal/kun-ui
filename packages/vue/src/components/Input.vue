@@ -173,15 +173,14 @@ defineExpose({
         :aria-describedby="(helper || error) ? `${kunUniqueId}-desc` : undefined"
         :class="
           cn(
-            'border-default/20 block w-full border transition duration-150 ease-in-out focus:border-transparent focus:ring-2',
+            'block w-full border transition duration-150 ease-in-out focus:border-transparent focus:ring-2',
             roundedClass,
             colorClass[color],
             sizeClasses,
-            darkBorder && 'dark:border-default-200',
             $slots.prefix && 'pl-10',
             rightPadClass,
             disabled && 'bg-default-100 cursor-not-allowed',
-            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : '',
+            invalid ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
             className
           )
         "

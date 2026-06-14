@@ -239,21 +239,21 @@ const listClasses = computed(() => {
       return cn(
         base,
         isVertical.value
-          ? 'border-l border-default-200'
-          : 'border-b border-default-200',
+          ? 'border-l border-kun'
+          : 'border-b border-kun',
         props.innerClassName
       )
     case 'solid':
     case 'light':
       return cn(
         base,
-        'border border-default-200 rounded-kun-md p-1 bg-content2/30',
+        'border border-kun rounded-kun-md p-1 bg-content2/30',
         props.innerClassName
       )
     case 'bordered':
       return cn(
         base,
-        'border border-default-200 rounded-kun-md p-1',
+        'border border-kun rounded-kun-md p-1',
         props.innerClassName
       )
     case 'pills':

@@ -127,12 +127,11 @@ defineExpose({
         :autofocus="autofocus"
         :class="
           cn(
-            'scrollbar-hide border-default/20 w-full border transition duration-150 ease-in-out',
+            'scrollbar-hide border-kun w-full border transition duration-150 ease-in-out',
             kunControlSizeClasses[props.size],
             roundedClass,
             'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
             disabled ? 'text-default-500 cursor-not-allowed shadow-none' : '',
-            darkBorder && 'dark:border-default-200',
             resize === 'none'
               ? 'resize-none'
               : resize === 'vertical'

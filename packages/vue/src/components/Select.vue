@@ -305,8 +305,8 @@ watch(filtered, () => {
           'focus:border-primary focus:ring-primary flex w-full cursor-pointer items-center justify-between gap-2 text-left focus:ring-1 focus:outline-none',
           kunControlSizeClasses[props.size],
           roundedClass,
-          darkBorder && 'dark:border-default-200 border-default/20 border',
-          error && 'border-danger-300 focus:border-danger focus:ring-danger',
+          'border',
+          error ? 'border-danger-300 focus:border-danger focus:ring-danger' : 'border-kun',
           disabled && 'bg-default-100 cursor-not-allowed'
         )
       "
@@ -383,7 +383,7 @@ watch(filtered, () => {
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(
-              'bg-content1 border-default-200 z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
+              'bg-content1 border-kun z-kun-popover flex flex-col overflow-hidden border p-1 shadow-lg',
               roundedClass
             )
           "
@@ -398,7 +398,7 @@ watch(filtered, () => {
               :aria-controls="listId"
               :aria-expanded="isOpen"
               :aria-activedescendant="activeId"
-              class="border-default-200 focus:border-primary focus:ring-primary w-full rounded-kun-sm border px-2.5 py-1.5 text-sm focus:ring-1 focus:outline-none"
+              class="border-kun focus:border-primary focus:ring-primary w-full rounded-kun-sm border px-2.5 py-1.5 text-sm focus:ring-1 focus:outline-none"
               @keydown="onKeydown"
             />
           </div>

@@ -232,7 +232,7 @@ onUnmounted(() => {
         >
           <header
             v-if="title || $slots.header || isShowCloseButton"
-            class="border-default-200 flex items-center justify-between border-b px-6 py-4"
+            class="border-kun flex items-center justify-between border-b px-6 py-4"
           >
             <div class="flex min-w-0 flex-1 items-center gap-2">
               <h2
@@ -270,7 +270,7 @@ onUnmounted(() => {
 
           <footer
             v-if="$slots.footer"
-            class="border-default-200 border-t px-6 py-4"
+            class="border-kun border-t px-6 py-4"
           >
             <slot name="footer" />
           </footer>

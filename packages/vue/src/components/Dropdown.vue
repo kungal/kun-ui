@@ -283,7 +283,7 @@ defineExpose({
           tabindex="-1"
           :class="
             cn(
-              'border-default-200 bg-background/95 z-kun-popover rounded-kun-lg border p-1 text-sm shadow-2xl outline-none backdrop-blur',
+              'border-kun bg-background/95 z-kun-popover rounded-kun-lg border p-1 text-sm shadow-2xl outline-none backdrop-blur',
               menuClass
             )
           "

@@ -85,12 +85,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
       cn(
         'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-200',
         isHoverable && 'hover:bg-default-100',
-        bordered && 'border-default/20 border',
-        darkBorder &&
-          cn(
-            'dark:border-default-200 border border-transparent',
-            bordered && 'border-default/20'
-          ),
+        bordered && 'border-kun border',
         isInteractive && 'cursor-pointer overflow-hidden active:scale-[0.97] text-left',
         isTransparent ? 'backdrop-blur-none' : colorClasses[props.color],
         roundedClass,

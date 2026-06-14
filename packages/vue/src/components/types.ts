@@ -34,6 +34,12 @@ export interface KunCardProps {
   contentClass?: string
   rounded?: KunUIRounded
   color?: KunUIColor | 'background'
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
 }
 
@@ -317,6 +323,12 @@ export interface KunInputProps {
   size?: KunUISize
   required?: boolean
   disabled?: boolean
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   autofocus?: boolean
   rounded?: KunUIRounded
@@ -343,6 +355,12 @@ export interface KunTextareaProps {
   maxlength?: number
   minlength?: number
   resize?: 'none' | 'vertical' | 'horizontal' | 'both'
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   rounded?: KunUIRounded
   size?: KunUISize
@@ -368,6 +386,12 @@ export interface KunNumberInputProps {
   controls?: boolean
   // Round/display to this many decimal places.
   precision?: number
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   rounded?: KunUIRounded
   // Native form field name (emits a hidden input mirroring the value).
@@ -415,6 +439,12 @@ export interface KunAutocompleteProps {
   disabled?: boolean
   size?: KunUISize
   rounded?: KunUIRounded
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   clearable?: boolean
   // Accept a value the user typed that is not in `options` (free text).
@@ -534,6 +564,12 @@ export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
   // Helper text under the field (hidden when `error` is set).
   description?: string
   disabled?: boolean
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   ariaLabel?: string
   className?: string
@@ -694,6 +730,12 @@ export interface KunDatePickerProps {
   placeholder?: string
   error?: string
   disabled?: boolean
+  /**
+   * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
+   * unified `--color-kun-border` token (the `border-kun` utility), which already
+   * flips light↔dark — so the old light-translucent / dark-solid split this prop
+   * toggled is gone. Safe to remove from call sites.
+   */
   darkBorder?: boolean
   clearable?: boolean
   format?: string

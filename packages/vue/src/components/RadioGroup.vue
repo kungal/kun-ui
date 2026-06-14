@@ -201,7 +201,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
               orientation === 'horizontal' && 'flex-1 min-w-[8rem]',
               modelValue === option.value
                 ? cn(kunBorderClasses[color], kunSoftBgClasses[color])
-                : 'border-default-200 hover:border-default-300 bg-content1',
+                : 'border-kun hover:border-default-300 bg-content1',
               isOptionDisabled(option) && 'cursor-not-allowed opacity-50'
             )
           "

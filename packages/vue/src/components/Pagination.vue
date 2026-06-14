@@ -157,7 +157,7 @@ onKeyStroke('ArrowRight', (e) => {
         :max="totalPage"
         :class="
           cn(
-            'focus:ring-primary border-default-200 w-24 rounded-kun-md border px-2 py-1 text-sm focus:ring-1 focus:outline-none',
+            'focus:ring-primary border-kun w-24 rounded-kun-md border px-2 py-1 text-sm focus:ring-1 focus:outline-none',
             isLoading && 'cursor-not-allowed opacity-50'
           )
         "

@@ -228,7 +228,7 @@ onUnmounted(() => {
           >
             <span
               v-if="tooltipVisible"
-              class="bg-content1 text-foreground border-default-200 pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-kun-sm border px-2 py-0.5 text-xs font-medium tabular-nums shadow-md"
+              class="bg-content1 text-foreground border-kun pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-kun-sm border px-2 py-0.5 text-xs font-medium tabular-nums shadow-md"
             >
               {{ display }}
             </span>
