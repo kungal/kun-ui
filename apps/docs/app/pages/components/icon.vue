@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import Basic from '~/examples/icon/Basic.vue'
 import BasicSrc from '~/examples/icon/Basic.vue?raw'
+import Sizes from '~/examples/icon/Sizes.vue'
+import SizesSrc from '~/examples/icon/Sizes.vue?raw'
+import Colors from '~/examples/icon/Colors.vue'
+import ColorsSrc from '~/examples/icon/Colors.vue?raw'
+import Gallery from '~/examples/icon/Gallery.vue'
+import GallerySrc from '~/examples/icon/Gallery.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -19,6 +25,15 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">尺寸</h2>
+    <Demo title="Sizes.vue" :source="SizesSrc"><Sizes /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">颜色</h2>
+    <Demo title="Colors.vue" :source="ColorsSrc"><Colors /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">多个图标</h2>
+    <Demo title="Gallery.vue" :source="GallerySrc"><Gallery /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunIcon.props" />

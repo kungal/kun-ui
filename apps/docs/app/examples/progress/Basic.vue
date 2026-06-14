@@ -1,8 +1,8 @@
 <template>
   <div class="flex w-full max-w-md flex-col gap-3">
-    <KunProgress :value="60" show-label />
-    <KunProgress :value="40" variant="striped" color="success" />
-    <KunProgress :value="80" variant="gradient" color="secondary" />
-    <KunProgress indeterminate color="primary" />
+    <KunProgress :value="25" />
+    <KunProgress :value="50" />
+    <KunProgress :value="75" />
+    <KunProgress :value="100" />
   </div>
 </template>

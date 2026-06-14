@@ -1,11 +1,8 @@
 <template>
   <KunBadge :count="5">
-    <KunButton variant="bordered">Inbox</KunButton>
+    <KunButton variant="bordered">收件箱</KunButton>
   </KunBadge>
-  <KunBadge :count="120" :max="99" color="primary">
-    <KunButton variant="bordered">Messages</KunButton>
-  </KunBadge>
-  <KunBadge variant="dot" color="success">
-    <KunButton variant="bordered">Status</KunButton>
+  <KunBadge :count="12">
+    <KunButton variant="bordered">消息</KunButton>
   </KunBadge>
 </template>

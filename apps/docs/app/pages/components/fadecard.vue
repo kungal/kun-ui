@@ -12,7 +12,7 @@ import BasicSrc from '~/examples/fadecard/Basic.vue?raw'
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
     <p class="text-default-500 mt-6 text-sm">
-      无属性 —— 把你的 <code class="text-primary">v-if</code> 内容放进默认插槽即可。
+      无属性 —— 把带 <code class="text-primary">v-if</code> 的内容放进默认插槽即可，切换时自动播放淡入淡出 + 高度展开过渡。
     </p>
   </article>
 </template>
