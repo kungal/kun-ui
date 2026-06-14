@@ -38,3 +38,16 @@ export const kunSelectionSizeClasses: Record<KunUISize, KunSelectionSize> = {
   lg: { box: 'size-5', dot: 'size-2.5', check: 'size-3.5', text: 'text-base', gap: 'gap-2.5' },
   xl: { box: 'size-6', dot: 'size-3', check: 'size-4', text: 'text-lg', gap: 'gap-3' },
 }
+
+// The single source of truth for chip / tag pills — a standalone KunChip and the
+// tags inside KunTagInput share it, so a tag looks identical either way. A
+// compact sub-scale (~0.7× the form-control height): vertical padding is tighter
+// than kunControlSizeClasses because a chip is text + tight padding, not a tap
+// target. Pair with `gap-1` + `rounded-full`.
+export const kunChipSizeClasses: Record<KunUISize, string> = {
+  xs: 'px-2 py-0.5 text-xs',
+  sm: 'px-2 py-1 text-xs',
+  md: 'px-3 py-1 text-sm',
+  lg: 'px-4 py-1.5 text-sm',
+  xl: 'px-6 py-2 text-base',
+}

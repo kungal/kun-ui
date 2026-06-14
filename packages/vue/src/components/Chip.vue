@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, kunVariantClasses, type KunUISize } from '@kungal/ui-core'
+import { cn, kunVariantClasses, kunChipSizeClasses } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import type { KunChipProps } from './types'
 
@@ -21,16 +21,6 @@ const emit = defineEmits<{
   close: []
 }>()
 
-// Chips sit on a compact sub-scale — ~0.7× the button height at the same size
-// keyword (a tag is text + tight padding, not a tap target). Vertical padding is
-// deliberately tighter than the form-control scale.
-const sizeClasses: Record<KunUISize, string> = {
-  xs: 'px-2 py-0.5 text-xs',
-  sm: 'px-2 py-1 text-xs',
-  md: 'px-3 py-1 text-sm',
-  lg: 'px-4 py-1.5 text-sm',
-  xl: 'px-6 py-2 text-base',
-}
 </script>
 
 <template>
@@ -38,7 +28,7 @@ const sizeClasses: Record<KunUISize, string> = {
     :class="
       cn(
         'inline-flex cursor-default items-center justify-center gap-1 rounded-full font-medium',
-        sizeClasses[props.size],
+        kunChipSizeClasses[props.size],
         kunVariantClasses(props.variant, props.color),
         disabled && 'pointer-events-none opacity-50',
         className

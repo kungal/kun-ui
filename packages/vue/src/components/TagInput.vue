@@ -2,6 +2,7 @@
 import { computed, nextTick, ref } from 'vue'
 import {
   cn,
+  kunChipSizeClasses,
   kunFocusRingClasses,
   kunFocusRingWithinClasses,
   kunRoundedClasses,
@@ -293,21 +294,13 @@ const containerClasses = computed(() =>
   )
 )
 
-const chipSizeClass: Record<string, string> = {
-  xs: 'px-1.5 py-0.5 text-xs gap-0.5',
-  sm: 'px-2 py-0.5 text-xs gap-1',
-  md: 'px-2 py-1 text-sm gap-1',
-  lg: 'px-2.5 py-1 text-sm gap-1.5',
-  xl: 'px-3 py-1.5 text-base gap-1.5',
-}
-
+// A tag IS a KunChip — same shared size scale, pill shape, flat tint, and gap —
+// so a tag in the field looks identical to a standalone <KunChip>.
 const chipClasses = computed(() =>
   cn(
-    'inline-flex items-center rounded-kun-sm font-medium select-none',
-    // Tint with the same flat variant every other KunUI chip uses, so a tag's
-    // color matches the rest of the UI instead of a one-off shade.
+    'inline-flex items-center gap-1 rounded-full font-medium select-none',
     kunVariantClasses('flat', props.color),
-    chipSizeClass[props.size],
+    kunChipSizeClasses[props.size],
     kunFocusRingClasses[props.color]
   )
 )

@@ -111,7 +111,11 @@ defineExpose({
 
 <template>
   <div class="w-full">
-    <label v-if="label" :for="kunUniqueId" class="mb-1 block text-sm font-medium">
+    <label
+      v-if="label"
+      :for="kunUniqueId"
+      class="text-default-700 mb-1 block text-sm font-medium"
+    >
       {{ label }}
       <span v-if="required" class="text-danger ml-1">*</span>
     </label>
@@ -161,7 +165,7 @@ defineExpose({
       </div>
     </div>
 
-    <div v-if="error" class="text-danger-600 mt-1 text-sm">{{ error }}</div>
-    <div v-else-if="helper" class="text-default-500 mt-1 text-sm">{{ helper }}</div>
+    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="helper" class="text-default-500 mt-1 text-sm">{{ helper }}</p>
   </div>
 </template>

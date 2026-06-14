@@ -33,6 +33,7 @@ export {
 export {
   kunControlSizeClasses,
   kunSelectionSizeClasses,
+  kunChipSizeClasses,
   type KunSelectionSize,
 } from './controlSize'
 

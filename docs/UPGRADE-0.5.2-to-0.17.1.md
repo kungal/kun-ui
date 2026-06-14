@@ -167,4 +167,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 | **0.19.1** | Card header 去下边框、footer 改细线分隔(去灰底);Tab item 圆角 `sm`→`md`(与整体一致)、容器 →`lg`;Message toast 加 `shadow-lg` 立体感 |
 | **0.20.0** | **统一 elevation**:新增 `--shadow-kun-sm/md/lg` 三级阴影 token(`shadow-kun-*` utility,与 ring 叠加),浮层按层级套用(tooltip=sm,popover/菜单/列表/toast=md,modal/drawer=lg),Modal 补阴影。**统一 motion**:新增 `duration-kun-fast/base/slow/exit` utility,30 处过渡按角色走 token(enter=base/leave=exit/微交互=fast/淡入=slow),raw `ease-in-out`→`ease-kun-*`。杂项:Brand/Null/Loading raw 圆角走 token、NumberInput 禁用透明度统一 50 |
 
+| **0.21.0** | sizing/spacing 一致性:表单 label 统一(Textarea/DatePicker 补 `text-default-700`、DatePicker `mb-2`→`mb-1`)、error 文字统一(`text-danger mt-1`);新增 `kunChipSizeClasses`,KunChip 与 KunTagInput 标签共用同一 chip 尺寸 + 药丸形 |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

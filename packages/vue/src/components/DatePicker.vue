@@ -190,7 +190,7 @@ const isInPreviewRange = (date: Date) => {
     tabindex="0"
     @keydown.prevent.capture="onKeydown"
   >
-    <label v-if="label" class="mb-2 block text-sm font-medium">{{ label }}</label>
+    <label v-if="label" class="text-default-700 mb-1 block text-sm font-medium">{{ label }}</label>
 
     <div class="relative">
       <button
@@ -326,6 +326,6 @@ const isInPreviewRange = (date: Date) => {
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger mt-2 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
   </div>
 </template>
