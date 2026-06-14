@@ -1,12 +1,12 @@
-# KunUI 升级指南:0.5.2 → 0.17.1
+# KunUI 升级指南:0.5.2 → 1.0.0
 
-面向仍停留在 **0.5.2** 的下游(如 moyu),一次性升到当前最新 **0.17.1**。四个包(`@kungal/ui-core` / `ui-tokens` / `ui-vue` / `ui-nuxt`)始终**锁步同版本**,必须一起升。
+面向仍停留在 **0.5.2** 的下游(如 moyu),一次性升到稳定版 **1.0.0**。四个包(`@kungal/ui-core` / `ui-tokens` / `ui-vue` / `ui-nuxt`)始终**锁步同版本**,必须一起升。
 
 ```bash
-pnpm up "@kungal/*@latest"   # → 0.17.1
+pnpm up "@kungal/*@latest"   # → 1.0.0
 ```
 
-跨度很大(0.6.0 → 0.17.1 共十余个版本),但绝大多数变更**向后兼容**:新增 props 都有默认值,不传则行为不变。本篇只列**需要你处理或注意**的部分,按「⚠️ 必须处理 → 🧹 可清理 → 🎨 要回归 → ✨ 可选采用」组织。
+跨度很大(0.6.0 → 1.0.0 共二十余个版本),但绝大多数变更**向后兼容**:新增 props 都有默认值,不传则行为不变。本篇只列**需要你处理或注意**的部分,按「⚠️ 必须处理 → 🧹 可清理 → 🎨 要回归 → ✨ 可选采用」组织。
 
 > **最重要的一步**是 [§6 集成注意](#6-集成注意必读) —— 跨这么多版本,Tailwind `@source` / reduced-motion / inert 这几点不处理会出问题。
 >
@@ -178,5 +178,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 | **0.22.3** | Button/Chip/Badge/TagInput 标签改为不换行(`whitespace-nowrap`,对齐 shadcn/Material 标准);Button 图标 `shrink-0` 防压缩(Tab 早已 nowrap) |
 
 | **0.22.4** | 单行校验收尾:Dropdown/ContextMenu 菜单项 `truncate`(+图标 shrink-0)、UserChip 姓名/描述 `truncate`;Tooltip 由强制 `nowrap` 改 `max-w-xs`(长内容换行不再撑屏) |
+| **1.0.0** | 首个稳定版。修复 Nuxt 层漏注册 `KunAutocomplete`/`KunNumberInput`/`KunPinInput`(Nuxt 消费者此前「Failed to resolve component」);补齐这 3 个组件的文档页 / props 表 / llms.txt |
 
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。
