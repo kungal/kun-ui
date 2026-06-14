@@ -66,7 +66,7 @@ const userAvatarSrc = computed(() => {
     v-bind="linkProps"
     :class="
       cn(
-        'flex shrink-0 justify-center rounded-full transition duration-150 ease-in-out',
+        'flex shrink-0 justify-center rounded-full transition duration-kun-fast ease-kun-standard',
         isLink && 'cursor-pointer hover:scale-110',
         sizeClasses,
         className

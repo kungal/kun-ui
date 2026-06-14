@@ -90,10 +90,10 @@ const hide = () => {
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition-opacity duration-150 ease-kun-out"
+        enter-active-class="transition-opacity duration-kun-base ease-kun-out"
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
-        leave-active-class="transition-opacity duration-100 ease-kun-in"
+        leave-active-class="transition-opacity duration-kun-exit ease-kun-in"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
@@ -104,7 +104,7 @@ const hide = () => {
           role="tooltip"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border px-3 py-2 text-sm font-medium whitespace-nowrap shadow-md',
+              'bg-content1 border-kun z-kun-popover border px-3 py-2 text-sm font-medium whitespace-nowrap shadow-kun-sm',
               roundedClass,
               hideOnMobile && 'hidden sm:block'
             )

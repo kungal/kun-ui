@@ -164,7 +164,7 @@ const typeStyles = computed(() => {
     aria-atomic="true"
     :class="
       cn(
-        'group relative mb-3 flex w-full touch-pan-y items-center overflow-hidden rounded-kun-lg p-4 shadow-lg ring-1 ring-black/5 transition-all duration-300 dark:ring-white/10',
+        'group relative mb-3 flex w-full touch-pan-y items-center overflow-hidden rounded-kun-lg p-4 shadow-kun-md ring-1 ring-black/5 transition-all duration-kun-slow dark:ring-white/10',
         typeStyles.bg,
         typeStyles.text
       )

@@ -103,10 +103,10 @@ defineExpose({
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-200 ease-kun-out"
+        enter-active-class="transition duration-kun-base ease-kun-out"
         enter-from-class="transform scale-95 opacity-0"
         enter-to-class="transform scale-100 opacity-100"
-        leave-active-class="transition duration-150 ease-kun-in"
+        leave-active-class="transition duration-kun-exit ease-kun-in"
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
@@ -119,7 +119,7 @@ defineExpose({
           :aria-label="ariaLabel || 'popover'"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border shadow-lg focus:outline-none',
+              'bg-content1 border-kun z-kun-popover border shadow-kun-md focus:outline-none',
               roundedClass,
               innerClass
             )

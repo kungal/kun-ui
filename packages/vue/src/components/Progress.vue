@@ -157,7 +157,7 @@ const circleOffset = computed(
         v-else
         :class="
           cn(
-            'flex h-full items-center transition-all duration-500 ease-out',
+            'flex h-full items-center transition-all duration-kun-slow ease-kun-out',
             barClasses
           )
         "

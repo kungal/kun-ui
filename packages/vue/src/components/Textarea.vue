@@ -132,7 +132,7 @@ defineExpose({
         :autofocus="autofocus"
         :class="
           cn(
-            'scrollbar-hide w-full border transition-[color,box-shadow] duration-150 ease-in-out',
+            'scrollbar-hide w-full border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
             kunControlSizeClasses[props.size],
             roundedClass,
             error

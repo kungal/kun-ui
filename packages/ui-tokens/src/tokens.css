@@ -179,6 +179,19 @@
   --kun-dur-slow: 350ms; /* larger surfaces */
   --kun-dur-exit: 180ms; /* exits run ~30% shorter than enters */
 
+  /* Elevation scale — ONE shadow per tier so every floating surface of the same
+   * kind shares an elevation instead of picking shadow-md/lg/2xl ad hoc. These
+   * are a Tailwind `--shadow-*` namespace, so `shadow-kun-sm|md|lg` utilities are
+   * generated and compose with `ring-*` (both feed --tw-shadow). Tiers:
+   *   sm → tooltips / small hints
+   *   md → popovers, dropdowns, menus, select & date lists, toasts
+   *   lg → modals, drawers (the highest surfaces) */
+  --shadow-kun-sm: 0 2px 8px -2px rgb(0 0 0 / 0.12);
+  --shadow-kun-md:
+    0 4px 12px -4px rgb(0 0 0 / 0.1), 0 8px 24px -6px rgb(0 0 0 / 0.14);
+  --shadow-kun-lg:
+    0 8px 24px -8px rgb(0 0 0 / 0.14), 0 16px 48px -12px rgb(0 0 0 / 0.22);
+
   /* Animations */
   --animate-shake: shake 1s ease-in-out;
   --animate-bounceInDown: bounceInDown 1s ease-in-out;
@@ -387,6 +400,25 @@
 }
 @utility border-kun {
   border-color: var(--color-kun-border, hsl(var(--default-200)));
+}
+
+/* Duration utilities bound to the motion scale, so component transitions route
+ * through the same `--kun-dur-*` tokens as the overlay enter/leave animations
+ * instead of hardcoding `duration-150/200/300`. Literal fallback (the var is
+ * mirrored to :root below) keeps them robust if the token is ever tree-shaken.
+ * Tiers: fast = hover/selection/micro; base = component enter; exit = leave
+ * (asymmetric, ~30% shorter); slow = larger surfaces / fades. */
+@utility duration-kun-fast {
+  transition-duration: var(--kun-dur-fast, 150ms);
+}
+@utility duration-kun-base {
+  transition-duration: var(--kun-dur-base, 250ms);
+}
+@utility duration-kun-slow {
+  transition-duration: var(--kun-dur-slow, 350ms);
+}
+@utility duration-kun-exit {
+  transition-duration: var(--kun-dur-exit, 180ms);
 }
 
 /* Motion tokens, mirrored into a plain :root so they ALWAYS reach the document.

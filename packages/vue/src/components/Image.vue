@@ -150,7 +150,7 @@ const wrap = computed(() => props.skeleton)
     <div
       v-if="status !== 'loaded'"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 transition-opacity duration-kun-slow"
       :class="
         status === 'error'
           ? 'opacity-0'
@@ -163,7 +163,7 @@ const wrap = computed(() => props.skeleton)
       v-bind="imgBindings"
       :class="
         cn(
-          'block size-full transition-opacity duration-300',
+          'block size-full transition-opacity duration-kun-slow',
           aspectRatio ? 'absolute inset-0' : '',
           objectFitClass,
           status === 'loaded' ? 'opacity-100' : 'opacity-0',

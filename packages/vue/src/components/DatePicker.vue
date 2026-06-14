@@ -227,10 +227,10 @@ const isInPreviewRange = (date: Date) => {
 
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-200 ease-kun-out"
+        enter-active-class="transition duration-kun-base ease-kun-out"
         enter-from-class="opacity-0 scale-95"
         enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-150 ease-kun-in"
+        leave-active-class="transition duration-kun-exit ease-kun-in"
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
@@ -239,7 +239,7 @@ const isInPreviewRange = (date: Date) => {
           ref="dropdownRef"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border p-3 shadow-lg',
+              'bg-content1 border-kun z-kun-popover border p-3 shadow-kun-md',
               roundedClass
             )
           "

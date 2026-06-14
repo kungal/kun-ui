@@ -229,10 +229,10 @@ const itemClass = (item: KunContextMenuItem) =>
 <template>
   <Teleport to="body">
     <Transition
-      enter-active-class="transition duration-200 ease-kun-out"
+      enter-active-class="transition duration-kun-base ease-kun-out"
       enter-from-class="opacity-0 scale-95"
       enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-150 ease-kun-in"
+      leave-active-class="transition duration-kun-exit ease-kun-in"
       leave-from-class="opacity-100 scale-100"
       leave-to-class="opacity-0 scale-95"
     >
@@ -242,7 +242,7 @@ const itemClass = (item: KunContextMenuItem) =>
         role="menu"
         aria-orientation="vertical"
         tabindex="-1"
-        class="border-kun bg-background/95 fixed z-kun-popover rounded-kun-lg border p-1 text-sm shadow-2xl outline-none backdrop-blur"
+        class="border-kun bg-background/95 fixed z-kun-popover rounded-kun-lg border p-1 text-sm shadow-kun-md outline-none backdrop-blur"
         :style="menuStyle"
         @click.stop
         @keydown="onMenuKeydown"

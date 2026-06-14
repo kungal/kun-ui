@@ -221,21 +221,21 @@ onUnmounted(() => {
         >
           <!-- Value tooltip -->
           <Transition
-            enter-active-class="transition duration-150 ease-kun-out"
+            enter-active-class="transition duration-kun-base ease-kun-out"
             enter-from-class="opacity-0 translate-y-1"
-            leave-active-class="transition duration-100 ease-kun-in"
+            leave-active-class="transition duration-kun-exit ease-kun-in"
             leave-to-class="opacity-0 translate-y-1"
           >
             <span
               v-if="tooltipVisible"
-              class="bg-content1 text-foreground border-kun pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-kun-sm border px-2 py-0.5 text-xs font-medium tabular-nums shadow-md"
+              class="bg-content1 text-foreground border-kun pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-kun-sm border px-2 py-0.5 text-xs font-medium tabular-nums shadow-kun-sm"
             >
               {{ display }}
             </span>
           </Transition>
 
           <div
-            class="bg-content1 rounded-full border-2 transition-shadow duration-150 hover:ring-4 focus-visible:ring-4 focus-visible:outline-none active:ring-4"
+            class="bg-content1 rounded-full border-2 transition-shadow duration-kun-fast hover:ring-4 focus-visible:ring-4 focus-visible:outline-none active:ring-4"
             :class="[
               sizeClass.thumb,
               tone.thumb,

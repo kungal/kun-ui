@@ -205,7 +205,7 @@ defineExpose({
         :disabled="!canDecrement"
         :class="
           cn(
-            'text-default-600 hover:bg-default-100 flex items-center disabled:cursor-not-allowed disabled:opacity-40',
+            'text-default-600 hover:bg-default-100 flex items-center disabled:cursor-not-allowed disabled:opacity-50',
             sz.btn
           )
         "
@@ -252,7 +252,7 @@ defineExpose({
         :disabled="!canIncrement"
         :class="
           cn(
-            'text-default-600 hover:bg-default-100 flex items-center disabled:cursor-not-allowed disabled:opacity-40',
+            'text-default-600 hover:bg-default-100 flex items-center disabled:cursor-not-allowed disabled:opacity-50',
             sz.btn
           )
         "

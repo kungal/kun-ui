@@ -21,7 +21,7 @@ withDefaults(defineProps<KunNullProps>(), {
     <KunImageNative
       v-if="isShowSticker"
       :src="src"
-      class-name="w-72 h-auto rounded-2xl"
+      class-name="w-72 h-auto rounded-kun-lg"
       alt="empty"
     />
     <span class="text-default-500">{{ description }}</span>

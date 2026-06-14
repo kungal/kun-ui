@@ -83,7 +83,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
     v-bind="rootBindings"
     :class="
       cn(
-        'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-200',
+        'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
         isHoverable && 'hover:bg-default-100',
         bordered && 'border-kun border',
         isInteractive && 'cursor-pointer overflow-hidden active:scale-[0.97] text-left',

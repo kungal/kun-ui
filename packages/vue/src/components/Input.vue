@@ -163,7 +163,7 @@ defineExpose({
         :aria-describedby="(helper || error) ? `${kunUniqueId}-desc` : undefined"
         :class="
           cn(
-            'block w-full border transition-[color,box-shadow] duration-150 ease-in-out',
+            'block w-full border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
             roundedClass,
             sizeClasses,
             $slots.prefix && 'pl-10',

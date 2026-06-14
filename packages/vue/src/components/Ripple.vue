@@ -25,7 +25,7 @@ defineProps<{
 <style scoped>
 .ripple {
   transform: scale(0);
-  animation: ripple-animation 0.6s ease-out;
+  animation: ripple-animation 0.6s var(--ease-kun-out);
 }
 
 @keyframes ripple-animation {

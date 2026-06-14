@@ -116,7 +116,7 @@ const indeterminateColor: Record<KunUIColor, string> = {
         <!-- Check glyph (checked, not indeterminate) -->
         <div
           v-show="!indeterminate"
-          class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-200 ease-kun-emphasized peer-checked:scale-100 peer-checked:opacity-100"
+          class="pointer-events-none absolute inset-0 flex scale-50 items-center justify-center text-white opacity-0 transition-all duration-kun-fast ease-kun-emphasized peer-checked:scale-100 peer-checked:opacity-100"
         >
           <KunIcon name="lucide:check" :class="size.check" />
         </div>

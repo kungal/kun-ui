@@ -60,7 +60,7 @@ const { isLightboxOpen, images, currentImageIndex } =
     }
 
     & > *:not(.spoiler-canvas) {
-      transition: filter 0.3s ease-in-out;
+      transition: filter var(--kun-dur-slow) var(--ease-kun-standard);
       filter: blur(0);
     }
 
@@ -70,7 +70,7 @@ const { isLightboxOpen, images, currentImageIndex } =
       z-index: 1;
       pointer-events: none;
       opacity: 1;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity var(--kun-dur-slow) var(--ease-kun-standard);
       background-color: rgba(150, 150, 150, 0.1);
 
       &.fade-out {

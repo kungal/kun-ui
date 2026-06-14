@@ -43,14 +43,14 @@ const spinnerSize: Record<KunUISize, string> = {
       </div>
 
       <transition
-        enter-active-class="transition-opacity duration-300"
+        enter-active-class="transition-opacity duration-kun-slow"
         enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-300"
+        leave-active-class="transition-opacity duration-kun-slow"
         leave-from-class="opacity-0"
       >
         <div
           v-if="loading"
-          class="bg-background/50 absolute inset-0 z-50 flex items-center justify-center rounded-lg"
+          class="bg-background/50 absolute inset-0 z-50 flex items-center justify-center rounded-kun-md"
           role="status"
           aria-live="polite"
           :aria-busy="loading"
@@ -67,7 +67,7 @@ const spinnerSize: Record<KunUISize, string> = {
               alt=""
               aria-hidden="true"
               :src="src"
-              class-name="w-80 h-auto rounded-lg"
+              class-name="w-80 h-auto rounded-kun-md"
             />
             <span :class="spinner ? 'text-default-600 text-sm' : 'info text-xl'">
               {{ description }}
@@ -95,7 +95,7 @@ const spinnerSize: Record<KunUISize, string> = {
         alt=""
         aria-hidden="true"
         :src="src"
-        class-name="w-80 h-auto rounded-lg"
+        class-name="w-80 h-auto rounded-kun-md"
       />
       <span :class="spinner ? 'text-default-600 text-sm' : 'info'">{{ description }}</span>
     </div>

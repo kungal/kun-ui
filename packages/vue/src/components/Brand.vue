@@ -12,7 +12,7 @@ defineOptions({ name: 'KunBrand' })
 const props = withDefaults(defineProps<KunBrandProps>(), {
   iconSrc: '/favicon.webp',
   iconAlt: 'logo',
-  iconClass: 'size-10 rounded-2xl',
+  iconClass: 'size-10 rounded-kun-lg',
   badge: '',
   badgeColor: 'primary',
   to: '/',
