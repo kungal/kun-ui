@@ -171,4 +171,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 
 | **0.22.0** | 聚焦环颜色统一:全部文本控件 ring 跟随 `color`、默认 `'default'`(灰环);Textarea/Select/Autocomplete/DatePicker 新增 `color` prop,NumberInput 默认 `'primary'`→`'default'`;Card footer 去掉 top border |
 
+| **0.22.1** | 修复暗色 solid/shadow 按钮填充:之前 info(≈L88 惨白)/default/secondary 过浅、success 在 solid/shadow 间不一致;现各色 pin `dark:bg-{color}-{n}` 统一到 ~L44–55 一致等级(亮色不变) |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

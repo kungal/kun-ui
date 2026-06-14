@@ -12,14 +12,20 @@ import type { KunUIVariant, KunUIColor } from './types'
 // transparent border of the same width so switching variants never shifts the
 // box by a pixel.
 const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
+  // Filled buttons keep white text in BOTH modes, so the fill must stay dark
+  // enough for contrast. The dark color scale is inverted (`-500`/`-600` become
+  // LIGHT in dark mode), so a plain `bg-{color}` renders pale — worst on the
+  // light hues (info ≈ L88%, default/secondary ≈ L65–72%). Each entry pins a
+  // `dark:bg-{color}-{n}` that lands every color at a consistent ~L44–55% so the
+  // whole row reads as one saturated tier with legible white text.
   solid: {
-    default: 'border border-transparent bg-default text-white',
-    primary: 'border border-transparent bg-primary text-white',
-    secondary: 'border border-transparent bg-secondary text-white',
-    success: 'border border-transparent bg-success-600 text-white dark:bg-success-300',
-    warning: 'border border-transparent bg-warning text-white',
-    danger: 'border border-transparent bg-danger text-white',
-    info: 'border border-transparent bg-info-600 text-white',
+    default: 'border border-transparent bg-default text-white dark:bg-default-400',
+    primary: 'border border-transparent bg-primary text-white dark:bg-primary-400',
+    secondary: 'border border-transparent bg-secondary text-white dark:bg-secondary-300',
+    success: 'border border-transparent bg-success-600 text-white dark:bg-success-400',
+    warning: 'border border-transparent bg-warning text-white dark:bg-warning-400',
+    danger: 'border border-transparent bg-danger text-white dark:bg-danger-400',
+    info: 'border border-transparent bg-info-600 text-white dark:bg-info-300',
   },
   bordered: {
     default: 'border border-default bg-transparent',
@@ -48,14 +54,16 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
     danger: 'border border-transparent bg-danger/20 text-danger-600 dark:text-danger-500',
     info: 'border border-transparent bg-info/20 text-info-700 dark:text-info-500',
   },
+  // Same fill logic as `solid` (see note above) plus the colored glow; the
+  // `dark:bg-{color}-{n}` overrides keep the dark row at one consistent tier.
   shadow: {
-    default: 'border border-transparent shadow-default/40 bg-default text-white',
-    primary: 'border border-transparent shadow-primary/40 bg-primary text-white',
-    secondary: 'border border-transparent shadow-secondary/40 bg-secondary text-white',
-    success: 'border border-transparent shadow-success/40 bg-success-600 text-white',
-    warning: 'border border-transparent shadow-warning/40 bg-warning text-white',
-    danger: 'border border-transparent shadow-danger/40 bg-danger text-white',
-    info: 'border border-transparent shadow-info/40 bg-info-600 text-white',
+    default: 'border border-transparent shadow-default/40 bg-default text-white dark:bg-default-400',
+    primary: 'border border-transparent shadow-primary/40 bg-primary text-white dark:bg-primary-400',
+    secondary: 'border border-transparent shadow-secondary/40 bg-secondary text-white dark:bg-secondary-300',
+    success: 'border border-transparent shadow-success/40 bg-success-600 text-white dark:bg-success-400',
+    warning: 'border border-transparent shadow-warning/40 bg-warning text-white dark:bg-warning-400',
+    danger: 'border border-transparent shadow-danger/40 bg-danger text-white dark:bg-danger-400',
+    info: 'border border-transparent shadow-info/40 bg-info-600 text-white dark:bg-info-300',
   },
   ghost: {
     default: 'border border-default bg-transparent hover:bg-default/10',
