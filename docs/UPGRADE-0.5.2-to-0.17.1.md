@@ -173,4 +173,6 @@ pnpm up "@kungal/*@latest"   # → 0.17.1
 
 | **0.22.1** | 修复暗色 solid/shadow 按钮填充:之前 info(≈L88 惨白)/default/secondary 过浅、success 在 solid/shadow 间不一致;现各色 pin `dark:bg-{color}-{n}` 统一到 ~L44–55 一致等级(亮色不变) |
 
+| **0.22.2** | 修复 `shadow` 按钮变体:之前只设了阴影颜色没设阴影尺寸 → `box-shadow: none`(和 solid 没区别);加 `shadow-lg` 后每个 shadow 按钮真正投出对应颜色的柔和光晕 |
+
 完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。

@@ -54,16 +54,19 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
     danger: 'border border-transparent bg-danger/20 text-danger-600 dark:text-danger-500',
     info: 'border border-transparent bg-info/20 text-info-700 dark:text-info-500',
   },
-  // Same fill logic as `solid` (see note above) plus the colored glow; the
-  // `dark:bg-{color}-{n}` overrides keep the dark row at one consistent tier.
+  // Same fill logic as `solid` (see note above) plus a COLORED glow. The glow
+  // needs both a size (`shadow-lg` — the geometry) AND a tint (`shadow-{color}/40`
+  // — sets --tw-shadow-color): a color utility alone leaves --tw-shadow empty, so
+  // the button rendered with NO shadow at all. `overflow-hidden` on the button
+  // doesn't clip its own outset box-shadow, so the glow shows.
   shadow: {
-    default: 'border border-transparent shadow-default/40 bg-default text-white dark:bg-default-400',
-    primary: 'border border-transparent shadow-primary/40 bg-primary text-white dark:bg-primary-400',
-    secondary: 'border border-transparent shadow-secondary/40 bg-secondary text-white dark:bg-secondary-300',
-    success: 'border border-transparent shadow-success/40 bg-success-600 text-white dark:bg-success-400',
-    warning: 'border border-transparent shadow-warning/40 bg-warning text-white dark:bg-warning-400',
-    danger: 'border border-transparent shadow-danger/40 bg-danger text-white dark:bg-danger-400',
-    info: 'border border-transparent shadow-info/40 bg-info-600 text-white dark:bg-info-300',
+    default: 'border border-transparent shadow-lg shadow-default/40 bg-default text-white dark:bg-default-400',
+    primary: 'border border-transparent shadow-lg shadow-primary/40 bg-primary text-white dark:bg-primary-400',
+    secondary: 'border border-transparent shadow-lg shadow-secondary/40 bg-secondary text-white dark:bg-secondary-300',
+    success: 'border border-transparent shadow-lg shadow-success/40 bg-success-600 text-white dark:bg-success-400',
+    warning: 'border border-transparent shadow-lg shadow-warning/40 bg-warning text-white dark:bg-warning-400',
+    danger: 'border border-transparent shadow-lg shadow-danger/40 bg-danger text-white dark:bg-danger-400',
+    info: 'border border-transparent shadow-lg shadow-info/40 bg-info-600 text-white dark:bg-info-300',
   },
   ghost: {
     default: 'border border-default bg-transparent hover:bg-default/10',
