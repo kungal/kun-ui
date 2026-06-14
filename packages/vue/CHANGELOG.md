@@ -1,5 +1,15 @@
 # @kungal/ui-vue
 
+## 1.1.0
+
+### Minor Changes
+
+- eaf375b: **Lightbox**: clicking the dark backdrop around the image now closes the viewer, matching the convention of every modern image viewer (and complementing the existing ESC-to-close). Clicks on the image and on the controls are unaffected, and a click that is the tail of a drag / pan / swipe no longer dismisses the viewer.
+
+### Patch Changes
+
+- @kungal/ui-core@1.1.0
+
 ## 1.0.0
 
 ### Major Changes
