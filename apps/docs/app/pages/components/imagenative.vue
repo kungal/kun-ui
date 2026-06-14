@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Basic from '~/examples/imagenative/Basic.vue'
 import BasicSrc from '~/examples/imagenative/Basic.vue?raw'
+import ClassMerge from '~/examples/imagenative/ClassMerge.vue'
+import ClassMergeSrc from '~/examples/imagenative/ClassMerge.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -11,6 +13,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">自定义样式</h2>
+    <Demo title="ClassMerge.vue" :source="ClassMergeSrc"><ClassMerge /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunImageNative.props" />

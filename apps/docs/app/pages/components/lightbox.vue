@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import Basic from '~/examples/lightbox/Basic.vue'
 import BasicSrc from '~/examples/lightbox/Basic.vue?raw'
+import Gallery from '~/examples/lightbox/Gallery.vue'
+import GallerySrc from '~/examples/lightbox/Gallery.vue?raw'
+import Standalone from '~/examples/lightbox/Standalone.vue'
+import StandaloneSrc from '~/examples/lightbox/Standalone.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -9,8 +13,14 @@ import meta from '~/generated/component-meta.json'
     <DocTitle />
     <DocIntro />
 
-    <h2 class="mt-10 mb-1 text-xl font-semibold">画廊(点击缩略图)</h2>
+    <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">画廊</h2>
+    <Demo title="Gallery.vue" :source="GallerySrc"><Gallery /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">独立用法</h2>
+    <Demo title="Standalone.vue" :source="StandaloneSrc"><Standalone /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">KunLightboxGalleryItem 属性</h2>
     <PropsTable :rows="meta.KunLightboxGalleryItem.props" />

@@ -8,5 +8,11 @@ const user: KunUser = { id: 1, name: 'Kun', avatar }
 </script>
 
 <template>
-  <KunUserChip :user="user" :is-navigation="false" />
+  <!-- A secondary `description` line renders under the name in a muted color. -->
+  <KunUserChip
+    :user="user"
+    description="2024 年加入 · 管理员"
+    size="lg"
+    :is-navigation="false"
+  />
 </template>
