@@ -79,5 +79,14 @@ const { isLightboxOpen, images, currentImageIndex } =
   & :deep(.kun-spoiler-hidden:hover) {
     background-color: rgb(150 150 150 / 0.26);
   }
+
+  /* Once the per-word particle canvas is live it draws its own tint inside each
+     word/line rect, so drop the block-wide tint — the gaps (spaces, ragged line
+     ends) must stay clear. The block tint above remains the pre-JS / image-only
+     fallback. */
+  & :deep(.kun-spoiler-hidden.kun-spoiler-live),
+  & :deep(.kun-spoiler-hidden.kun-spoiler-live:hover) {
+    background-color: transparent;
+  }
 }
 </style>

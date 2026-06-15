@@ -5,27 +5,33 @@ import { nextTick, watch, type Ref } from 'vue'
 // HTML, so it's reusable on any `<div ref class="kun-prose" v-html>`.
 //
 // SSR-safe BY CONSTRUCTION: the cover-of-record is pure CSS, driven by the
-// author's `class="kun-spoiler kun-spoiler-hidden"` (transparent text + a light
-// tint). The secret is hidden in the very first server-rendered paint and stays
-// hidden with JS disabled or before hydration. On the client we *add* a drifting
-// particle canvas on top — a pure enhancement; if it never runs the spoiler is
-// still covered.
+// author's `class="kun-spoiler kun-spoiler-hidden"` (transparent text + a faint
+// tint). The secret is hidden in the first server-rendered paint and stays
+// hidden with JS disabled. On the client we *add* an animated particle canvas —
+// a pure enhancement.
+//
+// The mask follows the real text shape: we measure each space-separated word run
+// with the Range API (`getClientRects()`), giving one rect per word — or, for
+// scriptio-continua text like CJK, one rect per wrapped line. Particles and the
+// grey tint are confined to those rects, so multi-line spoilers are masked
+// line-by-line and word-by-word with the gaps (spaces, ragged line ends) left
+// clear — rather than one solid block.
 //
 // The particle model is ported from molefrog/spoiled's paint worklet: every
 // particle is a pure function of one shared clock `t`, with a spawn → fly → fade
-// → respawn lifecycle (that churn is what reads as floating dust). Revealing a
-// spoiler sets a `tStop`, which fades the field out sequentially and stops it.
+// → respawn lifecycle. Revealing sets a `tStop`, which dissolves the field out.
 //
-// Performance: ONE shared, fps-throttled rAF loop drives every canvas (not one
-// loop each); off-screen spoilers are skipped via a shared IntersectionObserver;
-// particle counts are capped by area; reduced-motion users get a single static
-// frame and no loop.
+// Performance: ONE shared, fps-throttled rAF loop drives every canvas; off-screen
+// spoilers are paused via a shared IntersectionObserver; particle counts are
+// capped; word rects are measured once per layout (on setup / resize), never per
+// frame; reduced-motion users get a single static frame and no loop.
 
 const FPS = 30
 const FRAME_MS = 1000 / FPS
-const DENSITY = 0.08 // particles per css px²
+const DENSITY = 0.08 // particles per css px² of masked area
 const MAX_PARTICLES = 2500
-const FADE = 0.6 // seconds — fade-in on appear and dissolve on reveal
+const FADE = 0.6 // seconds — fade-in on appear, dissolve on reveal
+const TINT_ALPHA = 0.34
 const V_MIN = 2 // particle speed, px/s
 const V_MAX = 12
 const TAU = Math.PI * 2
@@ -36,8 +42,6 @@ const easeOutCubic = (t: number): number => {
 }
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x)
 
-// Trapezoidal visibility over a particle's lifetime: grows in (`a`s), holds,
-// shrinks out (`b`s).
 const trapezoid = (life: number, a: number, b: number, t: number): number => {
   const s = Math.max(a, life - b)
   if (t < a) return Math.max(0, t / a)
@@ -45,8 +49,6 @@ const trapezoid = (life: number, a: number, b: number, t: number): number => {
   return 1
 }
 
-// Sequential fade — in when the field appears, out (after `tStop`) on reveal.
-// Particles start animating staggered across the first 2/3 of `duration`.
 const fadeFactor = (
   worldT: number,
   tStop: number | null,
@@ -63,8 +65,16 @@ const fadeFactor = (
   return easeOutCubic(1 - clamp01(progress))
 }
 
+interface Rect {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
 interface Particle {
-  x0: number
+  rect: Rect
+  x0: number // local to rect
   y0: number
   vx: number
   vy: number
@@ -72,7 +82,7 @@ interface Particle {
   cycle: number // life + respawn
   phase: number
   size0: number
-  light: number // hsl lightness 0–100
+  light: number
   square: boolean
 }
 
@@ -82,6 +92,7 @@ interface ParticleField {
   ctx: CanvasRenderingContext2D
   w: number
   h: number
+  rects: Rect[]
   particles: Particle[]
   inView: boolean
   animated: boolean
@@ -93,6 +104,33 @@ interface ParticleField {
 const reducedMotion = (): boolean =>
   typeof window !== 'undefined' &&
   !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+// Measure the rectangle of every space-separated word run (one rect per line a
+// run occupies). For CJK / no-space text a run spans the whole node, so this
+// degrades to one rect per wrapped line. Element-local coordinates. O(words),
+// run once per layout — never per frame.
+const measureRects = (el: HTMLElement): Rect[] => {
+  const base = el.getBoundingClientRect()
+  const rects: Rect[] = []
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+  const range = document.createRange()
+  let node: Node | null
+  while ((node = walker.nextNode())) {
+    const text = node.nodeValue ?? ''
+    for (const m of text.matchAll(/\S+/g)) {
+      const start = m.index ?? 0
+      range.setStart(node, start)
+      range.setEnd(node, start + m[0].length)
+      const list = range.getClientRects()
+      for (let i = 0; i < list.length; i++) {
+        const r = list[i]!
+        if (r.width < 0.5 || r.height < 0.5) continue
+        rects.push({ x: r.left - base.left, y: r.top - base.top, w: r.width, h: r.height })
+      }
+    }
+  }
+  return rects
+}
 
 // ── shared animation infrastructure ────────────────────────────────────────
 const fields = new Set<ParticleField>()
@@ -117,13 +155,25 @@ const getIO = (): IntersectionObserver => {
 }
 
 const drawField = (f: ParticleField) => {
-  const { ctx, w, h, particles, tStop } = f
+  const { ctx, w, h, particles, rects, tStop } = f
   const t = clock - f.bornAt
   const n = particles.length
   ctx.clearRect(0, 0, w, h)
+
+  // grey tint behind the particles, confined to the word/line rects; fades in on
+  // appear and out on reveal.
+  const tintFade =
+    tStop != null ? clamp01(1 - (t - tStop) / FADE) : clamp01(t / (FADE * 0.5))
+  if (tintFade > 0) {
+    ctx.fillStyle = `rgba(150, 150, 150, ${TINT_ALPHA * tintFade})`
+    for (let r = 0; r < rects.length; r++) {
+      const rect = rects[r]!
+      ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
+    }
+  }
+
   for (let i = 0; i < n; i++) {
     const p = particles[i]!
-    // can't respawn after the field has been told to stop
     if (
       tStop != null &&
       Math.floor((tStop + p.phase) / p.cycle) < Math.floor((t + p.phase) / p.cycle)
@@ -137,9 +187,9 @@ const drawField = (f: ParticleField) => {
     if (alpha <= 0.01) continue
     const size = fade * p.size0 * trapezoid(p.life, 0.15, 0.3, lt)
     if (size <= 0) continue
-    // drift + wrap so the cloud never thins at the edges
-    let x = (((p.x0 + p.vx * lt) % w) + w) % w
-    let y = (((p.y0 + p.vy * lt) % h) + h) % h
+    const rect = p.rect
+    const x = rect.x + (((p.x0 + p.vx * lt) % rect.w) + rect.w) % rect.w
+    const y = rect.y + (((p.y0 + p.vy * lt) % rect.h) + rect.h) % rect.h
     ctx.globalAlpha = alpha > 1 ? 1 : alpha
     ctx.fillStyle = `hsl(0 0% ${p.light}%)`
     if (p.square) {
@@ -182,17 +232,39 @@ const stopLoopIfIdle = () => {
 }
 
 const seed = (f: ParticleField) => {
-  const count = Math.min(MAX_PARTICLES, Math.max(6, Math.round(f.w * f.h * DENSITY)))
+  const rects = f.rects
+  if (!rects.length) {
+    f.particles = []
+    return
+  }
+  // cumulative areas → pick a rect weighted by its area
+  let total = 0
+  const cum: number[] = []
+  for (const r of rects) {
+    total += r.w * r.h
+    cum.push(total)
+  }
+  const count = Math.min(MAX_PARTICLES, Math.max(6, Math.round(total * DENSITY)))
   const r = Math.random
   f.particles = Array.from({ length: count }, () => {
+    const pick = r() * total
+    let lo = 0
+    let hi = cum.length - 1
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1
+      if (cum[mid]! < pick) lo = mid + 1
+      else hi = mid
+    }
+    const rect = rects[lo]!
     const angle = r() * TAU
     const speed = V_MIN + r() * (V_MAX - V_MIN)
     const life = 0.3 + r() * 1.2
-    const cycle = life + r() // up to 1s respawn delay
+    const cycle = life + r()
     const ldir = r() < 0.5 ? -1 : 1
     return {
-      x0: r() * f.w,
-      y0: r() * f.h,
+      rect,
+      x0: r() * rect.w,
+      y0: r() * rect.h,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life,
@@ -220,6 +292,16 @@ const sizeCanvas = (f: ParticleField): boolean => {
   return true
 }
 
+const refresh = (f: ParticleField) => {
+  if (!sizeCanvas(f)) return
+  f.rects = measureRects(f.el)
+  // per-word canvas takes over only when there's measurable text; otherwise the
+  // CSS block tint remains the cover (e.g. an image-only spoiler).
+  f.el.classList.toggle('kun-spoiler-live', f.rects.length > 0)
+  seed(f)
+  if (!f.animated) drawField(f)
+}
+
 const createField = (el: HTMLElement) => {
   if (elToField.has(el)) return
   const canvas = document.createElement('canvas')
@@ -243,31 +325,23 @@ const createField = (el: HTMLElement) => {
     ctx,
     w: 0,
     h: 0,
+    rects: [],
     particles: [],
     inView: true,
     animated: !reducedMotion(),
     bornAt: clock,
     tStop: null,
   }
-  field.ro = new ResizeObserver(() => {
-    if (sizeCanvas(field)) {
-      seed(field)
-      if (!field.animated) drawField(field)
-    }
-  })
+  field.ro = new ResizeObserver(() => refresh(field))
 
   fields.add(field)
   elToField.set(el, field)
   field.ro.observe(el)
+  refresh(field)
 
-  if (sizeCanvas(field)) {
-    seed(field)
-    if (field.animated) {
-      getIO().observe(el)
-      startLoop()
-    } else {
-      drawField(field) // reduced motion: a single static frame
-    }
+  if (field.animated && field.rects.length) {
+    getIO().observe(el)
+    startLoop()
   }
 }
 
@@ -277,6 +351,7 @@ const destroyField = (el: HTMLElement) => {
   field.ro?.disconnect()
   sharedIO?.unobserve(el)
   field.canvas.remove()
+  el.classList.remove('kun-spoiler-live')
   fields.delete(field)
   elToField.delete(el)
   stopLoopIfIdle()
@@ -308,8 +383,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
     el.removeAttribute('aria-label')
 
     const field = elToField.get(el)
-    if (field && field.animated && !reducedMotion()) {
-      // dissolve the field out; the loop destroys it once the fade completes.
+    if (field && field.animated && field.rects.length && !reducedMotion()) {
       field.tStop = clock - field.bornAt
       startLoop()
     } else {
