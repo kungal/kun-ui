@@ -357,6 +357,60 @@ const destroyField = (el: HTMLElement) => {
   stopLoopIfIdle()
 }
 
+// ── code-block copy button ─────────────────────────────────────────────────
+// KunContent gives every code block a copy button so downstream doesn't have to
+// reimplement it. Self-styled inline (token-aware → adapts to light/dark), so it
+// works with or without the opt-in prose.css. Idempotent: a block that already
+// carries a `.copy` button (e.g. one emitted by a markdown pipeline) is left
+// alone, so we never double up.
+const COPY_ICON =
+  "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='9' y='9' width='13' height='13' rx='2'/><path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/></svg>"
+const CHECK_ICON =
+  "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M20 6 9 17l-5-5'/></svg>"
+
+// Parse a trusted, hard-coded SVG string into a DOM node (no innerHTML).
+const makeIcon = (svg: string): Node =>
+  document.importNode(
+    new DOMParser().parseFromString(svg, 'image/svg+xml').documentElement,
+    true
+  )
+
+const injectCopyButtons = (container: HTMLElement) => {
+  container.querySelectorAll('pre').forEach((pre) => {
+    if (pre.dataset.kunCopyReady) return
+    // leave pipeline-emitted copy buttons (forum/moyu/wiki) untouched
+    if (pre.closest('.kun-code-container')?.querySelector('.copy, .kun-prose-copy')) {
+      return
+    }
+    pre.dataset.kunCopyReady = '1'
+    if (getComputedStyle(pre).position === 'static') pre.style.position = 'relative'
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'kun-prose-copy'
+    btn.setAttribute('aria-label', '复制代码')
+    btn.appendChild(makeIcon(COPY_ICON))
+    Object.assign(btn.style, {
+      position: 'absolute',
+      top: '0.5rem',
+      right: '0.5rem',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '1.85rem',
+      height: '1.85rem',
+      padding: '0',
+      cursor: 'pointer',
+      color: 'hsl(var(--foreground))',
+      background: 'hsl(var(--content1))',
+      border: '1px solid var(--color-kun-border, hsla(var(--foreground), 0.14))',
+      borderRadius: '0.5rem',
+      opacity: '0.75',
+      transition: 'opacity 0.15s, color 0.15s',
+    })
+    pre.appendChild(btn)
+  })
+}
+
 export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
   const localFields = new Set<HTMLElement>()
 
@@ -393,14 +447,27 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
   }
 
   const handleCopyClick = (copyButton: HTMLElement) => {
-    const container = copyButton.closest('.kun-code-container')
-    const pre = container?.querySelector('pre')
+    const pre =
+      copyButton.closest('.kun-code-container')?.querySelector('pre') ??
+      copyButton.closest('pre')
     if (!pre) return
+    const text = (pre.querySelector('code') ?? pre).textContent ?? ''
     navigator.clipboard
-      .writeText(pre.innerText)
+      .writeText(text)
       .then(() => {
         copyButton.classList.add('copied')
-        setTimeout(() => copyButton.classList.remove('copied'), 3000)
+        if (copyButton.classList.contains('kun-prose-copy')) {
+          // self-styled injected button: swap icon for instant feedback
+          copyButton.replaceChildren(makeIcon(CHECK_ICON))
+          copyButton.style.color = 'hsl(var(--success-500))'
+          setTimeout(() => {
+            copyButton.replaceChildren(makeIcon(COPY_ICON))
+            copyButton.style.color = 'hsl(var(--foreground))'
+            copyButton.classList.remove('copied')
+          }, 2000)
+        } else {
+          setTimeout(() => copyButton.classList.remove('copied'), 3000)
+        }
       })
       .catch((err) => {
         console.error('复制失败:', err)
@@ -417,7 +484,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
       reveal(spoiler)
       return
     }
-    const copyButton = target.closest<HTMLElement>('.copy')
+    const copyButton = target.closest<HTMLElement>('.copy, .kun-prose-copy')
     if (copyButton) {
       event.preventDefault()
       event.stopPropagation()
@@ -441,6 +508,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
     container
       .querySelectorAll<HTMLElement>('.kun-spoiler.kun-spoiler-hidden')
       .forEach(tagSpoiler)
+    injectCopyButtons(container)
     container.addEventListener('click', handleContainerClick)
     container.addEventListener('keydown', handleContainerKeydown)
   }

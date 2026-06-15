@@ -15,7 +15,7 @@ import type { KunContentProps } from './types'
 // input here.
 defineOptions({ name: 'KunContent' })
 
-withDefaults(defineProps<KunContentProps>(), { className: '' })
+withDefaults(defineProps<KunContentProps>(), { className: '', compact: false })
 
 const articleRef = ref<HTMLElement | null>(null)
 
@@ -27,7 +27,11 @@ const { isLightboxOpen, images, currentImageIndex } =
 <template>
   <div>
     <!-- eslint-disable-next-line vue/no-v-html — trusted HTML, see note above -->
-    <article ref="articleRef" :class="cn('kun-prose', className)" v-html="content" />
+    <article
+      ref="articleRef"
+      :class="cn('kun-prose', compact && 'kun-prose-compact', className)"
+      v-html="content"
+    />
     <KunLightbox
       v-model:is-open="isLightboxOpen"
       :images="images"

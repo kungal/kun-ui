@@ -39,10 +39,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./prose.css": "./dist/prose.css"
   },
   "scripts": {
-    "build": "vite build && vue-tsc -p tsconfig.build.json",
+    "build": "vite build && cp src/prose.css dist/prose.css && vue-tsc -p tsconfig.build.json",
     "dev": "vite build --watch",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist"

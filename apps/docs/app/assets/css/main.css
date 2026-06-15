@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import '@kungal/ui-tokens';
 @import '@kungal/ui-vue/style.css';
+/* Opt into the editorial Markdown/prose typography (KunContent ships behaviour
+   in style.css; this adds the `.kun-prose` type system). */
+@import '@kungal/ui-vue/prose.css';
 
 /*
  * Scan the KunUI package sources so Tailwind generates the classes the

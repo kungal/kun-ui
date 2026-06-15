@@ -1,0 +1,292 @@
+/*
+ * @kungal/ui-vue/prose.css — OPT-IN editorial Markdown/prose typography.
+ *
+ *   import '@kungal/ui-vue/prose.css'
+ *
+ * Styles any `.kun-prose` container (KunContent applies that class). It is a
+ * SEPARATE import on purpose: KunContent itself only ships *behavior* (sanitize,
+ * lightbox, spoilers, code-copy) in the main style.css, so a downstream that
+ * already owns its own `.kun-prose` typography (e.g. kun-galgame-forum, moyu,
+ * wiki) is NOT affected — it simply doesn't import this file. New consumers that
+ * want beautiful defaults opt in here.
+ *
+ * Token-driven, so it adapts to light/dark automatically. The theme stores
+ * colours as comma HSL *channels* (`--foreground: 202, 24%, 9%`), so alpha uses
+ * legacy `hsla(var(--x), a)` — NOT `hsl(var(--x) / a)`. `--color-kun-border` is
+ * already a full neutral `hsl()` colour. Neutral foreground/content tokens drive
+ * body + chrome; `--primary-*` only links and the blockquote rule.
+ *
+ * Pass `compact` to KunContent (or add `.kun-prose-compact`) for a tighter
+ * density — meant for comment / reply streams.
+ */
+
+.kun-prose {
+  max-width: 40rem;
+  margin-inline: auto;
+  font-size: 1.0625rem; /* 17px — editorial body */
+  line-height: 1.8; /* generous leading, kind to CJK */
+  color: hsl(var(--foreground));
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+.kun-prose > :first-child {
+  margin-top: 0;
+}
+.kun-prose > :last-child {
+  margin-bottom: 0;
+}
+
+.kun-prose p {
+  margin: 1.25em 0;
+}
+
+/* Headings — modular scale ~1.25; top-margin ≫ bottom so a heading groups with
+   the content that follows it. */
+.kun-prose h1,
+.kun-prose h2,
+.kun-prose h3,
+.kun-prose h4,
+.kun-prose h5,
+.kun-prose h6 {
+  color: hsl(var(--foreground));
+  line-height: 1.3;
+  text-wrap: balance;
+  scroll-margin-top: 5rem;
+}
+.kun-prose h1 {
+  font-size: 2.125em; /* ~36px */
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+  margin: 0 0 0.7em;
+}
+.kun-prose h2 {
+  font-size: 1.53em; /* ~26px */
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 2.4em 0 0.85em;
+}
+.kun-prose h3 {
+  font-size: 1.235em; /* ~21px */
+  font-weight: 600;
+  margin: 1.9em 0 0.6em;
+}
+.kun-prose h4 {
+  font-size: 1.06em; /* ~18px */
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 1.6em 0 0.5em;
+}
+.kun-prose h5 {
+  font-size: 0.95em;
+  font-weight: 600;
+  margin: 1.5em 0 0.4em;
+}
+.kun-prose h6 {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: hsla(var(--foreground), 0.65);
+  margin: 1.5em 0 0.4em;
+}
+
+/* Inline */
+.kun-prose strong,
+.kun-prose b {
+  font-weight: 650;
+  color: hsl(var(--foreground));
+}
+.kun-prose em,
+.kun-prose i {
+  font-style: italic;
+}
+.kun-prose a {
+  color: hsl(var(--primary-600));
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 0.15s var(--ease-kun-standard, ease);
+}
+.kun-prose a:hover {
+  color: hsl(var(--primary-500));
+}
+.kun-prose mark {
+  background: hsla(var(--warning-300, 45, 93%, 64%), 0.55);
+  color: hsl(var(--foreground));
+  padding: 0.05em 0.25em;
+  border-radius: 0.25em;
+}
+
+/* Lists */
+.kun-prose ul,
+.kun-prose ol {
+  margin: 1.25em 0;
+  padding-left: 1.6em;
+}
+.kun-prose ul {
+  list-style: disc;
+}
+.kun-prose ol {
+  list-style: decimal;
+}
+.kun-prose li {
+  margin: 0.4em 0;
+  padding-left: 0.25em;
+}
+.kun-prose li::marker {
+  color: hsla(var(--foreground), 0.45);
+}
+.kun-prose ul ul,
+.kun-prose ul ol,
+.kun-prose ol ul,
+.kun-prose ol ol {
+  margin: 0.4em 0;
+}
+.kun-prose li > p {
+  margin: 0.4em 0;
+}
+
+/* Blockquote — left rule + muted, upright (no italic, kinder to CJK) */
+.kun-prose blockquote {
+  margin: 1.6em 0;
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 3px solid hsl(var(--primary-400));
+  color: hsla(var(--foreground), 0.72);
+  font-style: normal;
+}
+.kun-prose blockquote p {
+  margin: 0.5em 0;
+}
+
+/* Code */
+.kun-prose code {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.875em;
+  background: hsl(var(--content2));
+  border: 1px solid var(--color-kun-border, hsla(var(--foreground), 0.12));
+  border-radius: 0.375em;
+  padding: 0.12em 0.4em;
+}
+.kun-prose pre {
+  position: relative; /* anchors the injected copy button */
+  margin: 1.5em 0;
+  padding: 1em 1.15em;
+  background: hsl(var(--content2));
+  border: 1px solid var(--color-kun-border, hsla(var(--foreground), 0.12));
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.7;
+}
+.kun-prose pre code {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Tables */
+.kun-prose table {
+  width: 100%;
+  margin: 1.6em 0;
+  border-collapse: collapse;
+  font-size: 0.925em;
+  line-height: 1.5;
+}
+.kun-prose thead th {
+  text-align: left;
+  font-weight: 650;
+  padding: 0.6em 0.85em;
+  border-bottom: 2px solid var(--color-kun-border, hsla(var(--foreground), 0.16));
+}
+.kun-prose tbody td {
+  padding: 0.6em 0.85em;
+  border-bottom: 1px solid var(--color-kun-border, hsla(var(--foreground), 0.1));
+}
+.kun-prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Rule + media */
+.kun-prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-kun-border, hsla(var(--foreground), 0.12));
+  margin: 3em 0;
+}
+.kun-prose img,
+.kun-prose video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.75em 0;
+}
+
+/* Keyboard key */
+.kun-prose kbd {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8em;
+  padding: 0.15em 0.45em;
+  border-radius: 0.375em;
+  background: hsl(var(--content2));
+  border: 1px solid var(--color-kun-border, hsla(var(--foreground), 0.14));
+  box-shadow: 0 1px 0 hsla(var(--foreground), 0.12);
+}
+
+/* ── Compact density (comment / reply streams) ───────────────────────────────
+   Tighter base, leading and spacing; smaller heading scale; fills its container
+   instead of centring on a 40rem measure. */
+.kun-prose-compact {
+  max-width: none;
+  margin-inline: 0;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.7;
+}
+.kun-prose-compact p {
+  margin: 0.7em 0;
+}
+.kun-prose-compact h1 {
+  font-size: 1.5em;
+  margin: 1.2em 0 0.5em;
+}
+.kun-prose-compact h2 {
+  font-size: 1.3em;
+  margin: 1.3em 0 0.5em;
+}
+.kun-prose-compact h3 {
+  font-size: 1.15em;
+  margin: 1.2em 0 0.4em;
+}
+.kun-prose-compact h4,
+.kun-prose-compact h5,
+.kun-prose-compact h6 {
+  font-size: 1em;
+  margin: 1em 0 0.35em;
+}
+.kun-prose-compact ul,
+.kun-prose-compact ol {
+  margin: 0.7em 0;
+  padding-left: 1.4em;
+}
+.kun-prose-compact li {
+  margin: 0.25em 0;
+}
+.kun-prose-compact blockquote {
+  margin: 1em 0;
+  padding-left: 0.9em;
+}
+.kun-prose-compact pre {
+  margin: 1em 0;
+  padding: 0.8em 0.9em;
+}
+.kun-prose-compact table {
+  margin: 1em 0;
+}
+.kun-prose-compact hr {
+  margin: 1.6em 0;
+}
+.kun-prose-compact img,
+.kun-prose-compact video {
+  margin: 1em 0;
+}

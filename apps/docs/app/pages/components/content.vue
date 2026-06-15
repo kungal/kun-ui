@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Basic from '~/examples/content/Basic.vue'
 import BasicSrc from '~/examples/content/Basic.vue?raw'
+import Typography from '~/examples/content/Typography.vue'
+import TypographySrc from '~/examples/content/Typography.vue?raw'
 import Spoiler from '~/examples/content/Spoiler.vue'
 import SpoilerSrc from '~/examples/content/Spoiler.vue?raw'
 import LongSpoiler from '~/examples/content/LongSpoiler.vue'
@@ -25,6 +27,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">Markdown 排版</h2>
+    <Demo title="Typography.vue" :source="TypographySrc"><Typography /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">剧透</h2>
     <Demo title="Spoiler.vue" :source="SpoilerSrc"><Spoiler /></Demo>

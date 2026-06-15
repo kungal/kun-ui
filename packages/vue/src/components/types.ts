@@ -723,6 +723,9 @@ export interface KunContentProps {
   // (KunUI does not sanitize; see docs/architecture.md).
   content: string
   className?: string
+  // Tighter density for comment / reply streams (adds `.kun-prose-compact`).
+  // Visual effect requires importing `@kungal/ui-vue/prose.css`.
+  compact?: boolean
 }
 
 export interface KunTextProps {
