@@ -11,6 +11,7 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import KunIcon from './Icon.vue'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
@@ -117,7 +118,10 @@ const open = () => {
   const sel = filtered.value.findIndex((o) => selectedSet.value.has(o.value))
   activeIndex.value = sel >= 0 ? sel : firstEnabled()
   nextTick(() => {
-    if (props.searchable) searchRef.value?.focus()
+    // preventScroll: the search field lives in the teleported dropdown, which
+    // is momentarily at (0,0) before floating-ui's first measurement — a plain
+    // focus() would scroll the page to the top. floating-ui handles visibility.
+    if (props.searchable) searchRef.value?.focus({ preventScroll: true })
     scrollActiveIntoView()
   })
 }
@@ -126,7 +130,7 @@ const close = (returnFocus = true) => {
   if (!isOpen.value) return
   isOpen.value = false
   query.value = ''
-  if (returnFocus) nextTick(() => buttonRef.value?.focus())
+  if (returnFocus) nextTick(() => buttonRef.value?.focus({ preventScroll: true }))
 }
 
 const toggle = () => (isOpen.value ? close() : open())
@@ -146,7 +150,7 @@ const selectOption = (option: KunSelectOption<T>) => {
     if (at >= 0) cur.splice(at, 1)
     else cur.push(option.value)
     modelValue.value = cur
-    if (props.searchable) nextTick(() => searchRef.value?.focus())
+    if (props.searchable) nextTick(() => searchRef.value?.focus({ preventScroll: true }))
   } else {
     modelValue.value = option.value
     close()
@@ -173,9 +177,10 @@ const clearAll = () => {
 // ── keyboard ─────────────────────────────────────────────────────────────
 const scrollActiveIntoView = () => {
   nextTick(() => {
-    listRef.value
-      ?.querySelector(`[data-index="${activeIndex.value}"]`)
-      ?.scrollIntoView({ block: 'nearest' })
+    scrollItemIntoView(
+      listRef.value,
+      listRef.value?.querySelector(`[data-index="${activeIndex.value}"]`)
+    )
   })
 }
 

@@ -11,6 +11,7 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import KunIcon from './Icon.vue'
 import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
 
@@ -105,9 +106,10 @@ const close = () => {
 
 const scrollActiveIntoView = () => {
   nextTick(() => {
-    listRef.value
-      ?.querySelector(`[data-index="${activeIndex.value}"]`)
-      ?.scrollIntoView({ block: 'nearest' })
+    scrollItemIntoView(
+      listRef.value,
+      listRef.value?.querySelector(`[data-index="${activeIndex.value}"]`)
+    )
   })
 }
 
