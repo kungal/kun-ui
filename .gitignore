@@ -8,3 +8,4 @@ dist
 *.log
 .vscode/
 .playwright-mcp/
+refs
