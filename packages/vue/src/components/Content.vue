@@ -42,55 +42,42 @@ const { isLightboxOpen, images, currentImageIndex } =
     cursor: zoom-in;
   }
 
+  /* Spoiler shell — a positioned, clipped box so the noise overlay can fill it.
+     The covered/revealed state is driven entirely by the `kun-spoiler-hidden`
+     class present in the (server-rendered) HTML — no JS needed to hide. */
   & :deep(.kun-spoiler) {
     position: relative;
     display: inline-block;
-    border-radius: 0.5rem;
+    /* No rounded corners — the cover stays rectangular so it lines up with the
+       browser's text-selection highlight (which is always rectangular). */
     overflow: hidden;
     vertical-align: middle;
-
-    & .spoiler-frost {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: rgb(150, 150, 150);
-      border-radius: inherit;
-      transform: translateZ(0);
-      z-index: 5;
-    }
-
-    & > *:not(.spoiler-canvas) {
-      transition: filter var(--kun-dur-slow) var(--ease-kun-standard);
-      filter: blur(0);
-    }
-
-    & .spoiler-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity var(--kun-dur-slow) var(--ease-kun-standard);
-      background-color: rgba(150, 150, 150, 0.1);
-
-      &.fade-out {
-        opacity: 0;
-      }
-    }
-  }
-
-  & :deep(.kun-spoiler.kun-spoiler-hidden) {
-    cursor: pointer;
-
-    & > *:not(.spoiler-canvas) {
-      filter: blur(52px);
-      user-select: none;
-    }
+    transition: color var(--kun-dur-base) var(--ease-kun-standard);
   }
 
   & :deep(div.kun-spoiler) {
     display: block;
     width: fit-content;
+  }
+
+  /* Covered: text (and any child) goes transparent; a light tint marks the
+     region. This is the cover-of-record — pure CSS, present in the SSR HTML, so
+     the secret is hidden on first paint and with JS disabled. The drifting
+     particle canvas (.kun-spoiler-canvas) is layered on top by JS as a pure
+     client-side enhancement. */
+  & :deep(.kun-spoiler-hidden) {
+    cursor: pointer;
+    color: transparent !important;
+    user-select: none;
+    background-color: rgb(150 150 150 / 0.18);
+  }
+  /* Hide element children (e.g. images) without hiding the particle canvas. */
+  & :deep(.kun-spoiler-hidden > :not(.kun-spoiler-canvas)) {
+    visibility: hidden;
+  }
+
+  & :deep(.kun-spoiler-hidden:hover) {
+    background-color: rgb(150 150 150 / 0.26);
   }
 }
 </style>

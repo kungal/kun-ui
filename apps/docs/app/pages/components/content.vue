@@ -3,6 +3,8 @@ import Basic from '~/examples/content/Basic.vue'
 import BasicSrc from '~/examples/content/Basic.vue?raw'
 import Spoiler from '~/examples/content/Spoiler.vue'
 import SpoilerSrc from '~/examples/content/Spoiler.vue?raw'
+import LongSpoiler from '~/examples/content/LongSpoiler.vue'
+import LongSpoilerSrc from '~/examples/content/LongSpoiler.vue?raw'
 import Lightbox from '~/examples/content/Lightbox.vue'
 import LightboxSrc from '~/examples/content/Lightbox.vue?raw'
 import meta from '~/generated/component-meta.json'
@@ -26,6 +28,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">剧透</h2>
     <Demo title="Spoiler.vue" :source="SpoilerSrc"><Spoiler /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">超长多段剧透</h2>
+    <Demo title="LongSpoiler.vue" :source="LongSpoilerSrc"><LongSpoiler /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">内联图片灯箱</h2>
     <Demo title="Lightbox.vue" :source="LightboxSrc"><Lightbox /></Demo>
