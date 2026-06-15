@@ -1,6 +1,6 @@
 {
   "name": "@kungal/ui-vue",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "KunUI Vue 3 component layer — Nuxt-decoupled. Works in any Vue app; pairs with @kungal/ui-nuxt for Nuxt sugar.",
   "type": "module",
   "keywords": [
