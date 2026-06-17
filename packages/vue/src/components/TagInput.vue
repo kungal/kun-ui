@@ -282,7 +282,12 @@ const containerClasses = computed(() =>
     sizeMinH[props.size],
     sizePadding[props.size],
     sizeText[props.size],
-    props.variant === 'bordered' && cn('border', !props.error && 'border-kun'),
+    // Always reserve a 1px border (transparent) so the `flat` variant and the
+    // error state stay the same outer size as `bordered` — only the border
+    // COLOUR changes. (Bonus: the error border now shows on `flat` too, which
+    // previously had no border width to colour.)
+    'border border-transparent',
+    props.variant === 'bordered' && !props.error && 'border-kun',
     props.variant === 'flat' && 'bg-content2',
     props.error
       ? kunFocusRingWithinClasses.danger

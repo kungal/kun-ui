@@ -22,21 +22,25 @@ const props = withDefaults(defineProps<KunInfoProps>(), {
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
+// Every variant carries the SAME 1.5px border width — `bordered` colours it,
+// the others keep it transparent — so switching variants never changes the
+// box's outer size (the filled / light / ghost variants would otherwise be 3px
+// smaller than `bordered`). Mirrors how Button reserves a transparent border.
 const variantClasses = computed(() => {
   switch (props.variant) {
     case 'solid':
     case 'shadow':
-      return ' text-white'
+      return 'border-[1.5px] border-transparent text-white'
     case 'bordered':
       return 'border-[1.5px]'
     case 'light':
-      return 'bg-opacity-20 border-transparent'
+      return 'bg-opacity-20 border-[1.5px] border-transparent'
     case 'flat':
-      return 'bg-opacity-20 border-transparent shadow-none'
+      return 'bg-opacity-20 border-[1.5px] border-transparent shadow-none'
     case 'ghost':
-      return 'bg-transparent border-transparent shadow-none hover:bg-opacity-10'
+      return 'bg-transparent border-[1.5px] border-transparent shadow-none hover:bg-opacity-10'
     default:
-      return ''
+      return 'border-[1.5px] border-transparent'
   }
 })
 
