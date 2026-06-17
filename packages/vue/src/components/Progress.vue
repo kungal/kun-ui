@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunBgClasses, kunRoundedClasses, type KunUIColor } from '@kungal/ui-core'
+import {
+  cn,
+  kunSolidBgClasses,
+  kunSolidFgClasses,
+  kunRoundedClasses,
+  type KunUIColor,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import type { KunProgressProps } from './types'
 
@@ -68,8 +74,11 @@ const gradientClasses: Record<KunUIColor, string> = {
   info: 'bg-gradient-to-r from-info-400 to-info-600',
 }
 
+// Foreground for the on-bar label (light hues take dark text).
+const labelFg = computed(() => kunSolidFgClasses[props.color])
+
 const barClasses = computed(() => {
-  const base = kunBgClasses[props.color]
+  const base = kunSolidBgClasses[props.color]
   switch (props.variant) {
     case 'gradient':
       return gradientClasses[props.color]
@@ -163,7 +172,10 @@ const circleOffset = computed(
         "
         :style="`width:${percentage}%`"
       >
-        <span v-if="showLabel" class="px-2 text-xs font-medium text-white">
+        <span
+          v-if="showLabel"
+          :class="cn('px-2 text-xs font-medium', labelFg)"
+        >
           {{ percentage }}%
         </span>
       </div>

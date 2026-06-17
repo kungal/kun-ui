@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, kunRoundedClasses, type KunUIVariant, type KunUIColor } from '@kungal/ui-core'
+import {
+  cn,
+  kunRoundedClasses,
+  kunSolidClasses,
+  type KunUIVariant,
+  type KunUIColor,
+} from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import KunIcon from './Icon.vue'
 import type { KunInfoProps } from './types'
@@ -30,7 +36,9 @@ const variantClasses = computed(() => {
   switch (props.variant) {
     case 'solid':
     case 'shadow':
-      return 'border-[1.5px] border-transparent text-white'
+      // Fill + foreground come from kunSolidClasses (see colorClasses) — it
+      // picks white or dark text per colour for legibility in both modes.
+      return 'border-[1.5px] border-transparent'
     case 'bordered':
       return 'border-[1.5px]'
     case 'light':
@@ -44,16 +52,10 @@ const variantClasses = computed(() => {
   }
 })
 
-const colorVariants: Record<KunUIVariant, Record<KunUIColor, string>> = {
-  solid: {
-    default: 'bg-default',
-    primary: 'bg-primary',
-    secondary: 'bg-secondary',
-    success: 'bg-success-600',
-    warning: 'bg-warning',
-    danger: 'bg-danger-600',
-    info: 'bg-info-600',
-  },
+// solid / shadow are handled by kunSolidClasses in colorClasses (one source of
+// truth for fill + contrast-correct foreground). The remaining variants use
+// soft tints with dark colored text, so they keep their own table.
+const colorVariants: Partial<Record<KunUIVariant, Record<KunUIColor, string>>> = {
   bordered: {
     default: 'bg-transparent bg-default/15 border-default',
     primary: 'bg-transparent bg-primary/15 border-primary text-primary',
@@ -81,15 +83,6 @@ const colorVariants: Record<KunUIVariant, Record<KunUIColor, string>> = {
     danger: 'bg-danger/15 text-danger-800 dark:text-danger-500',
     info: 'bg-info/15 text-info-800 dark:text-info-500',
   },
-  shadow: {
-    default: ' shadow-default/50 bg-default',
-    primary: ' shadow-primary/40 bg-primary',
-    secondary: ' shadow-secondary/40 bg-secondary',
-    success: ' shadow-success/40 bg-success',
-    warning: ' shadow-warning/40 bg-warning dark:text-black',
-    danger: ' shadow-danger/40 bg-danger',
-    info: ' shadow-info/40 bg-info',
-  },
   ghost: {
     default: 'border-default',
     primary: 'border-primary text-primary',
@@ -101,9 +94,30 @@ const colorVariants: Record<KunUIVariant, Record<KunUIColor, string>> = {
   },
 }
 
-const colorClasses = computed(() => colorVariants[props.variant]?.[props.color] || '')
+// Colored glow for the shadow variant (size + tint); the fill + foreground come
+// from kunSolidClasses.
+const shadowGlow: Record<KunUIColor, string> = {
+  default: 'shadow-lg shadow-default/40',
+  primary: 'shadow-lg shadow-primary/40',
+  secondary: 'shadow-lg shadow-secondary/40',
+  success: 'shadow-lg shadow-success/40',
+  warning: 'shadow-lg shadow-warning/40',
+  danger: 'shadow-lg shadow-danger/40',
+  info: 'shadow-lg shadow-info/40',
+}
 
+const colorClasses = computed(() => {
+  if (props.variant === 'solid') return kunSolidClasses[props.color]
+  if (props.variant === 'shadow')
+    return cn(shadowGlow[props.color], kunSolidClasses[props.color])
+  return colorVariants[props.variant]?.[props.color] || ''
+})
+
+// Title colour. The soft-tint variants use a dark colored title; solid / shadow
+// inherit the box's contrast-correct foreground (kunSolidClasses) — overriding
+// it with `text-{color}-900` is what made the solid title unreadable.
 const titleColor = computed(() => {
+  if (props.variant === 'solid' || props.variant === 'shadow') return ''
   switch (props.color) {
     case 'primary':
       return 'text-primary-900'

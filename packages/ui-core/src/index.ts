@@ -16,6 +16,9 @@ export { cn, type ClassValue } from './cn'
 export {
   kunVariantClasses,
   kunBgClasses,
+  kunSolidBgClasses,
+  kunSolidFgClasses,
+  kunSolidClasses,
   kunTextClasses,
   kunBorderClasses,
   kunRingClasses,

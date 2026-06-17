@@ -18,14 +18,17 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
   // light hues (info ≈ L88%, default/secondary ≈ L65–72%). Each entry pins a
   // `dark:bg-{color}-{n}` that lands every color at a consistent ~L44–55% so the
   // whole row reads as one saturated tier with legible white text.
+  // Foreground: the dark hues take white; the light hues (success / warning /
+  // info) are light in BOTH modes, so white text fails WCAG on them (~1.5–3.4:1)
+  // — they take dark text (≈6–18:1). See kunSolidFgClasses.
   solid: {
     default: 'border border-transparent bg-default text-white dark:bg-default-400',
     primary: 'border border-transparent bg-primary text-white dark:bg-primary-400',
-    secondary: 'border border-transparent bg-secondary text-white dark:bg-secondary-300',
-    success: 'border border-transparent bg-success-600 text-white dark:bg-success-400',
-    warning: 'border border-transparent bg-warning text-white dark:bg-warning-400',
+    secondary: 'border border-transparent bg-secondary text-black dark:bg-secondary-300',
+    success: 'border border-transparent bg-success-600 text-black dark:bg-success-400',
+    warning: 'border border-transparent bg-warning text-black dark:bg-warning-400',
     danger: 'border border-transparent bg-danger text-white dark:bg-danger-400',
-    info: 'border border-transparent bg-info-600 text-white dark:bg-info-300',
+    info: 'border border-transparent bg-info-600 text-black dark:bg-info-300',
   },
   bordered: {
     default: 'border border-default bg-transparent',
@@ -62,11 +65,11 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
   shadow: {
     default: 'border border-transparent shadow-lg shadow-default/40 bg-default text-white dark:bg-default-400',
     primary: 'border border-transparent shadow-lg shadow-primary/40 bg-primary text-white dark:bg-primary-400',
-    secondary: 'border border-transparent shadow-lg shadow-secondary/40 bg-secondary text-white dark:bg-secondary-300',
-    success: 'border border-transparent shadow-lg shadow-success/40 bg-success-600 text-white dark:bg-success-400',
-    warning: 'border border-transparent shadow-lg shadow-warning/40 bg-warning text-white dark:bg-warning-400',
+    secondary: 'border border-transparent shadow-lg shadow-secondary/40 bg-secondary text-black dark:bg-secondary-300',
+    success: 'border border-transparent shadow-lg shadow-success/40 bg-success-600 text-black dark:bg-success-400',
+    warning: 'border border-transparent shadow-lg shadow-warning/40 bg-warning text-black dark:bg-warning-400',
     danger: 'border border-transparent shadow-lg shadow-danger/40 bg-danger text-white dark:bg-danger-400',
-    info: 'border border-transparent shadow-lg shadow-info/40 bg-info-600 text-white dark:bg-info-300',
+    info: 'border border-transparent shadow-lg shadow-info/40 bg-info-600 text-black dark:bg-info-300',
   },
   ghost: {
     default: 'border border-default bg-transparent hover:bg-default/10',
@@ -95,6 +98,53 @@ export const kunBgClasses: Record<KunUIColor, string> = {
   warning: 'bg-warning',
   danger: 'bg-danger',
   info: 'bg-info',
+}
+
+// ─── Solid fills (a colored fill that carries text / icons) ──────────────────
+// Two facts shape these, both verified by contrast measurement:
+//   1. The dark color scale is INVERTED, so a plain `bg-{color}` renders pale in
+//      dark mode — each fill pins a `dark:bg-{color}-{n}` to stay saturated
+//      enough for its foreground. (Same pins as the Button `solid` row.)
+//   2. The light hues (success / warning / info) are light in BOTH modes, so
+//      white text fails WCAG on them everywhere (~1.2–3.4:1). They take DARK
+//      text (≈6–18:1); the darker hues keep white.
+// Reach for these — NOT plain `kunBgClasses` — whenever a colored fill carries a
+// foreground. `kunBgClasses` stays for tints / bars / dots that carry no text.
+
+/** Just the fill (with the dark-mode pin). Pair with {@link kunSolidFgClasses}
+ *  when the fill and its text live on different elements. */
+export const kunSolidBgClasses: Record<KunUIColor, string> = {
+  default: 'bg-default dark:bg-default-400',
+  primary: 'bg-primary dark:bg-primary-400',
+  secondary: 'bg-secondary dark:bg-secondary-300',
+  success: 'bg-success-600 dark:bg-success-400',
+  warning: 'bg-warning dark:bg-warning-400',
+  danger: 'bg-danger dark:bg-danger-400',
+  info: 'bg-info-600 dark:bg-info-300',
+}
+
+/** The foreground that stays legible on the matching solid fill in both modes. */
+// secondary is a bright magenta — white fails on it (≈2.9:1 in light); it takes
+// dark text. danger keeps white (the red+white convention; ≈4.1:1, legible).
+export const kunSolidFgClasses: Record<KunUIColor, string> = {
+  default: 'text-white',
+  primary: 'text-white',
+  secondary: 'text-black',
+  success: 'text-black',
+  warning: 'text-black',
+  danger: 'text-white',
+  info: 'text-black',
+}
+
+/** Fill + matching foreground — the common case (text sits on the fill). */
+export const kunSolidClasses: Record<KunUIColor, string> = {
+  default: 'bg-default text-white dark:bg-default-400',
+  primary: 'bg-primary text-white dark:bg-primary-400',
+  secondary: 'bg-secondary text-black dark:bg-secondary-300',
+  success: 'bg-success-600 text-black dark:bg-success-400',
+  warning: 'bg-warning text-black dark:bg-warning-400',
+  danger: 'bg-danger text-white dark:bg-danger-400',
+  info: 'bg-info-600 text-black dark:bg-info-300',
 }
 
 export const kunTextClasses: Record<KunUIColor, string> = {

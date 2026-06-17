@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import { cn, kunBgClasses } from '@kungal/ui-core'
+import { cn, kunSolidClasses } from '@kungal/ui-core'
 import type { KunBadgeProps } from './types'
 
 // Dot / count overlay on the top corner of an anchor (avatar, icon, button).
@@ -58,8 +58,9 @@ const standalone = computed(() => !slots.default)
 
 const badgeClasses = computed(() =>
   cn(
-    'inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap text-white',
-    kunBgClasses[props.color],
+    'inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap',
+    // Fill + contrast-correct foreground (light hues take dark text).
+    kunSolidClasses[props.color],
     props.variant === 'dot' ? dotSize[props.size] : countSize[props.size],
     // Anchored overlay: corner-positioned + ringed. Standalone: plain inline.
     standalone.value

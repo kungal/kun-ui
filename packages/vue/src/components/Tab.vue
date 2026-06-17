@@ -10,6 +10,9 @@ import {
 import {
   cn,
   kunBgClasses,
+  kunSolidBgClasses,
+  kunSolidFgClasses,
+  kunSolidClasses,
   kunTextClasses,
   kunBorderClasses,
 } from '@kungal/ui-core'
@@ -326,7 +329,10 @@ const tabClasses = (item: KunTabItem) => {
         base,
         'rounded-kun-md',
         selected
-          ? cn('text-white', fallback && kunBgClasses[props.color])
+          ? cn(
+              kunSolidFgClasses[props.color],
+              fallback && kunSolidBgClasses[props.color]
+            )
           : 'text-default-500 hover:text-foreground'
       )
     case 'light':
@@ -350,7 +356,7 @@ const tabClasses = (item: KunTabItem) => {
         base,
         'rounded-full',
         selected
-          ? cn(kunBgClasses[props.color], 'text-white')
+          ? kunSolidClasses[props.color]
           : 'text-default-500 hover:text-foreground'
       )
     default:
@@ -387,7 +393,10 @@ const indicatorClasses = computed(() => {
         isVertical.value ? 'left-0 top-0' : 'bottom-0 left-0'
       )
     case 'solid':
-      return cn('absolute top-0 left-0 rounded-kun-md', kunBgClasses[props.color])
+      return cn(
+        'absolute top-0 left-0 rounded-kun-md',
+        kunSolidBgClasses[props.color]
+      )
     case 'light':
       return cn('absolute top-0 left-0 rounded-kun-md', softBgByColor[props.color])
     default:
