@@ -951,13 +951,13 @@ export interface KunAccordionProps {
   className?: string
 }
 export interface KunAccordionItemProps {
-  /** Unique key for this section (used by v-model + ARIA ids). */
+  /** Unique key for this section (used by v-model). */
   value: string
   title?: string
   /** Optional leading icon (registered name). */
   icon?: string
   disabled?: boolean
-  /** Shared id namespace so multiple accordions on a page don't collide. */
+  /** Optional readable prefix for the auto-generated (already unique) ARIA ids. */
   name?: string
   className?: string
 }

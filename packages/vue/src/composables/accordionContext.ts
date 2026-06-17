@@ -12,10 +12,3 @@ export interface KunAccordionContext {
 
 export const KUN_ACCORDION: InjectionKey<KunAccordionContext> =
   Symbol('kun-accordion')
-
-// Stable ARIA ids linking each header button to its region (+ optional shared
-// `name` so multiple accordions on one page don't collide).
-export const kunAccordionHeaderId = (name: string | undefined, value: string) =>
-  `${name ?? 'kun'}-acc-header-${value}`
-export const kunAccordionPanelId = (name: string | undefined, value: string) =>
-  `${name ?? 'kun'}-acc-panel-${value}`

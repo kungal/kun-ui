@@ -38,9 +38,17 @@ const count = ref(0)
 const active = ref(0)
 
 const maxIndex = computed(() => Math.max(0, count.value - props.slidesPerView))
-const showArrows = computed(
+// Renamed (not `showArrows`) to avoid shadowing the prop of the same name.
+const arrowsVisible = computed(
   () => props.showArrows && count.value > props.slidesPerView
 )
+// One dot per reachable scroll position (a "page"), so every dot can become
+// active. For slidesPerView=1 this is one-per-slide; for >1 the trailing slides
+// that are always co-visible don't get a dead dot.
+const dotsVisible = computed(
+  () => props.showIndicators && count.value > props.slidesPerView
+)
+const dotCount = computed(() => maxIndex.value + 1)
 
 let reduced = false
 const stride = (t: HTMLElement) => {
@@ -137,7 +145,7 @@ onBeforeUnmount(() => {
     </ul>
 
     <!-- Arrows -->
-    <template v-if="showArrows">
+    <template v-if="arrowsVisible">
       <button
         type="button"
         aria-label="上一张"
@@ -158,20 +166,19 @@ onBeforeUnmount(() => {
       </button>
     </template>
 
-    <!-- Dot indicators -->
+    <!-- Dot indicators (one per reachable position) -->
     <div
-      v-if="showIndicators && count > slidesPerView"
+      v-if="dotsVisible"
       class="mt-3 flex items-center justify-center gap-2"
-      role="tablist"
+      role="group"
       aria-label="轮播导航"
     >
       <button
-        v-for="i in count"
+        v-for="i in dotCount"
         :key="i"
         type="button"
-        role="tab"
-        :aria-label="`第 ${i} 张`"
-        :aria-selected="active === i - 1"
+        :aria-label="`跳到第 ${i} 张`"
+        :aria-current="active === i - 1 ? 'true' : undefined"
         :class="
           cn(
             'h-2 rounded-full transition-all',

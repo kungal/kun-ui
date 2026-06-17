@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { cn } from '@kungal/ui-core'
-import {
-  KUN_ACCORDION,
-  kunAccordionHeaderId,
-  kunAccordionPanelId,
-} from '../composables/accordionContext'
+import { KUN_ACCORDION } from '../composables/accordionContext'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import type { KunAccordionItemProps } from './types'
 
@@ -28,8 +25,12 @@ const ctx = inject(KUN_ACCORDION, null)
 const open = computed(() => ctx?.isOpen(props.value) ?? false)
 const splitted = computed(() => ctx?.variant.value === 'splitted')
 
-const headerId = computed(() => kunAccordionHeaderId(props.name, props.value))
-const panelId = computed(() => kunAccordionPanelId(props.name, props.value))
+// SSR-stable, globally-unique ids (Vue useId) so two accordions that happen to
+// reuse the same item `value`s never collide. `name` is an optional readable
+// prefix. (Item state still keys off `value`; only the DOM ids use the uid.)
+const uid = useKunUniqueId(props.name ? `${props.name}-acc-` : 'kun-acc-')
+const headerId = computed(() => `${uid.value}-header`)
+const panelId = computed(() => `${uid.value}-panel`)
 
 const onToggle = () => {
   if (props.disabled) return
