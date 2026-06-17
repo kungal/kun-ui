@@ -1,5 +1,20 @@
 # @kungal/ui-nuxt
 
+## 1.6.2
+
+### Patch Changes
+
+- 05f2bee: chore: ship CHANGELOG.md in the published packages
+
+  `CHANGELOG.md` is now included in each package's npm tarball (added to `files`),
+  so downstream can read the per-version changes straight from the npm package
+  page — not only from the GitHub repo. (Releases also now appear on GitHub
+  Releases and the docs site's auto-generated /changelog page.)
+
+- Updated dependencies [05f2bee]
+  - @kungal/ui-tokens@1.6.2
+  - @kungal/ui-vue@1.6.2
+
 ## 1.6.1
 
 ### Patch Changes

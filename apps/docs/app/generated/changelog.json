@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.6.2",
+    "type": "patch",
+    "html": "<ul>\n<li><p>chore: ship CHANGELOG.md in the published packages</p>\n<p><code>CHANGELOG.md</code> is now included in each package&#39;s npm tarball (added to <code>files</code>),\nso downstream can read the per-version changes straight from the npm package\npage — not only from the GitHub repo. (Releases also now appear on GitHub\nReleases and the docs site&#39;s auto-generated /changelog page.)</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.6.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): Accordion duplicate ids + Carousel dot indicators</p>\n<p>Two issues found reviewing the 1.6.0 components:</p>\n<ul>\n<li><strong>KunAccordion</strong>: header/panel ARIA ids were derived from the item <code>value</code>, so\ntwo accordions reusing the same values (e.g. <code>a</code>/<code>b</code>) emitted duplicate ids —\ninvalid HTML and a broken <code>aria-controls</code> target. Ids are now generated with\nVue&#39;s SSR-stable <code>useId()</code>, so they&#39;re globally unique regardless of <code>value</code>.\n(<code>name</code> stays as an optional readable prefix.)</li>\n<li><strong>KunCarousel</strong>: with <code>slidesPerView &gt; 1</code> the dots rendered one-per-slide, but\nthe last <code>slidesPerView − 1</code> of them could never become active. Dots now map to\nreachable scroll positions (<code>maxIndex + 1</code>), so every dot works. The dots also\nswitched from an incorrect <code>role=&quot;tab&quot;</code> (with no tabpanels) to plain buttons\nwith <code>aria-current</code>, and an internal computed no longer shadows the\n<code>showArrows</code> prop.</li>\n</ul>\n</li>\n</ul>\n"
