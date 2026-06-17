@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
 import {
   cn,
   kunBgClasses,
@@ -114,6 +121,28 @@ watch(
   () => nextTick(updateIndicator),
   { immediate: true }
 )
+
+// The sliding indicator is measured from the DOM (offsetLeft/offsetWidth), so it
+// CANNOT exist in server-rendered HTML — until the client mounts, the active tab
+// falls back to a CSS highlight (see tabClasses, gated on `!showIndicator`).
+// Measure on mount (the DOM is guaranteed present) and re-measure whenever the
+// list resizes — web-font swaps, container width changes and item changes all
+// shift tab widths, which would otherwise leave the indicator stale.
+const listRef = ref<HTMLElement | null>(null)
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(() => {
+  nextTick(updateIndicator)
+  if (typeof ResizeObserver !== 'undefined' && listRef.value) {
+    resizeObserver = new ResizeObserver(() => updateIndicator())
+    resizeObserver.observe(listRef.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  resizeObserver = null
+})
 
 const focusTab = (idx: number) => {
   const el = tabRefs.value[idx]
@@ -275,8 +304,17 @@ const tabClasses = (item: KunTabItem) => {
     item.disabled && 'opacity-50 cursor-not-allowed',
     isVertical.value && props.fullWidth && 'w-full'
   )
+  // These three variants show the active state via the JS-measured sliding
+  // indicator, which is absent until the client mounts. `!showIndicator` is true
+  // on the server and through hydration, so the selected tab carries a CSS-only
+  // active highlight then; once the indicator is measured it takes over and this
+  // fallback drops — no hydration mismatch (the swap happens post-mount).
+  const fallback = !showIndicator.value
   switch (props.variant) {
     case 'underlined':
+      // The pre-hydration underline is drawn via an inline box-shadow (see
+      // tabStyle) rather than a class — an arbitrary inset-shadow utility isn't
+      // reliably generated, and an inline style always renders in SSR HTML.
       return cn(
         base,
         selected
@@ -287,14 +325,16 @@ const tabClasses = (item: KunTabItem) => {
       return cn(
         base,
         'rounded-kun-md',
-        selected ? 'text-white' : 'text-default-500 hover:text-foreground'
+        selected
+          ? cn('text-white', fallback && kunBgClasses[props.color])
+          : 'text-default-500 hover:text-foreground'
       )
     case 'light':
       return cn(
         base,
         'rounded-kun-md',
         selected
-          ? kunTextClasses[props.color]
+          ? cn(kunTextClasses[props.color], fallback && softBgByColor[props.color])
           : 'text-default-500 hover:text-foreground'
       )
     case 'bordered':
@@ -317,6 +357,14 @@ const tabClasses = (item: KunTabItem) => {
       return base
   }
 }
+
+// SSR / pre-hydration fallback for the underlined variant: a 2px inset bottom
+// bar on the active tab itself (currentColor = its active text color). Inline so
+// it always renders server-side; once the measured indicator exists it drops.
+const tabStyle = (item: KunTabItem) =>
+  props.variant === 'underlined' && isSelected(item) && !showIndicator.value
+    ? { boxShadow: 'inset 0 -2px 0 0 currentColor' }
+    : undefined
 
 // Soft tint for the light variant's sliding panel (15% — a touch stronger
 // than @kungal/ui-core's kunSoftBgClasses 5%). Static literals for the JIT.
@@ -369,7 +417,12 @@ const indicatorMergedStyle = computed(() => {
 
 <template>
   <div :class="containerClasses">
-    <div :class="listClasses" role="tablist" :aria-orientation="orientation">
+    <div
+      ref="listRef"
+      :class="listClasses"
+      role="tablist"
+      :aria-orientation="orientation"
+    >
       <div
         v-if="showIndicator"
         aria-hidden="true"
@@ -390,6 +443,7 @@ const indicatorMergedStyle = computed(() => {
         :aria-disabled="item.disabled || disabled"
         :tabindex="isSelected(item) && !item.disabled && !disabled ? 0 : -1"
         :class="tabClasses(item)"
+        :style="tabStyle(item)"
         @click="onTabClick($event, item, index)"
         @keydown="onKeydown($event, index)"
       >
