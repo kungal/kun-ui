@@ -29,6 +29,7 @@
     "*.vue"
   ],
   "files": [
+    "CHANGELOG.md",
     "dist"
   ],
   "main": "./dist/index.js",

@@ -11,7 +11,8 @@
     "preview": "nuxt preview",
     "gen:meta": "node scripts/gen-meta.mjs",
     "nuxt:prepare": "nuxt prepare",
-    "gen:page-md": "node scripts/gen-page-md.mjs"
+    "gen:page-md": "node scripts/gen-page-md.mjs",
+    "gen:changelog": "node scripts/gen-changelog.mjs"
   },
   "dependencies": {
     "@codemirror/lang-vue": "^0.1.3",
@@ -33,6 +34,7 @@
     "typescript": "^5.7.0",
     "vue": "^3.5.35",
     "vue-component-meta": "^3.3.3",
-    "jiti": "^2.7.0"
+    "jiti": "^2.7.0",
+    "marked": "^15.0.0"
   }
 }

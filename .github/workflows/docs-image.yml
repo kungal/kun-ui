@@ -3,6 +3,9 @@ name: docs-image
 # Build the docs site image and push it to GHCR, mirroring the infra
 # (GHCR + Actions → Dokploy pulls prebuilt) pipeline. Production never builds.
 on:
+  # Manual / API dispatch — the Release workflow kicks this after a version bump
+  # (whose commit is [skip ci]) so the /changelog page rebuilds with the new entry.
+  workflow_dispatch:
   push:
     branches: [main]
     paths:

@@ -10,6 +10,8 @@ pnpm up "@kungal/*@latest"   # → 1.5.0
 >
 > 1.0.0 之前(0.5.2 → 1.0.0)的大跨度迁移见 [`UPGRADE-0.5.2-to-1.0.0.md`](./UPGRADE-0.5.2-to-1.0.0.md)。
 > _(本文件名仍是 `…-to-1.1.0`,但内容覆盖到 1.5.0。)_
+>
+> **逐版变更不再手写。** 每个版本的变更现已**随发布自动生成**:见 [ui.kungal.com/changelog](https://ui.kungal.com/changelog)、各包 `CHANGELOG.md`(npm + 仓库)、以及 [GitHub Releases](https://github.com/kungal/kun-ui/releases)。本类手写 `UPGRADE-*.md` 今后只为**破坏性大版本(major)** 保留,作为叙事式迁移指南。
 
 ---
 

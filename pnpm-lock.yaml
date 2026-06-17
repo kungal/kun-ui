@@ -54,6 +54,9 @@ importers:
       jiti:
         specifier: ^2.7.0
         version: 2.7.0
+      marked:
+        specifier: ^15.0.0
+        version: 15.0.12
       nuxt:
         specifier: ^4.4.7
         version: 4.4.7(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@types/node@22.19.20)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(ioredis@5.11.1)(lightningcss@1.32.0)(magicast@0.5.3)(rolldown@1.0.3)(rollup-plugin-visualizer@7.0.1(rolldown@1.0.3)(rollup@4.61.1))(rollup@4.61.1)(srvx@0.11.16)(terser@5.48.0)(typescript@5.9.3)(vite@8.0.16(@types/node@22.19.20)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@5.9.3))(yaml@2.9.0)
@@ -3462,6 +3465,11 @@ packages:
 
   magicast@0.5.3:
     resolution: {integrity: sha512-pVKE4UdSQ7DvHzivsCIFx2BJn1mHG6KsyrFcaxFx6tONdneEuThrDx0Cj3AMg58KyN4pzYT+LHOotxDQDjNvkw==}
+
+  marked@15.0.12:
+    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   mdast-util-to-hast@13.2.1:
     resolution: {integrity: sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA==}
@@ -8254,6 +8262,8 @@ snapshots:
       '@babel/parser': 7.29.7
       '@babel/types': 7.29.7
       source-map-js: 1.2.1
+
+  marked@15.0.12: {}
 
   mdast-util-to-hast@13.2.1:
     dependencies:

@@ -8,8 +8,9 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  contents: write # commit the version bump back to main + push git tags
+  contents: write # commit the version bump back to main + push git tags + create GitHub Releases
   id-token: write # OIDC token for npm trusted publishing (no NPM_TOKEN needed)
+  actions: write # dispatch the docs-image workflow after a release
 
 jobs:
   release:
@@ -38,6 +39,7 @@ jobs:
       # Workspace deps are `version: link:` in the lockfile (no pinned number),
       # so a version bump never changes pnpm-lock.yaml — no reinstall needed.
       - name: Version and publish
+        id: release
         run: |
           set -euo pipefail
 
@@ -45,8 +47,13 @@ jobs:
 
           if git diff --quiet; then
             echo "No changesets present — nothing to release."
+            echo "released=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
+          # Refresh the docs /changelog page data from the just-updated CHANGELOG
+          # so it ships inside this same release commit (no hand-written docs).
+          pnpm --filter @kungal/docs gen:changelog || true
 
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -56,7 +63,36 @@ jobs:
 
           pnpm ci:publish      # build packages + changeset publish (OIDC + provenance)
           git push origin --tags
+
+          echo "released=true" >> "$GITHUB_OUTPUT"
+          echo "version=$(node -p "require('./packages/vue/package.json').version")" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # No NPM_TOKEN: authentication happens via OIDC (id-token: write).
           # Provenance is emitted automatically under trusted publishing.
+
+      # Publish a GitHub Release per version (the 4 packages move in lockstep, so
+      # one Release on the ui-vue tag covers them). Notes = the newest CHANGELOG
+      # block — same content as the changesets, with zero extra hand-writing.
+      - name: Create GitHub Release
+        if: steps.release.outputs.released == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.release.outputs.version }}"
+          NOTES=$(awk 'f && /^## /{exit} /^## /{f=1; next} f' packages/vue/CHANGELOG.md)
+          gh release create "@kungal/ui-vue@${VERSION}" \
+            --title "v${VERSION}" \
+            --notes "${NOTES:-Release v${VERSION}}" \
+            || echo "Release for v${VERSION} may already exist; skipping."
+
+      # The bump commit is [skip ci], so docs-image won't auto-trigger — kick it
+      # so the live /changelog page picks up the freshly-committed entry.
+      - name: Trigger docs site rebuild
+        if: steps.release.outputs.released == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run docs-image.yml --ref "${GITHUB_REF_NAME}" \
+            || echo "Could not dispatch docs-image; it will rebuild on the next docs change."

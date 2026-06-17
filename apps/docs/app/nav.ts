@@ -25,6 +25,7 @@ export const nav: NavSection[] = [
       { label: '简介', to: '/' },
       { label: '快速开始', to: '/getting-started' },
       item('/playground'),
+      item('/changelog'),
     ],
   },
   {

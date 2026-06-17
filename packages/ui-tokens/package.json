@@ -27,6 +27,7 @@
     "*.css"
   ],
   "files": [
+    "CHANGELOG.md",
     "src"
   ],
   "exports": {
