@@ -14,3 +14,95 @@
  */
 @source '../../../../../packages/ui-core/src';
 @source '../../../../../packages/vue/src';
+
+/*
+ * Playground safelist.
+ *
+ * Tailwind only generates the utility classes it sees in source at BUILD time,
+ * but the Playground (/playground) lets visitors type ANY utility at RUNTIME.
+ * `@source inline(...)` force-generates a broad, bounded set so common utilities
+ * render in live previews even when they appear nowhere else on the site.
+ *
+ * Scope notes: this lands in the global stylesheet (one Tailwind entry), so it's
+ * loaded site-wide — kept bounded on purpose. Responsive (`sm:`/`md:`) and most
+ * stateful prefixes are omitted (previews are single-column); the full palette
+ * is limited to shades 100–900. A user can still type something outside this set
+ * and see it not apply — that's the documented edge, not a bug.
+ */
+
+/* Display / layout / fl/grid / position */
+@source inline("{block,inline-block,inline,flex,inline-flex,grid,inline-grid,hidden,contents}");
+@source inline("flex-{row,row-reverse,col,col-reverse,wrap,nowrap,1,auto,initial,none}");
+@source inline("{grow,grow-0,shrink,shrink-0,flex-1,flex-auto,flex-none}");
+@source inline("grid-cols-{1,2,3,4,5,6,7,8,9,10,11,12,none}");
+@source inline("col-span-{1,2,3,4,5,6,full}");
+@source inline("grid-rows-{1,2,3,4,5,6}");
+@source inline("items-{start,end,center,baseline,stretch}");
+@source inline("justify-{start,end,center,between,around,evenly,stretch}");
+@source inline("justify-items-{start,end,center,stretch}");
+@source inline("self-{auto,start,end,center,stretch}");
+@source inline("place-{items,content}-{start,end,center,stretch,between,around}");
+@source inline("{relative,absolute,fixed,sticky,static}");
+@source inline("{top,right,bottom,left,inset}-{0,1,2,3,4,8,auto}");
+@source inline("{inset-x,inset-y}-0");
+@source inline("z-{0,10,20,30,40,50,auto}");
+@source inline("overflow-{auto,hidden,visible,scroll,clip}");
+@source inline("overflow-{x,y}-{auto,hidden,visible,scroll}");
+
+/* Spacing: padding / margin / gap */
+@source inline("{p,px,py,pt,pr,pb,pl}-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,7,8,9,10,12,14,16,20,24}");
+@source inline("{m,mx,my,mt,mr,mb,ml}-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,7,8,9,10,12,14,16,20,24,auto}");
+@source inline("gap-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,7,8,9,10,12}");
+@source inline("gap-{x,y}-{0,1,2,3,4,5,6,8}");
+@source inline("{space-x,space-y}-{0,1,2,3,4,5,6,8}");
+
+/* Sizing */
+@source inline("w-{0,1,2,3,4,5,6,8,10,12,16,20,24,32,40,48,56,64,px,auto,full,screen,min,max,fit}");
+@source inline("w-{1/2,1/3,2/3,1/4,3/4}");
+@source inline("h-{0,1,2,3,4,5,6,8,10,12,16,20,24,32,40,48,56,64,px,auto,full,screen,min,max,fit}");
+@source inline("size-{0,1,2,3,4,5,6,8,10,12,16,20,24,32,full}");
+@source inline("{min-w,min-h}-{0,full,fit,min,max,screen}");
+@source inline("max-w-{0,xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,full,min,max,fit,none,prose}");
+@source inline("max-h-{full,screen,fit,none}");
+
+/* Typography */
+@source inline("text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl}");
+@source inline("font-{thin,extralight,light,normal,medium,semibold,bold,extrabold,black}");
+@source inline("text-{left,center,right,justify,start,end}");
+@source inline("leading-{none,tight,snug,normal,relaxed,loose,3,4,5,6,7,8,9,10}");
+@source inline("tracking-{tighter,tight,normal,wide,wider,widest}");
+@source inline("{italic,not-italic,underline,overline,line-through,no-underline,truncate,uppercase,lowercase,capitalize,normal-case}");
+@source inline("whitespace-{normal,nowrap,pre,pre-line,pre-wrap}");
+@source inline("break-{normal,words,all,keep}");
+@source inline("list-{none,disc,decimal,inside,outside}");
+
+/* Borders / radius / ring / divide */
+@source inline("border{,-0,-2,-4,-8}");
+@source inline("border-{t,r,b,l,x,y}{,-0,-2,-4}");
+@source inline("rounded{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}");
+@source inline("rounded-{t,r,b,l,tl,tr,br,bl}-{none,sm,md,lg,xl,2xl,3xl,full}");
+@source inline("{border-solid,border-dashed,border-dotted,border-none}");
+@source inline("ring{,-0,-1,-2,-4}");
+@source inline("{divide-x,divide-y}");
+
+/* Effects / interaction / misc */
+@source inline("shadow{,-sm,-md,-lg,-xl,-2xl,-none,-inner}");
+@source inline("opacity-{0,5,10,20,25,30,40,50,60,70,75,80,90,95,100}");
+@source inline("cursor-{pointer,default,not-allowed,wait,text,move,grab}");
+@source inline("{select-none,select-text,select-all,select-auto}");
+@source inline("transition{,-none,-all,-colors,-opacity,-transform,-shadow}");
+@source inline("duration-{75,100,150,200,300,500,700,1000}");
+@source inline("ease-{linear,in,out,in-out}");
+@source inline("object-{cover,contain,fill,none,center,top,bottom,left,right}");
+@source inline("aspect-{auto,square,video}");
+
+/* Colors — standard palette (text/bg/border), shades 100–900, + hover for text/bg */
+@source inline("{text,bg,border}-{slate,gray,zinc,neutral,stone,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{100..900..100}");
+@source inline("hover:{text,bg}-{slate,gray,zinc,neutral,stone,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{300,500,700}");
+@source inline("{text,bg,border}-{black,white,transparent,current}");
+
+/* Colors — KunUI semantic tokens (text/bg/border) + shades + hover */
+@source inline("{text,bg,border}-{primary,secondary,success,warning,danger,info,default}");
+@source inline("{text,bg,border}-{primary,secondary,success,warning,danger,info,default}-{50,{100..900..100}}");
+@source inline("hover:{text,bg,border}-{primary,secondary,success,warning,danger,info,default}");
+@source inline("{text,bg}-{foreground,background,content1,content2,content3,content4}");
