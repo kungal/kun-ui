@@ -36,6 +36,13 @@ watchEffect(() => {
       <div class="flex items-center gap-3 sm:gap-4">
         <!-- AI-friendly "copy this page as Markdown" control (every page). -->
         <CopyPage />
+        <NuxtLink
+          to="/playground"
+          class="text-default-600 hover:text-foreground hidden items-center gap-1.5 text-sm transition-colors sm:flex"
+          active-class="!text-primary"
+        >
+          <KunIcon name="lucide:flask-conical" /> Playground
+        </NuxtLink>
         <a
           href="https://github.com/kungal/kun-ui"
           target="_blank"

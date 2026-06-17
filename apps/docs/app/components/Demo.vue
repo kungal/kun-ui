@@ -4,9 +4,18 @@ import { ref } from 'vue'
 // A live example + its source. The source is passed in (extracted at build time
 // via Vite's `?raw` import on the example file), so the shown code can NEVER
 // drift from the rendered demo. The chrome is built from KunUI components.
-withDefaults(defineProps<{ title?: string; source: string }>(), { title: '' })
+const props = withDefaults(defineProps<{ title?: string; source: string }>(), {
+  title: '',
+})
 
 const show = ref(false)
+
+// Hand this example's source to the Playground. sessionStorage (not a URL
+// param) keeps the link clean and avoids encoding a whole SFC into the URL.
+const editInPlayground = () => {
+  sessionStorage.setItem('kun-playground-source', props.source)
+  navigateTo('/playground')
+}
 </script>
 
 <template>
@@ -21,9 +30,14 @@ const show = ref(false)
       class="border-default-200 bg-content1/60 flex items-center justify-between border-t px-3 py-1.5"
     >
       <span class="text-default-500 text-xs">{{ title }}</span>
-      <KunButton size="sm" variant="light" @click="show = !show">
-        {{ show ? '隐藏代码' : '查看代码' }}
-      </KunButton>
+      <div class="flex items-center gap-1">
+        <KunButton size="sm" variant="light" @click="editInPlayground">
+          在 Playground 中编辑
+        </KunButton>
+        <KunButton size="sm" variant="light" @click="show = !show">
+          {{ show ? '隐藏代码' : '查看代码' }}
+        </KunButton>
+      </div>
     </div>
 
     <!-- Source (kept mounted so it prerenders; toggled with v-show) -->

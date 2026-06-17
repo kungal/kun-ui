@@ -48,6 +48,7 @@ export interface PageMeta {
 export const pageMeta: Record<string, PageMeta> = {
   '/': { title: site.name, description: site.description },
   '/getting-started': { title: '快速开始', description: '几分钟把 KunUI 接入你的 Vue / Nuxt 项目:安装、CSS 入口、核心规则、暗色模式与反馈 Provider。' },
+  '/playground': { title: 'Playground', cn: '在线试玩', description: '在浏览器里实时编辑单文件组件并渲染 KunUI —— 改代码即见效果,无需本地搭建。' },
 
   '/components/autocomplete': { title: 'Autocomplete', cn: '自动完成', description: '组合框:文本输入 + 过滤建议列表(v-model 字符串);支持 allowCustomValue 与手动过滤。' },
   '/components/avatar': { title: 'Avatar', cn: '头像', description: '基于 KunUser 的用户头像,支持确定性贴纸兜底与点击跳转个人主页。' },

@@ -14,11 +14,17 @@
     "gen:page-md": "node scripts/gen-page-md.mjs"
   },
   "dependencies": {
+    "@codemirror/lang-vue": "^0.1.3",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.36.5",
     "@kungal/ui-nuxt": "workspace:*",
     "@kungal/ui-vue": "workspace:*",
     "@kungal/ui-core": "workspace:*",
     "@kungal/ui-tokens": "workspace:*",
-    "shiki": "^4.2.0"
+    "@vue/compiler-sfc": "3.5.35",
+    "codemirror": "^6.0.2",
+    "shiki": "^4.2.0",
+    "sucrase": "^3.35.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.0",
