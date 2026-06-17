@@ -892,3 +892,89 @@ export interface KunLoliProps {
   message: string
   duration: number
 }
+
+// ── Skeleton ───────────────────────────────────────────────────────────
+export interface KunSkeletonProps {
+  /** Shape preset: `rect` block, `text` line, or `circle` (avatar). */
+  variant?: 'rect' | 'text' | 'circle'
+  /** CSS width. Defaults: rect/text 100%, circle = height. */
+  width?: string
+  /** CSS height. Defaults: text 1em, rect 1.25rem, circle 2.5rem. */
+  height?: string
+  rounded?: KunUIRounded
+  /** When true, render the default slot (real content) instead of the placeholder. */
+  loaded?: boolean
+  /** Pulse animation (auto-disabled under prefers-reduced-motion); `none` to turn off. */
+  animation?: 'pulse' | 'none'
+  className?: string
+}
+
+// ── Steps ──────────────────────────────────────────────────────────────
+export type KunStepsSize = 'sm' | 'md' | 'lg'
+export interface KunStepItem {
+  title: string
+  description?: string
+  /** Registered icon name; defaults to the step number (done shows a check). */
+  icon?: string
+}
+export interface KunStepsProps {
+  items: KunStepItem[]
+  /** 0-based index of the current step; earlier steps render as done. */
+  current?: number
+  color?: KunUIColor
+  size?: KunStepsSize
+  orientation?: 'horizontal' | 'vertical'
+  className?: string
+}
+
+// ── Timeline ───────────────────────────────────────────────────────────
+export interface KunTimelineProps {
+  className?: string
+}
+export interface KunTimelineItemProps {
+  /** Dot / medallion colour. */
+  color?: KunUIColor
+  /** Registered icon name → renders a medallion instead of a plain dot. */
+  icon?: string
+  title?: string
+  time?: string
+  className?: string
+}
+
+// ── Accordion ──────────────────────────────────────────────────────────
+export interface KunAccordionProps {
+  /** Allow multiple sections open at once (default single-open). */
+  multiple?: boolean
+  variant?: 'light' | 'bordered' | 'splitted'
+  /** Initially-open value(s) when uncontrolled (no v-model). */
+  defaultValue?: string | string[]
+  className?: string
+}
+export interface KunAccordionItemProps {
+  /** Unique key for this section (used by v-model + ARIA ids). */
+  value: string
+  title?: string
+  /** Optional leading icon (registered name). */
+  icon?: string
+  disabled?: boolean
+  /** Shared id namespace so multiple accordions on a page don't collide. */
+  name?: string
+  className?: string
+}
+
+// ── Carousel ───────────────────────────────────────────────────────────
+export interface KunCarouselProps {
+  /** Slides visible at once (>1 for thumbnail strips). */
+  slidesPerView?: number
+  /** Gap between slides (any CSS length). */
+  gap?: string
+  showArrows?: boolean
+  showIndicators?: boolean
+  /** Autoplay interval in ms (0 = off). Pauses on hover/focus, off under reduced-motion. */
+  autoplay?: number
+  ariaLabel?: string
+  className?: string
+}
+export interface KunCarouselItemProps {
+  className?: string
+}

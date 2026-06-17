@@ -1,4 +1,82 @@
 {
+  "KunAccordion": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string | string[]",
+        "required": false,
+        "default": "undefined",
+        "description": "Initially-open value(s) when uncontrolled (no v-model)."
+      },
+      {
+        "name": "modelValue",
+        "type": "string | string[]",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Allow multiple sections open at once (default single-open)."
+      },
+      {
+        "name": "variant",
+        "type": "\"light\" | \"bordered\" | \"splitted\"",
+        "required": false,
+        "default": "\"light\""
+      }
+    ]
+  },
+  "KunAccordionItem": {
+    "props": [
+      {
+        "name": "value",
+        "type": "string",
+        "required": true,
+        "description": "Unique key for this section (used by v-model + ARIA ids)."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Optional leading icon (registered name)."
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "default": "undefined",
+        "description": "Shared id namespace so multiple accordions on a page don't collide."
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
   "KunAlertProvider": {
     "props": []
   },
@@ -460,6 +538,65 @@
       }
     ]
   },
+  "KunCarousel": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"轮播\""
+      },
+      {
+        "name": "autoplay",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "Autoplay interval in ms (0 = off). Pauses on hover/focus, off under reduced-motion."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "gap",
+        "type": "string",
+        "required": false,
+        "default": "\"1rem\"",
+        "description": "Gap between slides (any CSS length)."
+      },
+      {
+        "name": "showArrows",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "showIndicators",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "slidesPerView",
+        "type": "number",
+        "required": false,
+        "default": "1",
+        "description": "Slides visible at once (>1 for thumbnail strips)."
+      }
+    ]
+  },
+  "KunCarouselItem": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
   "KunCheckBox": {
     "props": [
       {
@@ -594,6 +731,12 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "compact",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       }
     ]
   },
@@ -2288,6 +2431,57 @@
       }
     ]
   },
+  "KunSkeleton": {
+    "props": [
+      {
+        "name": "animation",
+        "type": "\"none\" | \"pulse\"",
+        "required": false,
+        "default": "\"pulse\"",
+        "description": "Pulse animation (auto-disabled under prefers-reduced-motion); `none` to turn off."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "height",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "CSS height. Defaults: text 1em, rect 1.25rem, circle 2.5rem."
+      },
+      {
+        "name": "loaded",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "When true, render the default slot (real content) instead of the placeholder."
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "variant",
+        "type": "\"text\" | \"circle\" | \"rect\"",
+        "required": false,
+        "default": "\"rect\"",
+        "description": "Shape preset: `rect` block, `text` line, or `circle` (avatar)."
+      },
+      {
+        "name": "width",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "CSS width. Defaults: rect/text 100%, circle = height."
+      }
+    ]
+  },
   "KunSlider": {
     "props": [
       {
@@ -2372,6 +2566,46 @@
         "type": "number",
         "required": false,
         "default": "1"
+      }
+    ]
+  },
+  "KunSteps": {
+    "props": [
+      {
+        "name": "items",
+        "type": "KunStepItem[]",
+        "required": true
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "current",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "0-based index of the current step; earlier steps render as done."
+      },
+      {
+        "name": "orientation",
+        "type": "\"horizontal\" | \"vertical\"",
+        "required": false,
+        "default": "\"horizontal\""
+      },
+      {
+        "name": "size",
+        "type": "KunStepsSize",
+        "required": false,
+        "default": "\"md\""
       }
     ]
   },
@@ -2898,6 +3132,52 @@
         "type": "KunUISize",
         "required": false,
         "default": "\"md\""
+      }
+    ]
+  },
+  "KunTimeline": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      }
+    ]
+  },
+  "KunTimelineItem": {
+    "props": [
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\"",
+        "description": "Dot / medallion colour."
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Registered icon name → renders a medallion instead of a plain dot."
+      },
+      {
+        "name": "time",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
       }
     ]
   },

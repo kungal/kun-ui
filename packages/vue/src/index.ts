@@ -1,4 +1,6 @@
 import type { App, Plugin } from 'vue'
+import KunAccordion from './components/Accordion.vue'
+import KunAccordionItem from './components/AccordionItem.vue'
 import KunAlertProvider from './components/AlertProvider.vue'
 import KunAutocomplete from './components/Autocomplete.vue'
 import KunAvatar from './components/Avatar.vue'
@@ -7,6 +9,8 @@ import KunBadge from './components/Badge.vue'
 import KunBrand from './components/Brand.vue'
 import KunButton from './components/Button.vue'
 import KunCard from './components/Card.vue'
+import KunCarousel from './components/Carousel.vue'
+import KunCarouselItem from './components/CarouselItem.vue'
 import KunCheckBox from './components/CheckBox.vue'
 import KunChip from './components/Chip.vue'
 import KunContent from './components/Content.vue'
@@ -45,7 +49,9 @@ import KunRating from './components/Rating.vue'
 import KunSelect from './components/Select.vue'
 import KunRipple from './components/Ripple.vue'
 import KunScrollShadow from './components/ScrollShadow.vue'
+import KunSkeleton from './components/Skeleton.vue'
 import KunSlider from './components/Slider.vue'
+import KunSteps from './components/Steps.vue'
 import KunSwitch from './components/Switch.vue'
 import KunTab from './components/Tab.vue'
 import KunTabPanel from './components/TabPanel.vue'
@@ -53,6 +59,8 @@ import KunTabPanels from './components/TabPanels.vue'
 import KunTagInput from './components/TagInput.vue'
 import KunText from './components/Text.vue'
 import KunTextarea from './components/Textarea.vue'
+import KunTimeline from './components/Timeline.vue'
+import KunTimelineItem from './components/TimelineItem.vue'
 import KunTooltip from './components/Tooltip.vue'
 import KunUpload from './components/Upload.vue'
 import KunUserChip from './components/UserChip.vue'
@@ -60,6 +68,8 @@ import KunUserChip from './components/UserChip.vue'
 // Components — import individually for tree-shaking, or register them all
 // globally with the KunUI plugin (below).
 export {
+  KunAccordion,
+  KunAccordionItem,
   KunAlertProvider,
   KunAutocomplete,
   KunAvatar,
@@ -68,6 +78,8 @@ export {
   KunBrand,
   KunButton,
   KunCard,
+  KunCarousel,
+  KunCarouselItem,
   KunCheckBox,
   KunChip,
   KunContent,
@@ -106,7 +118,9 @@ export {
   KunRipple,
   KunScrollShadow,
   KunSelect,
+  KunSkeleton,
   KunSlider,
+  KunSteps,
   KunSwitch,
   KunTab,
   KunTabPanel,
@@ -114,6 +128,8 @@ export {
   KunTagInput,
   KunText,
   KunTextarea,
+  KunTimeline,
+  KunTimelineItem,
   KunTooltip,
   KunUpload,
   KunUserChip,
@@ -256,6 +272,8 @@ export type {
 export type { KunUser } from '@kungal/ui-core'
 
 const components = {
+  KunAccordion,
+  KunAccordionItem,
   KunAlertProvider,
   KunAutocomplete,
   KunAvatar,
@@ -264,6 +282,8 @@ const components = {
   KunBrand,
   KunButton,
   KunCard,
+  KunCarousel,
+  KunCarouselItem,
   KunCheckBox,
   KunChip,
   KunContent,
@@ -302,7 +322,9 @@ const components = {
   KunRipple,
   KunScrollShadow,
   KunSelect,
+  KunSkeleton,
   KunSlider,
+  KunSteps,
   KunSwitch,
   KunTab,
   KunTabPanel,
@@ -310,6 +332,8 @@ const components = {
   KunTagInput,
   KunText,
   KunTextarea,
+  KunTimeline,
+  KunTimelineItem,
   KunTooltip,
   KunUpload,
   KunUserChip,
