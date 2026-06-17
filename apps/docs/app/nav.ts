@@ -26,6 +26,7 @@ export const nav: NavSection[] = [
       { label: '快速开始', to: '/getting-started' },
       item('/playground'),
       item('/changelog'),
+      item('/upgrade'),
     ],
   },
   {

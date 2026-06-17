@@ -1,17 +1,17 @@
-# KunUI 升级指南:1.0.0 → 1.5.0
+# KunUI 1.x 升级指南
 
-面向已在 **1.0.0** 的下游,升到当前最新的 **1.5.0**。四个包(`@kungal/ui-core` / `ui-tokens` / `ui-vue` / `ui-nuxt`)始终**锁步同版本**,必须一起升。
+面向已在 **1.x**(任意 1.0+)的下游,升到当前最新。四个包(`@kungal/ui-core` / `ui-tokens` / `ui-vue` / `ui-nuxt`)始终**锁步同版本**,必须一起升。
 
 ```bash
-pnpm up "@kungal/*@latest"   # → 1.5.0
+pnpm up "@kungal/*@latest"
 ```
 
-> **进入 1.x 后遵循 [SemVer](https://semver.org/lang/zh-CN/)**:`minor`(如 1.4→1.5)与 `patch` 只做**向后兼容**的新增与修复,破坏性变更只会出现在下一个 `major`(2.0)。所以从 1.0 起,升级几乎都是「装上就好」——本篇是 **1.x 的累计升级说明**,只列**需要你回归或留意**的少数几处(主要是视觉变化)。
+> **1.x 遵循 [SemVer](https://semver.org/lang/zh-CN/)**:`minor` 与 `patch` 只做**向后兼容**的新增与修复,破坏性变更只会出现在下一个 `major`(2.0)。所以 1.x 内升级几乎都是「装上就好」。
 >
-> 1.0.0 之前(0.5.2 → 1.0.0)的大跨度迁移见 [`UPGRADE-0.5.2-to-1.0.0.md`](./UPGRADE-0.5.2-to-1.0.0.md)。
-> _(本文件名仍是 `…-to-1.1.0`,但内容覆盖到 1.5.0。)_
+> **逐版完整变更不在本文** —— 见自动生成的[更新日志](https://ui.kungal.com/changelog)、各包 `CHANGELOG.md`(npm + 仓库)、[GitHub Releases](https://github.com/kungal/kun-ui/releases)。本文是**稳定的高层迁移摘要**:只列 1.x 内**需要回归或留意**的少数几处(主要是视觉变化),**不随每次发布更新**。
 >
-> **逐版变更不再手写。** 每个版本的变更现已**随发布自动生成**:见 [ui.kungal.com/changelog](https://ui.kungal.com/changelog)、各包 `CHANGELOG.md`(npm + 仓库)、以及 [GitHub Releases](https://github.com/kungal/kun-ui/releases)。本类手写 `UPGRADE-*.md` 今后只为**破坏性大版本(major)** 保留,作为叙事式迁移指南。
+> - **从 0.5.2 或更早升级?** 先做大跨度破坏性迁移:[`UPGRADE-0.5.2-to-1.0.0.md`](./UPGRADE-0.5.2-to-1.0.0.md),再回到本文。
+> - **未来的 2.0(破坏性版本)** 会有独立的迁移指南。
 
 ---
 
@@ -36,6 +36,7 @@ pnpm up "@kungal/*@latest"   # → 1.5.0
 | `KunTab` 激活高亮 SSR 安全 | 1.4.1 | 纯修复,首屏不再丢高亮 |
 | `bordered` 变体尺寸一致(§2.5) | 1.4.2 | Info / TagInput 的 `flat`/`solid` 现与 `bordered` 同尺寸 |
 | **实心变体前景对比度(§2.3)** | 1.5.0 | **可见变化**,见下 |
+| 新增 Accordion / Carousel / Skeleton / Steps / Timeline | 1.6.0 | 纯新增组件,无需动作 |
 
 ### 2.1 `KunLightbox` 点遮罩关闭(1.1.0)
 
@@ -105,18 +106,12 @@ KunContent 现在会给每个代码块**自动注入**一个自带样式(token �
 
 ---
 
-## 5. 版本流水对照
+## 5. 逐版完整变更
 
-| 版本 | 主题 |
-|---|---|
-| **1.0.0** | 首个稳定版(组件集 + 设计 token 定稿) |
-| **1.1.0** | `KunLightbox` 点遮罩关闭(与 Esc 互补,拖拽不误关) |
-| **1.1.1** | 修复 Select / Autocomplete 首次打开时页面跳到顶部(列表只在自身容器内滚动) |
-| **1.2.0** | Content 剧透改为 SSR 安全的动画粒子场(去圆角,可键盘操作,尊重 reduced-motion) |
-| **1.3.0** | 剧透按行/按词贴合文本形状遮罩(Range API 测量,逐帧成本恒定) |
-| **1.4.0** | KunContent:可选编辑式排版 `prose.css`、内置代码复制、`compact` 紧凑模式 |
-| **1.4.1** | `KunTab` 激活高亮 SSR 安全(首屏纯 CSS 兜底,水合后测量滑块接管,无 mismatch) |
-| **1.4.2** | `bordered` 变体尺寸一致(Info / TagInput;flat 的报错红框现可显示) |
-| **1.5.0** | 实心变体前景对比度(浅色调改深字,深色模式钉死填充;新增 `kunSolidClasses` 等导出) |
+**不在本文维护** —— 每个版本的完整改动随发布**自动生成**,去这三处任选其一:
 
-完整逐版改动见各包 `CHANGELOG.md` 与仓库 `.changeset/` 历史。
+- 🌐 [**ui.kungal.com/changelog**](https://ui.kungal.com/changelog) —— 按版本折叠、带 Major/Minor/Patch 标签
+- 📦 各包 `CHANGELOG.md`(npm 包页面 + [仓库](https://github.com/kungal/kun-ui/tree/main/packages))
+- 🏷 [**GitHub Releases**](https://github.com/kungal/kun-ui/releases)(可 watch 订阅;Renovate / Dependabot 也会抓取)
+
+> 本文只在出现**需要回归的视觉/行为变化**时增补一行(见 §2 表),不逐版罗列。

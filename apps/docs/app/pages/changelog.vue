@@ -17,11 +17,17 @@ const chip: Record<Type, { color: string; label: string }> = {
 <template>
   <div class="mx-auto max-w-3xl">
     <h1 class="text-2xl font-bold">更新日志</h1>
-    <p class="text-default-600 mt-2 mb-6">
+    <p class="text-default-600 mt-2 mb-4">
       KunUI 各版本变更(四个包
       <code class="text-sm">ui-tokens / ui-core / ui-vue / ui-nuxt</code>
       锁步同版本)。每条都源自该次发布的 changeset,**随发布自动生成**,无需手写。
     </p>
+
+    <KunInfo color="primary" variant="flat" class-name="mb-6">
+      <template #title>从旧版本升级?</template>
+      跨版本迁移(尤其 <strong>0.5.2 / 1.0</strong>)请看
+      <NuxtLink to="/upgrade" class="text-primary underline">升级与迁移指南</NuxtLink>。
+    </KunInfo>
 
     <KunAccordion
       variant="splitted"

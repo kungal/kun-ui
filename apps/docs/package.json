@@ -12,7 +12,8 @@
     "gen:meta": "node scripts/gen-meta.mjs",
     "nuxt:prepare": "nuxt prepare",
     "gen:page-md": "node scripts/gen-page-md.mjs",
-    "gen:changelog": "node scripts/gen-changelog.mjs"
+    "gen:changelog": "node scripts/gen-changelog.mjs",
+    "gen:upgrade": "node scripts/gen-upgrade.mjs"
   },
   "dependencies": {
     "@codemirror/lang-vue": "^0.1.3",

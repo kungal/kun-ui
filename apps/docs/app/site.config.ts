@@ -50,6 +50,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/getting-started': { title: '快速开始', description: '几分钟把 KunUI 接入你的 Vue / Nuxt 项目:安装、CSS 入口、核心规则、暗色模式与反馈 Provider。' },
   '/playground': { title: 'Playground', cn: '在线试玩', description: '在浏览器里实时编辑单文件组件并渲染 KunUI —— 改代码即见效果,无需本地搭建。' },
   '/changelog': { title: 'Changelog', cn: '更新日志', description: 'KunUI 各版本变更,随每次发布自动生成(源自 changeset)。四个包锁步同版本。' },
+  '/upgrade': { title: 'Upgrade', cn: '升级与迁移', description: '按版本跨度的迁移指南:1.x 升级摘要,以及从 0.5.2 到 1.0 的破坏性迁移。' },
 
   '/components/accordion': { title: 'Accordion', cn: '手风琴', description: '可折叠区块(KunAccordion + KunAccordionItem):单开/多开、v-model、grid 揭示动画,SSR 安全且无障碍。' },
   '/components/autocomplete': { title: 'Autocomplete', cn: '自动完成', description: '组合框:文本输入 + 过滤建议列表(v-model 字符串);支持 allowCustomValue 与手动过滤。' },
