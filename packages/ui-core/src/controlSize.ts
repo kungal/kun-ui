@@ -18,6 +18,28 @@ export const kunControlSizeClasses: Record<KunUISize, string> = {
   xl: 'text-lg px-6 py-3',
 }
 
+// Icon-only buttons: a fixed SQUARE whose side equals the text-button height at
+// the same size, so an icon button lines up with text buttons in a row.
+//
+// Why this exists: kunControlSizeClasses is padding-driven (height = line-height
+// + 2·py + border). A text label contributes a full line-box (≈1.5em), but a lone
+// 1em icon does not — with the same padding the icon button would come out
+// shorter and break the row. Mainstream libraries dodge this by giving buttons a
+// fixed height and making the icon button a square of that height (shadcn
+// `size-9`, HeroUI/Chakra/Ant `isIconOnly`/`.ant-btn-icon-only`). We do the same,
+// ONLY for icon-only, keeping the icon at its natural 1em centered in the box.
+//
+// Sides MUST equal the kunControlSizeClasses heights (incl. the 1px border every
+// variant carries): xs 26 · sm 34 · md 38 · lg 46 · xl 54. (size-* is border-box,
+// so the value already accounts for the icon button's own 1px border.)
+export const kunControlSquareClasses: Record<KunUISize, string> = {
+  xs: 'size-[26px] p-0',
+  sm: 'size-[34px] p-0',
+  md: 'size-[38px] p-0',
+  lg: 'size-[46px] p-0',
+  xl: 'size-[54px] p-0',
+}
+
 export interface KunSelectionSize {
   box: string // the square: checkbox box / radio indicator outer ring
   dot: string // radio's inner filled dot (unused by checkbox)

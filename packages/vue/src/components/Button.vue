@@ -5,6 +5,7 @@ import {
   kunVariantClasses,
   kunRoundedClasses,
   kunControlSizeClasses,
+  kunControlSquareClasses,
   kunFocusRingClasses,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
@@ -78,25 +79,13 @@ const colorClasses = computed(() =>
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
-const isIconOnlyClasses = computed(() => {
-  if (!props.isIconOnly) {
-    return ''
-  }
-  switch (props.size) {
-    case 'xs':
-      return 'p-1'
-    case 'sm':
-      return 'p-1.5'
-    case 'md':
-      return 'p-2'
-    case 'lg':
-      return 'p-2.5'
-    case 'xl':
-      return 'p-3'
-    default:
-      return 'p-2'
-  }
-})
+// Icon-only buttons become a fixed SQUARE equal to the same-size text button's
+// height (kunControlSquareClasses), so icon + text buttons line up in a row. The
+// square overrides the inherited px/py (its `p-0`) but keeps `text-*`, so the
+// icon stays at its natural 1em, centered. See kunControlSquareClasses.
+const isIconOnlyClasses = computed(() =>
+  props.isIconOnly ? kunControlSquareClasses[props.size] : ''
+)
 
 const { ripples, onClick } = useRipple()
 

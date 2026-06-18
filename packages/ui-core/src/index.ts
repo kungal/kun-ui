@@ -35,6 +35,7 @@ export {
 
 export {
   kunControlSizeClasses,
+  kunControlSquareClasses,
   kunSelectionSizeClasses,
   kunChipSizeClasses,
   type KunSelectionSize,

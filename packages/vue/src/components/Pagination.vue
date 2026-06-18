@@ -100,6 +100,7 @@ onKeyStroke('ArrowRight', (e) => {
         <KunButton
           :is-icon-only="true"
           variant="light"
+          size="sm"
           aria-label="上一页"
           :href="pageHref && currentPage > 1 ? pageHref(currentPage - 1) : undefined"
           :disabled="isLoading || currentPage === 1"
@@ -130,6 +131,7 @@ onKeyStroke('ArrowRight', (e) => {
         <KunButton
           :is-icon-only="true"
           variant="light"
+          size="sm"
           aria-label="下一页"
           :href="pageHref && currentPage < totalPage ? pageHref(currentPage + 1) : undefined"
           :disabled="isLoading || currentPage === totalPage"
