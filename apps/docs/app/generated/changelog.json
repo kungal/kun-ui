@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.6.3",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): icon-only buttons now match the height of same-size text buttons</p>\n<p><code>isIconOnly</code> previously only swapped the padding (<code>p-2.5</code> etc.), so an icon-only\nbutton collapsed to the icon&#39;s <code>1em</code> height instead of the text line-height —\nleaving it ~8px shorter than a text button of the same <code>size</code> and breaking\nalignment in a toolbar row. Icon-only buttons are now a fixed square whose side\nequals the same-size text-button height (the new <code>kunControlSquareClasses</code>),\nmatching how shadcn/HeroUI/Chakra/Ant size their icon buttons. The icon stays at\nits natural <code>1em</code>, centered.</p>\n<p>Also pins <code>KunPagination</code>&#39;s prev/next arrows to <code>size=&quot;sm&quot;</code> so they line up with\nthe (already <code>sm</code>) numbered page buttons — without it the now-correct default\n<code>md</code> icon button would render 4px taller than the numbers.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.6.2",
     "type": "patch",
     "html": "<ul>\n<li><p>chore: ship CHANGELOG.md in the published packages</p>\n<p><code>CHANGELOG.md</code> is now included in each package&#39;s npm tarball (added to <code>files</code>),\nso downstream can read the per-version changes straight from the npm package\npage — not only from the GitHub repo. (Releases also now appear on GitHub\nReleases and the docs site&#39;s auto-generated /changelog page.)</p>\n</li>\n</ul>\n"

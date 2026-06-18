@@ -1,5 +1,7 @@
 # @kungal/ui-core
 
+## 1.6.3
+
 ## 1.6.2
 
 ### Patch Changes
