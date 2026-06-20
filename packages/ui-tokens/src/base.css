@@ -42,6 +42,14 @@
     color: oklch(var(--foreground));
     min-height: 100vh;
   }
+
+  /* Placeholder text — a muted neutral that flips with the theme (the browser
+   * default is a fixed grey that doesn't follow light/dark). `opacity: 1` since
+   * the colour already carries its own muting and UA sheets dim placeholders. */
+  ::placeholder {
+    color: oklch(var(--default-400));
+    opacity: 1;
+  }
 }
 
 @layer utilities {

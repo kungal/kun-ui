@@ -316,11 +316,11 @@ watch(filtered, () => {
           'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
           kunControlSizeClasses[props.size],
           roundedClass,
-          'border',
+          'bg-content1 shadow-kun-sm',
           error
-            ? cn('border-danger-300', kunFocusRingClasses.danger)
-            : cn('border-kun', kunFocusRingClasses[color]),
-          disabled && 'bg-default-100 cursor-not-allowed'
+            ? cn('ring-2 ring-danger/60', kunFocusRingClasses.danger)
+            : kunFocusRingClasses[color],
+          disabled && 'cursor-not-allowed opacity-60'
         )
       "
       @click="toggle"
@@ -396,7 +396,7 @@ watch(filtered, () => {
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover flex flex-col overflow-hidden border p-1 shadow-kun-md',
+              'bg-content1 z-kun-popover flex flex-col overflow-hidden p-1 shadow-kun-md',
               roundedClass
             )
           "
@@ -413,7 +413,7 @@ watch(filtered, () => {
               :aria-activedescendant="activeId"
               :class="
                 cn(
-                  'border-kun w-full rounded-kun-sm border px-2.5 py-1.5 text-sm',
+                  'bg-content1 shadow-kun-sm w-full rounded-kun-sm px-2.5 py-1.5 text-sm',
                   kunFocusRingClasses[color]
                 )
               "

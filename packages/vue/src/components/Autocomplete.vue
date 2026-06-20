@@ -249,14 +249,14 @@ defineExpose({
         autocomplete="off"
         :class="
           cn(
-            'block w-full border transition-[color,box-shadow]',
+            'block w-full bg-content1 shadow-kun-sm transition-[color,box-shadow]',
             roundedClass,
             kunControlSizeClasses[size],
             clearable && modelValue ? 'pr-9' : '',
             invalid
-              ? cn('border-danger-300', kunFocusRingClasses.danger)
-              : cn('border-kun', kunFocusRingClasses[color]),
-            disabled && 'bg-default-100 cursor-not-allowed'
+              ? cn('ring-2 ring-danger/60', kunFocusRingClasses.danger)
+              : kunFocusRingClasses[color],
+            disabled && 'cursor-not-allowed opacity-60'
           )
         "
         @input="onInput"
@@ -293,7 +293,7 @@ defineExpose({
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover flex flex-col overflow-hidden border p-1 shadow-kun-md',
+              'bg-content1 z-kun-popover flex flex-col overflow-hidden p-1 shadow-kun-md',
               roundedClass
             )
           "

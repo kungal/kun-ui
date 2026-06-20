@@ -242,7 +242,7 @@ const itemClass = (item: KunContextMenuItem) =>
         role="menu"
         aria-orientation="vertical"
         tabindex="-1"
-        class="border-kun bg-background/95 fixed z-kun-popover rounded-kun-lg border p-1 text-sm shadow-kun-md outline-none backdrop-blur"
+        class="bg-content1 fixed z-kun-popover rounded-kun-lg p-1 text-sm shadow-kun-md outline-none"
         :style="menuStyle"
         @click.stop
         @keydown="onMenuKeydown"

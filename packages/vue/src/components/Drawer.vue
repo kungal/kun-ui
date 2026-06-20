@@ -222,7 +222,7 @@ onUnmounted(() => {
         <div
           :class="
             cn(
-              'bg-content1 flex flex-col border shadow-kun-lg',
+              'bg-content1 flex flex-col shadow-kun-lg',
               panelGeometry,
               innerClassName,
               size === 'full' ? roundedClass : ''

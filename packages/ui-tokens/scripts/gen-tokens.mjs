@@ -97,10 +97,15 @@ function buildColor(key, ramp) {
   return { shades, accent, on, onRatio, useWhite, accentFill: fill }
 }
 
-// Neutrals (surfaces / text) — kept from the original design, converted to OKLCH
-// so the whole file speaks one color space. [light, dark].
+// Neutrals (surfaces / text) — an ELEVATION scale, [light, dark].
+//   background  = the page. A soft neutral (NOT pure #fff/#000) so raised
+//                 surfaces read as raised by fill alone.
+//   content1    = cards / popovers / menus — the raised surface (pops on the page).
+//   content2-4  = progressively deeper greys (hovers, wells, code blocks).
+// Inputs/selects are now borderless and use `content1` (the card surface) + a
+// small shadow, so they match a card; no separate fill token is needed.
 const NEUTRALS = {
-  background: ['#ffffff', '#000000'],
+  background: ['#f5f5f7', '#0a0a0a'],
   foreground: ['hsl(202 24% 9%)', 'hsl(210 6% 93%)'],
   content1: ['hsl(0 0% 100%)', 'hsl(240 6% 10%)'],
   content2: ['hsl(240 5% 96%)', 'hsl(240 4% 16%)'],

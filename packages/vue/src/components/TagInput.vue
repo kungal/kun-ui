@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<KunTagInputProps>(), {
   respectComposition: true,
   color: 'primary',
   size: 'md',
-  variant: 'bordered',
+  variant: 'flat',
   disabled: false,
   readonly: false,
   showCounter: false,
@@ -288,7 +288,7 @@ const containerClasses = computed(() =>
     // previously had no border width to colour.)
     'border border-transparent',
     props.variant === 'bordered' && !props.error && 'border-kun',
-    props.variant === 'flat' && 'bg-content2',
+    props.variant === 'flat' && 'bg-content1 shadow-kun-sm',
     props.error
       ? kunFocusRingWithinClasses.danger
       : kunFocusRingWithinClasses[props.color],

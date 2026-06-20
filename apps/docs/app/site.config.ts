@@ -48,6 +48,7 @@ export interface PageMeta {
 export const pageMeta: Record<string, PageMeta> = {
   '/': { title: site.name, description: site.description },
   '/getting-started': { title: '快速开始', description: '几分钟把 KunUI 接入你的 Vue / Nuxt 项目:安装、CSS 入口、核心规则、暗色模式与反馈 Provider。' },
+  '/colors': { title: 'Colors', cn: '色彩', description: 'KunUI 的完整色板:7 个语义色与各自 11 级色阶、由对比度生成的前景(on-color),以及页面/卡片的表面层级。全部基于 OKLCH 感知均匀生成,实心配色在明暗两模式均达 WCAG AA。' },
   '/playground': { title: 'Playground', cn: '在线试玩', description: '在浏览器里实时编辑单文件组件并渲染 KunUI —— 改代码即见效果,无需本地搭建。' },
   '/changelog': { title: 'Changelog', cn: '更新日志', description: 'KunUI 各版本变更,随每次发布自动生成(源自 changeset)。四个包锁步同版本。' },
   '/upgrade': { title: 'Upgrade', cn: '升级与迁移', description: '按版本跨度的迁移指南:1.x 升级摘要,以及从 0.5.2 到 1.0 的破坏性迁移。' },

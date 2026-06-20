@@ -188,13 +188,13 @@ defineExpose({
     <div
       :class="
         cn(
-          'flex w-full items-stretch overflow-hidden border transition-[color,box-shadow]',
+          'bg-content1 shadow-kun-sm flex w-full items-stretch overflow-hidden transition-[color,box-shadow]',
           roundedClass,
           sz.text,
           invalid
-            ? cn('border-danger-300', kunFocusRingWithinClasses.danger)
-            : cn('border-kun', kunFocusRingWithinClasses[color]),
-          disabled && 'bg-default-100 cursor-not-allowed'
+            ? cn('ring-2 ring-danger/60', kunFocusRingWithinClasses.danger)
+            : kunFocusRingWithinClasses[color],
+          disabled && 'cursor-not-allowed opacity-60'
         )
       "
     >

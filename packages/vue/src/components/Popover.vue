@@ -119,7 +119,7 @@ defineExpose({
           :aria-label="ariaLabel || 'popover'"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border shadow-kun-md focus:outline-none',
+              'bg-content1 z-kun-popover shadow-kun-md focus:outline-none',
               roundedClass,
               innerClass
             )
@@ -131,7 +131,7 @@ defineExpose({
           <div
             v-if="showArrow"
             ref="arrowRef"
-            class="bg-content1 border-kun size-2 rotate-45 border"
+            class="bg-content1 size-2 rotate-45"
             :style="arrowStyles"
           />
         </div>

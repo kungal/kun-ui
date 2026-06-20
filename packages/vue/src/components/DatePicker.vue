@@ -203,8 +203,8 @@ const isInPreviewRange = (date: Date) => {
             kunControlSizeClasses[props.size],
             roundedClass,
             kunFocusRingClasses[color],
-            'border-kun border',
-            disabled && 'bg-default-100 cursor-not-allowed'
+            'bg-content1 shadow-kun-sm',
+            disabled && 'cursor-not-allowed opacity-60'
           )
         "
         @click="toggle"
@@ -240,7 +240,7 @@ const isInPreviewRange = (date: Date) => {
           ref="dropdownRef"
           :class="
             cn(
-              'bg-content1 border-kun z-kun-popover border p-3 shadow-kun-md',
+              'bg-content1 z-kun-popover p-3 shadow-kun-md',
               roundedClass
             )
           "

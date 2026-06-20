@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<KunCardProps>(), {
   href: undefined,
   isHoverable: false,
   isTransparent: false,
-  bordered: true,
+  bordered: false,
   className: '',
   contentClass: '',
   rounded: undefined,
@@ -62,8 +62,11 @@ const handleKunCardClick = (event: MouseEvent) => {
   emit('click', event)
 }
 
+// A card is a RAISED surface: `content1` (the elevated fill) over the softer page
+// background, plus a small shadow — so it reads as a card without a border. The
+// colored variants stay as tints. Pass `bordered` to add an optional outline.
 const colorClasses: Record<KunUIColor | 'background', string> = {
-  background: 'bg-background',
+  background: 'bg-content1',
   default: 'bg-default-100/30',
   primary: 'bg-primary-100/30 border-primary-300',
   secondary: 'bg-secondary-100/30 border-secondary-300',
@@ -84,7 +87,8 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
     :class="
       cn(
         'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
-        isHoverable && 'hover:bg-default-100',
+        !isTransparent && 'shadow-kun-sm',
+        isHoverable && 'hover:bg-content2',
         bordered && 'border-kun border',
         isInteractive && 'cursor-pointer overflow-hidden active:scale-[0.97] text-left',
         isTransparent ? 'backdrop-blur-none' : colorClasses[props.color],

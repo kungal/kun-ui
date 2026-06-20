@@ -160,7 +160,7 @@ onKeyStroke('ArrowRight', (e) => {
         :class="
           cn(
             cn(
-              'border-kun w-24 rounded-kun-md border px-2 py-1 text-sm transition-[color,box-shadow]',
+              'bg-content1 shadow-kun-sm w-24 rounded-kun-md px-2 py-1 text-sm transition-[color,box-shadow]',
               kunFocusRingClasses.default
             ),
             isLoading && 'cursor-not-allowed opacity-50'
