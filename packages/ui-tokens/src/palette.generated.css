@@ -11,7 +11,7 @@
 @theme {
   --color-background: oklch(var(--background) / var(--kun-global-opacity));
   --color-foreground: oklch(var(--foreground));
-  --color-content1: oklch(var(--content1));
+  --color-content1: oklch(var(--content1) / var(--kun-surface-opacity));
   --color-content2: oklch(var(--content2));
   --color-content3: oklch(var(--content3));
   --color-content4: oklch(var(--content4));

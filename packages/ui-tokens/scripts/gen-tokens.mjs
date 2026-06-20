@@ -152,7 +152,11 @@ const COLORS = Object.keys(HUES)
 const themeColorLines = []
 themeColorLines.push(`  --color-background: oklch(var(--background) / var(--kun-global-opacity));`)
 themeColorLines.push(`  --color-foreground: oklch(var(--foreground));`)
-for (const n of [1, 2, 3, 4]) themeColorLines.push(`  --color-content${n}: oklch(var(--content${n}));`)
+// content1 is the raised surface (cards/popovers/inputs); its opacity is themeable
+// via --kun-surface-opacity (default 1 = opaque) so a bg-image site can frost every
+// surface at once. content2-4 stay opaque (small wells/accents).
+themeColorLines.push(`  --color-content1: oklch(var(--content1) / var(--kun-surface-opacity));`)
+for (const n of [2, 3, 4]) themeColorLines.push(`  --color-content${n}: oklch(var(--content${n}));`)
 themeColorLines.push('')
 for (const key of COLORS) {
   themeColorLines.push(`  --color-${key}: oklch(var(--${key}-accent));`)

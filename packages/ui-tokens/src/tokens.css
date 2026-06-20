@@ -31,6 +31,15 @@
    * default-100). Lower = more see-through. Apps may override in :root. */
   --kun-global-opacity: 0.7;
 
+  /* Opacity of the RAISED surface (`content1`) — cards, popovers, dropdowns,
+   * inputs, modal, drawer. Default 1 = fully opaque (the clean elevation look).
+   * A site with a background image (e.g. a galgame page) can make every surface
+   * frosted at once by lowering this and adding a blur, with NO component changes:
+   *   :root { --kun-surface-opacity: 0.7; --kun-background-blur: 12px; }
+   * (Components don't ship a backdrop-blur on every surface, so set the blur too
+   * if you want true frosted glass rather than plain see-through.) */
+  --kun-surface-opacity: 1;
+
   /* Backdrop blur strength for glass surfaces (Card / Modal / sticky
    * topbar). 0 = no blur. Referenced as
    * `backdrop-blur-[var(--kun-background-blur)]` by those components.
