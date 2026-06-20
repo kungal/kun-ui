@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.1",
+    "type": "patch",
+    "html": ""
+  },
+  {
     "version": "1.8.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(tokens,vue): surface-elevation system — cards &amp; inputs pop by fill+shadow, not borders</p>\n<p>Move from a border-defined look to an elevation scale. The page background is now\na soft neutral (light <code>#f5f5f7</code>, dark near-black <code>#0a0a0a</code>) instead of pure\nwhite/black, so raised surfaces read as raised:</p>\n<ul>\n<li><strong>Card</strong> is a raised surface — <code>bg-content1</code> (<code>#fff</code> / <code>#18181b</code>) + <code>shadow-kun-sm</code>;\nborder is now OFF by default (<code>bordered</code> is opt-in). It no longer shares the\npage background.</li>\n<li><strong>Inputs are borderless and share the card surface</strong>: Input, Textarea, Select,\nNumberInput, TagInput, PinInput, Autocomplete, DatePicker trigger and the\nPagination field use <code>bg-content1</code> + <code>shadow-kun-sm</code> (same fill as a card, lifted\nby a small shadow). The error state is a danger <strong>ring</strong>, not a border.</li>\n<li><strong>Floating panels lose their border</strong> and rely on shadow + the <code>content1</code>\nsurface: Dropdown, Select/Autocomplete lists, ContextMenu, Popover, Tooltip,\nDatePicker calendar, Modal, Drawer.</li>\n<li><strong>Placeholder</strong> now uses a theme-adaptive <code>::placeholder</code> colour (the browser\ndefault grey didn&#39;t follow light/dark).</li>\n</ul>\n<p>Visual change only; component APIs are unchanged except <code>KunCard</code>&#39;s <code>bordered</code>\ndefault (true→false) and <code>KunTagInput</code>&#39;s <code>variant</code> default (bordered→flat).</p>\n</li>\n</ul>\n"

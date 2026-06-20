@@ -1,5 +1,11 @@
 # @kungal/ui-vue
 
+## 1.8.1
+
+### Patch Changes
+
+- @kungal/ui-core@1.8.1
+
 ## 1.8.0
 
 ### Minor Changes
