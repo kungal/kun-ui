@@ -183,7 +183,7 @@ onBeforeUnmount(() => {
           cn(
             'h-2 rounded-full transition-all',
             active === i - 1
-              ? 'bg-primary dark:bg-primary-400 w-5'
+              ? 'bg-primary w-5'
               : 'bg-default-300 hover:bg-default-400 w-2'
           )
         "

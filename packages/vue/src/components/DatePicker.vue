@@ -290,10 +290,10 @@ const isInPreviewRange = (date: Date) => {
                     day.isToday && 'border-primary bg-primary/20 border',
                     !day.isSelected && !day.isDisabled && 'hover:bg-default/20',
                     day.isDisabled && 'cursor-not-allowed opacity-50',
-                    // dark:bg-primary-400 keeps the fill dark enough for white
-                    // text in dark mode (plain bg-primary renders pale there).
+                    // bg-primary + its generated on-color (mode-correct token,
+                    // no dark: pin needed).
                     day.isSelected &&
-                      'bg-primary dark:bg-primary-400 hover:bg-primary/90 text-white',
+                      'bg-primary text-primary-foreground hover:bg-primary/90',
                     (day.isInRange || isInPreviewRange(day.date)) &&
                       !day.isSelected &&
                       'bg-primary/10 rounded-none',

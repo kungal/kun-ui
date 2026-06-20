@@ -400,9 +400,9 @@ const injectCopyButtons = (container: HTMLElement) => {
       height: '1.85rem',
       padding: '0',
       cursor: 'pointer',
-      color: 'hsl(var(--foreground))',
-      background: 'hsl(var(--content1))',
-      border: '1px solid var(--color-kun-border, hsla(var(--foreground), 0.14))',
+      color: 'oklch(var(--foreground))',
+      background: 'oklch(var(--content1))',
+      border: '1px solid var(--color-kun-border, oklch(var(--foreground) / 0.14))',
       borderRadius: '0.5rem',
       opacity: '0.75',
       transition: 'opacity 0.15s, color 0.15s',
@@ -459,10 +459,10 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
         if (copyButton.classList.contains('kun-prose-copy')) {
           // self-styled injected button: swap icon for instant feedback
           copyButton.replaceChildren(makeIcon(CHECK_ICON))
-          copyButton.style.color = 'hsl(var(--success-500))'
+          copyButton.style.color = 'oklch(var(--success-500))'
           setTimeout(() => {
             copyButton.replaceChildren(makeIcon(COPY_ICON))
-            copyButton.style.color = 'hsl(var(--foreground))'
+            copyButton.style.color = 'oklch(var(--foreground))'
             copyButton.classList.remove('copied')
           }, 2000)
         } else {

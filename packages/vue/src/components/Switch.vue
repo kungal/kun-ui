@@ -65,9 +65,9 @@ const size = computed(() => switchSizes[props.size])
         class="rounded-full transition-colors duration-kun-fast ease-kun-standard peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
         :class="[
           size.track,
-          // dark:bg-primary-400 keeps the on-track dark enough for the white
-          // knob to read in dark mode (plain primary-500 renders pale there).
-          modelValue ? 'bg-primary-500 dark:bg-primary-400' : 'bg-default-500',
+          // bg-primary is the mode-correct accent (no dark: pin needed); the
+          // white knob reads on it in both themes.
+          modelValue ? 'bg-primary' : 'bg-default-500',
           disabled ? 'opacity-50' : '',
           modelValue && disabled ? 'bg-primary-300' : '',
         ]"

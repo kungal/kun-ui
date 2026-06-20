@@ -61,41 +61,33 @@ const updateValue = (event: Event) => {
   emit('change', checked)
 }
 
-// `dark:checked:bg-{color}-{n}` pins the filled box dark enough for its mark in
-// dark mode (plain bg-{color} renders pale there); the mark colour itself is
-// kunSolidFgClasses (white on dark hues, dark on light hues — see markFg).
+// The filled box uses the semantic accent (`bg-{c}`) — mode-correct by token, no
+// `dark:` pin — and its mark colour is the generated on-color (kunSolidFgClasses,
+// white on medium hues, a dark tint on the bright ones), so the check/dash stays
+// legible on every fill in both modes.
 const colorClasses: Record<KunUIColor, string> = {
-  default:
-    'border-default-300 checked:bg-default dark:checked:bg-default-400 checked:border-default hover:border-default',
-  primary:
-    'border-primary-300 checked:bg-primary dark:checked:bg-primary-400 checked:border-primary hover:border-primary',
-  secondary:
-    'border-secondary-300 checked:bg-secondary dark:checked:bg-secondary-300 checked:border-secondary hover:border-secondary',
-  success:
-    'border-success-300 checked:bg-success-600 dark:checked:bg-success-400 checked:border-success hover:border-success',
-  warning:
-    'border-warning-300 checked:bg-warning dark:checked:bg-warning-400 checked:border-warning hover:border-warning',
-  danger:
-    'border-danger-300 checked:bg-danger dark:checked:bg-danger-400 checked:border-danger hover:border-danger',
-  info: 'border-info-300 checked:bg-info-600 dark:checked:bg-info-300 checked:border-info hover:border-info',
+  default: 'border-default-300 checked:bg-default checked:border-default hover:border-default',
+  primary: 'border-primary-300 checked:bg-primary checked:border-primary hover:border-primary',
+  secondary: 'border-secondary-300 checked:bg-secondary checked:border-secondary hover:border-secondary',
+  success: 'border-success-300 checked:bg-success checked:border-success hover:border-success',
+  warning: 'border-warning-300 checked:bg-warning checked:border-warning hover:border-warning',
+  danger: 'border-danger-300 checked:bg-danger checked:border-danger hover:border-danger',
+  info: 'border-info-300 checked:bg-info checked:border-info hover:border-info',
 }
 // Filled look for the indeterminate state (no :checked pseudo to lean on).
 const indeterminateColor: Record<KunUIColor, string> = {
-  default: 'bg-default dark:bg-default-400 border-default',
-  primary: 'bg-primary dark:bg-primary-400 border-primary',
-  secondary: 'bg-secondary dark:bg-secondary-300 border-secondary',
-  success: 'bg-success-600 dark:bg-success-400 border-success',
-  warning: 'bg-warning dark:bg-warning-400 border-warning',
-  danger: 'bg-danger dark:bg-danger-400 border-danger',
-  info: 'bg-info-600 dark:bg-info-300 border-info',
+  default: 'bg-default border-default',
+  primary: 'bg-primary border-primary',
+  secondary: 'bg-secondary border-secondary',
+  success: 'bg-success border-success',
+  warning: 'bg-warning border-warning',
+  danger: 'bg-danger border-danger',
+  info: 'bg-info border-info',
 }
 
-// The check / dash mark colour, matched to the filled box so it stays legible in
-// both modes (light hues take a dark mark).
+// The check / dash mark colour — the fill's generated on-color. The dash is drawn
+// with `bg-current` so it inherits this same color without needing its own map.
 const markFg = computed(() => kunSolidFgClasses[props.color])
-const markDashBg = computed(() =>
-  markFg.value === 'text-black' ? 'bg-black' : 'bg-white'
-)
 </script>
 
 <template>
@@ -142,8 +134,8 @@ const markDashBg = computed(() =>
           class="pointer-events-none absolute inset-0 flex items-center justify-center"
         >
           <span
-            class="h-0.5 rounded-full"
-            :class="[dashWidth[props.size], markDashBg]"
+            class="h-0.5 rounded-full bg-current"
+            :class="[dashWidth[props.size], markFg]"
           />
         </div>
       </div>

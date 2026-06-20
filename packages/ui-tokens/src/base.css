@@ -38,8 +38,8 @@
    * nothing sits behind the root. */
   html,
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: oklch(var(--background));
+    color: oklch(var(--foreground));
     min-height: 100vh;
   }
 }

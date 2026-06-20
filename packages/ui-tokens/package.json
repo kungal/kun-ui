@@ -40,9 +40,13 @@
   "scripts": {
     "build": "echo \"@kungal/ui-tokens ships CSS source, no build step\"",
     "typecheck": "echo \"@kungal/ui-tokens has no TypeScript\"",
-    "clean": "echo \"@kungal/ui-tokens has nothing to clean\""
+    "clean": "echo \"@kungal/ui-tokens has nothing to clean\"",
+    "gen": "node scripts/gen-tokens.mjs"
   },
   "peerDependencies": {
     "tailwindcss": "^4.0.0"
+  },
+  "devDependencies": {
+    "culori": "^4.0.2"
   }
 }
