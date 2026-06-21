@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.2",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(tokens,vue): give surfaces breathing room + refine KunCard hover</p>\n<ul>\n<li>The light page background is a touch deeper (<code>#f5f5f7</code> → <code>#eeeef1</code>) so white\ncards/surfaces pop more (≈17 vs ≈10 units) and there&#39;s room for interaction\nstates. Dark mode is unchanged (it already had ample headroom).</li>\n<li>KunCard hover feedback now applies only to interactive cards (<code>href</code> /\n<code>clickable</code>) or an explicit <code>isHoverable</code>; a plain static card no longer reacts.</li>\n<li>Hover is a faint <code>foreground</code> state layer (≈3%, via <code>::after</code>) — darkens\nslightly in light, lightens in dark — and stays clearly brighter than the page\n(no surface-colour swap, no shadow change).</li>\n<li>KunNumberInput stepper buttons use <code>hover:bg-foreground/8</code> (a normal control\nhover) instead of the absolute <code>bg-default-100</code>.</li>\n</ul>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.8.1",
     "type": "patch",
     "html": ""
