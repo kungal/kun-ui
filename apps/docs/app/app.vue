@@ -43,7 +43,7 @@ watch(
           v-if="!isHome"
           type="button"
           aria-label="打开导航菜单"
-          class="text-default-600 hover:text-foreground -ml-1 cursor-pointer p-1 md:hidden"
+          class="text-default-600 hover:text-foreground -ml-1 inline-flex cursor-pointer items-center justify-center p-1 md:hidden"
           @click="mobileNavOpen = true"
         >
           <KunIcon name="lucide:menu" class="text-xl" />
