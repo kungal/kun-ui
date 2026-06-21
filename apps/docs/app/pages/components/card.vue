@@ -5,6 +5,8 @@ import Colors from '~/examples/card/Colors.vue'
 import ColorsSrc from '~/examples/card/Colors.vue?raw'
 import Variants from '~/examples/card/Variants.vue'
 import VariantsSrc from '~/examples/card/Variants.vue?raw'
+import Padding from '~/examples/card/Padding.vue'
+import PaddingSrc from '~/examples/card/Padding.vue?raw'
 import Hoverable from '~/examples/card/Hoverable.vue'
 import HoverableSrc from '~/examples/card/Hoverable.vue?raw'
 import Clickable from '~/examples/card/Clickable.vue'
@@ -29,6 +31,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">变体</h2>
     <Demo title="Variants.vue" :source="VariantsSrc"><Variants /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">内边距</h2>
+    <Demo title="Padding.vue" :source="PaddingSrc"><Padding /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">可悬停</h2>
     <Demo title="Hoverable.vue" :source="HoverableSrc"><Hoverable /></Demo>

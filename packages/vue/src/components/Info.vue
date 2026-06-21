@@ -140,7 +140,7 @@ const titleColor = computed(() => {
 <template>
   <div
     :class="
-      cn('space-y-2 p-3', roundedClass, variantClasses, colorClasses, className)
+      cn('space-y-2 p-4', roundedClass, variantClasses, colorClasses, className)
     "
   >
     <h3 :class="cn('flex items-center gap-2 font-medium', titleColor)">

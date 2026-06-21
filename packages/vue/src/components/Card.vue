@@ -5,7 +5,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunRipple from './Ripple.vue'
-import type { KunCardProps } from './types'
+import type { KunCardProps, KunCardPadding } from './types'
 
 // KunCard renders as one of three elements (priority: href > clickable > div):
 //   1. `href`      → config.linkComponent  (was <NuxtLink>)
@@ -21,6 +21,7 @@ const props = withDefaults(defineProps<KunCardProps>(), {
   isHoverable: false,
   isTransparent: false,
   bordered: false,
+  padding: 'lg',
   className: '',
   contentClass: '',
   rounded: undefined,
@@ -79,6 +80,15 @@ const colorClasses: Record<KunUIColor | 'background', string> = {
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
+// Inner padding. `lg` (24px) is the default — comfortable, matching shadcn / Ant /
+// KunModal; `sm` (12px) is the old compact value, `none` for full-bleed cards.
+const paddingClasses: Record<KunCardPadding, string> = {
+  none: 'p-0',
+  sm: 'p-3',
+  md: 'p-5',
+  lg: 'p-6',
+}
+
 // Hover = a faint `foreground` state layer (via ::after) — darkens slightly in
 // light, lightens slightly in dark. The page sits ~7% below white, which leaves
 // room for this ~3% tint to read as a hover while the card stays clearly brighter
@@ -94,7 +104,8 @@ const hoverStateLayer =
     v-bind="rootBindings"
     :class="
       cn(
-        'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
+        'relative flex flex-col gap-4 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
+        paddingClasses[padding],
         !isTransparent && 'shadow-kun-sm',
         // Hover feedback only for navigable/clickable cards or an explicit opt-in;
         // a plain static card stays inert.

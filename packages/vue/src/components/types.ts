@@ -24,12 +24,19 @@ export interface KunButtonProps {
   ariaLabel?: string
 }
 
+/** Inner padding of a KunCard. `lg` (24px) is the comfortable default (matches
+ *  shadcn / Ant / KunModal); drop to `sm`/`md` for denser cards, `none` for a
+ *  full-bleed surface (e.g. a card that's just a cover image). */
+export type KunCardPadding = 'none' | 'sm' | 'md' | 'lg'
+
 export interface KunCardProps {
   isHoverable?: boolean
   clickable?: boolean
   href?: string
   isTransparent?: boolean
   bordered?: boolean
+  /** Inner padding. Default `lg` (24px). */
+  padding?: KunCardPadding
   className?: string
   contentClass?: string
   rounded?: KunUIRounded

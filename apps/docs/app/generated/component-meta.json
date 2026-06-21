@@ -41,7 +41,7 @@
         "name": "value",
         "type": "string",
         "required": true,
-        "description": "Unique key for this section (used by v-model + ARIA ids)."
+        "description": "Unique key for this section (used by v-model)."
       },
       {
         "name": "className",
@@ -67,7 +67,7 @@
         "type": "string",
         "required": false,
         "default": "undefined",
-        "description": "Shared id namespace so multiple accordions on a page don't collide."
+        "description": "Optional readable prefix for the auto-generated (already unique) ARIA ids."
       },
       {
         "name": "title",
@@ -480,7 +480,7 @@
         "name": "bordered",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "false"
       },
       {
         "name": "className",
@@ -529,6 +529,13 @@
         "type": "boolean",
         "required": false,
         "default": "false"
+      },
+      {
+        "name": "padding",
+        "type": "KunCardPadding",
+        "required": false,
+        "default": "\"lg\"",
+        "description": "Inner padding. Default `lg` (24px)."
       },
       {
         "name": "rounded",
@@ -2979,7 +2986,7 @@
         "name": "variant",
         "type": "KunTagInputVariant",
         "required": false,
-        "default": "\"bordered\""
+        "default": "\"flat\""
       }
     ]
   },
