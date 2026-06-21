@@ -137,12 +137,12 @@ defineExpose({
         :autofocus="autofocus"
         :class="
           cn(
-            'scrollbar-hide w-full bg-content1 shadow-kun-sm transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
+            'scrollbar-hide w-full bg-content1 shadow-kun-sm border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
             kunControlSizeClasses[props.size],
             roundedClass,
             error
-              ? cn('ring-2 ring-danger/60', kunFocusRingClasses.danger)
-              : kunFocusRingClasses[color],
+              ? cn('border-danger-300', kunFocusRingClasses.danger)
+              : cn('border-kun', kunFocusRingClasses[color]),
             disabled ? 'text-default-500 cursor-not-allowed opacity-60 shadow-none' : '',
             resize === 'none'
               ? 'resize-none'

@@ -105,7 +105,7 @@ function buildColor(key, ramp) {
 // Inputs/selects are now borderless and use `content1` (the card surface) + a
 // small shadow, so they match a card; no separate fill token is needed.
 const NEUTRALS = {
-  background: ['#f2f2f5', '#0a0a0a'],
+  background: ['#f4f4f7', '#0a0a0a'],
   foreground: ['hsl(202 24% 9%)', 'hsl(210 6% 93%)'],
   content1: ['hsl(0 0% 100%)', 'hsl(240 6% 10%)'],
   content2: ['hsl(240 5% 96%)', 'hsl(240 4% 16%)'],

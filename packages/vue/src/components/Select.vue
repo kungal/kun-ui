@@ -316,10 +316,10 @@ watch(filtered, () => {
           'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
           kunControlSizeClasses[props.size],
           roundedClass,
-          'bg-content1 shadow-kun-sm',
+          'bg-content1 shadow-kun-sm border',
           error
-            ? cn('ring-2 ring-danger/60', kunFocusRingClasses.danger)
-            : kunFocusRingClasses[color],
+            ? cn('border-danger-300', kunFocusRingClasses.danger)
+            : cn('border-kun', kunFocusRingClasses[color]),
           disabled && 'cursor-not-allowed opacity-60'
         )
       "
@@ -413,7 +413,7 @@ watch(filtered, () => {
               :aria-activedescendant="activeId"
               :class="
                 cn(
-                  'bg-content1 shadow-kun-sm w-full rounded-kun-sm px-2.5 py-1.5 text-sm',
+                  'bg-content1 shadow-kun-sm border-kun w-full rounded-kun-sm border px-2.5 py-1.5 text-sm',
                   kunFocusRingClasses[color]
                 )
               "

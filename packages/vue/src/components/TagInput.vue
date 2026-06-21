@@ -287,7 +287,7 @@ const containerClasses = computed(() =>
     // COLOUR changes. (Bonus: the error border now shows on `flat` too, which
     // previously had no border width to colour.)
     'border border-transparent',
-    props.variant === 'bordered' && !props.error && 'border-kun',
+    !props.error && 'border-kun',
     props.variant === 'flat' && 'bg-content1 shadow-kun-sm',
     props.error
       ? kunFocusRingWithinClasses.danger

@@ -202,8 +202,10 @@ const isInPreviewRange = (date: Date) => {
             'flex w-full cursor-pointer items-center justify-between text-left transition-[color,box-shadow]',
             kunControlSizeClasses[props.size],
             roundedClass,
-            kunFocusRingClasses[color],
-            'bg-content1 shadow-kun-sm',
+            'bg-content1 shadow-kun-sm border',
+            error
+              ? cn('border-danger-300', kunFocusRingClasses.danger)
+              : cn('border-kun', kunFocusRingClasses[color]),
             disabled && 'cursor-not-allowed opacity-60'
           )
         "
