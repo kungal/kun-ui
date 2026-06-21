@@ -1,6 +1,6 @@
 {
   "name": "@kungal/ui-nuxt",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "description": "KunUI Nuxt Layer — wraps @kungal/ui-vue, auto-imports the components, and injects NuxtLink + @nuxt/icon so existing Nuxt apps keep their exact DX.",
   "type": "module",
   "keywords": [
