@@ -99,11 +99,11 @@ const reset = () => {
 
 <template>
   <div
-    class="border-default-200 rounded-kun-lg bg-background overflow-hidden border"
+    class="border-default-200 rounded-kun-lg bg-content2 overflow-hidden border"
   >
     <!-- Toolbar -->
     <div
-      class="border-default-200 bg-content1/60 flex items-center justify-between gap-2 border-b px-3 py-1.5"
+      class="border-default-200 bg-content2 flex items-center justify-between gap-2 border-b px-3 py-1.5"
     >
       <div class="flex items-center gap-2">
         <span class="text-default-500 text-xs">Playground.vue</span>

@@ -53,12 +53,16 @@ const { data: html } = await useAsyncData(
 }
 </style>
 
-<!-- Global (not scoped): .kun-dark-mode is on <html>, an ancestor. Switch the
-     Shiki dual-theme CSS variables to the dark palette in dark mode. -->
+<!-- Global (not scoped): .kun-dark-mode is on <html>, an ancestor. -->
 <style>
+/* Code panel surface = content2, matching the demo/playground panels — overrides
+   Shiki's own theme background (a glaring white in light mode) in BOTH themes. */
+.kun-code .shiki {
+  background-color: oklch(var(--content2)) !important;
+}
+/* Dark-mode syntax token colours come from Shiki's dual-theme CSS variables. */
 .kun-dark-mode .kun-code .shiki,
 .kun-dark-mode .kun-code .shiki span {
   color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
 }
 </style>

@@ -78,6 +78,14 @@ const colorClasses: Record<KunUIColor | 'background', string> = {
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+
+// Hover = a faint `foreground` state layer (via ::after) — darkens slightly in
+// light, lightens slightly in dark. The page sits ~7% below white, which leaves
+// room for this ~3% tint to read as a hover while the card stays clearly brighter
+// than the page. No shadow change. Kept here (not inline in the template) so the
+// `content-['']` quotes don't clash with the :class="" attr.
+const hoverStateLayer =
+  "after:content-[''] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-foreground after:opacity-0 after:transition-opacity after:duration-kun-fast hover:after:opacity-[0.03]"
 </script>
 
 <template>
@@ -88,7 +96,9 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
       cn(
         'relative flex flex-col gap-3 p-3 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
         !isTransparent && 'shadow-kun-sm',
-        isHoverable && 'hover:bg-content2',
+        // Hover feedback only for navigable/clickable cards or an explicit opt-in;
+        // a plain static card stays inert.
+        (isInteractive || isHoverable) && hoverStateLayer,
         bordered && 'border-kun border',
         isInteractive && 'cursor-pointer overflow-hidden active:scale-[0.97] text-left',
         isTransparent ? 'backdrop-blur-none' : colorClasses[props.color],
