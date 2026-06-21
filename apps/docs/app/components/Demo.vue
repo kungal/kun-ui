@@ -20,15 +20,14 @@ const editInPlayground = () => {
 
 <template>
   <div class="border-default-200 rounded-kun-lg my-5 overflow-hidden border">
-    <!-- Live render — content2, a muted neutral panel (one step below the card
-         surface) so the demo sits quietly above the page without glaring. -->
-    <div class="bg-content2 flex flex-wrap items-center gap-3 p-6">
+    <!-- Live render — a soft panel (content1 @ 60% over the page) for the demo. -->
+    <div class="bg-content1/60 flex flex-wrap items-center gap-3 p-6">
       <slot />
     </div>
 
     <!-- Toolbar -->
     <div
-      class="border-default-200 bg-content2 flex items-center justify-between border-t px-3 py-1.5"
+      class="border-default-200 bg-content1/60 flex items-center justify-between border-t px-3 py-1.5"
     >
       <span class="text-default-500 text-xs">{{ title }}</span>
       <div class="flex items-center gap-1">

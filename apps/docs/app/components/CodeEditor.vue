@@ -36,7 +36,7 @@ const baseTheme = (dark: boolean) =>
     {
       '&': {
         fontSize: '13px',
-        backgroundColor: dark ? '#27272a' : '#f4f4f5',
+        backgroundColor: dark ? '#121214' : '#fafafa',
         color: dark ? '#e6edf3' : '#1f2328',
         height: '100%',
       },
@@ -47,7 +47,7 @@ const baseTheme = (dark: boolean) =>
       },
       '.cm-content': { padding: '14px 0' },
       '.cm-gutters': {
-        backgroundColor: dark ? '#27272a' : '#f4f4f5',
+        backgroundColor: dark ? '#121214' : '#fafafa',
         color: dark ? '#484f58' : '#8c959f',
         border: 'none',
       },
