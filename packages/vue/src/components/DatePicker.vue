@@ -205,7 +205,7 @@ const isInPreviewRange = (date: Date) => {
         :disabled="disabled"
         :class="
           cn(
-            'flex w-full cursor-pointer items-center justify-between text-left transition-[color,box-shadow]',
+            'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
             kunControlSizeClasses[props.size],
             roundedClass,
             'bg-content1 shadow-kun-sm border',
@@ -217,10 +217,10 @@ const isInPreviewRange = (date: Date) => {
         "
         @click="toggle"
       >
-        <span class="block truncate" :class="{ 'text-default-400': !displayValue }">
+        <span class="block min-w-0 flex-1 truncate" :class="{ 'text-default-400': !displayValue }">
           {{ displayValue || placeholder }}
         </span>
-        <div class="flex items-center">
+        <div class="flex shrink-0 items-center">
           <button
             v-if="clearable && displayValue"
             class="text-default-500 hover:text-default-800 mr-2 p-1"
