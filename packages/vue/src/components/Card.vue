@@ -104,15 +104,18 @@ const hoverStateLayer =
     v-bind="rootBindings"
     :class="
       cn(
-        'relative flex flex-col gap-4 backdrop-blur-[var(--kun-background-blur)] transition-all duration-kun-fast',
+        'relative flex flex-col gap-4 transition-all duration-kun-fast',
         paddingClasses[padding],
-        !isTransparent && 'shadow-kun-sm',
+        // A raised (opaque) card: shadow + an opt-in glass backdrop (free `none`
+        // by default — no backdrop-filter is emitted unless --kun-backdrop-filter
+        // is set). Transparent cards stay fully see-through with neither.
+        !isTransparent && 'shadow-kun-sm kun-backdrop',
         // Hover feedback only for navigable/clickable cards or an explicit opt-in;
         // a plain static card stays inert.
         (isInteractive || isHoverable) && hoverStateLayer,
         bordered && 'border-kun border',
         isInteractive && 'cursor-pointer overflow-hidden active:scale-[0.97] text-left',
-        isTransparent ? 'backdrop-blur-none' : colorClasses[props.color],
+        !isTransparent && colorClasses[props.color],
         roundedClass,
         className
       )

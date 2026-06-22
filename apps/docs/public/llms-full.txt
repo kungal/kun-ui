@@ -267,12 +267,13 @@ or mirror its state onto that class.
 
 ### Overridable knobs
 
-`@kungal/ui-tokens` exposes two `:root` custom properties you may override:
+`@kungal/ui-tokens` exposes these `:root` custom properties you may override:
 
 ```css
 :root {
-  --kun-global-opacity: 0.7;  /* alpha of "glassy" surfaces (Card/Modal/topbar) */
-  --kun-background-blur: 0px;  /* backdrop blur strength for those surfaces */
+  --kun-global-opacity: 0.7;    /* alpha of translucent semantic surfaces (page background) */
+  --kun-surface-opacity: 1;     /* opacity of raised surfaces (cards/inputs/modal); lower for glass */
+  --kun-backdrop-filter: none;  /* set e.g. blur(12px) to frost every raised surface at once */
 }
 ```
 

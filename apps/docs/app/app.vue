@@ -35,7 +35,7 @@ watch(
   <div class="min-h-screen">
     <!-- Top bar — built from KunUI components (dogfooding). -->
     <header
-      class="border-default-200 bg-background/80 z-kun-sticky sticky top-0 flex items-center justify-between gap-3 border-b px-4 py-3 backdrop-blur sm:px-5"
+      class="border-default-200 bg-[oklch(var(--background))] z-kun-sticky sticky top-0 flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-5 md:bg-background/80 md:backdrop-blur"
     >
       <div class="flex items-center gap-1.5">
         <!-- Mobile: open the nav drawer (the sidebar is hidden below md). -->

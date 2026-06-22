@@ -35,16 +35,26 @@
    * inputs, modal, drawer. Default 1 = fully opaque (the clean elevation look).
    * A site with a background image (e.g. a galgame page) can make every surface
    * frosted at once by lowering this and adding a blur, with NO component changes:
-   *   :root { --kun-surface-opacity: 0.7; --kun-background-blur: 12px; }
-   * (Components don't ship a backdrop-blur on every surface, so set the blur too
-   * if you want true frosted glass rather than plain see-through.) */
+   *   :root { --kun-surface-opacity: 0.7; --kun-backdrop-filter: blur(12px); }
+   * (Surfaces ship `backdrop-filter: none` by default — set --kun-backdrop-filter
+   * to opt into true frosted glass rather than plain see-through.) */
   --kun-surface-opacity: 1;
 
-  /* Backdrop blur strength for glass surfaces (Card / Modal / sticky
-   * topbar). 0 = no blur. Referenced as
-   * `backdrop-blur-[var(--kun-background-blur)]` by those components.
-   * Apps may override (e.g. a user-adjustable glass-blur setting). */
-  --kun-background-blur: 0px;
+  /* Backdrop-filter for raised glass surfaces (Card / Modal), consumed via the
+   * `kun-backdrop` utility. Default `none` so NO backdrop-filter is emitted:
+   * backdrop-filter: blur() is the #1 cause of mobile scroll jank, and at the
+   * default opaque / zero-blur it produced no visual effect anyway. A glass site
+   * opts in for every surface at once, e.g. `--kun-backdrop-filter: blur(12px)`
+   * (pair with a lowered --kun-surface-opacity). */
+  --kun-backdrop-filter: none;
+}
+
+/* Opt-in frosted-glass backdrop for raised surfaces. At the default `none` it
+ * emits `backdrop-filter: none` (free — no compositing layer, no blur pass);
+ * set --kun-backdrop-filter to enable glass on every surface that uses it. */
+@utility kun-backdrop {
+  -webkit-backdrop-filter: var(--kun-backdrop-filter, none);
+  backdrop-filter: var(--kun-backdrop-filter, none);
 }
 
 @theme {
