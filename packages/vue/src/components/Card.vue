@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<KunCardProps>(), {
   href: undefined,
   isHoverable: false,
   isTransparent: false,
-  bordered: false,
+  bordered: true,
   padding: 'lg',
   className: '',
   contentClass: '',

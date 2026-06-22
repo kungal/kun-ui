@@ -303,8 +303,9 @@
 
 /* Canonical neutral border — the SINGLE source of truth for every structural
  * hairline (inputs, cards, dividers, popovers, tabs, tables…). Defaults to the
- * `default-200` step, which already flips light↔dark (light ≈ L90% zinc-200,
- * dark ≈ L26% zinc-700), so one utility stays consistent across modes AND
+ * `default-100` step — a very light hairline that just delineates a surface
+ * without framing it — which already flips light↔dark, so one utility stays
+ * consistent across modes AND
  * components — no more per-component `border-default/20` + `dark:border-…`
  * juggling that only coincidentally matched. Retheme every border at once by
  * overriding `--color-kun-border` (set it in `.kun-dark-mode` too if you give
@@ -316,10 +317,10 @@
  * / `focus:border-*` still win (apply `border-kun` only in the non-error branch
  * so two plain border-color utilities never fight over source order). */
 :root {
-  --color-kun-border: oklch(var(--default-200));
+  --color-kun-border: oklch(var(--default-100));
 }
 @utility border-kun {
-  border-color: var(--color-kun-border, oklch(var(--default-200)));
+  border-color: var(--color-kun-border, oklch(var(--default-100)));
 }
 
 /* Duration utilities bound to the motion scale, so component transitions route
