@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.9.2",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(tokens,vue): softer neutral hairline + bordered cards by default</p>\n<ul>\n<li>KunCard shows a faint hairline border by default again (it was borderless during\nthe filled-surface work) — with the lighter page and softer shadows, a hairline\ndelineates the card better than shadow alone.</li>\n<li>The shared neutral border token (<code>--color-kun-border</code> / the <code>border-kun</code> utility)\ndrops from <code>default-200</code> to <code>default-100</code> — a lighter hairline that delineates a\nsurface without framing it. Every consumer softens at once: inputs, textarea,\nselect &amp; other controls, accordion, tabs, dividers, drawer rules, etc. Error\nborders (danger) and focus rings are unaffected.</li>\n</ul>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.9.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue,tokens): bordered inputs, softer shadows, lighter page background</p>\n<ul>\n<li>Form controls (Input, Textarea, Select, NumberInput, Autocomplete, DatePicker,\nTagInput flat, PinInput, Pagination jump field, Select&#39;s inline search) get a\ncard-like neutral border back on top of the filled surface — the borderless\nfill was too hard to spot on a card. Error state recolours the border to danger\ninstead of a persistent ring. (= the shadcn &quot;border + fill + subtle shadow&quot; input.)</li>\n<li>Elevation scale softened ~30% across all three tiers (sm/md/lg) — lighter, tighter\nshadows on cards, inputs, dropdowns, modals.</li>\n<li>Light page background nudged brighter (#f2f2f5 → #f4f4f7). Dark unchanged.</li>\n</ul>\n</li>\n</ul>\n"
