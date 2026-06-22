@@ -1,6 +1,6 @@
 {
   "name": "@kungal/ui-core",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "KunUI framework-agnostic core — design types, cn(), variant matrix, radius system, utils. No Vue/React.",
   "type": "module",
   "keywords": [

@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.9.5",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): DatePicker trigger — gap + truncation between text and calendar icon</p>\n<p>The trigger only had <code>justify-between</code> (no gap), so in a narrow field the\nplaceholder/value text butted right against the calendar icon with no spacing\n(and looked vertically off). Adopted the Select trigger&#39;s pattern: <code>gap-2</code> on the\nbutton, <code>min-w-0 flex-1 truncate</code> on the text, and <code>shrink-0</code> on the icon group —\nso there&#39;s always an 8px gap, the text truncates gracefully, and the icon stays\nput. (Audited Select, Autocomplete and the input family — they already do this;\nDatePicker was the only one missing it.)</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.9.4",
     "type": "patch",
     "html": "<ul>\n<li><p>fix: DatePicker month/year nav closing on mobile; Enter key hijacked to &quot;Next&quot;</p>\n<ul>\n<li><strong>DatePicker</strong>: the calendar panel is teleported to <code>&lt;body&gt;</code>, so its month/year\nnav buttons were treated as outside-clicks and closed the picker (felt on mobile,\nwhere you must tap the nav). Added the same <code>dropdownRef.contains</code> guard that\nSelect/Autocomplete already use; outside clicks still close it.</li>\n<li><strong>Mobile &quot;Next&quot; key</strong>: on a page with several fields the virtual keyboard shows a\n&quot;Next&quot; action that jumps to the next field instead of firing Enter — breaking\ninputs whose Enter does an in-component action. Declared <code>enterkeyhint</code> on those:\nTagInput (<code>enter</code>, add tag), Autocomplete &amp; searchable Select (<code>done</code>, pick the\nactive option), Pagination jump field (<code>go</code>). Plain Input/Textarea/NumberInput/\nPinInput are unchanged (field-to-field &quot;Next&quot; is correct there).</li>\n</ul>\n</li>\n</ul>\n"
