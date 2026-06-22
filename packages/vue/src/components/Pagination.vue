@@ -154,6 +154,7 @@ onKeyStroke('ArrowRight', (e) => {
         :id="kunUniqueId"
         v-model="jumpToPage"
         type="number"
+        enterkeyhint="go"
         :disabled="isLoading"
         min="1"
         :max="totalPage"

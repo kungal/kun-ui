@@ -406,6 +406,7 @@ watch(filtered, () => {
               ref="searchRef"
               v-model="query"
               type="text"
+              enterkeyhint="done"
               :placeholder="searchPlaceholder"
               role="combobox"
               :aria-controls="listId"

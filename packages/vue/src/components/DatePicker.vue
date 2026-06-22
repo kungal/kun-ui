@@ -47,7 +47,13 @@ const datePickerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 const hoveredDate = ref<Date | null>(null)
 
-onClickOutside(datePickerRef, () => (isOpen.value = false))
+// The calendar panel is teleported to <body>, so it is NOT a DOM descendant of
+// datePickerRef — without this guard every tap inside it (month/year nav, etc.)
+// counts as an outside click and closes the picker. Mirrors Select/Autocomplete.
+onClickOutside(datePickerRef, (event) => {
+  if (dropdownRef.value?.contains(event.target as Node)) return
+  isOpen.value = false
+})
 
 const { floatingStyles, placement } = useFloating(datePickerRef, dropdownRef, {
   placement: 'bottom-start',

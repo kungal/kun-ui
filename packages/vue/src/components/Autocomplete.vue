@@ -234,6 +234,7 @@ defineExpose({
       <input
         :id="kunUniqueId"
         ref="inputRef"
+        enterkeyhint="done"
         v-bind="$attrs"
         :value="modelValue"
         type="text"

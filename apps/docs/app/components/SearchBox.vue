@@ -221,6 +221,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
                 ref="inputEl"
                 v-model="query"
                 type="text"
+                enterkeyhint="search"
                 placeholder="搜索组件、页面…"
                 class="text-foreground placeholder:text-default-400 flex-1 bg-transparent py-3.5 text-sm outline-none"
                 spellcheck="false"

@@ -362,6 +362,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
         ref="inputEl"
         v-model="inputValue"
         type="text"
+        enterkeyhint="enter"
         :placeholder="tags.length === 0 ? placeholder : ''"
         :disabled="disabled"
         :readonly="isAtMax"
