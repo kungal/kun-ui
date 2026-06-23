@@ -364,12 +364,18 @@ const tabClasses = (item: KunTabItem) => {
   }
 }
 
-// SSR / pre-hydration fallback for the underlined variant: a 2px inset bottom
-// bar on the active tab itself (currentColor = its active text color). Inline so
-// it always renders server-side; once the measured indicator exists it drops.
+// SSR / pre-hydration fallback for the underlined variant: a 2px inset bar on the
+// active tab itself (currentColor = its active text color). Must sit on the SAME
+// edge the measured indicator will — LEFT for vertical, BOTTOM for horizontal —
+// otherwise the bar visibly jumps (bottom → left) when the measured indicator
+// takes over after hydration. Inline so it always renders server-side.
 const tabStyle = (item: KunTabItem) =>
   props.variant === 'underlined' && isSelected(item) && !showIndicator.value
-    ? { boxShadow: 'inset 0 -2px 0 0 currentColor' }
+    ? {
+        boxShadow: isVertical.value
+          ? 'inset 2px 0 0 0 currentColor'
+          : 'inset 0 -2px 0 0 currentColor',
+      }
     : undefined
 
 // Soft tint for the light variant's sliding panel (15% — a touch stronger

@@ -11,11 +11,20 @@ const items: KunTabItem[] = [
 </script>
 
 <template>
-  <KunTab
-    v-model="active"
-    :items="items"
-    orientation="vertical"
-    variant="light"
-    color="secondary"
-  />
+  <div class="flex gap-10">
+    <KunTab
+      v-model="active"
+      :items="items"
+      orientation="vertical"
+      variant="underlined"
+      color="primary"
+    />
+    <KunTab
+      v-model="active"
+      :items="items"
+      orientation="vertical"
+      variant="light"
+      color="secondary"
+    />
+  </div>
 </template>
