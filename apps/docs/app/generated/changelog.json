@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.14.2",
+    "type": "patch",
+    "html": ""
+  },
+  {
     "version": "1.14.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): DatePicker / Autocomplete focus-on-open no longer risks scrolling the page</p>\n<p>Hardens the two remaining popup components that still used a bare <code>.focus()</code>:\nDatePicker (focus the root on open) and Autocomplete (refocus the input after\nselect / clear) now pass <code>{ preventScroll: true }</code>. The menu components already\ndid this; this brings the last two in line so a portaled-panel open can never\njump the page to the top. (The public <code>Autocomplete.focus()</code> method keeps the\ndefault so the caller controls scroll intent.)</p>\n</li>\n</ul>\n"
