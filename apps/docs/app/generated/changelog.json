@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.12.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunReaction — <code>#icon</code> slot + arbitrary <code>color</code></p>\n<p>Two additive, backward-compatible hooks for fully custom reactions (e.g. a &quot;推&quot;):</p>\n<ul>\n<li><strong><code>#icon</code> slot</strong> (scoped <code>{ active }</code>) replaces the whole glyph — an emoji,\nimage or custom SVG, and it can differ by active state. Slot content still gets\nthe pop + burst animations.</li>\n<li><strong><code>color</code></strong> now also accepts any CSS colour string (e.g. a brand <code>#ff6a00</code>), not\njust a palette key. The whole effect runs through <code>currentColor</code>, so the icon\nfill, the pop and the burst (ring + sparks) all follow it with no extra wiring.</li>\n</ul>\n<p>Existing <code>icon</code> / palette-<code>color</code> usage is unchanged.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.11.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunReaction — a compact like/reaction control with count</p>\n<p>A purpose-built reaction control so a like + count doesn&#39;t bloat into a wide\npadded text button. It&#39;s a tight pill (icon + optional count), a proper toggle\n(<code>aria-pressed</code>, accessible name includes the count), and it animates on click —\nall pure CSS/Vue, no external library:</p>\n<ul>\n<li>icon fills + colours when active;</li>\n<li>a bouncy pop;</li>\n<li>a one-shot burst (expanding ring + radiating sparks) when liking;</li>\n<li>the count rolls in the direction it changed.</li>\n</ul>\n<p><code>v-model</code> is the active state; <code>v-model:count</code> the count (auto ±1 on click, the\nparent can override for server sync). Props: <code>icon</code> (default a heart), <code>color</code>\n(default danger), <code>size</code>, <code>disabled</code>, <code>disableAnimation</code>, <code>label</code>. All animation\nis off under <code>prefers-reduced-motion</code>.</p>\n</li>\n</ul>\n"
