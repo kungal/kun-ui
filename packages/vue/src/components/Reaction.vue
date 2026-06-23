@@ -15,6 +15,7 @@ defineOptions({ name: 'KunReaction' })
 const props = withDefaults(defineProps<KunReactionProps>(), {
   icon: 'lucide:heart',
   color: 'danger',
+  toggle: true,
   size: 'md',
   disabled: false,
   disableAnimation: false,
@@ -43,23 +44,37 @@ watch(count, (n, o) => {
   if (typeof n === 'number' && typeof o === 'number') rollDir.value = n >= o ? 'up' : 'down'
 })
 
-const toggle = () => {
+const pop = () => {
+  if (!animate.value) return
+  // Restart the animation from frame 0 (off → next frame on).
+  popping.value = false
+  requestAnimationFrame(() => (popping.value = true))
+}
+
+const handleClick = () => {
   if (props.disabled) return
+  if (!props.toggle) {
+    // Action mode (share / more …): a tactile pop only — no pressed state, no
+    // count change, no burst. The consumer handles it via a native @click.
+    pop()
+    return
+  }
   const next = !active.value
   active.value = next
   if (typeof count.value === 'number') {
     count.value = Math.max(0, count.value + (next ? 1 : -1))
   }
   emit('change', next)
-  if (!animate.value) return
-  // Restart the animations from frame 0 (toggle off → next frame on).
-  popping.value = false
-  requestAnimationFrame(() => (popping.value = true))
-  if (next) {
+  pop()
+  if (next && animate.value) {
     bursting.value = false
     requestAnimationFrame(() => (bursting.value = true))
   }
 }
+
+// "On" = a pressed toggle. Action-mode reactions never read as on, so they keep
+// the neutral skin (matching an un-liked reaction) regardless of the model.
+const isOn = computed(() => props.toggle && active.value)
 
 const sizeMap = {
   sm: { btn: 'gap-1 px-1.5 py-0.5 text-xs', icon: '1rem' },
@@ -78,7 +93,7 @@ const accessibleName = computed(() =>
 // brand colour works everywhere with zero extra plumbing.
 const isPaletteColor = computed(() => props.color in kunTextClasses)
 const activeColorStyle = computed(() =>
-  active.value && !isPaletteColor.value ? { color: props.color } : undefined
+  isOn.value && !isPaletteColor.value ? { color: props.color } : undefined
 )
 
 const rootClasses = computed(() =>
@@ -87,8 +102,8 @@ const rootClasses = computed(() =>
     sz.value.btn,
     props.disabled
       ? 'cursor-not-allowed opacity-50'
-      : cn('cursor-pointer hover:bg-default-100', active.value && 'hover:bg-default-100/60'),
-    active.value
+      : cn('cursor-pointer hover:bg-default-100', isOn.value && 'hover:bg-default-100/60'),
+    isOn.value
       ? isPaletteColor.value
         ? kunTextClasses[props.color as KunUIColor]
         : ''
@@ -102,10 +117,10 @@ const rootClasses = computed(() =>
     type="button"
     :class="rootClasses"
     :style="activeColorStyle"
-    :aria-pressed="active"
-    :aria-label="accessibleName"
+    :aria-pressed="toggle ? active : undefined"
+    :aria-label="$slots.default ? undefined : accessibleName"
     :disabled="disabled"
-    @click="toggle"
+    @click="handleClick"
   >
     <span
       class="kun-reaction-fx relative inline-flex shrink-0"
@@ -114,10 +129,10 @@ const rootClasses = computed(() =>
       @animationend="popping = false"
     >
       <!-- Replace the whole glyph (emoji / image / per-state) via #icon. -->
-      <slot name="icon" :active="active">
+      <slot name="icon" :active="isOn">
         <KunIcon
           :name="icon"
-          :class="cn('transition-colors', active && 'fill-current')"
+          :class="cn('transition-colors', isOn && 'fill-current')"
         />
       </slot>
 
@@ -137,6 +152,13 @@ const rootClasses = computed(() =>
           :style="{ '--kun-spark-a': `${n * 60}deg` }"
         />
       </template>
+    </span>
+
+    <!-- Optional visible label (default slot), rendered INSIDE the button so
+         clicking the text toggles too — and it inherits currentColor (the active
+         colour when on). Omit it to keep the compact icon-(+count) reaction. -->
+    <span v-if="$slots.default" class="whitespace-nowrap">
+      <slot />
     </span>
 
     <!-- Count, rolling in the direction it changed. -->

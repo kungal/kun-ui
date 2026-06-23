@@ -677,6 +677,14 @@ export interface KunReactionProps {
   /** Active (liked) colour — a palette key OR any CSS colour string (e.g. a
    *  brand `#ff6a00`). The icon fill, pop and burst all follow it. Default `danger`. */
   color?: KunUIColor | (string & {})
+  /**
+   * `true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon
+   * fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share /
+   * more …) in the same compact skin — no pressed state, no burst, just a tactile
+   * pop; handle the click with a native `@click`. Lets a whole reactions row use
+   * one component instead of mixing in a heavier icon button.
+   */
+  toggle?: boolean
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   /** Disable the pop / burst / count-roll animations (also off under reduced-motion). */

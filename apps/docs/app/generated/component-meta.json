@@ -2333,6 +2333,13 @@
         "type": "\"md\" | \"sm\" | \"lg\"",
         "required": false,
         "default": "\"md\""
+      },
+      {
+        "name": "toggle",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "`true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share / more …) in the same compact skin — no pressed state, no burst, just a tactile pop; handle the click with a native `@click`. Lets a whole reactions row use one component instead of mixing in a heavier icon button."
       }
     ]
   },
