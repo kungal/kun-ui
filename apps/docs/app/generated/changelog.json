@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.14.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): DatePicker / Autocomplete focus-on-open no longer risks scrolling the page</p>\n<p>Hardens the two remaining popup components that still used a bare <code>.focus()</code>:\nDatePicker (focus the root on open) and Autocomplete (refocus the input after\nselect / clear) now pass <code>{ preventScroll: true }</code>. The menu components already\ndid this; this brings the last two in line so a portaled-panel open can never\njump the page to the top. (The public <code>Autocomplete.focus()</code> method keeps the\ndefault so the caller controls scroll intent.)</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.14.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunReaction <code>toggle</code> (action mode) + default-slot visible label</p>\n<p>Two additive, backward-compatible hooks so a whole actions row can be one\ncomponent, and so the text is part of the click target:</p>\n<ul>\n<li><strong><code>toggle</code> prop</strong> (default <code>true</code>). <code>false</code> = a one-shot ACTION (share / 更多 …)\nin the same compact skin: no pressed state, no burst, just a tactile pop —\nhandle it with a native <code>@click</code>. A reactions row no longer needs to mix in a\nheavier icon button.</li>\n<li><strong>Default slot</strong> = a visible label rendered INSIDE the button, so clicking the\nTEXT (not just the icon) toggles too — the clean fix for &quot;点 收藏游戏 文字也该收藏&quot;.\nIt inherits the active colour; when present it becomes the accessible name (the\n<code>label</code> prop is the aria fallback only when there&#39;s no visible label). Omit it to\nkeep the compact icon-(+count) reaction.</li>\n</ul>\n</li>\n</ul>\n"
