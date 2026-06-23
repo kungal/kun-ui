@@ -167,6 +167,11 @@ export type KunPopoverPosition =
 export interface KunPopoverProps {
   position?: KunPopoverPosition
   innerClass?: string
+  /**
+   * Avoid viewport collisions: flip to the opposite side, shift along the edge,
+   * and cap height/width to the available space so tall content scrolls instead
+   * of overflowing. Default `true`. Set `false` to honour `position` verbatim.
+   */
   autoPosition?: boolean
   rounded?: KunUIRounded
   // Accessible name for the dialog (role="dialog" needs a name).

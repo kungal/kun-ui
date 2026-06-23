@@ -51,6 +51,7 @@ const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, menuRef, 
   placement: () => props.position as Placement,
   open: isOpen,
   offset: 6,
+  maxSize: true,
 })
 
 const enabledIndices = () =>

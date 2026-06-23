@@ -12,6 +12,7 @@ import {
   offset as offsetMiddleware,
   flip,
   shift,
+  size as sizeMiddleware,
   arrow as arrowMiddleware,
   type Middleware,
   type Placement,
@@ -44,6 +45,13 @@ export interface UseKunFloatingOptions {
   // Pass false to respect the literal `placement` verbatim (Popover's
   // autoPosition=false).
   constrain?: boolean
+  // Cap the panel to the space the viewport actually offers (size() middleware):
+  // sets max-height / max-width to the available room and makes it scroll, so a
+  // tall menu near the bottom edge (or a wide one on a narrow screen) stays fully
+  // on-screen instead of overflowing. For menus that DON'T need to match the
+  // trigger width (Popover / Dropdown); Select / Autocomplete pass their own
+  // size() via `middleware` instead.
+  maxSize?: boolean
   // Extra middleware appended after shift() — e.g. size() to match the trigger
   // width (Select / Autocomplete).
   middleware?: Middleware[]
@@ -64,9 +72,25 @@ export const useKunFloating = (
   const arrowRef = ref<HTMLElement | null>(null)
 
   const constrain = options.constrain ?? true
+  const padding = options.padding ?? 8
   const middleware: Middleware[] = [
     offsetMiddleware(options.offset ?? 8),
-    ...(constrain ? [flip(), shift({ padding: options.padding ?? 8 })] : []),
+    ...(constrain ? [flip(), shift({ padding })] : []),
+    // size() runs after flip so it measures the room on the RESOLVED side.
+    ...(options.maxSize
+      ? [
+          sizeMiddleware({
+            padding,
+            apply({ availableWidth, availableHeight, elements }) {
+              Object.assign(elements.floating.style, {
+                maxWidth: `${Math.max(0, Math.floor(availableWidth))}px`,
+                maxHeight: `${Math.max(0, Math.floor(availableHeight))}px`,
+                overflowY: 'auto',
+              })
+            },
+          }),
+        ]
+      : []),
     ...(options.middleware ?? []),
     ...(options.arrow
       ? [arrowMiddleware({ element: arrowRef, padding: options.arrowPadding ?? 6 })]

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, toRefs, nextTick, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
+import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/vue'
 import {
   cn,
   kunRoundedClasses,
@@ -60,7 +60,22 @@ const { floatingStyles, placement } = useFloating(datePickerRef, dropdownRef, {
   open: isOpen,
   whileElementsMounted: autoUpdate,
   transform: false,
-  middleware: [offset(4), flip(), shift({ padding: 8 })],
+  middleware: [
+    offset(4),
+    flip(),
+    shift({ padding: 8 }),
+    // Last resort on a very short viewport: cap to the available height + scroll
+    // so the calendar stays reachable instead of overflowing off-screen.
+    size({
+      padding: 8,
+      apply({ availableHeight, elements }) {
+        Object.assign(elements.floating.style, {
+          maxHeight: `${Math.max(0, Math.floor(availableHeight))}px`,
+          overflowY: 'auto',
+        })
+      },
+    }),
+  ],
 })
 // Grow the calendar out of the trigger edge (post-flip aware).
 const transformOrigin = useTransformOrigin(placement)

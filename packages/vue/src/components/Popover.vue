@@ -19,7 +19,7 @@ defineOptions({ name: 'KunPopover' })
 const props = withDefaults(defineProps<KunPopoverProps>(), {
   position: 'bottom-start',
   innerClass: '',
-  autoPosition: false,
+  autoPosition: true,
   rounded: undefined,
   showArrow: false,
   opaque: false,
@@ -45,6 +45,9 @@ const { floatingStyles, transformOrigin, arrowRef, arrowStyles } = useKunFloatin
     open: isOpen,
     offset: 8,
     constrain: props.autoPosition,
+    // maxSize sets overflow:auto on the panel, which would clip the arrow (it sits
+    // half outside the panel edge) — so only cap size when there's no caret.
+    maxSize: props.autoPosition && !props.showArrow,
     arrow: props.showArrow,
   }
 )
