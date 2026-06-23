@@ -7,6 +7,8 @@ import Sizes from '~/examples/reaction/Sizes.vue'
 import SizesSrc from '~/examples/reaction/Sizes.vue?raw'
 import ToggleOnly from '~/examples/reaction/ToggleOnly.vue'
 import ToggleOnlySrc from '~/examples/reaction/ToggleOnly.vue?raw'
+import Custom from '~/examples/reaction/Custom.vue'
+import CustomSrc from '~/examples/reaction/Custom.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -29,6 +31,13 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">纯切换(无计数)</h2>
     <Demo title="ToggleOnly.vue" :source="ToggleOnlySrc"><ToggleOnly /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">自定义(插槽 + 任意颜色)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      <code>#icon</code> 插槽接管字形(emoji / 图片 / SVG,可按 <code>active</code> 切换);
+      <code>color</code> 也接受任意 CSS 颜色(品牌色)——填充、弹跳、爆裂全跟着它走。
+    </p>
+    <Demo title="Custom.vue" :source="CustomSrc"><Custom /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunReaction.props" />

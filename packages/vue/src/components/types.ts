@@ -671,10 +671,12 @@ export interface KunRatingProps {
 
 // ── Reaction (like + count) ────────────────────────────────────────────
 export interface KunReactionProps {
-  /** Icon name (default a heart); filled + coloured when active. */
+  /** Icon name (default a heart); filled + coloured when active. Override the
+   *  whole glyph (emoji / image / per-state) with the `#icon` slot instead. */
   icon?: string
-  /** Active (liked) colour. Default `danger` — a red heart. */
-  color?: KunUIColor
+  /** Active (liked) colour — a palette key OR any CSS colour string (e.g. a
+   *  brand `#ff6a00`). The icon fill, pop and burst all follow it. Default `danger`. */
+  color?: KunUIColor | (string & {})
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   /** Disable the pop / burst / count-roll animations (also off under reduced-motion). */

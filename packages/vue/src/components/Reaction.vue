@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import {
-  cn,
-  kunTextClasses,
-  kunBgClasses,
-  kunBorderClasses,
-} from '@kungal/ui-core'
+import { cn, kunTextClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import type { KunReactionProps } from './types'
 
@@ -77,6 +72,15 @@ const accessibleName = computed(() =>
   typeof count.value === 'number' ? `${props.label},${count.value}` : props.label
 )
 
+// The active colour can be a palette key (→ a `text-*` class) or any CSS colour
+// (→ inline `color`). Either way it becomes `currentColor`, which the icon fill,
+// the burst ring (border-current) and the sparks (bg-current) all follow — so a
+// brand colour works everywhere with zero extra plumbing.
+const isPaletteColor = computed(() => props.color in kunTextClasses)
+const activeColorStyle = computed(() =>
+  active.value && !isPaletteColor.value ? { color: props.color } : undefined
+)
+
 const rootClasses = computed(() =>
   cn(
     'relative inline-flex items-center rounded-full transition-colors select-none',
@@ -84,7 +88,11 @@ const rootClasses = computed(() =>
     props.disabled
       ? 'cursor-not-allowed opacity-50'
       : cn('cursor-pointer hover:bg-default-100', active.value && 'hover:bg-default-100/60'),
-    active.value ? kunTextClasses[props.color] : 'text-default-500'
+    active.value
+      ? isPaletteColor.value
+        ? kunTextClasses[props.color as KunUIColor]
+        : ''
+      : 'text-default-500'
   )
 )
 </script>
@@ -93,6 +101,7 @@ const rootClasses = computed(() =>
   <button
     type="button"
     :class="rootClasses"
+    :style="activeColorStyle"
     :aria-pressed="active"
     :aria-label="accessibleName"
     :disabled="disabled"
@@ -101,26 +110,30 @@ const rootClasses = computed(() =>
     <span
       class="kun-reaction-fx relative inline-flex shrink-0"
       :class="popping && 'kun-reaction-pop'"
+      :style="{ fontSize: sz.icon }"
       @animationend="popping = false"
     >
-      <KunIcon
-        :name="icon"
-        :class="cn('transition-colors', active && 'fill-current')"
-        :style="{ fontSize: sz.icon }"
-      />
+      <!-- Replace the whole glyph (emoji / image / per-state) via #icon. -->
+      <slot name="icon" :active="active">
+        <KunIcon
+          :name="icon"
+          :class="cn('transition-colors', active && 'fill-current')"
+        />
+      </slot>
 
-      <!-- One-shot burst (on like): an expanding ring + radiating sparks. -->
+      <!-- One-shot burst (on like): an expanding ring + radiating sparks. Both
+           use currentColor, so they follow the active colour (palette or brand). -->
       <template v-if="bursting">
         <span
           aria-hidden="true"
-          :class="cn('kun-reaction-ring border-2', kunBorderClasses[color])"
+          class="kun-reaction-ring border-2 border-current"
           @animationend="bursting = false"
         />
         <span
           v-for="n in sparks"
           :key="n"
           aria-hidden="true"
-          :class="cn('kun-reaction-spark', kunBgClasses[color])"
+          class="kun-reaction-spark bg-current"
           :style="{ '--kun-spark-a': `${n * 60}deg` }"
         />
       </template>

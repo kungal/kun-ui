@@ -2284,10 +2284,10 @@
     "props": [
       {
         "name": "color",
-        "type": "KunUIColor",
+        "type": "KunUIColor | (string & {})",
         "required": false,
         "default": "\"danger\"",
-        "description": "Active (liked) colour. Default `danger` — a red heart."
+        "description": "Active (liked) colour — a palette key OR any CSS colour string (e.g. a brand `#ff6a00`). The icon fill, pop and burst all follow it. Default `danger`."
       },
       {
         "name": "count",
@@ -2313,7 +2313,7 @@
         "type": "string",
         "required": false,
         "default": "\"lucide:heart\"",
-        "description": "Icon name (default a heart); filled + coloured when active."
+        "description": "Icon name (default a heart); filled + coloured when active. Override the whole glyph (emoji / image / per-state) with the `#icon` slot instead."
       },
       {
         "name": "label",
