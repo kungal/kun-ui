@@ -53,6 +53,7 @@ const KUN_COMPONENTS = [
   'KunProgress',
   'KunRadioGroup',
   'KunRating',
+  'KunReaction',
   'KunRipple',
   'KunScrollShadow',
   'KunSelect',
