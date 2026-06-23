@@ -2077,10 +2077,31 @@
         "default": "false"
       },
       {
+        "name": "closeDelay",
+        "type": "number",
+        "required": false,
+        "default": "120",
+        "description": "`trigger=\"hover\"`: ms grace after leaving (crosses the gap). Default 120."
+      },
+      {
+        "name": "group",
+        "type": "string",
+        "required": false,
+        "default": "undefined",
+        "description": "`trigger=\"hover\"`: shared id so a row of menus switches instantly between siblings and only one is open at a time (menu-bar behaviour)."
+      },
+      {
         "name": "innerClass",
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "openDelay",
+        "type": "number",
+        "required": false,
+        "default": "100",
+        "description": "`trigger=\"hover\"`: ms before a hover opens. Default 100."
       },
       {
         "name": "position",
@@ -2099,6 +2120,13 @@
         "type": "boolean",
         "required": false,
         "default": "false"
+      },
+      {
+        "name": "trigger",
+        "type": "\"click\" | \"hover\"",
+        "required": false,
+        "default": "\"click\"",
+        "description": "How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click."
       }
     ]
   },

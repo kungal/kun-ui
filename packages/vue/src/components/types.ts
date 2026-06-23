@@ -173,6 +173,20 @@ export interface KunPopoverProps {
   ariaLabel?: string
   // Render a caret pointing at the trigger.
   showArrow?: boolean
+  /**
+   * How the popover opens. `'click'` (default) toggles + moves focus into the
+   * panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you
+   * can reach the panel without it closing — for navigation menus. Hover never
+   * steals focus; click/keyboard/Esc still work, and touch falls back to click.
+   */
+  trigger?: 'click' | 'hover'
+  /** `trigger="hover"`: ms before a hover opens. Default 100. */
+  openDelay?: number
+  /** `trigger="hover"`: ms grace after leaving (crosses the gap). Default 120. */
+  closeDelay?: number
+  /** `trigger="hover"`: shared id so a row of menus switches instantly between
+   *  siblings and only one is open at a time (menu-bar behaviour). */
+  group?: string
 }
 
 // ── Image ──────────────────────────────────────────────────────────────

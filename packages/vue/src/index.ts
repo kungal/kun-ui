@@ -149,6 +149,10 @@ export {
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
+export {
+  useKunPointerMenu,
+  type KunPointerMenuOptions,
+} from './composables/useKunPointerMenu'
 export { useKunCopy } from './composables/useKunCopy'
 export { useSpoilerContent } from './composables/useSpoilerContent'
 export { useContentLightbox } from './composables/useContentLightbox'

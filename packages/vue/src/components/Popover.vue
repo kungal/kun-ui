@@ -6,6 +6,7 @@ import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunPointerMenu } from '../composables/useKunPointerMenu'
 import type { KunPopoverProps } from './types'
 
 // Nuxt-decoupled Popover. A non-modal dialog anchored to its trigger: it moves
@@ -21,6 +22,10 @@ const props = withDefaults(defineProps<KunPopoverProps>(), {
   autoPosition: false,
   rounded: undefined,
   showArrow: false,
+  trigger: 'click',
+  openDelay: 100,
+  closeDelay: 120,
+  group: undefined,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -70,6 +75,18 @@ const close = (returnFocus = true) => {
 
 const toggle = () => (isOpen.value ? close() : open())
 
+// Hover mode (navigation menus). Drives `isOpen` directly — so a hover-open never
+// steals focus the way the click `open()` intentionally does — with a coordinate
+// safe-triangle that survives the teleported panel. Click / keyboard / Esc /
+// click-outside all keep working; touch falls back to click.
+const { triggerHandlers, panelHandlers } = useKunPointerMenu(popoverRef, {
+  open: isOpen,
+  enabled: props.trigger === 'hover',
+  openDelay: props.openDelay,
+  closeDelay: props.closeDelay,
+  group: props.group,
+})
+
 onClickOutside(triggerRef, (event) => {
   if (popoverRef.value?.contains(event.target as Node)) return
   close(false)
@@ -97,6 +114,7 @@ defineExpose({
       :aria-expanded="isOpen"
       :aria-controls="isOpen ? popoverId : undefined"
       @click="toggle"
+      v-on="triggerHandlers"
     >
       <slot name="trigger" />
     </div>
@@ -126,6 +144,7 @@ defineExpose({
           "
           :style="[floatingStyles, { transformOrigin }]"
           @keydown.escape="close()"
+          v-on="panelHandlers"
         >
           <slot />
           <div

@@ -7,6 +7,8 @@ import Arrow from '~/examples/popover/Arrow.vue'
 import ArrowSrc from '~/examples/popover/Arrow.vue?raw'
 import RichContent from '~/examples/popover/RichContent.vue'
 import RichContentSrc from '~/examples/popover/RichContent.vue?raw'
+import HoverMenu from '~/examples/popover/HoverMenu.vue'
+import HoverMenuSrc from '~/examples/popover/HoverMenu.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -26,6 +28,14 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">富内容</h2>
     <Demo title="RichContent.vue" :source="RichContentSrc"><RichContent /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">悬停菜单(导航)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      <code>trigger="hover"</code> + 共享 <code>group</code> = 导航悬停菜单。横向移到兄弟项**瞬间切换**;
+      下移到面板靠**坐标安全三角**不会中途关闭(且面板是 teleport 的也照样work);悬停**不抢焦点**;
+      点击 / 键盘 / Esc 仍可用,**触屏自动退回点击**。动作菜单(<code>KunDropdown</code>)仍只用点击。
+    </p>
+    <Demo title="HoverMenu.vue" :source="HoverMenuSrc"><HoverMenu /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunPopover.props" />
