@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  provide,
-  ref,
-} from 'vue'
+import { computed, onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { KUN_CAROUSEL } from '../composables/carouselContext'
 import KunIcon from './Icon.vue'
 import type { KunCarouselProps } from './types'
 
-// Horizontal slider. Put <KunCarouselItem>s inside. The track is native CSS
-// scroll-snap, so touch swipe + momentum work with zero JS and it renders
-// server-side; the arrows, dot indicators and optional autoplay are progressive
-// enhancements layered on top. Active slide is read from scroll position (no
-// per-frame measurement beyond a rAF-throttled scroll handler).
+// Horizontal slider on native CSS scroll-snap (touch swipe + momentum + SSR for
+// free). `loop` adds a SEAMLESS infinite loop via the reposition ("treadmill")
+// technique — NO cloned DOM. Each slide gets a CSS `order` so it forms a ring:
+// the active slide sits at a fixed "home" scroll position with the others
+// wrapping around it, so the slide physically to its right is always the next
+// one (slide 0 sits right after the last). After every scroll settles we re-home
+// — jump scrollLeft back by the distance travelled while shifting the (off-screen)
+// slides the same amount via `order`, so the visible pixels are unchanged and the
+// reset is invisible. Result: autoplay just keeps gliding forward past the end
+// into the start. Reposition (not cloning) means no duplicate nodes and nothing
+// for a screen reader to read twice. `order` only reorders the flex layout, never
+// the DOM, so Vue never fights it.
 defineOptions({ name: 'KunCarousel' })
 
 const props = withDefaults(defineProps<KunCarouselProps>(), {
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<KunCarouselProps>(), {
   showArrows: true,
   showIndicators: true,
   autoplay: 0,
+  loop: true,
   ariaLabel: '轮播',
   className: '',
 })
@@ -35,20 +37,41 @@ provide(KUN_CAROUSEL, {
 
 const trackRef = ref<HTMLElement | null>(null)
 const count = ref(0)
-const active = ref(0)
+// Visual scroll position (left-most visible slot), read from scrollLeft. In loop
+// mode it drifts ±1 from `home` between re-homings.
+const scrollIndex = ref(0)
+// Logical "first" slide (0..count-1) — what the dots reflect. Only changes when
+// the scroll settles (re-home), so it survives the invisible scrollLeft reset.
+const logicalActive = ref(0)
+
+const mod = (n: number, m: number) => (m <= 0 ? 0 : ((n % m) + m) % m)
 
 const maxIndex = computed(() => Math.max(0, count.value - props.slidesPerView))
-// Renamed (not `showArrows`) to avoid shadowing the prop of the same name.
+// Loop needs ≥2 reachable scroll positions so the home slide has a neighbour on
+// each side to glide into; otherwise fall back to a plain (bounded) slider.
+const loopActive = computed(() => props.loop && maxIndex.value >= 2)
+// The scroll index the active slide always returns to — centred for maximum
+// runway before a fast fling can reach a physical edge.
+const home = computed(() =>
+  Math.min(Math.max(1, Math.floor(maxIndex.value / 2)), Math.max(1, maxIndex.value - 1))
+)
+
 const arrowsVisible = computed(
   () => props.showArrows && count.value > props.slidesPerView
 )
-// One dot per reachable scroll position (a "page"), so every dot can become
-// active. For slidesPerView=1 this is one-per-slide; for >1 the trailing slides
-// that are always co-visible don't get a dead dot.
 const dotsVisible = computed(
   () => props.showIndicators && count.value > props.slidesPerView
 )
-const dotCount = computed(() => maxIndex.value + 1)
+// One dot per slide when looping a single-up carousel; otherwise one per page.
+const perSlideDots = computed(() => loopActive.value && props.slidesPerView <= 1)
+const dotCount = computed(() =>
+  perSlideDots.value ? count.value : maxIndex.value + 1
+)
+const activeDot = computed(() =>
+  perSlideDots.value
+    ? mod(logicalActive.value + (scrollIndex.value - home.value), count.value)
+    : scrollIndex.value
+)
 
 let reduced = false
 const stride = (t: HTMLElement) => {
@@ -58,15 +81,63 @@ const stride = (t: HTMLElement) => {
   return first.getBoundingClientRect().width + gap
 }
 
+// Ring the slides via `order` so slide `logicalActive` sits at visual `home`.
+const applyOrders = () => {
+  const t = trackRef.value
+  if (!t) return
+  const n = count.value
+  if (!loopActive.value || n === 0) {
+    for (const el of Array.from(t.children)) (el as HTMLElement).style.order = ''
+    return
+  }
+  const rot = mod(home.value - logicalActive.value, n)
+  Array.from(t.children).forEach((el, i) => {
+    ;(el as HTMLElement).style.order = String(mod(i + rot, n))
+  })
+}
+
 const goTo = (i: number, smooth = true) => {
   const t = trackRef.value
   if (!t) return
-  const clamped = Math.max(0, Math.min(i, count.value - 1))
   const s = stride(t)
-  t.scrollTo({ left: clamped * s, behavior: smooth && !reduced ? 'smooth' : 'auto' })
+  const clamped = Math.max(0, Math.min(i, maxIndex.value))
+  t.scrollTo({
+    left: clamped * s,
+    behavior: smooth && !reduced ? 'smooth' : 'auto',
+  })
 }
-const prev = () => goTo(active.value - 1)
-const next = () => goTo(active.value + 1)
+const prev = () => goTo(scrollIndex.value - 1)
+const next = () => goTo(scrollIndex.value + 1)
+const goToDot = (dot: number) => {
+  if (!perSlideDots.value) return goTo(dot)
+  const n = count.value
+  const rot = mod(home.value - logicalActive.value, n)
+  goTo(mod(dot + rot, n)) // dot's current visual position; re-home makes it active
+}
+
+// Re-home: adopt whatever slide we settled on as the logical active, re-ring the
+// orders, and reset scrollLeft to `home` — all synchronously, so only off-screen
+// slides shuffle and the visible pixels never change. The invisible "reset" that
+// makes the loop seamless.
+const recenter = () => {
+  const t = trackRef.value
+  if (!t || !loopActive.value) return
+  const s = stride(t)
+  if (!s) return
+  const delta = Math.round(t.scrollLeft / s) - home.value
+  if (!delta) return
+  logicalActive.value = mod(logicalActive.value + delta, count.value)
+  applyOrders()
+  t.scrollLeft = home.value * s
+  scrollIndex.value = home.value
+}
+
+let settleTimer: ReturnType<typeof setTimeout> | undefined
+const scheduleRecenter = () => {
+  if (!loopActive.value) return
+  clearTimeout(settleTimer)
+  settleTimer = setTimeout(recenter, 130)
+}
 
 let raf = 0
 const onScroll = () => {
@@ -76,12 +147,11 @@ const onScroll = () => {
     const t = trackRef.value
     if (!t) return
     const s = stride(t)
-    if (s > 0) active.value = Math.round(t.scrollLeft / s)
+    if (s > 0) scrollIndex.value = Math.round(t.scrollLeft / s)
+    scheduleRecenter()
   })
 }
 
-// Autoplay (paused on hover / focus; off under reduced-motion or when all slides
-// already fit).
 let timer: ReturnType<typeof setInterval> | undefined
 const canAutoplay = () =>
   props.autoplay > 0 && !reduced && count.value > props.slidesPerView
@@ -89,7 +159,8 @@ const startAutoplay = () => {
   stopAutoplay()
   if (!canAutoplay()) return
   timer = setInterval(() => {
-    goTo(active.value >= maxIndex.value ? 0 : active.value + 1)
+    if (loopActive.value) next()
+    else goTo(scrollIndex.value >= maxIndex.value ? 0 : scrollIndex.value + 1)
   }, props.autoplay)
 }
 const stopAutoplay = () => {
@@ -97,23 +168,49 @@ const stopAutoplay = () => {
   timer = undefined
 }
 
-let observer: MutationObserver | null = null
-const updateCount = () => {
-  count.value = trackRef.value?.children.length ?? 0
+// (Re)build the ring and park at home. Called on mount and whenever slides change.
+const relayout = () => {
+  const t = trackRef.value
+  count.value = t?.children.length ?? 0
+  if (count.value > 0) logicalActive.value = mod(logicalActive.value, count.value)
+  applyOrders()
+  if (t && loopActive.value) {
+    const s = stride(t)
+    if (s) {
+      t.scrollLeft = home.value * s
+      scrollIndex.value = home.value
+    }
+  }
 }
 
+const onResize = () => {
+  const t = trackRef.value
+  if (t && loopActive.value) {
+    const s = stride(t)
+    if (s) t.scrollLeft = home.value * s
+  }
+}
+
+let observer: MutationObserver | null = null
 onMounted(() => {
   reduced =
     typeof matchMedia !== 'undefined' &&
     matchMedia('(prefers-reduced-motion: reduce)').matches
-  updateCount()
-  if (trackRef.value && typeof MutationObserver !== 'undefined') {
-    observer = new MutationObserver(() => {
-      updateCount()
-      startAutoplay()
-    })
-    observer.observe(trackRef.value, { childList: true })
+  relayout()
+  const t = trackRef.value
+  if (t) {
+    // Re-home the instant a scroll settles (snappier than the debounce); the
+    // debounce in scheduleRecenter is the fallback for browsers without scrollend.
+    t.addEventListener('scrollend', recenter)
+    if (typeof MutationObserver !== 'undefined') {
+      observer = new MutationObserver(() => {
+        relayout()
+        startAutoplay()
+      })
+      observer.observe(t, { childList: true })
+    }
   }
+  window.addEventListener('resize', onResize)
   startAutoplay()
 })
 
@@ -121,6 +218,9 @@ onBeforeUnmount(() => {
   stopAutoplay()
   observer?.disconnect()
   if (raf) cancelAnimationFrame(raf)
+  clearTimeout(settleTimer)
+  trackRef.value?.removeEventListener('scrollend', recenter)
+  window.removeEventListener('resize', onResize)
 })
 </script>
 
@@ -149,7 +249,7 @@ onBeforeUnmount(() => {
       <button
         type="button"
         aria-label="上一张"
-        :disabled="active <= 0"
+        :disabled="!loopActive && activeDot <= 0"
         class="border-kun bg-background/80 text-foreground absolute top-1/2 left-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="prev"
       >
@@ -158,7 +258,7 @@ onBeforeUnmount(() => {
       <button
         type="button"
         aria-label="下一张"
-        :disabled="active >= maxIndex"
+        :disabled="!loopActive && activeDot >= maxIndex"
         class="border-kun bg-background/80 text-foreground absolute top-1/2 right-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="next"
       >
@@ -166,7 +266,7 @@ onBeforeUnmount(() => {
       </button>
     </template>
 
-    <!-- Dot indicators (one per reachable position) -->
+    <!-- Dot indicators -->
     <div
       v-if="dotsVisible"
       class="mt-3 flex items-center justify-center gap-2"
@@ -178,16 +278,16 @@ onBeforeUnmount(() => {
         :key="i"
         type="button"
         :aria-label="`跳到第 ${i} 张`"
-        :aria-current="active === i - 1 ? 'true' : undefined"
+        :aria-current="activeDot === i - 1 ? 'true' : undefined"
         :class="
           cn(
             'h-2 rounded-full transition-all',
-            active === i - 1
+            activeDot === i - 1
               ? 'bg-primary w-5'
               : 'bg-default-300 hover:bg-default-400 w-2'
           )
         "
-        @click="goTo(i - 1)"
+        @click="goToDot(i - 1)"
       />
     </div>
   </div>

@@ -979,6 +979,12 @@ export interface KunCarouselProps {
   showIndicators?: boolean
   /** Autoplay interval in ms (0 = off). Pauses on hover/focus, off under reduced-motion. */
   autoplay?: number
+  /**
+   * Seamless infinite loop via slide repositioning (CSS `order`), no cloned DOM.
+   * Autoplay glides past the last slide into the first instead of snapping back.
+   * Default `true`; auto-disabled when there are too few slides to loop cleanly.
+   */
+  loop?: boolean
   ariaLabel?: string
   className?: string
 }
