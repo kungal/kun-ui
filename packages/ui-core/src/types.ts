@@ -7,7 +7,6 @@ export type KunUIVariant =
   | 'light'
   | 'flat'
   | 'shadow'
-  | 'ghost'
 
 export type KunUIColor =
   | 'default'

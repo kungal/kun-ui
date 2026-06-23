@@ -6,8 +6,8 @@ import type { KunUIVariant, KunUIColor } from './types'
 //
 // All keys MUST be static string literals so the Tailwind JIT picks them
 // up — never construct class names with template strings at runtime.
-// Every entry carries an explicit `border` WIDTH so the outline variants
-// (bordered / ghost) actually render — `border-{color}` alone sets only the
+// Every entry carries an explicit `border` WIDTH so the outline variant
+// `bordered` actually renders — `border-{color}` alone sets only the
 // color and paints nothing in Tailwind v4. Filled / light variants use a
 // transparent border of the same width so switching variants never shifts the
 // box by a pixel.
@@ -70,15 +70,6 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
     warning: 'border border-transparent shadow-lg shadow-warning/40 bg-warning text-warning-foreground',
     danger: 'border border-transparent shadow-lg shadow-danger/40 bg-danger text-danger-foreground',
     info: 'border border-transparent shadow-lg shadow-info/40 bg-info text-info-foreground',
-  },
-  ghost: {
-    default: 'border border-default bg-transparent hover:bg-default/10',
-    primary: 'border border-primary bg-transparent text-primary hover:bg-primary/10',
-    secondary: 'border border-secondary bg-transparent text-secondary hover:bg-secondary/10',
-    success: 'border border-success bg-transparent text-success hover:bg-success/10',
-    warning: 'border border-warning bg-transparent text-warning hover:bg-warning/10',
-    danger: 'border border-danger bg-transparent text-danger hover:bg-danger/10',
-    info: 'border border-info bg-transparent text-info hover:bg-info/10',
   },
 }
 

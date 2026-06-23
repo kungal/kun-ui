@@ -30,7 +30,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 // Every variant carries the SAME 1.5px border width — `bordered` colours it,
 // the others keep it transparent — so switching variants never changes the
-// box's outer size (the filled / light / ghost variants would otherwise be 3px
+// box's outer size (the filled / light variants would otherwise be 3px
 // smaller than `bordered`). Mirrors how Button reserves a transparent border.
 const variantClasses = computed(() => {
   switch (props.variant) {
@@ -45,8 +45,6 @@ const variantClasses = computed(() => {
       return 'bg-opacity-20 border-[1.5px] border-transparent'
     case 'flat':
       return 'bg-opacity-20 border-[1.5px] border-transparent shadow-none'
-    case 'ghost':
-      return 'bg-transparent border-[1.5px] border-transparent shadow-none hover:bg-opacity-10'
     default:
       return 'border-[1.5px] border-transparent'
   }
@@ -82,15 +80,6 @@ const colorVariants: Partial<Record<KunUIVariant, Record<KunUIColor, string>>> =
     warning: 'bg-warning/15 text-warning-800 dark:text-warning',
     danger: 'bg-danger/15 text-danger-800 dark:text-danger-500',
     info: 'bg-info/15 text-info-800 dark:text-info-500',
-  },
-  ghost: {
-    default: 'border-default',
-    primary: 'border-primary text-primary',
-    secondary: 'border-secondary text-secondary',
-    success: 'border-success text-success',
-    warning: 'border-warning text-warning',
-    danger: 'border-danger text-danger',
-    info: 'border-info text-info',
   },
 }
 
