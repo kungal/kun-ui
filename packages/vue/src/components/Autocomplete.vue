@@ -133,7 +133,7 @@ const selectOption = (option: KunAutocompleteOption) => {
   dirty.value = false
   emit('select', option)
   close()
-  nextTick(() => inputRef.value?.focus())
+  nextTick(() => inputRef.value?.focus({ preventScroll: true }))
 }
 
 const onInput = (e: Event) => {
@@ -194,7 +194,7 @@ const clear = () => {
   modelValue.value = ''
   dirty.value = true
   emit('search', '')
-  nextTick(() => inputRef.value?.focus())
+  nextTick(() => inputRef.value?.focus({ preventScroll: true }))
   open()
 }
 

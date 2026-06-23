@@ -163,7 +163,9 @@ const toggle = () => {
   if (props.disabled) return
   isOpen.value = !isOpen.value
   if (isOpen.value) {
-    nextTick(() => datePickerRef.value?.focus())
+    // preventScroll: focusing on open must never scroll the page (the portaled
+    // panel + a non-preventScroll focus is the classic "jumps to top" bug).
+    nextTick(() => datePickerRef.value?.focus({ preventScroll: true }))
   }
 }
 
