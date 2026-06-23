@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.2.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunPopover <code>opaque</code> prop — keep a menu solid on a frosted site</p>\n<p>Sites with a background image often lower <code>--kun-surface-opacity</code> to frost every\nsurface — which also makes popover/hover-menu panels translucent and hard to read.\n<code>opaque</code> forces a solid <code>content1</code> background (from its raw channels, ignoring the\nsurface-opacity alpha; still light/dark adaptive). Note this is the only reliable\nway: setting <code>--kun-surface-opacity:1</code> on the panel does NOT work, because the\nthemed <code>--color-content1</code> is resolved at <code>:root</code>, not on the element.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.1.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunPopover restores focus to the trigger on every close</p>\n<p>Hardens focus handling found while stress-testing hover menus: if focus was\ninside the panel when it closed via a path that doesn&#39;t restore it itself —\ne.g. a hover <code>group</code> sibling stealing the open menu — focus is now pulled back to\nthe trigger instead of being orphaned on the detached panel node. Covers all\nclose paths (group steal, click-outside, programmatic).</p>\n</li>\n</ul>\n"
