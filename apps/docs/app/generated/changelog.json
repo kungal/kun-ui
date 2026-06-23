@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.3.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): overlays avoid viewport collisions by default + cap size on small screens</p>\n<p>Aligns the floating overlays with Floating UI / Radix defaults so they never\noverflow the screen at an edge or on a short viewport:</p>\n<ul>\n<li><strong>KunPopover</strong> now flips, shifts AND caps its size by default (<code>autoPosition</code>\ndefaults to <strong><code>true</code></strong> — it was <code>false</code>, so a popover near an edge used to\noverflow). Set <code>auto-position=&quot;false&quot;</code> to honour <code>position</code> verbatim. (Panels\nwith <code>show-arrow</code> skip the size-cap so the caret isn&#39;t clipped.)</li>\n<li><strong>KunDropdown</strong> and <strong>KunDatePicker</strong> now cap their height to the available\nspace and scroll, instead of overflowing off-screen on a short viewport.</li>\n<li>New <code>maxSize</code> option on the internal <code>useKunFloating</code> (size() middleware:\nmax-height/width + scroll) — one implementation reused across overlays. Select /\nAutocomplete already did this.</li>\n</ul>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.2.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunPopover <code>opaque</code> prop — keep a menu solid on a frosted site</p>\n<p>Sites with a background image often lower <code>--kun-surface-opacity</code> to frost every\nsurface — which also makes popover/hover-menu panels translucent and hard to read.\n<code>opaque</code> forces a solid <code>content1</code> background (from its raw channels, ignoring the\nsurface-opacity alpha; still light/dark adaptive). Note this is the only reliable\nway: setting <code>--kun-surface-opacity:1</code> on the panel does NOT work, because the\nthemed <code>--color-content1</code> is resolved at <code>:root</code>, not on the element.</p>\n</li>\n</ul>\n"
