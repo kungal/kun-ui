@@ -33,7 +33,7 @@ const OUT = join(dirname(fileURLToPath(import.meta.url)), '../src/palette.genera
 // solidL values mirror HeroUI's own measured OKLCH lightness per hue.
 const HUES = {
   primary: { h: 257.9, c: 0.2, name: 'Blue', solidL: 0.57 },
-  secondary: { h: 341.5, c: 0.26, name: 'Magenta', solidL: 0.74 },
+  secondary: { h: 341.5, c: 0.26, name: 'Magenta', solidL: 0.8 },
   success: { h: 150.9, c: 0.18, name: 'Green', solidL: 0.72 },
   warning: { h: 72.2, c: 0.17, name: 'Amber', solidL: 0.8 },
   danger: { h: 11.1, c: 0.23, name: 'Red', solidL: 0.58 },
