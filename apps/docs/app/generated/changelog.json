@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.0.0",
+    "type": "major",
+    "html": "<ul>\n<li><p>Remove the <code>ghost</code> variant.</p>\n<p><code>ghost</code> was visually indistinguishable from <code>bordered</code>: at rest both are just\n<code>border + bg-transparent + colored text</code>. <code>ghost</code> only added a faint <code>hover</code> fill,\nso the two looked identical until hovered. It has been dropped from <code>KunUIVariant</code>,\nwhich affects every variant consumer — <code>KunButton</code>, <code>KunChip</code>, <code>KunDropdown</code> and\n<code>KunInfo</code>.</p>\n<p><strong>Migration:</strong> replace <code>variant=&quot;ghost&quot;</code> with <code>variant=&quot;bordered&quot;</code> (the outline\nlook it overlapped). For a softer fill instead, <code>variant=&quot;flat&quot;</code> or <code>variant=&quot;light&quot;</code>.</p>\n<p>(This mirrors the earlier removal of the <code>faded</code> variant for the same reason; the\nremaining set — solid / bordered / light / flat / shadow — has no visual overlap.)</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "1.14.2",
     "type": "patch",
     "html": ""
