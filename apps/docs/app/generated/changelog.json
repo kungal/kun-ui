@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.0.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunCarousel runaway auto-advance / &quot;wild flicker&quot; on Chromium</p>\n<p>The seamless loop is a scroll-jacked container — it programmatically reorders\nslides (CSS <code>order</code>) and resets <code>scrollLeft</code> to re-home. Chromium&#39;s default\n<strong>scroll anchoring</strong> reacts to that reorder/reflow by nudging <code>scrollLeft</code> to keep\nan anchor element in view; the re-home logic then misreads the nudge as &quot;the user\nmoved to the next slide&quot;, advances, reorders again, and loops — so the carousel\nraces through slides far faster than the autoplay interval (looks like everything\nflickering/stacking; reported on Chrome + Edge, desktop). The track now sets\n<code>overflow-anchor: none</code>, handing scroll control entirely to the component. No API\nor behaviour change otherwise.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.0.0",
     "type": "major",
     "html": "<ul>\n<li><p>Remove the <code>ghost</code> variant.</p>\n<p><code>ghost</code> was visually indistinguishable from <code>bordered</code>: at rest both are just\n<code>border + bg-transparent + colored text</code>. <code>ghost</code> only added a faint <code>hover</code> fill,\nso the two looked identical until hovered. It has been dropped from <code>KunUIVariant</code>,\nwhich affects every variant consumer — <code>KunButton</code>, <code>KunChip</code>, <code>KunDropdown</code> and\n<code>KunInfo</code>.</p>\n<p><strong>Migration:</strong> replace <code>variant=&quot;ghost&quot;</code> with <code>variant=&quot;bordered&quot;</code> (the outline\nlook it overlapped). For a softer fill instead, <code>variant=&quot;flat&quot;</code> or <code>variant=&quot;light&quot;</code>.</p>\n<p>(This mirrors the earlier removal of the <code>faded</code> variant for the same reason; the\nremaining set — solid / bordered / light / flat / shadow — has no visual overlap.)</p>\n</li>\n</ul>\n"
