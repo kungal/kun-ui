@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useEventListener, onClickOutside } from '@vueuse/core'
 import { type Placement } from '@floating-ui/vue'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
@@ -85,6 +85,20 @@ const { triggerHandlers, panelHandlers } = useKunPointerMenu(popoverRef, {
   openDelay: props.openDelay,
   closeDelay: props.closeDelay,
   group: props.group,
+})
+
+// Focus-restore backstop: whenever we close, if focus is still inside the panel
+// (e.g. a hover-group sibling stole the menu via a path that doesn't restore
+// focus), pull it back to the trigger so it never lands on a detached node.
+watch(isOpen, (open) => {
+  if (open) return
+  const panel = popoverRef.value
+  if (!panel || !panel.contains(document.activeElement)) return
+  triggerRef.value
+    ?.querySelector<HTMLElement>(
+      'button,a[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])'
+    )
+    ?.focus({ preventScroll: true })
 })
 
 onClickOutside(triggerRef, (event) => {
