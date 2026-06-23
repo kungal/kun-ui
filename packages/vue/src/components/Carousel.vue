@@ -235,9 +235,16 @@ onBeforeUnmount(() => {
     @focusin="stopAutoplay"
     @focusout="startAutoplay"
   >
+    <!-- overflow-anchor:none — this is a scroll-JACKED container: the seamless
+         loop programmatically reorders slides (`order`) and resets scrollLeft. On
+         Chromium, the default scroll-anchoring would re-adjust scrollLeft to keep
+         an "anchor" element in view when the reorder/reflow happens, which the
+         re-home logic then misreads as a slide change → it advances → reorders
+         again → runaway auto-advance (seen as wild flicker, Chrome/Edge only).
+         Disabling anchoring hands scroll control entirely to us. -->
     <ul
       ref="trackRef"
-      class="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto"
+      class="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto [overflow-anchor:none]"
       :style="{ gap }"
       @scroll.passive="onScroll"
     >
