@@ -1,78 +1,16 @@
 import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
+import { KUN_COMPONENT_NAMES } from '@kungal/ui-vue'
 
 // The components live in the framework-agnostic-friendly @kungal/ui-vue
 // package (already compiled). Rather than re-authoring SFCs in this layer,
 // register each named export as a Nuxt auto-import so downstream templates
 // can use `<KunButton>` etc. with no import — and Nuxt generates the
 // component types, so the tags stay type-checked in consumer templates.
-const KUN_COMPONENTS = [
-  'KunAccordion',
-  'KunAccordionItem',
-  'KunAlertProvider',
-  'KunAutocomplete',
-  'KunAvatar',
-  'KunAvatarGroup',
-  'KunBadge',
-  'KunBrand',
-  'KunButton',
-  'KunCard',
-  'KunCarousel',
-  'KunCarouselItem',
-  'KunCheckBox',
-  'KunChip',
-  'KunContent',
-  'KunContextMenu',
-  'KunCopy',
-  'KunDatePicker',
-  'KunDivider',
-  'KunDrawer',
-  'KunDropdown',
-  'KunFadeCard',
-  'KunFileInput',
-  'KunHeader',
-  'KunIcon',
-  'KunImage',
-  'KunImageNative',
-  'KunInfo',
-  'KunInput',
-  'KunLightbox',
-  'KunLightboxGallery',
-  'KunLightboxGalleryItem',
-  'KunLink',
-  'KunLoading',
-  'KunLoli',
-  'KunLoliProvider',
-  'KunMarkdown',
-  'KunMessageProvider',
-  'KunModal',
-  'KunNull',
-  'KunNumberInput',
-  'KunPagination',
-  'KunPinInput',
-  'KunPopover',
-  'KunProgress',
-  'KunRadioGroup',
-  'KunRating',
-  'KunReaction',
-  'KunRipple',
-  'KunScrollShadow',
-  'KunSelect',
-  'KunSkeleton',
-  'KunSlider',
-  'KunSteps',
-  'KunSwitch',
-  'KunTab',
-  'KunTabPanel',
-  'KunTabPanels',
-  'KunTagInput',
-  'KunText',
-  'KunTextarea',
-  'KunTimeline',
-  'KunTimelineItem',
-  'KunTooltip',
-  'KunUpload',
-  'KunUserChip',
-]
+//
+// The list is NOT duplicated here: it's the `KUN_COMPONENT_NAMES` single source
+// from @kungal/ui-vue (the same one the library types its global registry
+// against), so a new component is auto-registered for Nuxt with zero changes
+// in this layer — and the two lists can never drift out of sync.
 
 // Composables auto-imported for DX parity with the original Nuxt-native lib
 // (so `useKunMessage(...)` etc. work with no import in any component).
@@ -102,7 +40,7 @@ export default defineNuxtConfig({
     defineNuxtModule({
       meta: { name: 'kun-ui-components' },
       setup() {
-        for (const name of KUN_COMPONENTS) {
+        for (const name of KUN_COMPONENT_NAMES) {
           addComponent({ name, export: name, filePath: '@kungal/ui-vue' })
         }
         for (const name of KUN_COMPOSABLES) {

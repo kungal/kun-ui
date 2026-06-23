@@ -11,28 +11,17 @@ import { createChecker } from 'vue-component-meta'
 import { writeFileSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { KUN_COMPONENT_NAMES } from '@kungal/ui-vue'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..', '..', '..')
 const vuePkg = join(root, 'packages', 'vue')
 const tsconfig = join(vuePkg, 'tsconfig.json')
 
-// The 57 public components. File name = component name without the `Kun` prefix.
-const names = [
-  'KunAccordion', 'KunAccordionItem',
-  'KunAlertProvider', 'KunAutocomplete', 'KunAvatar', 'KunAvatarGroup', 'KunBadge', 'KunBrand',
-  'KunButton', 'KunCard', 'KunCarousel', 'KunCarouselItem', 'KunCheckBox', 'KunChip', 'KunContent',
-  'KunContextMenu', 'KunCopy', 'KunDatePicker', 'KunDivider', 'KunDrawer',
-  'KunDropdown', 'KunFadeCard', 'KunFileInput', 'KunHeader',
-  'KunIcon', 'KunImage', 'KunImageNative', 'KunInfo', 'KunInput',
-  'KunLightbox', 'KunLightboxGallery', 'KunLightboxGalleryItem', 'KunLink',
-  'KunLoading', 'KunLoli', 'KunLoliProvider', 'KunMarkdown', 'KunMessageProvider',
-  'KunModal', 'KunNull', 'KunNumberInput', 'KunPagination', 'KunPinInput', 'KunPopover', 'KunProgress',
-  'KunRadioGroup', 'KunRating', 'KunReaction', 'KunRipple', 'KunScrollShadow', 'KunSelect',
-  'KunSkeleton', 'KunSlider', 'KunSteps', 'KunSwitch', 'KunTab', 'KunTabPanel', 'KunTabPanels',
-  'KunTagInput', 'KunText', 'KunTextarea', 'KunTimeline', 'KunTimelineItem',
-  'KunTooltip', 'KunUpload', 'KunUserChip',
-]
+// Public components — derived from the SAME single source the library + Nuxt
+// layer use (KUN_COMPONENT_NAMES), so the docs can never miss a component.
+// File name = component name without the `Kun` prefix.
+const names = KUN_COMPONENT_NAMES
 
 const checker = createChecker(tsconfig, {
   forceUseTs: true,

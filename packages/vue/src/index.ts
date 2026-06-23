@@ -1,4 +1,5 @@
-import type { App, Plugin } from 'vue'
+import type { App, Plugin, Component } from 'vue'
+import { KUN_COMPONENT_NAMES, type KunComponentName } from './componentNames'
 import KunAccordion from './components/Accordion.vue'
 import KunAccordionItem from './components/AccordionItem.vue'
 import KunAlertProvider from './components/AlertProvider.vue'
@@ -274,7 +275,10 @@ export type {
 // User data model (lives in @kungal/ui-core; re-exported here for convenience).
 export type { KunUser } from '@kungal/ui-core'
 
-const components = {
+// Typed as `Record<KunComponentName, …>` so this registry stays EXACTLY in sync
+// with the single source (componentNames.ts): a missing or extra entry is a
+// vue-tsc error, not a silent runtime "Failed to resolve component" downstream.
+const components: Record<KunComponentName, Component> = {
   KunAccordion,
   KunAccordionItem,
   KunAlertProvider,
@@ -353,5 +357,10 @@ export const KunUI: Plugin = {
     }
   },
 }
+
+// The component-name single source (consumed by the Nuxt layer + docs meta), and
+// the `unplugin-vue-components` resolver for on-demand auto-import in Vite apps.
+export { KUN_COMPONENT_NAMES, type KunComponentName } from './componentNames'
+export { KunUIResolver, type KunUIResolverOptions } from './resolver'
 
 export default KunUI
