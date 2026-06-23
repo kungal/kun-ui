@@ -18,6 +18,7 @@ const menus = [
       group="docs-nav"
       position="bottom-start"
       inner-class="p-1"
+      opaque
     >
       <template #trigger>
         <button

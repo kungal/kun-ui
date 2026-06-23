@@ -174,6 +174,14 @@ export interface KunPopoverProps {
   // Render a caret pointing at the trigger.
   showArrow?: boolean
   /**
+   * Force a fully OPAQUE panel, ignoring a globally-lowered `--kun-surface-opacity`
+   * (which sites with a background image use to frost surfaces). Menus/popovers over
+   * a busy background usually want this for legibility. Default `false` (follows the
+   * global surface opacity). Note: setting `--kun-surface-opacity:1` on the panel
+   * yourself does NOT work — Tailwind resolves the themed colour at `:root`.
+   */
+  opaque?: boolean
+  /**
    * How the popover opens. `'click'` (default) toggles + moves focus into the
    * panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you
    * can reach the panel without it closing — for navigation menus. Hover never

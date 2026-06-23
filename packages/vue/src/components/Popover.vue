@@ -22,6 +22,7 @@ const props = withDefaults(defineProps<KunPopoverProps>(), {
   autoPosition: false,
   rounded: undefined,
   showArrow: false,
+  opaque: false,
   trigger: 'click',
   openDelay: 100,
   closeDelay: 120,
@@ -151,7 +152,10 @@ defineExpose({
           :aria-label="ariaLabel || 'popover'"
           :class="
             cn(
-              'bg-content1 z-kun-popover shadow-kun-md focus:outline-none',
+              // opaque: solid content1 from its raw channels (no surface-opacity
+              // alpha), so a globally-frosted site still gets a readable menu.
+              opaque ? 'bg-[oklch(var(--content1))]' : 'bg-content1',
+              'z-kun-popover shadow-kun-md focus:outline-none',
               roundedClass,
               innerClass
             )

@@ -34,6 +34,8 @@ import meta from '~/generated/component-meta.json'
       <code>trigger="hover"</code> + 共享 <code>group</code> = 导航悬停菜单。横向移到兄弟项**瞬间切换**;
       下移到面板靠**坐标安全三角**不会中途关闭(且面板是 teleport 的也照样work);悬停**不抢焦点**;
       点击 / 键盘 / Esc 仍可用,**触屏自动退回点击**。动作菜单(<code>KunDropdown</code>)仍只用点击。
+      若站点用 <code>--kun-surface-opacity</code> 全局磨砂了表面,给菜单加 <code>opaque</code> 保持实心可读
+      (直接在面板上写 <code>--kun-surface-opacity:1</code> 无效——主题色在 <code>:root</code> 解析)。
     </p>
     <Demo title="HoverMenu.vue" :source="HoverMenuSrc"><HoverMenu /></Demo>
 

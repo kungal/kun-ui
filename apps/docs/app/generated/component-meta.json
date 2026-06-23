@@ -2097,6 +2097,13 @@
         "default": "\"\""
       },
       {
+        "name": "opaque",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Force a fully OPAQUE panel, ignoring a globally-lowered `--kun-surface-opacity` (which sites with a background image use to frost surfaces). Menus/popovers over a busy background usually want this for legibility. Default `false` (follows the global surface opacity). Note: setting `--kun-surface-opacity:1` on the panel yourself does NOT work — Tailwind resolves the themed colour at `:root`."
+      },
+      {
         "name": "openDelay",
         "type": "number",
         "required": false,
