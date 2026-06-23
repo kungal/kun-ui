@@ -480,7 +480,7 @@
         "name": "bordered",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "true"
       },
       {
         "name": "className",
@@ -572,6 +572,13 @@
         "required": false,
         "default": "\"1rem\"",
         "description": "Gap between slides (any CSS length)."
+      },
+      {
+        "name": "loop",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Seamless infinite loop via slide repositioning (CSS `order`), no cloned DOM. Autoplay glides past the last slide into the first instead of snapping back. Default `true`; auto-disabled when there are too few slides to loop cleanly."
       },
       {
         "name": "showArrows",
@@ -2261,6 +2268,62 @@
       },
       {
         "name": "readonly",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "size",
+        "type": "\"md\" | \"sm\" | \"lg\"",
+        "required": false,
+        "default": "\"md\""
+      }
+    ]
+  },
+  "KunReaction": {
+    "props": [
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"danger\"",
+        "description": "Active (liked) colour. Default `danger` — a red heart."
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "disableAnimation",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Disable the pop / burst / count-roll animations (also off under reduced-motion)."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"lucide:heart\"",
+        "description": "Icon name (default a heart); filled + coloured when active."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"点赞\"",
+        "description": "Accessible label base; the count is appended for the full name. Default `点赞`."
+      },
+      {
+        "name": "modelValue",
         "type": "boolean",
         "required": false,
         "default": "false"

@@ -28,7 +28,7 @@ const names = [
   'KunLightbox', 'KunLightboxGallery', 'KunLightboxGalleryItem', 'KunLink',
   'KunLoading', 'KunLoli', 'KunLoliProvider', 'KunMarkdown', 'KunMessageProvider',
   'KunModal', 'KunNull', 'KunNumberInput', 'KunPagination', 'KunPinInput', 'KunPopover', 'KunProgress',
-  'KunRadioGroup', 'KunRating', 'KunRipple', 'KunScrollShadow', 'KunSelect',
+  'KunRadioGroup', 'KunRating', 'KunReaction', 'KunRipple', 'KunScrollShadow', 'KunSelect',
   'KunSkeleton', 'KunSlider', 'KunSteps', 'KunSwitch', 'KunTab', 'KunTabPanel', 'KunTabPanels',
   'KunTagInput', 'KunText', 'KunTextarea', 'KunTimeline', 'KunTimelineItem',
   'KunTooltip', 'KunUpload', 'KunUserChip',

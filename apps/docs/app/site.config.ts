@@ -93,6 +93,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/progress': { title: 'Progress', cn: '进度条', description: '进度条:实心 / 条纹 / 渐变 / 环形,支持不确定态与标签。' },
   '/components/radiogroup': { title: 'RadioGroup', cn: '单选组', description: '单选组(v-model + options),支持经典 / 卡片变体。' },
   '/components/rating': { title: 'Rating', cn: '评分', description: '星级评分输入(v-model number),支持只读与尺寸。' },
+  '/components/reaction': { title: 'Reaction', cn: '点赞', description: '点赞 / 表态(v-model + 计数),紧凑胶囊,带填充变色、弹跳、爆裂光环与数字滚动动画。' },
   '/components/ripple': { title: 'Ripple', cn: '水波纹', description: '水波纹渲染组件,由 useRipple 组合式驱动。' },
   '/components/scrollshadow': { title: 'ScrollShadow', cn: '滚动阴影', description: '带边缘渐隐阴影的滚动容器,仅在有更多内容时出现。' },
   '/components/select': { title: 'Select', cn: '选择器', description: '下拉选择框(v-model),由 options 数组驱动。' },

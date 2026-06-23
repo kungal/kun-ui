@@ -669,6 +669,20 @@ export interface KunRatingProps {
   ariaLabel?: string
 }
 
+// ── Reaction (like + count) ────────────────────────────────────────────
+export interface KunReactionProps {
+  /** Icon name (default a heart); filled + coloured when active. */
+  icon?: string
+  /** Active (liked) colour. Default `danger` — a red heart. */
+  color?: KunUIColor
+  size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
+  /** Disable the pop / burst / count-roll animations (also off under reduced-motion). */
+  disableAnimation?: boolean
+  /** Accessible label base; the count is appended for the full name. Default `点赞`. */
+  label?: string
+}
+
 // ── Null (empty state) ─────────────────────────────────────────────────
 export interface KunNullProps {
   description?: string
