@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.1.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunPopover restores focus to the trigger on every close</p>\n<p>Hardens focus handling found while stress-testing hover menus: if focus was\ninside the panel when it closed via a path that doesn&#39;t restore it itself —\ne.g. a hover <code>group</code> sibling stealing the open menu — focus is now pulled back to\nthe trigger instead of being orphaned on the detached panel node. Covers all\nclose paths (group steal, click-outside, programmatic).</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.1.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunPopover <code>trigger=&quot;hover&quot;</code> + <code>useKunPointerMenu</code> — navigation hover menus done right</p>\n<p>Adds first-class hover menus without the usual traps, via a reusable composable\n<code>useKunPointerMenu</code> (also exported):</p>\n<ul>\n<li><strong>Coordinate safe-triangle</strong> — on leaving the trigger you can travel to the\npanel without it closing. Computed from <code>clientX/Y</code> + <code>getBoundingClientRect()</code>,\nso it works even though panels are <code>Teleport</code>ed to <code>&lt;body&gt;</code> (DOM-containment\nsafe-polygons break across portals; coordinates don&#39;t).</li>\n<li><strong><code>openDelay</code> / <code>closeDelay</code></strong> and a shared <strong><code>group</code></strong> so a row of menus\nswitches instantly between siblings and keeps only one open (menu-bar feel).</li>\n<li><strong>No focus steal on hover</strong> (unlike the click open), and <strong>touch falls back to\nclick</strong> (<code>pointerType</code> gate) so the first tap doesn&#39;t follow a link — the\nclassic a11y trap. Click / keyboard / Esc / click-outside all still work.</li>\n</ul>\n<p><code>KunPopover</code> gains <code>trigger</code> (&#39;click&#39; default | &#39;hover&#39;), <code>openDelay</code>,\n<code>closeDelay</code>, <code>group</code>. <code>KunDropdown</code> (role=menu) stays click-only by design.</p>\n</li>\n</ul>\n"
