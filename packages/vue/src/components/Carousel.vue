@@ -46,10 +46,38 @@ const logicalActive = ref(0)
 
 const mod = (n: number, m: number) => (m <= 0 ? 0 : ((n % m) + m) % m)
 
+// performance.now() in the browser; only the client ever runs the scroll code.
+const now = () => (typeof performance !== 'undefined' ? performance.now() : 0)
+
+// Re-entrancy guard — the structural fix for the "runaway auto-advance" flicker.
+// The seamless loop works by programmatically writing scrollLeft (recenter /
+// relayout / resize). Those writes emit scroll + scrollend events; without this
+// guard the handler reads them back as if the USER scrolled and re-homes again →
+// the browser nudges scrollLeft after the reflow → re-home again → a per-frame
+// feedback loop. overflow-anchor:none closes ONE drift source (Chromium scroll-
+// anchoring); snap-mandatory re-alignment after the `order` reflow is another.
+// Rather than chase each one, we suppress scroll handling for a short window after
+// every self-induced write, so a programmatic write can NEVER trigger a re-home.
+let scrollLockUntil = 0
+const lockScroll = () => {
+  scrollLockUntil = now() + 250
+}
+const scrollLocked = () => now() < scrollLockUntil
+
+// Circuit breaker — last-resort guarantee. A healthy carousel re-homes at most a
+// few times per second (one per autoplay tick or user swipe). If reorders ever
+// spike (some unreproduced quirk reopening the loop past the guard above), trip
+// out of loop mode into a plain bounded slider rather than let a user watch it
+// flicker. With the lock in place this should never fire — it's pure insurance.
+let reorderStamps: number[] = []
+const loopBroken = ref(false)
+
 const maxIndex = computed(() => Math.max(0, count.value - props.slidesPerView))
 // Loop needs ≥2 reachable scroll positions so the home slide has a neighbour on
 // each side to glide into; otherwise fall back to a plain (bounded) slider.
-const loopActive = computed(() => props.loop && maxIndex.value >= 2)
+const loopActive = computed(
+  () => props.loop && maxIndex.value >= 2 && !loopBroken.value
+)
 // The scroll index the active slide always returns to — centred for maximum
 // runway before a fast fling can reach a physical edge.
 const home = computed(() =>
@@ -121,20 +149,40 @@ const goToDot = (dot: number) => {
 // makes the loop seamless.
 const recenter = () => {
   const t = trackRef.value
-  if (!t || !loopActive.value) return
+  // scrollLocked(): this scroll settled from OUR OWN write, not the user — never
+  // re-home off a self-induced scroll (that's the feedback loop).
+  if (!t || !loopActive.value || scrollLocked()) return
   const s = stride(t)
   if (!s) return
   const delta = Math.round(t.scrollLeft / s) - home.value
   if (!delta) return
+  // Circuit breaker: a burst of reorders means the loop reopened despite the
+  // guard. Drop to a plain (non-loop) slider so it physically cannot flicker.
+  reorderStamps = reorderStamps.filter((ts) => now() - ts < 1000)
+  reorderStamps.push(now())
+  if (reorderStamps.length > 12) {
+    loopBroken.value = true
+    stopAutoplay()
+    applyOrders() // loopActive is false now ⇒ clears the ring back to natural order
+    if (typeof console !== 'undefined') {
+      console.warn(
+        '[KunCarousel] runaway re-homing detected (browser scroll feedback); ' +
+          'falling back to a non-looping slider.'
+      )
+    }
+    return
+  }
   logicalActive.value = mod(logicalActive.value + delta, count.value)
   applyOrders()
+  // Lock BEFORE the write so the scroll/scrollend it emits is ignored.
+  lockScroll()
   t.scrollLeft = home.value * s
   scrollIndex.value = home.value
 }
 
 let settleTimer: ReturnType<typeof setTimeout> | undefined
 const scheduleRecenter = () => {
-  if (!loopActive.value) return
+  if (!loopActive.value || scrollLocked()) return
   clearTimeout(settleTimer)
   settleTimer = setTimeout(recenter, 130)
 }
@@ -144,6 +192,8 @@ const onScroll = () => {
   if (raf) return
   raf = requestAnimationFrame(() => {
     raf = 0
+    // Ignore the scroll our own programmatic write just emitted.
+    if (scrollLocked()) return
     const t = trackRef.value
     if (!t) return
     const s = stride(t)
@@ -159,8 +209,18 @@ const startAutoplay = () => {
   stopAutoplay()
   if (!canAutoplay()) return
   timer = setInterval(() => {
-    if (loopActive.value) next()
-    else goTo(scrollIndex.value >= maxIndex.value ? 0 : scrollIndex.value + 1)
+    if (loopActive.value) {
+      // Self-heal: a stray scroll drift could have parked us off-home — worst case
+      // at a physical edge, where next() would clamp and the carousel would sit
+      // still. Re-home first (keeps the visible slide, restores runway) so autoplay
+      // can always glide on. Idempotent when already home.
+      const t = trackRef.value
+      const s = t ? stride(t) : 0
+      if (t && s && Math.round(t.scrollLeft / s) !== home.value) recenter()
+      next()
+    } else {
+      goTo(scrollIndex.value >= maxIndex.value ? 0 : scrollIndex.value + 1)
+    }
   }, props.autoplay)
 }
 const stopAutoplay = () => {
@@ -177,6 +237,7 @@ const relayout = () => {
   if (t && loopActive.value) {
     const s = stride(t)
     if (s) {
+      lockScroll()
       t.scrollLeft = home.value * s
       scrollIndex.value = home.value
     }
@@ -187,7 +248,10 @@ const onResize = () => {
   const t = trackRef.value
   if (t && loopActive.value) {
     const s = stride(t)
-    if (s) t.scrollLeft = home.value * s
+    if (s) {
+      lockScroll()
+      t.scrollLeft = home.value * s
+    }
   }
 }
 
@@ -235,17 +299,21 @@ onBeforeUnmount(() => {
     @focusin="stopAutoplay"
     @focusout="startAutoplay"
   >
-    <!-- overflow-anchor:none — this is a scroll-JACKED container: the seamless
-         loop programmatically reorders slides (`order`) and resets scrollLeft. On
-         Chromium, the default scroll-anchoring would re-adjust scrollLeft to keep
-         an "anchor" element in view when the reorder/reflow happens, which the
-         re-home logic then misreads as a slide change → it advances → reorders
-         again → runaway auto-advance (seen as wild flicker, Chrome/Edge only).
-         Disabling anchoring hands scroll control entirely to us. -->
+    <!-- overflow-anchor:none is set INLINE (not as a Tailwind class) on purpose:
+         it's a correctness fix, not styling, and a headless consumer's Tailwind
+         may not regenerate an arbitrary utility from our compiled JS — an inline
+         style always applies and can never be purged. Why it matters: this is a
+         scroll-JACKED container — the seamless loop programmatically reorders
+         slides (`order`) and resets scrollLeft. On Chromium the default scroll-
+         anchoring re-adjusts scrollLeft to keep an "anchor" element in view on
+         that reorder/reflow, which the re-home logic would misread as a slide
+         change → runaway auto-advance (wild flicker, Chrome/Edge). Disabling it
+         hands scroll control to us; the re-entrancy lock + circuit breaker in the
+         script are the structural backstops for any other scrollLeft drift. -->
     <ul
       ref="trackRef"
-      class="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto [overflow-anchor:none]"
-      :style="{ gap }"
+      class="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto"
+      :style="{ gap, overflowAnchor: 'none' }"
       @scroll.passive="onScroll"
     >
       <slot />
