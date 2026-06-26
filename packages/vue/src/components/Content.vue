@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { useSpoilerContent } from '../composables/useSpoilerContent'
 import { useContentLightbox } from '../composables/useContentLightbox'
+import { useContentBlurUp } from '../composables/useContentBlurUp'
 import KunLightbox from './Lightbox.vue'
 import type { KunContentProps } from './types'
 
@@ -20,6 +21,7 @@ withDefaults(defineProps<KunContentProps>(), { className: '', compact: false })
 const articleRef = ref<HTMLElement | null>(null)
 
 useSpoilerContent(articleRef)
+useContentBlurUp(articleRef)
 const { isLightboxOpen, images, currentImageIndex } =
   useContentLightbox(articleRef)
 </script>

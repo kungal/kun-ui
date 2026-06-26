@@ -9,6 +9,8 @@ import LongSpoiler from '~/examples/content/LongSpoiler.vue'
 import LongSpoilerSrc from '~/examples/content/LongSpoiler.vue?raw'
 import Lightbox from '~/examples/content/Lightbox.vue'
 import LightboxSrc from '~/examples/content/Lightbox.vue?raw'
+import BlurUp from '~/examples/content/BlurUp.vue'
+import BlurUpSrc from '~/examples/content/BlurUp.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -39,6 +41,15 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">内联图片灯箱</h2>
     <Demo title="Lightbox.vue" :source="LightboxSrc"><Lightbox /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">正文图模糊占位(ThumbHash)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      正文图是后端渲染的原始 <code>&lt;img&gt;</code>(不是组件)。只要标签带
+      <code class="text-primary">width</code>/<code class="text-primary">height</code>(浏览器据此原生预留空间、消除加载抖动)与
+      <code class="text-primary">data-thumbhash</code>,KunContent 就会自动把解码出的模糊占位画到图片背景上,加载完成后清除——
+      零 DOM 改动,与灯箱、剧透共存。
+    </p>
+    <Demo title="BlurUp.vue" :source="BlurUpSrc"><BlurUp /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunContent.props" />

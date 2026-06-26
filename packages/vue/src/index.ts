@@ -158,6 +158,7 @@ export {
 export { useKunCopy } from './composables/useKunCopy'
 export { useSpoilerContent } from './composables/useSpoilerContent'
 export { useContentLightbox } from './composables/useContentLightbox'
+export { useContentBlurUp } from './composables/useContentBlurUp'
 // Refcounted body scroll-lock shared across overlays (Modal/Drawer/Lightbox
 // use it internally); exported so apps can lock the body for their own overlays.
 export { useBodyScrollLock } from './composables/useBodyScrollLock'
