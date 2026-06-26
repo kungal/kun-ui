@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.7.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunContent — ThumbHash blur-up for body images</p>\n<p>Body images in KunContent are raw <code>&lt;img&gt;</code> from v-html (backend-rendered markdown),\nnot components, so they couldn&#39;t get the cover-image blur-up. Now any\n<code>&lt;img data-thumbhash=&quot;…&quot;&gt;</code> in the prose automatically shows a decoded, blurred\nplaceholder until it loads.</p>\n<p>The decoded ThumbHash is painted as the image&#39;s OWN <code>background</code> (visible behind the\nnot-yet-loaded content, cleared once it paints over) — zero DOM restructuring, so it\ncoexists with the existing lightbox and spoiler passes and never disturbs prose\nlayout. The blur shows when the <code>&lt;img&gt;</code> reserves space (width/height attributes),\nwhich the same backend metadata supplies — together they also remove the load-time\nlayout shift (CLS).</p>\n<p>Also exported as <code>useContentBlurUp(containerRef)</code> for apps building their own prose\nrenderer. Client-only; the ~2KB decoder is lazy-imported.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.6.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunImage — ThumbHash blur-up placeholder</p>\n<p>KunImage gains a <code>thumbhash</code> prop: pass the base64 ThumbHash a backend ships\nalongside image metadata, and KunImage shows a decoded, blurred &quot;blur-up&quot;\nplaceholder until the image loads, then cross-fades to it — much closer to the\nfinal frame than a plain skeleton, with no extra network request.</p>\n<ul>\n<li>Decoded on the client (canvas) to a tiny data-URL image, upscaled by <code>bg-cover</code>;\nSSR-safe — falls back to the pulse skeleton until decoded, or if the hash is\ninvalid.</li>\n<li>The ~2KB <code>thumbhash</code> decoder is loaded via a dynamic import, so it only ships for\nimages that actually use the prop — zero cost otherwise.</li>\n</ul>\n</li>\n</ul>\n"
