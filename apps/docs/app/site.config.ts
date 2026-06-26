@@ -95,7 +95,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/rating': { title: 'Rating', cn: '评分', description: '星级评分输入(v-model number),支持只读与尺寸。' },
   '/components/reaction': { title: 'Reaction', cn: '点赞', description: '点赞 / 表态(v-model + 计数),紧凑胶囊,带填充变色、弹跳、爆裂光环与数字滚动动画。' },
   '/components/ripple': { title: 'Ripple', cn: '水波纹', description: '水波纹渲染组件,由 useRipple 组合式驱动。' },
-  '/components/scrollshadow': { title: 'ScrollShadow', cn: '滚动阴影', description: '带边缘渐隐阴影的滚动容器,仅在有更多内容时出现。' },
+  '/components/scrollshadow': { title: 'ScrollShadow', cn: '滚动阴影', description: '带边缘渐隐阴影的滚动容器,仅在有更多内容时出现;横向条可选鼠标滚轮横向滚动、按住拖拽滚动,到两端自动交还页面滚动。' },
   '/components/select': { title: 'Select', cn: '选择器', description: '下拉选择框(v-model),由 options 数组驱动。' },
   '/components/shatter': { title: 'Shatter', cn: '碎裂', description: '把任意内容像玻璃一样打碎成碎片飞散消失:零运行时依赖,Voronoi 碎片几何 + 仅合成器线程(transform/opacity)的动画,稳定 60fps;支持点击/指令/v-model 触发,尊重 reduced-motion。' },
   '/components/skeleton': { title: 'Skeleton', cn: '骨架屏', description: '内容加载占位:text / rect / circle 形状,loaded 切换为真实内容,脉冲动画尊重 reduced-motion。' },

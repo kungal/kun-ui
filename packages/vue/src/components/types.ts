@@ -806,6 +806,22 @@ export interface KunScrollShadowProps {
   contentClass?: string
   // Accessible name for the scrollable region. Default 'scrollable content'.
   ariaLabel?: string
+  /** When `axis='horizontal'`, let a vertical mouse wheel scroll the content
+   *  sideways (mouse users otherwise can't reach off-screen content; trackpads and
+   *  touch already can). `true` releases at either edge so the page scrolls on past
+   *  (no scroll-trap); `'contain'` keeps the wheel on the strip at the edges so the
+   *  page doesn't move — but only while the strip is actually scrollable, so it can
+   *  never freeze the page. Default false. */
+  wheel?: boolean | 'contain'
+  /** Click-and-drag with a mouse/pen to scroll the area, like grabbing a strip.
+   *  A drag past a small threshold suppresses the click so cards inside still work
+   *  on a normal click; touch is left to native scrolling. Default false. */
+  draggable?: boolean
+  /** Scrollbar style. `hide` (default) hides it — the edge shadows are the
+   *  affordance; `thin` shows a slim, theme-coloured scrollbar (a dependency-free
+   *  alternative to an overlay-scrollbar library); `auto` shows the platform
+   *  default. */
+  scrollbar?: 'hide' | 'thin' | 'auto'
 }
 
 // ── Pagination ─────────────────────────────────────────────────────────
