@@ -720,6 +720,61 @@ export interface KunReactionProps {
   label?: string
 }
 
+// ── Shatter (break-apart animation) ────────────────────────────────────
+/** Impact point the shards fly away from. A keyword, or explicit element-local
+ *  pixel coordinates `{ x, y }`. */
+export type KunShatterOrigin = 'center' | 'top' | 'pointer' | { x: number; y: number }
+
+export interface KunShatterProps {
+  /** How the break is triggered. `manual` (default) = drive it via
+   *  `v-model:shattered` or the exposed `shatter()` method; `click` = clicking
+   *  the content shatters it, and the click point becomes the impact origin. */
+  trigger?: 'manual' | 'click'
+  /** Target number of glass shards (Voronoi cells); clamped to 2–160. Default 24.
+   *  Fewer is cheaper to build, but the fly-apart stays compositor-only regardless. */
+  pieces?: number
+  /** Fly-apart duration in ms. Default 1100. */
+  duration?: number
+  /** Where the break originates — shards fly outward from here. `center` (default),
+   *  `top`, `pointer` (last pointer position over the content), or `{ x, y }` px. */
+  origin?: KunShatterOrigin
+  /** How far the shards travel, as a multiplier. Default 1. */
+  spread?: number
+  /** Downward gravity pull on the shards (0 = a pure radial burst). Default 1. */
+  gravity?: number
+  /** Maximum random spin per shard, in degrees. Default 140. */
+  rotation?: number
+  /** Fade shards out as they fly (false = keep full opacity, e.g. flying off-screen).
+   *  Default true. */
+  fade?: boolean
+  /** Animation-level CSS easing. Default `linear` — the natural ballistic motion is
+   *  baked into each shard's sampled keyframes, so override this only to time-warp
+   *  the whole flight. */
+  easing?: string
+  /** Deterministic shard pattern: the same seed reproduces the same break (handy
+   *  for visual tests). Omit for a fresh random shatter each time. */
+  seed?: number
+  /** Animate the re-form when restoring — a reverse "reassemble" where the same
+   *  shards fly back in from where they scattered and settle into place. `false`
+   *  snaps the content back instantly. Default true. */
+  reassemble?: boolean
+  /** Auto re-form this many ms after the break completes (0 = stay shattered).
+   *  Default 0. */
+  autoRestore?: number
+  /** Keep the original's layout space after it shatters (`visibility:hidden`)
+   *  instead of collapsing it (`display:none`). Default false. */
+  keepSpace?: boolean
+  /** Disable shattering entirely — the content stays put. Default false. */
+  disabled?: boolean
+  /** Skip the shard animation and hide instantly. Also forced under
+   *  `prefers-reduced-motion`. Default false. */
+  disableAnimation?: boolean
+  /** z-index of the body-level shard overlay. Default 9999. */
+  zIndex?: number
+  /** Extra classes for the wrapper. */
+  className?: string
+}
+
 // ── Null (empty state) ─────────────────────────────────────────────────
 export interface KunNullProps {
   description?: string

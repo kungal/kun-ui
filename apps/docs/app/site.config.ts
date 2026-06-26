@@ -97,6 +97,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/ripple': { title: 'Ripple', cn: '水波纹', description: '水波纹渲染组件,由 useRipple 组合式驱动。' },
   '/components/scrollshadow': { title: 'ScrollShadow', cn: '滚动阴影', description: '带边缘渐隐阴影的滚动容器,仅在有更多内容时出现。' },
   '/components/select': { title: 'Select', cn: '选择器', description: '下拉选择框(v-model),由 options 数组驱动。' },
+  '/components/shatter': { title: 'Shatter', cn: '碎裂', description: '把任意内容像玻璃一样打碎成碎片飞散消失:零运行时依赖,Voronoi 碎片几何 + 仅合成器线程(transform/opacity)的动画,稳定 60fps;支持点击/指令/v-model 触发,尊重 reduced-motion。' },
   '/components/skeleton': { title: 'Skeleton', cn: '骨架屏', description: '内容加载占位:text / rect / circle 形状,loaded 切换为真实内容,脉冲动画尊重 reduced-motion。' },
   '/components/slider': { title: 'Slider', cn: '滑块', description: '范围滑块(v-model number),支持 min / max / step。' },
   '/components/steps': { title: 'Steps', cn: '步骤条', description: '多步流程(items + current):横向/纵向、完成/进行/待办状态,数据驱动且 SSR 安全。' },

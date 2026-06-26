@@ -49,6 +49,7 @@ import KunRadioGroup from './components/RadioGroup.vue'
 import KunRating from './components/Rating.vue'
 import KunReaction from './components/Reaction.vue'
 import KunSelect from './components/Select.vue'
+import KunShatter from './components/Shatter.vue'
 import KunRipple from './components/Ripple.vue'
 import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSkeleton from './components/Skeleton.vue'
@@ -121,6 +122,7 @@ export {
   KunRipple,
   KunScrollShadow,
   KunSelect,
+  KunShatter,
   KunSkeleton,
   KunSlider,
   KunSteps,
@@ -252,6 +254,8 @@ export type {
   KunCopyProps,
   KunRatingProps,
   KunReactionProps,
+  KunShatterProps,
+  KunShatterOrigin,
   KunNullProps,
   KunBrandProps,
   KunScrollShadowProps,
@@ -334,6 +338,7 @@ const components: Record<KunComponentName, Component> = {
   KunRipple,
   KunScrollShadow,
   KunSelect,
+  KunShatter,
   KunSkeleton,
   KunSlider,
   KunSteps,

@@ -2544,6 +2544,134 @@
       }
     ]
   },
+  "KunShatter": {
+    "props": [
+      {
+        "name": "autoRestore",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "Auto re-form this many ms after the break completes (0 = stay shattered). Default 0."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Extra classes for the wrapper."
+      },
+      {
+        "name": "disableAnimation",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Skip the shard animation and hide instantly. Also forced under `prefers-reduced-motion`. Default false."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Disable shattering entirely — the content stays put. Default false."
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "required": false,
+        "default": "1100",
+        "description": "Fly-apart duration in ms. Default 1100."
+      },
+      {
+        "name": "easing",
+        "type": "string",
+        "required": false,
+        "default": "\"linear\"",
+        "description": "Animation-level CSS easing. Default `linear` — the natural ballistic motion is baked into each shard's sampled keyframes, so override this only to time-warp the whole flight."
+      },
+      {
+        "name": "fade",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Fade shards out as they fly (false = keep full opacity, e.g. flying off-screen). Default true."
+      },
+      {
+        "name": "gravity",
+        "type": "number",
+        "required": false,
+        "default": "1",
+        "description": "Downward gravity pull on the shards (0 = a pure radial burst). Default 1."
+      },
+      {
+        "name": "keepSpace",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Keep the original's layout space after it shatters (`visibility:hidden`) instead of collapsing it (`display:none`). Default false."
+      },
+      {
+        "name": "origin",
+        "type": "KunShatterOrigin",
+        "required": false,
+        "default": "\"center\"",
+        "description": "Where the break originates — shards fly outward from here. `center` (default), `top`, `pointer` (last pointer position over the content), or `{ x, y }` px."
+      },
+      {
+        "name": "pieces",
+        "type": "number",
+        "required": false,
+        "default": "24",
+        "description": "Target number of glass shards (Voronoi cells); clamped to 2–160. Default 24. Fewer is cheaper to build, but the fly-apart stays compositor-only regardless."
+      },
+      {
+        "name": "reassemble",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Animate the re-form when restoring — a reverse \"reassemble\" where the same shards fly back in from where they scattered and settle into place. `false` snaps the content back instantly. Default true."
+      },
+      {
+        "name": "rotation",
+        "type": "number",
+        "required": false,
+        "default": "140",
+        "description": "Maximum random spin per shard, in degrees. Default 140."
+      },
+      {
+        "name": "seed",
+        "type": "number",
+        "required": false,
+        "description": "Deterministic shard pattern: the same seed reproduces the same break (handy for visual tests). Omit for a fresh random shatter each time."
+      },
+      {
+        "name": "shattered",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "spread",
+        "type": "number",
+        "required": false,
+        "default": "1",
+        "description": "How far the shards travel, as a multiplier. Default 1."
+      },
+      {
+        "name": "trigger",
+        "type": "\"click\" | \"manual\"",
+        "required": false,
+        "default": "\"manual\"",
+        "description": "How the break is triggered. `manual` (default) = drive it via `v-model:shattered` or the exposed `shatter()` method; `click` = clicking the content shatters it, and the click point becomes the impact origin."
+      },
+      {
+        "name": "zIndex",
+        "type": "number",
+        "required": false,
+        "default": "9999",
+        "description": "z-index of the body-level shard overlay. Default 9999."
+      }
+    ]
+  },
   "KunSkeleton": {
     "props": [
       {
