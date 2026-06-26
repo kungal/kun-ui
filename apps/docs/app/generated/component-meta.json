@@ -1361,6 +1361,13 @@
         "default": "true"
       },
       {
+        "name": "thumbhash",
+        "type": "string",
+        "required": false,
+        "default": "undefined",
+        "description": "A ThumbHash (base64) → a blurred \"blur-up\" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`."
+      },
+      {
         "name": "width",
         "type": "string | number",
         "required": false,

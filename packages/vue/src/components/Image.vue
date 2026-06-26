@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, type ComponentPublicInstance } from 'vue'
+import { computed, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
 import { useKunUIConfig } from '../config/useKunUIConfig'
@@ -29,6 +29,7 @@ const props = withDefaults(defineProps<KunImageProps>(), {
   width: undefined,
   height: undefined,
   skeleton: true,
+  thumbhash: undefined,
   aspectRatio: undefined,
   objectFit: 'cover',
   imageClassName: undefined,
@@ -122,8 +123,29 @@ const wrapperStyle = computed(() =>
   props.aspectRatio ? { aspectRatio: props.aspectRatio } : undefined
 )
 
-// skeleton off → bare element, no wrapper (pre-skeleton single-element DOM).
-const wrap = computed(() => props.skeleton)
+// ── ThumbHash blur-up placeholder ────────────────────────────────────────────
+// Decode the (base64) ThumbHash to a tiny data-URL image on the CLIENT (it needs a
+// canvas), upscaled by `bg-cover` into a smooth blurred placeholder. The ~2KB
+// decoder is lazy-imported, so it only loads for images that actually use it.
+// Until it decodes (or if the hash is invalid) we fall back to the pulse skeleton.
+const thumbUrl = ref<string | null>(null)
+async function decodeThumb(hash?: string) {
+  thumbUrl.value = null
+  if (!hash || typeof document === 'undefined') return
+  try {
+    const bytes = Uint8Array.from(atob(hash), (c) => c.charCodeAt(0))
+    const { thumbHashToDataURL } = await import('thumbhash')
+    // Ignore a stale decode if the prop changed while we awaited the import.
+    if (props.thumbhash === hash) thumbUrl.value = thumbHashToDataURL(bytes)
+  } catch {
+    thumbUrl.value = null
+  }
+}
+onMounted(() => decodeThumb(props.thumbhash))
+watch(() => props.thumbhash, (h) => decodeThumb(h))
+
+// skeleton off → bare element, no wrapper. A thumbhash also needs the wrapper.
+const wrap = computed(() => props.skeleton || !!props.thumbhash)
 </script>
 
 <template>
@@ -145,10 +167,19 @@ const wrap = computed(() => props.skeleton)
     "
     :style="wrapperStyle"
   >
+    <!-- ThumbHash blur-up: the decoded placeholder, upscaled by bg-cover. Cross-
+         fades out on load; until it decodes the pulse skeleton below shows. -->
+    <div
+      v-if="status !== 'loaded' && thumbUrl"
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-cover bg-center transition-opacity duration-kun-slow"
+      :class="status === 'error' ? 'opacity-0' : 'opacity-100'"
+      :style="{ backgroundImage: `url(${thumbUrl})` }"
+    />
     <!-- Sibling skeleton layer: animates the OVERLAY (not the painted image)
          and sits behind transparent PNGs. Cross-fades out on `loaded`. -->
     <div
-      v-if="status !== 'loaded'"
+      v-else-if="status !== 'loaded' && (skeleton || thumbhash)"
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 transition-opacity duration-kun-slow"
       :class="

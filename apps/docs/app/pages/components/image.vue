@@ -7,6 +7,8 @@ import ObjectFit from '~/examples/image/ObjectFit.vue'
 import ObjectFitSrc from '~/examples/image/ObjectFit.vue?raw'
 import Skeleton from '~/examples/image/Skeleton.vue'
 import SkeletonSrc from '~/examples/image/Skeleton.vue?raw'
+import BlurUp from '~/examples/image/BlurUp.vue'
+import BlurUpSrc from '~/examples/image/BlurUp.vue?raw'
 import Fallback from '~/examples/image/Fallback.vue'
 import FallbackSrc from '~/examples/image/Fallback.vue?raw'
 import Loading from '~/examples/image/Loading.vue'
@@ -30,6 +32,14 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">骨架屏</h2>
     <Demo title="Skeleton.vue" :source="SkeletonSrc"><Skeleton /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">ThumbHash 模糊占位(blur-up)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      传入 <code class="text-primary">thumbhash</code>(后端随图片元数据下发的 ~25 字节 base64),
+      加载前即显示解码出的模糊占位、加载完成后淡出——比纯骨架屏更贴近最终画面,且零额外网络请求。
+      解码器仅在用到时才按需加载,客户端解码、SSR 安全。
+    </p>
+    <Demo title="BlurUp.vue" :source="BlurUpSrc"><BlurUp /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">加载失败回退</h2>
     <Demo title="Fallback.vue" :source="FallbackSrc"><Fallback /></Demo>

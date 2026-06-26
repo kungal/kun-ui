@@ -216,6 +216,11 @@ export interface KunImageProps {
   // Renders a sibling skeleton overlay while loading (Radix-Avatar
   // 3-state machine). Default true; set false for a bare element.
   skeleton?: boolean
+  /** A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image
+   *  loads, then cross-faded out. Decoded to a tiny image on the client; falls back
+   *  to the pulse skeleton until decoded (or if the hash is invalid). Implies the
+   *  wrapper even with `skeleton: false`. */
+  thumbhash?: string
   // CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image
   // is absolutely positioned and fills the box.
   aspectRatio?: string

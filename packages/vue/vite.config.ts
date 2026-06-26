@@ -30,6 +30,7 @@ export default defineConfig({
         return (
           id === 'vue' ||
           id === '@kungal/ui-core' ||
+          id === 'thumbhash' ||
           id === 'focus-trap' ||
           id === 'date-fns' ||
           id === 'vue-advanced-cropper' ||
