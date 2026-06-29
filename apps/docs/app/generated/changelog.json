@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.7.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): ThumbHash blur-up now reliably shows before fast/cached images load</p>\n<p>Both KunImage (covers) and KunContent (body images) decoded the ThumbHash through a\nlazy <code>import(&#39;thumbhash&#39;)</code>. A fast or cached CDN image could finish loading during\nthat import — after which a placeholder is pointless and was skipped — so the blur\nnever appeared (you&#39;d see the reserved box but no blur). The decode is now a\nsynchronous (static) import, painted in the same tick as mount/scan, so it always\nwins the race against the image load. The decoder stays externalized + tree-shaken;\nit&#39;s ~2KB.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.7.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunContent — ThumbHash blur-up for body images</p>\n<p>Body images in KunContent are raw <code>&lt;img&gt;</code> from v-html (backend-rendered markdown),\nnot components, so they couldn&#39;t get the cover-image blur-up. Now any\n<code>&lt;img data-thumbhash=&quot;…&quot;&gt;</code> in the prose automatically shows a decoded, blurred\nplaceholder until it loads.</p>\n<p>The decoded ThumbHash is painted as the image&#39;s OWN <code>background</code> (visible behind the\nnot-yet-loaded content, cleared once it paints over) — zero DOM restructuring, so it\ncoexists with the existing lightbox and spoiler passes and never disturbs prose\nlayout. The blur shows when the <code>&lt;img&gt;</code> reserves space (width/height attributes),\nwhich the same backend metadata supplies — together they also remove the load-time\nlayout shift (CLS).</p>\n<p>Also exported as <code>useContentBlurUp(containerRef)</code> for apps building their own prose\nrenderer. Client-only; the ~2KB decoder is lazy-imported.</p>\n</li>\n</ul>\n"
