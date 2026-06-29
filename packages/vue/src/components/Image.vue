@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
+import { thumbHashToDataURL } from 'thumbhash'
 import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
 import { useKunUIConfig } from '../config/useKunUIConfig'
@@ -124,19 +125,20 @@ const wrapperStyle = computed(() =>
 )
 
 // ── ThumbHash blur-up placeholder ────────────────────────────────────────────
-// Decode the (base64) ThumbHash to a tiny data-URL image on the CLIENT (it needs a
-// canvas), upscaled by `bg-cover` into a smooth blurred placeholder. The ~2KB
-// decoder is lazy-imported, so it only loads for images that actually use it.
-// Until it decodes (or if the hash is invalid) we fall back to the pulse skeleton.
+// Decode the (base64) ThumbHash to a tiny data-URL image, upscaled by `bg-cover`
+// into a smooth blurred placeholder shown until the real image loads. Decoded
+// SYNCHRONOUSLY on mount / prop change so the blur is ready before a fast (cached
+// CDN) image can finish loading — a lazy import would lose that race and the blur
+// would never show. Invalid hash → no blur (the pulse skeleton covers it). The
+// decode uses a canvas, so it only runs on the client (onMounted / watch).
 const thumbUrl = ref<string | null>(null)
-async function decodeThumb(hash?: string) {
-  thumbUrl.value = null
-  if (!hash || typeof document === 'undefined') return
+const decodeThumb = (hash?: string) => {
+  if (!hash) {
+    thumbUrl.value = null
+    return
+  }
   try {
-    const bytes = Uint8Array.from(atob(hash), (c) => c.charCodeAt(0))
-    const { thumbHashToDataURL } = await import('thumbhash')
-    // Ignore a stale decode if the prop changed while we awaited the import.
-    if (props.thumbhash === hash) thumbUrl.value = thumbHashToDataURL(bytes)
+    thumbUrl.value = thumbHashToDataURL(Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)))
   } catch {
     thumbUrl.value = null
   }

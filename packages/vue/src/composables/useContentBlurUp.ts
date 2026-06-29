@@ -1,4 +1,5 @@
 import { onBeforeUnmount, onMounted, type Ref } from 'vue'
+import { thumbHashToDataURL } from 'thumbhash'
 
 // Blur-up for body images inside a v-html prose container: any
 // `<img data-thumbhash="…">` gets its decoded ThumbHash painted as the image's
@@ -12,13 +13,16 @@ import { onBeforeUnmount, onMounted, type Ref } from 'vue'
 // the same backend metadata that ships the hash — so the two travel together.
 //
 // KunContent wires this internally; exported so apps building their own prose
-// renderer can reuse it. Client-only; the ~2KB decoder is lazy-imported.
+// renderer can reuse it. Client-only. The hash is decoded SYNCHRONOUSLY so the blur
+// is painted in the same tick as the scan — a lazy `import('thumbhash')` would lose
+// the race to a fast/cached image (it finishes during the import, and then there's
+// no point painting a blur over an already-shown image).
 export const useContentBlurUp = (containerRef: Ref<HTMLElement | null>) => {
   const done = new WeakSet<HTMLImageElement>()
   let observer: MutationObserver | null = null
   let queued = false
 
-  const apply = async (img: HTMLImageElement) => {
+  const apply = (img: HTMLImageElement) => {
     if (done.has(img)) return
     done.add(img)
     const hash = img.getAttribute('data-thumbhash')
@@ -26,10 +30,7 @@ export const useContentBlurUp = (containerRef: Ref<HTMLElement | null>) => {
     // again, so we'd have no moment to clear the blur back off.
     if (!hash || (img.complete && img.naturalWidth > 0)) return
     try {
-      const bytes = Uint8Array.from(atob(hash), (c) => c.charCodeAt(0))
-      const { thumbHashToDataURL } = await import('thumbhash')
-      if (img.complete && img.naturalWidth > 0) return // loaded during the await
-      img.style.backgroundImage = `url(${thumbHashToDataURL(bytes)})`
+      img.style.backgroundImage = `url(${thumbHashToDataURL(Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)))})`
       img.style.backgroundSize = 'cover'
       img.style.backgroundPosition = 'center'
       const clear = () => {
