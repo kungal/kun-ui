@@ -391,9 +391,11 @@ render *exactly* what you give them:
 
 If that HTML can contain anything user-controlled, **you must sanitize it
 yourself, in your app, before passing it in.** KunUI intentionally ships no
-sanitizer because running one inside the library under SSR proved unreliable —
-sanitization is the consuming app's responsibility, where you control the
-server/client environment.
+sanitizer: a library-side one would have to run in the SSR render, where
+DOMPurify needs a server DOM (jsdom) that leaks memory badly under sustained
+load. Sanitization is the consuming app's responsibility — ideally server-side
+at write time, so you persist already-safe HTML and the render never sees raw
+input.
 
 ```ts
 import DOMPurify from 'dompurify'
@@ -436,9 +438,11 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
   (§6), SSR never makes a network request to render an icon.
 - Mount the overlay providers (§8) at the app root; they are client-driven but
   SSR-safe to render.
-- Do sanitization (§9) on the consumer side; under SSR, run DOMPurify with a
-  server DOM (e.g. `jsdom`/`isomorphic-dompurify`) on the server and the native
-  DOM on the client.
+- Do sanitization (§9) on the consumer side, and prefer doing it **server-side
+  at write time** (persist already-safe HTML) so the SSR render never touches
+  raw HTML. Do **not** run DOMPurify with a server DOM
+  (`jsdom`/`isomorphic-dompurify`) in the SSR render path — it leaks memory
+  badly under sustained SSR load.
 
 ---
 

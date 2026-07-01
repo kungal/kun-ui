@@ -187,7 +187,9 @@ data-model decision first.)
 - Rework `useKunMessage` to mount its container without stealing the Nuxt
   app context (framework-neutral `createApp`/teleport target), so it works
   in plain Vue.
-- Port `sanitize.ts` off `import.meta.server` (inject an `isServer` flag)
-  before it can move into a shared package.
+- ~~Port `sanitize.ts` off `import.meta.server`~~ — **superseded** by the
+  Sanitization decision above: it is OUT OF SCOPE. SSR-side DOMPurify needs a
+  server DOM (jsdom) that leaked memory in production, so no sanitizer ships;
+  consumers sanitize server-side at write time.
 - Keep consuming `@kungal/ui-core` (`cn`, `kunVariantClasses`, `resolveRounded`,
   `kunRoundedClasses`) instead of the in-package copies.

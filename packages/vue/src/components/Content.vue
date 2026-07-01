@@ -10,10 +10,12 @@ import type { KunContentProps } from './types'
 // Rich prose renderer for trusted HTML: click-to-reveal spoilers + inline-
 // image lightbox, wired in for free.
 //
-// IMPORTANT: `content` is rendered with v-html and is NOT sanitized by KunUI
-// (SSR-side sanitization is problematic — see docs/architecture.md). The
-// CALLER must pass trusted / already-sanitized HTML. Never pass raw user
-// input here.
+// IMPORTANT: `content` is rendered with v-html and is NOT sanitized by KunUI —
+// by design, not an oversight. A library-side sanitizer would have to run in the
+// SSR render, where DOMPurify needs a server DOM (jsdom) that leaks memory badly
+// under sustained load — so KunUI ships none (see docs/architecture.md). The
+// CALLER must pass trusted HTML, sanitized server-side at write time. Never pass
+// raw user input here.
 defineOptions({ name: 'KunContent' })
 
 withDefaults(defineProps<KunContentProps>(), { className: '', compact: false })
