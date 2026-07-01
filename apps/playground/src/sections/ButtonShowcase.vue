@@ -7,7 +7,6 @@ const variants: KunUIVariant[] = [
   'light',
   'flat',
   'shadow',
-  'ghost',
 ]
 const colors: KunUIColor[] = [
   'default',

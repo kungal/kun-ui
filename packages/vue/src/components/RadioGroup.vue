@@ -6,11 +6,14 @@ import {
   kunBorderClasses,
   kunFocusRingClasses,
   kunSoftBgClasses,
+  kunSolidClasses,
+  kunTextClasses,
   kunRoundedClasses,
   kunSelectionSizeClasses,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import KunIcon from './Icon.vue'
 import type {
   KunRadioGroupProps,
   KunRadioOption,
@@ -25,6 +28,7 @@ const props = withDefaults(defineProps<KunRadioGroupProps<T>>(), {
   color: 'primary',
   size: 'md',
   rounded: undefined,
+  hideIndicator: false,
   disabled: false,
   error: '',
   ariaLabel: '',
@@ -180,7 +184,37 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
         </label>
       </template>
 
-      <!-- card: bordered card with tint -->
+      <!-- pill: choice chips (single-select) -->
+      <template v-else-if="variant === 'pill'">
+        <button
+          v-for="(option, index) in options"
+          :key="String(option.value)"
+          :ref="(el) => (itemRefs[index] = el as HTMLElement | null)"
+          type="button"
+          role="radio"
+          :aria-checked="modelValue === option.value"
+          :aria-disabled="isOptionDisabled(option) || undefined"
+          :tabindex="focusableIndex === index && !isOptionDisabled(option) ? 0 : -1"
+          :class="
+            cn(
+              'inline-flex cursor-pointer items-center gap-1.5 rounded-full border-2 border-transparent px-3 py-1.5 font-medium transition-colors',
+              kunFocusRingClasses[color],
+              sizeClasses.text,
+              modelValue === option.value
+                ? kunSolidClasses[color]
+                : 'bg-default/20 text-default-700 hover:bg-default/30',
+              isOptionDisabled(option) && 'cursor-not-allowed opacity-50'
+            )
+          "
+          @click="selectOption(option, index)"
+          @keydown="(e) => onKeydown(e, index)"
+        >
+          <KunIcon v-if="option.icon" :name="option.icon" class="size-4 shrink-0" />
+          {{ option.label }}
+        </button>
+      </template>
+
+      <!-- card: bordered card with tint (+ optional icon) -->
       <template v-else>
         <div
           v-for="(option, index) in options"
@@ -208,6 +242,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           @keydown="(e) => onKeydown(e, index)"
         >
           <span
+            v-if="!hideIndicator"
             :class="
               cn(
                 'mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full border-2 transition-colors',
@@ -223,6 +258,16 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
               :class="cn('block rounded-full', sizeClasses.dot, kunBgClasses[color])"
             />
           </span>
+          <KunIcon
+            v-if="option.icon"
+            :name="option.icon"
+            :class="
+              cn(
+                'size-6 shrink-0 transition-colors',
+                modelValue === option.value ? kunTextClasses[color] : 'text-default-500'
+              )
+            "
+          />
           <div class="flex flex-col">
             <span class="text-foreground font-medium">{{ option.label }}</span>
             <span v-if="option.description" class="text-default-500 mt-0.5 text-xs">

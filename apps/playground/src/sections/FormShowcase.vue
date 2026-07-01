@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import type {
   KunRadioOption,
+  KunCheckBoxGroupOption,
+  KunCheckBoxGroupInvalidReason,
   KunSelectOption,
   KunAutocompleteOption,
 } from '@kungal/ui-vue'
@@ -57,6 +59,35 @@ const radioOptions: KunRadioOption[] = [
   { value: 'react', label: 'React', description: 'A library for web UIs' },
   { value: 'solid', label: 'Solid', description: 'Simple and performant' },
   { value: 'svelte', label: 'Svelte', description: 'Disabled', disabled: true },
+]
+
+// Icon-card single-select (RadioGroup card + icon + hideIndicator)
+const category = ref('discuss')
+const categoryOptions: KunRadioOption[] = [
+  { value: 'discuss', label: '讨论', icon: 'lucide:info' },
+  { value: 'guide', label: '攻略', icon: 'lucide:circle-check' },
+  { value: 'news', label: '资讯', icon: 'lucide:triangle-alert' },
+]
+
+// Multi-select pill group with a cap (CheckBoxGroup pill + max)
+const sections = ref<string[]>(['galgame'])
+const sectionOptions: KunCheckBoxGroupOption[] = [
+  { value: 'galgame', label: 'Galgame' },
+  { value: 'anime', label: '动画' },
+  { value: 'comic', label: '漫画' },
+  { value: 'novel', label: '轻小说' },
+  { value: 'music', label: '音乐' },
+]
+const sectionWarn = ref('')
+const onSectionInvalid = (reason: KunCheckBoxGroupInvalidReason) => {
+  if (reason === 'max-reached') sectionWarn.value = '最多只能选择 3 个分区'
+}
+
+// Multi-select description cards (CheckBoxGroup card)
+const storages = ref<string[]>(['s3'])
+const storageOptions: KunCheckBoxGroupOption[] = [
+  { value: 's3', label: 'S3 上传', description: '推荐，走站点存储', icon: 'lucide:upload' },
+  { value: 'user', label: '用户链接', description: '外链自行维护', icon: 'lucide:arrow-right' },
 ]
 </script>
 
@@ -206,6 +237,69 @@ const radioOptions: KunRadioOption[] = [
         variant="card"
         :options="radioOptions"
         color="secondary"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-default-500 text-sm">RadioGroup · pill (choice chips)</span>
+      <KunRadioGroup
+        v-model="radio"
+        variant="pill"
+        orientation="horizontal"
+        :options="radioOptions"
+        color="primary"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-default-500 text-sm">
+        RadioGroup · icon card (hideIndicator) — selected: {{ category }}
+      </span>
+      <KunRadioGroup
+        v-model="category"
+        variant="card"
+        orientation="horizontal"
+        hide-indicator
+        :options="categoryOptions"
+        color="primary"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-default-500 text-sm">
+        CheckBoxGroup · pill + max 3 — selected: {{ sections.join(', ') || '(none)' }}
+      </span>
+      <KunCheckBoxGroup
+        v-model="sections"
+        variant="pill"
+        orientation="horizontal"
+        :max="3"
+        :options="sectionOptions"
+        color="primary"
+        @invalid="onSectionInvalid"
+      />
+      <span v-if="sectionWarn" class="text-warning text-sm">{{ sectionWarn }}</span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-default-500 text-sm">
+        CheckBoxGroup · description cards — selected: {{ storages.join(', ') || '(none)' }}
+      </span>
+      <KunCheckBoxGroup
+        v-model="storages"
+        variant="card"
+        orientation="horizontal"
+        :options="storageOptions"
+        color="primary"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-default-500 text-sm">CheckBoxGroup · classic list</span>
+      <KunCheckBoxGroup
+        v-model="storages"
+        :options="storageOptions"
+        color="success"
       />
     </div>
   </section>

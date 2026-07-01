@@ -27,6 +27,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunCarousel',
   'KunCarouselItem',
   'KunCheckBox',
+  'KunCheckBoxGroup',
   'KunChip',
   'KunContent',
   'KunContextMenu',

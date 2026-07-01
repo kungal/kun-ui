@@ -570,13 +570,17 @@ export interface KunSliderProps {
 
 // ── RadioGroup ─────────────────────────────────────────────────────────
 export type KunRadioValue = string | number
-export type KunRadioVariant = 'classic' | 'card'
+// classic = dot + label list · pill = choice chips (Material "choice chips",
+// single-select) · card = bordered/tinted card (with optional icon).
+export type KunRadioVariant = 'classic' | 'pill' | 'card'
 export type KunRadioOrientation = 'vertical' | 'horizontal'
 
 export interface KunRadioOption<T extends KunRadioValue = KunRadioValue> {
   value: T
   label: string
   description?: string
+  // Icon name (e.g. `lucide:layout-grid`) rendered by `card` / `pill` variants.
+  icon?: string
   disabled?: boolean
 }
 
@@ -589,6 +593,51 @@ export interface KunRadioGroupProps<T extends KunRadioValue = KunRadioValue> {
   color?: KunUIColor
   size?: KunUISize
   rounded?: KunUIRounded
+  // `card` variant only: drop the radio-dot indicator and signal selection with
+  // the tinted border/fill alone (the icon-card look). No effect on classic/pill.
+  hideIndicator?: boolean
+  disabled?: boolean
+  error?: string
+  className?: string
+}
+
+// ── CheckBoxGroup ──────────────────────────────────────────────────────
+// Multi-select sibling of RadioGroup (WAI-ARIA checkbox-group semantics):
+// use this — NOT a ToggleGroup — for a multi-select FORM field, so the value
+// is a real array the form submits. Same three variants as RadioGroup.
+export type KunCheckBoxGroupValue = string | number
+export type KunCheckBoxGroupVariant = 'classic' | 'pill' | 'card'
+export type KunCheckBoxGroupOrientation = 'vertical' | 'horizontal'
+export type KunCheckBoxGroupInvalidReason = 'max-reached'
+
+export interface KunCheckBoxGroupOption<
+  T extends KunCheckBoxGroupValue = KunCheckBoxGroupValue,
+> {
+  value: T
+  label: string
+  description?: string
+  icon?: string
+  disabled?: boolean
+}
+
+export interface KunCheckBoxGroupProps<
+  T extends KunCheckBoxGroupValue = KunCheckBoxGroupValue,
+> {
+  options: readonly KunCheckBoxGroupOption<T>[]
+  ariaLabel?: string
+  label?: string
+  variant?: KunCheckBoxGroupVariant
+  orientation?: KunCheckBoxGroupOrientation
+  color?: KunUIColor
+  size?: KunUISize
+  rounded?: KunUIRounded
+  // Cap on how many options can be selected at once. A click that would exceed
+  // it is blocked and emits `invalid` with `'max-reached'` (already-selected
+  // options can still be toggled off).
+  max?: number
+  // `card` variant only: drop the checkbox-box indicator, signal selection with
+  // the tinted border/fill alone (the icon-card look).
+  hideIndicator?: boolean
   disabled?: boolean
   error?: string
   className?: string

@@ -13,6 +13,7 @@ import KunCard from './components/Card.vue'
 import KunCarousel from './components/Carousel.vue'
 import KunCarouselItem from './components/CarouselItem.vue'
 import KunCheckBox from './components/CheckBox.vue'
+import KunCheckBoxGroup from './components/CheckBoxGroup.vue'
 import KunChip from './components/Chip.vue'
 import KunContent from './components/Content.vue'
 import KunContextMenu from './components/ContextMenu.vue'
@@ -84,6 +85,7 @@ export {
   KunCarousel,
   KunCarouselItem,
   KunCheckBox,
+  KunCheckBoxGroup,
   KunChip,
   KunContent,
   KunContextMenu,
@@ -236,6 +238,12 @@ export type {
   KunTextareaProps,
   KunSwitchProps,
   KunCheckBoxProps,
+  KunCheckBoxGroupProps,
+  KunCheckBoxGroupOption,
+  KunCheckBoxGroupValue,
+  KunCheckBoxGroupVariant,
+  KunCheckBoxGroupOrientation,
+  KunCheckBoxGroupInvalidReason,
   KunSliderProps,
   KunSliderMark,
   KunRadioGroupProps,
@@ -301,6 +309,7 @@ const components: Record<KunComponentName, Component> = {
   KunCarousel,
   KunCarouselItem,
   KunCheckBox,
+  KunCheckBoxGroup,
   KunChip,
   KunContent,
   KunContextMenu,
