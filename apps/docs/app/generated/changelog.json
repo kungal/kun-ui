@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.8.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): add KunCheckBoxGroup + pill/icon selectors on KunRadioGroup</p>\n<p>Adds the multi-select form field the library was missing, and rounds out the\nsingle-select one, so &quot;pick a category / pick sections / pick types&quot; selectors\n(previously hand-rolled in every downstream app) come from KunUI:</p>\n<ul>\n<li><strong>New <code>KunCheckBoxGroup</code></strong> — WAI-ARIA checkbox-group semantics (value is a real\n<code>T[]</code> the form submits, unlike a toolbar-style toggle group). Variants\n<code>classic | pill | card</code>, a <code>max</code> cap that blocks extra picks and emits\n<code>invalid: &#39;max-reached&#39;</code>, and per-option <code>icon</code> / <code>description</code>.</li>\n<li><strong><code>KunRadioGroup</code></strong> gains a <code>pill</code> variant (single-select &quot;choice chips&quot;), an\noptional <code>icon</code> per option, and <code>hideIndicator</code> for the <code>card</code> variant (drop\nthe radio dot and signal selection with the tinted border alone — the\nicon-card look).</li>\n</ul>\n<p>Both share the selection size scale, color matrix, and focus ring with the rest\nof the library. Picking between them follows the recognized rule: single-select\nform field → RadioGroup, multi-select form field → CheckBoxGroup; a ToggleGroup\nstays for non-form UI toggles.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.7.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): ThumbHash blur-up now reliably shows before fast/cached images load</p>\n<p>Both KunImage (covers) and KunContent (body images) decoded the ThumbHash through a\nlazy <code>import(&#39;thumbhash&#39;)</code>. A fast or cached CDN image could finish loading during\nthat import — after which a placeholder is pointless and was skipped — so the blur\nnever appeared (you&#39;d see the reserved box but no blur). The decode is now a\nsynchronous (static) import, painted in the same tick as mount/scan, so it always\nwins the race against the image load. The decoder stays externalized + tree-shaken;\nit&#39;s ~2KB.</p>\n</li>\n</ul>\n"
