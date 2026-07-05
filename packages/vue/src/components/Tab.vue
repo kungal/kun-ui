@@ -299,7 +299,13 @@ const alignClass: Record<NonNullable<KunTabProps['align']>, string> = {
 const tabClasses = (item: KunTabItem) => {
   const selected = isSelected(item)
   const base = cn(
-    'relative z-10 inline-flex items-center cursor-pointer select-none whitespace-nowrap transition-colors',
+    // Match the sliding indicator's duration + easing (--kun-dur-base /
+    // ease-kun-standard) so the active tab's text color tracks the pill in
+    // lockstep. With the Tailwind default (150ms) the text turned its final
+    // color ~100ms BEFORE the 250ms pill arrived — e.g. solid/pills went white
+    // over the still-uncovered light background and read as "invisible until the
+    // animation finished". Now both land together.
+    'relative z-10 inline-flex items-center cursor-pointer select-none whitespace-nowrap transition-colors duration-kun-base ease-kun-standard',
     alignClass[props.align],
     sizeClasses[props.size],
     sizeGap[props.size],
