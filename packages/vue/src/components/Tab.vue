@@ -12,7 +12,6 @@ import {
   kunBgClasses,
   kunSolidBgClasses,
   kunSolidFgClasses,
-  kunSolidClasses,
   kunTextClasses,
   kunBorderClasses,
 } from '@kungal/ui-core'
@@ -344,19 +343,25 @@ const tabClasses = (item: KunTabItem) => {
           : 'text-default-500 hover:text-foreground'
       )
     case 'bordered':
+      // Reserve the border width (transparent) on every tab so the sliding
+      // outline never nudges layout; draw the colored border only in the
+      // pre-hydration fallback, else the indicator owns it.
       return cn(
         base,
-        'rounded-kun-md border',
+        'rounded-kun-md border border-transparent',
         selected
-          ? cn(kunBorderClasses[props.color], kunTextClasses[props.color])
-          : 'border-transparent text-default-500 hover:text-foreground'
+          ? cn(kunTextClasses[props.color], fallback && kunBorderClasses[props.color])
+          : 'text-default-500 hover:text-foreground'
       )
     case 'pills':
       return cn(
         base,
         'rounded-full',
         selected
-          ? kunSolidClasses[props.color]
+          ? cn(
+              kunSolidFgClasses[props.color],
+              fallback && kunSolidBgClasses[props.color]
+            )
           : 'text-default-500 hover:text-foreground'
       )
     default:
@@ -405,6 +410,15 @@ const indicatorClasses = computed(() => {
       )
     case 'light':
       return cn('absolute top-0 left-0 rounded-kun-md', softBgByColor[props.color])
+    case 'bordered':
+      // A sliding outline: transparent fill, colored border. The tabs reserve the
+      // same border width (transparent) so nothing shifts when it takes over.
+      return cn(
+        'absolute top-0 left-0 rounded-kun-md border',
+        kunBorderClasses[props.color]
+      )
+    case 'pills':
+      return cn('absolute top-0 left-0 rounded-full', kunSolidBgClasses[props.color])
     default:
       return null
   }
