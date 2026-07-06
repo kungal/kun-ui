@@ -9,6 +9,7 @@ import KunAvatarGroup from './components/AvatarGroup.vue'
 import KunBadge from './components/Badge.vue'
 import KunBrand from './components/Brand.vue'
 import KunButton from './components/Button.vue'
+import KunButtonGroup from './components/ButtonGroup.vue'
 import KunCard from './components/Card.vue'
 import KunCarousel from './components/Carousel.vue'
 import KunCarouselItem from './components/CarouselItem.vue'
@@ -81,6 +82,7 @@ export {
   KunBadge,
   KunBrand,
   KunButton,
+  KunButtonGroup,
   KunCard,
   KunCarousel,
   KunCarouselItem,
@@ -209,6 +211,8 @@ export {
 // Prop types
 export type {
   KunButtonProps,
+  KunButtonGroupProps,
+  KunButtonGroupOrientation,
   KunCardProps,
   KunModalProps,
   KunModalSize,
@@ -305,6 +309,7 @@ const components: Record<KunComponentName, Component> = {
   KunBadge,
   KunBrand,
   KunButton,
+  KunButtonGroup,
   KunCard,
   KunCarousel,
   KunCarouselItem,

@@ -24,6 +24,20 @@ export interface KunButtonProps {
   ariaLabel?: string
 }
 
+// ── ButtonGroup ────────────────────────────────────────────────────────
+// Joins a row/column of KunButtons into one attached unit (segmented actions,
+// split buttons). It collapses the touching inner corners and overlaps the 1px
+// borders into a single seam — the building block for a GitHub-style split
+// button (primary KunButton + a chevron KunButton that triggers a KunPopover).
+export type KunButtonGroupOrientation = 'horizontal' | 'vertical'
+
+export interface KunButtonGroupProps {
+  orientation?: KunButtonGroupOrientation
+  // Accessible name for the group (role="group").
+  ariaLabel?: string
+  className?: string
+}
+
 /** Inner padding of a KunCard. `lg` (24px) is the comfortable default (matches
  *  shadcn / Ant / KunModal); drop to `sm`/`md` for denser cards, `none` for a
  *  full-bleed surface (e.g. a card that's just a cover image). */

@@ -23,6 +23,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunBadge',
   'KunBrand',
   'KunButton',
+  'KunButtonGroup',
   'KunCard',
   'KunCarousel',
   'KunCarouselItem',
