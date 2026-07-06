@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.9.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): add KunButtonGroup (segmented actions + split buttons)</p>\n<p><code>KunButtonGroup</code> joins a row/column of <code>KunButton</code>s into one attached unit —\ncollapsing the touching inner corners and overlapping the 1px borders into a\nsingle seam. It is the building block for a GitHub-style <strong>split button</strong>: a\nprimary <code>KunButton</code> next to a chevron <code>KunButton</code> that triggers a <code>KunPopover</code>\nholding a rich menu (e.g. a <code>KunCheckBoxGroup</code> of lists + a &quot;create list&quot;\nfooter). The seam CSS reaches a button nested inside a <code>KunPopover</code> trigger\nwrapper, and — because the popover panel teleports to <code>&lt;body&gt;</code> — never touches\nthe menu&#39;s own buttons. Supports <code>orientation=&quot;horizontal&quot; | &quot;vertical&quot;</code>.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.8.3",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunModal panel is opaque by default (drop the hardcoded 85% alpha)</p>\n<p>The modal panel hardcoded <code>bg-content1/85</code>, forcing an 85%-opaque (see-through)\nsurface that ignored <code>--kun-surface-opacity</code> and stacked on top of it — so on a\nsite that already lowered that token (a background-image page) the panel went\neven more translucent than every other surface. It now uses plain <code>bg-content1</code>\nlike Card / Drawer / Dropdown / Tooltip / Select, so it is fully opaque by\ndefault and follows <code>--kun-surface-opacity</code> (set it &lt; 1 with <code>--kun-backdrop-filter</code>\nto opt every surface into frosted glass at once). The backdrop scrim is unchanged.</p>\n</li>\n</ul>\n"
