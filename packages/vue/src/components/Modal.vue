@@ -206,7 +206,7 @@ onUnmounted(() => {
           :aria-label="ariaLabel || '对话框'"
           :class="
             cn(
-              'kun-modal-panel bg-content1/85 scrollbar-hide shadow-kun-lg kun-backdrop relative mx-auto min-w-80 p-6',
+              'kun-modal-panel bg-content1 scrollbar-hide shadow-kun-lg kun-backdrop relative mx-auto min-w-80 p-6',
               sizeClass,
               panelScrollClass,
               roundedClass,
