@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.9.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunReaction honors <code>active</code> skin in action mode (menu-button reactions)</p>\n<p>The filled/coloured skin now follows the <code>active</code> model in BOTH modes, not just\n<code>toggle</code> mode. This lets an action-mode (<code>toggle=&quot;false&quot;</code>) reaction be a\ncontrolled &quot;menu button&quot;: wrap it as a <code>KunPopover</code> trigger, bind <code>:model-value</code>\nto your own state, and the click opens the picker instead of self-toggling while\nthe skin still reflects your state. This is what a 收藏 button needs when it sits\nnext to a 点赞 reaction — both stay peer pills (identical skin), but 收藏&#39;s click\nopens a 收藏夹 picker and its filled state = &quot;in ≥1 list&quot; (Bilibili / YouTube\npattern), no split button. Fully backward-compatible: existing action-mode\nbuttons (share / more …) pass no <code>active</code>, so they stay neutral exactly as before.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.9.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): add KunButtonGroup (segmented actions + split buttons)</p>\n<p><code>KunButtonGroup</code> joins a row/column of <code>KunButton</code>s into one attached unit —\ncollapsing the touching inner corners and overlapping the 1px borders into a\nsingle seam. It is the building block for a GitHub-style <strong>split button</strong>: a\nprimary <code>KunButton</code> next to a chevron <code>KunButton</code> that triggers a <code>KunPopover</code>\nholding a rich menu (e.g. a <code>KunCheckBoxGroup</code> of lists + a &quot;create list&quot;\nfooter). The seam CSS reaches a button nested inside a <code>KunPopover</code> trigger\nwrapper, and — because the popover panel teleports to <code>&lt;body&gt;</code> — never touches\nthe menu&#39;s own buttons. Supports <code>orientation=&quot;horizontal&quot; | &quot;vertical&quot;</code>.</p>\n</li>\n</ul>\n"
