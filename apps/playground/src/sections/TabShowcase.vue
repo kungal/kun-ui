@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import type { KunTabItem, KunTabVariant } from '@kungal/ui-vue'
 
 const tab = ref('home')
@@ -32,6 +32,34 @@ const routeItems: KunTabItem[] = [
   { value: 'b', textValue: 'Section B', href: '#b' },
   { value: 'c', textValue: 'Section C', href: '#c' },
 ]
+
+// lazy-loading / loading demo
+const lazyTab = ref('overview')
+const lazyItems: KunTabItem[] = [
+  { value: 'overview', textValue: 'Overview' },
+  { value: 'specs', textValue: 'Specs' },
+  { value: 'reviews', textValue: 'Reviews' },
+]
+type PanelState = { data: string | null; loading: boolean }
+const lazyState = reactive<Record<string, PanelState>>({
+  overview: { data: null, loading: false },
+  specs: { data: null, loading: false },
+  reviews: { data: null, loading: false },
+})
+// Long-ish latency so the dim (0.5 opacity) is easy to see on a refresh.
+const fetchLazy = (value: string) => {
+  const panel = lazyState[value]!
+  panel.loading = true
+  setTimeout(() => {
+    panel.data = `Loaded "${value}" at ${new Date().toLocaleTimeString()}`
+    panel.loading = false
+  }, 1200)
+}
+const onLazyChange = (value: string) => {
+  const panel = lazyState[value]!
+  if (panel.data === null && !panel.loading) fetchLazy(value)
+}
+onLazyChange(lazyTab.value)
 </script>
 
 <template>
@@ -69,6 +97,54 @@ const routeItems: KunTabItem[] = [
       </KunTabPanel>
       <KunTabPanel value="reviews" class="text-default-600 text-sm">
         Reviews — also server-rendered; deep-linkable via text fragments.
+      </KunTabPanel>
+    </KunTabPanels>
+
+    <h3 class="mt-2 text-base font-medium">
+      Lazy loading + loading state (mount=lazy, :loading dim)
+    </h3>
+    <p class="text-default-500 text-sm">
+      First open of a tab fetches (~1.2s) and shows a skeleton — nothing to dim
+      yet. Once loaded, hit <em>Refresh</em>: the panel dims to 0.5 opacity and
+      goes inert instead of flashing a skeleton. Fast tab switches never flicker
+      (the dim has a 0.2s delay).
+    </p>
+    <KunTab
+      v-model="lazyTab"
+      :items="lazyItems"
+      variant="light"
+      color="secondary"
+      name="lazy"
+      @change="onLazyChange"
+    />
+    <KunTabPanels v-model="lazyTab" name="lazy" mount="lazy" class="mt-2">
+      <KunTabPanel
+        v-for="item in lazyItems"
+        :key="item.value"
+        :value="item.value"
+        :loading="lazyState[item.value]!.loading && lazyState[item.value]!.data !== null"
+      >
+        <!-- First load: skeleton at full opacity — don't pass `loading` (it would
+             dim the skeleton). The dim is only for revalidating existing content. -->
+        <div
+          v-if="lazyState[item.value]!.data === null"
+          class="flex flex-col gap-2"
+        >
+          <KunSkeleton variant="text" width="70%" />
+          <KunSkeleton variant="text" />
+          <KunSkeleton variant="text" width="40%" />
+        </div>
+        <div v-else class="text-default-600 flex flex-col gap-3 text-sm">
+          <p>{{ lazyState[item.value]!.data }}</p>
+          <KunButton
+            size="sm"
+            variant="flat"
+            class="self-start"
+            @click="fetchLazy(item.value)"
+          >
+            Refresh
+          </KunButton>
+        </div>
       </KunTabPanel>
     </KunTabPanels>
 

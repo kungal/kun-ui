@@ -148,6 +148,15 @@ export interface KunTabPanelProps {
   // How inactive eager/lazy panels hide. until-found (default) keeps them
   // findable by in-page search + deep links; display is plain display:none.
   hiddenStrategy?: 'until-found' | 'display'
+  // Mark this panel as loading (async / lazy data still resolving). Dims the
+  // panel to 0.5 opacity, makes it inert (no pointer/keyboard interaction) and
+  // sets aria-busy for screen readers. The dim uses a *delayed* fade (the React
+  // useDeferredValue trick) so a fast load finishes before it becomes visible —
+  // no flicker; only a genuinely slow load dims. This is the "stale-while-
+  // revalidate" mechanism only: the library dims what's there, YOU decide when
+  // `loading` is true and render the skeleton (e.g. via <KunSkeleton>) for a
+  // first load where there is no prior content to dim.
+  loading?: boolean
   name?: string
   className?: string
 }

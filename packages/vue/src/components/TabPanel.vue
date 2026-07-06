@@ -21,6 +21,13 @@ import type { KunTabPanelProps } from './types'
 // the DOM and indexed, but also reachable by in-page search, scroll-to-text
 // fragments and deep links — on which the browser fires `beforematch`, so we
 // flip the active tab to match what the user is about to see.
+//
+// `loading` marks the panel busy while async/lazy data resolves: it dims to 0.5,
+// goes `inert` (no pointer/keyboard interaction) and sets aria-busy. The dim is a
+// *delayed* fade (React's useDeferredValue trick) — a fast load finishes before
+// it shows, so quick tab switches never flicker. That covers the stale-while-
+// revalidate case (there's prior content to dim); for a true first load render a
+// skeleton in the slot yourself — dimming an empty panel shows nothing.
 defineOptions({ name: 'KunTabPanel' })
 
 const props = withDefaults(defineProps<KunTabPanelProps>(), {
@@ -28,6 +35,7 @@ const props = withDefaults(defineProps<KunTabPanelProps>(), {
   mount: undefined,
   forceMount: false,
   hiddenStrategy: undefined,
+  loading: false,
   name: undefined,
   className: '',
 })
@@ -104,6 +112,9 @@ const onBeforeMatch = () => {
     :id="panelId"
     :aria-labelledby="tabId"
     :tabindex="isActive ? 0 : -1"
+    :aria-busy="loading || undefined"
+    :inert="loading || undefined"
+    :data-kun-tab-loading="loading ? '' : undefined"
     :data-kun-tab-hidden="!hydrated && isHidden ? '' : undefined"
     :class="cn('focus:outline-none', className)"
     @beforematch="onBeforeMatch"
@@ -118,5 +129,22 @@ const onBeforeMatch = () => {
    hidden="until-found" the client swaps in. */
 [data-kun-tab-hidden] {
   content-visibility: hidden;
+}
+
+/* loading: dim to 0.5 with a DELAYED fade (React useDeferredValue trick). The
+   0.2s delay means a load that resolves quickly clears `loading` before the dim
+   ever paints — so fast tab switches don't flicker; only a slow load visibly
+   dims. Clearing `loading` drops this rule, so it snaps back to full opacity
+   instantly (content is ready — show it now). `inert` already blocks pointer +
+   keyboard; opacity is the visual cue. */
+[data-kun-tab-loading] {
+  opacity: 0.5;
+  transition: opacity 0.2s 0.2s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-kun-tab-loading] {
+    transition: none;
+  }
 }
 </style>

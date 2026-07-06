@@ -17,6 +17,8 @@ import Disabled from '~/examples/tab/Disabled.vue'
 import DisabledSrc from '~/examples/tab/Disabled.vue?raw'
 import Panels from '~/examples/tab/Panels.vue'
 import PanelsSrc from '~/examples/tab/Panels.vue?raw'
+import LazyLoading from '~/examples/tab/LazyLoading.vue'
+import LazyLoadingSrc from '~/examples/tab/LazyLoading.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -51,6 +53,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">内容面板</h2>
     <Demo title="Panels.vue" :source="PanelsSrc"><Panels /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">懒加载 / 加载中</h2>
+    <Demo title="LazyLoading.vue" :source="LazyLoadingSrc"><LazyLoading /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTab.props" />
