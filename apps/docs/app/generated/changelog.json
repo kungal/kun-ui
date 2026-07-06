@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.8.3",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunModal panel is opaque by default (drop the hardcoded 85% alpha)</p>\n<p>The modal panel hardcoded <code>bg-content1/85</code>, forcing an 85%-opaque (see-through)\nsurface that ignored <code>--kun-surface-opacity</code> and stacked on top of it — so on a\nsite that already lowered that token (a background-image page) the panel went\neven more translucent than every other surface. It now uses plain <code>bg-content1</code>\nlike Card / Drawer / Dropdown / Tooltip / Select, so it is fully opaque by\ndefault and follows <code>--kun-surface-opacity</code> (set it &lt; 1 with <code>--kun-backdrop-filter</code>\nto opt every surface into frosted glass at once). The backdrop scrim is unchanged.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.8.2",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunTab active-tab text color now tracks the sliding indicator</p>\n<p>The per-tab text color transitioned over Tailwind&#39;s default 150ms while the\nsliding indicator slid over 250ms (<code>--kun-dur-base</code>), so the newly-active tab&#39;s\ntext reached its final color ~100ms before the pill arrived under it. With\n<code>solid</code>/<code>pills</code> that meant the text went white over the still-uncovered light\nbackground and read as &quot;invisible until the animation finished&quot;. The tab text\ntransition is now pinned to the indicator&#39;s duration and easing\n(<code>duration-kun-base ease-kun-standard</code>), so color and position land in lockstep.</p>\n</li>\n</ul>\n"
