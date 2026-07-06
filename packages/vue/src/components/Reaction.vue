@@ -72,9 +72,13 @@ const handleClick = () => {
   }
 }
 
-// "On" = a pressed toggle. Action-mode reactions never read as on, so they keep
-// the neutral skin (matching an un-liked reaction) regardless of the model.
-const isOn = computed(() => props.toggle && active.value)
+// "On" = the filled/coloured active skin, driven by `active` in BOTH modes. In
+// toggle mode the click flips `active`; in action mode the CONSUMER controls it —
+// e.g. a 收藏 button used as a KunPopover trigger, whose "collected" skin reflects
+// membership in ≥1 list while the click opens the folder picker instead of self-
+// toggling. Existing action-mode buttons (share / more …) pass no `active`, so it
+// defaults false and their skin stays neutral exactly as before.
+const isOn = computed(() => active.value)
 
 const sizeMap = {
   sm: { btn: 'gap-1 px-1.5 py-0.5 text-xs', icon: '1rem' },

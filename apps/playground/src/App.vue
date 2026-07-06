@@ -9,6 +9,7 @@ import TabShowcase from './sections/TabShowcase.vue'
 import FloatingShowcase from './sections/FloatingShowcase.vue'
 import MediaShowcase from './sections/MediaShowcase.vue'
 import DisplayShowcase from './sections/DisplayShowcase.vue'
+import ReactionShowcase from './sections/ReactionShowcase.vue'
 import FormShowcase from './sections/FormShowcase.vue'
 import OverlayShowcase from './sections/OverlayShowcase.vue'
 import MiscShowcase from './sections/MiscShowcase.vue'
@@ -90,6 +91,7 @@ const swatch: Record<(typeof colors)[number], string> = {
       <FloatingShowcase />
       <MediaShowcase />
       <DisplayShowcase />
+      <ReactionShowcase />
       <FormShowcase />
       <OverlayShowcase />
       <MiscShowcase />
