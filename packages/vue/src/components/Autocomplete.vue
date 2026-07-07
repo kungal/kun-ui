@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size as floatingSize } from '@floating-ui/vue'
 import {
@@ -13,6 +13,7 @@ import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import KunIcon from './Icon.vue'
+import KunLoading from './Loading.vue'
 import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
 
 // A combobox: a text field with a suggestion list. v-model is the field text
@@ -36,6 +37,9 @@ const props = withDefaults(defineProps<KunAutocompleteProps>(), {
   allowCustomValue: true,
   manualFilter: false,
   noResultText: '无匹配项',
+  loading: false,
+  loadingText: '加载中…',
+  debounce: 0,
   name: undefined,
   ariaLabel: '',
 })
@@ -127,8 +131,46 @@ const moveActive = (dir: 1 | -1) => {
   scrollActiveIntoView()
 }
 
+// Emit `@search`, debounced by `props.debounce` (the input text itself always
+// updates instantly — only the parent notification waits). `immediate` skips the
+// wait for resets (clear / blur) so they fire at once, and supersedes any pending
+// keystroke emit.
+// While a debounce timer is armed we're "about to search": `pending` surfaces the
+// spinner and suppresses `noResultText` so the gap before the request fires never
+// flashes "no matches". With `debounce: 0` (default) it's never set, so behaviour
+// is unchanged. `props.loading` (the real, parent-driven request) does the same.
+const pending = ref(false)
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+const cancelPendingSearch = () => {
+  if (searchTimer) {
+    clearTimeout(searchTimer)
+    searchTimer = null
+  }
+  pending.value = false
+}
+const emitSearch = (q: string, immediate = false) => {
+  cancelPendingSearch()
+  if (immediate || props.debounce <= 0) {
+    emit('search', q)
+    return
+  }
+  pending.value = true
+  searchTimer = setTimeout(() => {
+    searchTimer = null
+    pending.value = false
+    emit('search', q)
+  }, props.debounce)
+}
+onBeforeUnmount(cancelPendingSearch)
+
+// Spinner shows for the real request (`loading`) and the pre-request debounce gap.
+const showSpinner = computed(() => props.loading || pending.value)
+
 const selectOption = (option: KunAutocompleteOption) => {
   if (option.disabled) return
+  // Drop any pending keystroke search so it can't refetch with the pre-selection
+  // query right after the user committed a choice.
+  cancelPendingSearch()
   modelValue.value = option.label
   dirty.value = false
   emit('select', option)
@@ -139,7 +181,7 @@ const selectOption = (option: KunAutocompleteOption) => {
 const onInput = (e: Event) => {
   modelValue.value = (e.target as HTMLInputElement).value
   dirty.value = true
-  emit('search', modelValue.value)
+  emitSearch(modelValue.value)
   open()
   activeIndex.value = firstEnabled()
 }
@@ -185,7 +227,7 @@ const onBlur = () => {
       )
     ) {
       modelValue.value = ''
-      emit('search', '')
+      emitSearch('', true)
     }
   }, 120)
 }
@@ -193,7 +235,7 @@ const onBlur = () => {
 const clear = () => {
   modelValue.value = ''
   dirty.value = true
-  emit('search', '')
+  emitSearch('', true)
   nextTick(() => inputRef.value?.focus({ preventScroll: true }))
   open()
 }
@@ -262,6 +304,7 @@ defineExpose({
         "
         @input="onInput"
         @focus="open"
+        @click="open"
         @keydown="onKeydown"
         @blur="onBlur"
       />
@@ -289,7 +332,7 @@ defineExpose({
         leave-to-class="opacity-0 scale-95"
       >
         <div
-          v-if="isOpen && (filtered.length || dirty)"
+          v-if="isOpen && (filtered.length || dirty || showSpinner)"
           ref="dropdownRef"
           :style="[floatingStyles, { transformOrigin }]"
           :class="
@@ -304,34 +347,44 @@ defineExpose({
             :id="listId"
             class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm"
             role="listbox"
+            :aria-busy="showSpinner || undefined"
           >
-            <li
-              v-for="(option, index) in filtered"
-              :id="`${kunUniqueId}-opt-${index}`"
-              :key="option.value"
-              :data-index="index"
-              class="text-foreground relative flex items-center rounded-kun-md px-3 py-2 select-none"
-              :class="[
-                option.disabled
-                  ? 'text-default-300 cursor-not-allowed'
-                  : 'cursor-pointer',
-                index === activeIndex && !option.disabled ? 'bg-default-100' : '',
-              ]"
-              role="option"
-              :aria-selected="index === activeIndex"
-              :aria-disabled="option.disabled || undefined"
-              @click="selectOption(option)"
-              @mousemove="!option.disabled && (activeIndex = index)"
-            >
-              <span class="block min-w-0 flex-1 truncate">{{ option.label }}</span>
+            <!-- Async in flight (or debounce armed): a spinner instead of options
+                 / noResultText, so a pending fetch never reads as "no matches". -->
+            <li v-if="showSpinner" class="flex justify-center px-3 py-6">
+              <KunLoading spinner size="sm" :description="loadingText" />
             </li>
 
-            <li
-              v-if="!filtered.length"
-              class="text-default-400 px-3 py-6 text-center text-sm"
-            >
-              {{ noResultText }}
-            </li>
+            <template v-else>
+              <li
+                v-for="(option, index) in filtered"
+                :id="`${kunUniqueId}-opt-${index}`"
+                :key="option.value"
+                :data-index="index"
+                class="text-foreground relative flex items-center rounded-kun-md px-3 py-2 select-none"
+                :class="[
+                  option.disabled
+                    ? 'text-default-300 cursor-not-allowed'
+                    : 'cursor-pointer',
+                  index === activeIndex && !option.disabled ? 'bg-default-100' : '',
+                ]"
+                role="option"
+                :aria-selected="index === activeIndex"
+                :aria-disabled="option.disabled || undefined"
+                @click="selectOption(option)"
+                @mousemove="!option.disabled && (activeIndex = index)"
+                @mousedown.prevent
+              >
+                <span class="block min-w-0 flex-1 truncate">{{ option.label }}</span>
+              </li>
+
+              <li
+                v-if="!filtered.length"
+                class="text-default-400 px-3 py-6 text-center text-sm"
+              >
+                {{ noResultText }}
+              </li>
+            </template>
           </ul>
         </div>
       </Transition>

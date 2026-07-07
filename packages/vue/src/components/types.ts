@@ -523,6 +523,16 @@ export interface KunAutocompleteProps {
   // (remote/async suggestions). Default false (client-side filter).
   manualFilter?: boolean
   noResultText?: string
+  // Async data source: show a loading spinner in the dropdown (instead of
+  // `noResultText`) while a remote `@search` request is in flight. Drive it from
+  // your fetch — set true when the request starts, false when the results land.
+  loading?: boolean
+  // Text under the loading spinner. Default '加载中…'.
+  loadingText?: string
+  // Debounce the `@search` emit by N ms; the input text still updates instantly
+  // (a responsive field). 0 (default) emits on every keystroke — set e.g. 300
+  // for remote sources so you fetch once the user pauses, not per keypress.
+  debounce?: number
   name?: string
   ariaLabel?: string
 }

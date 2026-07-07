@@ -38,6 +38,32 @@ const acOptions: KunAutocompleteOption[] = [
   { value: 'nagoya', label: '名古屋 Nagoya' },
 ]
 
+// Autocomplete — remote search (loading + debounce)
+const remoteText = ref('')
+const remotePicked = ref<string | number | null>(null)
+const remoteOptions = ref<KunAutocompleteOption[]>([])
+const remoteLoading = ref(false)
+let remoteReqId = 0
+const onRemoteSearch = async (q: string) => {
+  const query = q.trim().toLowerCase()
+  if (!query) {
+    remoteOptions.value = []
+    remoteLoading.value = false
+    return
+  }
+  const mine = ++remoteReqId
+  remoteLoading.value = true
+  await new Promise((r) => setTimeout(r, 700)) // fake latency
+  if (mine !== remoteReqId) return // superseded by a newer search
+  remoteOptions.value = acOptions.filter((o) =>
+    o.label.toLowerCase().includes(query)
+  )
+  remoteLoading.value = false
+}
+const onRemoteSelect = (opt: KunAutocompleteOption) => {
+  remotePicked.value = opt.value
+}
+
 // NumberInput + PinInput
 const qty = ref<number | null>(3)
 const price = ref<number | null>(19.9)
@@ -156,6 +182,24 @@ const storageOptions: KunCheckBoxGroupOption[] = [
         placeholder="Type a city…"
         :clearable="true"
       />
+      <div>
+        <KunAutocomplete
+          v-model="remoteText"
+          :options="remoteOptions"
+          :loading="remoteLoading"
+          :debounce="300"
+          manual-filter
+          :allow-custom-value="false"
+          :clearable="true"
+          label="Autocomplete (remote: loading + debounce)"
+          placeholder="Type a city… (700ms fake fetch)"
+          @search="onRemoteSearch"
+          @select="onRemoteSelect"
+        />
+        <p class="text-default-500 mt-1 text-xs">
+          confirmed value: {{ remotePicked ?? '—' }}
+        </p>
+      </div>
     </div>
 
     <h3 class="text-default-600 text-sm font-semibold">NumberInput · PinInput</h3>

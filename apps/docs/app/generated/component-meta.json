@@ -118,6 +118,12 @@
         "default": "true"
       },
       {
+        "name": "debounce",
+        "type": "number",
+        "required": false,
+        "default": "0"
+      },
+      {
         "name": "description",
         "type": "string",
         "required": false,
@@ -146,6 +152,18 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "loadingText",
+        "type": "string",
+        "required": false,
+        "default": "\"加载中…\""
       },
       {
         "name": "manualFilter",
@@ -474,6 +492,28 @@
       }
     ]
   },
+  "KunButtonGroup": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "orientation",
+        "type": "KunButtonGroupOrientation",
+        "required": false,
+        "default": "\"horizontal\""
+      }
+    ]
+  },
   "KunCard": {
     "props": [
       {
@@ -690,6 +730,92 @@
         "type": "string | number | boolean",
         "required": false,
         "default": "undefined"
+      }
+    ]
+  },
+  "KunCheckBoxGroup": {
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "T[]",
+        "required": true
+      },
+      {
+        "name": "options",
+        "type": "readonly KunCheckBoxGroupOption<T>[]",
+        "required": true
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "hideIndicator",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "orientation",
+        "type": "KunCheckBoxGroupOrientation",
+        "required": false,
+        "default": "\"vertical\""
+      },
+      {
+        "name": "rounded",
+        "type": "KunUIRounded",
+        "required": false,
+        "default": "undefined"
+      },
+      {
+        "name": "size",
+        "type": "KunUISize",
+        "required": false,
+        "default": "\"md\""
+      },
+      {
+        "name": "variant",
+        "type": "KunCheckBoxGroupVariant",
+        "required": false,
+        "default": "\"classic\""
       }
     ]
   },
@@ -2252,6 +2378,12 @@
         "default": "\"\""
       },
       {
+        "name": "hideIndicator",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
         "name": "label",
         "type": "string",
         "required": false,
@@ -2382,7 +2514,7 @@
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "`true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share / more …) in the same compact skin — no pressed state, no burst, just a tactile pop; handle the click with a native `@click`. Lets a whole reactions row use one component instead of mixing in a heavier icon button."
+        "description": "`true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share / more …) in the same compact skin — no self-toggle, no burst, just a tactile pop; handle the click with a native `@click`. Lets a whole reactions row use one component instead of mixing in a heavier icon button. In BOTH modes the filled/coloured skin follows the `active` model. So an action-mode reaction can be a controlled \"menu button\": wrap it as a `KunPopover` trigger, bind `:model-value` to your own state (e.g. 收藏 = \"in ≥1 list\"), and the click opens the picker instead of self-toggling."
       }
     ]
   },
@@ -3050,6 +3182,12 @@
         "type": "\"until-found\" | \"display\"",
         "required": false,
         "default": "undefined"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
       },
       {
         "name": "mount",
