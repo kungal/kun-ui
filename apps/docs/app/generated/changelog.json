@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.12.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunMessage no longer jumps wider for a frame when dismissed</p>\n<p>The leaving toast went <code>position: absolute; width: 100%</code>, but the <code>%</code> resolved\nagainst the outer <code>fixed</code> container&#39;s padding box — 2rem wider than the in-flow\ncontent width — so the toast visibly widened and spilled out the right edge for a\nframe before fading. The <code>TransitionGroup</code> wrapper is now the containing block\n(<code>position: relative</code>), so <code>width: 100%</code> matches the in-flow width exactly.</p>\n</li>\n<li><p>fix(vue): KunMessage toasts use semantic-colored border + count badge</p>\n<p>Each toast&#39;s outline is now its own semantic colour (<code>ring-{color}/50</code>) instead of\na uniform neutral grey ring, and the de-dup count badge uses a matching\n<code>bg-{color}/10</code> tint instead of the neutral <code>bg-black/10</code>. Each type now reads as\none cohesive coloured surface in both light and dark.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.12.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunAutocomplete &amp; KunSelect support custom option rendering via <code>#option</code></p>\n<p>Both components are now generic over the option shape, so you can pass options\nwith extra fields (avatar, description, …) and read them — typed — in a new\n<code>#option</code> scoped slot: <code>&lt;template #option=&quot;{ option, index, active, selected }&quot;&gt;</code>.\nRender a leading image, two-line text, badges, anything. Without the slot the\nplain label renders exactly as before (fully backward-compatible). Select keeps\nits check indicator outside the slot, and the option row now groups rich content\nat the left with the indicator at the right.</p>\n</li>\n</ul>\n"
