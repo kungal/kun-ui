@@ -61,7 +61,12 @@ const positionClasses: Record<KunMessagePosition, string> = {
         positionClasses[position as KunMessagePosition],
       ]"
     >
-      <TransitionGroup name="message-list" tag="div" class="w-full">
+      <!-- `relative` makes THIS wrapper the containing block for a leaving item
+           (which goes `position: absolute`). Without it, the item's `width: 100%`
+           resolves against the outer `fixed` container's padding box — 2rem wider
+           than the in-flow width — so the toast visibly jumps wider (spilling out
+           the right) for a frame before it fades. -->
+      <TransitionGroup name="message-list" tag="div" class="relative w-full">
         <KunMessageItem
           v-for="msg in msgs"
           :key="msg.id"

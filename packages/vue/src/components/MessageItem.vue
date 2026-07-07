@@ -126,6 +126,8 @@ const typeStyles = computed(() => {
         text: 'text-success-800',
         icon: 'text-success-500',
         progress: 'bg-success-400',
+        ring: 'ring-success/50',
+        countBg: 'bg-success/10',
         iconName: 'lucide:circle-check',
       }
     case 'error':
@@ -134,6 +136,8 @@ const typeStyles = computed(() => {
         text: 'text-danger-800',
         icon: 'text-danger-500',
         progress: 'bg-danger-400',
+        ring: 'ring-danger/50',
+        countBg: 'bg-danger/10',
         iconName: 'lucide:circle-x',
       }
     case 'warn':
@@ -142,6 +146,8 @@ const typeStyles = computed(() => {
         text: 'text-warning-800',
         icon: 'text-warning-500',
         progress: 'bg-warning-400',
+        ring: 'ring-warning/50',
+        countBg: 'bg-warning/10',
         iconName: 'lucide:triangle-alert',
       }
     case 'info':
@@ -151,6 +157,8 @@ const typeStyles = computed(() => {
         text: 'text-primary-800',
         icon: 'text-primary-500',
         progress: 'bg-primary-400',
+        ring: 'ring-primary/50',
+        countBg: 'bg-primary/10',
         iconName: 'lucide:info',
       }
   }
@@ -164,9 +172,10 @@ const typeStyles = computed(() => {
     aria-atomic="true"
     :class="
       cn(
-        'group relative mb-3 flex w-full touch-pan-y items-center overflow-hidden rounded-kun-lg p-4 shadow-kun-md ring-1 ring-black/5 transition-all duration-kun-slow dark:ring-white/10',
+        'group relative mb-3 flex w-full touch-pan-y items-center overflow-hidden rounded-kun-lg p-4 shadow-kun-md ring-1 transition-all duration-kun-slow',
         typeStyles.bg,
-        typeStyles.text
+        typeStyles.text,
+        typeStyles.ring
       )
     "
     :style="dragStyle"
@@ -191,7 +200,12 @@ const typeStyles = computed(() => {
 
     <span
       v-if="count > 1"
-      class="ml-3 flex h-6 w-6 items-center justify-center rounded-full bg-black/10 text-xs font-bold dark:bg-white/10"
+      :class="
+        cn(
+          'ml-3 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+          typeStyles.countBg
+        )
+      "
     >
       {{ count }}
     </span>
