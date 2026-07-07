@@ -496,10 +496,14 @@ export interface KunAutocompleteOption {
   disabled?: boolean
 }
 
-export interface KunAutocompleteProps {
+// Generic over the option shape so callers can attach extra fields (avatar,
+// description, …) and read them back — typed — in the `#option` scoped slot.
+export interface KunAutocompleteProps<
+  T extends KunAutocompleteOption = KunAutocompleteOption,
+> {
   // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
   color?: KunUIColor
-  options: readonly KunAutocompleteOption[]
+  options: readonly T[]
   label?: string
   placeholder?: string
   error?: string
@@ -685,10 +689,16 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
   disabled?: boolean
 }
 
-export interface KunSelectProps<T extends KunSelectValue = KunSelectValue> {
+// `T` is the value type; `O` is the option shape. `O` defaults to the plain
+// option, but callers can pass a richer object (avatar, description, …) and read
+// it back — typed — in the `#option` scoped slot.
+export interface KunSelectProps<
+  T extends KunSelectValue = KunSelectValue,
+  O extends KunSelectOption<T> = KunSelectOption<T>,
+> {
   // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
   color?: KunUIColor
-  options: readonly KunSelectOption<T>[]
+  options: readonly O[]
   label?: string
   placeholder?: string
   error?: string

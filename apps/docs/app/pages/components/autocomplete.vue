@@ -11,6 +11,8 @@ import Colors from '~/examples/autocomplete/Colors.vue'
 import ColorsSrc from '~/examples/autocomplete/Colors.vue?raw'
 import RemoteSearch from '~/examples/autocomplete/RemoteSearch.vue'
 import RemoteSearchSrc from '~/examples/autocomplete/RemoteSearch.vue?raw'
+import CustomOption from '~/examples/autocomplete/CustomOption.vue'
+import CustomOptionSrc from '~/examples/autocomplete/CustomOption.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -36,6 +38,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">远程搜索（loading + debounce）</h2>
     <Demo title="RemoteSearch.vue" :source="RemoteSearchSrc"><RemoteSearch /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">自定义选项（#option 插槽）</h2>
+    <Demo title="CustomOption.vue" :source="CustomOptionSrc"><CustomOption /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunAutocomplete.props" />

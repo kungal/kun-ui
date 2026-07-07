@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue">
+<script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue, O extends KunSelectOption<T> = KunSelectOption<T>">
 import { computed, nextTick, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size } from '@floating-ui/vue'
@@ -17,7 +17,7 @@ import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
 defineOptions({ name: 'KunSelect' })
 
-const props = withDefaults(defineProps<KunSelectProps<T>>(), {
+const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
   placeholder: '',
   label: '',
   disabled: false,
@@ -141,7 +141,7 @@ onClickOutside(buttonRef, (event) => {
 })
 
 // ── selection actions ────────────────────────────────────────────────────
-const selectOption = (option: KunSelectOption<T>) => {
+const selectOption = (option: O) => {
   if (option.disabled) return
   const origIndex = props.options.findIndex((o) => o.value === option.value)
   if (props.multiple) {
@@ -435,7 +435,7 @@ watch(filtered, () => {
               :id="`${kunUniqueId}-opt-${index}`"
               :key="String(option.value)"
               :data-index="index"
-              class="text-foreground relative flex items-center justify-between rounded-kun-md px-3 py-2 select-none"
+              class="text-foreground relative flex items-center gap-2 rounded-kun-md px-3 py-2 select-none"
               :class="[
                 option.disabled
                   ? 'text-default-300 cursor-not-allowed'
@@ -448,11 +448,25 @@ watch(filtered, () => {
               @click="selectOption(option)"
               @mousemove="!option.disabled && (activeIndex = index)"
             >
-              <span class="block min-w-0 flex-1 truncate">{{ option.label }}</span>
+              <!-- Custom item rendering: pass an option shape with extra fields
+                   (avatar, description, …) and read them here. Defaults to the
+                   plain label. The flex-1 wrapper lets rich content (avatar +
+                   text) group at the left while the check stays at the right. -->
+              <div class="flex min-w-0 flex-1 items-center gap-2">
+                <slot
+                  name="option"
+                  :option="option"
+                  :index="index"
+                  :active="index === activeIndex"
+                  :selected="selectedSet.has(option.value)"
+                >
+                  <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+                </slot>
+              </div>
               <KunIcon
                 v-if="selectedSet.has(option.value)"
                 name="lucide:check"
-                class="text-primary ml-2 shrink-0"
+                class="text-primary shrink-0"
               />
             </li>
 

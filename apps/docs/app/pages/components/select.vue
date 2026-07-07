@@ -13,6 +13,8 @@ import Error from '~/examples/select/Error.vue'
 import ErrorSrc from '~/examples/select/Error.vue?raw'
 import Colors from '~/examples/select/Colors.vue'
 import ColorsSrc from '~/examples/select/Colors.vue?raw'
+import CustomOption from '~/examples/select/CustomOption.vue'
+import CustomOptionSrc from '~/examples/select/CustomOption.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -41,6 +43,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">颜色</h2>
     <Demo title="Colors.vue" :source="ColorsSrc"><Colors /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">自定义选项（#option 插槽）</h2>
+    <Demo title="CustomOption.vue" :source="CustomOptionSrc"><CustomOption /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunSelect.props" />

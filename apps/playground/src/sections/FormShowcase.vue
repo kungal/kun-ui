@@ -64,6 +64,21 @@ const onRemoteSelect = (opt: KunAutocompleteOption) => {
   remotePicked.value = opt.value
 }
 
+// Custom option rendering (#option slot) — rich items with avatar + description
+const avatarUri = (initial: string, bg: string) =>
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" rx="20" fill="${bg}"/><text x="20" y="27" font-size="18" fill="white" text-anchor="middle" font-family="sans-serif">${initial}</text></svg>`
+  )
+type RichOption = { value: string; label: string; avatar: string; desc: string }
+const richOptions: RichOption[] = [
+  { value: 'kun', label: 'Kun', avatar: avatarUri('K', '#e11d48'), desc: '前端 · Vue' },
+  { value: 'moe', label: 'Moe', avatar: avatarUri('M', '#2563eb'), desc: '设计' },
+  { value: 'rin', label: 'Rin', avatar: avatarUri('R', '#16a34a'), desc: '后端 · Rust' },
+]
+const richSelect = ref<string>('kun')
+const richAc = ref('')
+
 // NumberInput + PinInput
 const qty = ref<number | null>(3)
 const price = ref<number | null>(19.9)
@@ -200,6 +215,35 @@ const storageOptions: KunCheckBoxGroupOption[] = [
           confirmed value: {{ remotePicked ?? '—' }}
         </p>
       </div>
+
+      <KunSelect
+        v-model="richSelect"
+        :options="richOptions"
+        label="Select — custom #option (avatar + desc)"
+      >
+        <template #option="{ option }">
+          <img :src="option.avatar" alt="" class="size-8 shrink-0 rounded-full" />
+          <div class="min-w-0">
+            <div class="truncate font-medium">{{ option.label }}</div>
+            <div class="text-default-500 truncate text-xs">{{ option.desc }}</div>
+          </div>
+        </template>
+      </KunSelect>
+
+      <KunAutocomplete
+        v-model="richAc"
+        :options="richOptions"
+        label="Autocomplete — custom #option (avatar + desc)"
+        placeholder="Type a name…"
+      >
+        <template #option="{ option }">
+          <img :src="option.avatar" alt="" class="size-8 shrink-0 rounded-full" />
+          <div class="min-w-0">
+            <div class="truncate font-medium">{{ option.label }}</div>
+            <div class="text-default-500 truncate text-xs">{{ option.desc }}</div>
+          </div>
+        </template>
+      </KunAutocomplete>
     </div>
 
     <h3 class="text-default-600 text-sm font-semibold">NumberInput · PinInput</h3>

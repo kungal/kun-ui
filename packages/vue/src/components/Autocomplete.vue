@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends KunAutocompleteOption = KunAutocompleteOption">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size as floatingSize } from '@floating-ui/vue'
@@ -22,7 +22,7 @@ import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
 // remote/async sources (pair with `manualFilter`).
 defineOptions({ name: 'KunAutocomplete', inheritAttrs: false })
 
-const props = withDefaults(defineProps<KunAutocompleteProps>(), {
+const props = withDefaults(defineProps<KunAutocompleteProps<T>>(), {
   label: '',
   placeholder: '',
   error: '',
@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<KunAutocompleteProps>(), {
 const modelValue = defineModel<string>({ default: '' })
 
 const emit = defineEmits<{
-  select: [option: KunAutocompleteOption]
+  select: [option: T]
   search: [query: string]
 }>()
 
@@ -166,7 +166,7 @@ onBeforeUnmount(cancelPendingSearch)
 // Spinner shows for the real request (`loading`) and the pre-request debounce gap.
 const showSpinner = computed(() => props.loading || pending.value)
 
-const selectOption = (option: KunAutocompleteOption) => {
+const selectOption = (option: T) => {
   if (option.disabled) return
   // Drop any pending keystroke search so it can't refetch with the pre-selection
   // query right after the user committed a choice.
@@ -361,7 +361,7 @@ defineExpose({
                 :id="`${kunUniqueId}-opt-${index}`"
                 :key="option.value"
                 :data-index="index"
-                class="text-foreground relative flex items-center rounded-kun-md px-3 py-2 select-none"
+                class="text-foreground relative flex items-center gap-2 rounded-kun-md px-3 py-2 select-none"
                 :class="[
                   option.disabled
                     ? 'text-default-300 cursor-not-allowed'
@@ -375,7 +375,21 @@ defineExpose({
                 @mousemove="!option.disabled && (activeIndex = index)"
                 @mousedown.prevent
               >
-                <span class="block min-w-0 flex-1 truncate">{{ option.label }}</span>
+                <!-- Custom item rendering: pass an option shape with extra fields
+                     (avatar, description, …) and read them here. Defaults to the
+                     plain label. The flex-1 wrapper lets rich content (avatar +
+                     text) lay out as a row. -->
+                <div class="flex min-w-0 flex-1 items-center gap-2">
+                  <slot
+                    name="option"
+                    :option="option"
+                    :index="index"
+                    :active="index === activeIndex"
+                    :selected="option.label === modelValue"
+                  >
+                    <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+                  </slot>
+                </div>
               </li>
 
               <li
