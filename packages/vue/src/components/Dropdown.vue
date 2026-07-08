@@ -230,7 +230,9 @@ const focusTint: Record<KunUIColor, string> = {
 
 const itemClass = (item: KunDropdownItem) =>
   cn(
-    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-kun-md px-3 py-1.5 text-sm font-medium outline-none transition-colors',
+    // `text-left`: a native <button> defaults to text-align:center, which the
+    // flex-1 label span inherits — so short labels would sit centered. Reset it.
+    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-kun-md px-3 py-1.5 text-left text-sm font-medium outline-none transition-colors',
     kunVariantClasses('light', item.color || 'default'),
     focusTint[item.color || 'default'],
     item.disabled && 'pointer-events-none cursor-not-allowed opacity-50'
