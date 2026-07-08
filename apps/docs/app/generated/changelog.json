@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.13.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunPopover gains a <code>fullWidth</code> prop</p>\n<p>The trigger was wrapped in two hardcoded <code>inline-block</code> divs, so a consumer could\nnever make the anchor span its container — external classes only reached the outer\nwrapper, not the inner <code>triggerRef</code>. <code>&lt;KunPopover full-width&gt;</code> now switches both\nwrappers to <code>block w-full</code>, so a full-width trigger (e.g. a <code>fullWidth</code> KunButton\nor a split button) fills the width. Default <code>false</code> (inline, content-width) —\nunchanged.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.12.2",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunDropdown / KunContextMenu item labels align left, not center</p>\n<p>Menu items are native <code>&lt;button&gt;</code>s, which default to <code>text-align: center</code>; the\n<code>flex-1</code> label span inherited that, so short labels sat centered. Both item rows\nnow carry <code>text-left</code> so the label starts at the left edge (icon → label), the\nexpected menu-item layout.</p>\n</li>\n</ul>\n"
