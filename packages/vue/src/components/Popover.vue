@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<KunPopoverProps>(), {
   rounded: undefined,
   showArrow: false,
   opaque: false,
+  fullWidth: false,
   trigger: 'click',
   openDelay: 100,
   closeDelay: 120,
@@ -122,12 +123,12 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative inline-block">
+  <div :class="['relative', fullWidth ? 'block w-full' : 'inline-block']">
     <!-- The wrapper opens the popover on click but does NOT claim button
          semantics — the slotted trigger keeps its own role/label. -->
     <div
       ref="triggerRef"
-      class="inline-block"
+      :class="fullWidth ? 'block w-full' : 'inline-block'"
       aria-haspopup="dialog"
       :aria-expanded="isOpen"
       :aria-controls="isOpen ? popoverId : undefined"

@@ -41,5 +41,16 @@
         </div>
       </KunPopover>
     </div>
+
+    <!-- full-width: trigger anchor spans its container (needs a full-width trigger too) -->
+    <div class="w-80 max-w-full rounded-kun-lg border-kun border border-dashed p-3">
+      <p class="text-default-500 mb-2 text-xs">KunPopover full-width (in a 320px box)</p>
+      <KunPopover full-width position="bottom-start">
+        <template #trigger>
+          <KunButton color="secondary" full-width>Full-width trigger ▾</KunButton>
+        </template>
+        <div class="w-64 p-4 text-sm">Panel content</div>
+      </KunPopover>
+    </div>
   </section>
 </template>
