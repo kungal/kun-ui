@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, onUnmounted, ref, watch, watchEffect } from 'vue'
 import { useRoute } from '#imports'
+import { useBodyScrollLock } from '@kungal/ui-vue'
 
 // Per-route SEO — title, description, Open Graph, Twitter card, canonical —
 // resolved from site.config (pageMeta) for every route. Reactive, so it
@@ -29,10 +30,23 @@ watch(
     mobileNavOpen.value = false
   }
 )
+
+// Lock body scroll while the drawer is open. Without it the page behind still
+// scrolls on mobile — and that scroll toggles the browser's URL bar, which
+// (against a 100vh layout) leaves the blank strip at the bottom users reported.
+// Refcounted lock shared with KunUI's own overlays (Modal/Drawer/Lightbox).
+const { lock, unlock } = useBodyScrollLock()
+watch(mobileNavOpen, (open) => (open ? lock() : unlock()))
+onUnmounted(() => {
+  if (mobileNavOpen.value) unlock()
+})
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-dvh">
+    <!-- Route-change progress bar (Nuxt). -->
+    <NuxtLoadingIndicator color="var(--color-primary)" />
+
     <!-- Top bar — built from KunUI components (dogfooding). -->
     <header
       class="border-default-200 bg-[oklch(var(--background))] z-kun-sticky sticky top-0 flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-5 md:bg-background/80 md:backdrop-blur"
@@ -119,7 +133,7 @@ watch(
             @click="mobileNavOpen = false"
           />
           <aside
-            class="mnav-panel bg-content1 border-kun shadow-kun-lg relative h-full w-72 max-w-[80vw] overflow-y-auto border-r p-4"
+            class="mnav-panel bg-content1 border-kun shadow-kun-lg relative h-full w-72 max-w-[80vw] overflow-y-auto overscroll-contain border-r p-4"
           >
             <div class="mb-4 flex items-center justify-between">
               <span class="text-lg font-bold"
