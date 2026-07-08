@@ -1,5 +1,15 @@
 # @kungal/docs
 
+## 0.0.99
+
+### Patch Changes
+
+- Updated dependencies [7a99394]
+  - @kungal/ui-vue@2.12.2
+  - @kungal/ui-nuxt@2.12.2
+  - @kungal/ui-tokens@2.12.2
+  - @kungal/ui-core@2.12.2
+
 ## 0.0.98
 
 ### Patch Changes

@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.12.2",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunDropdown / KunContextMenu item labels align left, not center</p>\n<p>Menu items are native <code>&lt;button&gt;</code>s, which default to <code>text-align: center</code>; the\n<code>flex-1</code> label span inherited that, so short labels sat centered. Both item rows\nnow carry <code>text-left</code> so the label starts at the left edge (icon → label), the\nexpected menu-item layout.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.12.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunMessage no longer jumps wider for a frame when dismissed</p>\n<p>The leaving toast went <code>position: absolute; width: 100%</code>, but the <code>%</code> resolved\nagainst the outer <code>fixed</code> container&#39;s padding box — 2rem wider than the in-flow\ncontent width — so the toast visibly widened and spilled out the right edge for a\nframe before fading. The <code>TransitionGroup</code> wrapper is now the containing block\n(<code>position: relative</code>), so <code>width: 100%</code> matches the in-flow width exactly.</p>\n</li>\n<li><p>fix(vue): KunMessage toasts use semantic-colored border + count badge</p>\n<p>Each toast&#39;s outline is now its own semantic colour (<code>ring-{color}/50</code>) instead of\na uniform neutral grey ring, and the de-dup count badge uses a matching\n<code>bg-{color}/10</code> tint instead of the neutral <code>bg-black/10</code>. Each type now reads as\none cohesive coloured surface in both light and dark.</p>\n</li>\n</ul>\n"

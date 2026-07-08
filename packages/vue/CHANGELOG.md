@@ -1,5 +1,18 @@
 # @kungal/ui-vue
 
+## 2.12.2
+
+### Patch Changes
+
+- 7a99394: fix(vue): KunDropdown / KunContextMenu item labels align left, not center
+
+  Menu items are native `<button>`s, which default to `text-align: center`; the
+  `flex-1` label span inherited that, so short labels sat centered. Both item rows
+  now carry `text-left` so the label starts at the left edge (icon → label), the
+  expected menu-item layout.
+
+  - @kungal/ui-core@2.12.2
+
 ## 2.12.1
 
 ### Patch Changes
