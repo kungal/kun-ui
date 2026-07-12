@@ -65,6 +65,14 @@ export const useKunMessage = (
   richText = false,
   position: KunMessagePosition = 'top-center'
 ): string => {
+  // Toasts are client-only, ephemeral UI. This store is MODULE-SCOPE, so on the
+  // server it's a single array shared by every SSR request (one module instance
+  // per process) and is never cleared there (the dismiss timer only runs on the
+  // client). A server-side trigger would therefore pile up across requests, bake
+  // into every page's SSR HTML, and vanish on hydration (empty client store →
+  // hydration mismatch). No-op on the server — trigger toasts from client code.
+  if (typeof document === 'undefined') return ''
+
   const existingMessage = messages.value.find(
     (m) =>
       m.message === messageData && m.position === position && m.type === type

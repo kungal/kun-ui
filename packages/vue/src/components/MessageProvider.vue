@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   useKunMessageState,
   type KunMessagePosition,
@@ -20,6 +20,14 @@ import KunMessageItem from './MessageItem.vue'
 defineOptions({ name: 'KunMessageProvider' })
 
 const { messages, removeMessage } = useKunMessageState()
+
+// Toasts are client-only, ephemeral UI. Render nothing until mounted so the
+// server (and the first, pre-hydration client render) emits no toast markup —
+// no hydration mismatch even if the store were somehow non-empty on the server.
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
 
 const positionedMessages = computed(() => {
   const groups: Record<KunMessagePosition, KunMessageOptions[]> = {
@@ -48,34 +56,38 @@ const positionClasses: Record<KunMessagePosition, string> = {
 
 <template>
   <Teleport to="body">
-    <!-- Plain positioning container — live-region semantics live on each
-         KunMessageItem (status/polite, or alert/assertive for error/warn).
-         `data-kun-overlay` keeps toasts interactive above an open Modal/Drawer
-         (which marks the rest of the page inert). -->
-    <div
-      v-for="(msgs, position) in positionedMessages"
-      :key="position"
-      data-kun-overlay
-      :class="[
-        'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
-        positionClasses[position as KunMessagePosition],
-      ]"
-    >
-      <!-- `relative` makes THIS wrapper the containing block for a leaving item
-           (which goes `position: absolute`). Without it, the item's `width: 100%`
-           resolves against the outer `fixed` container's padding box — 2rem wider
-           than the in-flow width — so the toast visibly jumps wider (spilling out
-           the right) for a frame before it fades. -->
-      <TransitionGroup name="message-list" tag="div" class="relative w-full">
-        <KunMessageItem
-          v-for="msg in msgs"
-          :key="msg.id"
-          v-bind="msg"
-          class="pointer-events-auto"
-          @remove="removeMessage"
-        />
-      </TransitionGroup>
-    </div>
+    <!-- Client-only (`v-if="mounted"`) so no toast markup is ever
+         server-rendered — the module store is shared across SSR requests. -->
+    <template v-if="mounted">
+      <!-- Plain positioning container — live-region semantics live on each
+           KunMessageItem (status/polite, or alert/assertive for error/warn).
+           `data-kun-overlay` keeps toasts interactive above an open Modal/Drawer
+           (which marks the rest of the page inert). -->
+      <div
+        v-for="(msgs, position) in positionedMessages"
+        :key="position"
+        data-kun-overlay
+        :class="[
+          'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
+          positionClasses[position as KunMessagePosition],
+        ]"
+      >
+        <!-- `relative` makes THIS wrapper the containing block for a leaving item
+             (which goes `position: absolute`). Without it, the item's `width: 100%`
+             resolves against the outer `fixed` container's padding box — 2rem wider
+             than the in-flow width — so the toast visibly jumps wider (spilling out
+             the right) for a frame before it fades. -->
+        <TransitionGroup name="message-list" tag="div" class="relative w-full">
+          <KunMessageItem
+            v-for="msg in msgs"
+            :key="msg.id"
+            v-bind="msg"
+            class="pointer-events-auto"
+            @remove="removeMessage"
+          />
+        </TransitionGroup>
+      </div>
+    </template>
   </Teleport>
 </template>
 
