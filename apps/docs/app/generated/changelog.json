@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.13.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunMessage no longer leaks toasts across SSR requests</p>\n<p>The toast store is module-scope, so on the server it&#39;s a single array shared by\nevery SSR request and never cleared there (the dismiss timer is client-only). A\nserver-side <code>useKunMessage()</code> — e.g. from a data-fetch error handler that runs\nduring SSR — therefore piled up (deduped into a growing <code>count</code>), baked into\nevery page&#39;s SSR HTML, and vanished on hydration (empty client store →\nhydration mismatch). Two guards, both making toasts the client-only ephemeral UI\nthey are: <code>useKunMessage()</code> is a no-op on the server (the store is never mutated\nthere), and <code>KunMessageProvider</code> renders nothing until mounted.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.13.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunPopover gains a <code>fullWidth</code> prop</p>\n<p>The trigger was wrapped in two hardcoded <code>inline-block</code> divs, so a consumer could\nnever make the anchor span its container — external classes only reached the outer\nwrapper, not the inner <code>triggerRef</code>. <code>&lt;KunPopover full-width&gt;</code> now switches both\nwrappers to <code>block w-full</code>, so a full-width trigger (e.g. a <code>fullWidth</code> KunButton\nor a split button) fills the width. Default <code>false</code> (inline, content-width) —\nunchanged.</p>\n</li>\n</ul>\n"

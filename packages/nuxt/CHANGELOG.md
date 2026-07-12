@@ -1,5 +1,13 @@
 # @kungal/ui-nuxt
 
+## 2.13.1
+
+### Patch Changes
+
+- Updated dependencies [978cf03]
+  - @kungal/ui-vue@2.13.1
+  - @kungal/ui-tokens@2.13.1
+
 ## 2.13.0
 
 ### Patch Changes
