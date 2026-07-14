@@ -1222,3 +1222,53 @@ export interface KunCarouselProps {
 export interface KunCarouselItemProps {
   className?: string
 }
+
+// ── CommandPalette (⌘K) ────────────────────────────────────────────────
+// The generic command-palette / spotlight SHELL: trigger + ⌘K, teleported
+// dialog, query input, keyboard nav, grouped results, match highlighting, a11y.
+// It owns NO search logic — you feed it results (grouped or flat) computed from
+// the `query` it exposes via `v-model:query` (your scoring / index / async
+// fetch), and it renders + navigates them. Selecting emits `@select`.
+export interface KunCommandItem {
+  /** Stable key + what `@select` carries (falls back to `label`). */
+  value?: string | number
+  /** Primary line. */
+  label: string
+  /** Secondary line — a match snippet or description. */
+  description?: string
+  /** Small caption above the label (e.g. a breadcrumb / category). */
+  section?: string
+  /** Leading icon name. */
+  icon?: string
+  /** Render as a real crawlable link (`@select` still fires). */
+  href?: string
+  disabled?: boolean
+}
+
+export interface KunCommandGroup<T extends KunCommandItem = KunCommandItem> {
+  /** Optional group heading. */
+  label?: string
+  items: readonly T[]
+}
+
+export interface KunCommandPaletteProps<
+  T extends KunCommandItem = KunCommandItem,
+> {
+  /** Results to show: a flat item list (one unlabelled group) OR grouped. You
+   *  compute these from `v-model:query` — the shell does no matching itself. */
+  items?: readonly T[] | readonly KunCommandGroup<T>[]
+  /** Async search in flight → a loading state instead of the no-result text. */
+  loading?: boolean
+  placeholder?: string
+  /** Shown when `query` is non-empty but there are no results. */
+  noResultText?: string
+  /** Shown when `query` is empty (a hint / "recent"). */
+  emptyText?: string
+  /** Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string
+   *  sets a custom key (still with meta/ctrl); `false` disables it. */
+  shortcut?: boolean | string
+  /** Highlight the query terms in the default item render. Default `true`. */
+  highlight?: boolean
+  /** Accessible name for the dialog. */
+  ariaLabel?: string
+}

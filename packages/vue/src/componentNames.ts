@@ -30,6 +30,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunCheckBox',
   'KunCheckBoxGroup',
   'KunChip',
+  'KunCommandPalette',
   'KunContent',
   'KunContextMenu',
   'KunCopy',

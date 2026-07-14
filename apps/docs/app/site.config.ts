@@ -64,6 +64,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/carousel': { title: 'Carousel', cn: '轮播', description: '横向轮播(KunCarousel + KunCarouselItem):原生滚动吸附 + 触摸滑动,箭头/圆点/自动播放为渐进增强。' },
   '/components/checkbox': { title: 'Checkbox', cn: '复选框', description: '布尔复选框(v-model),可带标签。' },
   '/components/chip': { title: 'Chip', cn: '胶囊', description: '小巧的标签 / 胶囊,支持颜色、变体与尺寸。' },
+  '/components/commandpalette': { title: 'CommandPalette', cn: '命令面板', description: '通用 ⌘K 命令面板外壳:触发器 + 快捷键、弹层、键盘导航、分组与高亮。搜索逻辑由你提供(v-model:query → items),库负责交互与无障碍。' },
   '/components/content': { title: 'Content', cn: '内容', description: '渲染可信 HTML(支持剧透与内联图片灯箱)。不做 sanitize —— 不可信 HTML 请自行处理。' },
   '/components/contextmenu': { title: 'ContextMenu', cn: '右键菜单', description: '在指定坐标打开的菜单,例如右键菜单。' },
   '/components/copy': { title: 'Copy', cn: '复制', description: '一键复制到剪贴板,带成功反馈。' },

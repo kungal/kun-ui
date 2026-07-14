@@ -84,7 +84,7 @@
     "props": [
       {
         "name": "options",
-        "type": "readonly KunAutocompleteOption[]",
+        "type": "readonly T[]",
         "required": true
       },
       {
@@ -229,7 +229,7 @@
       },
       {
         "name": "floatingPosition",
-        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
         "required": false
       },
       {
@@ -336,7 +336,7 @@
       },
       {
         "name": "size",
-        "type": "\"md\" | \"sm\" | \"lg\"",
+        "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       },
@@ -445,7 +445,7 @@
       },
       {
         "name": "iconPosition",
-        "type": "\"left\" | \"right\"",
+        "type": "\"right\" | \"left\"",
         "required": false,
         "default": "\"left\""
       },
@@ -856,6 +856,77 @@
         "type": "KunUIVariant",
         "required": false,
         "default": "\"flat\""
+      }
+    ]
+  },
+  "KunCommandPalette": {
+    "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Accessible name for the dialog."
+      },
+      {
+        "name": "emptyText",
+        "type": "string",
+        "required": false,
+        "default": "\"输入关键字搜索\"",
+        "description": "Shown when `query` is empty (a hint / \"recent\")."
+      },
+      {
+        "name": "highlight",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Highlight the query terms in the default item render. Default `true`."
+      },
+      {
+        "name": "items",
+        "type": "readonly T[] | readonly KunCommandGroup<T>[]",
+        "required": false,
+        "default": "[]",
+        "description": "Results to show: a flat item list (one unlabelled group) OR grouped. You compute these from `v-model:query` — the shell does no matching itself."
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Async search in flight → a loading state instead of the no-result text."
+      },
+      {
+        "name": "noResultText",
+        "type": "string",
+        "required": false,
+        "default": "\"无结果\"",
+        "description": "Shown when `query` is non-empty but there are no results."
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "\"搜索…\""
+      },
+      {
+        "name": "query",
+        "type": "string",
+        "required": false,
+        "default": "\"\""
+      },
+      {
+        "name": "shortcut",
+        "type": "string | boolean",
+        "required": false,
+        "default": "true",
+        "description": "Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string sets a custom key (still with meta/ctrl); `false` disables it."
       }
     ]
   },
@@ -1398,7 +1469,7 @@
       },
       {
         "name": "decoding",
-        "type": "\"sync\" | \"async\" | \"auto\"",
+        "type": "\"auto\" | \"sync\" | \"async\"",
         "required": false,
         "default": "undefined"
       },
@@ -1464,7 +1535,7 @@
       },
       {
         "name": "provider",
-        "type": "\"none\" | \"ipx\" | (string & {})",
+        "type": "\"none\" | (string & {}) | \"ipx\"",
         "required": false,
         "default": "undefined"
       },
@@ -2218,6 +2289,13 @@
         "description": "`trigger=\"hover\"`: ms grace after leaving (crosses the gap). Default 120."
       },
       {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Make the trigger anchor span its container instead of shrinking to its content. Both wrapper divs switch from `inline-block` to `block w-full`, so a full-width trigger (e.g. a `fullWidth` KunButton or a split button) can actually fill the width. Default `false` (inline, content-width)."
+      },
+      {
         "name": "group",
         "type": "string",
         "required": false,
@@ -2449,7 +2527,7 @@
       },
       {
         "name": "size",
-        "type": "\"md\" | \"sm\" | \"lg\"",
+        "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       }
@@ -2505,7 +2583,7 @@
       },
       {
         "name": "size",
-        "type": "\"md\" | \"sm\" | \"lg\"",
+        "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       },
@@ -2597,7 +2675,7 @@
       },
       {
         "name": "options",
-        "type": "readonly KunSelectOption<T>[]",
+        "type": "readonly O[]",
         "required": true
       },
       {
@@ -3616,7 +3694,7 @@
       },
       {
         "name": "position",
-        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
         "required": false,
         "default": "\"top\""
       },
@@ -3711,7 +3789,7 @@
       },
       {
         "name": "floatingPosition",
-        "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+        "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
         "required": false,
         "default": "\"top\""
       },

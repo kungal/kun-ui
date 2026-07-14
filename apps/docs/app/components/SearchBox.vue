@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed } from 'vue'
 import { navigateTo } from '#imports'
 import { pageMeta } from '~/site.config'
 import { nav } from '~/nav'
+import type { KunCommandItem } from '@kungal/ui-vue'
 
-// Native client-side search (⌘K command palette) — no Algolia, no build step,
-// works identically in dev and prod. The index is built straight from the
-// site's pageMeta (title / Chinese name / description) + nav (section); it's a
-// few dozen tiny entries, so it ships inline rather than as a lazy chunk.
+// The ⌘K UI (dialog, keyboard nav, highlight, a11y) now lives in the library's
+// <KunCommandPalette>. This file keeps only the docs-specific search: build an
+// index from pageMeta, score it against the query, map hits → command items.
 interface Doc {
   route: string
   title: string
@@ -34,55 +34,15 @@ const index: Doc[] = Object.entries(pageMeta).map(([route, m]) => ({
 
 const open = ref(false)
 const query = ref('')
-const active = ref(0)
-const inputEl = ref<HTMLInputElement | null>(null)
-const listEl = ref<HTMLElement | null>(null)
 
-// ⌘K on macOS, Ctrl K elsewhere — label matches the platform.
-const isMac = ref(false)
-onMounted(() => {
-  isMac.value = /mac/i.test(navigator.platform || navigator.userAgent)
-})
+const terms = computed(() =>
+  query.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
+)
 
-function openSearch() {
-  open.value = true
-  nextTick(() => inputEl.value?.focus())
-}
-function closeSearch() {
-  open.value = false
-  query.value = ''
-  active.value = 0
-}
-
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const escapeHtml = (s: string) =>
-  s.replace(
-    /[&<>"]/g,
-    (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string
-  )
-
-// Safe highlight: split on the terms (capturing group → odd indices are
-// matches), escape every piece, wrap matches in <mark>. Escaping AFTER the
-// split avoids matching inside HTML entities.
-function highlight(text: string, terms: string[]): string {
-  const valid = terms.filter(Boolean).map(escapeRegExp)
-  if (!valid.length) return escapeHtml(text)
-  const re = new RegExp(`(${valid.join('|')})`, 'gi')
-  return text
-    .split(re)
-    .map((part, i) =>
-      i % 2
-        ? `<mark class="bg-primary/20 text-foreground rounded-sm px-0.5">${escapeHtml(part)}</mark>`
-        : escapeHtml(part)
-    )
-    .join('')
-}
-
-function makeSnippet(body: string, terms: string[]): string | undefined {
+function makeSnippet(body: string, ts: string[]): string | undefined {
   const lower = body.toLowerCase()
   let pos = -1
-  for (const t of terms) {
+  for (const t of ts) {
     const i = lower.indexOf(t)
     if (i !== -1 && (pos === -1 || i < pos)) pos = i
   }
@@ -95,10 +55,6 @@ function makeSnippet(body: string, terms: string[]): string | undefined {
     (end < body.length ? '…' : '')
   )
 }
-
-const terms = computed(() =>
-  query.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
-)
 
 const results = computed<Hit[]>(() => {
   const ts = terms.value
@@ -122,7 +78,6 @@ const results = computed<Hit[]>(() => {
         i = body.indexOf(t, i + t.length)
       }
     }
-    // every term must appear somewhere (AND semantics)
     const allPresent = ts.every(
       (t) =>
         title.includes(t) ||
@@ -137,173 +92,50 @@ const results = computed<Hit[]>(() => {
   return hits.slice(0, 8)
 })
 
-watch(results, () => {
-  active.value = 0
-})
-
 const heading = (d: Doc) => (d.cn ? `${d.title} · ${d.cn}` : d.title)
 
-function go(hit: Hit) {
-  closeSearch()
-  navigateTo(hit.doc.route)
-}
+// Map scored hits → the shell's item shape. `section` is the caption, `label`
+// the title, `description` the snippet — the palette highlights them for us.
+const items = computed<KunCommandItem[]>(() =>
+  results.value.map((hit) => ({
+    value: hit.doc.route,
+    label: heading(hit.doc),
+    description: hit.snippet,
+    section: hit.doc.section,
+  }))
+)
 
-function move(delta: number) {
-  if (!results.value.length) return
-  active.value =
-    (active.value + delta + results.value.length) % results.value.length
-  nextTick(() => {
-    listEl.value
-      ?.querySelector('[data-active="true"]')
-      ?.scrollIntoView({ block: 'nearest' })
-  })
+function go(item: KunCommandItem) {
+  navigateTo(String(item.value))
 }
-
-function onKeydown(e: KeyboardEvent) {
-  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-    e.preventDefault()
-    open.value ? closeSearch() : openSearch()
-    return
-  }
-  if (!open.value) return
-  if (e.key === 'Escape') {
-    e.preventDefault()
-    closeSearch()
-  } else if (e.key === 'ArrowDown') {
-    e.preventDefault()
-    move(1)
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault()
-    move(-1)
-  } else if (e.key === 'Enter') {
-    e.preventDefault()
-    const hit = results.value[active.value]
-    if (hit) go(hit)
-  }
-}
-
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>
-  <div>
-    <!-- Trigger: a search field on md+, icon-only on mobile. SSR-rendered. -->
-    <button
-      type="button"
-      aria-label="搜索文档"
-      class="border-kun text-default-400 hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
-      @click="openSearch"
-    >
-      <KunIcon name="lucide:search" class="shrink-0" />
-      <span class="hidden flex-1 text-left md:inline">搜索文档…</span>
-      <kbd
-        class="border-kun text-default-400 hidden rounded border px-1.5 py-0.5 text-[10px] font-medium md:inline"
+  <KunCommandPalette
+    v-model:open="open"
+    v-model:query="query"
+    :items="items"
+    placeholder="搜索组件、页面…"
+    empty-text="输入关键字搜索组件与页面"
+    aria-label="搜索文档"
+    @select="go"
+  >
+    <template #trigger="{ open, shortcut }">
+      <!-- The classic docs trigger: a search field on md+, icon-only on mobile. -->
+      <button
+        type="button"
+        aria-label="搜索文档"
+        class="border-kun text-default-400 hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
+        @click="open"
       >
-        {{ isMac ? '⌘' : 'Ctrl' }} K
-      </kbd>
-    </button>
-
-    <Teleport to="body">
-      <Transition name="kun-fade">
-        <div
-          v-if="open"
-          class="z-kun-modal fixed inset-0 flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
-          @click.self="closeSearch"
+        <KunIcon name="lucide:search" class="shrink-0" />
+        <span class="hidden flex-1 text-left md:inline">搜索文档…</span>
+        <kbd
+          class="border-kun text-default-400 hidden rounded border px-1.5 py-0.5 text-[10px] font-medium md:inline"
         >
-          <div
-            class="bg-content1 border-kun rounded-kun-lg shadow-kun-lg flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden border"
-          >
-            <!-- input -->
-            <div class="border-kun flex items-center gap-3 border-b px-4">
-              <KunIcon name="lucide:search" class="text-default-400 shrink-0" />
-              <input
-                ref="inputEl"
-                v-model="query"
-                type="text"
-                enterkeyhint="search"
-                placeholder="搜索组件、页面…"
-                class="text-foreground placeholder:text-default-400 flex-1 bg-transparent py-3.5 text-sm outline-none"
-                spellcheck="false"
-                autocomplete="off"
-              />
-              <button
-                type="button"
-                class="text-default-400 hover:text-default-600 cursor-pointer"
-                aria-label="关闭"
-                @click="closeSearch"
-              >
-                <KunIcon name="lucide:x" />
-              </button>
-            </div>
-
-            <!-- results -->
-            <div ref="listEl" class="min-h-0 flex-1 overflow-y-auto p-2">
-              <ul v-if="results.length" class="flex flex-col gap-0.5">
-                <li v-for="(hit, i) in results" :key="hit.doc.route">
-                  <button
-                    type="button"
-                    :data-active="i === active"
-                    class="block w-full cursor-pointer rounded-kun-md px-3 py-2 text-left transition-colors"
-                    :class="i === active ? 'bg-primary/10' : 'hover:bg-default-100'"
-                    @click="go(hit)"
-                    @mouseenter="active = i"
-                  >
-                    <div class="text-default-400 mb-0.5 text-xs">
-                      {{ hit.doc.section }}
-                    </div>
-                    <!-- eslint-disable-next-line vue/no-v-html -->
-                    <div
-                      class="text-foreground text-sm font-medium"
-                      v-html="highlight(heading(hit.doc), terms)"
-                    />
-                    <!-- eslint-disable-next-line vue/no-v-html -->
-                    <div
-                      v-if="hit.snippet"
-                      class="text-default-400 mt-0.5 truncate text-xs"
-                      v-html="highlight(hit.snippet, terms)"
-                    />
-                  </button>
-                </li>
-              </ul>
-
-              <p
-                v-else-if="query.trim()"
-                class="text-default-400 px-3 py-6 text-center text-sm"
-              >
-                无结果:<span class="text-default-600">{{ query }}</span>
-              </p>
-              <p
-                v-else
-                class="text-default-400 px-3 py-6 text-center text-sm"
-              >
-                输入关键字搜索组件与页面
-              </p>
-            </div>
-
-            <!-- footer hints -->
-            <div
-              class="border-kun text-default-400 flex items-center gap-4 border-t px-4 py-2 text-[11px]"
-            >
-              <span><kbd class="text-default-500">↑↓</kbd> 选择</span>
-              <span><kbd class="text-default-500">↵</kbd> 打开</span>
-              <span><kbd class="text-default-500">esc</kbd> 关闭</span>
-              <span class="ml-auto">{{ results.length }} 条结果</span>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
-  </div>
+          {{ shortcut }}
+        </kbd>
+      </button>
+    </template>
+  </KunCommandPalette>
 </template>
-
-<style scoped>
-.kun-fade-enter-active,
-.kun-fade-leave-active {
-  transition: opacity 0.15s ease;
-}
-.kun-fade-enter-from,
-.kun-fade-leave-to {
-  opacity: 0;
-}
-</style>

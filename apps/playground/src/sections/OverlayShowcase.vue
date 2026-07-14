@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type {
   KunSelectOption,
   KunDropdownItem,
   KunContextMenuItem,
+  KunCommandGroup,
+  KunCommandItem,
 } from '@kungal/ui-vue'
 
 const selected = ref('vue')
@@ -41,6 +43,27 @@ const onContext = (e: MouseEvent) => {
   ctxPos.value = { x: e.clientX, y: e.clientY }
   ctxVisible.value = true
 }
+
+// CommandPalette (⌘K). Static commands, grouped, filtered by the query the
+// palette exposes via v-model:query — the shell does the dialog + keyboard nav.
+const cmdkOpen = ref(false)
+const cmdkQuery = ref('')
+const cmdkPicked = ref('')
+const COMMANDS: (KunCommandItem & { section: string })[] = [
+  { value: 'dashboard', label: 'Go to Dashboard', section: 'Navigate', icon: 'lucide:layout-grid' },
+  { value: 'settings', label: 'Go to Settings', section: 'Navigate', icon: 'lucide:settings' },
+  { value: 'profile', label: 'Go to Profile', section: 'Navigate', icon: 'lucide:user' },
+  { value: 'new-file', label: 'New file', section: 'Actions', icon: 'lucide:file-plus' },
+  { value: 'copy-link', label: 'Copy link', section: 'Actions', icon: 'lucide:link' },
+  { value: 'delete', label: 'Delete', section: 'Actions', icon: 'lucide:trash-2' },
+]
+const cmdkGroups = computed<KunCommandGroup[]>(() => {
+  const q = cmdkQuery.value.trim().toLowerCase()
+  const match = COMMANDS.filter((c) => !q || c.label.toLowerCase().includes(q))
+  return ['Navigate', 'Actions']
+    .map((s) => ({ label: s, items: match.filter((c) => c.section === s) }))
+    .filter((g) => g.items.length)
+})
 </script>
 
 <template>
@@ -65,6 +88,25 @@ const onContext = (e: MouseEvent) => {
         </template>
       </KunDropdown>
       <span class="text-default-500 text-sm">last: {{ lastAction || '—' }}</span>
+    </div>
+
+    <h3 class="mt-2 text-base font-medium">CommandPalette (⌘K)</h3>
+    <div class="flex items-center gap-3">
+      <KunCommandPalette
+        v-model:open="cmdkOpen"
+        v-model:query="cmdkQuery"
+        :items="cmdkGroups"
+        placeholder="Type a command…"
+        @select="(i: KunCommandItem) => (cmdkPicked = String(i.value))"
+      >
+        <template #trigger="{ open, shortcut }">
+          <KunButton variant="bordered" @click="open">
+            Command palette
+            <kbd class="border-kun ml-1 rounded border px-1 text-[10px]">{{ shortcut }}</kbd>
+          </KunButton>
+        </template>
+      </KunCommandPalette>
+      <span class="text-default-500 text-sm">picked: {{ cmdkPicked || '—' }}</span>
     </div>
 
     <h3 class="mt-2 text-base font-medium">Drawer</h3>
