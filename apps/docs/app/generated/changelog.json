@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.14.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): add KunCommandPalette (⌘K command palette / spotlight)</p>\n<p>The generic ⌘K palette SHELL — trigger + global shortcut, teleported dialog,\nautofocus, body scroll-lock, keyboard nav (↑↓ / Home / End / Enter / Esc),\ngrouped results, safe match highlighting, and full a11y (dialog + combobox +\nlistbox + aria-activedescendant) — with NO search logic baked in. You compute\n<code>items</code> (flat or grouped) from the <code>query</code> it exposes via <code>v-model:query</code> (your\nown scoring / index / async fetch) and it renders + navigates them; selecting\nemits <code>@select</code>. Generic over the item shape, with <code>#trigger</code> / <code>#item</code> /\n<code>#empty</code> / <code>#no-result</code> / <code>#footer</code> slots, a <code>loading</code> state, and a configurable\n<code>shortcut</code>. The docs site&#39;s ⌘K search is now a thin consumer of it.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.13.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunMessage no longer leaks toasts across SSR requests</p>\n<p>The toast store is module-scope, so on the server it&#39;s a single array shared by\nevery SSR request and never cleared there (the dismiss timer is client-only). A\nserver-side <code>useKunMessage()</code> — e.g. from a data-fetch error handler that runs\nduring SSR — therefore piled up (deduped into a growing <code>count</code>), baked into\nevery page&#39;s SSR HTML, and vanished on hydration (empty client store →\nhydration mismatch). Two guards, both making toasts the client-only ephemeral UI\nthey are: <code>useKunMessage()</code> is a no-op on the server (the store is never mutated\nthere), and <code>KunMessageProvider</code> renders nothing until mounted.</p>\n</li>\n</ul>\n"
