@@ -125,7 +125,7 @@ function go(item: KunCommandItem) {
       <button
         type="button"
         aria-label="搜索文档"
-        class="border-kun text-default-400 hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
+        class="border-default-300 text-default-400 hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
         @click="open"
       >
         <KunIcon name="lucide:search" class="shrink-0" />
