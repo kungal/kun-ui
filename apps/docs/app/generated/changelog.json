@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.14.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>feat(vue): KunPagination animates the active page (sliding pill + &quot;highlight leads&quot;)</p>\n<p>The active page is now a single primary pill that slides between numbers (like\nKunTab&#39;s indicator) with a small elastic pop, instead of the highlight jumping.\nFor mid-range pages — where the active number stays centered in the ellipsis\nwindow so the pill can&#39;t slide — the highlight <em>leads</em>: it first covers the\nadjacent number, then the number row scrolls (FLIP) to recenter and the pill\nrides back with it. Honors <code>prefers-reduced-motion</code>; falls back to a solid pill\nbefore hydration. No API change.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.14.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): add KunCommandPalette (⌘K command palette / spotlight)</p>\n<p>The generic ⌘K palette SHELL — trigger + global shortcut, teleported dialog,\nautofocus, body scroll-lock, keyboard nav (↑↓ / Home / End / Enter / Esc),\ngrouped results, safe match highlighting, and full a11y (dialog + combobox +\nlistbox + aria-activedescendant) — with NO search logic baked in. You compute\n<code>items</code> (flat or grouped) from the <code>query</code> it exposes via <code>v-model:query</code> (your\nown scoring / index / async fetch) and it renders + navigates them; selecting\nemits <code>@select</code>. Generic over the item shape, with <code>#trigger</code> / <code>#item</code> /\n<code>#empty</code> / <code>#no-result</code> / <code>#footer</code> slots, a <code>loading</code> state, and a configurable\n<code>shortcut</code>. The docs site&#39;s ⌘K search is now a thin consumer of it.</p>\n</li>\n</ul>\n"
