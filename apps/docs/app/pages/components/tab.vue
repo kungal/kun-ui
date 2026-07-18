@@ -19,6 +19,8 @@ import Panels from '~/examples/tab/Panels.vue'
 import PanelsSrc from '~/examples/tab/Panels.vue?raw'
 import LazyLoading from '~/examples/tab/LazyLoading.vue'
 import LazyLoadingSrc from '~/examples/tab/LazyLoading.vue?raw'
+import Badge from '~/examples/tab/Badge.vue'
+import BadgeSrc from '~/examples/tab/Badge.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -56,6 +58,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">懒加载 / 加载中</h2>
     <Demo title="LazyLoading.vue" :source="LazyLoadingSrc"><LazyLoading /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">自定义标签 · 徽标 / 圆点（#tab 插槽）</h2>
+    <Demo title="Badge.vue" :source="BadgeSrc"><Badge /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTab.props" />

@@ -17,6 +17,15 @@ const variants: KunTabVariant[] = [
   'pills',
 ]
 
+// #tab slot — per-tab badge / dot (extra fields on the item, typed in the slot)
+type BadgeTab = KunTabItem & { count?: number; dirty?: boolean }
+const badgeTab = ref('inbox')
+const badgeItems: BadgeTab[] = [
+  { value: 'inbox', textValue: 'Inbox', icon: 'lucide:check', count: 3 },
+  { value: 'drafts', textValue: 'Drafts', dirty: true },
+  { value: 'sent', textValue: 'Sent' },
+]
+
 // SEO-friendly panels demo
 const panelTab = ref('overview')
 const panelItems: KunTabItem[] = [
@@ -76,6 +85,15 @@ onLazyChange(lazyTab.value)
         <KunTab v-model="tab" :items="items" :variant="v" />
       </div>
     </div>
+
+    <h3 class="mt-2 text-base font-medium">Per-tab badge / dot (#tab slot)</h3>
+    <KunTab v-model="badgeTab" :items="badgeItems" variant="light">
+      <template #tab="{ item }">
+        <span>{{ item.textValue }}</span>
+        <KunBadge v-if="item.count" variant="count" :count="item.count" color="primary" />
+        <KunBadge v-else-if="item.dirty" variant="dot" color="danger" />
+      </template>
+    </KunTab>
 
     <h3 class="mt-2 text-base font-medium">Vertical</h3>
     <KunTab

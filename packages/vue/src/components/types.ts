@@ -112,8 +112,10 @@ export type KunTabColor = KunUIColor
 export type KunTabSize = 'sm' | 'md' | 'lg'
 export type KunTabOrientation = 'horizontal' | 'vertical'
 
-export interface KunTabProps {
-  items: KunTabItem[]
+// Generic over the item shape so callers can attach extra fields (a `dirty`
+// flag, an unread count, …) and read them back — typed — in the `#tab` slot.
+export interface KunTabProps<T extends KunTabItem = KunTabItem> {
+  items: T[]
   variant?: KunTabVariant
   color?: KunTabColor
   size?: KunTabSize

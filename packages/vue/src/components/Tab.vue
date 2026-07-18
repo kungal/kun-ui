@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends KunTabItem = KunTabItem">
 import {
   computed,
   nextTick,
@@ -27,7 +27,7 @@ import type { KunTabItem, KunTabColor, KunTabSize, KunTabProps } from './types'
 //     under Nuxt's Vite build)
 defineOptions({ name: 'KunTab' })
 
-const props = withDefaults(defineProps<KunTabProps>(), {
+const props = withDefaults(defineProps<KunTabProps<T>>(), {
   variant: 'underlined',
   color: 'primary',
   size: 'md',
@@ -482,14 +482,20 @@ const indicatorMergedStyle = computed(() => {
         @click="onTabClick($event, item, index)"
         @keydown="onKeydown($event, index)"
       >
-        <span
-          v-if="item.icon"
-          class="inline-flex shrink-0"
-          :style="{ fontSize: iconSize }"
-        >
-          <KunIcon :name="item.icon" />
-        </span>
-        <span v-if="item.textValue">{{ item.textValue }}</span>
+        <!-- Custom tab content: read extra fields off `item` (e.g. render a
+             KunBadge for unsaved/unread state). The sliding indicator measures
+             the button, so wider slot content is tracked automatically. Defaults
+             to the icon + label. -->
+        <slot name="tab" :item="item" :index="index" :active="isSelected(item)">
+          <span
+            v-if="item.icon"
+            class="inline-flex shrink-0"
+            :style="{ fontSize: iconSize }"
+          >
+            <KunIcon :name="item.icon" />
+          </span>
+          <span v-if="item.textValue">{{ item.textValue }}</span>
+        </slot>
       </component>
     </div>
   </div>
