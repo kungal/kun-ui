@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.15.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunTab <code>#tab</code> slot for custom tab content (badges, dots)</p>\n<p>KunTab is now generic over the item shape and exposes a <code>#tab</code> scoped slot\n(<code>{ item, index, active }</code>) so you can render custom per-tab content — e.g.\ncompose a <code>KunBadge</code> for an unread count or an &quot;unsaved&quot; dot — instead of being\nlimited to icon + label. Extra fields on the item (a <code>count</code>, a <code>dirty</code> flag, …)\nare typed inside the slot. The sliding indicator measures the button, so\nbadge-widened tabs are tracked automatically. Defaults to icon + label\n(backward-compatible).</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.14.1",
     "type": "patch",
     "html": "<ul>\n<li><p>feat(vue): KunPagination animates the active page (sliding pill + &quot;highlight leads&quot;)</p>\n<p>The active page is now a single primary pill that slides between numbers (like\nKunTab&#39;s indicator) with a small elastic pop, instead of the highlight jumping.\nFor mid-range pages — where the active number stays centered in the ellipsis\nwindow so the pill can&#39;t slide — the highlight <em>leads</em>: it first covers the\nadjacent number, then the number row scrolls (FLIP) to recenter and the pill\nrides back with it. Honors <code>prefers-reduced-motion</code>; falls back to a solid pill\nbefore hydration. No API change.</p>\n</li>\n</ul>\n"
