@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.16.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p>feat(vue): KunTab auto-handles horizontal overflow (scroll + edge fade + chevrons)</p>\n<p>A horizontal tab strip that outgrows its container now scrolls <strong>inside</strong> the\ncontainer instead of widening the page — automatically, with no <code>scrollable</code>\nflag and no manual overflow check. When the tabs overflow:</p>\n<ul>\n<li>the overflowing edge fades to transparent via a CSS mask — <strong>background-independent</strong>,\nso it reads clearly on any surface (unlike a colored scroll shadow that blends in);</li>\n<li>a chevron button floats on each scrollable side (opt out with <code>:scroll-buttons=&quot;false&quot;</code>\nto keep just the fade);</li>\n<li>the active tab auto-scrolls into view, so ← / → keyboard nav always keeps the\nselection visible.</li>\n</ul>\n<p>New prop: <code>scrollButtons?: boolean</code> (default <code>true</code>). The existing <code>scrollable</code>\nprop now only governs <em>vertical</em> tab columns; horizontal overflow is handled\nunconditionally.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.15.1",
     "type": "patch",
     "html": "<ul>\n<li><p>fix(vue): KunTab vertical orientation now defaults to left-aligned content</p>\n<p>The <code>align</code> default is now orientation-aware. A vertical tab list reads as a\nnav column, where left-aligned labels are the convention, so vertical tabs now\ndefault to <code>align=&quot;start&quot;</code>. Horizontal tabs keep the classic centered look.\nAn explicit <code>align</code> prop still overrides either orientation — pass\n<code>align=&quot;center&quot;</code> to restore the previous centered vertical tabs.</p>\n</li>\n</ul>\n"
