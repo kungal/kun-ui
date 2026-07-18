@@ -123,7 +123,8 @@ export interface KunTabProps<T extends KunTabItem = KunTabItem> {
   fullWidth?: boolean
   // Horizontal alignment of each tab's content (icon + label) inside its box.
   // Mainly visible on vertical / full-width tabs (where the box is wider than
-  // its content). Default 'center'.
+  // its content). Default is orientation-aware: 'start' for vertical (a nav
+  // column reads best left-aligned), 'center' for horizontal.
   align?: 'start' | 'center' | 'end'
   disabled?: boolean
   disableAnimation?: boolean

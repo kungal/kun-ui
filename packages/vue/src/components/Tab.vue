@@ -33,7 +33,8 @@ const props = withDefaults(defineProps<KunTabProps<T>>(), {
   size: 'md',
   orientation: 'horizontal',
   fullWidth: false,
-  align: 'center',
+  // `align` is intentionally left undefined here so the default can be
+  // orientation-aware — see `resolvedAlign`.
   disabled: false,
   disableAnimation: false,
   scrollable: false,
@@ -296,6 +297,14 @@ const alignClass: Record<NonNullable<KunTabProps['align']>, string> = {
   end: 'justify-end',
 }
 
+// Default alignment is orientation-aware: a vertical tab list reads as a nav
+// column, where left-aligned labels are the convention, so it defaults to
+// 'start'. Horizontal tabs keep the classic centered look. An explicit `align`
+// prop overrides either way.
+const resolvedAlign = computed(
+  () => props.align ?? (isVertical.value ? 'start' : 'center')
+)
+
 const tabClasses = (item: KunTabItem) => {
   const selected = isSelected(item)
   const base = cn(
@@ -306,7 +315,7 @@ const tabClasses = (item: KunTabItem) => {
     // over the still-uncovered light background and read as "invisible until the
     // animation finished". Now both land together.
     'relative z-10 inline-flex items-center cursor-pointer select-none whitespace-nowrap transition-colors duration-kun-base ease-kun-standard',
-    alignClass[props.align],
+    alignClass[resolvedAlign.value],
     sizeClasses[props.size],
     sizeGap[props.size],
     item.disabled && 'opacity-50 cursor-not-allowed',
