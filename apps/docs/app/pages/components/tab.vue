@@ -9,6 +9,8 @@ import Sizes from '~/examples/tab/Sizes.vue'
 import SizesSrc from '~/examples/tab/Sizes.vue?raw'
 import Vertical from '~/examples/tab/Vertical.vue'
 import VerticalSrc from '~/examples/tab/Vertical.vue?raw'
+import Overflow from '~/examples/tab/Overflow.vue'
+import OverflowSrc from '~/examples/tab/Overflow.vue?raw'
 import Icons from '~/examples/tab/Icons.vue'
 import IconsSrc from '~/examples/tab/Icons.vue?raw'
 import Align from '~/examples/tab/Align.vue'
@@ -43,6 +45,16 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">垂直方向</h2>
     <Demo title="Vertical.vue" :source="VerticalSrc"><Vertical /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">溢出 · 自动滚动</h2>
+    <p class="text-default-600 mb-3 text-sm leading-relaxed">
+      横向 Tab 一旦放不下,会在容器内<strong>自动滚动</strong>而不是撑开页面——无需
+      <code>scrollable</code> 开关,也无需手动判断是否溢出。溢出的一侧用遮罩把标签
+      <strong>渐隐为透明</strong>(与背景色无关,任何底色都清晰),并在可滚动的一侧浮出
+      箭头;选中的标签会自动滚入可见区,方向键切换时始终可见。传
+      <code>:scroll-buttons="false"</code> 可只保留渐隐、去掉箭头。
+    </p>
+    <Demo title="Overflow.vue" :source="OverflowSrc"><Overflow /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">图标</h2>
     <Demo title="Icons.vue" :source="IconsSrc"><Icons /></Demo>

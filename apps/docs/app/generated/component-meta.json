@@ -3217,6 +3217,12 @@
         "default": "false"
       },
       {
+        "name": "scrollButtons",
+        "type": "boolean",
+        "required": false,
+        "default": "true"
+      },
+      {
         "name": "size",
         "type": "KunTabSize",
         "required": false,

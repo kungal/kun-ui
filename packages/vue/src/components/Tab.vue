@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<KunTabProps<T>>(), {
   disabled: false,
   disableAnimation: false,
   scrollable: false,
+  scrollButtons: true,
   iconSize: '1em',
   className: '',
   innerClassName: '',
@@ -121,7 +122,12 @@ const updateIndicator = () => {
 
 watch(
   [value, () => props.items.length, () => props.orientation],
-  () => nextTick(updateIndicator),
+  () =>
+    nextTick(() => {
+      updateIndicator()
+      updateOverflow()
+      scrollActiveIntoView()
+    }),
   { immediate: true }
 )
 
@@ -135,10 +141,22 @@ const listRef = ref<HTMLElement | null>(null)
 let resizeObserver: ResizeObserver | null = null
 
 onMounted(() => {
-  nextTick(updateIndicator)
-  if (typeof ResizeObserver !== 'undefined' && listRef.value) {
-    resizeObserver = new ResizeObserver(() => updateIndicator())
-    resizeObserver.observe(listRef.value)
+  nextTick(() => {
+    updateIndicator()
+    updateOverflow()
+    // Jump (no animation) on first paint — the active tab must simply *be*
+    // in view, not slide there.
+    scrollActiveIntoView(false)
+  })
+  if (typeof ResizeObserver !== 'undefined') {
+    // Re-measure on any size change: the container width drives overflow, the
+    // list width (item / web-font changes) drives the indicator.
+    resizeObserver = new ResizeObserver(() => {
+      updateIndicator()
+      updateOverflow()
+    })
+    if (listRef.value) resizeObserver.observe(listRef.value)
+    if (scrollRef.value) resizeObserver.observe(scrollRef.value)
   }
 })
 
@@ -146,6 +164,98 @@ onBeforeUnmount(() => {
   resizeObserver?.disconnect()
   resizeObserver = null
 })
+
+// ---- Horizontal overflow: auto-scroll with edge fade + chevron affordances ----
+// A horizontal tab strip that outgrows its container must never widen the page.
+// The viewport is ALWAYS an overflow-x scroll container (a no-op while the tabs
+// fit). When they don't, we fade the overflowing edge to transparent with a CSS
+// mask — background-independent, unlike a colored scroll shadow that blends in —
+// and float a chevron on each scrollable side. The active tab is kept in view.
+const scrollRef = ref<HTMLElement | null>(null)
+const canScrollLeft = ref(false)
+const canScrollRight = ref(false)
+
+const updateOverflow = () => {
+  const vp = scrollRef.value
+  if (!vp || isVertical.value) {
+    canScrollLeft.value = false
+    canScrollRight.value = false
+    return
+  }
+  const max = vp.scrollWidth - vp.clientWidth
+  // 1px slack absorbs sub-pixel rounding so a fully-scrolled edge doesn't keep
+  // a phantom chevron / fade.
+  canScrollLeft.value = vp.scrollLeft > 1
+  canScrollRight.value = vp.scrollLeft < max - 1
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// Chevron scrolls ~80% of the viewport — a page-turn that leaves one tab of
+// overlap for context.
+const scrollByStep = (dir: 1 | -1) => {
+  const vp = scrollRef.value
+  if (!vp) return
+  vp.scrollBy({
+    left: dir * vp.clientWidth * 0.8,
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+  })
+}
+
+// Keep the active tab inside the viewport, padded so it never hides under the
+// fade / chevron. Called on selection change, mount and item changes.
+const SCROLL_PAD = 44
+const scrollActiveIntoView = (smooth = true) => {
+  const vp = scrollRef.value
+  const el = tabRefs.value[currentIndex.value]
+  if (!vp || !el || isVertical.value) return
+  const left = el.offsetLeft
+  const right = left + el.offsetWidth
+  const viewLeft = vp.scrollLeft
+  const viewRight = viewLeft + vp.clientWidth
+  const behavior: ScrollBehavior =
+    smooth && !prefersReducedMotion() ? 'smooth' : 'auto'
+  if (left < viewLeft + SCROLL_PAD) {
+    vp.scrollTo({ left: Math.max(0, left - SCROLL_PAD), behavior })
+  } else if (right > viewRight - SCROLL_PAD) {
+    vp.scrollTo({ left: right - vp.clientWidth + SCROLL_PAD, behavior })
+  }
+}
+
+const onViewportScroll = () => updateOverflow()
+
+// Chevrons show only when the consumer opted in (default) AND that side can
+// scroll. `scrollButtons=false` keeps the fade but drops the buttons.
+const showButtons = computed(
+  () => !isVertical.value && props.scrollButtons !== false
+)
+
+// Background-independent edge fade: mask the tab strip itself to transparent on
+// whichever side(s) can still scroll. Works over ANY page background.
+const FADE = '1.75rem'
+const maskStyle = computed(() => {
+  if (isVertical.value || (!canScrollLeft.value && !canScrollRight.value)) {
+    return {}
+  }
+  const stops: string[] = []
+  stops.push(canScrollLeft.value ? 'transparent 0' : '#000 0')
+  if (canScrollLeft.value) stops.push(`#000 ${FADE}`)
+  if (canScrollRight.value) stops.push(`#000 calc(100% - ${FADE})`)
+  stops.push(canScrollRight.value ? 'transparent 100%' : '#000 100%')
+  const gradient = `linear-gradient(to right, ${stops.join(', ')})`
+  return { maskImage: gradient, WebkitMaskImage: gradient }
+})
+
+const scrollBtnClasses = (side: 'left' | 'right') =>
+  cn(
+    'absolute top-1/2 z-20 inline-flex size-7 -translate-y-1/2 items-center justify-center',
+    'rounded-full border border-kun bg-background/80 text-default-600 shadow-kun-sm backdrop-blur',
+    'opacity-80 transition-[color,opacity] hover:text-foreground hover:opacity-100',
+    side === 'left' ? 'left-0.5' : 'right-0.5'
+  )
 
 const focusTab = (idx: number) => {
   const el = tabRefs.value[idx]
@@ -249,24 +359,47 @@ const panelIdFor = (v: string) => kunTabPanelId(props.name, v)
 
 const isSelected = (item: KunTabItem) => value.value === item.value
 
-const containerClasses = computed(() =>
+// ROOT — the positioning context for the chevron overlays. `max-w-full` (or a
+// full-width flex row) clamps it to the parent so an overflowing strip never
+// widens the page; the viewport inside then scrolls.
+const rootClasses = computed(() =>
   cn(
     'relative',
-    isVertical.value ? 'inline-flex flex-col' : 'inline-flex',
-    props.fullWidth && 'w-full',
+    isVertical.value
+      ? cn('inline-flex flex-col', props.fullWidth && 'w-full')
+      : props.fullWidth
+        ? 'flex w-full'
+        : 'inline-flex max-w-full',
     props.disabled && 'opacity-50 cursor-not-allowed',
-    props.scrollable &&
-      (isVertical.value
-        ? 'max-h-full overflow-y-auto scrollbar-hide'
-        : 'max-w-full overflow-x-auto scrollbar-hide'),
     props.className
   )
+)
+
+// VIEWPORT — the scroll container. Horizontal tabs always contain their overflow
+// (min-w-0 lets the flex item shrink below its content so overflow-x actually
+// kicks in); a vertical column opts in via `scrollable`.
+const viewportClasses = computed(() =>
+  isVertical.value
+    ? cn(
+        props.scrollable && 'max-h-full min-h-0 overflow-y-auto scrollbar-hide',
+        props.fullWidth && 'w-full'
+      )
+    : cn(
+        'min-w-0 max-w-full overflow-x-auto scrollbar-hide',
+        props.fullWidth && 'flex-1'
+      )
 )
 
 const listClasses = computed(() => {
   const base = isVertical.value
     ? cn('relative flex flex-col items-stretch', sizeGap[props.size])
-    : cn('relative flex items-center', sizeGap[props.size])
+    : // `w-max` lets the row grow past the viewport (so it scrolls); a
+      // full-width row fills it instead and the tabs distribute.
+      cn(
+        'relative flex items-center',
+        props.fullWidth ? 'w-full' : 'w-max',
+        sizeGap[props.size]
+      )
   switch (props.variant) {
     case 'underlined':
       // No static track line — only the sliding active indicator.
@@ -460,52 +593,84 @@ const indicatorMergedStyle = computed(() => {
 </script>
 
 <template>
-  <div :class="containerClasses">
+  <div :class="rootClasses">
+    <!-- Left chevron — a redundant affordance (arrow keys / swipe also scroll),
+         so it's hidden from the a11y tree and the tab order. -->
+    <button
+      v-if="showButtons && canScrollLeft"
+      type="button"
+      tabindex="-1"
+      aria-hidden="true"
+      :class="scrollBtnClasses('left')"
+      @click="scrollByStep(-1)"
+    >
+      <KunIcon name="lucide:chevron-left" />
+    </button>
+
     <div
-      ref="listRef"
-      :class="listClasses"
-      role="tablist"
-      :aria-orientation="orientation"
+      ref="scrollRef"
+      :class="viewportClasses"
+      :style="maskStyle"
+      @scroll.passive="onViewportScroll"
     >
       <div
-        v-if="showIndicator"
-        aria-hidden="true"
-        :class="indicatorClasses!"
-        :style="indicatorMergedStyle"
-      />
-
-      <component
-        :is="tabIs(item)"
-        v-for="(item, index) in items"
-        :key="item.value"
-        :ref="(el: unknown) => setTabRef(el as Element | null, index)"
-        v-bind="tabBindings(item)"
-        :id="tabIdFor(item.value)"
-        role="tab"
-        :aria-controls="panelIdFor(item.value)"
-        :aria-selected="isSelected(item)"
-        :aria-disabled="item.disabled || disabled"
-        :tabindex="isSelected(item) && !item.disabled && !disabled ? 0 : -1"
-        :class="tabClasses(item)"
-        :style="tabStyle(item)"
-        @click="onTabClick($event, item, index)"
-        @keydown="onKeydown($event, index)"
+        ref="listRef"
+        :class="listClasses"
+        role="tablist"
+        :aria-orientation="orientation"
       >
-        <!-- Custom tab content: read extra fields off `item` (e.g. render a
-             KunBadge for unsaved/unread state). The sliding indicator measures
-             the button, so wider slot content is tracked automatically. Defaults
-             to the icon + label. -->
-        <slot name="tab" :item="item" :index="index" :active="isSelected(item)">
-          <span
-            v-if="item.icon"
-            class="inline-flex shrink-0"
-            :style="{ fontSize: iconSize }"
-          >
-            <KunIcon :name="item.icon" />
-          </span>
-          <span v-if="item.textValue">{{ item.textValue }}</span>
-        </slot>
-      </component>
+        <div
+          v-if="showIndicator"
+          aria-hidden="true"
+          :class="indicatorClasses!"
+          :style="indicatorMergedStyle"
+        />
+
+        <component
+          :is="tabIs(item)"
+          v-for="(item, index) in items"
+          :key="item.value"
+          :ref="(el: unknown) => setTabRef(el as Element | null, index)"
+          v-bind="tabBindings(item)"
+          :id="tabIdFor(item.value)"
+          role="tab"
+          :aria-controls="panelIdFor(item.value)"
+          :aria-selected="isSelected(item)"
+          :aria-disabled="item.disabled || disabled"
+          :tabindex="isSelected(item) && !item.disabled && !disabled ? 0 : -1"
+          :class="tabClasses(item)"
+          :style="tabStyle(item)"
+          @click="onTabClick($event, item, index)"
+          @keydown="onKeydown($event, index)"
+        >
+          <!-- Custom tab content: read extra fields off `item` (e.g. render a
+               KunBadge for unsaved/unread state). The sliding indicator measures
+               the button, so wider slot content is tracked automatically.
+               Defaults to the icon + label. -->
+          <slot name="tab" :item="item" :index="index" :active="isSelected(item)">
+            <span
+              v-if="item.icon"
+              class="inline-flex shrink-0"
+              :style="{ fontSize: iconSize }"
+            >
+              <KunIcon :name="item.icon" />
+            </span>
+            <span v-if="item.textValue">{{ item.textValue }}</span>
+          </slot>
+        </component>
+      </div>
     </div>
+
+    <!-- Right chevron -->
+    <button
+      v-if="showButtons && canScrollRight"
+      type="button"
+      tabindex="-1"
+      aria-hidden="true"
+      :class="scrollBtnClasses('right')"
+      @click="scrollByStep(1)"
+    >
+      <KunIcon name="lucide:chevron-right" />
+    </button>
   </div>
 </template>

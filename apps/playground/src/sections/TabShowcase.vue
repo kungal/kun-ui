@@ -26,6 +26,13 @@ const badgeItems: BadgeTab[] = [
   { value: 'sent', textValue: 'Sent' },
 ]
 
+// overflow demo — many tabs in a narrow box (mobile-like)
+const manyTab = ref('t1')
+const manyItems: KunTabItem[] = Array.from({ length: 14 }, (_, i) => ({
+  value: `t${i + 1}`,
+  textValue: `Section ${i + 1}`,
+}))
+
 // SEO-friendly panels demo
 const panelTab = ref('overview')
 const panelItems: KunTabItem[] = [
@@ -94,6 +101,37 @@ onLazyChange(lazyTab.value)
         <KunBadge v-else-if="item.dirty" variant="dot" color="danger" />
       </template>
     </KunTab>
+
+    <h3 class="mt-2 text-base font-medium">
+      Overflow — auto-scroll + edge fade + chevrons (in a 340px box)
+    </h3>
+    <p class="text-default-500 text-sm">
+      14 tabs in a narrow container. The strip scrolls instead of widening the
+      page; the overflowing edge fades to transparent (background-independent)
+      and a chevron floats on each scrollable side. The active tab auto-scrolls
+      into view — click one near an edge, or use ← / → keys.
+    </p>
+    <div class="w-[340px] rounded-kun-lg border border-kun p-3">
+      <KunTab v-model="manyTab" :items="manyItems" variant="underlined" />
+    </div>
+    <div class="w-[340px] rounded-kun-lg border border-kun p-3">
+      <KunTab
+        v-model="manyTab"
+        :items="manyItems"
+        variant="pills"
+        color="secondary"
+      />
+    </div>
+    <p class="text-default-500 text-sm">Same, fade-only (scrollButtons=false):</p>
+    <div class="w-[340px] rounded-kun-lg border border-kun p-3">
+      <KunTab
+        v-model="manyTab"
+        :items="manyItems"
+        variant="light"
+        color="success"
+        :scroll-buttons="false"
+      />
+    </div>
 
     <h3 class="mt-2 text-base font-medium">Vertical</h3>
     <KunTab

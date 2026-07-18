@@ -128,7 +128,15 @@ export interface KunTabProps<T extends KunTabItem = KunTabItem> {
   align?: 'start' | 'center' | 'end'
   disabled?: boolean
   disableAnimation?: boolean
+  // Horizontal tabs ALWAYS contain their overflow (they scroll inside the
+  // container instead of widening the page) — no flag needed. This opts a
+  // *vertical* tab column into scrolling when it outgrows a bounded height.
   scrollable?: boolean
+  // When a horizontal tab strip overflows, float a chevron button on each
+  // scrollable edge (in addition to the always-on edge fade). Set false to keep
+  // just the fade — the strip still scrolls via swipe / wheel / keyboard.
+  // Default true.
+  scrollButtons?: boolean
   iconSize?: string
   className?: string
   innerClassName?: string
