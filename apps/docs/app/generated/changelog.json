@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.15.1",
+    "type": "patch",
+    "html": "<ul>\n<li><p>fix(vue): KunTab vertical orientation now defaults to left-aligned content</p>\n<p>The <code>align</code> default is now orientation-aware. A vertical tab list reads as a\nnav column, where left-aligned labels are the convention, so vertical tabs now\ndefault to <code>align=&quot;start&quot;</code>. Horizontal tabs keep the classic centered look.\nAn explicit <code>align</code> prop still overrides either orientation — pass\n<code>align=&quot;center&quot;</code> to restore the previous centered vertical tabs.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.15.0",
     "type": "minor",
     "html": "<ul>\n<li><p>feat(vue): KunTab <code>#tab</code> slot for custom tab content (badges, dots)</p>\n<p>KunTab is now generic over the item shape and exposes a <code>#tab</code> scoped slot\n(<code>{ item, index, active }</code>) so you can render custom per-tab content — e.g.\ncompose a <code>KunBadge</code> for an unread count or an &quot;unsaved&quot; dot — instead of being\nlimited to icon + label. Extra fields on the item (a <code>count</code>, a <code>dirty</code> flag, …)\nare typed inside the slot. The sliding indicator measures the button, so\nbadge-widened tabs are tracked automatically. Defaults to icon + label\n(backward-compatible).</p>\n</li>\n</ul>\n"
