@@ -9,6 +9,8 @@ import RichContent from '~/examples/popover/RichContent.vue'
 import RichContentSrc from '~/examples/popover/RichContent.vue?raw'
 import HoverMenu from '~/examples/popover/HoverMenu.vue'
 import HoverMenuSrc from '~/examples/popover/HoverMenu.vue?raw'
+import RailFlyout from '~/examples/popover/RailFlyout.vue'
+import RailFlyoutSrc from '~/examples/popover/RailFlyout.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -38,6 +40,16 @@ import meta from '~/generated/component-meta.json'
       (直接在面板上写 <code>--kun-surface-opacity:1</code> 无效——主题色在 <code>:root</code> 解析)。
     </p>
     <Demo title="HoverMenu.vue" :source="HoverMenuSrc"><HoverMenu /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">侧边飞出菜单(导航栏)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      <code>position="right-start"</code> 让菜单贴着 tile 顶部**向右**展开——侧边导航栏的
+      经典交互。关键在于 <code>autoPosition</code>(默认开启)的**碰撞感知**:靠近视口底部的
+      高菜单会由 <code>shift()</code> 上移、<code>size()</code> 把高度限制到**可用空间**并自动
+      滚动,始终留在屏幕内,而不是从固定锚点冲出底部被裁切。过去只能手写
+      <code>absolute left-full + max-h-[80vh]</code> 的场景,现在直接交给 KunPopover。
+    </p>
+    <Demo title="RailFlyout.vue" :source="RailFlyoutSrc"><RailFlyout /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunPopover.props" />

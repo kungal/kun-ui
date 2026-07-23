@@ -192,11 +192,24 @@ export interface KunTooltipProps {
 }
 
 // ── Popover ────────────────────────────────────────────────────────────
+// Placement is passed straight to floating-ui, so every side aligns and (with
+// `autoPosition`, the default) flips + shifts to stay on-screen while `size()`
+// caps its height to the room available. The `right-*` / `left-*` sides make a
+// side-anchored flyout (e.g. a navigation rail's hover menu) a first-class use
+// of KunPopover instead of hand-rolled `absolute left-full` positioning.
 export type KunPopoverPosition =
+  | 'top'
   | 'top-start'
   | 'top-end'
+  | 'bottom'
   | 'bottom-start'
   | 'bottom-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
 
 export interface KunPopoverProps {
   position?: KunPopoverPosition
