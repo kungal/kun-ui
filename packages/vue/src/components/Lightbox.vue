@@ -286,10 +286,38 @@ const handleDoubleClickAt = (clientX: number, clientY: number) => {
   position.y = constrained.y
 }
 
-const handleDoubleClick = (e: MouseEvent) =>
+// Touch devices replay a tap as synthesized mouse events (mousedown / mousemove
+// / mouseup / click / dblclick) once the touch sequence ends. Our own touch
+// handlers have already acted on that gesture, so letting the synthesized pair
+// through runs everything twice — a double-tap would zoom in via onTouchEnd and
+// then immediately zoom back out via the synthesized dblclick. Mouse handlers
+// therefore ignore anything that arrives in the wake of a touch.
+const GHOST_MOUSE_MS = 700
+let lastTouchTime = 0
+const isGhostMouseEvent = () => Date.now() - lastTouchTime < GHOST_MOUSE_MS
+
+const handleDoubleClick = (e: MouseEvent) => {
+  if (isGhostMouseEvent()) return
   handleDoubleClickAt(e.clientX, e.clientY)
+}
+
+const onMouseDown = (e: MouseEvent) => {
+  if (isGhostMouseEvent()) return
+  startDrag(e)
+}
+
+const onMouseMove = (e: MouseEvent) => {
+  if (isGhostMouseEvent()) return
+  onDrag(e)
+}
+
+const onMouseUp = (e: MouseEvent) => {
+  if (isGhostMouseEvent()) return
+  stopDrag(e)
+}
 
 const handleTouchStart = (e: TouchEvent) => {
+  lastTouchTime = Date.now()
   if (e.touches.length >= 2) {
     isDragging.value = false
     isPinching.value = true
@@ -306,6 +334,7 @@ const handleTouchStart = (e: TouchEvent) => {
 }
 
 const handleTouchMove = (e: TouchEvent) => {
+  lastTouchTime = Date.now()
   if (e.touches.length >= 2 && isPinching.value) {
     const [t1, t2] = [e.touches[0]!, e.touches[1]!]
     const currentDistance = Math.hypot(
@@ -340,6 +369,7 @@ const handleTouchMove = (e: TouchEvent) => {
 }
 
 const onTouchEnd = (e: TouchEvent) => {
+  lastTouchTime = Date.now()
   if (isPinching.value) {
     if (e.touches.length >= 2) return
     isPinching.value = false
@@ -448,10 +478,10 @@ onUnmounted(() => {
         class="kun-lightbox-stage relative flex h-full w-full touch-none items-center justify-center overflow-hidden"
         @click="onBackdropClick"
         @wheel.prevent="handleWheel"
-        @mousedown="startDrag"
-        @mousemove="onDrag"
-        @mouseup="stopDrag"
-        @mouseleave="stopDrag"
+        @mousedown="onMouseDown"
+        @mousemove="onMouseMove"
+        @mouseup="onMouseUp"
+        @mouseleave="onMouseUp"
         @touchstart.passive="handleTouchStart"
         @touchmove.passive="handleTouchMove"
         @touchend="onTouchEnd"
