@@ -6,6 +6,15 @@ import type { KunImageNativeProps } from './types'
 // KunImage's skeleton/optimization machinery.
 defineOptions({ name: 'KunImageNative' })
 
+// Declared rather than left to attribute fallthrough. Fallthrough happens to
+// work here (the root IS the <img>), but it made `@error` a property of this
+// component's DOM shape instead of its API, and gave a signature that differs
+// from KunImage's. Both now emit the same `(src, event)`.
+const emit = defineEmits<{
+  load: [src: string, event: Event]
+  error: [src: string, event: Event]
+}>()
+
 withDefaults(defineProps<KunImageNativeProps>(), {
   alt: 'image',
   loading: 'lazy', // lazy by default; pass loading="eager" for an LCP image
@@ -25,5 +34,7 @@ withDefaults(defineProps<KunImageNativeProps>(), {
     :aria-label="ariaLabel"
     :width="width"
     :height="height"
+    @load="(e: Event) => emit('load', src, e)"
+    @error="(e: Event) => emit('error', src, e)"
   />
 </template>

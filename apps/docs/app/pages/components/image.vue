@@ -11,6 +11,8 @@ import BlurUp from '~/examples/image/BlurUp.vue'
 import BlurUpSrc from '~/examples/image/BlurUp.vue?raw'
 import Fallback from '~/examples/image/Fallback.vue'
 import FallbackSrc from '~/examples/image/Fallback.vue?raw'
+import ErrorEvent from '~/examples/image/ErrorEvent.vue'
+import ErrorEventSrc from '~/examples/image/ErrorEvent.vue?raw'
 import Loading from '~/examples/image/Loading.vue'
 import LoadingSrc from '~/examples/image/Loading.vue?raw'
 import meta from '~/generated/component-meta.json'
@@ -43,6 +45,15 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">加载失败回退</h2>
     <Demo title="Fallback.vue" :source="FallbackSrc"><Fallback /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">load / error 事件</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      两个事件的签名都是 <code class="text-primary">(src, event?)</code>。第一个参数是对应的图片地址——
+      因为配了 <code class="text-primary">fallbackSrc</code> 时会有两次尝试,靠它才能区分是原图失败还是回退图也失败。
+      <code class="text-primary">event</code> 是原生 DOM 事件;若失败/成功是从已缓存的图片状态直接判定出来的
+      (此时浏览器不会再触发 load / error),则为 <code class="text-primary">undefined</code>。
+    </p>
+    <Demo title="ErrorEvent.vue" :source="ErrorEventSrc"><ErrorEvent /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">懒加载与即时加载</h2>
     <Demo title="Loading.vue" :source="LoadingSrc"><Loading /></Demo>

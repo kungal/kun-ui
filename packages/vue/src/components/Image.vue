@@ -45,11 +45,28 @@ const props = withDefaults(defineProps<KunImageProps>(), {
   sizes: undefined,
 })
 
+// `src` is the reliable payload; `event` is the native DOM event when there is
+// one. The cache-race path below reaches `loaded` / `error` by re-reading the
+// DOM rather than by a fired event, so it has no event to forward — hence
+// optional. Emitting `src` (rather than only the event) also lets a listener
+// tell an original-image failure from a `fallbackSrc` failure.
+const emit = defineEmits<{
+  load: [src: string, event?: Event]
+  error: [src: string, event?: Event]
+}>()
+
 const config = useKunUIConfig()
 const imageComponent = computed(() => config.imageComponent ?? 'img')
 const isNative = computed(() => typeof imageComponent.value === 'string')
 
 const imgEl = ref<ComponentPublicInstance | HTMLImageElement | null>(null)
+
+// A single failure can be observed twice — once as a fired `@error`, once as
+// the cache-race path flipping `status` — so each outcome is announced at most
+// once per src. Tracked by src (not a boolean) because `fallbackSrc` is a
+// second, separately-reportable attempt after the original one fails.
+let reportedLoadSrc: string | undefined
+let reportedErrorSrc: string | undefined
 
 // On load error, swap to `fallbackSrc` (once); reset when `src` changes.
 const failed = ref(false)
@@ -58,23 +75,65 @@ const effectiveSrc = computed(() =>
 )
 watch(
   () => props.src,
-  () => (failed.value = false)
+  () => {
+    failed.value = false
+    reportedLoadSrc = undefined
+    reportedErrorSrc = undefined
+  }
 )
 
 const srcRef = computed(() => effectiveSrc.value)
 const { status, onLoad, onError } = useImageLoadingStatus(imgEl, srcRef)
 
-const handleError = () => {
-  onError()
-  if (!failed.value && props.fallbackSrc) failed.value = true
+const reportLoad = (src: string, event?: Event) => {
+  if (!src || reportedLoadSrc === src) return
+  reportedLoadSrc = src
+  emit('load', src, event)
 }
 
-// Also swap on error detected via the cache-race path (syncFromDom sets
-// status='error' for a broken-in-cache src WITHOUT firing @error) — otherwise
-// the fallback would silently never load in exactly that case.
-watch(status, (s) => {
-  if (s === 'error' && !failed.value && props.fallbackSrc) failed.value = true
-})
+const reportError = (src: string, event?: Event) => {
+  if (!src || reportedErrorSrc === src) return
+  reportedErrorSrc = src
+  emit('error', src, event)
+}
+
+// Report BEFORE handing the status machine the outcome: the watcher below runs
+// synchronously off that status change and would otherwise win the dedup and
+// drop the DOM event we have here.
+const handleLoad = (event?: Event) => {
+  reportLoad(effectiveSrc.value, event)
+  onLoad()
+}
+
+const handleError = (event?: Event) => {
+  reportError(effectiveSrc.value, event)
+  onError()
+}
+
+// Single settlement point for BOTH routes into a terminal status: a fired
+// @load / @error, and the cache-race path where syncFromDom settles a src that
+// was already complete in cache and no event ever fires. The `reported*` guards
+// make it a no-op for whichever route already announced this src.
+//
+// `flush: 'sync'` is load-bearing, not a micro-optimization. `effectiveSrc`
+// swaps to `fallbackSrc` the instant we mark the original failed, so a deferred
+// watcher would wake up holding the NEW src while reporting the OLD src's
+// failure — emitting a bogus `error` for a fallback that loads perfectly well.
+// Running synchronously keeps status and src describing the same attempt.
+watch(
+  status,
+  (s) => {
+    if (s === 'error') {
+      reportError(effectiveSrc.value)
+      // Swap to the fallback (once). Kept here rather than in `handleError` so
+      // a cache-race failure — which never fires @error — swaps too.
+      if (!failed.value && props.fallbackSrc) failed.value = true
+    } else if (s === 'loaded') {
+      reportLoad(effectiveSrc.value)
+    }
+  },
+  { flush: 'sync' }
+)
 
 // Standard HTML <img> attributes — safe on both native and injected.
 const baseBindings = computed<Record<string, unknown>>(() => ({
@@ -154,8 +213,10 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
   <component
     :is="imageComponent"
     v-if="!wrap"
+    ref="imgEl"
     v-bind="imgBindings"
     :class="cn(className, imageClassName)"
+    @load="handleLoad"
     @error="handleError"
   />
   <div
@@ -203,7 +264,7 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
           imageClassName
         )
       "
-      @load="onLoad"
+      @load="handleLoad"
       @error="handleError"
     />
   </div>
