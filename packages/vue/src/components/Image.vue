@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
+import { computed, ref, watch, type ComponentPublicInstance } from 'vue'
 import { thumbHashToDataURL } from 'thumbhash'
 import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
@@ -185,25 +185,29 @@ const wrapperStyle = computed(() =>
 
 // ── ThumbHash blur-up placeholder ────────────────────────────────────────────
 // Decode the (base64) ThumbHash to a tiny data-URL image, upscaled by `bg-cover`
-// into a smooth blurred placeholder shown until the real image loads. Decoded
-// SYNCHRONOUSLY on mount / prop change so the blur is ready before a fast (cached
-// CDN) image can finish loading — a lazy import would lose that race and the blur
-// would never show. Invalid hash → no blur (the pulse skeleton covers it). The
-// decode uses a canvas, so it only runs on the client (onMounted / watch).
-const thumbUrl = ref<string | null>(null)
-const decodeThumb = (hash?: string) => {
-  if (!hash) {
-    thumbUrl.value = null
-    return
-  }
+// into a smooth blurred placeholder shown until the real image loads. Invalid
+// hash → no blur (the pulse skeleton covers it).
+//
+// Decoded during render, NOT in onMounted, so the blur is part of the SSR
+// markup and is in the very first paint — which is the entire point of shipping
+// a ThumbHash: a meaningful placeholder with zero extra requests. Deferring it
+// to mount meant SSR painted a grey pulse skeleton first and the blur only
+// appeared after hydration, i.e. exactly when it was least needed.
+//
+// This is safe despite the usual "no DOM work during render" instinct:
+// thumbhash's `rgbaToDataURL` hand-assembles the PNG bytes and only needs
+// `atob`/`btoa` — no canvas, no document — so it runs identically on the server
+// and the client, and hydration matches. (An earlier comment here claimed a
+// canvas was involved; it is not.)
+const decodeThumb = (hash?: string): string | null => {
+  if (!hash) return null
   try {
-    thumbUrl.value = thumbHashToDataURL(Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)))
+    return thumbHashToDataURL(Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)))
   } catch {
-    thumbUrl.value = null
+    return null
   }
 }
-onMounted(() => decodeThumb(props.thumbhash))
-watch(() => props.thumbhash, (h) => decodeThumb(h))
+const thumbUrl = computed(() => decodeThumb(props.thumbhash))
 
 // skeleton off → bare element, no wrapper. A thumbhash also needs the wrapper.
 const wrap = computed(() => props.skeleton || !!props.thumbhash)
