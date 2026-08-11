@@ -66,6 +66,7 @@ const displayedPages = computed<PageItem[]>(() => {
 
 const handlePageChange = (page: number) => {
   if (props.isLoading || page === props.currentPage) return
+  if (props.totalPage <= 0) return
   emit('update:currentPage', page)
 }
 
@@ -257,8 +258,8 @@ onKeyStroke('ArrowRight', (e) => {
           size="sm"
           aria-label="上一页"
           :href="pageHref && currentPage > 1 ? pageHref(currentPage - 1) : undefined"
-          :disabled="isLoading || currentPage === 1"
-          :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage === 1 }"
+          :disabled="isLoading || currentPage <= 1"
+          :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage <= 1 }"
           @click="handlePageChange(currentPage - 1)"
         >
           <KunIcon name="lucide:chevron-left" />
@@ -312,8 +313,8 @@ onKeyStroke('ArrowRight', (e) => {
           size="sm"
           aria-label="下一页"
           :href="pageHref && currentPage < totalPage ? pageHref(currentPage + 1) : undefined"
-          :disabled="isLoading || currentPage === totalPage"
-          :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage === totalPage }"
+          :disabled="isLoading || currentPage >= totalPage"
+          :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage >= totalPage }"
           @click="handlePageChange(currentPage + 1)"
         >
           <KunIcon name="lucide:chevron-right" />
