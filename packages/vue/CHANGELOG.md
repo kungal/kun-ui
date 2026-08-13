@@ -41,6 +41,20 @@ vertical-align: middle` unconditionally, and none of it was released on reveal �
   can be removed — they were tying with the component's own `(0,3,0)` selector and
   winning only on stylesheet order.
 
+- c71759e: fix(vue): KunPagination no longer walks past the end when `totalPage` is 0
+
+  The next-page button's disabled test was `currentPage === totalPage`. With an
+  empty result set — `totalPage: 0`, `currentPage: 1` — that equality is false, so
+  the button stayed live and every click emitted `update:currentPage` for page 2,
+  3, 4… forever, with nothing to show on any of them.
+
+  Both arrows now compare with `>=` / `<=` instead of `===`, so they disable on any
+  out-of-range `currentPage` rather than only on an exact match, and
+  `handlePageChange` bails out when `totalPage <= 0` as a backstop for callers that
+  reach it without going through a button.
+
+  Thanks to @miaoledor (#3).
+
   - @kungal/ui-core@2.18.2
 
 ## 2.18.1
