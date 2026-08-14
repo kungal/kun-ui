@@ -32,25 +32,56 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Both cover ./packages/* only. Typecheck first: vue-tsc gives a precise
-      # error where a failed build would just report a dead import.
+      # Build first, and everything else after it. Every workspace dependency is
+      # `workspace:*`, which resolves to the dependency's `dist` — including for
+      # type resolution — so on a bare checkout nothing that reads types across
+      # a package boundary works until dist exists. `pnpm typecheck` ahead of
+      # this line fails with `Cannot find module '@kungal/ui-core'`, which is not
+      # something you notice locally, where dist is always lying around from the
+      # last build.
+      #
+      # This is also the same build `ci:publish` runs before `changeset publish`,
+      # so a broken build is a red PR rather than a half-finished release that
+      # has already pushed a version bump to main.
+      - run: pnpm build
+
+      # Not redundant with the vue-tsc pass inside the build: that one runs over
+      # tsconfig.build.json (src only, emitting .d.ts), while this covers
+      # tsconfig.json — src plus vite.config.ts — and gives ui-core a real
+      # `tsc --noEmit`, which its tsup `dts: true` step is not.
       - run: pnpm typecheck
 
-      # The same build `ci:publish` runs before `changeset publish`. Running it
-      # here means a broken build is a red PR rather than a half-finished
-      # release that has already pushed a version bump to main.
-      - run: pnpm build
+      # ./apps/* — the Vite playground had a `typecheck` script that nothing ever
+      # invoked, which made it the one place the packages get exercised the way a
+      # real consumer sees them: through dist and its generated .d.ts, not src.
+      - run: pnpm typecheck:apps
+
+      # Build the docs site. `docs-image` builds it too, but only on push to
+      # main and via Docker — so until now a PR that broke the site merged green
+      # and the failure surfaced as a red image build on main, after the fact.
+      # This is also the only thing that exercises @kungal/ui-nuxt: that package
+      # ships `nuxt.config.ts` + `app/` as source with no build and no
+      # typecheck, and the docs site `extends` it.
+      - run: pnpm build:docs
 
   generated:
     name: Generated files are up to date
     # Every generated-and-committed artifact must match what the generators
-    # produce from the current sources. These artifacts (component-meta.json,
-    # the per-route .md files, llms.txt, changelog.json, upgrade.json) are
-    # committed because the docs image builds from them without running
-    # vue-component-meta — but nothing ran the generators automatically, so they
-    # were only as fresh as the last person who remembered. They drifted badly:
-    # 15 pages had no .md at all, llms.txt was 13 components behind, and the
-    # props tables still described props by their pre-refactor types.
+    # produce from the current sources. These artifacts (palette.generated.css,
+    # icons-data.ts, component-meta.json, the per-route .md files, llms.txt,
+    # changelog.json, upgrade.json) are committed because the build consumes
+    # them directly — the docs image never runs vue-component-meta, and the
+    # published packages ship the palette and the icon data as plain source. But
+    # nothing ran the generators automatically, so they were only as fresh as
+    # the last person who remembered. They drifted badly: 15 pages had no .md at
+    # all, llms.txt was 13 components behind, and the props tables still
+    # described props by their pre-refactor types.
+    #
+    # `pnpm gen` runs the two package generators first, because they write into
+    # packages/*/src — which is what the docs generators then read.
+    # gen:tokens doubles as a guard of its own: it asserts every solid/on-color
+    # pair clears WCAG AA in both modes and exits non-zero if one doesn't, so a
+    # retheme can no longer land an illegible color.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -62,10 +93,18 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      # The generators read `packages/vue/src` directly (never dist), so no
-      # package build is needed here — just the dependency graph. That also
-      # keeps this job independent of the build one, so they run in parallel.
       - run: pnpm install --frozen-lockfile
+
+      # The generators read `packages/*/src`, never dist — with one exception.
+      # gen:meta types the Vue components through a real TypeScript program, and
+      # they import their shared types from @kungal/ui-core, whose `exports`
+      # resolve to dist/index.d.ts. Without it TypeScript widens all of them to
+      # `any` instead of failing, so this job would regenerate a gutted
+      # component-meta.json and report the *committed* file as out of date.
+      # gen-meta.mjs now refuses to run in that state; this is what keeps it
+      # from having to. One tsup build, not the whole workspace — so this job
+      # still starts in seconds and runs in parallel with the build one.
+      - run: pnpm --filter @kungal/ui-core build
 
       - run: pnpm gen
 
