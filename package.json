@@ -24,10 +24,5 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.28.2",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  }
+  "packageManager": "pnpm@10.28.2"
 }

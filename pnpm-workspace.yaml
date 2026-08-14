@@ -1,3 +1,9 @@
 packages:
   - 'packages/*'
   - 'apps/*'
+
+# pnpm 10 does not run a dependency's install scripts unless it is listed here.
+# This lived under `"pnpm"` in package.json, which pnpm stopped reading — so it
+# had quietly become a no-op that printed a warning on every command.
+onlyBuiltDependencies:
+  - esbuild
