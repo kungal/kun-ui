@@ -10,14 +10,78 @@
 <script setup lang="ts">
 import type { KunUser } from '@kungal/ui-vue'
 
-const avatar = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="%237c3aed"/></svg>'
-)}`
+const avatar = '/favicon.webp'
 const user: KunUser = { id: 1, name: 'Kun', avatar }
 </script>
 
 <template>
-  <KunUserChip :user="user" description="Member since 2024" :disable-floating="true" />
+  <KunUserChip :user="user" :is-navigation="false" />
+</template>
+```
+
+### Description.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+const user: KunUser = { id: 1, name: 'Kun', avatar }
+</script>
+
+<template>
+  <!-- A secondary `description` line renders under the name in a muted color. -->
+  <KunUserChip
+    :user="user"
+    description="2024 年加入 · 管理员"
+    size="lg"
+    :is-navigation="false"
+  />
+</template>
+```
+
+### Navigation.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+
+// With `isNavigation` (the default) and a user that has an `id`, the WHOLE chip
+// becomes one crawlable link to the profile, with the name as anchor text.
+const user: KunUser = { id: 42, name: 'Kun', avatar }
+</script>
+
+<template>
+  <KunUserChip :user="user" description="点击进入个人主页" />
+</template>
+```
+
+### Truncate.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+
+// Long names and descriptions truncate with an ellipsis inside a constrained box.
+const user: KunUser = {
+  id: 1,
+  name: '这是一个非常非常长的用户名会被自动截断显示省略号',
+  avatar,
+}
+</script>
+
+<template>
+  <div class="w-56">
+    <KunUserChip
+      :user="user"
+      description="同样很长的一段个人简介也会被截断而不会撑破布局"
+      :is-navigation="false"
+    />
+  </div>
 </template>
 ```
 
@@ -29,7 +93,8 @@ const user: KunUser = { id: 1, name: 'Kun', avatar }
 | `className` | `string` | `""` |
 | `description` | `string` | `""` |
 | `disableFloating` | `boolean` | `false` |
-| `floatingPosition` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |
+| `isNavigation` | `boolean` | `true` |
 | `size` | `KunAvatarSize` | `"md"` |
 
 ---

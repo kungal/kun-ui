@@ -23,6 +23,132 @@ const open = ref(false)
 </template>
 ```
 
+### Placement.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { KunDrawerPlacement } from '@kungal/ui-vue'
+
+const open = ref(false)
+const placement = ref<KunDrawerPlacement>('right')
+const placements: KunDrawerPlacement[] = ['left', 'right', 'top', 'bottom']
+
+const openWith = (p: KunDrawerPlacement) => {
+  placement.value = p
+  open.value = true
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <KunButton
+      v-for="p in placements"
+      :key="p"
+      variant="bordered"
+      @click="openWith(p)"
+    >
+      {{ p }}
+    </KunButton>
+  </div>
+
+  <KunDrawer
+    v-model="open"
+    :placement="placement"
+    :responsive="false"
+    title="方向"
+  >
+    <p class="text-default-600 text-sm">
+      通过 <code>placement</code> 设置滑出方向,可选 left / right / top /
+      bottom。当前:{{ placement }}。
+    </p>
+  </KunDrawer>
+</template>
+```
+
+### Sizes.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { KunDrawerSize } from '@kungal/ui-vue'
+
+const open = ref(false)
+const size = ref<KunDrawerSize>('md')
+const sizes: KunDrawerSize[] = ['sm', 'md', 'lg', 'xl', 'full']
+
+const openWith = (s: KunDrawerSize) => {
+  size.value = s
+  open.value = true
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <KunButton
+      v-for="s in sizes"
+      :key="s"
+      variant="bordered"
+      @click="openWith(s)"
+    >
+      {{ s }}
+    </KunButton>
+  </div>
+
+  <KunDrawer v-model="open" :size="size" :responsive="false" title="尺寸">
+    <p class="text-default-600 text-sm">
+      通过 <code>size</code> 控制面板尺寸(横向抽屉为宽度,纵向抽屉为高度),
+      可选 sm / md / lg / xl / full。当前:{{ size }}。
+    </p>
+  </KunDrawer>
+</template>
+```
+
+### Title.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <KunButton color="primary" @click="open = true">带标题的抽屉</KunButton>
+
+  <KunDrawer v-model="open" title="个人设置">
+    <p class="text-default-600 text-sm">
+      设置 <code>title</code> 后,抽屉顶部会渲染一个带标题的头部栏,
+      并自动关联 <code>aria-labelledby</code> 以提升可访问性。
+    </p>
+  </KunDrawer>
+</template>
+```
+
+### NonDismissable.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <KunButton variant="bordered" @click="open = true">不可关闭</KunButton>
+
+  <KunDrawer v-model="open" title="不可关闭" :is-dismissable="false">
+    <div class="flex flex-col gap-3">
+      <p class="text-default-600 text-sm">
+        设置 <code>:is-dismissable="false"</code> 后,点击背景和按下 Esc
+        都不会关闭;头部的关闭按钮仍然有效。
+      </p>
+      <KunButton color="danger" @click="open = false">手动关闭</KunButton>
+    </div>
+  </KunDrawer>
+</template>
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 |

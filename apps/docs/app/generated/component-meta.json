@@ -84,7 +84,7 @@
     "props": [
       {
         "name": "options",
-        "type": "readonly T[]",
+        "type": "readonly KunAutocompleteOption[]",
         "required": true
       },
       {
@@ -737,12 +737,12 @@
     "props": [
       {
         "name": "modelValue",
-        "type": "T[]",
+        "type": "KunCheckBoxGroupValue[]",
         "required": true
       },
       {
         "name": "options",
-        "type": "readonly KunCheckBoxGroupOption<T>[]",
+        "type": "readonly KunCheckBoxGroupOption<KunCheckBoxGroupValue>[]",
         "required": true
       },
       {
@@ -884,7 +884,7 @@
       },
       {
         "name": "items",
-        "type": "readonly T[] | readonly KunCommandGroup<T>[]",
+        "type": "readonly KunCommandItem[] | readonly KunCommandGroup<KunCommandItem>[]",
         "required": false,
         "default": "[]",
         "description": "Results to show: a flat item list (one unlabelled group) OR grouped. You compute these from `v-model:query` — the shell does no matching itself."
@@ -2417,12 +2417,12 @@
     "props": [
       {
         "name": "modelValue",
-        "type": "T",
+        "type": "KunRadioValue",
         "required": true
       },
       {
         "name": "options",
-        "type": "readonly KunRadioOption<T>[]",
+        "type": "readonly KunRadioOption<KunRadioValue>[]",
         "required": true
       },
       {
@@ -2670,12 +2670,12 @@
     "props": [
       {
         "name": "modelValue",
-        "type": "T | T[] | null",
+        "type": "KunSelectValue | KunSelectValue[] | null",
         "required": true
       },
       {
         "name": "options",
-        "type": "readonly O[]",
+        "type": "readonly KunSelectOption<KunSelectValue>[]",
         "required": true
       },
       {
@@ -3155,7 +3155,8 @@
         "name": "align",
         "type": "\"start\" | \"end\" | \"center\"",
         "required": false,
-        "default": "\"center\""
+        "default": "\"center\" (horizontal) / \"start\" (vertical)",
+        "description": "Horizontal alignment of each tab's content (icon + label) inside its box. Mainly visible on vertical / full-width tabs, where the box is wider than its content."
       },
       {
         "name": "className",

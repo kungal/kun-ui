@@ -20,6 +20,50 @@ const page = ref(1)
 </template>
 ```
 
+### Few.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const page = ref(1)
+</script>
+
+<template>
+  <KunPagination v-model:current-page="page" :total-page="5" />
+</template>
+```
+
+### Loading.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const page = ref(3)
+</script>
+
+<template>
+  <KunPagination v-model:current-page="page" :total-page="20" :is-loading="true" />
+</template>
+```
+
+### Crawlable.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const page = ref(1)
+const pageHref = (n: number) => `#/page/${n}`
+</script>
+
+<template>
+  <KunPagination
+    v-model:current-page="page"
+    :total-page="20"
+    :page-href="pageHref"
+  />
+</template>
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 |
@@ -27,6 +71,7 @@ const page = ref(1)
 | `currentPage` * | `number` | — |
 | `totalPage` * | `number` | — |
 | `isLoading` | `boolean` | — |
+| `pageHref` | `((page: number) => string)` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/pagination

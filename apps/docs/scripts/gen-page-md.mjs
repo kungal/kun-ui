@@ -4,10 +4,12 @@
 // pageMeta (title/cn/description) + the example .vue sources + the committed
 // component metadata — so the Markdown can't drift from the page.
 //
-//   node scripts/gen-page-md.mjs   (or: pnpm gen:page-md)
+//   pnpm gen        (from the repo root — runs every generator in order; this
+//                    one reads component-meta.json, so gen:meta must go first)
 //
-// Re-run when pageMeta, examples, or component-meta change (same discipline as
-// gen:meta / gen:llms).
+// Re-run when pageMeta, examples, or component-meta change. You don't have to
+// remember: the `check` workflow regenerates everything on each PR and fails if
+// the committed output differs.
 
 import {
   readFileSync,
@@ -69,12 +71,26 @@ function examplesSection(slug) {
 function propsSection(title) {
   const comp = meta[`Kun${title}`]
   if (!comp?.props?.length) return ''
+  // PropsTable.vue renders a 说明 column from the same JSDoc, so carry it here
+  // too — an agent reading the .md should see what a human reading the page
+  // sees. Only where it says something, though: prop descriptions are still
+  // sparse, and an all-empty fourth column is pure noise in a file whose whole
+  // job is to be read into a context window.
+  const described = comp.props.some((p) => p.description)
   const rows = comp.props.map((p) => {
     const def =
       p.default == null || p.default === '' ? '—' : `\`${esc(p.default)}\``
-    return `| \`${esc(p.name)}\`${p.required ? ' *' : ''} | \`${esc(p.type)}\` | ${def} |`
+    const cells = [
+      `\`${esc(p.name)}\`${p.required ? ' *' : ''}`,
+      `\`${esc(p.type)}\``,
+      def,
+    ]
+    if (described) cells.push(esc(p.description ?? ''))
+    return `| ${cells.join(' | ')} |`
   })
-  return `## Props\n\n| 属性 | 类型 | 默认值 |\n| --- | --- | --- |\n${rows.join('\n')}`
+  const head = described ? '属性 | 类型 | 默认值 | 说明' : '属性 | 类型 | 默认值'
+  const sep = described ? '--- | --- | --- | ---' : '--- | --- | ---'
+  return `## Props\n\n| ${head} |\n| ${sep} |\n${rows.join('\n')}`
 }
 
 function buildMarkdown(route, m) {

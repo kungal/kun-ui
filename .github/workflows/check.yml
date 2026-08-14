@@ -1,0 +1,85 @@
+name: check
+
+# The pull-request gate. Until this existed nothing at all ran on a PR: Release
+# only fires on push to main (and publishes to npm as its first act), and
+# docs-image only builds after the merge. A PR that didn't typecheck, didn't
+# build, or left the generated docs stale merged green and broke main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Typecheck and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Both cover ./packages/* only. Typecheck first: vue-tsc gives a precise
+      # error where a failed build would just report a dead import.
+      - run: pnpm typecheck
+
+      # The same build `ci:publish` runs before `changeset publish`. Running it
+      # here means a broken build is a red PR rather than a half-finished
+      # release that has already pushed a version bump to main.
+      - run: pnpm build
+
+  generated:
+    name: Generated files are up to date
+    # Every generated-and-committed artifact must match what the generators
+    # produce from the current sources. These artifacts (component-meta.json,
+    # the per-route .md files, llms.txt, changelog.json, upgrade.json) are
+    # committed because the docs image builds from them without running
+    # vue-component-meta — but nothing ran the generators automatically, so they
+    # were only as fresh as the last person who remembered. They drifted badly:
+    # 15 pages had no .md at all, llms.txt was 13 components behind, and the
+    # props tables still described props by their pre-refactor types.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # The generators read `packages/vue/src` directly (never dist), so no
+      # package build is needed here — just the dependency graph. That also
+      # keeps this job independent of the build one, so they run in parallel.
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm gen
+
+      - name: Fail if anything changed
+        run: |
+          set -euo pipefail
+          # --porcelain, not `git diff --exit-code`: a generator that produces a
+          # brand-new file (a component page that never had one) leaves it
+          # untracked, which a diff wouldn't see at all — exactly the case that
+          # let 15 pages go missing.
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated files are out of date. Run 'pnpm gen' and commit the result."
+            git status --porcelain
+            git --no-pager diff
+            exit 1
+          fi
+          echo "Generated files are in sync."

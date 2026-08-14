@@ -20,6 +20,63 @@ const rating = ref(3)
 </template>
 ```
 
+### Readonly.vue
+
+```vue
+<template>
+  <div class="flex items-center gap-3">
+    <KunRating :model-value="4" readonly />
+    <span class="text-default-500 text-sm">只读，固定为 4 / 5</span>
+  </div>
+</template>
+```
+
+### Disabled.vue
+
+```vue
+<template>
+  <div class="flex items-center gap-3">
+    <KunRating :model-value="3" disabled />
+    <span class="text-default-500 text-sm">禁用，无法交互</span>
+  </div>
+</template>
+```
+
+### Count.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const rating = ref(7)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <KunRating v-model="rating" :max="10" />
+    <span class="text-default-500 text-sm">{{ rating }} / 10</span>
+  </div>
+</template>
+```
+
+### Sizes.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const sm = ref(3)
+const md = ref(3)
+const lg = ref(3)
+</script>
+
+<template>
+  <div class="flex flex-col gap-3">
+    <KunRating v-model="sm" size="sm" />
+    <KunRating v-model="md" size="md" />
+    <KunRating v-model="lg" size="lg" />
+  </div>
+</template>
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 |
@@ -29,7 +86,7 @@ const rating = ref(3)
 | `max` | `number` | `5` |
 | `modelValue` | `number` | `0` |
 | `readonly` | `boolean` | `false` |
-| `size` | `"md" \| "sm" \| "lg"` | `"md"` |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/rating

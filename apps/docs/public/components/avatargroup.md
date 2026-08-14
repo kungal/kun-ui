@@ -10,9 +10,7 @@
 <script setup lang="ts">
 import type { KunUser } from '@kungal/ui-vue'
 
-const avatar = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="%237c3aed"/></svg>'
-)}`
+const avatar = '/favicon.webp'
 const users: KunUser[] = Array.from({ length: 4 }, (_, i) => ({
   id: i + 1,
   name: `User ${i + 1}`,
@@ -21,7 +19,49 @@ const users: KunUser[] = Array.from({ length: 4 }, (_, i) => ({
 </script>
 
 <template>
-  <KunAvatarGroup :users="users" :total="8" />
+  <KunAvatarGroup :users="users" />
+</template>
+```
+
+### Overflow.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+const users: KunUser[] = Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+  name: `User ${i + 1}`,
+  avatar,
+}))
+</script>
+
+<template>
+  <!-- Only `visibleCount` avatars render; the rest collapse into a "+N" chip.
+       Pass `total` to count members beyond the array you actually have. -->
+  <KunAvatarGroup :users="users" :visible-count="4" :total="12" />
+</template>
+```
+
+### ShowAll.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+const users: KunUser[] = Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+  name: `User ${i + 1}`,
+  avatar,
+}))
+</script>
+
+<template>
+  <!-- `ellipsis="false"` disables the "+N" chip and renders every avatar.
+       `ariaLabel` overrides the default "N 位用户" group label for screen readers. -->
+  <KunAvatarGroup :users="users" :ellipsis="false" aria-label="项目协作者" />
 </template>
 ```
 
@@ -30,8 +70,9 @@ const users: KunUser[] = Array.from({ length: 4 }, (_, i) => ({
 | 属性 | 类型 | 默认值 |
 | --- | --- | --- |
 | `users` * | `KunUser[]` | — |
+| `ariaLabel` | `string` | `undefined` |
 | `ellipsis` | `boolean` | `true` |
-| `total` | `number` | `0` |
+| `total` | `number` | `undefined` |
 | `visibleCount` | `number` | `5` |
 
 ---

@@ -8,11 +8,31 @@
 
 ```vue
 <template>
+  <KunHeader name="组件库" />
+</template>
+```
+
+### Scale.vue
+
+```vue
+<template>
   <div class="flex flex-col gap-4">
-    <KunHeader name="Heading h1" description="A section heading with a description" scale="h1" />
-    <KunHeader name="Heading h2" scale="h2" />
-    <KunHeader name="Heading h3" scale="h3" />
+    <KunHeader name="一级标题" scale="h1" />
+    <KunHeader name="二级标题" scale="h2" />
+    <KunHeader name="三级标题" scale="h3" />
   </div>
+</template>
+```
+
+### WithDescription.vue
+
+```vue
+<template>
+  <KunHeader
+    name="账号设置"
+    description="管理你的个人资料、安全选项与通知偏好。"
+    scale="h2"
+  />
 </template>
 ```
 

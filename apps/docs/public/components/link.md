@@ -8,11 +8,41 @@
 
 ```vue
 <template>
-  <KunLink href="/components/button">Internal link</KunLink>
-  <KunLink href="https://github.com/kungal/kun-ui" target="_blank" is-show-anchor-icon>
-    External
+  <div class="flex flex-wrap items-center gap-4">
+    <KunLink href="/components/button">内部链接</KunLink>
+    <KunLink href="#" underline="hover">悬停显示下划线</KunLink>
+    <KunLink href="#" :underline="'none'">无下划线</KunLink>
+  </div>
+</template>
+```
+
+### Colors.vue
+
+```vue
+<template>
+  <div class="flex flex-wrap items-center gap-4">
+    <KunLink href="#" color="primary">primary</KunLink>
+    <KunLink href="#" color="secondary">secondary</KunLink>
+    <KunLink href="#" color="success">success</KunLink>
+    <KunLink href="#" color="warning">warning</KunLink>
+    <KunLink href="#" color="danger">danger</KunLink>
+    <KunLink href="#" color="info">info</KunLink>
+    <KunLink href="#" color="default">default</KunLink>
+  </div>
+</template>
+```
+
+### External.vue
+
+```vue
+<template>
+  <KunLink
+    href="https://github.com/kungal/kun-ui"
+    target="_blank"
+    is-show-anchor-icon
+  >
+    KunUI on GitHub
   </KunLink>
-  <KunLink href="#" color="danger" underline="hover">Danger, underline on hover</KunLink>
 </template>
 ```
 

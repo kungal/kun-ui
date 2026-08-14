@@ -129,10 +129,16 @@ export interface KunTabProps<T extends KunTabItem = KunTabItem> {
   size?: KunTabSize
   orientation?: KunTabOrientation
   fullWidth?: boolean
-  // Horizontal alignment of each tab's content (icon + label) inside its box.
-  // Mainly visible on vertical / full-width tabs (where the box is wider than
-  // its content). Default is orientation-aware: 'start' for vertical (a nav
-  // column reads best left-aligned), 'center' for horizontal.
+  // JSDoc, not `//`: the default is orientation-aware (see `resolvedAlign`), so
+  // it can't be a literal in `withDefaults` — which is the only place the docs
+  // generator looks. The `@default` tag below is how it learns the real answer.
+  /**
+   * Horizontal alignment of each tab's content (icon + label) inside its box.
+   * Mainly visible on vertical / full-width tabs, where the box is wider than
+   * its content.
+   *
+   * @default "center" (horizontal) / "start" (vertical)
+   */
   align?: 'start' | 'center' | 'end'
   disabled?: boolean
   disableAnimation?: boolean

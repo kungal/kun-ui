@@ -1,13 +1,14 @@
 // Generate llms.txt + llms-full.txt from a single source of truth.
 //
-//   node scripts/gen-llms.mjs
+//   pnpm gen        (from the repo root — runs every generator in order)
 //
 // These files make KunUI legible to AI coding tools (Claude Code, Cursor, …):
 // `llms.txt` is a compact index (rules + component map) that fits any context
 // window; `llms-full.txt` inlines the entire integration guide + a component
 // reference. The component metadata below is the canonical AI-facing source —
-// keep it in sync when adding/removing components (it can also feed the docs
-// site and an MCP server later).
+// add a row when you add a component; the guard further down refuses to generate
+// if the list falls behind KUN_COMPONENT_NAMES, and the `check` workflow runs
+// this on every PR.
 //
 // Links default to the GitHub repo; pass a site base URL once the docs site
 // ships: `node scripts/gen-llms.mjs https://kun-ui.example.com`.
@@ -21,8 +22,8 @@ const DOCS_BASE = process.argv[2] || 'https://github.com/kungal/kun-ui/blob/main
 
 const meta = {
   name: 'KunUI',
-  tagline:
-    'Cross-framework component library — 57 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.',
+  // tagline is assigned below — its component count is derived from `components`
+  // rather than typed in, because a hand-written number goes stale silently.
   packages: [
     ['@kungal/ui-tokens', 'Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.'],
     ['@kungal/ui-core', 'Framework-agnostic TypeScript core: cn(), the variant/class matrix, the radius system, the bundled-icon registry, shared types (KunUIColor, KunUser, …).'],
@@ -65,14 +66,25 @@ const components = [
   ['KunScrollShadow', 'Layout & display', 'Horizontal scroll container with edge fade shadows.'],
   ['KunFadeCard', 'Layout & display', 'Fade + expand transition wrapper for conditional content.'],
   ['KunNull', 'Layout & display', 'Empty-state placeholder with a bundled mascot image + caption (`description`, `src`, `isShowSticker`).'],
+  ['KunAccordion', 'Layout & display', 'Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.'],
+  ['KunAccordionItem', 'Layout & display', 'One accordion section: `value` (required), `title`/`icon` or the `title` slot, `disabled`.'],
+  ['KunSkeleton', 'Layout & display', 'Loading placeholder (variant text/circle/rect, width/height); set `loaded` to swap in the real content.'],
+  ['KunSteps', 'Layout & display', 'Step / progress indicator (items array, `current` index; horizontal or vertical).'],
+  ['KunTimeline', 'Layout & display', 'Vertical timeline container for KunTimelineItem.'],
+  ['KunTimelineItem', 'Layout & display', 'One timeline entry (title, time, icon, color + default slot for the body).'],
   // Buttons & feedback
   ['KunButton', 'Buttons & feedback', 'Button: color/variant/size, loading state; renders as a link with href/to.'],
+  ['KunButtonGroup', 'Buttons & feedback', 'Joins adjacent KunButtons into one segmented control (horizontal/vertical; merges the touching radii).'],
   ['KunRipple', 'Buttons & feedback', 'Material-style ripple effect.'],
   ['KunLoading', 'Buttons & feedback', 'Loading state: overlay over wrapped content (default slot) or standalone; bundled mascot image (`src`, `loading`, `description`).'],
   ['KunCopy', 'Buttons & feedback', 'Copy-to-clipboard button with feedback.'],
   ['KunRating', 'Buttons & feedback', 'Star rating input (v-model number).'],
+  ['KunReaction', 'Buttons & feedback', 'Like / reaction toggle (v-model boolean) with an animated icon and an optional `count`.'],
+  ['KunShatter', 'Buttons & feedback', 'Breaks its slot content into flying glass shards on click, and can fly them back (`pieces`, `gravity`, `reassemble`, `autoRestore`). Compositor-only (transform + opacity), zero deps.'],
   // Media & content
   ['KunImage', 'Media & content', 'Image with skeleton/aspect/objectFit; uses the injected image component (NuxtImg in Nuxt).'],
+  ['KunCarousel', 'Media & content', 'Swipeable carousel (arrows, indicators, `loop`, `autoplay` ms, `slidesPerView`). Wraps KunCarouselItem.'],
+  ['KunCarouselItem', 'Media & content', 'One carousel slide.'],
   ['KunImageNative', 'Media & content', 'Bare <img> with class merging (no optimization pipeline).'],
   ['KunIcon', 'Media & content', 'Inline SVG icon from the bundled registry; never fetches. `name` like `lucide:x`. Inherits text color.'],
   ['KunBrand', 'Media & content', 'Logo + name brand block, links home; optional badge.'],
@@ -90,6 +102,7 @@ const components = [
   ['KunPopover', 'Navigation & overlays', 'Floating popover anchored to a trigger slot.'],
   ['KunDropdown', 'Navigation & overlays', 'Menu of items anchored to a trigger (items array).'],
   ['KunContextMenu', 'Navigation & overlays', 'Right-click context menu (items array).'],
+  ['KunCommandPalette', 'Navigation & overlays', 'Command-palette SHELL (v-model:open + ⌘K/Ctrl-K, v-model:query): dialog, keyboard nav, grouped rendering, match highlighting, a11y. It does NOT search — YOU compute `items` (flat, or KunCommandGroup[]) from `query`; picking one emits @select.'],
   ['KunPagination', 'Navigation & overlays', 'Page navigation (v-model:current-page, total-page) with quick-jump.'],
   ['KunLightbox', 'Navigation & overlays', 'Image lightbox/viewer (v-model:is-open, images array).'],
   ['KunLightboxGallery', 'Navigation & overlays', 'Gallery wrapper; click an item to open the lightbox.'],
@@ -103,6 +116,7 @@ const components = [
   ['KunAutocomplete', 'Forms', 'Combobox: a text field (v-model string) with a filtered suggestion list; allowCustomValue / manualFilter.'],
   ['KunSwitch', 'Forms', 'Toggle switch (v-model boolean).'],
   ['KunCheckBox', 'Forms', 'Checkbox (v-model boolean).'],
+  ['KunCheckBoxGroup', 'Forms', 'Multi-select checkbox group (v-model array, options array; `max`, orientation, label/error).'],
   ['KunSlider', 'Forms', 'Range slider (v-model number; min/max/step).'],
   ['KunRadioGroup', 'Forms', 'Radio group (v-model, options array; card/classic variants).'],
   ['KunDatePicker', 'Forms', 'Date / date-range picker (date-fns based; v-model).'],
@@ -119,6 +133,35 @@ const components = [
   ['KunLoliProvider', 'Overlay providers (mount once near app root)', 'Renders the mascot popup triggered by useKunLoliInfo(). Mount once.'],
   ['KunLoli', 'Overlay providers (mount once near app root)', 'The standalone mascot popup component.'],
 ]
+
+meta.tagline = `Cross-framework component library — ${components.length} Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.`
+
+// The list above is hand-written on purpose — each row carries a one-line summary
+// no generator can invent. The cost is that it falls behind the library silently:
+// by the time this guard was added it was 13 components stale, so llms.txt was
+// telling agents that KunAccordion, KunCarousel, KunCommandPalette and friends
+// didn't exist. KUN_COMPONENT_NAMES is the single source of truth; diverging from
+// it now fails the generator instead.
+//
+// Read as text rather than imported: this script is plain node from the repo root
+// with no TS loader, and `@kungal/ui-vue` would resolve to dist (a build we don't
+// want to require just to write a text file).
+const exported = new Set(
+  [
+    ...readFileSync(join(root, 'packages/vue/src/componentNames.ts'), 'utf8')
+      .match(/export const KUN_COMPONENT_NAMES = \[([\s\S]*?)\]/)[1]
+      .matchAll(/'(Kun\w+)'/g),
+  ].map((m) => m[1])
+)
+const listed = new Set(components.map(([name]) => name))
+const missing = [...exported].filter((n) => !listed.has(n))
+const extra = [...listed].filter((n) => !exported.has(n))
+if (missing.length || extra.length) {
+  console.error('gen-llms: the `components` list is out of sync with KUN_COMPONENT_NAMES.')
+  if (missing.length) console.error(`  missing (add a summary): ${missing.join(', ')}`)
+  if (extra.length) console.error(`  no longer exported (remove): ${extra.join(', ')}`)
+  process.exit(1)
+}
 
 const composables = [
   ['useKunMessage / useKunMessageState', 'Trigger / read toasts. useKunMessage(message, type, duration=3000, richText=false, position="top-center").'],

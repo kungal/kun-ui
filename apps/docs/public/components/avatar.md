@@ -10,17 +10,73 @@
 <script setup lang="ts">
 import type { KunUser } from '@kungal/ui-vue'
 
-// A bundled data-URI avatar (no network request for the demo).
-const avatar = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#7c3aed"/></svg>'
-)}`
+// Any image URL works — a local/public asset (here the site icon), a remote CDN
+// image, or the deterministic sticker fallback when `avatar` is omitted.
+const avatar = '/favicon.webp'
 const user: KunUser = { id: 1, name: 'Kun', avatar }
 </script>
 
 <template>
+  <KunAvatar :user="user" :is-navigation="false" />
+</template>
+```
+
+### Sizes.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+const user: KunUser = { id: 1, name: 'Kun', avatar }
+</script>
+
+<template>
+  <KunAvatar :user="user" :is-navigation="false" size="xs" />
   <KunAvatar :user="user" :is-navigation="false" size="sm" />
   <KunAvatar :user="user" :is-navigation="false" size="md" />
   <KunAvatar :user="user" :is-navigation="false" size="lg" />
+  <KunAvatar :user="user" :is-navigation="false" size="xl" />
+  <KunAvatar :user="user" :is-navigation="false" size="original-sm" />
+  <KunAvatar :user="user" :is-navigation="false" size="original" />
+</template>
+```
+
+### StickerFallback.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+// No `avatar` URL → KunAvatar falls back to a deterministic sticker, stable per
+// name, so the same unknown user always gets the same picture.
+const alice: KunUser = { id: 1, name: 'Alice', avatar: '' }
+const bob: KunUser = { id: 2, name: 'Bob', avatar: '' }
+const carol: KunUser = { id: 3, name: 'Carol', avatar: '' }
+</script>
+
+<template>
+  <KunAvatar :user="alice" :is-navigation="false" size="lg" />
+  <KunAvatar :user="bob" :is-navigation="false" size="lg" />
+  <KunAvatar :user="carol" :is-navigation="false" size="lg" />
+</template>
+```
+
+### Navigation.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const avatar = '/favicon.webp'
+
+// With `isNavigation` (the default) and a user that has an `id`, the avatar
+// renders a real, crawlable link to the user's profile and scales on hover.
+const user: KunUser = { id: 42, name: 'Kun', avatar }
+</script>
+
+<template>
+  <KunAvatar :user="user" size="lg" />
 </template>
 ```
 
@@ -31,7 +87,7 @@ const user: KunUser = { id: 1, name: 'Kun', avatar }
 | `user` * | `KunUser \| null` | — |
 | `className` | `string` | `""` |
 | `disableFloating` | `boolean` | — |
-| `floatingPosition` | `"top" \| "bottom" \| "left" \| "right"` | — |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — |
 | `imageClassName` | `string` | `""` |
 | `isNavigation` | `boolean` | `true` |
 | `size` | `KunAvatarSize` | `"md"` |

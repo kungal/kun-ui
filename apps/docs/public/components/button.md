@@ -37,7 +37,6 @@
   <KunButton color="primary" variant="light">light</KunButton>
   <KunButton color="primary" variant="flat">flat</KunButton>
   <KunButton color="primary" variant="shadow">shadow</KunButton>
-  <KunButton color="primary" variant="ghost">ghost</KunButton>
 </template>
 ```
 
@@ -91,7 +90,7 @@
 | `fullWidth` | `boolean` | `false` |
 | `href` | `string` | `""` |
 | `icon` | `boolean` | `false` |
-| `iconPosition` | `"left" \| "right"` | `"left"` |
+| `iconPosition` | `"right" \| "left"` | `"left"` |
 | `isIconOnly` | `boolean` | `false` |
 | `loading` | `boolean` | `false` |
 | `rounded` | `KunUIRounded` | — |
