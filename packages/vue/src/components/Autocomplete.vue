@@ -334,6 +334,7 @@ defineExpose({
         <div
           v-if="isOpen && (filtered.length || dirty || showSpinner)"
           ref="dropdownRef"
+          data-kun-overlay
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(

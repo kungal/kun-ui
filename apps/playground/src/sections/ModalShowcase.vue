@@ -27,9 +27,8 @@ const openForm = ref(false)
       </KunButton>
     </div>
 
-    <KunModal v-model="open">
+    <KunModal v-model="open" title="Hello from KunModal">
       <div class="flex max-w-sm flex-col gap-3">
-        <h3 class="text-lg font-semibold">Hello from KunModal</h3>
         <p class="text-default-600 text-sm">
           Backdrop click or Escape closes this. Tab focus stays trapped inside
           while open, and the body scroll is locked.
@@ -38,9 +37,12 @@ const openForm = ref(false)
       </div>
     </KunModal>
 
-    <KunModal v-model="openLocked" :is-dismissable="false">
+    <KunModal
+      v-model="openLocked"
+      :is-dismissable="false"
+      title="Non-dismissable"
+    >
       <div class="flex max-w-sm flex-col gap-3">
-        <h3 class="text-lg font-semibold">Non-dismissable</h3>
         <p class="text-default-600 text-sm">
           Backdrop click and Escape are disabled here — close with the button.
         </p>
@@ -48,9 +50,12 @@ const openForm = ref(false)
       </div>
     </KunModal>
 
-    <KunModal v-model="openCentered" placement="center">
+    <KunModal
+      v-model="openCentered"
+      placement="center"
+      title="placement=&quot;center&quot;"
+    >
       <div class="flex flex-col gap-3">
-        <h3 class="text-lg font-semibold">placement="center"</h3>
         <p class="text-default-600 text-sm">
           Opts out of the responsive sheet — centred at every width, the pre-2.19
           behaviour.
@@ -59,9 +64,8 @@ const openForm = ref(false)
       </div>
     </KunModal>
 
-    <KunModal v-model="openForm">
+    <KunModal v-model="openForm" title="Sheet with an input">
       <div class="flex flex-col gap-3">
-        <h3 class="text-lg font-semibold">Sheet with an input</h3>
         <p class="text-default-600 text-sm">
           On a phone, focusing this input opens the keyboard — the overlay should
           shrink to the visible viewport instead of hiding behind it.

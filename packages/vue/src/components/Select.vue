@@ -393,6 +393,7 @@ watch(filtered, () => {
         <div
           v-if="isOpen"
           ref="dropdownRef"
+          data-kun-overlay
           :style="[floatingStyles, { transformOrigin }]"
           :class="
             cn(

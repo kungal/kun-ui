@@ -80,7 +80,9 @@ const html = '<p>trusted <strong>html</strong></p>'
       <KunButton @click="modalOpen = true">modal</KunButton>
       <KunButton @click="drawerOpen = true">drawer</KunButton>
       <KunButton @click="lightboxOpen = true">lightbox</KunButton>
-      <KunModal v-model="modalOpen"><div class="p-2">modal</div></KunModal>
+      <KunModal v-model="modalOpen" title="modal">
+        <div class="p-2">modal</div>
+      </KunModal>
       <KunDrawer v-model="drawerOpen" title="drawer"><p>drawer body</p></KunDrawer>
       <KunLightbox v-model:is-open="lightboxOpen" :images="lbImages" />
       <KunLightboxGallery>

@@ -11,9 +11,8 @@ const top = ref(false)
     <KunButton variant="bordered" @click="top = true">顶部对齐</KunButton>
   </div>
 
-  <KunModal v-model="auto">
+  <KunModal v-model="auto" title="自适应对齐">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">自适应对齐</h3>
       <p class="text-default-600 text-sm">
         默认值 <code>placement="auto"</code>:窄屏(<code>md</code> 以下)从底部
         升起、贴边铺满,更贴近手机的操作习惯;<code>md</code> 及以上恢复居中。
@@ -26,9 +25,8 @@ const top = ref(false)
     </div>
   </KunModal>
 
-  <KunModal v-model="top" placement="top">
+  <KunModal v-model="top" placement="top" title="顶部对齐">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">顶部对齐</h3>
       <p class="text-default-600 text-sm">
         <code>placement="top"</code> 在所有宽度下都贴近视口顶部。
       </p>

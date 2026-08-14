@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
@@ -7,6 +15,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -21,7 +30,14 @@ defineOptions({ name: 'KunModal' })
 const props = withDefaults(defineProps<KunModalProps>(), {
   className: '',
   innerClassName: '',
-  isDismissable: true,
+  title: '',
+  description: '',
+  ariaLabel: '',
+  // Deliberately `undefined` and not `true`: the default depends on `role` (see
+  // `isDismissable` below). Vue casts an ABSENT Boolean prop to `false`, but
+  // only when no `default` key is declared — spelling out `undefined` keeps the
+  // three states (unset / true / false) distinguishable.
+  isDismissable: undefined,
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
@@ -30,6 +46,33 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   placement: 'auto',
   role: 'dialog',
 })
+
+// An `alertdialog` interrupts the user to demand an answer, and a click that
+// happens to land on the backdrop is not one — so it stops dismissing, which is
+// exactly what Radix's and Reka's AlertDialog do (`@pointer-down-outside.prevent
+// @interact-outside.prevent`) and what APG asks for. Escape is deliberately NOT
+// included: both libraries leave it alone, because "cancel" is a real answer and
+// Escape is how a keyboard gives it. `:is-dismissable="true"` opts the backdrop
+// back in; `false` still turns both off.
+const isBackdropDismissable = computed(
+  () => props.isDismissable ?? props.role !== 'alertdialog'
+)
+const isEscapeDismissable = computed(() => props.isDismissable ?? true)
+
+// A dialog needs an accessible name, and the name should be the visible title —
+// `aria-labelledby` pointing at the rendered <h2>, which is what every library
+// with a title slot/prop does (Reka, Zag, react-aria, Nuxt UI). `ariaLabel` stays
+// as the escape hatch for a dialog whose title is drawn some other way.
+const uniqueId = useKunUniqueId('kun-modal')
+const titleId = computed(() => `${uniqueId.value}-title`)
+const descriptionId = computed(() => `${uniqueId.value}-description`)
+const labelledBy = computed(() => (props.title ? titleId.value : undefined))
+const describedBy = computed(() =>
+  props.description ? descriptionId.value : undefined
+)
+const label = computed(() =>
+  props.title ? undefined : props.ariaLabel || undefined
+)
 
 // Uniform corner radius: defers to the global config.rounded (default 'md')
 // like every other KunUI surface — set config.rounded once to restyle them all.
@@ -64,7 +107,7 @@ const placementClassMap: Record<KunModalPlacement, string> = {
 }
 const overlayClass = computed(() => [
   placementClassMap[props.placement],
-  props.scrollBehavior === 'outside' ? 'overflow-y-auto' : '',
+  props.scrollBehavior === 'outside' ? 'overflow-y-auto overscroll-contain' : '',
 ])
 
 // Below `md` an `auto` panel spans the full width like a sheet. `min-w-0` lifts
@@ -92,11 +135,16 @@ const panelPlacementClass = computed(() =>
 // its desktop `sm:my-16` margins in disguise; on a phone (`my-1`) it just leaves
 // 124px unused, landing at 83% of a 750px viewport and 75% of an SE. shadcn's
 // vaul drawer is `max-h-[80vh]` with a 96px floor. 85 sits between them.
+//
+// `overscroll-contain` stops the panel handing its leftover scroll to the page
+// underneath once it hits an end — the body lock catches that on desktop, but a
+// nested scroller inside the panel would still chain past it, and on iOS the
+// chain is what drags the page out from under a bottom sheet.
 const panelScrollClass = computed(() => {
   if (props.scrollBehavior === 'inside') {
     return props.placement === 'auto'
-      ? 'max-h-[min(85dvh,100%)] md:max-h-[min(90dvh,100%)] overflow-y-auto'
-      : 'max-h-[min(90dvh,100%)] overflow-y-auto'
+      ? 'max-h-[min(85dvh,100%)] md:max-h-[min(90dvh,100%)] overflow-y-auto overscroll-contain'
+      : 'max-h-[min(90dvh,100%)] overflow-y-auto overscroll-contain'
   }
   // Scrolling outside: the panel's own margin sets the gap, so an `auto` sheet
   // has to drop it below `md` or it floats 2rem off the bottom edge.
@@ -108,6 +156,22 @@ const modelValue = defineModel<boolean>({ required: true })
 const emits = defineEmits<{
   close: []
 }>()
+
+// `process.env.NODE_ENV` and NOT `import.meta.env.DEV`: Vite folds the latter to
+// `false` while building THIS package, which strips the warning out of the
+// published bundle so it could never reach the app that needs it. NODE_ENV is
+// substituted by the CONSUMER's bundler instead, so the check survives into
+// dist, warns in their dev build, and folds away in their production one — the
+// same idiom Reka UI uses for its DialogTitle warning.
+if (process.env.NODE_ENV !== 'production') {
+  watchEffect(() => {
+    if (modelValue.value && !props.title && !props.ariaLabel) {
+      console.warn(
+        '[KunModal] this dialog has no accessible name, so a screen reader announces it as just "dialog". Pass `title` (rendered, and wired to aria-labelledby) or `aria-label`.'
+      )
+    }
+  })
+}
 
 // The singleton lock counter lives in useBodyScrollLock; `locked` here is
 // per-instance and guarantees onUnmounted releases exactly once regardless
@@ -169,19 +233,27 @@ const applyInert = (shouldInert: boolean) => {
 // Focus trap on the modal container — focus can't escape via Tab/Shift+Tab
 // while open. `escapeDeactivates: false` because Modal owns the Escape
 // handler below. `returnFocusOnDeactivate` restores focus on close.
+//
+// `fallbackFocus` is what lets the backdrop stay OUT of the tab order. focus-trap
+// refuses to activate on a container with no tabbable node, and a modal whose
+// body is pure text has none — the old fix was `tabindex="0"` on the backdrop,
+// which bought that at the price of making the dim area itself a tab stop that
+// AT announces. Pointing the fallback at the panel (`tabindex="-1"`: focusable
+// programmatically, never by Tab) gives focus-trap its target and gives the
+// backdrop nothing.
 const trapEl = ref<HTMLElement | null>(null)
+const panelEl = ref<HTMLElement | null>(null)
 const { activate, deactivate } = useFocusTrap(trapEl, {
   immediate: false,
   escapeDeactivates: false,
   allowOutsideClick: true,
   returnFocusOnDeactivate: true,
+  fallbackFocus: () => panelEl.value ?? (trapEl.value as HTMLElement),
 })
 
-const handleCloseKunModal = () => {
-  if (props.isDismissable) {
-    modelValue.value = false
-    emits('close')
-  }
+const dismiss = () => {
+  modelValue.value = false
+  emits('close')
 }
 
 // Backdrop dismissal must require that the press STARTED on the backdrop, not
@@ -196,16 +268,25 @@ const onBackdropPointerDown = (e: Event) => {
   pressedOnBackdrop.value = e.target === e.currentTarget
 }
 const onBackdropClick = (e: Event) => {
-  if (e.target === e.currentTarget && pressedOnBackdrop.value) {
-    handleCloseKunModal()
+  if (
+    isBackdropDismissable.value &&
+    e.target === e.currentTarget &&
+    pressedOnBackdrop.value
+  ) {
+    dismiss()
   }
 }
 
 useEventListener('keydown', (e: KeyboardEvent) => {
   // Only the topmost overlay reacts to Escape, so a stacked Esc dismisses one
   // layer at a time instead of closing every open modal/drawer at once.
-  if (e.key === 'Escape' && modelValue.value && isTopmost.value) {
-    handleCloseKunModal()
+  if (
+    e.key === 'Escape' &&
+    modelValue.value &&
+    isTopmost.value &&
+    isEscapeDismissable.value
+  ) {
+    dismiss()
   }
 })
 
@@ -261,16 +342,20 @@ onUnmounted(() => {
         :style="overlayStyle"
         @pointerdown="onBackdropPointerDown"
         @click="onBackdropClick"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           v-if="withContainer"
+          ref="panelEl"
           :role="role"
           aria-modal="true"
-          :aria-label="ariaLabel || '对话框'"
+          :aria-label="label"
+          :aria-labelledby="labelledBy"
+          :aria-describedby="describedBy"
+          tabindex="-1"
           :class="
             cn(
-              'kun-modal-panel bg-content1 scrollbar-hide shadow-kun-lg kun-backdrop relative mx-auto min-w-80 p-6',
+              'kun-modal-panel bg-content1 scrollbar-hide shadow-kun-lg kun-backdrop relative mx-auto min-w-80 p-6 focus:outline-none',
               sizeClass,
               panelPlacementClass,
               panelScrollClass,
@@ -280,6 +365,28 @@ onUnmounted(() => {
           "
           @click.stop
         >
+          <!-- Rendered only when asked for, so a caller who draws their own
+               heading in the slot keeps the exact layout they had. -->
+          <div
+            v-if="title || description"
+            :class="$slots.default ? 'mb-4' : ''"
+          >
+            <h2
+              v-if="title"
+              :id="titleId"
+              class="text-foreground pr-8 text-lg font-semibold"
+            >
+              {{ title }}
+            </h2>
+            <p
+              v-if="description"
+              :id="descriptionId"
+              class="text-default-600 mt-2 text-sm"
+            >
+              {{ description }}
+            </p>
+          </div>
+
           <slot />
 
           <KunButton

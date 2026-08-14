@@ -280,6 +280,7 @@ defineExpose({
         <div
           v-if="isOpen && items.length"
           ref="menuRef"
+          data-kun-overlay
           :id="menuId"
           role="menu"
           aria-orientation="vertical"

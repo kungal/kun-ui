@@ -150,6 +150,7 @@ defineExpose({
         <div
           v-if="isOpen"
           ref="popoverRef"
+          data-kun-overlay
           :id="popoverId"
           role="dialog"
           tabindex="-1"

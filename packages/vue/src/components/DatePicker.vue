@@ -263,6 +263,7 @@ const isInPreviewRange = (date: Date) => {
         <div
           v-if="isOpen"
           ref="dropdownRef"
+          data-kun-overlay
           :class="
             cn(
               'bg-content1 z-kun-popover p-3 shadow-kun-md',

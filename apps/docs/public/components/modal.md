@@ -14,11 +14,15 @@ const open = ref(false)
 
 <template>
   <KunButton color="primary" @click="open = true">Open modal</KunButton>
-  <KunModal v-model="open">
-    <h3 class="text-lg font-semibold">Hello from a modal</h3>
-    <p class="text-default-600 mt-1">
-      Teleported to body, focus-trapped, body-scroll-locked. Press Esc or click
-      the backdrop to close.
+  <KunModal
+    v-model="open"
+    title="Hello from a modal"
+    description="Teleported to body, focus-trapped, body-scroll-locked. Press Esc or click the backdrop to close."
+  >
+    <p class="text-default-600 text-sm">
+      <code>title</code> 渲染为面板的 <code>&lt;h2&gt;</code> 并关联
+      <code>aria-labelledby</code>,<code>description</code> 关联
+      <code>aria-describedby</code> — 屏幕阅读器念到的名字就是屏幕上看到的那个。
     </p>
   </KunModal>
 </template>
@@ -53,15 +57,13 @@ const openWith = (s: KunModalSize) => {
     </KunButton>
   </div>
 
-  <KunModal v-model="open" :size="size">
-    <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">尺寸:{{ size }}</h3>
-      <p class="text-default-600 text-sm">
-        通过 <code>size</code> 控制面板的最大宽度,可选 sm / md / lg / xl /
-        full。
-      </p>
-      <KunButton color="primary" @click="open = false">关闭</KunButton>
-    </div>
+  <KunModal
+    v-model="open"
+    :size="size"
+    :title="`尺寸:${size}`"
+    description="通过 size 控制面板的最大宽度,可选 sm / md / lg / xl / full。"
+  >
+    <KunButton color="primary" @click="open = false">关闭</KunButton>
   </KunModal>
 </template>
 ```
@@ -82,9 +84,8 @@ const top = ref(false)
     <KunButton variant="bordered" @click="top = true">顶部对齐</KunButton>
   </div>
 
-  <KunModal v-model="auto">
+  <KunModal v-model="auto" title="自适应对齐">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">自适应对齐</h3>
       <p class="text-default-600 text-sm">
         默认值 <code>placement="auto"</code>:窄屏(<code>md</code> 以下)从底部
         升起、贴边铺满,更贴近手机的操作习惯;<code>md</code> 及以上恢复居中。
@@ -97,9 +98,8 @@ const top = ref(false)
     </div>
   </KunModal>
 
-  <KunModal v-model="top" placement="top">
+  <KunModal v-model="top" placement="top" title="顶部对齐">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">顶部对齐</h3>
       <p class="text-default-600 text-sm">
         <code>placement="top"</code> 在所有宽度下都贴近视口顶部。
       </p>
@@ -122,9 +122,8 @@ const paragraphs = Array.from({ length: 12 }, (_, i) => i + 1)
 <template>
   <KunButton color="primary" @click="open = true">外部滚动</KunButton>
 
-  <KunModal v-model="open" scroll-behavior="outside">
+  <KunModal v-model="open" scroll-behavior="outside" title="滚动行为:outside">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">滚动行为:outside</h3>
       <p class="text-default-600 text-sm">
         当内容超出视口时,<code>scrollBehavior="outside"</code>
         让整个遮罩层滚动;默认的 <code>inside</code> 则只滚动面板内部。
@@ -162,9 +161,8 @@ const openNoClose = ref(false)
     </KunButton>
   </div>
 
-  <KunModal v-model="openLocked" :is-dismissable="false">
+  <KunModal v-model="openLocked" :is-dismissable="false" title="不可关闭背景">
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">不可关闭背景</h3>
       <p class="text-default-600 text-sm">
         设置 <code>:is-dismissable="false"</code> 后,点击背景和按下 Esc
         都不会关闭,只能通过按钮主动关闭。
@@ -173,9 +171,12 @@ const openNoClose = ref(false)
     </div>
   </KunModal>
 
-  <KunModal v-model="openNoClose" :is-show-close-button="false">
+  <KunModal
+    v-model="openNoClose"
+    :is-show-close-button="false"
+    title="隐藏关闭按钮"
+  >
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">隐藏关闭按钮</h3>
       <p class="text-default-600 text-sm">
         设置 <code>:is-show-close-button="false"</code> 隐藏右上角的关闭按钮,
         仍可点击背景或按 Esc 关闭。
@@ -198,12 +199,17 @@ const open = ref(false)
 <template>
   <KunButton color="danger" @click="open = true">删除账户</KunButton>
 
-  <KunModal v-model="open" role="alertdialog" :is-dismissable="false">
+  <KunModal
+    v-model="open"
+    role="alertdialog"
+    title="确认删除?"
+    description="此操作不可撤销,账户下的全部数据都会被移除。"
+  >
     <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">确认删除?</h3>
       <p class="text-default-600 text-sm">
-        设置 <code>role="alertdialog"</code> 将对话框标记为警告语义,
-        适用于需要用户明确确认的破坏性操作。此例同时关闭了背景关闭。
+        <code>role="alertdialog"</code> 把对话框标记为警告语义,用于需要用户明确
+        回答的破坏性操作。它同时让点击背景不再关闭对话框 — 落在遮罩上的一次点击
+        不算一个回答;Esc 仍然可以取消,和 Radix / Reka 的 AlertDialog 一致。
       </p>
       <div class="flex justify-end gap-2">
         <KunButton variant="bordered" @click="open = false">取消</KunButton>
@@ -216,20 +222,22 @@ const open = ref(false)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `modelValue` * | `boolean` | — |
-| `ariaLabel` | `string` | — |
-| `className` | `string` | `""` |
-| `innerClassName` | `string` | `""` |
-| `isDismissable` | `boolean` | `true` |
-| `isShowCloseButton` | `boolean` | `true` |
-| `placement` | `KunModalPlacement` | `"auto"` |
-| `role` | `"dialog" \| "alertdialog"` | `"dialog"` |
-| `rounded` | `KunUIRounded` | `undefined` |
-| `scrollBehavior` | `"inside" \| "outside"` | `"inside"` |
-| `size` | `KunModalSize` | `"md"` |
-| `withContainer` | `boolean` | `true` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `modelValue` * | `boolean` | — |  |
+| `ariaLabel` | `string` | `""` | Accessible name for a dialog that draws its own heading inside the slot instead of passing `title`. Ignored when `title` is set (that wins, via `aria-labelledby`). With neither, KunUI warns in dev. |
+| `className` | `string` | `""` |  |
+| `description` | `string` | `""` | Rendered under the title and wired to `aria-describedby` — the supporting line a `role="alertdialog"` is required to point at. |
+| `innerClassName` | `string` | `""` |  |
+| `isDismissable` | `boolean` | `undefined` | Whether a backdrop click or Escape closes the dialog. `role="alertdialog"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off. |
+| `isShowCloseButton` | `boolean` | `true` |  |
+| `placement` | `KunModalPlacement` | `"auto"` |  |
+| `role` | `"dialog" \| "alertdialog"` | `"dialog"` |  |
+| `rounded` | `KunUIRounded` | `undefined` |  |
+| `scrollBehavior` | `"inside" \| "outside"` | `"inside"` |  |
+| `size` | `KunModalSize` | `"md"` |  |
+| `title` | `string` | `""` | Rendered as the panel's `<h2>` and wired to `aria-labelledby`, so the name a screen reader announces is the one on screen. Prefer it over `ariaLabel`. |
+| `withContainer` | `boolean` | `true` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/modal

@@ -74,6 +74,17 @@ export type KunModalPlacement = 'auto' | 'center' | 'top'
 export interface KunModalProps {
   className?: string
   innerClassName?: string
+  /** Rendered as the panel's `<h2>` and wired to `aria-labelledby`, so the name
+   *  a screen reader announces is the one on screen. Prefer it over `ariaLabel`. */
+  title?: string
+  /** Rendered under the title and wired to `aria-describedby` — the supporting
+   *  line a `role="alertdialog"` is required to point at. */
+  description?: string
+  /** Whether a backdrop click or Escape closes the dialog. `role="alertdialog"`
+   *  stops the BACKDROP from dismissing (a click that lands on the dim area is
+   *  not an answer) while Escape still cancels, matching Radix and Reka. Pass
+   *  `true` to opt the backdrop back in, `false` to turn both off.
+   *  @default true (backdrop excluded when role="alertdialog") */
   isDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean
@@ -91,10 +102,12 @@ export interface KunModalProps {
   // centring at every width.
   placement?: KunModalPlacement
   // ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts
-  // that need an immediate response. Default 'dialog'.
+  // that need an immediate response — it also flips the isDismissable default.
+  // Default 'dialog'.
   role?: 'dialog' | 'alertdialog'
-  // Accessible name for the dialog (role="dialog" needs a name; the title is in
-  // the slot so it can't be auto-derived).
+  /** Accessible name for a dialog that draws its own heading inside the slot
+   *  instead of passing `title`. Ignored when `title` is set (that wins, via
+   *  `aria-labelledby`). With neither, KunUI warns in dev. */
   ariaLabel?: string
 }
 
@@ -809,7 +822,11 @@ export interface KunDrawerProps {
   placement?: KunDrawerPlacement
   responsive?: boolean
   size?: KunDrawerSize
+  /** Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`. */
   title?: string
+  /** Accessible name for a drawer with no visible title. Ignored when `title`
+   *  is set. With neither, KunUI warns in dev. */
+  ariaLabel?: string
   isDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean

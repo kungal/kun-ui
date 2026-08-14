@@ -241,6 +241,7 @@ const itemClass = (item: KunContextMenuItem) =>
       <div
         v-if="visible && items.length"
         ref="menuRef"
+        data-kun-overlay
         role="menu"
         aria-orientation="vertical"
         tabindex="-1"

@@ -1188,6 +1188,13 @@
         "required": true
       },
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Accessible name for a drawer with no visible title. Ignored when `title` is set. With neither, KunUI warns in dev."
+      },
+      {
         "name": "className",
         "type": "string",
         "required": false,
@@ -1239,7 +1246,8 @@
         "name": "title",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`."
       },
       {
         "name": "withContainer",
@@ -1949,13 +1957,22 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "default": "\"\"",
+        "description": "Accessible name for a dialog that draws its own heading inside the slot instead of passing `title`. Ignored when `title` is set (that wins, via `aria-labelledby`). With neither, KunUI warns in dev."
       },
       {
         "name": "className",
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Rendered under the title and wired to `aria-describedby` — the supporting line a `role=\"alertdialog\"` is required to point at."
       },
       {
         "name": "innerClassName",
@@ -1967,7 +1984,8 @@
         "name": "isDismissable",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "undefined",
+        "description": "Whether a backdrop click or Escape closes the dialog. `role=\"alertdialog\"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off."
       },
       {
         "name": "isShowCloseButton",
@@ -2004,6 +2022,13 @@
         "type": "KunModalSize",
         "required": false,
         "default": "\"md\""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Rendered as the panel's `<h2>` and wired to `aria-labelledby`, so the name a screen reader announces is the one on screen. Prefer it over `ariaLabel`."
       },
       {
         "name": "withContainer",

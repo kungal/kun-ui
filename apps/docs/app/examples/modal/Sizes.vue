@@ -24,14 +24,12 @@ const openWith = (s: KunModalSize) => {
     </KunButton>
   </div>
 
-  <KunModal v-model="open" :size="size">
-    <div class="flex flex-col gap-3">
-      <h3 class="text-lg font-semibold">尺寸:{{ size }}</h3>
-      <p class="text-default-600 text-sm">
-        通过 <code>size</code> 控制面板的最大宽度,可选 sm / md / lg / xl /
-        full。
-      </p>
-      <KunButton color="primary" @click="open = false">关闭</KunButton>
-    </div>
+  <KunModal
+    v-model="open"
+    :size="size"
+    :title="`尺寸:${size}`"
+    description="通过 size 控制面板的最大宽度,可选 sm / md / lg / xl / full。"
+  >
+    <KunButton color="primary" @click="open = false">关闭</KunButton>
   </KunModal>
 </template>

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue'
 import { useEventListener, useMediaQuery } from '@vueuse/core'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
@@ -31,6 +39,7 @@ const props = withDefaults(defineProps<KunDrawerProps>(), {
   rounded: undefined,
   className: '',
   innerClassName: '',
+  ariaLabel: '',
 })
 
 // Match Tailwind's md breakpoint. Below it the drawer becomes a bottom
@@ -141,13 +150,28 @@ const applyInert = (shouldInert: boolean) => {
   }
 }
 
+// `fallbackFocus` on the panel — see the same block in Modal.vue for why this
+// replaces the old `tabindex="0"` on the backdrop.
 const trapEl = ref<HTMLElement | null>(null)
+const panelEl = ref<HTMLElement | null>(null)
 const { activate, deactivate } = useFocusTrap(trapEl, {
   immediate: false,
   escapeDeactivates: false,
   allowOutsideClick: true,
   returnFocusOnDeactivate: true,
+  fallbackFocus: () => panelEl.value ?? (trapEl.value as HTMLElement),
 })
+
+// NODE_ENV, not import.meta.env.DEV — see the note on the same guard in Modal.vue.
+if (process.env.NODE_ENV !== 'production') {
+  watchEffect(() => {
+    if (modelValue.value && !props.title && !props.ariaLabel) {
+      console.warn(
+        '[KunDrawer] this drawer has no accessible name, so a screen reader announces it as just "dialog". Pass `title` (rendered, and wired to aria-labelledby) or `aria-label`.'
+      )
+    }
+  })
+}
 
 const handleClose = () => {
   if (props.isDismissable) {
@@ -210,7 +234,8 @@ onUnmounted(() => {
         role="dialog"
         aria-modal="true"
         :aria-labelledby="title ? titleId : undefined"
-        tabindex="0"
+        :aria-label="title ? undefined : ariaLabel || undefined"
+        tabindex="-1"
       >
         <!-- Backdrop — separate from panel so the slide doesn't fight the
              backdrop fade. -->
@@ -220,9 +245,11 @@ onUnmounted(() => {
         />
 
         <div
+          ref="panelEl"
+          tabindex="-1"
           :class="
             cn(
-              'bg-content1 flex flex-col shadow-kun-lg',
+              'bg-content1 flex flex-col shadow-kun-lg focus:outline-none',
               panelGeometry,
               innerClassName,
               size === 'full' ? roundedClass : ''
@@ -260,9 +287,11 @@ onUnmounted(() => {
             </KunButton>
           </header>
 
+          <!-- `overscroll-contain`: the drawer body is the one scroller on
+               screen, so its end must not hand the scroll back to the page. -->
           <div
             v-if="withContainer"
-            class="scrollbar-hide flex-1 overflow-y-auto p-6"
+            class="scrollbar-hide flex-1 overflow-y-auto overscroll-contain p-6"
           >
             <slot />
           </div>

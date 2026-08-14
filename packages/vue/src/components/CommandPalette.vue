@@ -240,6 +240,7 @@ defineExpose({ open, close, toggle })
     <Transition name="kun-command">
       <div
         v-if="isOpen"
+        data-kun-overlay
         class="kun-command-overlay z-kun-modal fixed inset-0 flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
         @click.self="close"
       >

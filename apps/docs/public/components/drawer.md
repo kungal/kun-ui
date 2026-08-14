@@ -151,19 +151,20 @@ const open = ref(false)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `modelValue` * | `boolean` | — |
-| `className` | `string` | `""` |
-| `innerClassName` | `string` | `""` |
-| `isDismissable` | `boolean` | `true` |
-| `isShowCloseButton` | `boolean` | `true` |
-| `placement` | `KunDrawerPlacement` | `"right"` |
-| `responsive` | `boolean` | `true` |
-| `rounded` | `KunUIRounded` | `undefined` |
-| `size` | `KunDrawerSize` | `"md"` |
-| `title` | `string` | `""` |
-| `withContainer` | `boolean` | `true` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `modelValue` * | `boolean` | — |  |
+| `ariaLabel` | `string` | `""` | Accessible name for a drawer with no visible title. Ignored when `title` is set. With neither, KunUI warns in dev. |
+| `className` | `string` | `""` |  |
+| `innerClassName` | `string` | `""` |  |
+| `isDismissable` | `boolean` | `true` |  |
+| `isShowCloseButton` | `boolean` | `true` |  |
+| `placement` | `KunDrawerPlacement` | `"right"` |  |
+| `responsive` | `boolean` | `true` |  |
+| `rounded` | `KunUIRounded` | `undefined` |  |
+| `size` | `KunDrawerSize` | `"md"` |  |
+| `title` | `string` | `""` | Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`. |
+| `withContainer` | `boolean` | `true` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/drawer

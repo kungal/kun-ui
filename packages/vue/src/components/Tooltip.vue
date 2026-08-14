@@ -100,6 +100,7 @@ const hide = () => {
         <div
           v-if="isVisible"
           ref="tooltipRef"
+          data-kun-overlay
           :id="tooltipId"
           role="tooltip"
           :class="
