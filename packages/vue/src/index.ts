@@ -221,6 +221,7 @@ export type {
   KunCommandPaletteProps,
   KunModalProps,
   KunModalSize,
+  KunModalPlacement,
   KunTabProps,
   KunTabItem,
   KunTabVariant,

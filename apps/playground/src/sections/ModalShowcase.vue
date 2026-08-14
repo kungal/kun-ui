@@ -3,6 +3,8 @@ import { ref } from 'vue'
 
 const open = ref(false)
 const openLocked = ref(false)
+const openCentered = ref(false)
+const openForm = ref(false)
 </script>
 
 <template>
@@ -16,6 +18,12 @@ const openLocked = ref(false)
       <KunButton color="primary" @click="open = true">Open modal</KunButton>
       <KunButton variant="bordered" @click="openLocked = true">
         Non-dismissable
+      </KunButton>
+      <KunButton variant="bordered" @click="openCentered = true">
+        placement="center"
+      </KunButton>
+      <KunButton variant="bordered" @click="openForm = true">
+        Sheet with input
       </KunButton>
     </div>
 
@@ -37,6 +45,32 @@ const openLocked = ref(false)
           Backdrop click and Escape are disabled here — close with the button.
         </p>
         <KunButton color="danger" @click="openLocked = false">Close</KunButton>
+      </div>
+    </KunModal>
+
+    <KunModal v-model="openCentered" placement="center">
+      <div class="flex flex-col gap-3">
+        <h3 class="text-lg font-semibold">placement="center"</h3>
+        <p class="text-default-600 text-sm">
+          Opts out of the responsive sheet — centred at every width, the pre-2.19
+          behaviour.
+        </p>
+        <KunButton color="primary" @click="openCentered = false">Close</KunButton>
+      </div>
+    </KunModal>
+
+    <KunModal v-model="openForm">
+      <div class="flex flex-col gap-3">
+        <h3 class="text-lg font-semibold">Sheet with an input</h3>
+        <p class="text-default-600 text-sm">
+          On a phone, focusing this input opens the keyboard — the overlay should
+          shrink to the visible viewport instead of hiding behind it.
+        </p>
+        <input
+          class="border-kun rounded-kun-md bg-content1 px-3 py-2 text-sm"
+          placeholder="Tap me on a phone"
+        />
+        <KunButton color="primary" @click="openForm = false">Close</KunButton>
       </div>
     </KunModal>
   </section>

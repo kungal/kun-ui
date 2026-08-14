@@ -66,6 +66,11 @@ export interface KunCardProps {
 
 export type KunModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
 
+//   auto   — bottom sheet below `md`, centred dialog at `md` and up (default)
+//   center — centred at every width
+//   top    — near the top edge at every width
+export type KunModalPlacement = 'auto' | 'center' | 'top'
+
 export interface KunModalProps {
   className?: string
   innerClassName?: string
@@ -75,11 +80,14 @@ export interface KunModalProps {
   rounded?: KunUIRounded
   // Max width of the panel (full = nearly the whole viewport). Default 'md'.
   size?: KunModalSize
-  // inside (default): the panel body scrolls, capped at 90vh.
+  // inside (default): the panel body scrolls, capped at 90dvh (and never taller
+  // than the visible viewport, so the on-screen keyboard can't bury it).
   // outside: the whole overlay scrolls — for panels taller than the viewport.
   scrollBehavior?: 'inside' | 'outside'
-  // Vertical alignment of the panel. Default 'center'.
-  placement?: 'center' | 'top'
+  // Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones,
+  // a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of
+  // centring at every width.
+  placement?: KunModalPlacement
   // ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts
   // that need an immediate response. Default 'dialog'.
   role?: 'dialog' | 'alertdialog'

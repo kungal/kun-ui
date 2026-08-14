@@ -1977,9 +1977,9 @@
       },
       {
         "name": "placement",
-        "type": "\"top\" | \"center\"",
+        "type": "KunModalPlacement",
         "required": false,
-        "default": "\"center\""
+        "default": "\"auto\""
       },
       {
         "name": "role",

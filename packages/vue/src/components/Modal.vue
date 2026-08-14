@@ -7,9 +7,10 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
+import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
-import type { KunModalProps, KunModalSize } from './types'
+import type { KunModalPlacement, KunModalProps, KunModalSize } from './types'
 
 // Nuxt-decoupled Modal. Same behaviour as the Nuxt original — Teleport to
 // body, focus trap, refcounted body scroll-lock, Escape-to-close — but every
@@ -26,7 +27,7 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   rounded: undefined,
   size: 'md',
   scrollBehavior: 'inside',
-  placement: 'center',
+  placement: 'auto',
   role: 'dialog',
 })
 
@@ -44,14 +45,48 @@ const sizeClassMap: Record<KunModalSize, string> = {
   full: 'w-[calc(100vw-1.5rem)] max-w-none',
 }
 const sizeClass = computed(() => sizeClassMap[props.size])
-// Overlay alignment + which element scrolls when content overflows.
+
+// Where the panel sits, and how big a gap it leaves against the viewport edge.
+//
+// `auto` is the responsive one — a bottom sheet on phones, a centred dialog from
+// `md` up — and it is expressed purely in breakpoint classes, deliberately. The
+// obvious alternative, a `useMediaQuery` ref, evaluates to `false` on the server
+// (VueUse has no width to test unless the app calls `provideSSRWidth`), so a
+// dialog that is open in the SSR markup would ship centred and snap to the
+// bottom on hydration. Static classes render the same on both sides.
+//
+// The tighter mobile gap (`p-1`) is what makes a sheet read as a sheet rather
+// than a card that happens to be low; `md:p-3` restores the desktop inset.
+const placementClassMap: Record<KunModalPlacement, string> = {
+  auto: 'items-end p-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] md:items-center md:p-3',
+  center: 'items-center p-3',
+  top: 'items-start p-3',
+}
 const overlayClass = computed(() => [
-  props.placement === 'top' ? 'items-start' : 'items-center',
+  placementClassMap[props.placement],
   props.scrollBehavior === 'outside' ? 'overflow-y-auto' : '',
 ])
-const panelScrollClass = computed(() =>
-  props.scrollBehavior === 'inside' ? 'max-h-[90vh] overflow-y-auto' : 'my-8'
+
+// Below `md` an `auto` panel spans the full width like a sheet. `min-w-0` lifts
+// the 20rem floor, which on its own overflows a 320px-wide phone.
+const panelPlacementClass = computed(() =>
+  props.placement === 'auto' ? 'max-md:w-full max-md:min-w-0' : ''
 )
+
+// `min(90dvh, 100%)`: 90dvh is the design cap and wins in the ordinary case
+// (the overlay's own padding already makes 100% the larger of the two). When the
+// keyboard shrinks the overlay to the visual viewport, 100% becomes the smaller
+// and keeps the panel inside what's actually on screen. `vh` was wrong on phones
+// even before the keyboard — it resolves against the *large* viewport, so a
+// 90vh panel already ran under the address bar.
+const panelScrollClass = computed(() => {
+  if (props.scrollBehavior === 'inside') {
+    return 'max-h-[min(90dvh,100%)] overflow-y-auto'
+  }
+  // Scrolling outside: the panel's own margin sets the gap, so an `auto` sheet
+  // has to drop it below `md` or it floats 2rem off the bottom edge.
+  return props.placement === 'auto' ? 'my-8 max-md:my-0' : 'my-8'
+})
 
 const modelValue = defineModel<boolean>({ required: true })
 
@@ -88,6 +123,19 @@ const applyZIndex = (shouldClaim: boolean) => {
     claimed = false
   }
 }
+
+// Track the visible viewport while open so the on-screen keyboard shrinks the
+// overlay instead of covering it — see useVisualViewportHeight for why `dvh`
+// can't do this. Null until measured, hence the CSS fallback in the style below.
+const visualViewportHeight = useVisualViewportHeight(() => modelValue.value)
+
+const overlayStyle = computed(() => ({
+  zIndex: zIndex.value,
+  height: 'var(--kun-visual-viewport-height, 100dvh)',
+  ...(visualViewportHeight.value === null
+    ? {}
+    : { '--kun-visual-viewport-height': `${visualViewportHeight.value}px` }),
+}))
 
 // Mark the page background `inert` while open (stronger than aria-modal alone).
 // `inerted` keeps the refcount symmetric across modelValue toggles.
@@ -187,14 +235,15 @@ onUnmounted(() => {
         v-if="modelValue"
         ref="trapEl"
         data-kun-overlay
+        :data-placement="placement"
         :class="
           cn(
-            'bg-default-800/70 dark:bg-background/70 fixed top-0 left-0 z-kun-modal flex h-full w-full justify-center p-3',
+            'bg-default-800/70 dark:bg-background/70 z-kun-modal fixed top-0 left-0 flex w-full justify-center',
             overlayClass,
             className
           )
         "
-        :style="{ zIndex }"
+        :style="overlayStyle"
         @pointerdown="onBackdropPointerDown"
         @click="onBackdropClick"
         tabindex="0"
@@ -208,6 +257,7 @@ onUnmounted(() => {
             cn(
               'kun-modal-panel bg-content1 scrollbar-hide shadow-kun-lg kun-backdrop relative mx-auto min-w-80 p-6',
               sizeClass,
+              panelPlacementClass,
               panelScrollClass,
               roundedClass,
               innerClassName
@@ -265,5 +315,16 @@ onUnmounted(() => {
 .kun-modal-enter-from .kun-modal-panel,
 .kun-modal-leave-to .kun-modal-panel {
   transform: translateY(8px) scale(0.96);
+}
+
+/* `auto` below md: the panel is a sheet anchored to the bottom edge, so it rises
+   from that edge instead of scaling in place — scaling a full-width sheet reads
+   as the whole screen twitching. 5rem of travel rather than the panel's own
+   height keeps the exit short; it's the distance HeroUI settled on too. */
+@media (width < 48rem) {
+  .kun-modal-enter-from[data-placement='auto'] .kun-modal-panel,
+  .kun-modal-leave-to[data-placement='auto'] .kun-modal-panel {
+    transform: translateY(5rem) scale(1);
+  }
 }
 </style>
