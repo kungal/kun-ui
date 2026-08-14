@@ -11,15 +11,41 @@
 // output differs.
 
 import { createChecker } from 'vue-component-meta'
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 import { createJiti } from 'jiti'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..', '..', '..')
 const vuePkg = join(root, 'packages', 'vue')
 const tsconfig = join(vuePkg, 'tsconfig.json')
+
+// ── @kungal/ui-core must be built ───────────────────────────────────────
+// This reads component *sources*, but it does so through a real TypeScript
+// program, and `packages/vue` imports its shared types (KunUIColor, KunUISize,
+// KunUIRounded, KunUser, …) from @kungal/ui-core — a `workspace:*` dependency
+// whose `exports` point at dist/index.d.ts.
+//
+// When that file is absent TypeScript does not fail. It widens every type it
+// couldn't resolve to `any` and the run "succeeds": 83 prop types collapse to
+// `any`, unions come back reordered, and the generator commits the lot. That is
+// the worst kind of failure here — a green run that quietly guts the docs — so
+// check first, before spending a minute generating.
+const corePkgDir = join(root, 'packages', 'ui-core')
+const coreTypes = join(
+  corePkgDir,
+  JSON.parse(readFileSync(join(corePkgDir, 'package.json'), 'utf8')).types
+)
+if (!existsSync(coreTypes)) {
+  console.error(
+    `gen-meta: ${relative(root, coreTypes)} is missing, so every type imported from @kungal/ui-core would silently become \`any\`.`
+  )
+  console.error(
+    'gen-meta: build it first — `pnpm --filter @kungal/ui-core build`, or `pnpm build`.'
+  )
+  process.exit(1)
+}
 
 // Public components — derived from the SAME single source the library + Nuxt
 // layer use (KUN_COMPONENT_NAMES), so the docs can never miss a component.
@@ -151,6 +177,24 @@ if (failed.length) {
   console.error(
     `gen-meta: ${failed.length} component(s) produced no metadata: ${failed.join(', ')}`
   )
+  process.exit(1)
+}
+
+// Backstop for the same degradation arriving by some other route than a missing
+// ui-core build — a moved export, a tsconfig path that stops resolving. `any` is
+// exactly what broken type resolution looks like, and no public prop in the
+// library is typed that way today, so treat it as the failure it almost
+// certainly is rather than publishing a table that says nothing. If a prop ever
+// genuinely needs `any`, narrow it — or relax this check deliberately.
+const anyTyped = Object.entries(out).flatMap(([name, { props }]) =>
+  props.filter((p) => /\bany\b/.test(p.type)).map((p) => `${name}.${p.name}: ${p.type}`)
+)
+if (anyTyped.length) {
+  console.error(
+    `gen-meta: ${anyTyped.length} prop(s) resolved to \`any\`, which means type resolution broke:`
+  )
+  for (const p of anyTyped.slice(0, 10)) console.error(`  ${p}`)
+  if (anyTyped.length > 10) console.error(`  … and ${anyTyped.length - 10} more`)
   process.exit(1)
 }
 
