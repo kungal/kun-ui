@@ -80,8 +80,10 @@ export interface KunModalProps {
   rounded?: KunUIRounded
   // Max width of the panel (full = nearly the whole viewport). Default 'md'.
   size?: KunModalSize
-  // inside (default): the panel body scrolls, capped at 90dvh (and never taller
-  // than the visible viewport, so the on-screen keyboard can't bury it).
+  // inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an
+  // `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it
+  // — and never taller than the visible viewport, so the on-screen keyboard
+  // can't bury it.
   // outside: the whole overlay scrolls — for panels taller than the viewport.
   scrollBehavior?: 'inside' | 'outside'
   // Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones,

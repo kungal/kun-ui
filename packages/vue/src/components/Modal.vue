@@ -73,15 +73,30 @@ const panelPlacementClass = computed(() =>
   props.placement === 'auto' ? 'max-md:w-full max-md:min-w-0' : ''
 )
 
-// `min(90dvh, 100%)`: 90dvh is the design cap and wins in the ordinary case
-// (the overlay's own padding already makes 100% the larger of the two). When the
+// `min(Ndvh, 100%)`: Ndvh is the design cap and wins in the ordinary case (the
+// overlay's own padding already makes 100% the larger of the two). When the
 // keyboard shrinks the overlay to the visual viewport, 100% becomes the smaller
 // and keeps the panel inside what's actually on screen. `vh` was wrong on phones
 // even before the keyboard — it resolves against the *large* viewport, so a
 // 90vh panel already ran under the address bar.
+//
+// N is 85 for a sheet and 90 everywhere else, because the leftover is spent
+// differently in the two shapes. A centred dialog splits it into two strips
+// (~37px each on a 750px viewport — ordinary padding). A bottom sheet puts all
+// of it in one strip at the top, and that strip is doing two jobs: signalling
+// that this is a layer over the page, and being the only tap-to-dismiss target.
+// At 90dvh it is 71px on a 750px viewport and 48px on an iPhone SE — past the
+// 44px minimum with nothing to spare. 85dvh makes it 108px / 74px.
+//
+// For reference, HeroUI is `calc(100% - 8rem)` at every width, which is really
+// its desktop `sm:my-16` margins in disguise; on a phone (`my-1`) it just leaves
+// 124px unused, landing at 83% of a 750px viewport and 75% of an SE. shadcn's
+// vaul drawer is `max-h-[80vh]` with a 96px floor. 85 sits between them.
 const panelScrollClass = computed(() => {
   if (props.scrollBehavior === 'inside') {
-    return 'max-h-[min(90dvh,100%)] overflow-y-auto'
+    return props.placement === 'auto'
+      ? 'max-h-[min(85dvh,100%)] md:max-h-[min(90dvh,100%)] overflow-y-auto'
+      : 'max-h-[min(90dvh,100%)] overflow-y-auto'
   }
   // Scrolling outside: the panel's own margin sets the gap, so an `auto` sheet
   // has to drop it below `md` or it floats 2rem off the bottom edge.
