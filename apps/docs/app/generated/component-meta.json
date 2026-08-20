@@ -1207,6 +1207,13 @@
         "default": "\"\""
       },
       {
+        "name": "isCloseRequestDismissable",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Whether a platform close request dismisses the drawer — in practice Android's back button and back gesture, which close the drawer instead of leaving the page. Desktop is unaffected: its only close request is Escape, handled separately. Ignored when `isDismissable` is `false`."
+      },
+      {
         "name": "isDismissable",
         "type": "boolean",
         "required": false,
@@ -1979,6 +1986,13 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      },
+      {
+        "name": "isCloseRequestDismissable",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Whether a platform close request dismisses the dialog — in practice Android's back button and back gesture, which close the dialog instead of leaving the page (the behaviour a native `<dialog>` already has). Desktop is unaffected: its only close request is Escape, handled separately. Turn this off for a dialog that is bound to a route and should let back navigate. Ignored when `isDismissable` is `false`."
       },
       {
         "name": "isDismissable",

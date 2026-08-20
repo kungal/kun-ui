@@ -86,6 +86,14 @@ export interface KunModalProps {
    *  `true` to opt the backdrop back in, `false` to turn both off.
    *  @default true (backdrop excluded when role="alertdialog") */
   isDismissable?: boolean
+  /** Whether a platform close request dismisses the dialog — in practice
+   *  Android's back button and back gesture, which close the dialog instead of
+   *  leaving the page (the behaviour a native `<dialog>` already has). Desktop
+   *  is unaffected: its only close request is Escape, handled separately. Turn
+   *  this off for a dialog that is bound to a route and should let back
+   *  navigate. Ignored when `isDismissable` is `false`.
+   *  @default true */
+  isCloseRequestDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded
@@ -828,6 +836,12 @@ export interface KunDrawerProps {
    *  is set. With neither, KunUI warns in dev. */
   ariaLabel?: string
   isDismissable?: boolean
+  /** Whether a platform close request dismisses the drawer — in practice
+   *  Android's back button and back gesture, which close the drawer instead of
+   *  leaving the page. Desktop is unaffected: its only close request is Escape,
+   *  handled separately. Ignored when `isDismissable` is `false`.
+   *  @default true */
+  isCloseRequestDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded

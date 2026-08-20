@@ -34,6 +34,15 @@ import meta from '~/generated/component-meta.json'
       <NonDismissable />
     </Demo>
 
+    <h2 class="mt-8 mb-1 text-xl font-semibold">Android 返回键</h2>
+    <KunInfo
+      class="mt-3"
+      color="primary"
+      icon="lucide:arrow-left"
+      title="返回键关闭抽屉,而不是退回上一页"
+      description="在 Android 上打开抽屉时,按返回键或使用返回手势会关掉最上层的抽屉,页面留在原地。桌面端与 iOS 不受影响。isDismissable=false 时不生效,也可用 isCloseRequestDismissable=false 单独关掉。KunUI 不会向 history 里写任何东西,不会干扰你的路由。"
+    />
+
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunDrawer.props" />
   </article>

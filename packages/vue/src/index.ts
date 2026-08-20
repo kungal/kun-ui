@@ -172,6 +172,10 @@ export { useBodyScrollLock } from './composables/useBodyScrollLock'
 // top (Modal/Drawer use it); exported so apps can stack their own overlays on
 // the same z-kun-modal layer.
 export { useKunOverlayZIndex } from './composables/useKunOverlayZIndex'
+// Answers platform close requests — Android's back button/gesture — so an
+// overlay closes instead of the page navigating away (Modal/Drawer use it);
+// exported so apps can give their own overlays the same behaviour.
+export { useKunCloseRequest } from './composables/useKunCloseRequest'
 // Shared floating-ui setup (offset/flip/shift + transform-origin + optional
 // arrow) used by every KunUI overlay; exported so apps can build their own.
 export {

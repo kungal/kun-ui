@@ -15,6 +15,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
+import { useKunCloseRequest } from '../composables/useKunCloseRequest'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
 import KunButton from './Button.vue'
@@ -38,6 +39,7 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   // only when no `default` key is declared — spelling out `undefined` keeps the
   // three states (unset / true / false) distinguishable.
   isDismissable: undefined,
+  isCloseRequestDismissable: true,
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
@@ -277,14 +279,32 @@ const onBackdropClick = (e: Event) => {
   }
 }
 
+// Android's back button/gesture closes this dialog instead of leaving the page.
+// Gated on the same `isEscapeDismissable` as the keydown handler below: back IS
+// Android's Escape, so a dialog that refuses to cancel on one must refuse on
+// the other.
+const { isWatching: isWatchingCloseRequests } = useKunCloseRequest(
+  () =>
+    modelValue.value &&
+    isTopmost.value &&
+    isEscapeDismissable.value &&
+    props.isCloseRequestDismissable,
+  dismiss
+)
+
 useEventListener('keydown', (e: KeyboardEvent) => {
   // Only the topmost overlay reacts to Escape, so a stacked Esc dismisses one
   // layer at a time instead of closing every open modal/drawer at once.
+  //
+  // Stand down while a close watcher is live: Escape is a close request too, so
+  // the watcher is already going to handle this exact key press, and running
+  // both closes two layers at once (see useKunCloseRequest).
   if (
     e.key === 'Escape' &&
     modelValue.value &&
     isTopmost.value &&
-    isEscapeDismissable.value
+    isEscapeDismissable.value &&
+    !isWatchingCloseRequests.value
   ) {
     dismiss()
   }
