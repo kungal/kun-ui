@@ -232,6 +232,7 @@ const open = ref(false)
 | `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the dialog — in practice Android's back button and back gesture, which close the dialog instead of leaving the page (the behaviour a native `<dialog>` already has). Desktop is unaffected: its only close request is Escape, handled separately. Turn this off for a dialog that is bound to a route and should let back navigate. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `undefined` | Whether a backdrop click or Escape closes the dialog. `role="alertdialog"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off. |
 | `isShowCloseButton` | `boolean` | `true` |  |
+| `isSwipeDismissable` | `boolean` | `true` | Whether dragging the phone sheet downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies where the sheet exists — `placement="auto"` below `md`, on a touch-primary pointer — and only while the content is scrolled to the top, so a swipe over scrollable content still scrolls it. Follows `isDismissable`, so a `role="alertdialog"` cannot be swiped away any more than it can be clicked away. |
 | `placement` | `KunModalPlacement` | `"auto"` |  |
 | `role` | `"dialog" \| "alertdialog"` | `"dialog"` |  |
 | `rounded` | `KunUIRounded` | `undefined` |  |

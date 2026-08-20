@@ -14,6 +14,7 @@ let count = 0
 // `body { padding-right }` inline would otherwise lose it on every close).
 const MANAGED = [
   'overflow',
+  'overscrollBehavior',
   'paddingRight',
   'position',
   'top',
@@ -64,6 +65,13 @@ const apply = (locked: boolean) => {
     const basePadding = Number.parseFloat(getComputedStyle(body).paddingRight)
 
     body.style.overflow = 'hidden'
+    // `overflow: hidden` stops the page scrolling but NOT Chrome for Android's
+    // pull-to-refresh, which reads a downward drag near the top of the screen
+    // and reloads the page. On a bottom sheet that drag is the dismiss gesture,
+    // so the two collide; `overscroll-behavior: none` is the documented way to
+    // switch pull-to-refresh off and it also kills the rubber-band bounce
+    // behind the overlay.
+    body.style.overscrollBehavior = 'none'
     // Added to whatever padding the page already has, not instead of it.
     if (scrollbarWidth > 0) {
       body.style.paddingRight = `${(Number.isFinite(basePadding) ? basePadding : 0) + scrollbarWidth}px`
