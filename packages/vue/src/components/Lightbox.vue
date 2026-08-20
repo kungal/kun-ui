@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onUnmounted, reactive, ref, watch } from 'vue'
+import { useElementSize } from '@vueuse/core'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { wheelDeltaPx } from '../utils/wheelDeltaPx'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import type { KunLightboxProps } from './types'
@@ -51,6 +53,7 @@ const slideDir = ref<'slide-next' | 'slide-prev'>('slide-next')
 const dialogRef = ref<HTMLDialogElement | null>(null)
 const imageRef = ref<HTMLImageElement | null>(null)
 const containerRef = ref<HTMLElement | null>(null)
+const thumbsRef = ref<HTMLElement | null>(null)
 
 const currentImage = computed(() => props.images[currentIndex.value]?.src || '')
 const currentAlt = computed(() => props.images[currentIndex.value]?.alt || '')
@@ -446,6 +449,67 @@ const goToIndex = (i: number) => {
   currentIndex.value = i
 }
 
+// The strip is a plain overflow-x scroller, so touch already pans it; what has
+// to be added is the mouse wheel and keeping the active thumbnail on screen.
+const { width: thumbsWidth } = useElementSize(thumbsRef)
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// Centred rather than scrolled-just-into-view (what KunTab does): in a viewer
+// the strip is a filmstrip, so the active frame sits in the middle and the
+// neighbours in both directions stay visible. lightGallery's default
+// `currentPagerPosition: 'middle'` is the same call. The browser clamps at
+// both ends, so no manual bounds.
+const centerActiveThumb = (behavior: ScrollBehavior) => {
+  const strip = thumbsRef.value
+  const thumb = strip?.children[currentIndex.value] as HTMLElement | undefined
+  if (!strip || !thumb) return
+  // From the rects, not offsetLeft: the strip is not positioned, so it is not
+  // the thumbnails' offsetParent — offsetLeft is measured from the bottom bar
+  // and centres nothing.
+  const stripRect = strip.getBoundingClientRect()
+  const thumbRect = thumb.getBoundingClientRect()
+  strip.scrollTo({
+    left:
+      strip.scrollLeft +
+      (thumbRect.left - stripRect.left) -
+      (stripRect.width - thumbRect.width) / 2,
+    behavior,
+  })
+}
+
+// A <dialog> is display:none until showModal(), and showModal() itself can be
+// deferred by the view transition — so there is no tick after `isOpen` flips at
+// which the strip is reliably measurable. The ResizeObserver is: it fires
+// exactly when the strip first gets a box, and again on rotate / resize.
+watch(thumbsWidth, (w) => {
+  if (w > 0) centerActiveThumb('auto')
+})
+
+watch(
+  currentIndex,
+  () => centerActiveThumb(prefersReducedMotion() ? 'auto' : 'smooth'),
+  { flush: 'post' }
+)
+
+const onThumbsWheel = (e: WheelEvent) => {
+  const strip = thumbsRef.value
+  if (!strip) return
+  const max = strip.scrollWidth - strip.clientWidth
+  // Nothing to scroll → leave the wheel to whatever is behind.
+  if (max <= 0) return
+  const delta = wheelDeltaPx(e, strip.clientWidth)
+  if (!delta) return
+  const from = strip.scrollLeft
+  if ((delta < 0 && from <= 0) || (delta > 0 && from >= max - 1)) return
+  strip.scrollLeft = from + delta
+  // Only now, because we actually consumed it.
+  e.preventDefault()
+}
+
 const zoomPercent = computed(() => Math.round(scale.value * 100))
 
 const onDialogKeydown = (e: KeyboardEvent) => {
@@ -559,23 +623,9 @@ onUnmounted(() => {
       >
         <div
           v-if="images.length > 1"
-          class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-2 shadow-lg backdrop-blur-md md:hidden"
-        >
-          <button
-            v-for="(_, i) in images"
-            :key="`dot-${i}`"
-            type="button"
-            :aria-label="`跳转到第 ${i + 1} 张`"
-            :aria-current="i === currentIndex"
-            class="size-2 rounded-full transition-colors"
-            :class="i === currentIndex ? 'bg-primary-500' : 'bg-default-400/60 hover:bg-default-300'"
-            @click.stop="goToIndex(i)"
-          />
-        </div>
-
-        <div
-          v-if="images.length > 1"
-          class="pointer-events-auto hidden max-w-[80vw] items-center gap-1.5 overflow-x-auto rounded-xl border border-white/10 bg-black/70 p-2 shadow-lg backdrop-blur-md md:flex"
+          ref="thumbsRef"
+          class="kun-lightbox-thumbs pointer-events-auto flex max-w-[92vw] items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-black/70 p-1.5 shadow-lg backdrop-blur-md md:max-w-[80vw] md:gap-1.5 md:p-2"
+          @wheel="onThumbsWheel"
         >
           <button
             v-for="(img, i) in images"
@@ -591,7 +641,18 @@ onUnmounted(() => {
             "
             @click.stop="goToIndex(i)"
           >
-            <img :src="img.src" :alt="img.alt ?? ''" class="size-14 object-cover" draggable="false" />
+            <!-- KunLightboxImage carries no separate thumbnail URL, so every
+                 thumb is the full-size original. `lazy` is what keeps a long
+                 gallery from fetching all of them to fill the strip: measured
+                 in Chrome 151, a 100-image strip fetches 26 on open. -->
+            <img
+              :src="img.src"
+              :alt="img.alt ?? ''"
+              class="size-12 object-cover md:size-14"
+              draggable="false"
+              loading="lazy"
+              decoding="async"
+            />
           </button>
         </div>
 
@@ -631,6 +692,18 @@ onUnmounted(() => {
 <style scoped>
 .kun-lightbox-image {
   view-transition-name: kun-lightbox-image;
+}
+
+.kun-lightbox-thumbs {
+  /* Horizontal overscroll is the browser's back gesture on Chrome Android and
+     Safari — dragging the strip past its last thumbnail must not navigate away
+     from the page the viewer was opened from. */
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.kun-lightbox-thumbs::-webkit-scrollbar {
+  display: none;
 }
 
 .kun-lightbox-dialog::backdrop {

@@ -2,6 +2,7 @@
 import { computed, ref, watchEffect } from 'vue'
 import { useScroll, useElementSize, useEventListener } from '@vueuse/core'
 import { cn } from '@kungal/ui-core'
+import { wheelDeltaPx } from '../utils/wheelDeltaPx'
 import type { KunScrollShadowProps } from './types'
 
 // Edge fade-out shadows that appear when content is scrolled off either end of a
@@ -71,8 +72,7 @@ function onWheel(e: WheelEvent) {
   if (!el) return
   const max = maxX.value
   if (max <= 0) return // nothing to scroll → let the page handle it
-  // Prefer the dominant wheel axis so horizontal trackpad swipes still work.
-  const delta = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+  const delta = wheelDeltaPx(e, el.clientWidth)
   if (!delta) return
   const cur = el.scrollLeft
   // At a wall in the requested direction?
