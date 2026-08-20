@@ -15,6 +15,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
+import { useKunCloseRequest } from '../composables/useKunCloseRequest'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -34,6 +35,7 @@ const props = withDefaults(defineProps<KunDrawerProps>(), {
   size: 'md',
   title: '',
   isDismissable: true,
+  isCloseRequestDismissable: true,
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
@@ -186,9 +188,30 @@ const handleCloseButton = () => {
   emits('close')
 }
 
+// Android's back button/gesture closes this drawer instead of leaving the page
+// — see the same block in Modal.vue. `handleClose` already respects
+// `isDismissable`, so this only has to add the opt-out prop.
+const { isWatching: isWatchingCloseRequests } = useKunCloseRequest(
+  () =>
+    modelValue.value &&
+    isTopmost.value &&
+    props.isDismissable &&
+    props.isCloseRequestDismissable,
+  handleClose
+)
+
 useEventListener('keydown', (e: KeyboardEvent) => {
-  // Only the topmost overlay reacts to Escape (see useKunOverlayZIndex).
-  if (e.key === 'Escape' && modelValue.value && isTopmost.value) handleClose()
+  // Only the topmost overlay reacts to Escape (see useKunOverlayZIndex), and
+  // only while no close watcher is live — Escape is a close request, so running
+  // both handlers closes two layers at once (see useKunCloseRequest).
+  if (
+    e.key === 'Escape' &&
+    modelValue.value &&
+    isTopmost.value &&
+    !isWatchingCloseRequests.value
+  ) {
+    handleClose()
+  }
 })
 
 watch(modelValue, async (v) => {

@@ -229,6 +229,7 @@ const open = ref(false)
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` | Rendered under the title and wired to `aria-describedby` — the supporting line a `role="alertdialog"` is required to point at. |
 | `innerClassName` | `string` | `""` |  |
+| `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the dialog — in practice Android's back button and back gesture, which close the dialog instead of leaving the page (the behaviour a native `<dialog>` already has). Desktop is unaffected: its only close request is Escape, handled separately. Turn this off for a dialog that is bound to a route and should let back navigate. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `undefined` | Whether a backdrop click or Escape closes the dialog. `role="alertdialog"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off. |
 | `isShowCloseButton` | `boolean` | `true` |  |
 | `placement` | `KunModalPlacement` | `"auto"` |  |

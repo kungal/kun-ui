@@ -157,6 +157,7 @@ const open = ref(false)
 | `ariaLabel` | `string` | `""` | Accessible name for a drawer with no visible title. Ignored when `title` is set. With neither, KunUI warns in dev. |
 | `className` | `string` | `""` |  |
 | `innerClassName` | `string` | `""` |  |
+| `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the drawer — in practice Android's back button and back gesture, which close the drawer instead of leaving the page. Desktop is unaffected: its only close request is Escape, handled separately. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `true` |  |
 | `isShowCloseButton` | `boolean` | `true` |  |
 | `placement` | `KunDrawerPlacement` | `"right"` |  |
