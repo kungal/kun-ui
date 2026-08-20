@@ -36,29 +36,44 @@
 
 ```vue
 <template>
-  <KunLink
-    href="https://github.com/kungal/kun-ui"
-    target="_blank"
-    is-show-anchor-icon
-  >
-    KunUI on GitHub
-  </KunLink>
+  <div class="flex flex-wrap items-center gap-4">
+    <KunLink
+      href="https://github.com/kungal/kun-ui"
+      target="_blank"
+      is-show-anchor-icon
+    >
+      默认 noopener noreferrer
+    </KunLink>
+
+    <!-- `rel` replaces that default rather than adding to it (NuxtLink's rule).
+         Dropping `noreferrer` keeps the Referer header, so the destination's
+         analytics records a referral from your site instead of direct traffic.
+         `noopener` is added back to any target="_blank" link anyway. -->
+    <KunLink
+      href="https://github.com/kungal/kun-ui"
+      target="_blank"
+      rel="noopener"
+      is-show-anchor-icon
+    >
+      rel="noopener"，保留来源
+    </KunLink>
+  </div>
 </template>
 ```
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `href` | `string` | `undefined` |
-| `isShowAnchorIcon` | `boolean` | `false` |
-| `rel` | `string` | `""` |
-| `size` | `KunUISize` | `"md"` |
-| `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |
-| `to` | `string \| Record<string, string>` | `""` |
-| `underline` | `"none" \| "always" \| "hover"` | `"always"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `href` | `string` | `undefined` |  |
+| `isShowAnchorIcon` | `boolean` | `false` |  |
+| `rel` | `string` | `undefined` | `rel` for the rendered link. Replaces the default rather than adding to it, matching NuxtLink: with `target="_blank"` and no `rel`, KunUI emits `noopener noreferrer`; passing `rel="noopener"` emits exactly that, which is how you keep the `Referer` header (analytics on the other side count the visit as a referral instead of direct traffic). `noopener` is still added back to any `_blank` link unless the value contains the spec's `opener` token; `rel=""` removes the attribute entirely. |
+| `size` | `KunUISize` | `"md"` |  |
+| `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |  |
+| `to` | `string \| Record<string, string>` | `""` |  |
+| `underline` | `"none" \| "always" \| "hover"` | `"always"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/link

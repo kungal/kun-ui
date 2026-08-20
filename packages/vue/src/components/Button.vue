@@ -12,6 +12,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
 import { extractTextFromVNodes } from '../utils/extractTextFromVNodes'
 import { useKunUIConfig } from '../config/useKunUIConfig'
+import { resolveExternalRel } from '../utils/resolveExternalRel'
 import KunIcon from './Icon.vue'
 import KunRipple from './Ripple.vue'
 import type { KunButtonProps } from './types'
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<KunButtonProps>(), {
   className: '',
   href: '',
   target: '_self',
+  rel: undefined,
   ariaLabel: '',
 })
 
@@ -98,15 +100,15 @@ const isInactive = computed(() => props.disabled || props.loading)
 const rootIs = computed(() => (props.href ? config.linkComponent : 'button'))
 const rootBindings = computed<Record<string, unknown>>(() => {
   if (props.href) {
-    const dest =
-      typeof config.linkComponent === 'string'
-        ? { href: props.href }
-        : { to: props.href }
+    const isNativeAnchor = typeof config.linkComponent === 'string'
+    const dest = isNativeAnchor ? { href: props.href } : { to: props.href }
+    const rel = resolveExternalRel(props.rel, props.target === '_blank')
     return {
       ...dest,
       target: props.target,
-      // target="_blank" without rel="noopener" is a tabnabbing risk.
-      rel: props.target === '_blank' ? 'noopener noreferrer' : undefined,
+      // '' means "no rel" and must survive to NuxtLink, but would render as
+      // `rel=""` on a real <a> — see resolveExternalRel.
+      rel: isNativeAnchor ? rel || undefined : rel,
       role: 'link',
       'aria-label': computedAriaLabel.value,
     }

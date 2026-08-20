@@ -81,23 +81,24 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `ariaLabel` | `string` | `""` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `disabled` | `boolean` | `false` |
-| `fullWidth` | `boolean` | `false` |
-| `href` | `string` | `""` |
-| `icon` | `boolean` | `false` |
-| `iconPosition` | `"right" \| "left"` | `"left"` |
-| `isIconOnly` | `boolean` | `false` |
-| `loading` | `boolean` | `false` |
-| `rounded` | `KunUIRounded` | — |
-| `size` | `KunUISize` | `"md"` |
-| `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |
-| `type` | `"button" \| "submit" \| "reset"` | `"button"` |
-| `variant` | `KunUIVariant` | `"solid"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ariaLabel` | `string` | `""` |  |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `disabled` | `boolean` | `false` |  |
+| `fullWidth` | `boolean` | `false` |  |
+| `href` | `string` | `""` |  |
+| `icon` | `boolean` | `false` |  |
+| `iconPosition` | `"right" \| "left"` | `"left"` |  |
+| `isIconOnly` | `boolean` | `false` |  |
+| `loading` | `boolean` | `false` |  |
+| `rel` | `string` | `undefined` | `rel` for the rendered link. Replaces the default rather than adding to it, matching NuxtLink: with `target="_blank"` and no `rel`, KunUI emits `noopener noreferrer`; passing `rel="noopener"` emits exactly that, which is how you keep the `Referer` header (analytics on the other side count the visit as a referral instead of direct traffic). `noopener` is still added back to any `_blank` link unless the value contains the spec's `opener` token; `rel=""` removes the attribute entirely. |
+| `rounded` | `KunUIRounded` | — |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |  |
+| `type` | `"button" \| "submit" \| "reset"` | `"button"` |  |
+| `variant` | `KunUIVariant` | `"solid"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/button

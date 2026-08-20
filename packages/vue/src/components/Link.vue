@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { cn, kunTextClasses } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
+import { resolveExternalRel } from '../utils/resolveExternalRel'
 import KunIcon from './Icon.vue'
 import type { KunLinkProps } from './types'
 
@@ -17,7 +18,7 @@ const props = withDefaults(defineProps<KunLinkProps>(), {
   underline: 'always',
   size: 'md',
   className: '',
-  rel: '',
+  rel: undefined,
   target: '_self',
   isShowAnchorIcon: false,
 })
@@ -54,29 +55,27 @@ const sizeClasses = computed(() => {
 
 const dest = computed(() => props.to || props.href || '')
 
-// target="_blank" without rel="noopener" is a tabnabbing risk — auto-add it
-// (merged with any caller-supplied rel). Modern browsers imply noopener, but
-// being explicit covers older ones and is the documented best practice.
-const computedRel = computed(() => {
-  const parts = new Set((props.rel || '').split(/\s+/).filter(Boolean))
-  if (props.target === '_blank') {
-    parts.add('noopener')
-    parts.add('noreferrer')
-  }
-  return parts.size ? [...parts].join(' ') : undefined
-})
+const computedRel = computed(() =>
+  resolveExternalRel(props.rel, props.target === '_blank')
+)
 
 const linkBindings = computed<Record<string, unknown>>(() => {
-  const common = { rel: computedRel.value, target: props.target }
+  const common = { target: props.target }
   if (typeof config.linkComponent === 'string') {
     // native <a> takes a string href
     return {
       ...common,
+      // '' would render as the empty attribute `rel=""` on a real <a>.
+      rel: computedRel.value || undefined,
       href: typeof dest.value === 'string' ? dest.value : undefined,
     }
   }
-  // RouterLink / NuxtLink take `to`
-  return { ...common, to: dest.value }
+  // RouterLink / NuxtLink take `to`. '' is passed through rather than dropped:
+  // NuxtLink re-applies its own `noopener noreferrer` to any absolute URL or
+  // any link with a target whenever `rel` is undefined, and only a defined
+  // value suppresses that (its own `no-rel` prop resolves to '' for exactly
+  // this reason).
+  return { ...common, rel: computedRel.value, to: dest.value }
 })
 </script>
 

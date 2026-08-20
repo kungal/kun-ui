@@ -21,6 +21,17 @@ export interface KunButtonProps {
   className?: string
   href?: string
   target?: '_blank' | '_self' | '_parent' | '_top'
+  /**
+   * `rel` for the rendered link. Replaces the default rather than adding to
+   * it, matching NuxtLink: with `target="_blank"` and no `rel`, KunUI emits
+   * `noopener noreferrer`; passing `rel="noopener"` emits exactly that, which
+   * is how you keep the `Referer` header (analytics on the other side count
+   * the visit as a referral instead of direct traffic). `noopener` is still
+   * added back to any `_blank` link unless the value contains the spec's
+   * `opener` token; `rel=""` removes the attribute entirely.
+   * @default undefined
+   */
+  rel?: string
   ariaLabel?: string
 }
 
@@ -362,6 +373,16 @@ export interface KunLinkProps {
   underline?: 'none' | 'hover' | 'always'
   size?: KunUISize
   className?: string
+  /**
+   * `rel` for the rendered link. Replaces the default rather than adding to
+   * it, matching NuxtLink: with `target="_blank"` and no `rel`, KunUI emits
+   * `noopener noreferrer`; passing `rel="noopener"` emits exactly that, which
+   * is how you keep the `Referer` header (analytics on the other side count
+   * the visit as a referral instead of direct traffic). `noopener` is still
+   * added back to any `_blank` link unless the value contains the spec's
+   * `opener` token; `rel=""` removes the attribute entirely.
+   * @default undefined
+   */
   rel?: string
   target?: '_blank' | '_self' | '_parent' | '_top'
   isShowAnchorIcon?: boolean
