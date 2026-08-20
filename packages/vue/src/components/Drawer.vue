@@ -16,6 +16,7 @@ import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
+import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -36,6 +37,7 @@ const props = withDefaults(defineProps<KunDrawerProps>(), {
   title: '',
   isDismissable: true,
   isCloseRequestDismissable: true,
+  isSwipeDismissable: true,
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
@@ -156,6 +158,7 @@ const applyInert = (shouldInert: boolean) => {
 // replaces the old `tabindex="0"` on the backdrop.
 const trapEl = ref<HTMLElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
+const backdropEl = ref<HTMLElement | null>(null)
 const { activate, deactivate } = useFocusTrap(trapEl, {
   immediate: false,
   escapeDeactivates: false,
@@ -187,6 +190,25 @@ const handleCloseButton = () => {
   modelValue.value = false
   emits('close')
 }
+
+// Drag the bottom sheet down to dismiss it — see the same block in Modal.vue.
+// Only for the bottom edge: the gesture reads as "push it back where it came
+// from", which is only true when the panel came from below. `effectivePlacement`
+// already folds in `responsive`, so a right-hand drawer that becomes a bottom
+// sheet on a phone gets the gesture there and not on desktop.
+//
+// Unlike the modal there IS a separate backdrop element here, so it can fade
+// with the drag the way vaul's overlay does.
+const isSwipeEnabled = () =>
+  props.isSwipeDismissable &&
+  props.isDismissable &&
+  effectivePlacement.value === 'bottom'
+
+useKunSwipeDismiss(panelEl, {
+  enabled: isSwipeEnabled,
+  fade: backdropEl,
+  onDismiss: handleClose,
+})
 
 // Android's back button/gesture closes this drawer instead of leaving the page
 // — see the same block in Modal.vue. `handleClose` already respects
@@ -261,8 +283,10 @@ onUnmounted(() => {
         tabindex="-1"
       >
         <!-- Backdrop — separate from panel so the slide doesn't fight the
-             backdrop fade. -->
+             backdrop fade, and so a swipe-to-dismiss can dim it in step with
+             the drag. -->
         <div
+          ref="backdropEl"
           class="bg-default-800/70 dark:bg-background/70 absolute inset-0 transition-opacity"
           @click="handleClose"
         />
@@ -280,6 +304,18 @@ onUnmounted(() => {
           "
           @click.stop
         >
+          <!-- Drag affordance. In flow rather than absolute (the modal's
+               trick), because the drawer header fills its own top edge and an
+               overlay pill would sit on the title. Decorative only — Escape and
+               the close button are the keyboard/AT route. -->
+          <div
+            v-if="isSwipeDismissable && isDismissable && effectivePlacement === 'bottom'"
+            aria-hidden="true"
+            class="hidden shrink-0 justify-center pt-2 pb-1 pointer-coarse:flex"
+          >
+            <div class="bg-default-300 dark:bg-default-600 h-1 w-9 rounded-full" />
+          </div>
+
           <header
             v-if="title || $slots.header || isShowCloseButton"
             class="border-kun flex items-center justify-between border-b px-6 py-4"

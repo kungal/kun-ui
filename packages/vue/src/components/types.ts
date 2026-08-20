@@ -94,6 +94,15 @@ export interface KunModalProps {
    *  navigate. Ignored when `isDismissable` is `false`.
    *  @default true */
   isCloseRequestDismissable?: boolean
+  /** Whether dragging the phone sheet downwards dismisses it, and whether the
+   *  drag handle that advertises the gesture is drawn. Only applies where the
+   *  sheet exists — `placement="auto"` below `md`, on a touch-primary pointer —
+   *  and only while the content is scrolled to the top, so a swipe over
+   *  scrollable content still scrolls it. Follows `isDismissable`, so a
+   *  `role="alertdialog"` cannot be swiped away any more than it can be clicked
+   *  away.
+   *  @default true */
+  isSwipeDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded
@@ -842,6 +851,13 @@ export interface KunDrawerProps {
    *  handled separately. Ignored when `isDismissable` is `false`.
    *  @default true */
   isCloseRequestDismissable?: boolean
+  /** Whether dragging the drawer downwards dismisses it, and whether the drag
+   *  handle that advertises the gesture is drawn. Only applies to a drawer
+   *  sitting on the bottom edge — including a `responsive` one that becomes a
+   *  bottom sheet below `md` — on a touch-primary pointer, and only while the
+   *  content is scrolled to the top. Ignored when `isDismissable` is `false`.
+   *  @default true */
+  isSwipeDismissable?: boolean
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded

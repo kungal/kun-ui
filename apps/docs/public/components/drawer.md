@@ -160,6 +160,7 @@ const open = ref(false)
 | `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the drawer — in practice Android's back button and back gesture, which close the drawer instead of leaving the page. Desktop is unaffected: its only close request is Escape, handled separately. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `true` |  |
 | `isShowCloseButton` | `boolean` | `true` |  |
+| `isSwipeDismissable` | `boolean` | `true` | Whether dragging the drawer downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies to a drawer sitting on the bottom edge — including a `responsive` one that becomes a bottom sheet below `md` — on a touch-primary pointer, and only while the content is scrolled to the top. Ignored when `isDismissable` is `false`. |
 | `placement` | `KunDrawerPlacement` | `"right"` |  |
 | `responsive` | `boolean` | `true` |  |
 | `rounded` | `KunUIRounded` | `undefined` |  |

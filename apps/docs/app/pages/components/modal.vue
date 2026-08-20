@@ -41,6 +41,15 @@ import meta from '~/generated/component-meta.json'
     <h2 class="mt-8 mb-1 text-xl font-semibold">警告对话框</h2>
     <Demo title="AlertDialog.vue" :source="AlertDialogSrc"><AlertDialog /></Demo>
 
+    <h2 class="mt-8 mb-1 text-xl font-semibold">手机端下滑关闭</h2>
+    <KunInfo
+      class="mt-3"
+      color="primary"
+      icon="lucide:chevron-down"
+      title="把 sheet 往下拖就能关掉"
+      description="placement=&quot;auto&quot; 在 md 以下是底部 sheet,触屏上可以按住往下拖关闭 —— 拖过面板高度的 25%,或者快速一甩(0.4 px/ms)即可,不够则回弹。面板顶部那条小横杠就是这个手势的提示。内容滚动优先:只要 sheet 里的内容还没滚回顶部,下滑就是滚动而不是关闭,所以长内容不会被误关。桌面端、鼠标和 placement=&quot;center&quot;/&quot;top&quot; 都不受影响;role=&quot;alertdialog&quot; 和 isDismissable=false 同样拖不动。用 isSwipeDismissable=false 可以单独关掉。"
+    />
+
     <h2 class="mt-8 mb-1 text-xl font-semibold">Android 返回键</h2>
     <KunInfo
       class="mt-3"

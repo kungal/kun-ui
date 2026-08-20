@@ -16,6 +16,7 @@ import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
+import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
 import KunButton from './Button.vue'
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   // three states (unset / true / false) distinguishable.
   isDismissable: undefined,
   isCloseRequestDismissable: true,
+  isSwipeDismissable: true,
   isShowCloseButton: true,
   withContainer: true,
   rounded: undefined,
@@ -279,6 +281,25 @@ const onBackdropClick = (e: Event) => {
   }
 }
 
+// Drag the phone sheet down to dismiss it. Gated on `isBackdropDismissable`
+// rather than on Escape: a swipe is a pointer dismissal, so it goes with the
+// backdrop — which also gives `role="alertdialog"` the right answer, since an
+// alert must not be swiped away any more than it can be clicked away.
+//
+// `placement === 'auto'` is only HALF the sheet test: `auto` is a sheet below
+// `md` and a centred dialog above it, and the split lives in breakpoint classes
+// with no reactive counterpart. Reading matchMedia HERE, at the start of a
+// gesture, is what makes that safe — a `useMediaQuery` ref would be `false`
+// during SSR and would have to render something on the strength of it.
+const isSwipeEnabled = () =>
+  props.isSwipeDismissable &&
+  isBackdropDismissable.value &&
+  props.placement === 'auto' &&
+  typeof window !== 'undefined' &&
+  window.matchMedia('(max-width: 47.99rem)').matches
+
+useKunSwipeDismiss(panelEl, { enabled: isSwipeEnabled, onDismiss: dismiss })
+
 // Android's back button/gesture closes this dialog instead of leaving the page.
 // Gated on the same `isEscapeDismissable` as the keydown handler below: back IS
 // Android's Escape, so a dialog that refuses to cancel on one must refuse on
@@ -385,6 +406,20 @@ onUnmounted(() => {
           "
           @click.stop
         >
+          <!-- Drag affordance. Absolutely positioned inside the panel's own
+               p-6, so it costs the content no room and moves no existing
+               layout. Purely CSS-gated to where the gesture actually exists —
+               the sheet form below `md`, on a touch-primary pointer — because a
+               media-query ref would render differently on the server. It is
+               decorative: the gesture it advertises has a keyboard/AT
+               equivalent in Escape and the close button, so it is aria-hidden
+               and never a tab stop. -->
+          <div
+            v-if="isSwipeDismissable && isBackdropDismissable && placement === 'auto'"
+            aria-hidden="true"
+            class="bg-default-300 dark:bg-default-600 absolute top-2 left-1/2 hidden h-1 w-9 -translate-x-1/2 rounded-full max-md:pointer-coarse:block"
+          />
+
           <!-- Rendered only when asked for, so a caller who draws their own
                heading in the slot keeps the exact layout they had. -->
           <div

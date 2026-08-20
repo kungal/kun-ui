@@ -34,6 +34,15 @@ import meta from '~/generated/component-meta.json'
       <NonDismissable />
     </Demo>
 
+    <h2 class="mt-8 mb-1 text-xl font-semibold">手机端下滑关闭</h2>
+    <KunInfo
+      class="mt-3"
+      color="primary"
+      icon="lucide:chevron-down"
+      title="底部抽屉可以往下拖着关掉"
+      description="贴着底边的抽屉(包括 responsive 在 md 以下自动变成的底部 sheet)在触屏上可以往下拖关闭,拖过高度的 25% 或快速一甩即可,不够则回弹,遮罩的暗度跟着手指走。内容还没滚回顶部时,下滑仍然是滚动。左/右/上方向的抽屉、桌面端和鼠标都不受影响;isDismissable=false 拖不动,也可用 isSwipeDismissable=false 单独关掉。"
+    />
+
     <h2 class="mt-8 mb-1 text-xl font-semibold">Android 返回键</h2>
     <KunInfo
       class="mt-3"
