@@ -28,6 +28,11 @@ const DEFAULT_FORMAT = 'yyyy-MM-dd'
 const formatDate = (date: Date, formatStr = DEFAULT_FORMAT): string =>
   format(date, formatStr)
 
+// `parseISO`, NOT `new Date(str)`: ES2015+ parses a date-only ISO string
+// ('2026-06-14') as UTC midnight, and date-fns then FORMATS it in local time —
+// so every browser west of UTC renders the previous day, and an SSR app whose
+// server sits in a different zone from the visitor gets a hydration text
+// mismatch on top of that. parseISO treats a date-only string as local midnight.
 const parseDate = (
   dateString: string | Date | null | undefined
 ): Date | null => {
@@ -198,6 +203,7 @@ export const useCalendar = (props: {
   return {
     viewingDate,
     i18n,
+    parseDate,
     calendarGrid,
     navigateMonth,
     navigateYear,

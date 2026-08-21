@@ -11,6 +11,7 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
 import { useCalendar } from '../composables/useCalendar'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import type { KunDatePickerProps } from './types'
@@ -44,8 +45,13 @@ const emit = defineEmits<{
 
 const isOpen = ref(false)
 const datePickerRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 const hoveredDate = ref<Date | null>(null)
+
+const kunUniqueId = useKunUniqueId('kun-datepicker')
+const panelId = computed(() => `${kunUniqueId.value}-panel`)
+const dayId = (key: string) => `${kunUniqueId.value}-${key}`
 
 // The calendar panel is teleported to <body>, so it is NOT a DOM descendant of
 // datePickerRef — without this guard every tap inside it (month/year nav, etc.)
@@ -94,6 +100,7 @@ const {
 const {
   viewingDate,
   i18n,
+  parseDate,
   calendarGrid,
   navigateMonth,
   navigateYear,
@@ -129,8 +136,18 @@ const moveActiveDate = (days: number) => {
   }
 }
 
+// preventDefault only on the keys handled here. The blanket `@keydown.prevent`
+// this replaced also cancelled Tab (focus could never leave the picker) and
+// Enter (the trigger's own activation), leaving the calendar unopenable.
 const onKeydown = (e: KeyboardEvent) => {
-  if (!isOpen.value) return
+  if (props.disabled) return
+  if (!isOpen.value) {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+      e.preventDefault()
+      isOpen.value = true
+    }
+    return
+  }
   switch (e.key) {
     case 'ArrowLeft':
       e.preventDefault()
@@ -149,6 +166,7 @@ const onKeydown = (e: KeyboardEvent) => {
       moveActiveDate(7)
       break
     case 'Enter':
+    case ' ':
       e.preventDefault()
       handleDateSelect(activeDate.value)
       break
@@ -161,15 +179,14 @@ const onKeydown = (e: KeyboardEvent) => {
 
 const displayValue = computed(() => {
   if (props.mode === 'single') {
-    return props.modelValue
-      ? formatDate(new Date(props.modelValue as string), props.format)
-      : ''
+    const d = parseDate(props.modelValue as string)
+    return d ? formatDate(d, props.format) : ''
   }
   if (Array.isArray(props.modelValue) && props.modelValue.every((d) => d)) {
-    return `${formatDate(new Date(props.modelValue[0]!), props.format)} - ${formatDate(
-      new Date(props.modelValue[1]!),
-      props.format
-    )}`
+    const start = parseDate(props.modelValue[0])
+    const end = parseDate(props.modelValue[1])
+    if (!start || !end) return ''
+    return `${formatDate(start, props.format)} - ${formatDate(end, props.format)}`
   }
   return ''
 })
@@ -180,7 +197,7 @@ const toggle = () => {
   if (isOpen.value) {
     // preventScroll: focusing on open must never scroll the page (the portaled
     // panel + a non-preventScroll focus is the classic "jumps to top" bug).
-    nextTick(() => datePickerRef.value?.focus({ preventScroll: true }))
+    nextTick(() => triggerRef.value?.focus({ preventScroll: true }))
   }
 }
 
@@ -193,6 +210,7 @@ const handleDateSelect = (date: Date) => {
 }
 
 const clearDate = () => {
+  if (props.disabled) return
   const newValue: string | null | [string | null, string | null] =
     props.mode === 'single' ? null : [null, null]
   emit('update:modelValue', newValue)
@@ -208,18 +226,31 @@ const isInPreviewRange = (date: Date) => {
 </script>
 
 <template>
-  <div
-    ref="datePickerRef"
-    class="relative w-full"
-    tabindex="0"
-    @keydown.prevent.capture="onKeydown"
-  >
-    <label v-if="label" class="text-default-700 mb-1 block text-sm font-medium">{{ label }}</label>
+  <div ref="datePickerRef" class="relative w-full">
+    <label
+      v-if="label"
+      :id="`${kunUniqueId}-label`"
+      class="text-default-700 mb-1 block text-sm font-medium"
+    >{{ label }}</label>
 
     <div class="relative">
-      <button
-        type="button"
-        :disabled="disabled"
+      <!-- A div, not a <button>, because the clear control inside it IS a
+           button: a nested <button> start tag makes the parser emit an implied
+           </button>, so the browser hoists the clear button and the calendar
+           icon out of the trigger and hydration mismatches. Same shape as
+           KunSelect's trigger. -->
+      <div
+        :id="kunUniqueId"
+        ref="triggerRef"
+        role="combobox"
+        :tabindex="disabled ? -1 : 0"
+        aria-haspopup="dialog"
+        :aria-expanded="isOpen"
+        :aria-controls="panelId"
+        :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
+        :aria-label="label ? undefined : placeholder"
+        :aria-disabled="disabled || undefined"
+        :aria-activedescendant="isOpen ? dayId(formatDate(activeDate)) : undefined"
         :class="
           cn(
             'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
@@ -233,22 +264,25 @@ const isInPreviewRange = (date: Date) => {
           )
         "
         @click="toggle"
+        @keydown="onKeydown"
       >
         <span class="block min-w-0 flex-1 truncate" :class="{ 'text-default-400': !displayValue }">
           {{ displayValue || placeholder }}
         </span>
         <div class="flex shrink-0 items-center">
           <button
-            v-if="clearable && displayValue"
+            v-if="clearable && displayValue && !disabled"
+            type="button"
             class="text-default-500 hover:text-default-800 mr-2 p-1"
             aria-label="Clear date"
             @click.stop="clearDate"
+            @mousedown.stop.prevent
           >
             <KunIcon name="lucide:x" class="h-4 w-4" />
           </button>
           <KunIcon name="lucide:calendar" class="text-default-500" />
         </div>
-      </button>
+      </div>
     </div>
 
     <Teleport to="body">
@@ -262,6 +296,7 @@ const isInPreviewRange = (date: Date) => {
       >
         <div
           v-if="isOpen"
+          :id="panelId"
           ref="dropdownRef"
           data-kun-overlay
           :class="
@@ -305,6 +340,8 @@ const isInPreviewRange = (date: Date) => {
           <div class="mt-1 grid grid-cols-7" role="grid">
             <div v-for="day in calendarGrid" :key="day.key" class="p-0.5" role="gridcell">
               <button
+                :id="dayId(day.key)"
+                type="button"
                 :disabled="day.isDisabled"
                 :class="
                   cn(
