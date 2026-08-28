@@ -1664,31 +1664,36 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Plain-text body, rendered as one `<p>`. There is no `description` slot: rich body content goes in the DEFAULT slot, which renders directly under this paragraph. Passing both keeps both."
       },
       {
         "name": "icon",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Bundled icon name, e.g. `lucide:info`. Only the icons compiled into ui-core exist — an unbundled name renders nothing."
       },
       {
         "name": "rounded",
         "type": "KunUIRounded",
         "required": false,
-        "default": "undefined"
+        "default": "undefined",
+        "description": "Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`, not a fixed value."
       },
       {
         "name": "title",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Plain-text heading. For markup inside the heading (a link, a badge) use the `title` slot — it renders in the same row, after this text."
       },
       {
         "name": "variant",
         "type": "KunUIVariant",
         "required": false,
-        "default": "\"flat\""
+        "default": "\"flat\"",
+        "description": "Visual treatment. `solid` / `shadow` fill the box and take a contrast-correct foreground; `flat`, `light` and `bordered` use a soft tint of the colour with dark coloured text."
       }
     ]
   },

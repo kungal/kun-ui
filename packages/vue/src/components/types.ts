@@ -6,6 +6,11 @@ import type {
   KunUser,
 } from '@kungal/ui-core'
 
+// These JSDoc blocks are extracted verbatim into the docs PropsTable. An `@` at
+// the START of a JSDoc line is parsed as a block tag and everything after it is
+// dropped — a wrapped `@kungal/ui-core` silently truncated a description here.
+// Mid-line is safe.
+
 export interface KunButtonProps {
   variant?: KunUIVariant
   color?: KunUIColor
@@ -442,12 +447,24 @@ export interface KunProgressProps {
 
 // ── Info ───────────────────────────────────────────────────────────────
 export interface KunInfoProps {
+  /** Plain-text heading. For markup inside the heading (a link, a badge) use
+   *  the `title` slot — it renders in the same row, after this text. */
   title?: string
+  /** Plain-text body, rendered as one `<p>`. There is no `description` slot:
+   *  rich body content goes in the DEFAULT slot, which renders directly under
+   *  this paragraph. Passing both keeps both. */
   description?: string
   className?: string
   color?: KunUIColor
+  /** Visual treatment. `solid` / `shadow` fill the box and take a
+   *  contrast-correct foreground; `flat`, `light` and `bordered` use a soft
+   *  tint of the colour with dark coloured text. */
   variant?: KunUIVariant
+  /** Bundled icon name, e.g. `lucide:info`. Only the icons compiled into
+   *  ui-core exist — an unbundled name renders nothing. */
   icon?: string
+  /** Corner radius. When unset it follows the nearest KunUIConfigProvider's
+   *  `rounded`, not a fixed value. */
   rounded?: KunUIRounded
 }
 

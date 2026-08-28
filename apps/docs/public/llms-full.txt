@@ -540,7 +540,7 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunCard** — Container/panel with color + variant; renders as a link when given href/to.
 - **KunDivider** — Horizontal/vertical separator with an optional centered label.
 - **KunHeader** — Section heading (scale h1–h6) with brand styling.
-- **KunInfo** — Inline callout box (color, icon, title, description; solid/flat/bordered).
+- **KunInfo** — Inline callout box (color, icon, title, description; solid/flat/bordered). Rich body content goes in the default slot — there is no `description` slot; the heading has a `title` slot.
 - **KunProgress** — Progress bar: linear/striped/gradient/circle, indeterminate, optional label.
 - **KunBadge** — Count/dot badge wrapping a trigger (e.g. a button/icon); `max` caps the count.
 - **KunChip** — Small tag/pill with color + variant.
