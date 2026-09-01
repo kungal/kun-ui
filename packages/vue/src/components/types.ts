@@ -511,6 +511,12 @@ export interface KunInputProps {
    * toggled is gone. Safe to remove from call sites.
    */
   darkBorder?: boolean
+  /**
+   * Focus the field on mount. Focus is moved with `preventScroll`, so it never
+   * jogs the page: an autofocused input inside a popover is at the document
+   * origin until Floating UI has positioned it, and letting the browser scroll
+   * to it there threw the page to the top.
+   */
   autofocus?: boolean
   rounded?: KunUIRounded
 }
@@ -531,6 +537,12 @@ export interface KunTextareaProps {
   disabled?: boolean
   readonly?: boolean
   required?: boolean
+  /**
+   * Focus the field on mount. Focus is moved with `preventScroll`, so it never
+   * jogs the page: an autofocused input inside a popover is at the document
+   * origin until Floating UI has positioned it, and letting the browser scroll
+   * to it there threw the page to the top.
+   */
   autofocus?: boolean
   showCharCount?: boolean
   autoGrow?: boolean
@@ -595,7 +607,10 @@ export interface KunPinInputProps {
   disabled?: boolean
   // Mark every cell invalid (danger ring).
   isInvalid?: boolean
-  // Focus the first cell on mount.
+  /**
+   * Focus the first cell on mount. Focus is moved with `preventScroll` (see
+   * KunInput), so a code field below the fold never yanks the page to itself.
+   */
   autofocus?: boolean
   placeholder?: string
   rounded?: KunUIRounded

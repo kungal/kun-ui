@@ -11,6 +11,7 @@ import {
 import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import KunIcon from './Icon.vue'
 import type {
   KunCommandGroup,
@@ -44,6 +45,8 @@ const uid = useKunUniqueId('kun-command')
 const listId = computed(() => `${uid.value}-list`)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLElement | null>(null)
+const overlayRef = ref<HTMLElement | null>(null)
+useKunFloatingLayer(overlayRef)
 const activeIndex = ref(0)
 
 // ── normalise `items` (flat OR grouped) → groups, then a flat list that carries
@@ -240,6 +243,7 @@ defineExpose({ open, close, toggle })
     <Transition name="kun-command">
       <div
         v-if="isOpen"
+        ref="overlayRef"
         data-kun-overlay
         class="kun-command-overlay z-kun-modal fixed inset-0 flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
         @click.self="close"

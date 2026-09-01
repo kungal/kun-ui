@@ -11,6 +11,7 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
@@ -65,6 +66,7 @@ const dirty = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
 const triggerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
+useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
 const listRef = ref<HTMLElement | null>(null)
 
 const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, dropdownRef, {
@@ -257,7 +259,7 @@ watch(filtered, () => {
 })
 
 defineExpose({
-  focus: () => inputRef.value?.focus(),
+  focus: (options?: FocusOptions) => inputRef.value?.focus(options),
   blur: () => inputRef.value?.blur(),
 })
 </script>

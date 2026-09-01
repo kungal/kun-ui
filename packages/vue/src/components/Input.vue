@@ -103,13 +103,13 @@ const handleFocus = (event: FocusEvent) => {
 const clear = () => {
   modelValue.value = ''
   emits('clear')
-  nextTick(() => input.value?.focus())
+  nextTick(() => input.value?.focus({ preventScroll: true }))
 }
 
 onMounted(() => {
   if (props.autofocus) {
     isFocused.value = true
-    input.value?.focus()
+    input.value?.focus({ preventScroll: true })
   }
 })
 
@@ -125,12 +125,12 @@ const insertAtCaret = (text: string) => {
     if (!input.value) return
     const pos = start + text.length
     input.value.setSelectionRange(pos, pos)
-    input.value.focus()
+    input.value.focus({ preventScroll: true })
   })
 }
 
 defineExpose({
-  focus: () => input.value?.focus(),
+  focus: (options?: FocusOptions) => input.value?.focus(options),
   blur: () => input.value?.blur(),
   select: () => input.value?.select(),
   insertAtCaret,

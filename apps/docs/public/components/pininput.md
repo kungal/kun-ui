@@ -141,21 +141,21 @@ const pin = ref('12')
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `ariaLabel` | `string` | `"验证码"` |
-| `autofocus` | `boolean` | `false` |
-| `color` | `KunUIColor` | `"primary"` |
-| `disabled` | `boolean` | `false` |
-| `isInvalid` | `boolean` | `false` |
-| `length` | `number` | `6` |
-| `mask` | `boolean` | `false` |
-| `modelValue` | `string` | `""` |
-| `name` | `string` | `undefined` |
-| `placeholder` | `string` | `""` |
-| `rounded` | `KunUIRounded` | `undefined` |
-| `size` | `KunUISize` | `"md"` |
-| `type` | `"text" \| "numeric"` | `"numeric"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ariaLabel` | `string` | `"验证码"` |  |
+| `autofocus` | `boolean` | `false` | Focus the first cell on mount. Focus is moved with `preventScroll` (see KunInput), so a code field below the fold never yanks the page to itself. |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `disabled` | `boolean` | `false` |  |
+| `isInvalid` | `boolean` | `false` |  |
+| `length` | `number` | `6` |  |
+| `mask` | `boolean` | `false` |  |
+| `modelValue` | `string` | `""` |  |
+| `name` | `string` | `undefined` |  |
+| `placeholder` | `string` | `""` |  |
+| `rounded` | `KunUIRounded` | `undefined` |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `type` | `"text" \| "numeric"` | `"numeric"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/pininput

@@ -16,6 +16,7 @@ import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
+import { useKunFloatingLayerStack } from '../composables/useKunFloatingLayer'
 import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
@@ -154,16 +155,22 @@ const applyInert = (shouldInert: boolean) => {
   }
 }
 
-// `fallbackFocus` on the panel — see the same block in Modal.vue for why this
-// replaces the old `tabindex="0"` on the backdrop.
+// `fallbackFocus` on the panel, the floating-layer containers and
+// `preventScroll` — see the same block in Modal.vue for all three.
 const trapEl = ref<HTMLElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
 const backdropEl = ref<HTMLElement | null>(null)
-const { activate, deactivate } = useFocusTrap(trapEl, {
+const { panels: floatingPanels, hasOpenLayer } =
+  useKunFloatingLayerStack(trapEl)
+const trapContainers = computed(() =>
+  trapEl.value ? [trapEl.value, ...floatingPanels.value] : []
+)
+const { activate, deactivate } = useFocusTrap(trapContainers, {
   immediate: false,
   escapeDeactivates: false,
   allowOutsideClick: true,
   returnFocusOnDeactivate: true,
+  preventScroll: true,
   fallbackFocus: () => panelEl.value ?? (trapEl.value as HTMLElement),
 })
 
@@ -225,12 +232,15 @@ const { isWatching: isWatchingCloseRequests } = useKunCloseRequest(
 useEventListener('keydown', (e: KeyboardEvent) => {
   // Only the topmost overlay reacts to Escape (see useKunOverlayZIndex), and
   // only while no close watcher is live — Escape is a close request, so running
-  // both handlers closes two layers at once (see useKunCloseRequest).
+  // both handlers closes two layers at once (see useKunCloseRequest). A popup
+  // opened from inside the drawer stands it down for the same reason (see
+  // useKunFloatingLayer).
   if (
     e.key === 'Escape' &&
     modelValue.value &&
     isTopmost.value &&
-    !isWatchingCloseRequests.value
+    !isWatchingCloseRequests.value &&
+    !hasOpenLayer.value
   ) {
     handleClose()
   }

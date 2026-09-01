@@ -8,6 +8,7 @@ import {
   watch,
 } from 'vue'
 import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import KunIcon from './Icon.vue'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import type { KunContextMenuItem, KunContextMenuProps } from './types'
@@ -34,6 +35,7 @@ const emit = defineEmits<{
 const config = useKunUIConfig()
 
 const menuRef = ref<HTMLDivElement | null>(null)
+useKunFloatingLayer(menuRef)
 const activeIndex = ref(-1)
 const menuPosition = ref({
   x: props.position?.x ?? 0,

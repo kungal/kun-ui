@@ -127,7 +127,7 @@ const stepBy = (dir: 1 | -1) => {
   const base =
     modelValue.value ?? (Number.isFinite(props.min) ? props.min : 0)
   setValue(base + dir * props.step)
-  inputRef.value?.focus()
+  inputRef.value?.focus({ preventScroll: true })
 }
 
 // A null (empty) value can always step (it resolves to a base in stepBy); only
@@ -169,7 +169,7 @@ const onKeydown = (e: KeyboardEvent) => {
 }
 
 defineExpose({
-  focus: () => inputRef.value?.focus(),
+  focus: (options?: FocusOptions) => inputRef.value?.focus(options),
   blur: () => inputRef.value?.blur(),
 })
 </script>

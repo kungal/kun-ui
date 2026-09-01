@@ -1703,7 +1703,8 @@
         "name": "autofocus",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top."
       },
       {
         "name": "className",
@@ -2263,7 +2264,8 @@
         "name": "autofocus",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Focus the first cell on mount. Focus is moved with `preventScroll` (see KunInput), so a code field below the fold never yanks the page to itself."
       },
       {
         "name": "color",
@@ -3563,7 +3565,8 @@
         "name": "autofocus",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top."
       },
       {
         "name": "autoGrow",

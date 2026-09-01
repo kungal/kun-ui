@@ -84,7 +84,8 @@ onMounted(() => {
   if (props.autoGrow && textareaRef.value) {
     requestAnimationFrame(() => adjustHeight())
   }
-  if (props.autofocus && textareaRef.value) textareaRef.value.focus()
+  if (props.autofocus && textareaRef.value)
+    textareaRef.value.focus({ preventScroll: true })
 })
 
 const insertAtCaret = (text: string) => {
@@ -97,12 +98,12 @@ const insertAtCaret = (text: string) => {
     if (!textareaRef.value) return
     const pos = start + text.length
     textareaRef.value.setSelectionRange(pos, pos)
-    textareaRef.value.focus()
+    textareaRef.value.focus({ preventScroll: true })
   })
 }
 
 defineExpose({
-  focus: () => textareaRef.value?.focus(),
+  focus: (options?: FocusOptions) => textareaRef.value?.focus(options),
   blur: () => textareaRef.value?.blur(),
   select: () => textareaRef.value?.select(),
   insertAtCaret,

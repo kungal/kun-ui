@@ -180,7 +180,7 @@ const onKeydown = (e: KeyboardEvent) => {
   if (e.key === 'ArrowLeft' && !inputValue.value && tags.value.length > 0) {
     e.preventDefault()
     const lastIdx = tags.value.length - 1
-    chipRefs.value[lastIdx]?.focus()
+    chipRefs.value[lastIdx]?.focus({ preventScroll: true })
     return
   }
   if (e.key !== 'Backspace') {
@@ -193,20 +193,21 @@ const onChipKeydown = (e: KeyboardEvent, idx: number) => {
   switch (e.key) {
     case 'ArrowLeft':
       e.preventDefault()
-      if (idx > 0) chipRefs.value[idx - 1]?.focus()
+      if (idx > 0) chipRefs.value[idx - 1]?.focus({ preventScroll: true })
       break
     case 'ArrowRight':
       e.preventDefault()
-      if (idx < tags.value.length - 1) chipRefs.value[idx + 1]?.focus()
-      else inputEl.value?.focus()
+      if (idx < tags.value.length - 1)
+        chipRefs.value[idx + 1]?.focus({ preventScroll: true })
+      else inputEl.value?.focus({ preventScroll: true })
       break
     case 'Delete':
     case 'Backspace':
       e.preventDefault()
       removeAt(idx)
       nextTick(() => {
-        if (idx > 0) chipRefs.value[idx - 1]?.focus()
-        else inputEl.value?.focus()
+        if (idx > 0) chipRefs.value[idx - 1]?.focus({ preventScroll: true })
+        else inputEl.value?.focus({ preventScroll: true })
       })
       break
     case 'Enter':
@@ -243,7 +244,7 @@ const onBlur = () => {
 
 const focusInput = () => {
   if (props.disabled || props.readonly) return
-  inputEl.value?.focus()
+  inputEl.value?.focus({ preventScroll: true })
 }
 
 // Min-heights mirror the kunControlSizeClasses control heights, so an empty

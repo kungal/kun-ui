@@ -119,26 +119,26 @@ const amount = ref('')
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `autofocus` | `boolean` | `false` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"default"` |
-| `darkBorder` | `boolean` | `true` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `helperText` | `string` | `""` |
-| `isClearable` | `boolean` | `false` |
-| `isInvalid` | `boolean` | `false` |
-| `label` | `string` | `""` |
-| `modelValue` | `string \| number` | `""` |
-| `placeholder` | `string` | `""` |
-| `required` | `boolean` | `false` |
-| `revealPassword` | `boolean` | `false` |
-| `rounded` | `KunUIRounded` | `undefined` |
-| `size` | `KunUISize` | `"md"` |
-| `type` | `string` | `"text"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `autofocus` | `boolean` | `false` | Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top. |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"default"` |  |
+| `darkBorder` | `boolean` | `true` |  |
+| `description` | `string` | `""` |  |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `helperText` | `string` | `""` |  |
+| `isClearable` | `boolean` | `false` |  |
+| `isInvalid` | `boolean` | `false` |  |
+| `label` | `string` | `""` |  |
+| `modelValue` | `string \| number` | `""` |  |
+| `placeholder` | `string` | `""` |  |
+| `required` | `boolean` | `false` |  |
+| `revealPassword` | `boolean` | `false` |  |
+| `rounded` | `KunUIRounded` | `undefined` |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `type` | `string` | `"text"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/input

@@ -12,6 +12,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
 import { useCalendar } from '../composables/useCalendar'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import type { KunDatePickerProps } from './types'
@@ -47,6 +48,7 @@ const isOpen = ref(false)
 const datePickerRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
+useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
 const hoveredDate = ref<Date | null>(null)
 
 const kunUniqueId = useKunUniqueId('kun-datepicker')

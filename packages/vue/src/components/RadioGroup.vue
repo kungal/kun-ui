@@ -86,7 +86,7 @@ const focusSibling = (from: number, delta: number) => {
     const candidate = props.options[cursor]
     if (candidate && !isOptionDisabled(candidate)) {
       selectOption(candidate, cursor)
-      nextTick(() => itemRefs.value[cursor]?.focus())
+      nextTick(() => itemRefs.value[cursor]?.focus({ preventScroll: true }))
       return
     }
   }

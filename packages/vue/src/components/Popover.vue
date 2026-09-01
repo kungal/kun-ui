@@ -7,6 +7,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunPointerMenu } from '../composables/useKunPointerMenu'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import type { KunPopoverProps } from './types'
 
 // Nuxt-decoupled Popover. A non-modal dialog anchored to its trigger: it moves
@@ -37,6 +38,7 @@ const isOpen = ref(false)
 const triggerRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const popoverId = useKunUniqueId('kun-popover')
+useKunFloatingLayer(popoverRef, { trigger: triggerRef })
 
 const { floatingStyles, transformOrigin, arrowRef, arrowStyles } = useKunFloating(
   triggerRef,

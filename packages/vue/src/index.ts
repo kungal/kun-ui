@@ -191,6 +191,14 @@ export {
 } from './composables/useKunFloating'
 // Marks the page background `inert` while a modal overlay is open (refcounted).
 export { useKunBackgroundInert } from './composables/useKunBackgroundInert'
+// Lets a teleported floating panel be seen by the focus trap of the KunModal /
+// KunDrawer it was opened from, instead of being treated as "outside" and
+// having its focus stolen back. Every KunUI popup registers itself; exported so
+// an app that teleports its own panel out of a modal can do the same.
+export {
+  useKunFloatingLayer,
+  useKunFloatingLayerStack,
+} from './composables/useKunFloatingLayer'
 export {
   useFilePicker,
   type KunFilePickerOptions,

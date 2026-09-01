@@ -5,6 +5,7 @@ import { type Placement } from '@floating-ui/vue'
 import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import { useKunFloating } from '../composables/useKunFloating'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import type { KunDropdownItem } from './types'
 
@@ -44,6 +45,7 @@ const isOpen = ref(false)
 const activeIndex = ref(-1)
 const triggerRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
+useKunFloatingLayer(menuRef, { trigger: triggerRef })
 const menuId = `kun-dropdown-${useId()}`
 
 // Grow the menu out of its trigger corner (post-flip aware).

@@ -11,6 +11,7 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import KunIcon from './Icon.vue'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
@@ -54,6 +55,7 @@ const query = ref('')
 const activeIndex = ref(-1)
 const buttonRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
+useKunFloatingLayer(dropdownRef, { trigger: buttonRef })
 const listRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 

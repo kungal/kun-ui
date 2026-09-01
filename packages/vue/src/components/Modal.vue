@@ -16,6 +16,7 @@ import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
+import { useKunFloatingLayerStack } from '../composables/useKunFloatingLayer'
 import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
@@ -245,13 +246,31 @@ const applyInert = (shouldInert: boolean) => {
 // AT announces. Pointing the fallback at the panel (`tabindex="-1"`: focusable
 // programmatically, never by Tab) gives focus-trap its target and gives the
 // backdrop nothing.
+//
+// The teleported panels of any popup opened from inside this modal join the
+// trap as extra containers, or focus-trap pulls focus straight back out of them
+// (see useKunFloatingLayer). `trapEl` stays FIRST so it keeps deciding initial
+// focus and tab order. One inherited constraint: focus-trap throws
+// "positive tabindexes are only supported in single-container focus-traps", so
+// a positive tabindex inside a modal, already an anti-pattern, is now fatal
+// rather than merely wrong.
+//
+// `preventScroll` because every pull-back focus() this trap performs would
+// otherwise scroll the document to wherever it thinks the node is — and a
+// floating panel is at the document origin until Floating UI has positioned it.
 const trapEl = ref<HTMLElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
-const { activate, deactivate } = useFocusTrap(trapEl, {
+const { panels: floatingPanels, hasOpenLayer } =
+  useKunFloatingLayerStack(trapEl)
+const trapContainers = computed(() =>
+  trapEl.value ? [trapEl.value, ...floatingPanels.value] : []
+)
+const { activate, deactivate } = useFocusTrap(trapContainers, {
   immediate: false,
   escapeDeactivates: false,
   allowOutsideClick: true,
   returnFocusOnDeactivate: true,
+  preventScroll: true,
   fallbackFocus: () => panelEl.value ?? (trapEl.value as HTMLElement),
 })
 
@@ -320,12 +339,17 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   // Stand down while a close watcher is live: Escape is a close request too, so
   // the watcher is already going to handle this exact key press, and running
   // both closes two layers at once (see useKunCloseRequest).
+  //
+  // Stand down for the same reason while a popup opened from inside this modal
+  // is on screen — its own Escape handler is about to close it, and both
+  // running took the modal down with the popover in one press.
   if (
     e.key === 'Escape' &&
     modelValue.value &&
     isTopmost.value &&
     isEscapeDismissable.value &&
-    !isWatchingCloseRequests.value
+    !isWatchingCloseRequests.value &&
+    !hasOpenLayer.value
   ) {
     dismiss()
   }

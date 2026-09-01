@@ -259,7 +259,7 @@ const scrollBtnClasses = (side: 'left' | 'right') =>
 
 const focusTab = (idx: number) => {
   const el = tabRefs.value[idx]
-  if (el) el.focus()
+  if (el) el.focus({ preventScroll: true })
 }
 
 const moveFocus = (delta: number, e?: KeyboardEvent) => {
