@@ -1,6 +1,6 @@
 {
   "name": "@kungal/docs",
-  "version": "0.0.119",
+  "version": "0.0.120",
   "private": true,
   "type": "module",
   "description": "KunUI documentation & demo site — built WITH KunUI (dogfooding). Nuxt 4 + a self-built docs layer (no @nuxt/content): live <Demo> examples, Shiki highlighting, hand-built prose.",
