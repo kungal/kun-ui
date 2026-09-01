@@ -1,7 +1,7 @@
 # Deploying the docs site (ui.kungal.com)
 
 The KunUI docs site (`apps/docs`) deploys the same way as the kungal ecosystem
-(see `kun-galgame-infra/docs/deploy`): **GitHub Actions builds a Docker image and
+(see `nextmoe-infra/docs/deploy`): **GitHub Actions builds a Docker image and
 pushes it to GHCR; Dokploy pulls the prebuilt image and routes the domain to it
 via its built-in Traefik (auto-HTTPS).** The production server never builds.
 

@@ -22,7 +22,7 @@ So we split KunUI by **portability**, not by component:
 
 ## 2. How deeply the source is coupled to Nuxt
 
-Measured from `kun-galgame-infra/packages/ui` (~53 `.vue` files, 12
+Measured from `nextmoe-infra/packages/ui` (~53 `.vue` files, 12
 composables):
 
 - **Nuxt auto-imports everywhere** — `computed`/`ref`/`useSlots`/`cn`/

@@ -6,7 +6,7 @@
 # packages/{core,vue}/src; imports @kungal/ui-vue/style.css), so those packages
 # must be present and built before the docs build.
 #
-# Mirrors kun-galgame-infra/docker/nuxt.Dockerfile: deps → build → slim run
+# Mirrors nextmoe-infra/docker/nuxt.Dockerfile: deps → build → slim run
 # stage with only Node + the self-contained .output.
 ARG NODE_VERSION=24
 
