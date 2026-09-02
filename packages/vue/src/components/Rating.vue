@@ -55,6 +55,9 @@ const onLeave = () => {
 
 <template>
   <div class="inline-flex items-center gap-1" role="radiogroup" :aria-label="ariaLabel">
+    <!-- `flex` on the star button: a lone <svg> in a block button sits on the
+         line box's text baseline, and the strut's descent under it pushed the
+         whole row ~2px above any text set beside it (a score, a review count). -->
     <button
       v-for="val in stars"
       :key="val"
@@ -63,7 +66,7 @@ const onLeave = () => {
       :aria-checked="current >= val"
       :class="
         cn(
-          'disabled:text-default-200 cursor-pointer hover:scale-110 focus:outline-none disabled:cursor-not-allowed',
+          'disabled:text-default-200 flex cursor-pointer items-center hover:scale-110 focus:outline-none disabled:cursor-not-allowed',
           current >= val ? 'text-secondary' : 'text-default-300'
         )
       "

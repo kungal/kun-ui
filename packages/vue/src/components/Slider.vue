@@ -190,9 +190,16 @@ onUnmounted(() => {
       </span>
     </div>
 
+    <!-- Inline, not utility classes: this is correctness, and dist/style.css
+         ships no utilities. The pointer handlers are passive, so a drag can
+         never preventDefault() the browser's native selection — dragging the
+         slider used to select text elsewhere on the page. touch-action stops
+         the page scrolling out from under a touch drag. Same lever shadcn and
+         Radix pull (`touch-none select-none` on the slider root). -->
     <div
       class="kun-slider relative py-2"
       ref="sliderRef"
+      style="user-select: none; -webkit-user-select: none; touch-action: none"
       :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'"
       @mousedown.passive="startDrag"
       @touchstart.passive.stop="startDrag"

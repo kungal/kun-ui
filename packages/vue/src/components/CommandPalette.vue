@@ -274,7 +274,7 @@ defineExpose({ open, close, toggle })
             />
             <button
               type="button"
-              class="text-default-400 hover:text-default-600 shrink-0 cursor-pointer"
+              class="text-default-400 hover:text-default-600 flex shrink-0 cursor-pointer items-center"
               aria-label="关闭"
               @click="close"
             >

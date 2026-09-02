@@ -271,16 +271,23 @@ const isInPreviewRange = (date: Date) => {
         <span class="block min-w-0 flex-1 truncate" :class="{ 'text-default-400': !displayValue }">
           {{ displayValue || placeholder }}
         </span>
-        <div class="flex shrink-0 items-center">
+        <div class="flex shrink-0 items-center gap-2">
+          <!-- `flex` on the button, and the icon left at its 1em default: a lone
+               <svg> in a block button sits on the line box's text baseline, so
+               the strut's descent pushed the clear icon ~2px above the button's
+               centre and out of line with the calendar icon, while the button's
+               padding made the whole trigger 8px taller than a KunSelect of the
+               same size. The negative margin keeps the tap target without
+               putting that height back. -->
           <button
             v-if="clearable && displayValue && !disabled"
             type="button"
-            class="text-default-500 hover:text-default-800 mr-2 p-1"
+            class="text-default-500 hover:text-default-800 -m-1.5 flex items-center p-1.5"
             aria-label="Clear date"
             @click.stop="clearDate"
             @mousedown.stop.prevent
           >
-            <KunIcon name="lucide:x" class="h-4 w-4" />
+            <KunIcon name="lucide:x" />
           </button>
           <KunIcon name="lucide:calendar" class="text-default-500" />
         </div>

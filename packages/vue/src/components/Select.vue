@@ -339,7 +339,7 @@ watch(filtered, () => {
           <button
             v-if="!disabled"
             type="button"
-            class="hover:text-danger shrink-0"
+            class="hover:text-danger flex shrink-0 items-center"
             :aria-label="`移除 ${opt.label}`"
             @click.stop="removeValue(opt.value)"
             @mousedown.stop.prevent
@@ -354,10 +354,13 @@ watch(filtered, () => {
         {{ multiple ? placeholder : singleLabel || placeholder }}
       </span>
 
+      <!-- `flex`, not a bare block: an <svg> alone in a block button sits on the
+           line box's text baseline, which pushed the clear icon ~2px above the
+           chevron. Same fix as KunDatePicker's trigger. -->
       <button
         v-if="clearable && hasSelection && !disabled"
         type="button"
-        class="text-default-400 hover:text-default-600 shrink-0"
+        class="text-default-400 hover:text-default-600 flex shrink-0 items-center"
         aria-label="清除"
         @click.stop="clearAll"
         @mousedown.stop.prevent
