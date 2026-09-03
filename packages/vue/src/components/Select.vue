@@ -13,6 +13,7 @@ import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
+import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
@@ -223,6 +224,7 @@ const typeahead = (char: string) => {
 
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
+  if (isImeComposing(e)) return
   const key = e.key
   if (!isOpen.value) {
     if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(key)) {

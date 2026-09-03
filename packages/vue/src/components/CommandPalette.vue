@@ -12,6 +12,7 @@ import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
+import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import type {
   KunCommandGroup,
@@ -36,7 +37,14 @@ const props = withDefaults(defineProps<KunCommandPaletteProps<T>>(), {
   ariaLabel: '',
 })
 
-const emit = defineEmits<{ select: [item: T] }>()
+const emit = defineEmits<{
+  select: [item: T]
+  // Enter with nothing to select — no results, or every result disabled. The
+  // shell has no search of its own, so this is the only way a consumer can act
+  // on the raw query ("search the whole site for …"). Enter over a real result
+  // still selects it; put an action row first if you want one that is visible.
+  submit: [query: string]
+}>()
 
 const isOpen = defineModel<boolean>('open', { default: false })
 const query = defineModel<string>('query', { default: '' })
@@ -101,6 +109,7 @@ const move = (delta: 1 | -1) => {
   scrollActiveIntoView()
 }
 const onInputKeydown = (e: KeyboardEvent) => {
+  if (isImeComposing(e)) return
   switch (e.key) {
     case 'ArrowDown':
       e.preventDefault()
@@ -125,10 +134,18 @@ const onInputKeydown = (e: KeyboardEvent) => {
       }
       scrollActiveIntoView()
       break
-    case 'Enter':
-      e.preventDefault()
-      selectActive()
+    case 'Enter': {
+      const row = flat.value[activeIndex.value]
+      if (row && !row.item.disabled) {
+        e.preventDefault()
+        selectItem(row.item)
+        break
+      }
+      // Nothing to select. Emit instead of swallowing the key: preventDefault
+      // here used to make Enter a dead key on a no-result query.
+      if (query.value.trim()) emit('submit', query.value.trim())
       break
+    }
     case 'Escape':
       e.preventDefault()
       close()
@@ -141,10 +158,6 @@ const selectItem = (item: T) => {
   if (item.disabled) return
   emit('select', item)
   close()
-}
-const selectActive = () => {
-  const row = flat.value[activeIndex.value]
-  if (row) selectItem(row.item)
 }
 
 // ── open / close (+ scroll lock, focus restore) ─────────────────────────────

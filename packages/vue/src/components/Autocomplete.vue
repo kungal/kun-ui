@@ -13,6 +13,7 @@ import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
+import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
 import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
@@ -190,6 +191,7 @@ const onInput = (e: Event) => {
 
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
+  if (isImeComposing(e)) return
   switch (e.key) {
     case 'ArrowDown':
       e.preventDefault()

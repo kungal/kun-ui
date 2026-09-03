@@ -3,6 +3,8 @@ import Basic from '~/examples/commandpalette/Basic.vue'
 import BasicSrc from '~/examples/commandpalette/Basic.vue?raw'
 import Async from '~/examples/commandpalette/Async.vue'
 import AsyncSrc from '~/examples/commandpalette/Async.vue?raw'
+import Submit from '~/examples/commandpalette/Submit.vue'
+import SubmitSrc from '~/examples/commandpalette/Submit.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -27,6 +29,19 @@ import meta from '~/generated/component-meta.json'
       监听 <code>query</code> 发请求,请求中传 <code>:loading</code> —— 面板显示加载态而非「无结果」。
     </p>
     <Demo title="Async.vue" :source="AsyncSrc"><Async /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">回车提交查询(@submit)</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      回车落在某一条结果上时照常 <code>@select</code>。<strong>没有可选中的结果</strong>时(无结果,或结果全部
+      <code>disabled</code>)才触发 <code>@submit</code>,带上去掉首尾空格的 <code>query</code> ——
+      面板本身不含搜索,这是拿到原始查询去做「全站搜索」的出口。此时回车不会被
+      <code>preventDefault</code> 吞掉。
+    </p>
+    <p class="text-default-500 mb-2 text-sm">
+      想在<strong>有结果</strong>时也能提交,把动作项排在第 0 位当成一条普通结果 ——
+      这也是 cmdk(<code>forceMount</code>)、GitHub、Linear 的做法,好处是这个动作看得见、能用鼠标点。
+    </p>
+    <Demo title="Submit.vue" :source="SubmitSrc"><Submit /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunCommandPalette.props" />
