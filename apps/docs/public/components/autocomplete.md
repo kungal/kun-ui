@@ -275,29 +275,43 @@ const options: CityOption[] = [
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `options` * | `readonly KunAutocompleteOption[]` | — |  |
+| `allowCustomValue` | `boolean` | `true` | Accept a value the user typed that is not in `options` (free text). |
+| `ariaLabel` | `string` | `""` |  |
+| `clearable` | `boolean` | `false` |  |
+| `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). Default 'default'. |
+| `darkBorder` | `boolean` | `true` |  |
+| `debounce` | `number` | `0` | Debounce the `@search` emit by N ms; the input text still updates instantly (a responsive field). 0 (default) emits on every keystroke — set e.g. 300 for remote sources so you fetch once the user pauses, not per keypress. |
+| `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `isInvalid` | `boolean` | `false` |  |
+| `label` | `string` | `""` |  |
+| `loading` | `boolean` | `false` | Async data source: show a loading spinner in the dropdown (instead of `noResultText`) while a remote `@search` request is in flight. Drive it from your fetch — set true when the request starts, false when the results land. |
+| `loadingText` | `string` | `"加载中…"` | Text under the loading spinner. Default '加载中…'. |
+| `manualFilter` | `boolean` | `false` | Skip built-in label filtering — you control `options` from `@search` (remote/async suggestions). Default false (client-side filter). |
+| `modelValue` | `string` | `""` |  |
+| `name` | `string` | — |  |
+| `noResultText` | `string` | `"无匹配项"` |  |
+| `placeholder` | `string` | `""` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `size` | `KunUISize` | `"md"` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `options` * | `readonly KunAutocompleteOption[]` | — |
-| `allowCustomValue` | `boolean` | `true` |
-| `ariaLabel` | `string` | `""` |
-| `clearable` | `boolean` | `false` |
-| `color` | `KunUIColor` | `"default"` |
-| `darkBorder` | `boolean` | `true` |
-| `debounce` | `number` | `0` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `isInvalid` | `boolean` | `false` |
-| `label` | `string` | `""` |
-| `loading` | `boolean` | `false` |
-| `loadingText` | `string` | `"加载中…"` |
-| `manualFilter` | `boolean` | `false` |
-| `modelValue` | `string` | `""` |
-| `name` | `string` | — |
-| `noResultText` | `string` | `"无匹配项"` |
-| `placeholder` | `string` | `""` |
-| `rounded` | `KunUIRounded` | — |
-| `size` | `KunUISize` | `"md"` |
+| `search` | `query: string` | The field text, debounced by `debounce`. One emit per committed word during IME composition, not one per romaji keystroke. |
+| `select` | `option: KunAutocompleteOption` | The option the user committed by click or Enter. Free text accepted through `allowCustomValue` does not emit it. |
+| `update:modelValue` | `value: string` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#option` | `{ option: KunAutocompleteOption; index: number; active: boolean; selected: boolean; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/autocomplete

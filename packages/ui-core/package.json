@@ -43,6 +43,7 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "gen:icons": "node scripts/gen-icons.mjs",
+    "gen:scales": "node scripts/gen-tw-scales.mjs",
     "clean": "rm -rf dist"
   },
   "dependencies": {

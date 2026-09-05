@@ -26,5 +26,8 @@ const stepsProps = meta.KunSteps.props
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="stepsProps" />
+
+    <EventsTable :rows="meta.KunSteps.events" />
+    <SlotsTable :rows="meta.KunSteps.slots" />
   </article>
 </template>

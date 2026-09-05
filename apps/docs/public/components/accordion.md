@@ -72,5 +72,17 @@ const open = ref<string[]>(['a'])
 | `multiple` | `boolean` | `false` | Allow multiple sections open at once (default single-open). |
 | `variant` | `"light" \| "bordered" \| "splitted"` | `"light"` |  |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `update:modelValue` | `value: string \| string[]` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/accordion

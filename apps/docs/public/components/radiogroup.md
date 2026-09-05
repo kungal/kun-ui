@@ -156,21 +156,28 @@ const options: KunRadioOption[] = [
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `modelValue` * | `KunRadioValue` | — |  |
+| `options` * | `readonly KunRadioOption<KunRadioValue>[]` | — |  |
+| `ariaLabel` | `string` | `""` |  |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `hideIndicator` | `boolean` | `false` | `card` variant only: drop the radio-dot indicator and signal selection with the tinted border/fill alone (the icon-card look). No effect on classic/pill. |
+| `label` | `string` | `""` |  |
+| `orientation` | `KunRadioOrientation` | `"vertical"` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `variant` | `KunRadioVariant` | `"classic"` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `modelValue` * | `KunRadioValue` | — |
-| `options` * | `readonly KunRadioOption<KunRadioValue>[]` | — |
-| `ariaLabel` | `string` | `""` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `hideIndicator` | `boolean` | `false` |
-| `label` | `string` | `""` |
-| `orientation` | `KunRadioOrientation` | `"vertical"` |
-| `rounded` | `KunUIRounded` | — |
-| `size` | `KunUISize` | `"md"` |
-| `variant` | `KunRadioVariant` | `"classic"` |
+| `change` | `value: KunRadioValue, index: number` | The newly selected value and its index. Not fired for a click on the already-selected option. |
+| `update:modelValue` | `value: KunRadioValue` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/radiogroup

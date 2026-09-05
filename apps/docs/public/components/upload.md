@@ -55,15 +55,21 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `aspect` * | `number` | — |  |
+| `size` * | `number` | — |  |
+| `className` | `string` | `""` |  |
+| `description` | `string` | `""` | Helper text below the dropzone. Canonical name. |
+| `hint` | `string` | `""` |  |
+| `initialImage` | `string` | `""` |  |
+| `rounded` | `KunUIRounded` | — |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `aspect` * | `number` | — |
-| `size` * | `number` | — |
-| `className` | `string` | `""` |
-| `description` | `string` | `""` |
-| `hint` | `string` | `""` |
-| `initialImage` | `string` | `""` |
-| `rounded` | `KunUIRounded` | — |
+| `setImage` | `img: Blob` | The cropped image, once the user applies the crop. |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/upload

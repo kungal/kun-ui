@@ -29,5 +29,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTagInput.props" />
+
+    <EventsTable :rows="meta.KunTagInput.events" />
+    <SlotsTable :rows="meta.KunTagInput.slots" />
   </article>
 </template>

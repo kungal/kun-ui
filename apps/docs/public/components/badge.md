@@ -97,18 +97,24 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `ariaLabel` | `string` | — |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"danger"` |
-| `count` | `number` | `0` |
-| `max` | `number` | `99` |
-| `placement` | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left"` | `"top-right"` |
-| `show` | `boolean` | `true` |
-| `showZero` | `boolean` | `false` |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` |
-| `variant` | `"count" \| "dot"` | `"count"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ariaLabel` | `string` | — | Accessible name (e.g. "5 条未读"). Without an anchor slot the badge renders standalone (inline), not as a corner overlay. |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"danger"` |  |
+| `count` | `number` | `0` |  |
+| `max` | `number` | `99` |  |
+| `placement` | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left"` | `"top-right"` |  |
+| `show` | `boolean` | `true` |  |
+| `showZero` | `boolean` | `false` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` |  |
+| `variant` | `"count" \| "dot"` | `"count"` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/badge

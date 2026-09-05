@@ -38,6 +38,10 @@ const props = withDefaults(defineProps<KunNumberInputProps>(), {
 const modelValue = defineModel<number | null>({ default: null })
 
 const emit = defineEmits<{
+  /**
+   * The committed value — after clamp/precision on blur or a stepper press.
+   * `null` when the field is cleared.
+   */
   change: [value: number | null]
 }>()
 

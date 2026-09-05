@@ -26,5 +26,8 @@ const skeletonProps = meta.KunSkeleton.props
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="skeletonProps" />
+
+    <EventsTable :rows="meta.KunSkeleton.events" />
+    <SlotsTable :rows="meta.KunSkeleton.slots" />
   </article>
 </template>

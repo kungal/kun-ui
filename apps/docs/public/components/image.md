@@ -285,25 +285,32 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
 | `src` * | `string` | — |  |
 | `alt` | `string` | `"image"` |  |
 | `ariaLabel` | `string` | — |  |
-| `aspectRatio` | `string` | — |  |
+| `aspectRatio` | `string` | — | CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image is absolutely positioned and fills the box. |
 | `className` | `string` | — |  |
 | `decoding` | `"auto" \| "sync" \| "async"` | — |  |
 | `densities` | `string` | — |  |
-| `fallbackSrc` | `string` | — |  |
+| `fallbackSrc` | `string` | — | Shown if `src` fails to load (broken URL, 404). Resets when `src` changes. |
 | `fetchpriority` | `"auto" \| "high" \| "low"` | — |  |
 | `format` | `string` | — |  |
 | `height` | `string \| number` | — |  |
-| `imageClassName` | `string` | — |  |
+| `imageClassName` | `string` | — | Classes for the inner image (wrapper gets `className`). |
 | `loading` | `"lazy" \| "eager"` | `"lazy"` |  |
 | `objectFit` | `"fill" \| "none" \| "cover" \| "contain" \| "scale-down"` | `"cover"` |  |
 | `placeholder` | `string \| number \| boolean \| [w: number, h: number, q?: number, b?: number]` | — |  |
 | `preload` | `boolean \| { fetchPriority: "auto" \| "high" \| "low"; }` | — |  |
-| `provider` | `"none" \| (string & {}) \| "ipx"` | — |  |
+| `provider` | `"none" \| (string & {}) \| "ipx"` | — | Which |
 | `quality` | `string \| number` | — |  |
-| `sizes` | `string` | — |  |
-| `skeleton` | `boolean` | `true` |  |
+| `sizes` | `string` | — | Responsive `sizes` hint for |
+| `skeleton` | `boolean` | `true` | Renders a sibling skeleton overlay while loading (Radix-Avatar 3-state machine). Default true; set false for a bare element. |
 | `thumbhash` | `string` | — | A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`. |
 | `width` | `string \| number` | — |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `error` | `src: string, event?: Event` |
+| `load` | `src: string, event?: Event` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/image

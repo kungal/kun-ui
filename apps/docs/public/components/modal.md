@@ -233,13 +233,26 @@ const open = ref(false)
 | `isDismissable` | `boolean` | `true (backdrop excluded when role="alertdialog")` | Whether a backdrop click or Escape closes the dialog. `role="alertdialog"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off. |
 | `isShowCloseButton` | `boolean` | `true` |  |
 | `isSwipeDismissable` | `boolean` | `true` | Whether dragging the phone sheet downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies where the sheet exists — `placement="auto"` below `md`, on a touch-primary pointer — and only while the content is scrolled to the top, so a swipe over scrollable content still scrolls it. Follows `isDismissable`, so a `role="alertdialog"` cannot be swiped away any more than it can be clicked away. |
-| `placement` | `KunModalPlacement` | `"auto"` |  |
-| `role` | `"dialog" \| "alertdialog"` | `"dialog"` |  |
+| `placement` | `KunModalPlacement` | `"auto"` | Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones, a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of centring at every width. |
+| `role` | `"dialog" \| "alertdialog"` | `"dialog"` | ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts that need an immediate response — it also flips the isDismissable default. Default 'dialog'. |
 | `rounded` | `KunUIRounded` | — |  |
-| `scrollBehavior` | `"inside" \| "outside"` | `"inside"` |  |
-| `size` | `KunModalSize` | `"md"` |  |
+| `scrollBehavior` | `"inside" \| "outside"` | `"inside"` | inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it — and never taller than the visible viewport, so the on-screen keyboard can't bury it. outside: the whole overlay scrolls — for panels taller than the viewport. |
+| `size` | `KunModalSize` | `"md"` | Max width of the panel (full = nearly the whole viewport). Default 'md'. |
 | `title` | `string` | `""` | Rendered as the panel's `<h2>` and wired to `aria-labelledby`, so the name a screen reader announces is the one on screen. Prefer it over `ariaLabel`. |
 | `withContainer` | `boolean` | `true` |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `close` | — |
+| `update:modelValue` | `value: boolean` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/modal

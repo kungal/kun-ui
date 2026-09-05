@@ -30,6 +30,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const helper = computed(() => props.description || props.hint)
 
 const emits = defineEmits<{
+  /** The cropped image, once the user applies the crop. */
   setImage: [img: Blob]
 }>()
 

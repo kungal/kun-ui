@@ -100,5 +100,18 @@
 | `type` | `"button" \| "submit" \| "reset"` | `"button"` |  |
 | `variant` | `KunUIVariant` | `"solid"` |  |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `click` | `event: MouseEvent` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#icon` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/button

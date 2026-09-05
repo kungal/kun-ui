@@ -21,5 +21,8 @@ const itemProps = meta.KunTimelineItem.props
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">KunTimelineItem 属性</h2>
     <PropsTable :rows="itemProps" />
+
+    <EventsTable :rows="meta.KunTimelineItem.events" />
+    <SlotsTable :rows="meta.KunTimelineItem.slots" />
   </article>
 </template>

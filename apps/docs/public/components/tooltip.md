@@ -77,16 +77,23 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `className` | `string` | `""` |
-| `delayHide` | `number` | `0` |
-| `delayShow` | `number` | `100` |
-| `hideOnMobile` | `boolean` | `true` |
-| `position` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |
-| `rounded` | `KunUIRounded` | — |
-| `showArrow` | `boolean` | `false` |
-| `text` | `string` | `""` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `className` | `string` | `""` |  |
+| `delayHide` | `number` | `0` |  |
+| `delayShow` | `number` | `100` |  |
+| `hideOnMobile` | `boolean` | `true` |  |
+| `position` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `showArrow` | `boolean` | `false` | Render a caret pointing at the trigger. |
+| `text` | `string` | `""` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#content` | — |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/tooltip

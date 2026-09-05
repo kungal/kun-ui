@@ -93,16 +93,22 @@ const accept = ref(false)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `modelValue` * | `boolean` | — |
-| `className` | `string` | `""` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `label` | `string` | `""` |
-| `labelClassName` | `string` | `""` |
-| `size` | `KunUISize` | `"md"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `modelValue` * | `boolean` | — |  |
+| `className` | `string` | `""` |  |
+| `description` | `string` | `""` | Helper text below the switch (hidden when `error` is set). |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` | Error message (red text below). Takes precedence over description. |
+| `label` | `string` | `""` |  |
+| `labelClassName` | `string` | `""` |  |
+| `size` | `KunUISize` | `"md"` |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `update:modelValue` | `value: boolean` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/switch

@@ -168,5 +168,20 @@ const clicks = ref(0)
 | `padding` | `KunCardPadding` | `"lg"` | Inner padding. Default `lg` (24px). |
 | `rounded` | `KunUIRounded` | — |  |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `click` | `event: MouseEvent` | The card's native click. Emitted in all three render modes (div / button / link), so a plain `<KunCard @click>` works. |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#cover` | — |
+| `#default` | — |
+| `#footer` | — |
+| `#header` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/card

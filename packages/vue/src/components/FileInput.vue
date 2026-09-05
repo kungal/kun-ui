@@ -33,7 +33,9 @@ const file = defineModel<File | null>({ default: null })
 const filesModel = defineModel<File[]>('files', { default: () => [] })
 
 const emit = defineEmits<{
+  /** The files that passed `accept` and `maxSize`. */
   change: [picked: File[]]
+  /** A human-readable reason a picked file was rejected. */
   errorPick: [message: string]
 }>()
 

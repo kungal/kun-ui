@@ -198,6 +198,13 @@ export const useCalendar = (props: {
     return props.isDateDisabled?.value?.(start) ?? false
   }
 
+  // `今天` bypasses the grid, so it has to run the same bounds check a cell does
+  // or a `maxDate` in the past keeps a one-click way to commit today.
+  const isTodayDisabled = computed(() => {
+    const today = startOfDay(new Date())
+    return isPeriodDisabled(today, today)
+  })
+
   const calendarGrid = computed(() => {
     const firstDayOfMonth = startOfMonth(viewingDate.value)
     const lastDayOfMonth = endOfMonth(viewingDate.value)
@@ -351,6 +358,7 @@ export const useCalendar = (props: {
     calendarGrid,
     monthGrid,
     yearGrid,
+    isTodayDisabled,
     decadeLabel,
     navigateMonth,
     navigateYear,

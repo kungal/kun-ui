@@ -57,5 +57,12 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
 | `loading` | `"lazy" \| "eager"` | `"lazy"` |
 | `width` | `string \| number` | — |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `error` | `src: string, event: Event` |
+| `load` | `src: string, event: Event` |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/imagenative

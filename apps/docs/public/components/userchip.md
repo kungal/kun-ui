@@ -87,15 +87,15 @@ const user: KunUser = {
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `user` * | `KunUser \| null` | — |
-| `className` | `string` | `""` |
-| `description` | `string` | `""` |
-| `disableFloating` | `boolean` | `false` |
-| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |
-| `isNavigation` | `boolean` | `true` |
-| `size` | `KunAvatarSize` | `"md"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `user` * | `KunUser \| null` | — |  |
+| `className` | `string` | `""` |  |
+| `description` | `string` | `""` |  |
+| `disableFloating` | `boolean` | `false` |  |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |  |
+| `isNavigation` | `boolean` | `true` | When true (default) and the user has an id, the whole chip is a real <a>/link to the user's profile (crawlable, name as anchor text). |
+| `size` | `KunAvatarSize` | `"md"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/userchip

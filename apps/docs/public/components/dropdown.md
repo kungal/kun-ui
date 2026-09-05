@@ -137,5 +137,19 @@ const items: KunDropdownItem[] = [
 | `position` | `Placement` | `"bottom-start"` |
 | `triggerClass` | `string` | `""` |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `close` | — | The menu closed, for any reason. |
+| `open` | — | The menu opened. |
+| `select` | `item: KunContextMenuItem` | The item the user activated. A disabled item never emits. |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#trigger` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/dropdown

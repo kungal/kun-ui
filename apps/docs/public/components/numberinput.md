@@ -202,28 +202,35 @@ const v = ref<number | null>(42)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ariaLabel` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"default"` |  |
+| `controls` | `boolean` | `true` | Show the −/+ stepper buttons (default true). |
+| `darkBorder` | `boolean` | `true` |  |
+| `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `isInvalid` | `boolean` | `false` |  |
+| `label` | `string` | `""` |  |
+| `max` | `number` | `Number.POSITIVE_INFINITY` |  |
+| `min` | `number` | `Number.NEGATIVE_INFINITY` |  |
+| `modelValue` | `number \| null` | `null` |  |
+| `name` | `string` | — | Native form field name (emits a hidden input mirroring the value). |
+| `placeholder` | `string` | `""` |  |
+| `precision` | `number` | — | Round/display to this many decimal places. |
+| `readonly` | `boolean` | `false` |  |
+| `required` | `boolean` | `false` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `step` | `number` | `1` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `ariaLabel` | `string` | `""` |
-| `color` | `KunUIColor` | `"default"` |
-| `controls` | `boolean` | `true` |
-| `darkBorder` | `boolean` | `true` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `isInvalid` | `boolean` | `false` |
-| `label` | `string` | `""` |
-| `max` | `number` | `Number.POSITIVE_INFINITY` |
-| `min` | `number` | `Number.NEGATIVE_INFINITY` |
-| `modelValue` | `number \| null` | `null` |
-| `name` | `string` | — |
-| `placeholder` | `string` | `""` |
-| `precision` | `number` | — |
-| `readonly` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
-| `rounded` | `KunUIRounded` | — |
-| `size` | `KunUISize` | `"md"` |
-| `step` | `number` | `1` |
+| `change` | `value: number \| null` | The committed value — after clamp/precision on blur or a stepper press. `null` when the field is cleared. |
+| `update:modelValue` | `value: number \| null` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/numberinput

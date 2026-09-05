@@ -95,18 +95,18 @@ const progress = ref(40)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `ariaLabel` | `string` | `""` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `indeterminate` | `boolean` | `false` |
-| `max` | `number` | `100` |
-| `rounded` | `KunUIRounded` | — |
-| `showLabel` | `boolean` | `false` |
-| `size` | `KunUISize` | `"md"` |
-| `value` | `number` | `0` |
-| `variant` | `KunUIVariant \| "gradient" \| "circle" \| "striped"` | `"solid"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ariaLabel` | `string` | `""` | Accessible name for the progressbar (e.g. "上传进度"). |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `indeterminate` | `boolean` | `false` |  |
+| `max` | `number` | `100` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `showLabel` | `boolean` | `false` |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `value` | `number` | `0` |  |
+| `variant` | `KunUIVariant \| "gradient" \| "circle" \| "striped"` | `"solid"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/progress

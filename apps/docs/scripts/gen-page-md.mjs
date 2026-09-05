@@ -93,6 +93,36 @@ function propsSection(title) {
   return `## Props\n\n| ${head} |\n| ${sep} |\n${rows.join('\n')}`
 }
 
+// Events and slots ride the same metadata as the props table. A component's
+// emits and scoped slots are public API and used to appear in no generated
+// surface at all, so an agent reading `<route>.md` could not discover `@search`
+// or `#option` without opening the SFC.
+function signatureSection(title, heading, key, format) {
+  const rows = meta[`Kun${title}`]?.[key]
+  if (!rows?.length) return ''
+  const described = rows.some((r) => r.description)
+  const body = rows.map((r) => {
+    const cells = format(r)
+    if (described) cells.push(esc(r.description ?? ''))
+    return `| ${cells.join(' | ')} |`
+  })
+  const head = described ? `${heading} | 说明` : heading
+  const sep = heading.split('|').length + (described ? 1 : 0)
+  return `## ${key === 'events' ? 'Events' : 'Slots'}\n\n| ${head} |\n| ${Array(sep).fill('---').join(' | ')} |\n${body.join('\n')}`
+}
+
+const eventsSection = (title) =>
+  signatureSection(title, '事件 | 回调参数', 'events', (r) => [
+    `\`${esc(r.name)}\``,
+    r.type ? `\`${esc(r.type)}\`` : '—',
+  ])
+
+const slotsSection = (title) =>
+  signatureSection(title, '插槽 | 作用域', 'slots', (r) => [
+    `\`#${esc(r.name)}\``,
+    r.type === '{}' ? '—' : `\`${esc(r.type)}\``,
+  ])
+
 function buildMarkdown(route, m) {
   const url = `${site.url}${route}`
   const parts = [`# ${pageTitle(m)}`, '']
@@ -102,9 +132,14 @@ function buildMarkdown(route, m) {
     const slug = route.slice('/components/'.length)
     const ex = examplesSection(slug)
     const pr = propsSection(m.title)
+    const ev = eventsSection(m.title)
+    const sl = slotsSection(m.title)
     if (ex) parts.push(ex, '')
     if (pr) parts.push(pr, '')
+    if (ev) parts.push(ev, '')
+    if (sl) parts.push(sl, '')
     if (!ex && !pr) parts.push(`完整组件参考见 ${site.url}/llms-full.txt`, '')
+
   } else {
     parts.push(`完整集成指南与组件参考见 ${site.url}/llms-full.txt`, '')
   }

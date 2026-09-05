@@ -56,9 +56,15 @@ const loading = ref(true)
 | --- | --- | --- | --- |
 | `description` | `string` | `"正在摸鱼中...咕咕咕"` |  |
 | `loading` | `boolean` | `false` |  |
-| `size` | `KunUISize` | `"md"` |  |
-| `spinner` | `boolean` | `false` |  |
+| `size` | `KunUISize` | `"md"` | Spinner size (spinner mode only). Default 'md'. |
+| `spinner` | `boolean` | `false` | Render a compact spinner icon instead of the full mascot image — for small inline loading states (next to a button, a table cell, etc.). |
 | `src` | `string` | `KUN_LOADING_IMAGE` | Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed). Pass any URL or data URI to override. |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/loading

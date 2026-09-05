@@ -88,5 +88,12 @@ const lg = ref(3)
 | `readonly` | `boolean` | `false` |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `set` | `value: number` | The value the user clicked. Never emitted while `readonly` or `disabled`. |
+| `update:modelValue` | `value: number` |  |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/rating

@@ -147,15 +147,22 @@ const pin = ref('12')
 | `autofocus` | `boolean` | `false` | Focus the first cell on mount. Focus is moved with `preventScroll` (see KunInput), so a code field below the fold never yanks the page to itself. |
 | `color` | `KunUIColor` | `"primary"` |  |
 | `disabled` | `boolean` | `false` |  |
-| `isInvalid` | `boolean` | `false` |  |
-| `length` | `number` | `6` |  |
-| `mask` | `boolean` | `false` |  |
+| `isInvalid` | `boolean` | `false` | Mark every cell invalid (danger ring). |
+| `length` | `number` | `6` | Number of cells (code length). |
+| `mask` | `boolean` | `false` | Render each filled cell as a • (one-time codes / passcodes). |
 | `modelValue` | `string` | `""` |  |
-| `name` | `string` | — |  |
+| `name` | `string` | — | Native form field name (emits a hidden input mirroring the joined value). |
 | `placeholder` | `string` | `""` |  |
 | `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
-| `type` | `"text" \| "numeric"` | `"numeric"` |  |
+| `type` | `"text" \| "numeric"` | `"numeric"` | numeric → digits only + inputmode numeric; text → any single char. |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `complete` | `value: string` | Fired once every cell is filled. |
+| `update:modelValue` | `value: string` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/pininput

@@ -19,8 +19,10 @@ const props = withDefaults(defineProps<KunSliderProps>(), {
 })
 
 const emit = defineEmits<{
-  // Fired once on commit (pointer release / keyboard), for forms that only
-  // care about the final value — `update:modelValue` still streams live.
+  /**
+   * Fired once on commit (pointer release / keyboard), for forms that only care
+   * about the final value — `update:modelValue` still streams live.
+   */
   change: [value: number]
 }>()
 

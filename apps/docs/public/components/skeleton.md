@@ -66,5 +66,11 @@ const loaded = ref(false)
 | `variant` | `"text" \| "circle" \| "rect"` | `"rect"` | Shape preset: `rect` block, `text` line, or `circle` (avatar). |
 | `width` | `string` | `""` | CSS width. Defaults: rect/text 100%, circle = height. |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/skeleton

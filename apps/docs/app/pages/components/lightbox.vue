@@ -25,8 +25,14 @@ import meta from '~/generated/component-meta.json'
     <h2 class="mt-10 mb-1 text-xl font-semibold">KunLightboxGalleryItem 属性</h2>
     <PropsTable :rows="meta.KunLightboxGalleryItem.props" />
 
+    <EventsTable :rows="meta.KunLightboxGalleryItem.events" />
+    <SlotsTable :rows="meta.KunLightboxGalleryItem.slots" />
+
     <h2 class="mt-8 mb-1 text-xl font-semibold">KunLightbox 属性(独立使用)</h2>
     <PropsTable :rows="meta.KunLightbox.props" />
+
+    <EventsTable :rows="meta.KunLightbox.events" />
+    <SlotsTable :rows="meta.KunLightbox.slots" />
 
     <p class="text-default-500 mt-6 text-sm">
       <code class="text-primary">KunLightboxGallery</code> 没有属性 —— 它只是包裹这些项。

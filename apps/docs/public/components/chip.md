@@ -107,14 +107,28 @@ const remove = (tag: string) => {
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `className` | `string` | `""` |
-| `closable` | `boolean` | `false` |
-| `color` | `KunUIColor` | `"default"` |
-| `disabled` | `boolean` | `false` |
-| `size` | `KunUISize` | `"sm"` |
-| `variant` | `KunUIVariant` | `"flat"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `className` | `string` | `""` |  |
+| `closable` | `boolean` | `false` | Render a × that emits `close` (removable tag — filters, tag inputs). |
+| `color` | `KunUIColor` | `"default"` |  |
+| `disabled` | `boolean` | `false` |  |
+| `size` | `KunUISize` | `"sm"` |  |
+| `variant` | `KunUIVariant` | `"flat"` |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `close` | — |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#end` | — |
+| `#start` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/chip

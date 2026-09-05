@@ -79,6 +79,14 @@ const hoveredDate = ref<Date | null>(null)
 
 const kunUniqueId = useKunUniqueId('kun-datepicker')
 const panelId = computed(() => `${kunUniqueId.value}-panel`)
+// The trigger's `aria-controls` names the GRID, not the panel around it. ARIA
+// 1.2 lets a combobox keep DOM focus and point `aria-activedescendant` into its
+// popup only when "aria-controls refers to an element that supports
+// aria-activedescendant" — `dialog` is not in that list, `grid` is. The panel
+// was `role="dialog" aria-modal="true"` with focus outside it, which claimed the
+// rest of the page was inert while the focused element sat on it.
+const gridId = computed(() => `${kunUniqueId.value}-grid`)
+
 
 // The calendar panel is teleported to <body>, so it is NOT a DOM descendant of
 // datePickerRef — without this guard every tap inside it (month/year nav, etc.)
@@ -131,6 +139,7 @@ const {
   calendarGrid,
   monthGrid,
   yearGrid,
+  isTodayDisabled,
   decadeLabel,
   navigateMonth,
   navigateYear,
@@ -362,7 +371,20 @@ const clearDate = () => {
   emit('update:modelValue', newValue)
 }
 
+// `role="grid"` is only meaningful with `role="row"` between it and the cells:
+// without the rows a screen reader reads 42 cells as one flat list and loses
+// "column 3 of 7" entirely. Each row is its own CSS grid, which lays out
+// identically to the single grid it replaces because every row is full.
+const chunk = <C,>(cells: readonly C[], size: number): C[][] =>
+  Array.from({ length: Math.ceil(cells.length / size) }, (_, i) =>
+    cells.slice(i * size, i * size + size)
+  )
+const dayRows = computed(() => chunk(calendarGrid.value, 7))
+const monthRows = computed(() => chunk(monthGrid.value, 3))
+const yearRows = computed(() => chunk(yearGrid.value, 3))
+
 // One class builder for both coarse grids — they differ only in what a cell
+
 // stands for. Literal strings so they survive into `dist/index.js` for the
 // consumer's Tailwind to find.
 const periodCellClass = (cell: {
@@ -418,9 +440,9 @@ const isInPreviewRange = (date: Date) => {
         ref="triggerRef"
         role="combobox"
         :tabindex="disabled ? -1 : 0"
-        aria-haspopup="dialog"
+        aria-haspopup="grid"
         :aria-expanded="isOpen"
-        :aria-controls="panelId"
+        :aria-controls="gridId"
         :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
         :aria-label="label ? undefined : resolvedPlaceholder"
         :aria-disabled="disabled || undefined"
@@ -487,8 +509,6 @@ const isInPreviewRange = (date: Date) => {
             )
           "
           :style="[floatingStyles, { minWidth: '260px', transformOrigin }]"
-          role="dialog"
-          aria-modal="true"
           tabindex="-1"
           @keydown="onPanelKeydown"
         >
@@ -529,100 +549,149 @@ const isInPreviewRange = (date: Date) => {
             </div>
           </div>
 
-          <div v-if="view === 'day'" class="text-default-600 mt-3 grid grid-cols-7 text-center text-xs">
+          <!-- aria-hidden, following react-aria's useCalendarGrid: "Column
+               headers are hidden to screen readers to make navigating with a
+               touch screen reader easier. The day names are already included in
+               the label of each cell." Ours are — the cell label is a full
+               `toDateString()`. -->
+          <div
+            v-if="view === 'day'"
+            class="text-default-600 mt-3 grid grid-cols-7 text-center text-xs"
+            aria-hidden="true"
+          >
             <div v-for="day in i18n.weekdays" :key="day" class="p-1 font-medium">
               {{ day }}
             </div>
           </div>
 
-          <div v-if="view === 'day'" class="mt-1 grid grid-cols-7" role="grid">
-            <div v-for="day in calendarGrid" :key="day.key" class="p-0.5" role="gridcell">
-              <button
-                :id="cellId(day.key)"
-                type="button"
-                :disabled="day.isDisabled"
-                :class="
-                  cn(
-                    cn(
-                      'flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors',
-                      kunFocusRingClasses[color]
-                    ),
-                    !day.isCurrentMonth && 'text-default-400',
-                    day.isToday && 'border-primary bg-primary/20 border',
-                    !day.isSelected && !day.isDisabled && 'hover:bg-default/20',
-                    day.isDisabled && 'cursor-not-allowed opacity-50',
-                    // bg-primary + its generated on-color (mode-correct token,
-                    // no dark: pin needed).
-                    day.isSelected &&
-                      'bg-primary text-primary-foreground hover:bg-primary/90',
-                    (day.isInRange || isInPreviewRange(day.date)) &&
-                      !day.isSelected &&
-                      'bg-primary/10 rounded-none',
-                    day.isRangeStart && 'rounded-r-none',
-                    day.isRangeEnd && 'rounded-l-none'
-                  )
-                "
-                :aria-label="day.date.toDateString()"
-                :aria-selected="day.isSelected"
-                :tabindex="day.key === activeKey ? 0 : -1"
-                @click="handleCellSelect(day.date)"
-                @mouseenter="hoveredDate = day.date"
-                @mouseleave="hoveredDate = null"
+          <div
+            v-if="view === 'day'"
+            :id="gridId"
+            class="mt-1"
+            role="grid"
+            :aria-label="headerLabel"
+          >
+            <div
+              v-for="(week, weekIndex) in dayRows"
+              :key="weekIndex"
+              class="grid grid-cols-7"
+              role="row"
+            >
+              <div
+                v-for="day in week"
+                :key="day.key"
+                class="p-0.5"
+                role="gridcell"
               >
-                {{ day.dayOfMonth }}
-              </button>
+                <button
+                  :id="cellId(day.key)"
+                  type="button"
+                  :disabled="day.isDisabled"
+                  :class="
+                    cn(
+                      cn(
+                        'flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors',
+                        kunFocusRingClasses[color]
+                      ),
+                      !day.isCurrentMonth && 'text-default-400',
+                      day.isToday && 'border-primary bg-primary/20 border',
+                      !day.isSelected && !day.isDisabled && 'hover:bg-default/20',
+                      day.isDisabled && 'cursor-not-allowed opacity-50',
+                      // bg-primary + its generated on-color (mode-correct token,
+                      // no dark: pin needed).
+                      day.isSelected &&
+                        'bg-primary text-primary-foreground hover:bg-primary/90',
+                      (day.isInRange || isInPreviewRange(day.date)) &&
+                        !day.isSelected &&
+                        'bg-primary/10 rounded-none',
+                      day.isRangeStart && 'rounded-r-none',
+                      day.isRangeEnd && 'rounded-l-none'
+                    )
+                  "
+                  :aria-label="day.date.toDateString()"
+                  :aria-selected="day.isSelected"
+                  :tabindex="day.key === activeKey ? 0 : -1"
+                  @click="handleCellSelect(day.date)"
+                  @mouseenter="hoveredDate = day.date"
+                  @mouseleave="hoveredDate = null"
+                >
+                  {{ day.dayOfMonth }}
+                </button>
+              </div>
             </div>
           </div>
 
           <div
             v-else-if="view === 'month'"
-            class="mt-3 grid grid-cols-3"
+            :id="gridId"
+            class="mt-3"
             role="grid"
+            :aria-label="headerLabel"
           >
             <div
-              v-for="cell in monthGrid"
-              :key="cell.key"
-              class="p-0.5"
-              role="gridcell"
+              v-for="(row, rowIndex) in monthRows"
+              :key="rowIndex"
+              class="grid grid-cols-3"
+              role="row"
             >
-              <button
-                :id="cellId(cell.key)"
-                type="button"
-                :disabled="cell.isDisabled"
-                :class="periodCellClass(cell)"
-                :aria-label="`${cell.label} ${cell.date.getFullYear()}`"
-                :aria-selected="cell.isSelected"
-                :tabindex="cell.key === activeKey ? 0 : -1"
-                @click="handleCellSelect(cell.date)"
-                @mouseenter="hoveredDate = cell.date"
-                @mouseleave="hoveredDate = null"
+              <div
+                v-for="cell in row"
+                :key="cell.key"
+                class="p-0.5"
+                role="gridcell"
               >
-                {{ cell.label }}
-              </button>
+                <button
+                  :id="cellId(cell.key)"
+                  type="button"
+                  :disabled="cell.isDisabled"
+                  :class="periodCellClass(cell)"
+                  :aria-label="`${cell.label} ${cell.date.getFullYear()}`"
+                  :aria-selected="cell.isSelected"
+                  :tabindex="cell.key === activeKey ? 0 : -1"
+                  @click="handleCellSelect(cell.date)"
+                  @mouseenter="hoveredDate = cell.date"
+                  @mouseleave="hoveredDate = null"
+                >
+                  {{ cell.label }}
+                </button>
+              </div>
             </div>
           </div>
 
-          <div v-else class="mt-3 grid grid-cols-3" role="grid">
+          <div
+            v-else
+            :id="gridId"
+            class="mt-3"
+            role="grid"
+            :aria-label="headerLabel"
+          >
             <div
-              v-for="cell in yearGrid"
-              :key="cell.key"
-              class="p-0.5"
-              role="gridcell"
+              v-for="(row, rowIndex) in yearRows"
+              :key="rowIndex"
+              class="grid grid-cols-3"
+              role="row"
             >
-              <button
-                :id="cellId(cell.key)"
-                type="button"
-                :disabled="cell.isDisabled"
-                :class="periodCellClass(cell)"
-                :aria-label="cell.key"
-                :aria-selected="cell.isSelected"
-                :tabindex="cell.key === activeKey ? 0 : -1"
-                @click="handleCellSelect(cell.date)"
-                @mouseenter="hoveredDate = cell.date"
-                @mouseleave="hoveredDate = null"
+              <div
+                v-for="cell in row"
+                :key="cell.key"
+                class="p-0.5"
+                role="gridcell"
               >
-                {{ cell.label }}
-              </button>
+                <button
+                  :id="cellId(cell.key)"
+                  type="button"
+                  :disabled="cell.isDisabled"
+                  :class="periodCellClass(cell)"
+                  :aria-label="cell.key"
+                  :aria-selected="cell.isSelected"
+                  :tabindex="cell.key === activeKey ? 0 : -1"
+                  @click="handleCellSelect(cell.date)"
+                  @mouseenter="hoveredDate = cell.date"
+                  @mouseleave="hoveredDate = null"
+                >
+                  {{ cell.label }}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -631,6 +700,7 @@ const isInPreviewRange = (date: Date) => {
               v-if="precision === 'day'"
               size="sm"
               variant="light"
+              :disabled="isTodayDisabled"
               @click="handleDateSelect(new Date())"
             >
               今天

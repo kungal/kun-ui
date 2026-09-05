@@ -92,25 +92,40 @@ const b = ref<File | null>(null)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `accept` | `string` | `""` |  |
+| `className` | `string` | `""` |  |
+| `description` | `string` | `""` | Helper text below the trigger (hidden when `error` is set). Canonical name. |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `files` | `File[]` | `[]` |  |
+| `fullWidth` | `boolean` | `false` |  |
+| `hint` | `string` | `""` |  |
+| `maxSize` | `number` | — |  |
+| `modelValue` | `File \| null` | `null` |  |
+| `multiple` | `boolean` | `false` |  |
+| `showFileName` | `boolean` | `true` |  |
+| `triggerColor` | `KunUIColor` | `"primary"` |  |
+| `triggerIcon` | `string` | `"lucide:upload"` |  |
+| `triggerSize` | `KunUISize` | `"md"` |  |
+| `triggerText` | `string` | `"选择文件"` |  |
+| `triggerVariant` | `KunUIVariant` | `"flat"` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `accept` | `string` | `""` |
-| `className` | `string` | `""` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `files` | `File[]` | `[]` |
-| `fullWidth` | `boolean` | `false` |
-| `hint` | `string` | `""` |
-| `maxSize` | `number` | — |
-| `modelValue` | `File \| null` | `null` |
-| `multiple` | `boolean` | `false` |
-| `showFileName` | `boolean` | `true` |
-| `triggerColor` | `KunUIColor` | `"primary"` |
-| `triggerIcon` | `string` | `"lucide:upload"` |
-| `triggerSize` | `KunUISize` | `"md"` |
-| `triggerText` | `string` | `"选择文件"` |
-| `triggerVariant` | `KunUIVariant` | `"flat"` |
+| `change` | `picked: File[]` | The files that passed `accept` and `maxSize`. |
+| `errorPick` | `message: string` | A human-readable reason a picked file was rejected. |
+| `update:files` | `value: File[]` |  |
+| `update:modelValue` | `value: File \| null` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | `{ pick: () => void; disabled: boolean; fileName: string \| null; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/fileinput

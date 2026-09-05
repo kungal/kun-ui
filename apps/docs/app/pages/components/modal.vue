@@ -61,5 +61,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunModal.props" />
+
+    <EventsTable :rows="meta.KunModal.events" />
+    <SlotsTable :rows="meta.KunModal.slots" />
   </article>
 </template>

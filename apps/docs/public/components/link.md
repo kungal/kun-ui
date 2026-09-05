@@ -75,5 +75,13 @@
 | `to` | `string \| Record<string, string>` | `""` |  |
 | `underline` | `"none" \| "always" \| "hover"` | `"always"` |  |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#prefix` | — |
+| `#suffix` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/link

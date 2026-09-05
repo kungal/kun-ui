@@ -100,5 +100,12 @@
 | `title` | `string` | `""` | Plain-text heading. For markup inside the heading (a link, a badge) use the `title` slot — it renders in the same row, after this text. |
 | `variant` | `KunUIVariant` | `"flat"` | Visual treatment. `solid` / `shadow` fill the box and take a contrast-correct foreground; `flat`, `light` and `bordered` use a soft tint of the colour with dark coloured text. |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#title` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/info

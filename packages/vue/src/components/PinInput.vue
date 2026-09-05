@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<KunPinInputProps>(), {
 const modelValue = defineModel<string>({ default: '' })
 
 const emit = defineEmits<{
-  // Fired once every cell is filled.
+  /** Fired once every cell is filled. */
   complete: [value: string]
 }>()
 

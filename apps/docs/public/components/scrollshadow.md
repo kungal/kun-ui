@@ -73,7 +73,7 @@ const ratings = [
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `"scrollable content"` |  |
+| `ariaLabel` | `string` | `"scrollable content"` | Accessible name for the scrollable region. Default 'scrollable content'. |
 | `axis` | `"horizontal" \| "vertical"` | `"horizontal"` |  |
 | `className` | `string` | `""` |  |
 | `contentClass` | `string` | `""` |  |
@@ -82,6 +82,12 @@ const ratings = [
 | `shadowColor` | `string` | `"var(--color-background)"` |  |
 | `shadowSize` | `string` | `"2rem"` |  |
 | `wheel` | `boolean \| "contain"` | `false` | When `axis='horizontal'`, let a vertical mouse wheel scroll the content sideways (mouse users otherwise can't reach off-screen content; trackpads and touch already can). `true` releases at either edge so the page scrolls on past (no scroll-trap); `'contain'` keeps the wheel on the strip at the edges so the page doesn't move — but only while the strip is actually scrollable, so it can never freeze the page. Default false. |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/scrollshadow

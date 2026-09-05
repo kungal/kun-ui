@@ -192,5 +192,11 @@ const date = ref('')
 | `valueFormat` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the emitted v-model string. Defaults follow `precision`; keep it ISO-shaped so the value parses back. |
 | `weekdays` | `string[]` | — |  |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `update:modelValue` | `value: string \| [string \| null, string \| null] \| null` |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/datepicker

@@ -56,7 +56,17 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const modelValue = defineModel<T | T[] | null>({ required: true })
 
 const emit = defineEmits<{
+  /**
+   * The option the user just picked and its index in `options`. Fires on every
+   * pick, including each toggle in `multiple`; `update:modelValue` carries the
+   * whole value.
+   */
   set: [value: T, index: number]
+  /**
+   * The filter text, debounced by `debounce`. Requires `searchable`. Also fired
+   * with `''` (immediately) when the popup opens, so a remote source can load
+   * its first page.
+   */
   search: [query: string]
 }>()
 

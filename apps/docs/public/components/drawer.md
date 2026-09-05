@@ -168,5 +168,20 @@ const open = ref(false)
 | `title` | `string` | `""` | Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`. |
 | `withContainer` | `boolean` | `true` |  |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `close` | — |
+| `update:modelValue` | `value: boolean` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#footer` | — |
+| `#header` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/drawer

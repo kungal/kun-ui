@@ -78,5 +78,11 @@ const slides = ['公告一', '公告二', '公告三']
 | `showIndicators` | `boolean` | `true` |  |
 | `slidesPerView` | `number` | `1` | Slides visible at once (>1 for thumbnail strips). |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/carousel

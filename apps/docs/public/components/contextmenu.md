@@ -169,5 +169,12 @@ const onContext = (e: MouseEvent) => {
 | `position` | `{ x: number; y: number; } \| null` | `{ x: 0, y: 0 }` |
 | `width` | `number` | `192` |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `close` | — | The menu closed, for any reason. |
+| `select` | `item: KunContextMenuItem` | The item the user activated. A disabled item never emits. |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/contextmenu

@@ -52,8 +52,14 @@ const helper = computed(() => props.description || props.helperText)
 const tags = defineModel<string[]>({ default: () => [] })
 
 const emit = defineEmits<{
+  /** A tag that passed every check and is now in the model. */
   add: [tag: string]
+  /** The tag that was removed and the index it held. */
   remove: [tag: string, index: number]
+  /**
+   * Why an entry was rejected, plus the raw text. `detail` carries the message
+   * returned by a `validate` function.
+   */
   invalid: [reason: KunTagInputInvalidReason, raw: string, detail?: string]
 }>()
 

@@ -36,8 +36,11 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
+  /** The item the user activated. A disabled item never emits. */
   (e: 'select', item: KunDropdownItem): void
+  /** The menu opened. */
   (e: 'open'): void
+  /** The menu closed, for any reason. */
   (e: 'close'): void
 }>()
 

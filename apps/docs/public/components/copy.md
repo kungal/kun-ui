@@ -61,16 +61,16 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `text` * | `string` | — |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `copiedText` | `string` | `"已复制"` |
-| `name` | `string` | `""` |
-| `rounded` | `KunUIRounded` | — |
-| `size` | `KunUISize` | `"md"` |
-| `variant` | `KunUIVariant` | `"light"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `text` * | `string` | — |  |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `copiedText` | `string` | `"已复制"` | Label shown briefly after a successful copy. Default '已复制'. |
+| `name` | `string` | `""` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `variant` | `KunUIVariant` | `"light"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/copy

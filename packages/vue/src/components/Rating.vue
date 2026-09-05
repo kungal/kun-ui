@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<KunRatingProps>(), {
 const modelValue = defineModel<number>({ default: 0 })
 
 const emit = defineEmits<{
+  /** The value the user clicked. Never emitted while `readonly` or `disabled`. */
   set: [value: number]
 }>()
 

@@ -36,7 +36,9 @@ composables):
   SSR/IPX image pipeline that the galgame apps depend on.
 
 **Already portable in the source:** `variants.ts` (pure data table),
-`cn.ts` (clsx + tailwind-merge), the Tailwind `@theme` token CSS, and
+`cn.ts` (clsx + tailwind-merge, configured from the generated
+`twScales.generated.ts` so KunUI's own scales take part in conflict
+resolution), the Tailwind `@theme` token CSS, and
 much of the underlying dependency set — `@floating-ui` (React has
 `@floating-ui/react`), `focus-trap`, `dompurify`, `date-fns` are all
 framework-agnostic. That meaningfully de-risks a future React port.

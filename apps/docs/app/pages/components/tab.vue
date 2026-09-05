@@ -76,5 +76,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTab.props" />
+
+    <EventsTable :rows="meta.KunTab.events" />
+    <SlotsTable :rows="meta.KunTab.slots" />
   </article>
 </template>

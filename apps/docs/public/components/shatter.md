@@ -285,5 +285,20 @@ const presets = [
 | `trigger` | `"click" \| "manual"` | `"manual"` | How the break is triggered. `manual` (default) = drive it via `v-model:shattered` or the exposed `shatter()` method; `click` = clicking the content shatters it, and the click point becomes the impact origin. |
 | `zIndex` | `number` | `9999` | z-index of the body-level shard overlay. Default 9999. |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `restoreEnd` | — | The reassemble animation has finished. |
+| `shatterEnd` | — | The last shard has landed. |
+| `shatterStart` | — | The shatter animation has begun. |
+| `update:shattered` | `value: boolean` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/shatter

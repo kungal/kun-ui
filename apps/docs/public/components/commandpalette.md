@@ -215,5 +215,25 @@ const onSubmit = (q: string) => {
 | `query` | `string` | `""` |  |
 | `shortcut` | `string \| boolean` | `true` | Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string sets a custom key (still with meta/ctrl); `false` disables it. |
 
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `select` | `item: KunCommandItem` | The item the user activated. A disabled item never emits. |
+| `submit` | `query: string` | Enter with nothing to select — no results, or every result disabled. The shell has no search of its own, so this is the only way a consumer can act on the raw query ("search the whole site for …"). Enter over a real result still selects it; put an action row first if you want one that is visible. |
+| `update:open` | `value: boolean` |  |
+| `update:query` | `value: string` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#empty` | — |
+| `#footer` | — |
+| `#item` | `{ item: KunCommandItem; active: boolean; index: number; highlight: (text: string) => string; }` |
+| `#loading` | — |
+| `#no-result` | `{ query: string; }` |
+| `#trigger` | `{ open: () => void; shortcut: string; }` |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/commandpalette

@@ -24,5 +24,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunUpload.props" />
+
+    <EventsTable :rows="meta.KunUpload.events" />
+    <SlotsTable :rows="meta.KunUpload.slots" />
   </article>
 </template>

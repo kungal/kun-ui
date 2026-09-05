@@ -26,5 +26,8 @@ const carouselProps = meta.KunCarousel.props
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="carouselProps" />
+
+    <EventsTable :rows="meta.KunCarousel.events" />
+    <SlotsTable :rows="meta.KunCarousel.slots" />
   </article>
 </template>

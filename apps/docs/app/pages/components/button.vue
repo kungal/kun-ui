@@ -42,5 +42,8 @@ const buttonProps = meta.KunButton.props
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="buttonProps" />
+
+    <EventsTable :rows="meta.KunButton.events" />
+    <SlotsTable :rows="meta.KunButton.slots" />
   </article>
 </template>

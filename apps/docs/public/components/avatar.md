@@ -82,15 +82,15 @@ const user: KunUser = { id: 42, name: 'Kun', avatar }
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `user` * | `KunUser \| null` | — |
-| `className` | `string` | `""` |
-| `disableFloating` | `boolean` | — |
-| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — |
-| `imageClassName` | `string` | `""` |
-| `isNavigation` | `boolean` | `true` |
-| `size` | `KunAvatarSize` | `"md"` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `user` * | `KunUser \| null` | — | Nullable — upstream user hydration can return a missing brief; Avatar falls back to a deterministic sticker. |
+| `className` | `string` | `""` |  |
+| `disableFloating` | `boolean` | — | Accepted but unused (kept so existing call sites don't TS-error). |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — |  |
+| `imageClassName` | `string` | `""` |  |
+| `isNavigation` | `boolean` | `true` |  |
+| `size` | `KunAvatarSize` | `"md"` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/avatar

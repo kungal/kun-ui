@@ -45,5 +45,11 @@
 | --- | --- | --- |
 | `className` | `string` | `""` |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/timeline

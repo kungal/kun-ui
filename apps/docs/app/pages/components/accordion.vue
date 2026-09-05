@@ -28,7 +28,13 @@ const itemProps = meta.KunAccordionItem.props
     <h2 class="mt-10 mb-1 text-xl font-semibold">KunAccordion 属性</h2>
     <PropsTable :rows="accordionProps" />
 
+    <EventsTable :rows="meta.KunAccordion.events" />
+    <SlotsTable :rows="meta.KunAccordion.slots" />
+
     <h2 class="mt-8 mb-1 text-xl font-semibold">KunAccordionItem 属性</h2>
     <PropsTable :rows="itemProps" />
+
+    <EventsTable :rows="meta.KunAccordionItem.events" />
+    <SlotsTable :rows="meta.KunAccordionItem.slots" />
   </article>
 </template>

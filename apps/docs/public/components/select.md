@@ -473,7 +473,7 @@ const options: UserOption[] = [
 | `options` * | `readonly KunSelectOption<KunSelectValue>[]` | — |  |
 | `ariaLabel` | `string` | `""` |  |
 | `className` | `string` | `""` | Extra classes for the outer wrapper. Use `classNames` to reach the trigger, popup, list, options or chips. |
-| `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes. Padding, colour, border colour and typography override cleanly; KunUI's own `rounded-kun-*`, `shadow-kun-*` and `z-kun-*` scales do not, because tailwind-merge cannot see them — reach for the `rounded` prop instead of a radius utility. |
+| `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius — it keeps the two in step; `classNames.chip` is the only way to reach a chip. |
 | `clearable` | `boolean` | `false` | Show an X to reset the selection (single) — chips already remove per-item. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
 | `darkBorder` | `boolean` | `true` |  |
@@ -497,6 +497,20 @@ const options: UserOption[] = [
 | `searchable` | `boolean` | `false` | Render a filter input at the top of the list. Also the switch that enables `@search` / `manualFilter` — without it there is nothing to type into. |
 | `searchPlaceholder` | `string` | `"搜索…"` |  |
 | `size` | `KunUISize` | `"md"` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `search` | `query: string` | The filter text, debounced by `debounce`. Requires `searchable`. Also fired with `''` (immediately) when the popup opens, so a remote source can load its first page. |
+| `set` | `value: KunSelectValue, index: number` | The option the user just picked and its index in `options`. Fires on every pick, including each toggle in `multiple`; `update:modelValue` carries the whole value. |
+| `update:modelValue` | `value: KunSelectValue \| KunSelectValue[] \| null` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#option` | `{ option: KunSelectOption<KunSelectValue>; index: number; active: boolean; selected: boolean; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/select

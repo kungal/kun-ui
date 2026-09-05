@@ -213,7 +213,7 @@ const groups = [
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | — |  |
+| `ariaLabel` | `string` | — | Accessible name for the dialog (role="dialog" needs a name). |
 | `autoPosition` | `boolean` | `true` | Avoid viewport collisions: flip to the opposite side, shift along the edge, and cap height/width to the available space so tall content scrolls instead of overflowing. Default `true`. Set `false` to honour `position` verbatim. |
 | `closeDelay` | `number` | `120` | `trigger="hover"`: ms grace after leaving (crosses the gap). Default 120. |
 | `fullWidth` | `boolean` | `false` | Make the trigger anchor span its container instead of shrinking to its content. Both wrapper divs switch from `inline-block` to `block w-full`, so a full-width trigger (e.g. a `fullWidth` KunButton or a split button) can actually fill the width. Default `false` (inline, content-width). |
@@ -223,8 +223,15 @@ const groups = [
 | `openDelay` | `number` | `100` | `trigger="hover"`: ms before a hover opens. Default 100. |
 | `position` | `KunPopoverPosition` | `"bottom-start"` |  |
 | `rounded` | `KunUIRounded` | — |  |
-| `showArrow` | `boolean` | `false` |  |
+| `showArrow` | `boolean` | `false` | Render a caret pointing at the trigger. |
 | `trigger` | `"click" \| "hover"` | `"click"` | How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click. |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
+| `#trigger` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/popover

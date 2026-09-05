@@ -44,5 +44,14 @@
 | `name` | `string` | `""` |
 | `scale` | `"h1" \| "h2" \| "h3"` | `"h1"` |
 
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#description` | — |
+| `#endContent` | — |
+| `#headerEndContent` | — |
+| `#title` | — |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/header

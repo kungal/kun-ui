@@ -163,11 +163,11 @@ const html = computed(
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `content` * | `string` | — |
-| `className` | `string` | `""` |
-| `compact` | `boolean` | `false` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `content` * | `string` | — | Rendered with v-html — the caller MUST pass trusted/pre-sanitized HTML (KunUI does not sanitize; see docs/architecture.md). |
+| `className` | `string` | `""` |  |
+| `compact` | `boolean` | `false` | Tighter density for comment / reply streams (adds `.kun-prose-compact`). Visual effect requires importing `@kungal/ui-vue/prose.css`. |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/content

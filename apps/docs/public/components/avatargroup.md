@@ -67,13 +67,19 @@ const users: KunUser[] = Array.from({ length: 8 }, (_, i) => ({
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `users` * | `KunUser[]` | — |
-| `ariaLabel` | `string` | — |
-| `ellipsis` | `boolean` | `true` |
-| `total` | `number` | — |
-| `visibleCount` | `number` | `5` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `users` * | `KunUser[]` | — |  |
+| `ariaLabel` | `string` | — | Accessible name for the group (default derived from the count). |
+| `ellipsis` | `boolean` | `true` |  |
+| `total` | `number` | — | Grand total for the "+N" overflow chip. Defaults to users.length, so the overflow shows even without passing it explicitly. |
+| `visibleCount` | `number` | `5` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#default` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/avatargroup

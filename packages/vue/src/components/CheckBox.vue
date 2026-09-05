@@ -43,6 +43,7 @@ const dashWidth: Record<KunUISize, string> = {
 const modelValue = defineModel<boolean>({ default: false })
 
 const emit = defineEmits<{
+  /** The new checked state, from a user toggle. */
   change: [value: boolean]
 }>()
 

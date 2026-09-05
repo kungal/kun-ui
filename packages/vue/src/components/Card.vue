@@ -30,6 +30,10 @@ const props = withDefaults(defineProps<KunCardProps>(), {
 })
 
 const emit = defineEmits<{
+  /**
+   * The card's native click. Emitted in all three render modes (div / button /
+   * link), so a plain `<KunCard @click>` works.
+   */
   click: [event: MouseEvent]
 }>()
 

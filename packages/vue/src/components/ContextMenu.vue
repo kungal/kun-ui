@@ -28,7 +28,9 @@ const props = withDefaults(defineProps<KunContextMenuProps>(), {
 })
 
 const emit = defineEmits<{
+  /** The item the user activated. A disabled item never emits. */
   (event: 'select', item: KunContextMenuItem): void
+  /** The menu closed, for any reason. */
   (event: 'close'): void
 }>()
 

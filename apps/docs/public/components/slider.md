@@ -172,23 +172,30 @@ const v = ref(40)
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `modelValue` * | `number` | — |  |
+| `ariaLabel` | `string` | — | Accessible name when there is no visible label (role="slider" needs a name). |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `description` | `string` | — | Helper text below the track (hidden when `error` is set). |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | — | Error message (red text below + danger fill). Takes precedence over description. |
+| `formatValue` | `((value: number) => string)` | — | Format the value shown in the tooltip / value readout. |
+| `label` | `string` | — | Visible field label (rendered above the track, associates the slider). |
+| `marks` | `(number \| KunSliderMark)[]` | — | Tick marks under the track. Pass numbers (or {value,label}) within [min,max]. |
+| `max` | `number` | `100` |  |
+| `min` | `number` | `0` |  |
+| `showTooltip` | `boolean` | `false` | Show a value bubble above the thumb while hovering / dragging / focused. |
+| `showValue` | `boolean` | `false` | Always render the current value next to the label. |
+| `size` | `KunUISize` | `"md"` |  |
+| `step` | `number` | `1` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `modelValue` * | `number` | — |
-| `ariaLabel` | `string` | — |
-| `color` | `KunUIColor` | `"primary"` |
-| `description` | `string` | — |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | — |
-| `formatValue` | `((value: number) => string)` | — |
-| `label` | `string` | — |
-| `marks` | `(number \| KunSliderMark)[]` | — |
-| `max` | `number` | `100` |
-| `min` | `number` | `0` |
-| `showTooltip` | `boolean` | `false` |
-| `showValue` | `boolean` | `false` |
-| `size` | `KunUISize` | `"md"` |
-| `step` | `number` | `1` |
+| `change` | `value: number` | Fired once on commit (pointer release / keyboard), for forms that only care about the final value — `update:modelValue` still streams live. |
+| `update:modelValue` | `value: number` |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/slider

@@ -31,6 +31,18 @@
         "required": false,
         "default": "\"light\""
       }
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "type": "value: string | string[]"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunAccordionItem": {
@@ -72,10 +84,23 @@
         "required": false,
         "default": "\"\""
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "title",
+        "type": "{}"
+      }
     ]
   },
   "KunAlertProvider": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": []
   },
   "KunAutocomplete": {
     "props": [
@@ -88,7 +113,8 @@
         "name": "allowCustomValue",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Accept a value the user typed that is not in `options` (free text)."
       },
       {
         "name": "ariaLabel",
@@ -106,7 +132,8 @@
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"default\""
+        "default": "\"default\"",
+        "description": "Focus-ring accent (the resting border/text stay neutral). Default 'default'."
       },
       {
         "name": "darkBorder",
@@ -118,13 +145,15 @@
         "name": "debounce",
         "type": "number",
         "required": false,
-        "default": "0"
+        "default": "0",
+        "description": "Debounce the `@search` emit by N ms; the input text still updates instantly (a responsive field). 0 (default) emits on every keystroke — set e.g. 300 for remote sources so you fetch once the user pauses, not per keypress."
       },
       {
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -154,19 +183,22 @@
         "name": "loading",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Async data source: show a loading spinner in the dropdown (instead of `noResultText`) while a remote `@search` request is in flight. Drive it from your fetch — set true when the request starts, false when the results land."
       },
       {
         "name": "loadingText",
         "type": "string",
         "required": false,
-        "default": "\"加载中…\""
+        "default": "\"加载中…\"",
+        "description": "Text under the loading spinner. Default '加载中…'."
       },
       {
         "name": "manualFilter",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Skip built-in label filtering — you control `options` from `@search` (remote/async suggestions). Default false (client-side filter)."
       },
       {
         "name": "modelValue",
@@ -202,6 +234,28 @@
         "required": false,
         "default": "\"md\""
       }
+    ],
+    "events": [
+      {
+        "name": "search",
+        "type": "query: string",
+        "description": "The field text, debounced by `debounce`. One emit per committed word during IME composition, not one per romaji keystroke."
+      },
+      {
+        "name": "select",
+        "type": "option: KunAutocompleteOption",
+        "description": "The option the user committed by click or Enter. Free text accepted through `allowCustomValue` does not emit it."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      }
+    ],
+    "slots": [
+      {
+        "name": "option",
+        "type": "{ option: KunAutocompleteOption; index: number; active: boolean; selected: boolean; }"
+      }
     ]
   },
   "KunAvatar": {
@@ -209,7 +263,8 @@
       {
         "name": "user",
         "type": "KunUser | null",
-        "required": true
+        "required": true,
+        "description": "Nullable — upstream user hydration can return a missing brief; Avatar falls back to a deterministic sticker."
       },
       {
         "name": "className",
@@ -220,7 +275,8 @@
       {
         "name": "disableFloating",
         "type": "boolean",
-        "required": false
+        "required": false,
+        "description": "Accepted but unused (kept so existing call sites don't TS-error)."
       },
       {
         "name": "floatingPosition",
@@ -245,7 +301,9 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunAvatarGroup": {
     "props": [
@@ -257,7 +315,8 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name for the group (default derived from the count)."
       },
       {
         "name": "ellipsis",
@@ -268,13 +327,21 @@
       {
         "name": "total",
         "type": "number",
-        "required": false
+        "required": false,
+        "description": "Grand total for the \"+N\" overflow chip. Defaults to users.length, so the overflow shows even without passing it explicitly."
       },
       {
         "name": "visibleCount",
         "type": "number",
         "required": false,
         "default": "5"
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -283,7 +350,8 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name (e.g. \"5 条未读\"). Without an anchor slot the badge renders standalone (inline), not as a corner overlay."
       },
       {
         "name": "className",
@@ -339,6 +407,13 @@
         "required": false,
         "default": "\"count\""
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunBrand": {
@@ -390,7 +465,9 @@
         "required": false,
         "default": "\"/\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunButton": {
     "props": [
@@ -490,6 +567,22 @@
         "required": false,
         "default": "\"solid\""
       }
+    ],
+    "events": [
+      {
+        "name": "click",
+        "type": "event: MouseEvent"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "icon",
+        "type": "{}"
+      }
     ]
   },
   "KunButtonGroup": {
@@ -497,7 +590,8 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name for the group (role=\"group\")."
       },
       {
         "name": "className",
@@ -510,6 +604,13 @@
         "type": "KunButtonGroupOrientation",
         "required": false,
         "default": "\"horizontal\""
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -580,6 +681,31 @@
         "type": "KunUIRounded",
         "required": false
       }
+    ],
+    "events": [
+      {
+        "name": "click",
+        "type": "event: MouseEvent",
+        "description": "The card's native click. Emitted in all three render modes (div / button / link), so a plain `<KunCard @click>` works."
+      }
+    ],
+    "slots": [
+      {
+        "name": "cover",
+        "type": "{}"
+      },
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "footer",
+        "type": "{}"
+      },
+      {
+        "name": "header",
+        "type": "{}"
+      }
     ]
   },
   "KunCarousel": {
@@ -636,6 +762,13 @@
         "default": "1",
         "description": "Slides visible at once (>1 for thumbnail strips)."
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunCarouselItem": {
@@ -645,6 +778,13 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -666,7 +806,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the control (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -678,7 +819,8 @@
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message (red text below + danger box). Takes precedence over description."
       },
       {
         "name": "id",
@@ -689,7 +831,8 @@
         "name": "indeterminate",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Tri-state \"some but not all\" (e.g. a select-all parent). Visual dash that overrides the check; the underlying input stays unchecked until toggled."
       },
       {
         "name": "label",
@@ -723,6 +866,23 @@
         "name": "value",
         "type": "string | number | boolean",
         "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: boolean",
+        "description": "The new checked state, from a user toggle."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -772,7 +932,8 @@
         "name": "hideIndicator",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "`card` variant only: drop the checkbox-box indicator, signal selection with the tinted border/fill alone (the icon-card look)."
       },
       {
         "name": "label",
@@ -783,7 +944,8 @@
       {
         "name": "max",
         "type": "number",
-        "required": false
+        "required": false,
+        "description": "Cap on how many options can be selected at once. A click that would exceed it is blocked and emits `invalid` with `'max-reached'` (already-selected options can still be toggled off)."
       },
       {
         "name": "orientation",
@@ -808,7 +970,24 @@
         "required": false,
         "default": "\"classic\""
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: KunCheckBoxGroupValue[]",
+        "description": "The new selection, after a user toggle only — a programmatic `v-model` write does not emit it."
+      },
+      {
+        "name": "invalid",
+        "type": "reason: \"max-reached\"",
+        "description": "A click was blocked because it would exceed `max`."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: KunCheckBoxGroupValue[]"
+      }
+    ],
+    "slots": []
   },
   "KunChip": {
     "props": [
@@ -822,7 +1001,8 @@
         "name": "closable",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render a × that emits `close` (removable tag — filters, tag inputs)."
       },
       {
         "name": "color",
@@ -847,6 +1027,26 @@
         "type": "KunUIVariant",
         "required": false,
         "default": "\"flat\""
+      }
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": ""
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "end",
+        "type": "{}"
+      },
+      {
+        "name": "start",
+        "type": "{}"
       }
     ]
   },
@@ -919,6 +1119,52 @@
         "default": "true",
         "description": "Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string sets a custom key (still with meta/ctrl); `false` disables it."
       }
+    ],
+    "events": [
+      {
+        "name": "select",
+        "type": "item: KunCommandItem",
+        "description": "The item the user activated. A disabled item never emits."
+      },
+      {
+        "name": "submit",
+        "type": "query: string",
+        "description": "Enter with nothing to select — no results, or every result disabled. The shell has no search of its own, so this is the only way a consumer can act on the raw query (\"search the whole site for …\"). Enter over a real result still selects it; put an action row first if you want one that is visible."
+      },
+      {
+        "name": "update:open",
+        "type": "value: boolean"
+      },
+      {
+        "name": "update:query",
+        "type": "value: string"
+      }
+    ],
+    "slots": [
+      {
+        "name": "empty",
+        "type": "{}"
+      },
+      {
+        "name": "footer",
+        "type": "{}"
+      },
+      {
+        "name": "item",
+        "type": "{ item: KunCommandItem; active: boolean; index: number; highlight: (text: string) => string; }"
+      },
+      {
+        "name": "loading",
+        "type": "{}"
+      },
+      {
+        "name": "no-result",
+        "type": "{ query: string; }"
+      },
+      {
+        "name": "trigger",
+        "type": "{ open: () => void; shortcut: string; }"
+      }
     ]
   },
   "KunContent": {
@@ -926,7 +1172,8 @@
       {
         "name": "content",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "Rendered with v-html — the caller MUST pass trusted/pre-sanitized HTML (KunUI does not sanitize; see docs/architecture.md)."
       },
       {
         "name": "className",
@@ -938,9 +1185,12 @@
         "name": "compact",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Tighter density for comment / reply streams (adds `.kun-prose-compact`). Visual effect requires importing `@kungal/ui-vue/prose.css`."
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunContextMenu": {
     "props": [
@@ -973,7 +1223,20 @@
         "required": false,
         "default": "192"
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": "",
+        "description": "The menu closed, for any reason."
+      },
+      {
+        "name": "select",
+        "type": "item: KunContextMenuItem",
+        "description": "The item the user activated. A disabled item never emits."
+      }
+    ],
+    "slots": []
   },
   "KunCopy": {
     "props": [
@@ -998,7 +1261,8 @@
         "name": "copiedText",
         "type": "string",
         "required": false,
-        "default": "\"已复制\""
+        "default": "\"已复制\"",
+        "description": "Label shown briefly after a successful copy. Default '已复制'."
       },
       {
         "name": "name",
@@ -1023,7 +1287,9 @@
         "required": false,
         "default": "\"light\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunDatePicker": {
     "props": [
@@ -1147,7 +1413,14 @@
         "type": "string[]",
         "required": false
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "type": "value: string | [string | null, string | null] | null"
+      }
+    ],
+    "slots": []
   },
   "KunDivider": {
     "props": [
@@ -1180,6 +1453,13 @@
         "type": "boolean",
         "required": false,
         "default": "false"
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -1271,6 +1551,30 @@
         "required": false,
         "default": "true"
       }
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": ""
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "footer",
+        "type": "{}"
+      },
+      {
+        "name": "header",
+        "type": "{}"
+      }
     ]
   },
   "KunDropdown": {
@@ -1311,10 +1615,40 @@
         "required": false,
         "default": "\"\""
       }
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": "",
+        "description": "The menu closed, for any reason."
+      },
+      {
+        "name": "open",
+        "type": "",
+        "description": "The menu opened."
+      },
+      {
+        "name": "select",
+        "type": "item: KunContextMenuItem",
+        "description": "The item the user activated. A disabled item never emits."
+      }
+    ],
+    "slots": [
+      {
+        "name": "trigger",
+        "type": "{}"
+      }
     ]
   },
   "KunFadeCard": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
+    ]
   },
   "KunFileInput": {
     "props": [
@@ -1334,7 +1668,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the trigger (hidden when `error` is set). Canonical name."
       },
       {
         "name": "disabled",
@@ -1419,6 +1754,32 @@
         "required": false,
         "default": "\"flat\""
       }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "picked: File[]",
+        "description": "The files that passed `accept` and `maxSize`."
+      },
+      {
+        "name": "errorPick",
+        "type": "message: string",
+        "description": "A human-readable reason a picked file was rejected."
+      },
+      {
+        "name": "update:files",
+        "type": "value: File[]"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: File | null"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{ pick: () => void; disabled: boolean; fileName: string | null; }"
+      }
     ]
   },
   "KunHeader": {
@@ -1441,6 +1802,25 @@
         "required": false,
         "default": "\"h1\""
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "description",
+        "type": "{}"
+      },
+      {
+        "name": "endContent",
+        "type": "{}"
+      },
+      {
+        "name": "headerEndContent",
+        "type": "{}"
+      },
+      {
+        "name": "title",
+        "type": "{}"
+      }
     ]
   },
   "KunIcon": {
@@ -1457,7 +1837,9 @@
         "required": false,
         "default": "\"\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunImage": {
     "props": [
@@ -1480,7 +1862,8 @@
       {
         "name": "aspectRatio",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "CSS aspect-ratio on the wrapper, e.g. \"16 / 9\". When set the image is absolutely positioned and fills the box."
       },
       {
         "name": "className",
@@ -1500,7 +1883,8 @@
       {
         "name": "fallbackSrc",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Shown if `src` fails to load (broken URL, 404). Resets when `src` changes."
       },
       {
         "name": "fetchpriority",
@@ -1520,7 +1904,8 @@
       {
         "name": "imageClassName",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Classes for the inner image (wrapper gets `className`)."
       },
       {
         "name": "loading",
@@ -1547,7 +1932,8 @@
       {
         "name": "provider",
         "type": "\"none\" | (string & {}) | \"ipx\"",
-        "required": false
+        "required": false,
+        "description": "Which"
       },
       {
         "name": "quality",
@@ -1557,13 +1943,15 @@
       {
         "name": "sizes",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Responsive `sizes` hint for"
       },
       {
         "name": "skeleton",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Renders a sibling skeleton overlay while loading (Radix-Avatar 3-state machine). Default true; set false for a bare element."
       },
       {
         "name": "thumbhash",
@@ -1576,7 +1964,18 @@
         "type": "string | number",
         "required": false
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "error",
+        "type": "src: string, event?: Event"
+      },
+      {
+        "name": "load",
+        "type": "src: string, event?: Event"
+      }
+    ],
+    "slots": []
   },
   "KunImageNative": {
     "props": [
@@ -1617,7 +2016,18 @@
         "type": "string | number",
         "required": false
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "error",
+        "type": "src: string, event: Event"
+      },
+      {
+        "name": "load",
+        "type": "src: string, event: Event"
+      }
+    ],
+    "slots": []
   },
   "KunInfo": {
     "props": [
@@ -1667,6 +2077,17 @@
         "default": "\"flat\"",
         "description": "Visual treatment. `solid` / `shadow` fill the box and take a contrast-correct foreground; `flat`, `light` and `bordered` use a soft tint of the colour with dark coloured text."
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "title",
+        "type": "{}"
+      }
     ]
   },
   "KunInput": {
@@ -1700,7 +2121,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field (hidden when `error` is set). Canonical name."
       },
       {
         "name": "disabled",
@@ -1724,13 +2146,15 @@
         "name": "isClearable",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Show an X button to clear the value when non-empty."
       },
       {
         "name": "isInvalid",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Mark the field invalid (danger ring) without showing an error message."
       },
       {
         "name": "label",
@@ -1760,7 +2184,8 @@
         "name": "revealPassword",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "For type=\"password\": render an eye toggle to reveal/hide the value."
       },
       {
         "name": "rounded",
@@ -1778,6 +2203,34 @@
         "type": "string",
         "required": false,
         "default": "\"text\""
+      }
+    ],
+    "events": [
+      {
+        "name": "blur",
+        "type": "event: FocusEvent"
+      },
+      {
+        "name": "clear",
+        "type": ""
+      },
+      {
+        "name": "focus",
+        "type": "event: FocusEvent"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string | number"
+      }
+    ],
+    "slots": [
+      {
+        "name": "prefix",
+        "type": "{}"
+      },
+      {
+        "name": "suffix",
+        "type": "{}"
       }
     ]
   },
@@ -1798,10 +2251,24 @@
         "type": "number",
         "required": false
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "update:isOpen",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": []
   },
   "KunLightboxGallery": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
+    ]
   },
   "KunLightboxGalleryItem": {
     "props": [
@@ -1826,6 +2293,13 @@
         "type": "boolean",
         "required": false,
         "default": "true"
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{ open: () => void; }"
       }
     ]
   },
@@ -1885,6 +2359,21 @@
         "required": false,
         "default": "\"always\""
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "prefix",
+        "type": "{}"
+      },
+      {
+        "name": "suffix",
+        "type": "{}"
+      }
     ]
   },
   "KunLoading": {
@@ -1905,13 +2394,15 @@
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Spinner size (spinner mode only). Default 'md'."
       },
       {
         "name": "spinner",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render a compact spinner icon instead of the full mascot image — for small inline loading states (next to a button, a table cell, etc.)."
       },
       {
         "name": "src",
@@ -1919,6 +2410,13 @@
         "required": false,
         "default": "KUN_LOADING_IMAGE",
         "description": "Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed). Pass any URL or data URI to override."
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -1934,16 +2432,24 @@
         "type": "string",
         "required": true
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunLoliProvider": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": []
   },
   "KunMarkdown": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": []
   },
   "KunMessageProvider": {
-    "props": []
+    "props": [],
+    "events": [],
+    "slots": []
   },
   "KunModal": {
     "props": [
@@ -2009,13 +2515,15 @@
         "name": "placement",
         "type": "KunModalPlacement",
         "required": false,
-        "default": "\"auto\""
+        "default": "\"auto\"",
+        "description": "Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones, a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of centring at every width."
       },
       {
         "name": "role",
         "type": "\"dialog\" | \"alertdialog\"",
         "required": false,
-        "default": "\"dialog\""
+        "default": "\"dialog\"",
+        "description": "ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts that need an immediate response — it also flips the isDismissable default. Default 'dialog'."
       },
       {
         "name": "rounded",
@@ -2026,13 +2534,15 @@
         "name": "scrollBehavior",
         "type": "\"inside\" | \"outside\"",
         "required": false,
-        "default": "\"inside\""
+        "default": "\"inside\"",
+        "description": "inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it — and never taller than the visible viewport, so the on-screen keyboard can't bury it. outside: the whole overlay scrolls — for panels taller than the viewport."
       },
       {
         "name": "size",
         "type": "KunModalSize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Max width of the panel (full = nearly the whole viewport). Default 'md'."
       },
       {
         "name": "title",
@@ -2046,6 +2556,22 @@
         "type": "boolean",
         "required": false,
         "default": "true"
+      }
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": ""
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -2071,7 +2597,9 @@
         "default": "KUN_NULL_IMAGE",
         "description": "The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request). Pass any URL or data URI to override."
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunNumberInput": {
     "props": [
@@ -2091,7 +2619,8 @@
         "name": "controls",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Show the −/+ stepper buttons (default true)."
       },
       {
         "name": "darkBorder",
@@ -2103,7 +2632,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -2150,7 +2680,8 @@
       {
         "name": "name",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Native form field name (emits a hidden input mirroring the value)."
       },
       {
         "name": "placeholder",
@@ -2161,7 +2692,8 @@
       {
         "name": "precision",
         "type": "number",
-        "required": false
+        "required": false,
+        "description": "Round/display to this many decimal places."
       },
       {
         "name": "readonly",
@@ -2192,7 +2724,19 @@
         "required": false,
         "default": "1"
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: number | null",
+        "description": "The committed value — after clamp/precision on blur or a stepper press. `null` when the field is cleared."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: number | null"
+      }
+    ],
+    "slots": []
   },
   "KunPagination": {
     "props": [
@@ -2214,9 +2758,17 @@
       {
         "name": "pageHref",
         "type": "((page: number) => string)",
-        "required": false
+        "required": false,
+        "description": "Map a page number to its URL. When provided, the numbered page controls render real <a href> (crawlable pagination) instead of plain buttons."
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "update:currentPage",
+        "type": "page: number"
+      }
+    ],
+    "slots": []
   },
   "KunPinInput": {
     "props": [
@@ -2249,19 +2801,22 @@
         "name": "isInvalid",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Mark every cell invalid (danger ring)."
       },
       {
         "name": "length",
         "type": "number",
         "required": false,
-        "default": "6"
+        "default": "6",
+        "description": "Number of cells (code length)."
       },
       {
         "name": "mask",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render each filled cell as a • (one-time codes / passcodes)."
       },
       {
         "name": "modelValue",
@@ -2272,7 +2827,8 @@
       {
         "name": "name",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Native form field name (emits a hidden input mirroring the joined value)."
       },
       {
         "name": "placeholder",
@@ -2295,16 +2851,30 @@
         "name": "type",
         "type": "\"text\" | \"numeric\"",
         "required": false,
-        "default": "\"numeric\""
+        "default": "\"numeric\"",
+        "description": "numeric → digits only + inputmode numeric; text → any single char."
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "complete",
+        "type": "value: string",
+        "description": "Fired once every cell is filled."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      }
+    ],
+    "slots": []
   },
   "KunPopover": {
     "props": [
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name for the dialog (role=\"dialog\" needs a name)."
       },
       {
         "name": "autoPosition",
@@ -2368,7 +2938,8 @@
         "name": "showArrow",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render a caret pointing at the trigger."
       },
       {
         "name": "trigger",
@@ -2376,6 +2947,17 @@
         "required": false,
         "default": "\"click\"",
         "description": "How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click."
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "trigger",
+        "type": "{}"
       }
     ]
   },
@@ -2385,7 +2967,8 @@
         "name": "ariaLabel",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Accessible name for the progressbar (e.g. \"上传进度\")."
       },
       {
         "name": "className",
@@ -2440,7 +3023,9 @@
         "required": false,
         "default": "\"solid\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunRadioGroup": {
     "props": [
@@ -2488,7 +3073,8 @@
         "name": "hideIndicator",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "`card` variant only: drop the radio-dot indicator and signal selection with the tinted border/fill alone (the icon-card look). No effect on classic/pill."
       },
       {
         "name": "label",
@@ -2519,7 +3105,19 @@
         "required": false,
         "default": "\"classic\""
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: KunRadioValue, index: number",
+        "description": "The newly selected value and its index. Not fired for a click on the already-selected option."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: KunRadioValue"
+      }
+    ],
+    "slots": []
   },
   "KunRating": {
     "props": [
@@ -2559,7 +3157,19 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "set",
+        "type": "value: number",
+        "description": "The value the user clicked. Never emitted while `readonly` or `disabled`."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: number"
+      }
+    ],
+    "slots": []
   },
   "KunReaction": {
     "props": [
@@ -2621,6 +3231,30 @@
         "default": "true",
         "description": "`true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share / more …) in the same compact skin — no self-toggle, no burst, just a tactile pop; handle the click with a native `@click`. Lets a whole reactions row use one component instead of mixing in a heavier icon button. In BOTH modes the filled/coloured skin follows the `active` model. So an action-mode reaction can be a controlled \"menu button\": wrap it as a `KunPopover` trigger, bind `:model-value` to your own state (e.g. 收藏 = \"in ≥1 list\"), and the click opens the picker instead of self-toggling."
       }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "active: boolean"
+      },
+      {
+        "name": "update:count",
+        "type": "value: number"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "icon",
+        "type": "{ active: boolean; }"
+      }
     ]
   },
   "KunRipple": {
@@ -2630,7 +3264,9 @@
         "type": "RippleType[]",
         "required": true
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunScrollShadow": {
     "props": [
@@ -2638,7 +3274,8 @@
         "name": "ariaLabel",
         "type": "string",
         "required": false,
-        "default": "\"scrollable content\""
+        "default": "\"scrollable content\"",
+        "description": "Accessible name for the scrollable region. Default 'scrollable content'."
       },
       {
         "name": "axis",
@@ -2691,6 +3328,13 @@
         "default": "false",
         "description": "When `axis='horizontal'`, let a vertical mouse wheel scroll the content sideways (mouse users otherwise can't reach off-screen content; trackpads and touch already can). `true` releases at either edge so the page scrolls on past (no scroll-trap); `'contain'` keeps the wheel on the strip at the edges so the page doesn't move — but only while the strip is actually scrollable, so it can never freeze the page. Default false."
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunSelect": {
@@ -2722,7 +3366,7 @@
         "name": "classNames",
         "type": "KunSelectClassNames",
         "required": false,
-        "description": "Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes. Padding, colour, border colour and typography override cleanly; KunUI's own `rounded-kun-*`, `shadow-kun-*` and `z-kun-*` scales do not, because tailwind-merge cannot see them — reach for the `rounded` prop instead of a radius utility."
+        "description": "Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius — it keeps the two in step; `classNames.chip` is the only way to reach a chip."
       },
       {
         "name": "clearable",
@@ -2873,6 +3517,28 @@
         "required": false,
         "default": "\"md\""
       }
+    ],
+    "events": [
+      {
+        "name": "search",
+        "type": "query: string",
+        "description": "The filter text, debounced by `debounce`. Requires `searchable`. Also fired with `''` (immediately) when the popup opens, so a remote source can load its first page."
+      },
+      {
+        "name": "set",
+        "type": "value: KunSelectValue, index: number",
+        "description": "The option the user just picked and its index in `options`. Fires on every pick, including each toggle in `multiple`; `update:modelValue` carries the whole value."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: KunSelectValue | KunSelectValue[] | null"
+      }
+    ],
+    "slots": [
+      {
+        "name": "option",
+        "type": "{ option: KunSelectOption<KunSelectValue>; index: number; active: boolean; selected: boolean; }"
+      }
     ]
   },
   "KunShatter": {
@@ -3001,6 +3667,33 @@
         "default": "9999",
         "description": "z-index of the body-level shard overlay. Default 9999."
       }
+    ],
+    "events": [
+      {
+        "name": "restoreEnd",
+        "type": "",
+        "description": "The reassemble animation has finished."
+      },
+      {
+        "name": "shatterEnd",
+        "type": "",
+        "description": "The last shard has landed."
+      },
+      {
+        "name": "shatterStart",
+        "type": "",
+        "description": "The shatter animation has begun."
+      },
+      {
+        "name": "update:shattered",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunSkeleton": {
@@ -3051,6 +3744,13 @@
         "default": "\"\"",
         "description": "CSS width. Defaults: rect/text 100%, circle = height."
       }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      }
     ]
   },
   "KunSlider": {
@@ -3063,7 +3763,8 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name when there is no visible label (role=\"slider\" needs a name)."
       },
       {
         "name": "color",
@@ -3074,7 +3775,8 @@
       {
         "name": "description",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Helper text below the track (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -3085,22 +3787,26 @@
       {
         "name": "error",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Error message (red text below + danger fill). Takes precedence over description."
       },
       {
         "name": "formatValue",
         "type": "((value: number) => string)",
-        "required": false
+        "required": false,
+        "description": "Format the value shown in the tooltip / value readout."
       },
       {
         "name": "label",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Visible field label (rendered above the track, associates the slider)."
       },
       {
         "name": "marks",
         "type": "(number | KunSliderMark)[]",
-        "required": false
+        "required": false,
+        "description": "Tick marks under the track. Pass numbers (or {value,label}) within [min,max]."
       },
       {
         "name": "max",
@@ -3118,13 +3824,15 @@
         "name": "showTooltip",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Show a value bubble above the thumb while hovering / dragging / focused."
       },
       {
         "name": "showValue",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Always render the current value next to the label."
       },
       {
         "name": "size",
@@ -3138,7 +3846,19 @@
         "required": false,
         "default": "1"
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: number",
+        "description": "Fired once on commit (pointer release / keyboard), for forms that only care about the final value — `update:modelValue` still streams live."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: number"
+      }
+    ],
+    "slots": []
   },
   "KunSteps": {
     "props": [
@@ -3178,7 +3898,9 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunSwitch": {
     "props": [
@@ -3197,7 +3919,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the switch (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -3209,7 +3932,8 @@
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message (red text below). Takes precedence over description."
       },
       {
         "name": "label",
@@ -3229,7 +3953,14 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "type": "value: boolean"
+      }
+    ],
+    "slots": []
   },
   "KunTab": {
     "props": [
@@ -3295,7 +4026,8 @@
       {
         "name": "name",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via aria-controls/labelledby). Set a distinct `name` per tab group on a page."
       },
       {
         "name": "orientation",
@@ -3307,13 +4039,15 @@
         "name": "scrollable",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Horizontal tabs ALWAYS contain their overflow (they scroll inside the container instead of widening the page) — no flag needed. This opts a *vertical* tab column into scrolling when it outgrows a bounded height."
       },
       {
         "name": "scrollButtons",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "When a horizontal tab strip overflows, float a chevron button on each scrollable edge (in addition to the always-on edge fade). Set false to keep just the fade — the strip still scrolls via swipe / wheel / keyboard. Default true."
       },
       {
         "name": "size",
@@ -3327,6 +4061,22 @@
         "required": false,
         "default": "\"underlined\""
       }
+    ],
+    "events": [
+      {
+        "name": "change",
+        "type": "value: string"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      }
+    ],
+    "slots": [
+      {
+        "name": "tab",
+        "type": "{ item: KunTabItem; index: number; active: boolean; }"
+      }
     ]
   },
   "KunTabPanel": {
@@ -3334,12 +4084,14 @@
       {
         "name": "value",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "Which tab this panel belongs to (matches a KunTabItem `value`)."
       },
       {
         "name": "active",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "The active tab value. Optional when wrapped in <KunTabPanels> (inherited)."
       },
       {
         "name": "className",
@@ -3351,28 +4103,44 @@
         "name": "forceMount",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Alias for mount=\"eager\" — familiar from Radix/Reka/MUI."
       },
       {
         "name": "hiddenStrategy",
         "type": "\"until-found\" | \"display\"",
-        "required": false
+        "required": false,
+        "description": "How inactive eager/lazy panels hide. until-found (default) keeps them findable by in-page search + deep links; display is plain display:none."
       },
       {
         "name": "loading",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Mark this panel as loading (async / lazy data still resolving). Dims the panel to 0.5 opacity, makes it inert (no pointer/keyboard interaction) and sets aria-busy for screen readers. The dim uses a *delayed* fade (the React useDeferredValue trick) so a fast load finishes before it becomes visible — no flicker; only a genuinely slow load dims. This is the \"stale-while- revalidate\" mechanism only: the library dims what's there, YOU decide when `loading` is true and render the skeleton (e.g. via <KunSkeleton>) for a first load where there is no prior content to dim."
       },
       {
         "name": "mount",
         "type": "\"lazy\" | \"eager\" | \"unmount\"",
-        "required": false
+        "required": false,
+        "description": "eager: SSR all panels, hide inactive (SEO-optimal, default). lazy: render on first activation then keep. unmount: only active in DOM."
       },
       {
         "name": "name",
         "type": "string",
         "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "activate",
+        "type": "value: string"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -3399,6 +4167,18 @@
         "name": "name",
         "type": "string",
         "required": false
+      }
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      }
+    ],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -3438,7 +4218,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field (hidden when `error` is set). Canonical name."
       },
       {
         "name": "disabled",
@@ -3557,6 +4338,33 @@
         "required": false,
         "default": "\"flat\""
       }
+    ],
+    "events": [
+      {
+        "name": "add",
+        "type": "tag: string",
+        "description": "A tag that passed every check and is now in the model."
+      },
+      {
+        "name": "invalid",
+        "type": "reason: KunTagInputInvalidReason, raw: string, detail?: string",
+        "description": "Why an entry was rejected, plus the raw text. `detail` carries the message returned by a `validate` function."
+      },
+      {
+        "name": "remove",
+        "type": "tag: string, index: number",
+        "description": "The tag that was removed and the index it held."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string[]"
+      }
+    ],
+    "slots": [
+      {
+        "name": "tag",
+        "type": "{ tag: string; index: number; remove: () => void; }"
+      }
     ]
   },
   "KunText": {
@@ -3573,7 +4381,9 @@
         "required": false,
         "default": "\"\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   },
   "KunTextarea": {
     "props": [
@@ -3594,7 +4404,8 @@
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"default\""
+        "default": "\"default\"",
+        "description": "Focus-ring accent (the resting border/text stay neutral). Default 'default'."
       },
       {
         "name": "darkBorder",
@@ -3606,7 +4417,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field (hidden when `error` is set). Canonical name."
       },
       {
         "name": "disabled",
@@ -3709,7 +4521,26 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "blur",
+        "type": "event: FocusEvent"
+      },
+      {
+        "name": "focus",
+        "type": "event: FocusEvent"
+      },
+      {
+        "name": "input",
+        "type": "event: Event"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      }
+    ],
+    "slots": []
   },
   "KunTimeline": {
     "props": [
@@ -3718,6 +4549,13 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -3754,6 +4592,21 @@
         "type": "string",
         "required": false,
         "default": "\"\""
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "{}"
+      },
+      {
+        "name": "time",
+        "type": "{}"
+      },
+      {
+        "name": "title",
+        "type": "{}"
       }
     ]
   },
@@ -3798,13 +4651,25 @@
         "name": "showArrow",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render a caret pointing at the trigger."
       },
       {
         "name": "text",
         "type": "string",
         "required": false,
         "default": "\"\""
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "content",
+        "type": "{}"
+      },
+      {
+        "name": "default",
+        "type": "{}"
       }
     ]
   },
@@ -3830,7 +4695,8 @@
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the dropzone. Canonical name."
       },
       {
         "name": "hint",
@@ -3849,7 +4715,15 @@
         "type": "KunUIRounded",
         "required": false
       }
-    ]
+    ],
+    "events": [
+      {
+        "name": "setImage",
+        "type": "img: Blob",
+        "description": "The cropped image, once the user applies the crop."
+      }
+    ],
+    "slots": []
   },
   "KunUserChip": {
     "props": [
@@ -3886,7 +4760,8 @@
         "name": "isNavigation",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "When true (default) and the user has an id, the whole chip is a real <a>/link to the user's profile (crawlable, name as anchor text)."
       },
       {
         "name": "size",
@@ -3894,6 +4769,8 @@
         "required": false,
         "default": "\"md\""
       }
-    ]
+    ],
+    "events": [],
+    "slots": []
   }
 }

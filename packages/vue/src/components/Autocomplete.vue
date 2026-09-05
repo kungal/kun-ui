@@ -49,7 +49,15 @@ const props = withDefaults(defineProps<KunAutocompleteProps<T>>(), {
 const modelValue = defineModel<string>({ default: '' })
 
 const emit = defineEmits<{
+  /**
+   * The option the user committed by click or Enter. Free text accepted through
+   * `allowCustomValue` does not emit it.
+   */
   select: [option: T]
+  /**
+   * The field text, debounced by `debounce`. One emit per committed word during
+   * IME composition, not one per romaji keystroke.
+   */
   search: [query: string]
 }>()
 
@@ -189,18 +197,45 @@ const selectOption = (option: T) => {
   nextTick(() => inputRef.value?.focus({ preventScroll: true }))
 }
 
-const onInput = (e: Event) => {
-  // Everything here runs off `value`, never off `modelValue.value` (see
-  // filterOptions): @search used to fire one keystroke behind — typing "key"
-  // searched "", "k", "ke" — and the highlight was the first enabled row of the
-  // *previous* query's list, so Enter could commit an option the user never saw
-  // highlighted.
-  const value = (e.target as HTMLInputElement).value
+// The text this component last pushed into the model. `modelValue.value` cannot
+// answer that question in the same tick (see filterOptions), and the dedupe
+// below needs an answer that is never one keystroke stale.
+let appliedText = modelValue.value
+watch(modelValue, (v) => {
+  appliedText = v
+})
+
+const applyInput = (value: string) => {
+  // compositionend and the browser's own final `input` both carry the committed
+  // text, so without this one word emits @search twice.
+  if (value === appliedText) return
+  appliedText = value
+  // Everything here runs off `value`, never off `modelValue.value`: @search used
+  // to fire one keystroke behind — typing "key" searched "", "k", "ke" — and the
+  // highlight was the first enabled row of the *previous* query's list, so Enter
+  // could commit an option the user never saw highlighted.
   modelValue.value = value
   dirty.value = true
   emitSearch(value)
   open()
   activeIndex.value = firstEnabledOf(filterOptions(value))
+}
+
+// `:value` + a hand-written `@input` opts out of Vue's own composition guard:
+// runtime-dom's `vModelText` sets `e.target.composing` on compositionstart, its
+// input listener opens with `if (e.target.composing) return`, and compositionend
+// replays one event. KunSelect measured what losing it costs — typing 你好
+// through a Pinyin IME re-filtered on every romaji keystroke, collapsing the
+// panel to `noResultText` while the candidate window was still open.
+const composing = ref(false)
+const onCompositionEnd = (e: CompositionEvent) => {
+  composing.value = false
+  applyInput((e.target as HTMLInputElement).value)
+}
+
+const onInput = (e: Event) => {
+  if (composing.value) return
+  applyInput((e.target as HTMLInputElement).value)
 }
 
 const onKeydown = (e: KeyboardEvent) => {
@@ -321,6 +356,8 @@ defineExpose({
           )
         "
         @input="onInput"
+        @compositionstart="composing = true"
+        @compositionend="onCompositionEnd"
         @focus="open"
         @click="open"
         @keydown="onKeydown"

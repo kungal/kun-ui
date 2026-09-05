@@ -38,11 +38,15 @@ const props = withDefaults(defineProps<KunCommandPaletteProps<T>>(), {
 })
 
 const emit = defineEmits<{
+  /** The item the user activated. A disabled item never emits. */
   select: [item: T]
-  // Enter with nothing to select — no results, or every result disabled. The
-  // shell has no search of its own, so this is the only way a consumer can act
-  // on the raw query ("search the whole site for …"). Enter over a real result
-  // still selects it; put an action row first if you want one that is visible.
+
+  /**
+   * Enter with nothing to select — no results, or every result disabled. The
+   * shell has no search of its own, so this is the only way a consumer can act
+   * on the raw query ("search the whole site for …"). Enter over a real result
+   * still selects it; put an action row first if you want one that is visible.
+   */
   submit: [query: string]
 }>()
 

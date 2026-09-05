@@ -44,7 +44,12 @@ const props = withDefaults(defineProps<KunCheckBoxGroupProps<T>>(), {
 const modelValue = defineModel<T[]>({ required: true })
 
 const emits = defineEmits<{
+  /**
+   * The new selection, after a user toggle only — a programmatic `v-model`
+   * write does not emit it.
+   */
   change: [value: T[]]
+  /** A click was blocked because it would exceed `max`. */
   invalid: [reason: KunCheckBoxGroupInvalidReason]
 }>()
 

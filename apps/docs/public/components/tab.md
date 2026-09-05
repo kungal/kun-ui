@@ -443,12 +443,25 @@ const items: MailTab[] = [
 | `fullWidth` | `boolean` | `false` |  |
 | `iconSize` | `string` | `"1em"` |  |
 | `innerClassName` | `string` | `""` |  |
-| `name` | `string` | — |  |
+| `name` | `string` | — | ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via aria-controls/labelledby). Set a distinct `name` per tab group on a page. |
 | `orientation` | `KunTabOrientation` | `"horizontal"` |  |
-| `scrollable` | `boolean` | `false` |  |
-| `scrollButtons` | `boolean` | `true` |  |
+| `scrollable` | `boolean` | `false` | Horizontal tabs ALWAYS contain their overflow (they scroll inside the container instead of widening the page) — no flag needed. This opts a *vertical* tab column into scrolling when it outgrows a bounded height. |
+| `scrollButtons` | `boolean` | `true` | When a horizontal tab strip overflows, float a chevron button on each scrollable edge (in addition to the always-on edge fade). Set false to keep just the fade — the strip still scrolls via swipe / wheel / keyboard. Default true. |
 | `size` | `KunTabSize` | `"md"` |  |
 | `variant` | `KunTabVariant` | `"underlined"` |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `change` | `value: string` |
+| `update:modelValue` | `value: string` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#tab` | `{ item: KunTabItem; index: number; active: boolean; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/tab

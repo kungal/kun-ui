@@ -59,5 +59,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunSelect.props" />
+
+    <EventsTable :rows="meta.KunSelect.events" />
+    <SlotsTable :rows="meta.KunSelect.slots" />
   </article>
 </template>

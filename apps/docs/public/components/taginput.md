@@ -85,34 +85,49 @@ const b = ref<string[]>(['vue', 'react'])
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `allowDuplicates` | `boolean` | `false` |  |
+| `caseSensitive` | `boolean` | `false` |  |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"primary"` |  |
+| `confirmOnBlur` | `boolean` | `true` |  |
+| `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
+| `disabled` | `boolean` | `false` |  |
+| `error` | `string` | `""` |  |
+| `helperText` | `string` | `""` |  |
+| `label` | `string` | `""` |  |
+| `maxTagLength` | `number` | `100` |  |
+| `maxTags` | `number` | `Number.POSITIVE_INFINITY` |  |
+| `minTagLength` | `number` | `1` |  |
+| `modelValue` | `string[]` | `[]` |  |
+| `placeholder` | `string` | `""` |  |
+| `readonly` | `boolean` | `false` |  |
+| `respectComposition` | `boolean` | `true` |  |
+| `rounded` | `KunUIRounded` | — |  |
+| `showCounter` | `boolean` | `false` |  |
+| `size` | `KunUISize` | `"md"` |  |
+| `splitChars` | `(string \| RegExp)[]` | `["\n", ",", "，", ";"]` |  |
+| `splitOnPaste` | `boolean` | `true` |  |
+| `transform` | `((raw: string) => string)` | — |  |
+| `trim` | `boolean` | `true` |  |
+| `validate` | `KunTagInputValidator` | — |  |
+| `variant` | `KunTagInputVariant` | `"flat"` |  |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
-| `allowDuplicates` | `boolean` | `false` |
-| `caseSensitive` | `boolean` | `false` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"primary"` |
-| `confirmOnBlur` | `boolean` | `true` |
-| `description` | `string` | `""` |
-| `disabled` | `boolean` | `false` |
-| `error` | `string` | `""` |
-| `helperText` | `string` | `""` |
-| `label` | `string` | `""` |
-| `maxTagLength` | `number` | `100` |
-| `maxTags` | `number` | `Number.POSITIVE_INFINITY` |
-| `minTagLength` | `number` | `1` |
-| `modelValue` | `string[]` | `[]` |
-| `placeholder` | `string` | `""` |
-| `readonly` | `boolean` | `false` |
-| `respectComposition` | `boolean` | `true` |
-| `rounded` | `KunUIRounded` | — |
-| `showCounter` | `boolean` | `false` |
-| `size` | `KunUISize` | `"md"` |
-| `splitChars` | `(string \| RegExp)[]` | `["\n", ",", "，", ";"]` |
-| `splitOnPaste` | `boolean` | `true` |
-| `transform` | `((raw: string) => string)` | — |
-| `trim` | `boolean` | `true` |
-| `validate` | `KunTagInputValidator` | — |
-| `variant` | `KunTagInputVariant` | `"flat"` |
+| `add` | `tag: string` | A tag that passed every check and is now in the model. |
+| `invalid` | `reason: KunTagInputInvalidReason, raw: string, detail?: string` | Why an entry was rejected, plus the raw text. `detail` carries the message returned by a `validate` function. |
+| `remove` | `tag: string, index: number` | The tag that was removed and the index it held. |
+| `update:modelValue` | `value: string[]` |  |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#tag` | `{ tag: string; index: number; remove: () => void; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/taginput

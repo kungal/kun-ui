@@ -44,5 +44,8 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunAutocomplete.props" />
+
+    <EventsTable :rows="meta.KunAutocomplete.events" />
+    <SlotsTable :rows="meta.KunAutocomplete.slots" />
   </article>
 </template>

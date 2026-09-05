@@ -117,5 +117,11 @@ const openAt = (i: number) => {
 | `isOpen` * | `boolean` | — |
 | `initialIndex` | `number` | — |
 
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `update:isOpen` | `value: boolean` |
+
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/lightbox

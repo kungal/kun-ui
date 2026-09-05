@@ -23,8 +23,10 @@ import type { KunTabItem, KunTabColor, KunTabSize, KunTabProps } from './types'
 // Nuxt-decoupled Tab. Two coupling points fixed:
 //   - `navigateTo(href)` → `config.navigate(href)` (injectable; the Nuxt
 //     layer wires it to NuxtLink's navigateTo, plain Vue does a full nav)
-//   - `import.meta.dev` → `import.meta.env.DEV` (Vite standard; also true
-//     under Nuxt's Vite build)
+//   - `import.meta.dev` → `process.env.NODE_ENV`. NOT `import.meta.env.DEV`:
+//     Vite folds that to `false` while building THIS package, so the warning was
+//     stripped from the published bundle and could never reach the app that
+//     needs it. NODE_ENV is substituted by the CONSUMER's bundler instead.
 defineOptions({ name: 'KunTab' })
 
 const props = withDefaults(defineProps<KunTabProps<T>>(), {
@@ -74,7 +76,7 @@ const setTabRef = (
       : (el as Element | null)
   if (node instanceof HTMLElement) {
     tabRefs.value[idx] = node
-  } else if (el != null && import.meta.env.DEV) {
+  } else if (el != null && process.env.NODE_ENV !== 'production') {
     console.warn('[KunTab] unexpected ref payload at index', idx, el)
   }
 }

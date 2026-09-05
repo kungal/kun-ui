@@ -39,6 +39,10 @@ const props = withDefaults(defineProps<KunRadioGroupProps<T>>(), {
 const modelValue = defineModel<T>({ required: true })
 
 const emits = defineEmits<{
+  /**
+   * The newly selected value and its index. Not fired for a click on the
+   * already-selected option.
+   */
   change: [value: T, index: number]
 }>()
 

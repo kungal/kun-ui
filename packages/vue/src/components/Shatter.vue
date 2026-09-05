@@ -56,7 +56,14 @@ const props = withDefaults(defineProps<KunShatterProps>(), {
 // content; back to false re-forms it. The component also flips it to true itself
 // when an imperative / click break finishes, so external state stays in sync.
 const shattered = defineModel<boolean>('shattered', { default: false })
-const emit = defineEmits<{ shatterStart: []; shatterEnd: []; restoreEnd: [] }>()
+const emit = defineEmits<{
+  /** The shatter animation has begun. */
+  shatterStart: []
+  /** The last shard has landed. */
+  shatterEnd: []
+  /** The reassemble animation has finished. */
+  restoreEnd: []
+}>()
 
 const rootRef = ref<HTMLElement | null>(null)
 // SSR-safe + reactive; honoured so a reduced-motion user gets an instant hide.

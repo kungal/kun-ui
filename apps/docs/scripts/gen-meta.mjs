@@ -133,6 +133,42 @@ const resolveGenerics = (type, map) => {
   return next
 }
 
+// ── Emit descriptions ───────────────────────────────────────────────────
+// vue-component-meta reports every event's name, payload and signature, but its
+// `description` comes back "" even when the `defineEmits` member carries a
+// JSDoc block — in both the tuple (`add: [tag: string]`) and the call-signature
+// (`(e: 'add', tag: string): void`) form. The compiler has already folded the
+// type literal into overloads by the time the checker sees it and the doc
+// comments do not survive. So read them out of the SFC, the same way
+// genericDefaults reads the `generic=` attribute.
+const emitDocs = (file) => {
+  const src = readFileSync(file, 'utf8')
+  const start = src.indexOf('defineEmits<{')
+  if (start === -1) return null
+  let depth = 0
+  const open = src.indexOf('{', start)
+  let end = open
+  for (; end < src.length; end++) {
+    if (src[end] === '{') depth++
+    else if (src[end] === '}' && --depth === 0) break
+  }
+  const body = src.slice(open + 1, end)
+  const map = new Map()
+  const re =
+    /\/\*\*([\s\S]*?)\*\/\s*(?:\(\s*(?:e|event)\s*:\s*'([\w:]+)'|'?([\w:]+)'?\s*:)/g
+  for (const m of body.matchAll(re)) {
+    const name = m[2] ?? m[3]
+    const text = m[1]
+      .split('\n')
+      .map((l) => l.replace(/^\s*\*/, '').trim())
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    if (name && text) map.set(name, text)
+  }
+  return map.size ? map : null
+}
+
 const out = {}
 const failed = []
 let okProps = 0
@@ -164,12 +200,35 @@ for (const name of names) {
       }))
       // model props (v-model) first, then required, then alpha
       .sort((a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name))
-    out[name] = { props }
+    // Events and slots are public API too, and until now they appeared in no
+    // generated surface at all — not the props table, not the page Markdown,
+    // not llms.txt. A consumer could not discover `@search` or `#option`
+    // without opening the SFC.
+    const docs = emitDocs(file)
+    const events = meta.events
+      .map((e) => ({
+        name: e.name,
+        // The payload tuple, minus the tuple brackets: `[query: string]` is how
+        // an emits type is declared but not how it is read.
+        type: resolveGenerics(cleanType(e.type), generics).replace(/^\[(.*)\]$/, '$1'),
+        description:
+          docs?.get(e.name) ??
+          ((e.description || '').replace(/\s+/g, ' ').trim() || undefined),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    const slots = meta.slots
+      .map((s) => ({
+        name: s.name,
+        type: resolveGenerics(cleanType(s.type), generics),
+        description: (s.description || '').replace(/\s+/g, ' ').trim() || undefined,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    out[name] = { props, events, slots }
     okProps += props.length
   } catch (e) {
     console.error(`! meta failed for ${name}: ${e.message}`)
     failed.push(name)
-    out[name] = { props: [] }
+    out[name] = { props: [], events: [], slots: [] }
   }
 }
 
@@ -190,8 +249,10 @@ if (failed.length) {
 // library is typed that way today, so treat it as the failure it almost
 // certainly is rather than publishing a table that says nothing. If a prop ever
 // genuinely needs `any`, narrow it — or relax this check deliberately.
-const anyTyped = Object.entries(out).flatMap(([name, { props }]) =>
-  props.filter((p) => /\bany\b/.test(p.type)).map((p) => `${name}.${p.name}: ${p.type}`)
+const anyTyped = Object.entries(out).flatMap(([name, { props, events }]) =>
+  [...props, ...events]
+    .filter((p) => /\bany\b/.test(p.type))
+    .map((p) => `${name}.${p.name}: ${p.type}`)
 )
 if (anyTyped.length) {
   console.error(
@@ -205,4 +266,10 @@ if (anyTyped.length) {
 const dir = join(here, '..', 'app', 'generated')
 mkdirSync(dir, { recursive: true })
 writeFileSync(join(dir, 'component-meta.json'), `${JSON.stringify(out, null, 2)}\n`)
-console.log(`wrote component-meta.json — ${Object.keys(out).length} components, ${okProps} props total`)
+const totals = Object.values(out).reduce(
+  (acc, c) => ({ events: acc.events + c.events.length, slots: acc.slots + c.slots.length }),
+  { events: 0, slots: 0 }
+)
+console.log(
+  `wrote component-meta.json — ${Object.keys(out).length} components, ${okProps} props, ${totals.events} events, ${totals.slots} slots`
+)

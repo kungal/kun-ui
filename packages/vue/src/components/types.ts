@@ -49,7 +49,7 @@ export type KunButtonGroupOrientation = 'horizontal' | 'vertical'
 
 export interface KunButtonGroupProps {
   orientation?: KunButtonGroupOrientation
-  // Accessible name for the group (role="group").
+  /** Accessible name for the group (role="group"). */
   ariaLabel?: string
   className?: string
 }
@@ -122,21 +122,27 @@ export interface KunModalProps {
   isShowCloseButton?: boolean
   withContainer?: boolean
   rounded?: KunUIRounded
-  // Max width of the panel (full = nearly the whole viewport). Default 'md'.
+  /** Max width of the panel (full = nearly the whole viewport). Default 'md'. */
   size?: KunModalSize
-  // inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an
-  // `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it
-  // — and never taller than the visible viewport, so the on-screen keyboard
-  // can't bury it.
-  // outside: the whole overlay scrolls — for panels taller than the viewport.
+  /**
+   * inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an
+   * `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it
+   * — and never taller than the visible viewport, so the on-screen keyboard
+   * can't bury it.
+   * outside: the whole overlay scrolls — for panels taller than the viewport.
+   */
   scrollBehavior?: 'inside' | 'outside'
-  // Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones,
-  // a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of
-  // centring at every width.
+  /**
+   * Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones,
+   * a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of
+   * centring at every width.
+   */
   placement?: KunModalPlacement
-  // ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts
-  // that need an immediate response — it also flips the isDismissable default.
-  // Default 'dialog'.
+  /**
+   * ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts
+   * that need an immediate response — it also flips the isDismissable default.
+   * Default 'dialog'.
+   */
   role?: 'dialog' | 'alertdialog'
   /** Accessible name for a dialog that draws its own heading inside the slot
    *  instead of passing `title`. Ignored when `title` is set (that wins, via
@@ -190,45 +196,57 @@ export interface KunTabProps<T extends KunTabItem = KunTabItem> {
   align?: 'start' | 'center' | 'end'
   disabled?: boolean
   disableAnimation?: boolean
-  // Horizontal tabs ALWAYS contain their overflow (they scroll inside the
-  // container instead of widening the page) — no flag needed. This opts a
-  // *vertical* tab column into scrolling when it outgrows a bounded height.
+  /**
+   * Horizontal tabs ALWAYS contain their overflow (they scroll inside the
+   * container instead of widening the page) — no flag needed. This opts a
+   * *vertical* tab column into scrolling when it outgrows a bounded height.
+   */
   scrollable?: boolean
-  // When a horizontal tab strip overflows, float a chevron button on each
-  // scrollable edge (in addition to the always-on edge fade). Set false to keep
-  // just the fade — the strip still scrolls via swipe / wheel / keyboard.
-  // Default true.
+  /**
+   * When a horizontal tab strip overflows, float a chevron button on each
+   * scrollable edge (in addition to the always-on edge fade). Set false to keep
+   * just the fade — the strip still scrolls via swipe / wheel / keyboard.
+   * Default true.
+   */
   scrollButtons?: boolean
   iconSize?: string
   className?: string
   innerClassName?: string
-  // ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via
-  // aria-controls/labelledby). Set a distinct `name` per tab group on a page.
+  /**
+   * ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via
+   * aria-controls/labelledby). Set a distinct `name` per tab group on a page.
+   */
   name?: string
 }
 
 // ── TabPanel / TabPanels ───────────────────────────────────────────────
 export interface KunTabPanelProps {
-  // Which tab this panel belongs to (matches a KunTabItem `value`).
+  /** Which tab this panel belongs to (matches a KunTabItem `value`). */
   value: string
-  // The active tab value. Optional when wrapped in <KunTabPanels> (inherited).
+  /** The active tab value. Optional when wrapped in <KunTabPanels> (inherited). */
   active?: string
-  // eager: SSR all panels, hide inactive (SEO-optimal, default).
-  // lazy: render on first activation then keep. unmount: only active in DOM.
+  /**
+   * eager: SSR all panels, hide inactive (SEO-optimal, default).
+   * lazy: render on first activation then keep. unmount: only active in DOM.
+   */
   mount?: 'eager' | 'lazy' | 'unmount'
-  // Alias for mount="eager" — familiar from Radix/Reka/MUI.
+  /** Alias for mount="eager" — familiar from Radix/Reka/MUI. */
   forceMount?: boolean
-  // How inactive eager/lazy panels hide. until-found (default) keeps them
-  // findable by in-page search + deep links; display is plain display:none.
+  /**
+   * How inactive eager/lazy panels hide. until-found (default) keeps them
+   * findable by in-page search + deep links; display is plain display:none.
+   */
   hiddenStrategy?: 'until-found' | 'display'
-  // Mark this panel as loading (async / lazy data still resolving). Dims the
-  // panel to 0.5 opacity, makes it inert (no pointer/keyboard interaction) and
-  // sets aria-busy for screen readers. The dim uses a *delayed* fade (the React
-  // useDeferredValue trick) so a fast load finishes before it becomes visible —
-  // no flicker; only a genuinely slow load dims. This is the "stale-while-
-  // revalidate" mechanism only: the library dims what's there, YOU decide when
-  // `loading` is true and render the skeleton (e.g. via <KunSkeleton>) for a
-  // first load where there is no prior content to dim.
+  /**
+   * Mark this panel as loading (async / lazy data still resolving). Dims the
+   * panel to 0.5 opacity, makes it inert (no pointer/keyboard interaction) and
+   * sets aria-busy for screen readers. The dim uses a *delayed* fade (the React
+   * useDeferredValue trick) so a fast load finishes before it becomes visible —
+   * no flicker; only a genuinely slow load dims. This is the "stale-while-
+   * revalidate" mechanism only: the library dims what's there, YOU decide when
+   * `loading` is true and render the skeleton (e.g. via <KunSkeleton>) for a
+   * first load where there is no prior content to dim.
+   */
   loading?: boolean
   name?: string
   className?: string
@@ -249,7 +267,7 @@ export interface KunTooltipProps {
   delayHide?: number
   hideOnMobile?: boolean
   rounded?: KunUIRounded
-  // Render a caret pointing at the trigger.
+  /** Render a caret pointing at the trigger. */
   showArrow?: boolean
 }
 
@@ -290,9 +308,9 @@ export interface KunPopoverProps {
    */
   autoPosition?: boolean
   rounded?: KunUIRounded
-  // Accessible name for the dialog (role="dialog" needs a name).
+  /** Accessible name for the dialog (role="dialog" needs a name). */
   ariaLabel?: string
-  // Render a caret pointing at the trigger.
+  /** Render a caret pointing at the trigger. */
   showArrow?: boolean
   /**
    * Force a fully OPAQUE panel, ignoring a globally-lowered `--kun-surface-opacity`
@@ -322,41 +340,52 @@ export interface KunPopoverProps {
 export interface KunImageProps {
   src: string
   alt?: string
-  // Shown if `src` fails to load (broken URL, 404). Resets when `src` changes.
+  /** Shown if `src` fails to load (broken URL, 404). Resets when `src` changes. */
   fallbackSrc?: string
   loading?: 'lazy' | 'eager'
   className?: string
   ariaLabel?: string
   width?: string | number
   height?: string | number
-  // Renders a sibling skeleton overlay while loading (Radix-Avatar
-  // 3-state machine). Default true; set false for a bare element.
+  /**
+   * Renders a sibling skeleton overlay while loading (Radix-Avatar
+   * 3-state machine). Default true; set false for a bare element.
+   */
   skeleton?: boolean
   /** A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image
    *  loads, then cross-faded out. Decoded to a tiny image on the client; falls back
    *  to the pulse skeleton until decoded (or if the hash is invalid). Implies the
    *  wrapper even with `skeleton: false`. */
   thumbhash?: string
-  // CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image
-  // is absolutely positioned and fills the box.
+  /**
+   * CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image
+   * is absolutely positioned and fills the box.
+   */
   aspectRatio?: string
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
-  // Classes for the inner image (wrapper gets `className`).
+  /** Classes for the inner image (wrapper gets `className`). */
   imageClassName?: string
   decoding?: 'sync' | 'async' | 'auto'
   fetchpriority?: 'high' | 'low' | 'auto'
-  // ── @nuxt/image optimization props — only applied when an image
-  //    component is injected (Nuxt). Ignored by the native <img> default.
+  /** @nuxt/image blur-up placeholder. Only applied when an image component is
+   *  injected (Nuxt); the native `<img>` default ignores it. */
   placeholder?:
     | string
     | number
     | boolean
     | [w: number, h: number, q?: number, b?: number]
+  /** @nuxt/image output format (`webp`, `avif`, …). Nuxt only. */
   format?: string
+  /** @nuxt/image compression quality. Nuxt only. */
   quality?: string | number
+  /** @nuxt/image preload hint — emits `<link rel="preload">` for this image.
+   *  Nuxt only. */
   preload?: boolean | { fetchPriority: 'auto' | 'high' | 'low' }
+  /** Which @nuxt/image provider resolves the URL. Nuxt only. */
   provider?: 'ipx' | 'none' | (string & {})
+  /** @nuxt/image pixel densities to generate, e.g. `'x1 x2'`. Nuxt only. */
   densities?: string
+  /** Responsive `sizes` hint for @nuxt/image. Nuxt only. */
   sizes?: string
 }
 
@@ -414,8 +443,10 @@ export interface KunBadgeProps {
   size?: 'sm' | 'md' | 'lg'
   placement?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
   className?: string
-  // Accessible name (e.g. "5 条未读"). Without an anchor slot the badge renders
-  // standalone (inline), not as a corner overlay.
+  /**
+   * Accessible name (e.g. "5 条未读"). Without an anchor slot the badge renders
+   * standalone (inline), not as a corner overlay.
+   */
   ariaLabel?: string
 }
 
@@ -425,7 +456,7 @@ export interface KunChipProps {
   color?: KunUIColor
   size?: KunUISize
   variant?: KunUIVariant
-  // Render a × that emits `close` (removable tag — filters, tag inputs).
+  /** Render a × that emits `close` (removable tag — filters, tag inputs). */
   closable?: boolean
   disabled?: boolean
 }
@@ -441,7 +472,7 @@ export interface KunProgressProps {
   showLabel?: boolean
   indeterminate?: boolean
   className?: string
-  // Accessible name for the progressbar (e.g. "上传进度").
+  /** Accessible name for the progressbar (e.g. "上传进度"). */
   ariaLabel?: string
 }
 
@@ -476,10 +507,12 @@ export interface KunLoadingProps {
    *  URI — no network request, no consumer asset needed). Pass any URL or
    *  data URI to override. */
   src?: string
-  // Render a compact spinner icon instead of the full mascot image — for
-  // small inline loading states (next to a button, a table cell, etc.).
+  /**
+   * Render a compact spinner icon instead of the full mascot image — for
+   * small inline loading states (next to a button, a table cell, etc.).
+   */
   spinner?: boolean
-  // Spinner size (spinner mode only). Default 'md'.
+  /** Spinner size (spinner mode only). Default 'md'. */
   size?: KunUISize
 }
 
@@ -492,14 +525,14 @@ export interface KunInputProps {
   placeholder?: string
   /** @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
-  // Helper text below the field (hidden when `error` is set). Canonical name.
+  /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
   error?: string
-  // Mark the field invalid (danger ring) without showing an error message.
+  /** Mark the field invalid (danger ring) without showing an error message. */
   isInvalid?: boolean
-  // Show an X button to clear the value when non-empty.
+  /** Show an X button to clear the value when non-empty. */
   isClearable?: boolean
-  // For type="password": render an eye toggle to reveal/hide the value.
+  /** For type="password": render an eye toggle to reveal/hide the value. */
   revealPassword?: boolean
   size?: KunUISize
   required?: boolean
@@ -523,14 +556,16 @@ export interface KunInputProps {
 
 // ── Textarea ───────────────────────────────────────────────────────────
 export interface KunTextareaProps {
-  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  /**
+   * Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+   */
   color?: KunUIColor
   placeholder?: string
   label?: string
   name?: string
   /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
-  // Helper text below the field (hidden when `error` is set). Canonical name.
+  /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
   error?: string
   maxHeight?: string
@@ -571,15 +606,15 @@ export interface KunNumberInputProps {
   label?: string
   placeholder?: string
   error?: string
-  // Helper text below the field (hidden when `error` is set).
+  /** Helper text below the field (hidden when `error` is set). */
   description?: string
   isInvalid?: boolean
   disabled?: boolean
   readonly?: boolean
   required?: boolean
-  // Show the −/+ stepper buttons (default true).
+  /** Show the −/+ stepper buttons (default true). */
   controls?: boolean
-  // Round/display to this many decimal places.
+  /** Round/display to this many decimal places. */
   precision?: number
   /**
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
@@ -589,23 +624,23 @@ export interface KunNumberInputProps {
    */
   darkBorder?: boolean
   rounded?: KunUIRounded
-  // Native form field name (emits a hidden input mirroring the value).
+  /** Native form field name (emits a hidden input mirroring the value). */
   name?: string
   ariaLabel?: string
 }
 
 // ── PinInput (OTP) ─────────────────────────────────────────────────────
 export interface KunPinInputProps {
-  // Number of cells (code length).
+  /** Number of cells (code length). */
   length?: number
-  // numeric → digits only + inputmode numeric; text → any single char.
+  /** numeric → digits only + inputmode numeric; text → any single char. */
   type?: 'numeric' | 'text'
-  // Render each filled cell as a • (one-time codes / passcodes).
+  /** Render each filled cell as a • (one-time codes / passcodes). */
   mask?: boolean
   size?: KunUISize
   color?: KunUIColor
   disabled?: boolean
-  // Mark every cell invalid (danger ring).
+  /** Mark every cell invalid (danger ring). */
   isInvalid?: boolean
   /**
    * Focus the first cell on mount. Focus is moved with `preventScroll` (see
@@ -614,7 +649,7 @@ export interface KunPinInputProps {
   autofocus?: boolean
   placeholder?: string
   rounded?: KunUIRounded
-  // Native form field name (emits a hidden input mirroring the joined value).
+  /** Native form field name (emits a hidden input mirroring the joined value). */
   name?: string
   ariaLabel?: string
 }
@@ -631,13 +666,15 @@ export interface KunAutocompleteOption {
 export interface KunAutocompleteProps<
   T extends KunAutocompleteOption = KunAutocompleteOption,
 > {
-  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  /**
+   * Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+   */
   color?: KunUIColor
   options: readonly T[]
   label?: string
   placeholder?: string
   error?: string
-  // Helper text below the field (hidden when `error` is set).
+  /** Helper text below the field (hidden when `error` is set). */
   description?: string
   isInvalid?: boolean
   disabled?: boolean
@@ -651,21 +688,27 @@ export interface KunAutocompleteProps<
    */
   darkBorder?: boolean
   clearable?: boolean
-  // Accept a value the user typed that is not in `options` (free text).
+  /** Accept a value the user typed that is not in `options` (free text). */
   allowCustomValue?: boolean
-  // Skip built-in label filtering — you control `options` from `@search`
-  // (remote/async suggestions). Default false (client-side filter).
+  /**
+   * Skip built-in label filtering — you control `options` from `@search`
+   * (remote/async suggestions). Default false (client-side filter).
+   */
   manualFilter?: boolean
   noResultText?: string
-  // Async data source: show a loading spinner in the dropdown (instead of
-  // `noResultText`) while a remote `@search` request is in flight. Drive it from
-  // your fetch — set true when the request starts, false when the results land.
+  /**
+   * Async data source: show a loading spinner in the dropdown (instead of
+   * `noResultText`) while a remote `@search` request is in flight. Drive it from
+   * your fetch — set true when the request starts, false when the results land.
+   */
   loading?: boolean
-  // Text under the loading spinner. Default '加载中…'.
+  /** Text under the loading spinner. Default '加载中…'. */
   loadingText?: string
-  // Debounce the `@search` emit by N ms; the input text still updates instantly
-  // (a responsive field). 0 (default) emits on every keystroke — set e.g. 300
-  // for remote sources so you fetch once the user pauses, not per keypress.
+  /**
+   * Debounce the `@search` emit by N ms; the input text still updates instantly
+   * (a responsive field). 0 (default) emits on every keystroke — set e.g. 300
+   * for remote sources so you fetch once the user pauses, not per keypress.
+   */
   debounce?: number
   name?: string
   ariaLabel?: string
@@ -678,9 +721,9 @@ export interface KunSwitchProps {
   className?: string
   labelClassName?: string
   size?: KunUISize
-  // Error message (red text below). Takes precedence over description.
+  /** Error message (red text below). Takes precedence over description. */
   error?: string
-  // Helper text below the switch (hidden when `error` is set).
+  /** Helper text below the switch (hidden when `error` is set). */
   description?: string
 }
 
@@ -693,12 +736,16 @@ export interface KunCheckBoxProps {
   name?: string
   value?: string | number | boolean
   disabled?: boolean
-  // Tri-state "some but not all" (e.g. a select-all parent). Visual dash that
-  // overrides the check; the underlying input stays unchecked until toggled.
+  /**
+   * Tri-state "some but not all" (e.g. a select-all parent). Visual dash that
+   * overrides the check; the underlying input stays unchecked until toggled.
+   */
   indeterminate?: boolean
-  // Error message (red text below + danger box). Takes precedence over description.
+  /**
+   * Error message (red text below + danger box). Takes precedence over description.
+   */
   error?: string
-  // Helper text below the control (hidden when `error` is set).
+  /** Helper text below the control (hidden when `error` is set). */
   description?: string
   className?: string
   size?: KunUISize
@@ -717,21 +764,27 @@ export interface KunSliderProps {
   size?: KunUISize
   color?: KunUIColor
   disabled?: boolean
-  // Visible field label (rendered above the track, associates the slider).
+  /** Visible field label (rendered above the track, associates the slider). */
   label?: string
-  // Accessible name when there is no visible label (role="slider" needs a name).
+  /**
+   * Accessible name when there is no visible label (role="slider" needs a name).
+   */
   ariaLabel?: string
-  // Error message (red text below + danger fill). Takes precedence over description.
+  /**
+   * Error message (red text below + danger fill). Takes precedence over description.
+   */
   error?: string
-  // Helper text below the track (hidden when `error` is set).
+  /** Helper text below the track (hidden when `error` is set). */
   description?: string
-  // Tick marks under the track. Pass numbers (or {value,label}) within [min,max].
+  /**
+   * Tick marks under the track. Pass numbers (or {value,label}) within [min,max].
+   */
   marks?: (number | KunSliderMark)[]
-  // Show a value bubble above the thumb while hovering / dragging / focused.
+  /** Show a value bubble above the thumb while hovering / dragging / focused. */
   showTooltip?: boolean
-  // Always render the current value next to the label.
+  /** Always render the current value next to the label. */
   showValue?: boolean
-  // Format the value shown in the tooltip / value readout.
+  /** Format the value shown in the tooltip / value readout. */
   formatValue?: (value: number) => string
 }
 
@@ -760,8 +813,10 @@ export interface KunRadioGroupProps<T extends KunRadioValue = KunRadioValue> {
   color?: KunUIColor
   size?: KunUISize
   rounded?: KunUIRounded
-  // `card` variant only: drop the radio-dot indicator and signal selection with
-  // the tinted border/fill alone (the icon-card look). No effect on classic/pill.
+  /**
+   * `card` variant only: drop the radio-dot indicator and signal selection with
+   * the tinted border/fill alone (the icon-card look). No effect on classic/pill.
+   */
   hideIndicator?: boolean
   disabled?: boolean
   error?: string
@@ -798,12 +853,16 @@ export interface KunCheckBoxGroupProps<
   color?: KunUIColor
   size?: KunUISize
   rounded?: KunUIRounded
-  // Cap on how many options can be selected at once. A click that would exceed
-  // it is blocked and emits `invalid` with `'max-reached'` (already-selected
-  // options can still be toggled off).
+  /**
+   * Cap on how many options can be selected at once. A click that would exceed
+   * it is blocked and emits `invalid` with `'max-reached'` (already-selected
+   * options can still be toggled off).
+   */
   max?: number
-  // `card` variant only: drop the checkbox-box indicator, signal selection with
-  // the tinted border/fill alone (the icon-card look).
+  /**
+   * `card` variant only: drop the checkbox-box indicator, signal selection with
+   * the tinted border/fill alone (the icon-card look).
+   */
   hideIndicator?: boolean
   disabled?: boolean
   error?: string
@@ -823,12 +882,10 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
 // option, but callers can pass a richer object (avatar, description, …) and read
 // it back — typed — in the `#option` scoped slot.
 /** Per-part class hooks for KunSelect, merged *after* the component's own
- *  classes. `cn()` is tailwind-merge, which drops the losing class only for the
- *  scales it knows: padding, colour, border colour, typography and layout all
- *  override cleanly. It does NOT know KunUI's custom scales, so `rounded-kun-*`,
- *  `shadow-kun-*` and `z-kun-*` survive alongside whatever you pass and CSS
- *  source order decides the winner — measured, `classNames.trigger:
- *  'rounded-full'` leaves the radius at 12px. Use the `rounded` prop for radius. */
+ *  classes, so your class wins the conflict. `cn()` is tailwind-merge taught
+ *  KunUI's own scales as well as Tailwind's, so `rounded-full` overrides
+ *  `rounded-kun-md`, `shadow-none` overrides `shadow-kun-sm`, and padding,
+ *  colour, border colour, typography and layout all behave the same way. */
 export interface KunSelectClassNames {
   /** The outer wrapper — the same target as the legacy `className`. */
   root?: string
@@ -911,10 +968,10 @@ export interface KunSelectProps<
    *  @default 'trigger' */
   popupWidth?: KunSelectPopupWidth
   /** Per-part class hooks (root / trigger / popup / list / option / chip),
-   *  merged after the component's own classes. Padding, colour, border colour
-   *  and typography override cleanly; KunUI's own `rounded-kun-*`,
-   *  `shadow-kun-*` and `z-kun-*` scales do not, because tailwind-merge cannot
-   *  see them — reach for the `rounded` prop instead of a radius utility. */
+   *  merged after the component's own classes, so yours wins the conflict —
+   *  KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included.
+   *  `rounded` is still the right tool for the trigger and popup radius — it
+   *  keeps the two in step; `classNames.chip` is the only way to reach a chip. */
   classNames?: KunSelectClassNames
   /** Skip the built-in label filter — you own `options` and drive them from
    *  `@search` (remote/async suggestions). Requires `searchable`.
@@ -998,7 +1055,7 @@ export interface KunCopyProps {
   size?: KunUISize
   rounded?: KunUIRounded
   className?: string
-  // Label shown briefly after a successful copy. Default '已复制'.
+  /** Label shown briefly after a successful copy. Default '已复制'. */
   copiedText?: string
 }
 
@@ -1124,7 +1181,7 @@ export interface KunScrollShadowProps {
   shadowSize?: string
   className?: string
   contentClass?: string
-  // Accessible name for the scrollable region. Default 'scrollable content'.
+  /** Accessible name for the scrollable region. Default 'scrollable content'. */
   ariaLabel?: string
   /** When `axis='horizontal'`, let a vertical mouse wheel scroll the content
    *  sideways (mouse users otherwise can't reach off-screen content; trackpads and
@@ -1149,8 +1206,10 @@ export interface KunPaginationProps {
   currentPage: number
   totalPage: number
   isLoading?: boolean
-  // Map a page number to its URL. When provided, the numbered page controls
-  // render real <a href> (crawlable pagination) instead of plain buttons.
+  /**
+   * Map a page number to its URL. When provided, the numbered page controls
+   * render real <a href> (crawlable pagination) instead of plain buttons.
+   */
   pageHref?: (page: number) => string
 }
 
@@ -1168,12 +1227,16 @@ export interface KunLightboxProps {
 
 // ── Content / Text ─────────────────────────────────────────────────────
 export interface KunContentProps {
-  // Rendered with v-html — the caller MUST pass trusted/pre-sanitized HTML
-  // (KunUI does not sanitize; see docs/architecture.md).
+  /**
+   * Rendered with v-html — the caller MUST pass trusted/pre-sanitized HTML
+   * (KunUI does not sanitize; see docs/architecture.md).
+   */
   content: string
   className?: string
-  // Tighter density for comment / reply streams (adds `.kun-prose-compact`).
-  // Visual effect requires importing `@kungal/ui-vue/prose.css`.
+  /**
+   * Tighter density for comment / reply streams (adds `.kun-prose-compact`).
+   * Visual effect requires importing `@kungal/ui-vue/prose.css`.
+   */
   compact?: boolean
 }
 
@@ -1244,7 +1307,9 @@ export interface KunFileInputProps {
   maxSize?: number
   /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
-  // Helper text below the trigger (hidden when `error` is set). Canonical name.
+  /**
+   * Helper text below the trigger (hidden when `error` is set). Canonical name.
+   */
   description?: string
   error?: string
   disabled?: boolean
@@ -1275,7 +1340,7 @@ export interface KunTagInputProps {
   placeholder?: string
   /** @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
-  // Helper text below the field (hidden when `error` is set). Canonical name.
+  /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
   error?: string
   maxTags?: number
@@ -1307,7 +1372,7 @@ export interface KunUploadProps {
   initialImage?: string
   /** @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
-  // Helper text below the dropzone. Canonical name.
+  /** Helper text below the dropzone. Canonical name. */
   description?: string
   className?: string
   rounded?: KunUIRounded
@@ -1317,14 +1382,16 @@ export interface KunUploadProps {
 export type KunAvatarSize = KunUISize | 'original' | 'original-sm'
 
 export interface KunAvatarProps {
-  // Nullable — upstream user hydration can return a missing brief; Avatar
-  // falls back to a deterministic sticker.
+  /**
+   * Nullable — upstream user hydration can return a missing brief; Avatar
+   * falls back to a deterministic sticker.
+   */
   user: KunUser | null | undefined
   size?: KunAvatarSize
   isNavigation?: boolean
   className?: string
   imageClassName?: string
-  // Accepted but unused (kept so existing call sites don't TS-error).
+  /** Accepted but unused (kept so existing call sites don't TS-error). */
   disableFloating?: boolean
   floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
 }
@@ -1333,10 +1400,12 @@ export interface KunAvatarGroupProps {
   users: KunUser[]
   ellipsis?: boolean
   visibleCount?: number
-  // Grand total for the "+N" overflow chip. Defaults to users.length, so the
-  // overflow shows even without passing it explicitly.
+  /**
+   * Grand total for the "+N" overflow chip. Defaults to users.length, so the
+   * overflow shows even without passing it explicitly.
+   */
   total?: number
-  // Accessible name for the group (default derived from the count).
+  /** Accessible name for the group (default derived from the count). */
   ariaLabel?: string
 }
 
@@ -1345,8 +1414,10 @@ export interface KunUserChipProps {
   size?: KunAvatarSize
   description?: string
   className?: string
-  // When true (default) and the user has an id, the whole chip is a real
-  // <a>/link to the user's profile (crawlable, name as anchor text).
+  /**
+   * When true (default) and the user has an id, the whole chip is a real
+   * <a>/link to the user's profile (crawlable, name as anchor text).
+   */
   isNavigation?: boolean
   disableFloating?: boolean
   floatingPosition?: 'top' | 'bottom' | 'left' | 'right'

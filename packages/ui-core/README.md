@@ -9,7 +9,7 @@ ESM/CJS with type declarations.
 | Export | Purpose |
 | --- | --- |
 | `KunUIVariant`, `KunUIColor`, `KunUISize`, `KunUIRounded` | the design-system type vocabulary |
-| `cn(...inputs)` | clsx + tailwind-merge class merge ("last class wins") |
+| `cn(...inputs)` | clsx + tailwind-merge class merge ("last class wins"), taught KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` / `ease-kun-*` / `duration-kun-*` scales so they resolve against Tailwind's |
 | `kunVariantClasses(variant, color)` | the 7×7 variant × color → Tailwind class matrix |
 | `kunBgClasses` / `kunTextClasses` / `kunBorderClasses` / `kunRingClasses` / `kunSoftBgClasses` | per-color static class maps |
 | `kunRoundedClasses` | radius bucket → `rounded-kun-*` class map |

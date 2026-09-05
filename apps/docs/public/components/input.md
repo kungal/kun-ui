@@ -125,20 +125,36 @@ const amount = ref('')
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"default"` |  |
 | `darkBorder` | `boolean` | `true` |  |
-| `description` | `string` | `""` |  |
+| `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` |  |
 | `helperText` | `string` | `""` |  |
-| `isClearable` | `boolean` | `false` |  |
-| `isInvalid` | `boolean` | `false` |  |
+| `isClearable` | `boolean` | `false` | Show an X button to clear the value when non-empty. |
+| `isInvalid` | `boolean` | `false` | Mark the field invalid (danger ring) without showing an error message. |
 | `label` | `string` | `""` |  |
 | `modelValue` | `string \| number` | `""` |  |
 | `placeholder` | `string` | `""` |  |
 | `required` | `boolean` | `false` |  |
-| `revealPassword` | `boolean` | `false` |  |
+| `revealPassword` | `boolean` | `false` | For type="password": render an eye toggle to reveal/hide the value. |
 | `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
 | `type` | `string` | `"text"` |  |
+
+## Events
+
+| 事件 | 回调参数 |
+| --- | --- |
+| `blur` | `event: FocusEvent` |
+| `clear` | — |
+| `focus` | `event: FocusEvent` |
+| `update:modelValue` | `value: string \| number` |
+
+## Slots
+
+| 插槽 | 作用域 |
+| --- | --- |
+| `#prefix` | — |
+| `#suffix` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/input
