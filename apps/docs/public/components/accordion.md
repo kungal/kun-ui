@@ -67,8 +67,8 @@ const open = ref<string[]>(['a'])
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `className` | `string` | `""` |  |
-| `defaultValue` | `string \| string[]` | `undefined` | Initially-open value(s) when uncontrolled (no v-model). |
-| `modelValue` | `string \| string[]` | `undefined` |  |
+| `defaultValue` | `string \| string[]` | — | Initially-open value(s) when uncontrolled (no v-model). |
+| `modelValue` | `string \| string[]` | — |  |
 | `multiple` | `boolean` | `false` | Allow multiple sections open at once (default single-open). |
 | `variant` | `"light" \| "bordered" \| "splitted"` | `"light"` |  |
 

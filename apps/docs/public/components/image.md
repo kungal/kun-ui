@@ -284,26 +284,26 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
 | --- | --- | --- | --- |
 | `src` * | `string` | — |  |
 | `alt` | `string` | `"image"` |  |
-| `ariaLabel` | `string` | `undefined` |  |
-| `aspectRatio` | `string` | `undefined` |  |
-| `className` | `string` | `undefined` |  |
-| `decoding` | `"auto" \| "sync" \| "async"` | `undefined` |  |
-| `densities` | `string` | `undefined` |  |
-| `fallbackSrc` | `string` | `undefined` |  |
-| `fetchpriority` | `"auto" \| "high" \| "low"` | `undefined` |  |
-| `format` | `string` | `undefined` |  |
-| `height` | `string \| number` | `undefined` |  |
-| `imageClassName` | `string` | `undefined` |  |
+| `ariaLabel` | `string` | — |  |
+| `aspectRatio` | `string` | — |  |
+| `className` | `string` | — |  |
+| `decoding` | `"auto" \| "sync" \| "async"` | — |  |
+| `densities` | `string` | — |  |
+| `fallbackSrc` | `string` | — |  |
+| `fetchpriority` | `"auto" \| "high" \| "low"` | — |  |
+| `format` | `string` | — |  |
+| `height` | `string \| number` | — |  |
+| `imageClassName` | `string` | — |  |
 | `loading` | `"lazy" \| "eager"` | `"lazy"` |  |
 | `objectFit` | `"fill" \| "none" \| "cover" \| "contain" \| "scale-down"` | `"cover"` |  |
-| `placeholder` | `string \| number \| boolean \| [w: number, h: number, q?: number, b?: number]` | `undefined` |  |
-| `preload` | `boolean \| { fetchPriority: "auto" \| "high" \| "low"; }` | `undefined` |  |
-| `provider` | `"none" \| (string & {}) \| "ipx"` | `undefined` |  |
-| `quality` | `string \| number` | `undefined` |  |
-| `sizes` | `string` | `undefined` |  |
+| `placeholder` | `string \| number \| boolean \| [w: number, h: number, q?: number, b?: number]` | — |  |
+| `preload` | `boolean \| { fetchPriority: "auto" \| "high" \| "low"; }` | — |  |
+| `provider` | `"none" \| (string & {}) \| "ipx"` | — |  |
+| `quality` | `string \| number` | — |  |
+| `sizes` | `string` | — |  |
 | `skeleton` | `boolean` | `true` |  |
-| `thumbhash` | `string` | `undefined` | A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`. |
-| `width` | `string \| number` | `undefined` |  |
+| `thumbhash` | `string` | — | A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`. |
+| `width` | `string \| number` | — |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/image

@@ -3,6 +3,8 @@ import Basic from '~/examples/datepicker/Basic.vue'
 import BasicSrc from '~/examples/datepicker/Basic.vue?raw'
 import Range from '~/examples/datepicker/Range.vue'
 import RangeSrc from '~/examples/datepicker/Range.vue?raw'
+import Precision from '~/examples/datepicker/Precision.vue'
+import PrecisionSrc from '~/examples/datepicker/Precision.vue?raw'
 import Format from '~/examples/datepicker/Format.vue'
 import FormatSrc from '~/examples/datepicker/Format.vue?raw'
 import Colors from '~/examples/datepicker/Colors.vue'
@@ -24,6 +26,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">日期范围</h2>
     <Demo title="Range.vue" :source="RangeSrc"><Range /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">选择粒度（日 / 月 / 年）</h2>
+    <Demo title="Precision.vue" :source="PrecisionSrc"><Precision /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">格式与禁用日期</h2>
     <Demo title="Format.vue" :source="FormatSrc"><Format /></Demo>

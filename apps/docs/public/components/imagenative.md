@@ -51,11 +51,11 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
 | --- | --- | --- |
 | `src` * | `string` | — |
 | `alt` | `string` | `"image"` |
-| `ariaLabel` | `string` | `undefined` |
-| `className` | `string` | `undefined` |
-| `height` | `string \| number` | `undefined` |
+| `ariaLabel` | `string` | — |
+| `className` | `string` | — |
+| `height` | `string \| number` | — |
 | `loading` | `"lazy" \| "eager"` | `"lazy"` |
-| `width` | `string \| number` | `undefined` |
+| `width` | `string \| number` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/imagenative

@@ -108,7 +108,7 @@ const text = ref('')
 | `readonly` | `boolean` | `false` |  |
 | `required` | `boolean` | `false` |  |
 | `resize` | `"none" \| "horizontal" \| "vertical" \| "both"` | `"none"` |  |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `rows` | `number` | `4` |  |
 | `showCharCount` | `boolean` | `false` |  |
 | `size` | `KunUISize` | `"md"` |  |

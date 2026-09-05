@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue, O extends KunSelectOption<T> = KunSelectOption<T>">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { size } from '@floating-ui/vue'
 import {
@@ -15,6 +15,7 @@ import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
+import KunLoading from './Loading.vue'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
 defineOptions({ name: 'KunSelect' })
@@ -37,6 +38,15 @@ const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
   searchPlaceholder: '搜索…',
   noResultText: '无匹配项',
   name: undefined,
+  icon: undefined,
+  fullWidth: true,
+  maxVisibleTags: undefined,
+  popupWidth: 'trigger',
+  classNames: undefined,
+  manualFilter: false,
+  loading: false,
+  loadingText: '加载中…',
+  debounce: 0,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -47,6 +57,7 @@ const modelValue = defineModel<T | T[] | null>({ required: true })
 
 const emit = defineEmits<{
   set: [value: T, index: number]
+  search: [query: string]
 }>()
 
 const kunUniqueId = useKunUniqueId('kun-select')
@@ -65,12 +76,17 @@ const { floatingStyles, transformOrigin } = useKunFloating(buttonRef, dropdownRe
   open: isOpen,
   offset: 4,
   middleware: [
-    // Match dropdown width to the trigger; cap height to viewport so the
-    // list scrolls instead of overflowing.
+    // Inline styles, not classes: the popup's width is correctness, not
+    // appearance — a purged utility would leave the list at its content width
+    // over a trigger it is supposed to match. Height is always capped to the
+    // viewport so the list scrolls instead of overflowing.
     size({
-      apply({ rects, elements, availableHeight }) {
+      apply({ rects, elements, availableHeight, availableWidth }) {
+        const w = props.popupWidth
         Object.assign(elements.floating.style, {
-          width: `${rects.reference.width}px`,
+          width: typeof w === 'number' ? `${w}px` : w === 'auto' ? '' : `${rects.reference.width}px`,
+          minWidth: w === 'auto' ? `${rects.reference.width}px` : '',
+          maxWidth: w === 'auto' ? `${Math.max(0, availableWidth - 8)}px` : '',
           maxHeight: `${Math.min(280, availableHeight - 8)}px`,
         })
       },
@@ -85,15 +101,65 @@ const selected = computed<T[]>(() => {
   return v === undefined || v === null ? [] : [v as T]
 })
 const selectedSet = computed(() => new Set<KunSelectValue>(selected.value))
+const optionByValue = computed(() => {
+  const m = new Map<KunSelectValue, O>()
+  for (const o of props.options) m.set(o.value, o)
+  return m
+})
+
+// A remote source replaces `options` on every query, which used to take the
+// chips with it: search "fate", pick it, search "clannad" — the picked option is
+// no longer in the list, so its chip lost its label while the value stayed in
+// the model. Keep the last known option for everything currently selected
+// (Element Plus carries a `cachedOptions` map for the same reason), and only
+// for that, so the map cannot grow past the selection.
+const optionCache = shallowRef(new Map<KunSelectValue, O>())
+watch(
+  [() => props.options, selected],
+  ([opts, sel]) => {
+    const keep = new Set<KunSelectValue>(sel)
+    const next = new Map<KunSelectValue, O>()
+    for (const [k, v] of optionCache.value) if (keep.has(k)) next.set(k, v)
+    for (const o of opts) if (keep.has(o.value)) next.set(o.value, o)
+    optionCache.value = next
+  },
+  { immediate: true }
+)
+
+// Model order, not `options` order: the hidden form inputs already iterate the
+// model, so ordering the chips by the list made the two disagree.
 const selectedOptions = computed(() =>
-  props.options.filter((o) => selectedSet.value.has(o.value))
+  selected.value
+    .map((v) => optionByValue.value.get(v) ?? optionCache.value.get(v))
+    .filter((o): o is O => !!o)
 )
 const singleLabel = computed(() => selectedOptions.value[0]?.label ?? '')
 const hasSelection = computed(() => selected.value.length > 0)
 
+// Uncapped, the trigger grows a row per selection — fine for a form field,
+// fatal for a filter bar. 0 visible chips falls through to the text branch.
+const visibleTags = computed(() =>
+  props.maxVisibleTags == null
+    ? selectedOptions.value
+    : selectedOptions.value.slice(0, Math.max(0, props.maxVisibleTags))
+)
+const hiddenTagCount = computed(
+  () => selected.value.length - visibleTags.value.length
+)
+const showsChips = computed(
+  () => props.multiple && hasSelection.value && visibleTags.value.length > 0
+)
+const triggerText = computed(() => {
+  if (!props.multiple) return singleLabel.value || props.placeholder
+  if (!hasSelection.value) return props.placeholder
+  const n = selected.value.length
+  return props.placeholder ? `${props.placeholder} · ${n}` : String(n)
+})
+
 // ── filtering ──────────────────────────────────────────────────────────
 const filtered = computed(() => {
-  if (!props.searchable || !query.value.trim()) return props.options
+  if (props.manualFilter || !props.searchable || !query.value.trim())
+    return props.options
   const q = query.value.trim().toLowerCase()
   return props.options.filter((o) => o.label.toLowerCase().includes(q))
 })
@@ -112,6 +178,46 @@ const firstEnabled = (from = 0, dir = 1) => {
   return -1
 }
 
+// ── search ───────────────────────────────────────────────────────────────
+// Same contract as KunAutocomplete: the filter field updates instantly, only
+// the parent notification waits. `immediate` skips the wait for resets (open /
+// clear) and supersedes any pending keystroke emit. While a timer is armed we
+// are "about to search", so `pending` shows the spinner and suppresses
+// `noResultText` — otherwise the gap before the request flashes "no matches".
+const pending = ref(false)
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+const cancelPendingSearch = () => {
+  if (searchTimer) {
+    clearTimeout(searchTimer)
+    searchTimer = null
+  }
+  pending.value = false
+}
+const emitSearch = (q: string, immediate = false) => {
+  cancelPendingSearch()
+  if (immediate || props.debounce <= 0) {
+    emit('search', q)
+    return
+  }
+  pending.value = true
+  searchTimer = setTimeout(() => {
+    searchTimer = null
+    pending.value = false
+    emit('search', q)
+  }, props.debounce)
+}
+onBeforeUnmount(cancelPendingSearch)
+
+const showSpinner = computed(() => props.loading || pending.value)
+
+const onSearchInput = (e: Event) => {
+  // Value off the event, never read back out of state — the rule 2.26.3 was
+  // cut for. @search must carry the text that was just typed.
+  const value = (e.target as HTMLInputElement).value
+  query.value = value
+  emitSearch(value)
+}
+
 // ── open / close ─────────────────────────────────────────────────────────
 const open = () => {
   if (props.disabled || isOpen.value) return
@@ -127,12 +233,16 @@ const open = () => {
     if (props.searchable) searchRef.value?.focus({ preventScroll: true })
     scrollActiveIntoView()
   })
+  // Opening resets the query, so a remote source gets told to load its first
+  // page. Immediate: there is nothing to debounce against on an open.
+  if (props.searchable) emitSearch('', true)
 }
 
 const close = (returnFocus = true) => {
   if (!isOpen.value) return
   isOpen.value = false
   query.value = ''
+  cancelPendingSearch()
   if (returnFocus) nextTick(() => buttonRef.value?.focus({ preventScroll: true }))
 }
 
@@ -293,7 +403,16 @@ watch(filtered, () => {
 </script>
 
 <template>
-  <div :class="cn('relative w-full', props.className)">
+  <div
+    :class="
+      cn(
+        'relative',
+        fullWidth ? 'w-full' : 'inline-block align-top',
+        props.className,
+        props.classNames?.root
+      )
+    "
+  >
     <label
       v-if="label"
       :id="`${kunUniqueId}-label`"
@@ -317,25 +436,34 @@ watch(filtered, () => {
       :aria-disabled="disabled || undefined"
       :class="
         cn(
-          'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
+          'flex cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
+          fullWidth && 'w-full',
           kunControlSizeClasses[props.size],
           roundedClass,
           'bg-content1 shadow-kun-sm border',
           error
             ? cn('border-danger-300', kunFocusRingClasses.danger)
             : cn('border-kun', kunFocusRingClasses[color]),
-          disabled && 'cursor-not-allowed opacity-60'
+          disabled && 'cursor-not-allowed opacity-60',
+          props.classNames?.trigger
         )
       "
       @click="toggle"
       @keydown="onKeydown"
     >
-      <!-- Multiple: removable chips -->
-      <span v-if="multiple && hasSelection" class="flex min-w-0 flex-1 flex-wrap gap-1">
+      <KunIcon v-if="icon" :name="icon" class="text-default-500 shrink-0" />
+
+      <!-- Multiple: removable chips, capped by `maxVisibleTags` -->
+      <span v-if="showsChips" class="flex min-w-0 flex-1 flex-wrap items-center gap-1">
         <span
-          v-for="opt in selectedOptions"
+          v-for="opt in visibleTags"
           :key="String(opt.value)"
-          class="bg-default-100 text-default-700 inline-flex max-w-full items-center gap-1 rounded-kun-sm px-1.5 py-0.5 text-xs"
+          :class="
+            cn(
+              'bg-default-100 text-default-700 inline-flex max-w-full items-center gap-1 rounded-kun-sm px-1.5 py-0.5 text-xs',
+              props.classNames?.chip
+            )
+          "
         >
           <span class="truncate">{{ opt.label }}</span>
           <button
@@ -349,11 +477,22 @@ watch(filtered, () => {
             <KunIcon name="lucide:x" class="size-3" />
           </button>
         </span>
+        <span
+          v-if="hiddenTagCount > 0"
+          :class="
+            cn(
+              'bg-default-100 text-default-700 inline-flex shrink-0 items-center rounded-kun-sm px-1.5 py-0.5 text-xs tabular-nums',
+              props.classNames?.chip
+            )
+          "
+        >
+          +{{ hiddenTagCount }}
+        </span>
       </span>
 
-      <!-- Single: label or placeholder -->
+      <!-- Single, nothing selected, or every chip collapsed (`maxVisibleTags: 0`) -->
       <span v-else class="block min-w-0 flex-1 truncate" :class="!hasSelection && 'text-default-400'">
-        {{ multiple ? placeholder : singleLabel || placeholder }}
+        {{ triggerText }}
       </span>
 
       <!-- `flex`, not a bare block: an <svg> alone in a block button sits on the
@@ -405,14 +544,15 @@ watch(filtered, () => {
           :class="
             cn(
               'bg-content1 z-kun-popover flex flex-col overflow-hidden p-1 shadow-kun-md',
-              roundedClass
+              roundedClass,
+              props.classNames?.popup
             )
           "
         >
           <div v-if="searchable" class="p-1">
             <input
               ref="searchRef"
-              v-model="query"
+              :value="query"
               type="text"
               enterkeyhint="done"
               :placeholder="searchPlaceholder"
@@ -427,63 +567,80 @@ watch(filtered, () => {
                 )
               "
               @keydown="onKeydown"
+              @input="onSearchInput"
             />
           </div>
 
           <ul
             ref="listRef"
             :id="listId"
-            class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm focus:outline-none"
+            :class="
+              cn(
+                'scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm focus:outline-none',
+                props.classNames?.list
+              )
+            "
             tabindex="-1"
             role="listbox"
             :aria-multiselectable="multiple || undefined"
+            :aria-busy="showSpinner || undefined"
           >
-            <li
-              v-for="(option, index) in filtered"
-              :id="`${kunUniqueId}-opt-${index}`"
-              :key="String(option.value)"
-              :data-index="index"
-              class="text-foreground relative flex items-center gap-2 rounded-kun-md px-3 py-2 select-none"
-              :class="[
-                option.disabled
-                  ? 'text-default-300 cursor-not-allowed'
-                  : 'cursor-pointer',
-                index === activeIndex && !option.disabled ? 'bg-default-100' : '',
-              ]"
-              role="option"
-              :aria-selected="selectedSet.has(option.value)"
-              :aria-disabled="option.disabled || undefined"
-              @click="selectOption(option)"
-              @mousemove="!option.disabled && (activeIndex = index)"
-            >
-              <!-- Custom item rendering: pass an option shape with extra fields
-                   (avatar, description, …) and read them here. Defaults to the
-                   plain label. The flex-1 wrapper lets rich content (avatar +
-                   text) group at the left while the check stays at the right. -->
-              <div class="flex min-w-0 flex-1 items-center gap-2">
-                <slot
-                  name="option"
-                  :option="option"
-                  :index="index"
-                  :active="index === activeIndex"
-                  :selected="selectedSet.has(option.value)"
-                >
-                  <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
-                </slot>
-              </div>
-              <KunIcon
-                v-if="selectedSet.has(option.value)"
-                name="lucide:check"
-                class="text-primary shrink-0"
-              />
+            <!-- Async in flight (or the debounce gap): a spinner instead of
+                 options / noResultText, so a pending fetch never reads as
+                 "no matches". -->
+            <li v-if="showSpinner" class="flex justify-center px-3 py-6">
+              <KunLoading spinner size="sm" :description="loadingText" />
             </li>
 
-            <li
-              v-if="!filtered.length"
-              class="text-default-400 px-3 py-6 text-center text-sm"
-            >
-              {{ noResultText }}
-            </li>
+            <template v-else>
+              <li
+                v-for="(option, index) in filtered"
+                :id="`${kunUniqueId}-opt-${index}`"
+                :key="String(option.value)"
+                :data-index="index"
+                class="text-foreground relative flex items-center gap-2 rounded-kun-md px-3 py-2 select-none"
+                :class="[
+                  option.disabled
+                    ? 'text-default-300 cursor-not-allowed'
+                    : 'cursor-pointer',
+                  index === activeIndex && !option.disabled ? 'bg-default-100' : '',
+                  props.classNames?.option,
+                ]"
+                role="option"
+                :aria-selected="selectedSet.has(option.value)"
+                :aria-disabled="option.disabled || undefined"
+                @click="selectOption(option)"
+                @mousemove="!option.disabled && (activeIndex = index)"
+              >
+                <!-- Custom item rendering: pass an option shape with extra fields
+                     (avatar, description, …) and read them here. Defaults to the
+                     plain label. The flex-1 wrapper lets rich content (avatar +
+                     text) group at the left while the check stays at the right. -->
+                <div class="flex min-w-0 flex-1 items-center gap-2">
+                  <slot
+                    name="option"
+                    :option="option"
+                    :index="index"
+                    :active="index === activeIndex"
+                    :selected="selectedSet.has(option.value)"
+                  >
+                    <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+                  </slot>
+                </div>
+                <KunIcon
+                  v-if="selectedSet.has(option.value)"
+                  name="lucide:check"
+                  class="text-primary shrink-0"
+                />
+              </li>
+
+              <li
+                v-if="!filtered.length"
+                class="text-default-400 px-3 py-6 text-center text-sm"
+              >
+                {{ noResultText }}
+              </li>
+            </template>
           </ul>
         </div>
       </Transition>

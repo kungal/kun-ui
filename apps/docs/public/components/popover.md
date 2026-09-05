@@ -217,12 +217,12 @@ const groups = [
 | `autoPosition` | `boolean` | `true` | Avoid viewport collisions: flip to the opposite side, shift along the edge, and cap height/width to the available space so tall content scrolls instead of overflowing. Default `true`. Set `false` to honour `position` verbatim. |
 | `closeDelay` | `number` | `120` | `trigger="hover"`: ms grace after leaving (crosses the gap). Default 120. |
 | `fullWidth` | `boolean` | `false` | Make the trigger anchor span its container instead of shrinking to its content. Both wrapper divs switch from `inline-block` to `block w-full`, so a full-width trigger (e.g. a `fullWidth` KunButton or a split button) can actually fill the width. Default `false` (inline, content-width). |
-| `group` | `string` | `undefined` | `trigger="hover"`: shared id so a row of menus switches instantly between siblings and only one is open at a time (menu-bar behaviour). |
+| `group` | `string` | — | `trigger="hover"`: shared id so a row of menus switches instantly between siblings and only one is open at a time (menu-bar behaviour). |
 | `innerClass` | `string` | `""` |  |
 | `opaque` | `boolean` | `false` | Force a fully OPAQUE panel, ignoring a globally-lowered `--kun-surface-opacity` (which sites with a background image use to frost surfaces). Menus/popovers over a busy background usually want this for legibility. Default `false` (follows the global surface opacity). Note: setting `--kun-surface-opacity:1` on the panel yourself does NOT work — Tailwind resolves the themed colour at `:root`. |
 | `openDelay` | `number` | `100` | `trigger="hover"`: ms before a hover opens. Default 100. |
 | `position` | `KunPopoverPosition` | `"bottom-start"` |  |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `showArrow` | `boolean` | `false` |  |
 | `trigger` | `"click" \| "hover"` | `"click"` | How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click. |
 

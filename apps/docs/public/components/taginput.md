@@ -104,14 +104,14 @@ const b = ref<string[]>(['vue', 'react'])
 | `placeholder` | `string` | `""` |
 | `readonly` | `boolean` | `false` |
 | `respectComposition` | `boolean` | `true` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `showCounter` | `boolean` | `false` |
 | `size` | `KunUISize` | `"md"` |
 | `splitChars` | `(string \| RegExp)[]` | `["\n", ",", "，", ";"]` |
 | `splitOnPaste` | `boolean` | `true` |
-| `transform` | `((raw: string) => string)` | `undefined` |
+| `transform` | `((raw: string) => string)` | — |
 | `trim` | `boolean` | `true` |
-| `validate` | `KunTagInputValidator` | `undefined` |
+| `validate` | `KunTagInputValidator` | — |
 | `variant` | `KunTagInputVariant` | `"flat"` |
 
 ---

@@ -822,17 +822,38 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
 // `T` is the value type; `O` is the option shape. `O` defaults to the plain
 // option, but callers can pass a richer object (avatar, description, …) and read
 // it back — typed — in the `#option` scoped slot.
+/** Per-part class hooks for KunSelect. Each string is merged *after* the
+ *  component's own classes, so a utility here wins the `cn()` conflict. */
+export interface KunSelectClassNames {
+  /** The outer wrapper — the same target as the legacy `className`. */
+  root?: string
+  /** The `role="combobox"` trigger. */
+  trigger?: string
+  /** The teleported popup surface. */
+  popup?: string
+  /** The `role="listbox"` `<ul>`. */
+  list?: string
+  /** Every `role="option"` `<li>`. */
+  option?: string
+  /** Each selected-value chip inside a `multiple` trigger. */
+  chip?: string
+}
+
+/** Popup sizing. `'trigger'` matches the trigger exactly, `'auto'` sizes to the
+ *  content with the trigger width as a floor, a number is a fixed px width. */
+export type KunSelectPopupWidth = 'trigger' | 'auto' | number
+
 export interface KunSelectProps<
   T extends KunSelectValue = KunSelectValue,
   O extends KunSelectOption<T> = KunSelectOption<T>,
 > {
-  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  /** Focus-ring accent (the resting border/text stay neutral). */
   color?: KunUIColor
   options: readonly O[]
   label?: string
   placeholder?: string
   error?: string
-  // Helper text under the field (hidden when `error` is set).
+  /** Helper text under the field (hidden when `error` is set). */
   description?: string
   disabled?: boolean
   /**
@@ -843,22 +864,58 @@ export interface KunSelectProps<
    */
   darkBorder?: boolean
   ariaLabel?: string
+  /** Extra classes for the outer wrapper. Use `classNames` to reach the trigger,
+   *  popup, list, options or chips. */
   className?: string
   rounded?: KunUIRounded
   size?: KunUISize
-  // Multi-select: v-model becomes an array; the trigger shows removable chips
-  // and the list stays open while toggling.
+  /** Multi-select: v-model becomes an array; the trigger shows removable chips
+   *  and the list stays open while toggling. */
   multiple?: boolean
-  // Render a filter input at the top of the list (client-side label match).
+  /** Render a filter input at the top of the list. Also the switch that enables
+   *  `@search` / `manualFilter` — without it there is nothing to type into. */
   searchable?: boolean
-  // Show an X to reset the selection (single) — chips already remove per-item.
+  /** Show an X to reset the selection (single) — chips already remove per-item. */
   clearable?: boolean
   searchPlaceholder?: string
-  // Shown when the filter matches nothing.
+  /** Shown when the filter matches nothing. */
   noResultText?: string
-  // Native form field name — emits hidden input(s) so the value is collected
-  // by the surrounding <form> / FormData.
+  /** Native form field name — emits hidden input(s) so the value is collected
+   *  by the surrounding <form> / FormData. */
   name?: string
+  /** Icon rendered before the value in the trigger — a filter glyph for a filter
+   *  bar, a category glyph for a field. Must be one of the bundled icon names. */
+  icon?: string
+  /** Stretch the control to its container. Turn it off in a filter bar, where a
+   *  control should be only as wide as its own label.
+   *  @default true */
+  fullWidth?: boolean
+  /** How many chips a `multiple` trigger renders before collapsing the rest into
+   *  a `+N` badge. `0` renders no chips at all and the trigger reads
+   *  `{placeholder} · {n}` — what a filter pill wants, and what keeps a filter
+   *  bar from growing a row per selection. Unset renders every chip. */
+  maxVisibleTags?: number
+  /** Popup width. The default pins it to the trigger, which is wrong the moment
+   *  the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'`
+   *  sizes to the content and keeps the trigger width as a floor.
+   *  @default 'trigger' */
+  popupWidth?: KunSelectPopupWidth
+  /** Per-part class hooks, merged after the component's own classes. */
+  classNames?: KunSelectClassNames
+  /** Skip the built-in label filter — you own `options` and drive them from
+   *  `@search` (remote/async suggestions). Requires `searchable`.
+   *  @default false */
+  manualFilter?: boolean
+  /** Async data source: show a spinner in the list (instead of `noResultText`)
+   *  while a remote `@search` request is in flight. Drive it from your fetch —
+   *  true when the request starts, false when the results land. */
+  loading?: boolean
+  /** Text under the loading spinner. @default '加载中…' */
+  loadingText?: string
+  /** Debounce the `@search` emit by N ms; the filter field itself still updates
+   *  instantly. 0 (default) emits on every keystroke — set e.g. 300 for a remote
+   *  source so you fetch once the user pauses, not per keypress. */
+  debounce?: number
 }
 
 // ── ContextMenu / Dropdown (shared item model) ─────────────────────────
@@ -1114,11 +1171,21 @@ export interface KunTextProps {
 // ── DatePicker ─────────────────────────────────────────────────────────
 export type KunDatePickerMode = 'single' | 'range'
 
+/** Selection granularity. Orthogonal to `mode`, so `range` + `month` is a month
+ *  range — deliberately not Element Plus's fused `daterange`/`monthrange`
+ *  enum, which multiplies every future granularity by every future mode. */
+export type KunDatePickerPrecision = 'day' | 'month' | 'year'
+
 export interface KunDatePickerProps {
-  // Focus-ring accent (the resting border/text stay neutral). Default 'default'.
+  /** Focus-ring accent (the resting border/text stay neutral). */
   color?: KunUIColor
   modelValue?: string | null | [string | null, string | null]
   mode?: KunDatePickerMode
+  /** What one click commits: a day, a whole month, or a whole year. The panel
+   *  opens on the matching grid and the value is the first instant of the
+   *  period, so `month` emits `'2026-09'` and `year` emits `'2026'`.
+   *  @default 'day' */
+  precision?: KunDatePickerPrecision
   label?: string
   placeholder?: string
   error?: string
@@ -1131,13 +1198,24 @@ export interface KunDatePickerProps {
    */
   darkBorder?: boolean
   clearable?: boolean
+  /** date-fns pattern for the text shown in the trigger. Defaults follow
+   *  `precision`.
+   *  @default 'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy' */
   format?: string
+  /** date-fns pattern for the emitted v-model string. Defaults follow
+   *  `precision`; keep it ISO-shaped so the value parses back.
+   *  @default 'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy' */
   valueFormat?: string
   minDate?: string | Date
   maxDate?: string | Date
+  /** Extra per-cell veto. Called with the FIRST instant of the period a cell
+   *  covers — the day itself, the 1st of the month, or January 1st — so one
+   *  predicate works at every precision. */
   isDateDisabled?: (date: Date) => boolean
   locale?: string
   weekdays?: string[]
+  /** Full month names. Also the source for the month grid's labels, where the
+   *  abbreviated form is used unless this overrides it. */
   months?: string[]
   rounded?: KunUIRounded
   size?: KunUISize

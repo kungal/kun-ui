@@ -162,11 +162,11 @@ const clicks = ref(0)
 | `color` | `KunUIColor \| "background"` | `"background"` |  |
 | `contentClass` | `string` | `""` |  |
 | `darkBorder` | `boolean` | `false` |  |
-| `href` | `string` | `undefined` |  |
+| `href` | `string` | — |  |
 | `isHoverable` | `boolean` | `false` |  |
 | `isTransparent` | `boolean` | `false` |  |
 | `padding` | `KunCardPadding` | `"lg"` | Inner padding. Default `lg` (24px). |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/card

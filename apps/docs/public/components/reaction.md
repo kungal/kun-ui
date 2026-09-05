@@ -202,7 +202,7 @@ const liked = ref(false)
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `color` | `KunUIColor \| (string & {})` | `"danger"` | Active (liked) colour — a palette key OR any CSS colour string (e.g. a brand `#ff6a00`). The icon fill, pop and burst all follow it. Default `danger`. |
-| `count` | `number` | `undefined` |  |
+| `count` | `number` | — |  |
 | `disableAnimation` | `boolean` | `false` | Disable the pop / burst / count-roll animations (also off under reduced-motion). |
 | `disabled` | `boolean` | `false` |  |
 | `icon` | `string` | `"lucide:heart"` | Icon name (default a heart); filled + coloured when active. Override the whole glyph (emoji / image / per-state) with the `#icon` slot instead. |

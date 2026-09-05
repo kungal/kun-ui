@@ -13,7 +13,7 @@
 KunUI, the shared cross-framework component library for the NextMoe/KunGal ecosystem: one design language, multiple render layers. pnpm workspace, 4 packages versioned in lockstep (currently 2.22.x), released via changesets.
 
 - `@kungal/ui-tokens` — framework-agnostic Tailwind v4 theme (semantic colors, radius, OKLCH palette). `gen:tokens` asserts every solid/on-color pair clears WCAG AA in both modes and exits non-zero if one doesn't.
-- `@kungal/ui-core` — design types, `cn()`, variant matrix, radius system, the 29 inlined icons.
+- `@kungal/ui-core` — design types, `cn()`, variant matrix, radius system, the 30 inlined icons.
 - `@kungal/ui-vue` — the Vue 3 layer, Nuxt-decoupled: 71 SFCs, 70 registered in `KUN_COMPONENT_NAMES`, plus 22 exported composables.
 - `@kungal/ui-nuxt` — Nuxt layer wrapping ui-vue (auto-imports, injection). Ships `nuxt.config.ts` + `app/` as *source*: no build, no typecheck of its own — building `apps/docs` is the only thing that exercises it.
 
@@ -77,7 +77,7 @@ English, and short. Never write restatements, section banners, or `TODO` without
 - **Path-scoped commits** (`git commit -- <paths>`), never `add -A`. Note everything after `--` is a path, so a message must come from `-F <file>` or precede the `--`. English-only commit messages and comments.
 - All frontend functions are arrow functions; compose classes with `cn()`.
 - A new component must be added to `KUN_COMPONENT_NAMES` (`packages/vue/src/componentNames.ts`) — the single source the Nuxt layer auto-registers from, and typed against `Record<KunComponentName, Component>` in `index.ts`, which fails typecheck if you forget.
-- Icons are **bundled, never fetched**: only the 29 names in `WANT` in `packages/ui-core/scripts/gen-icons.mjs` exist. Using an unbundled name renders nothing. Add it there and run `pnpm gen:icons`. (`apps/docs` registers ~15 extra ones for its own pages — those are not available to consumers.)
+- Icons are **bundled, never fetched**: only the 30 names in `WANT` in `packages/ui-core/scripts/gen-icons.mjs` exist. Using an unbundled name renders nothing. Add it there and run `pnpm gen:icons`. (`apps/docs` registers ~15 extra ones for its own pages — those are not available to consumers.)
 - Responsive behaviour is **Tailwind breakpoint classes, never `useMediaQuery`**: VueUse media queries evaluate `false` on the server unless the app calls `provideSSRWidth`, so a JS-driven variant SSRs the wrong layout and snaps on hydration. A JS media query is acceptable only to gate a *gesture or listener*, never to choose markup or geometry.
 - Dev-only warnings use `process.env.NODE_ENV !== 'production'`, **not `import.meta.env.DEV`** — Vite folds the latter to `false` when it builds this package, so the warning is stripped from the published bundle and is dead code that reads as live.
 - A Boolean prop that must distinguish unset from `false` needs `withDefaults(..., { x: undefined })`; an absent Boolean prop otherwise casts to `false`.

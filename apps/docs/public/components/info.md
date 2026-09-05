@@ -96,7 +96,7 @@
 | `color` | `KunUIColor` | `"default"` |  |
 | `description` | `string` | `""` | Plain-text body, rendered as one `<p>`. There is no `description` slot: rich body content goes in the DEFAULT slot, which renders directly under this paragraph. Passing both keeps both. |
 | `icon` | `string` | `""` | Bundled icon name, e.g. `lucide:info`. Only the icons compiled into ui-core exist — an unbundled name renders nothing. |
-| `rounded` | `KunUIRounded` | `undefined` | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`, not a fixed value. |
+| `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`, not a fixed value. |
 | `title` | `string` | `""` | Plain-text heading. For markup inside the heading (a link, a badge) use the `title` slot — it renders in the same row, after this text. |
 | `variant` | `KunUIVariant` | `"flat"` | Visual treatment. `solid` / `shadow` fill the box and take a contrast-correct foreground; `flat`, `light` and `bordered` use a soft tint of the colour with dark coloured text. |
 

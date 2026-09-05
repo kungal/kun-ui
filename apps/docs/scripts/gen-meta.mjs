@@ -152,8 +152,12 @@ for (const name of names) {
         // orientation-aware `align` — is declared with a JSDoc `@default` tag
         // on the prop instead. Without this the table showed "—" for a prop
         // that very much has a default.
+        // A literal `undefined` in withDefaults is the ABSENCE of a default,
+        // not a default of undefined — `format: undefined` there means "resolve
+        // it from `precision` at runtime". Treat it as absent so the JSDoc tag
+        // still wins, or the table claims a conditional default is `undefined`.
         default:
-          p.default ??
+          (p.default === 'undefined' ? undefined : p.default) ??
           p.tags?.find((t) => t.name === 'default')?.text?.trim() ??
           undefined,
         description: (p.description || '').replace(/\s+/g, ' ').trim() || undefined,

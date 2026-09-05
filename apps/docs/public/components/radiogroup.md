@@ -168,7 +168,7 @@ const options: KunRadioOption[] = [
 | `hideIndicator` | `boolean` | `false` |
 | `label` | `string` | `""` |
 | `orientation` | `KunRadioOrientation` | `"vertical"` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `size` | `KunUISize` | `"md"` |
 | `variant` | `KunRadioVariant` | `"classic"` |
 

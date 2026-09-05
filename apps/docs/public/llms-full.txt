@@ -601,14 +601,14 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunTextarea** — Multiline input (v-model) with optional counter.
 - **KunNumberInput** — Numeric input (v-model number|null) with steppers, min/max/step, precision, clamping.
 - **KunPinInput** — OTP / PIN segmented input (v-model string): per-cell entry, paste, masking, complete event.
-- **KunSelect** — Select dropdown (v-model, options array); single/multiple, searchable, clearable.
+- **KunSelect** — Select dropdown (v-model, options array); single/multiple, searchable, clearable. Remote sources via manualFilter + @search + loading + debounce; maxVisibleTags collapses chips; fullWidth/icon/popupWidth/classNames shape it into a filter pill.
 - **KunAutocomplete** — Combobox: a text field (v-model string) with a filtered suggestion list; allowCustomValue / manualFilter.
 - **KunSwitch** — Toggle switch (v-model boolean).
 - **KunCheckBox** — Checkbox (v-model boolean).
 - **KunCheckBoxGroup** — Multi-select checkbox group (v-model array, options array; `max`, orientation, label/error).
 - **KunSlider** — Range slider (v-model number; min/max/step).
 - **KunRadioGroup** — Radio group (v-model, options array; card/classic variants).
-- **KunDatePicker** — Date / date-range picker (date-fns based; v-model).
+- **KunDatePicker** — Date / date-range picker (date-fns based; v-model). `precision` picks a day, month or year (value 'yyyy-MM-dd' / 'yyyy-MM' / 'yyyy'), orthogonal to `mode`; the panel header zooms out day → month → year.
 - **KunFileInput** — File picker button (v-model File | File[]); default trigger icon is bundled.
 - **KunTagInput** — Tag entry input (v-model string[]; split chars, validation, max).
 - **KunUpload** — Drag/drop image upload with crop (size, aspect).

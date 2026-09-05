@@ -163,7 +163,7 @@ const open = ref(false)
 | `isSwipeDismissable` | `boolean` | `true` | Whether dragging the drawer downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies to a drawer sitting on the bottom edge — including a `responsive` one that becomes a bottom sheet below `md` — on a touch-primary pointer, and only while the content is scrolled to the top. Ignored when `isDismissable` is `false`. |
 | `placement` | `KunDrawerPlacement` | `"right"` |  |
 | `responsive` | `boolean` | `true` |  |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunDrawerSize` | `"md"` |  |
 | `title` | `string` | `""` | Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`. |
 | `withContainer` | `boolean` | `true` |  |

@@ -216,12 +216,12 @@ const v = ref<number | null>(42)
 | `max` | `number` | `Number.POSITIVE_INFINITY` |
 | `min` | `number` | `Number.NEGATIVE_INFINITY` |
 | `modelValue` | `number \| null` | `null` |
-| `name` | `string` | `undefined` |
+| `name` | `string` | — |
 | `placeholder` | `string` | `""` |
-| `precision` | `number` | `undefined` |
+| `precision` | `number` | — |
 | `readonly` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `size` | `KunUISize` | `"md"` |
 | `step` | `number` | `1` |
 

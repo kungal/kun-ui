@@ -62,7 +62,7 @@ const loaded = ref(false)
 | `className` | `string` | `""` |  |
 | `height` | `string` | `""` | CSS height. Defaults: text 1em, rect 1.25rem, circle 2.5rem. |
 | `loaded` | `boolean` | `false` | When true, render the default slot (real content) instead of the placeholder. |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `variant` | `"text" \| "circle" \| "rect"` | `"rect"` | Shape preset: `rect` block, `text` line, or `circle` (avatar). |
 | `width` | `string` | `""` | CSS width. Defaults: rect/text 100%, circle = height. |
 

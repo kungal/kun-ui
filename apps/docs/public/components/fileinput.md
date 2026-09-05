@@ -102,7 +102,7 @@ const b = ref<File | null>(null)
 | `files` | `File[]` | `[]` |
 | `fullWidth` | `boolean` | `false` |
 | `hint` | `string` | `""` |
-| `maxSize` | `number` | `undefined` |
+| `maxSize` | `number` | — |
 | `modelValue` | `File \| null` | `null` |
 | `multiple` | `boolean` | `false` |
 | `showFileName` | `boolean` | `true` |

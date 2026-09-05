@@ -17,7 +17,7 @@ const WANT = {
     'chevron-right', 'chevron-left', 'chevron-down', 'chevrons-right',
     'chevrons-left', 'arrow-right', 'arrow-left', 'plus', 'minus', 'upload', 'zoom-in', 'zoom-out',
     'rotate-cw', 'rotate-ccw', 'refresh-ccw', 'external-link', 'download',
-    'copy', 'calendar', 'lollipop', 'eye', 'eye-off', 'search',
+    'copy', 'calendar', 'lollipop', 'eye', 'eye-off', 'search', 'filter',
   ],
   'svg-spinners': ['90-ring-with-bg'],
 }

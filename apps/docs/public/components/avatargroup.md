@@ -70,9 +70,9 @@ const users: KunUser[] = Array.from({ length: 8 }, (_, i) => ({
 | 属性 | 类型 | 默认值 |
 | --- | --- | --- |
 | `users` * | `KunUser[]` | — |
-| `ariaLabel` | `string` | `undefined` |
+| `ariaLabel` | `string` | — |
 | `ellipsis` | `boolean` | `true` |
-| `total` | `number` | `undefined` |
+| `total` | `number` | — |
 | `visibleCount` | `number` | `5` |
 
 ---

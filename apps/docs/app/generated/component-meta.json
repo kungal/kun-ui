@@ -11,14 +11,12 @@
         "name": "defaultValue",
         "type": "string | string[]",
         "required": false,
-        "default": "undefined",
         "description": "Initially-open value(s) when uncontrolled (no v-model)."
       },
       {
         "name": "modelValue",
         "type": "string | string[]",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "multiple",
@@ -66,7 +64,6 @@
         "name": "name",
         "type": "string",
         "required": false,
-        "default": "undefined",
         "description": "Optional readable prefix for the auto-generated (already unique) ARIA ids."
       },
       {
@@ -180,8 +177,7 @@
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "noResultText",
@@ -198,8 +194,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -262,8 +257,7 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "ellipsis",
@@ -274,8 +268,7 @@
       {
         "name": "total",
         "type": "number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "visibleCount",
@@ -504,8 +497,7 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "className",
@@ -562,8 +554,7 @@
       {
         "name": "href",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "isHoverable",
@@ -587,8 +578,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -693,8 +683,7 @@
       {
         "name": "id",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "indeterminate",
@@ -705,8 +694,7 @@
       {
         "name": "label",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "modelValue",
@@ -717,8 +705,7 @@
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -735,8 +722,7 @@
       {
         "name": "value",
         "type": "string | number | boolean",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -797,8 +783,7 @@
       {
         "name": "max",
         "type": "number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "orientation",
@@ -809,8 +794,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -1053,7 +1037,8 @@
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"default\""
+        "default": "\"default\"",
+        "description": "Focus-ring accent (the resting border/text stay neutral)."
       },
       {
         "name": "darkBorder",
@@ -1077,12 +1062,14 @@
         "name": "format",
         "type": "string",
         "required": false,
-        "default": "\"yyyy-MM-dd\""
+        "default": "'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy'",
+        "description": "date-fns pattern for the text shown in the trigger. Defaults follow `precision`."
       },
       {
         "name": "isDateDisabled",
         "type": "((date: Date) => boolean)",
-        "required": false
+        "required": false,
+        "description": "Extra per-cell veto. Called with the FIRST instant of the period a cell covers — the day itself, the 1st of the month, or January 1st — so one predicate works at every precision."
       },
       {
         "name": "label",
@@ -1120,19 +1107,25 @@
       {
         "name": "months",
         "type": "string[]",
-        "required": false
+        "required": false,
+        "description": "Full month names. Also the source for the month grid's labels, where the abbreviated form is used unless this overrides it."
       },
       {
         "name": "placeholder",
         "type": "string",
+        "required": false
+      },
+      {
+        "name": "precision",
+        "type": "KunDatePickerPrecision",
         "required": false,
-        "default": "\"请选择日期\""
+        "default": "\"day\"",
+        "description": "What one click commits: a day, a whole month, or a whole year. The panel opens on the matching grid and the value is the first instant of the period, so `month` emits `'2026-09'` and `year` emits `'2026'`."
       },
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -1144,7 +1137,8 @@
         "name": "valueFormat",
         "type": "string",
         "required": false,
-        "default": "\"yyyy-MM-dd\""
+        "default": "'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy'",
+        "description": "date-fns pattern for the emitted v-model string. Defaults follow `precision`; keep it ISO-shaped so the value parses back."
       },
       {
         "name": "weekdays",
@@ -1254,8 +1248,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -1374,8 +1367,7 @@
       {
         "name": "maxSize",
         "type": "number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "modelValue",
@@ -1481,62 +1473,52 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "aspectRatio",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "className",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "decoding",
         "type": "\"auto\" | \"sync\" | \"async\"",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "densities",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "fallbackSrc",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "fetchpriority",
         "type": "\"auto\" | \"high\" | \"low\"",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "format",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "height",
         "type": "string | number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "imageClassName",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "loading",
@@ -1553,32 +1535,27 @@
       {
         "name": "placeholder",
         "type": "string | number | boolean | [w: number, h: number, q?: number, b?: number]",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "preload",
         "type": "boolean | { fetchPriority: \"auto\" | \"high\" | \"low\"; }",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "provider",
         "type": "\"none\" | (string & {}) | \"ipx\"",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "quality",
         "type": "string | number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "sizes",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "skeleton",
@@ -1590,14 +1567,12 @@
         "name": "thumbhash",
         "type": "string",
         "required": false,
-        "default": "undefined",
         "description": "A ThumbHash (base64) → a blurred \"blur-up\" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`."
       },
       {
         "name": "width",
         "type": "string | number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -1617,20 +1592,17 @@
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "className",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "height",
         "type": "string | number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "loading",
@@ -1641,8 +1613,7 @@
       {
         "name": "width",
         "type": "string | number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -1678,7 +1649,6 @@
         "name": "rounded",
         "type": "KunUIRounded",
         "required": false,
-        "default": "undefined",
         "description": "Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`, not a fixed value."
       },
       {
@@ -1793,8 +1763,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -1875,8 +1844,7 @@
       {
         "name": "href",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "isShowAnchorIcon",
@@ -2019,7 +1987,7 @@
         "name": "isDismissable",
         "type": "boolean",
         "required": false,
-        "default": "undefined",
+        "default": "true (backdrop excluded when role=\"alertdialog\")",
         "description": "Whether a backdrop click or Escape closes the dialog. `role=\"alertdialog\"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off."
       },
       {
@@ -2050,8 +2018,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "scrollBehavior",
@@ -2181,8 +2148,7 @@
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "placeholder",
@@ -2193,8 +2159,7 @@
       {
         "name": "precision",
         "type": "number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "readonly",
@@ -2211,8 +2176,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -2306,8 +2270,7 @@
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "placeholder",
@@ -2318,8 +2281,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -2367,7 +2329,6 @@
         "name": "group",
         "type": "string",
         "required": false,
-        "default": "undefined",
         "description": "`trigger=\"hover\"`: shared id so a row of menus switches instantly between siblings and only one is open at a time (menu-bar behaviour)."
       },
       {
@@ -2399,8 +2360,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "showArrow",
@@ -2452,8 +2412,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "showLabel",
@@ -2544,8 +2503,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "size",
@@ -2613,8 +2571,7 @@
       {
         "name": "count",
         "type": "number",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "disableAnimation",
@@ -2756,19 +2713,28 @@
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes for the outer wrapper. Use `classNames` to reach the trigger, popup, list, options or chips."
+      },
+      {
+        "name": "classNames",
+        "type": "KunSelectClassNames",
+        "required": false,
+        "description": "Per-part class hooks, merged after the component's own classes."
       },
       {
         "name": "clearable",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Show an X to reset the selection (single) — chips already remove per-item."
       },
       {
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"default\""
+        "default": "\"default\"",
+        "description": "Focus-ring accent (the resting border/text stay neutral)."
       },
       {
         "name": "darkBorder",
@@ -2777,10 +2743,18 @@
         "default": "true"
       },
       {
+        "name": "debounce",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "Debounce the `@search` emit by N ms; the filter field itself still updates instantly. 0 (default) emits on every keystroke — set e.g. 300 for a remote source so you fetch once the user pauses, not per keypress."
+      },
+      {
         "name": "description",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text under the field (hidden when `error` is set)."
       },
       {
         "name": "disabled",
@@ -2795,28 +2769,70 @@
         "default": "\"\""
       },
       {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Stretch the control to its container. Turn it off in a filter bar, where a control should be only as wide as its own label."
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "description": "Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. Must be one of the bundled icon names."
+      },
+      {
         "name": "label",
         "type": "string",
         "required": false,
         "default": "\"\""
       },
       {
+        "name": "loading",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Async data source: show a spinner in the list (instead of `noResultText`) while a remote `@search` request is in flight. Drive it from your fetch — true when the request starts, false when the results land."
+      },
+      {
+        "name": "loadingText",
+        "type": "string",
+        "required": false,
+        "default": "\"加载中…\"",
+        "description": "Text under the loading spinner."
+      },
+      {
+        "name": "manualFilter",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Skip the built-in label filter — you own `options` and drive them from `@search` (remote/async suggestions). Requires `searchable`."
+      },
+      {
+        "name": "maxVisibleTags",
+        "type": "number",
+        "required": false,
+        "description": "How many chips a `multiple` trigger renders before collapsing the rest into a `+N` badge. `0` renders no chips at all and the trigger reads `{placeholder} · {n}` — what a filter pill wants, and what keeps a filter bar from growing a row per selection. Unset renders every chip."
+      },
+      {
         "name": "multiple",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling."
       },
       {
         "name": "name",
         "type": "string",
         "required": false,
-        "default": "undefined"
+        "description": "Native form field name — emits hidden input(s) so the value is collected by the surrounding <form> / FormData."
       },
       {
         "name": "noResultText",
         "type": "string",
         "required": false,
-        "default": "\"无匹配项\""
+        "default": "\"无匹配项\"",
+        "description": "Shown when the filter matches nothing."
       },
       {
         "name": "placeholder",
@@ -2825,16 +2841,23 @@
         "default": "\"\""
       },
       {
+        "name": "popupWidth",
+        "type": "KunSelectPopupWidth",
+        "required": false,
+        "default": "\"trigger\"",
+        "description": "Popup width. The default pins it to the trigger, which is wrong the moment the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'` sizes to the content and keeps the trigger width as a floor."
+      },
+      {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "searchable",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render a filter input at the top of the list. Also the switch that enables `@search` / `manualFilter` — without it there is nothing to type into."
       },
       {
         "name": "searchPlaceholder",
@@ -3010,8 +3033,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "variant",
@@ -3315,8 +3337,7 @@
       {
         "name": "active",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "className",
@@ -3333,8 +3354,7 @@
       {
         "name": "hiddenStrategy",
         "type": "\"until-found\" | \"display\"",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "loading",
@@ -3345,14 +3365,12 @@
       {
         "name": "mount",
         "type": "\"lazy\" | \"eager\" | \"unmount\"",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -3378,8 +3396,7 @@
       {
         "name": "name",
         "type": "string",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },
@@ -3490,8 +3507,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "showCounter",
@@ -3520,8 +3536,7 @@
       {
         "name": "transform",
         "type": "((raw: string) => string)",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "trim",
@@ -3532,8 +3547,7 @@
       {
         "name": "validate",
         "type": "KunTagInputValidator",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "variant",
@@ -3673,8 +3687,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "rows",
@@ -3777,8 +3790,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       },
       {
         "name": "showArrow",
@@ -3833,8 +3845,7 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false,
-        "default": "undefined"
+        "required": false
       }
     ]
   },

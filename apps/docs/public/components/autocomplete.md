@@ -293,10 +293,10 @@ const options: CityOption[] = [
 | `loadingText` | `string` | `"加载中…"` |
 | `manualFilter` | `boolean` | `false` |
 | `modelValue` | `string` | `""` |
-| `name` | `string` | `undefined` |
+| `name` | `string` | — |
 | `noResultText` | `string` | `"无匹配项"` |
 | `placeholder` | `string` | `""` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `size` | `KunUISize` | `"md"` |
 
 ---

@@ -13,6 +13,10 @@ import Error from '~/examples/select/Error.vue'
 import ErrorSrc from '~/examples/select/Error.vue?raw'
 import Colors from '~/examples/select/Colors.vue'
 import ColorsSrc from '~/examples/select/Colors.vue?raw'
+import Async from '~/examples/select/Async.vue'
+import AsyncSrc from '~/examples/select/Async.vue?raw'
+import FilterBar from '~/examples/select/FilterBar.vue'
+import FilterBarSrc from '~/examples/select/FilterBar.vue?raw'
 import CustomOption from '~/examples/select/CustomOption.vue'
 import CustomOptionSrc from '~/examples/select/CustomOption.vue?raw'
 import meta from '~/generated/component-meta.json'
@@ -46,6 +50,12 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">自定义选项（#option 插槽）</h2>
     <Demo title="CustomOption.vue" :source="CustomOptionSrc"><CustomOption /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">异步 / 远程数据源</h2>
+    <Demo title="Async.vue" :source="AsyncSrc"><Async /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">筛选栏形态</h2>
+    <Demo title="FilterBar.vue" :source="FilterBarSrc"><FilterBar /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunSelect.props" />

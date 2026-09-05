@@ -151,9 +151,9 @@ const pin = ref('12')
 | `length` | `number` | `6` |  |
 | `mask` | `boolean` | `false` |  |
 | `modelValue` | `string` | `""` |  |
-| `name` | `string` | `undefined` |  |
+| `name` | `string` | — |  |
 | `placeholder` | `string` | `""` |  |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
 | `type` | `"text" \| "numeric"` | `"numeric"` |  |
 

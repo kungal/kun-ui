@@ -63,7 +63,7 @@
 | `description` | `string` | `""` |
 | `hint` | `string` | `""` |
 | `initialImage` | `string` | `""` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/upload

@@ -9,8 +9,11 @@ import {
   endOfMonth,
   startOfWeek,
   endOfWeek,
+  startOfYear,
+  endOfYear,
   eachDayOfInterval,
   isSameMonth,
+  isSameYear,
   isToday,
   isSameDay,
   isBefore,
@@ -23,7 +26,18 @@ import { enUS, ja, zhCN } from 'date-fns/locale'
 // Calendar grid + selection logic for KunDatePicker. Pure date-fns + Vue
 // reactivity — no framework coupling.
 
-const DEFAULT_FORMAT = 'yyyy-MM-dd'
+export type KunCalendarPrecision = 'day' | 'month' | 'year'
+
+// The value a precision round-trips through. 'yyyy-MM' and 'yyyy' are both
+// valid ISO 8601, so `parseISO` reads them back as local midnight of the first
+// day of the period — the same guarantee the day format relies on.
+export const KUN_CALENDAR_VALUE_FORMATS: Record<KunCalendarPrecision, string> = {
+  day: 'yyyy-MM-dd',
+  month: 'yyyy-MM',
+  year: 'yyyy',
+}
+
+const DEFAULT_FORMAT = KUN_CALENDAR_VALUE_FORMATS.day
 
 const formatDate = (date: Date, formatStr = DEFAULT_FORMAT): string =>
   format(date, formatStr)
@@ -58,6 +72,7 @@ const getLocale = (localeStr?: string) => {
 export const useCalendar = (props: {
   modelValue: Ref<string | null | [string | null, string | null]>
   mode: Ref<'single' | 'range'>
+  precision?: Ref<KunCalendarPrecision | undefined>
   minDate?: Ref<string | Date | undefined>
   maxDate?: Ref<string | Date | undefined>
   isDateDisabled?: Ref<((date: Date) => boolean) | undefined>
@@ -71,6 +86,10 @@ export const useCalendar = (props: {
     : props.modelValue.value
   const viewingDate = ref(parseDate(initialDate) || startOfToday())
   const tempRangeStart = ref<Date | null>(null)
+
+  const precision = computed<KunCalendarPrecision>(
+    () => props.precision?.value ?? 'day'
+  )
 
   const localeObject = computed(() =>
     getLocale(typeof props.locale === 'string' ? props.locale : props.locale?.value)
@@ -93,8 +112,13 @@ export const useCalendar = (props: {
     const months =
       monthsOverride ||
       [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLLL', { locale }))
+    // Grid labels: 'LLLL' is "September", which does not fit a 3-column cell in
+    // any locale with long month names. 'LLL' is the standalone abbreviation.
+    const monthsShort =
+      monthsOverride ||
+      [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLL', { locale }))
 
-    return { weekdays: weekdaysShort, months }
+    return { weekdays: weekdaysShort, months, monthsShort }
   })
 
   const navigateMonth = (direction: number) => {
@@ -105,6 +129,41 @@ export const useCalendar = (props: {
     viewingDate.value = addYears(viewingDate.value, direction)
   }
 
+  const navigateDecade = (direction: number) => {
+    viewingDate.value = addYears(viewingDate.value, direction * 10)
+  }
+
+  // The first year of the 10-year page the view is sitting on.
+  const decadeStart = computed(
+    () => Math.floor(viewingDate.value.getFullYear() / 10) * 10
+  )
+  const decadeLabel = computed(
+    () => `${decadeStart.value} - ${decadeStart.value + 9}`
+  )
+
+  const bounds = computed(() => {
+    const minParsed = parseDate(props.minDate?.value)
+    const maxParsed = parseDate(props.maxDate?.value)
+    const mv = props.modelValue.value
+    return {
+      min: minParsed ? startOfDay(minParsed) : null,
+      max: maxParsed ? startOfDay(maxParsed) : null,
+      single: parseDate(Array.isArray(mv) ? mv[0] : (mv as string)),
+      rangeStart: parseDate(Array.isArray(mv) ? mv[0] : null),
+      rangeEnd: parseDate(Array.isArray(mv) ? mv[1] : null),
+    }
+  })
+
+  // A cell is disabled only when the WHOLE period it covers is out of bounds —
+  // otherwise a `minDate` of 2026-03-15 would grey out March in the month grid
+  // and take the second half of the month with it.
+  const isPeriodDisabled = (start: Date, end: Date) => {
+    const { min, max } = bounds.value
+    if (min && isBefore(end, min)) return true
+    if (max && isAfter(start, max)) return true
+    return props.isDateDisabled?.value?.(start) ?? false
+  }
+
   const calendarGrid = computed(() => {
     const firstDayOfMonth = startOfMonth(viewingDate.value)
     const lastDayOfMonth = endOfMonth(viewingDate.value)
@@ -113,45 +172,20 @@ export const useCalendar = (props: {
     const endDate = endOfWeek(lastDayOfMonth)
 
     const days = eachDayOfInterval({ start: startDate, end: endDate })
-
-    const minDateParsed = parseDate(props.minDate?.value)
-    const maxDateParsed = parseDate(props.maxDate?.value)
-
-    const min = startOfDay(minDateParsed || new Date(0))
-    const max = startOfDay(maxDateParsed || new Date(8640000000000000))
-
-    const modelValueDate = startOfDay(
-      parseDate(
-        Array.isArray(props.modelValue.value)
-          ? props.modelValue.value[0]
-          : (props.modelValue.value as string)
-      ) || new Date(0)
-    )
-    const rangeStart = startOfDay(
-      parseDate(
-        Array.isArray(props.modelValue.value) ? props.modelValue.value[0] : null
-      ) || new Date(0)
-    )
-    const rangeEnd = startOfDay(
-      parseDate(
-        Array.isArray(props.modelValue.value) ? props.modelValue.value[1] : null
-      ) || new Date(0)
-    )
+    const { single, rangeStart, rangeEnd } = bounds.value
 
     return days.map((date) => {
       const isSelected =
         props.mode.value === 'single'
-          ? isSameDay(date, modelValueDate)
-          : isSameDay(date, rangeStart) || isSameDay(date, rangeEnd)
+          ? !!single && isSameDay(date, single)
+          : (!!rangeStart && isSameDay(date, rangeStart)) ||
+            (!!rangeEnd && isSameDay(date, rangeEnd))
 
       const isInRange =
-        rangeStart && rangeEnd && isAfter(date, rangeStart) && isBefore(date, rangeEnd)
-
-      const isDisabledByProp = props.isDateDisabled?.value
-        ? props.isDateDisabled.value(date)
-        : false
-      const isDisabled =
-        isBefore(date, min) || isAfter(date, max) || isDisabledByProp
+        !!rangeStart &&
+        !!rangeEnd &&
+        isAfter(date, rangeStart) &&
+        isBefore(date, rangeEnd)
 
       return {
         date,
@@ -160,25 +194,100 @@ export const useCalendar = (props: {
         isCurrentMonth: isSameMonth(date, viewingDate.value),
         isToday: isToday(date),
         isSelected,
-        isRangeStart: isSameDay(date, rangeStart),
-        isRangeEnd: isSameDay(date, rangeEnd),
+        isRangeStart: !!rangeStart && isSameDay(date, rangeStart),
+        isRangeEnd: !!rangeEnd && isSameDay(date, rangeEnd),
         isInRange,
-        isDisabled,
+        isDisabled: isPeriodDisabled(startOfDay(date), startOfDay(date)),
       }
     })
   })
+
+  const monthGrid = computed(() => {
+    const year = viewingDate.value.getFullYear()
+    const { single, rangeStart, rangeEnd } = bounds.value
+    const now = new Date()
+    return Array.from({ length: 12 }, (_, m) => {
+      const date = new Date(year, m, 1)
+      const end = endOfMonth(date)
+      const isRangeStartCell = !!rangeStart && isSameMonth(date, rangeStart)
+      const isRangeEndCell = !!rangeEnd && isSameMonth(date, rangeEnd)
+      return {
+        date,
+        key: format(date, 'yyyy-MM'),
+        label: i18n.value.monthsShort[m]!,
+        isNow: isSameMonth(date, now),
+        isSelected:
+          props.mode.value === 'single'
+            ? !!single && isSameMonth(date, single)
+            : isRangeStartCell || isRangeEndCell,
+        isRangeStart: isRangeStartCell,
+        isRangeEnd: isRangeEndCell,
+        isInRange:
+          !!rangeStart &&
+          !!rangeEnd &&
+          isAfter(date, startOfMonth(rangeStart)) &&
+          isBefore(date, startOfMonth(rangeEnd)),
+        isOutside: false,
+        isDisabled: isPeriodDisabled(date, end),
+      }
+    })
+  })
+
+  // Twelve cells so the page shows the decade plus one leading and one trailing
+  // year — the same affordance the day grid's adjacent-month cells give.
+  const yearGrid = computed(() => {
+    const base = decadeStart.value
+    const { single, rangeStart, rangeEnd } = bounds.value
+    const now = new Date()
+    return Array.from({ length: 12 }, (_, i) => {
+      const y = base - 1 + i
+      const date = new Date(y, 0, 1)
+      const end = endOfYear(date)
+      const isRangeStartCell = !!rangeStart && isSameYear(date, rangeStart)
+      const isRangeEndCell = !!rangeEnd && isSameYear(date, rangeEnd)
+      return {
+        date,
+        key: String(y),
+        label: String(y),
+        isNow: isSameYear(date, now),
+        isSelected:
+          props.mode.value === 'single'
+            ? !!single && isSameYear(date, single)
+            : isRangeStartCell || isRangeEndCell,
+        isRangeStart: isRangeStartCell,
+        isRangeEnd: isRangeEndCell,
+        isInRange:
+          !!rangeStart &&
+          !!rangeEnd &&
+          isAfter(date, startOfYear(rangeStart)) &&
+          isBefore(date, startOfYear(rangeEnd)),
+        isOutside: y < base || y > base + 9,
+        isDisabled: isPeriodDisabled(date, end),
+      }
+    })
+  })
+
+  // Every date that leaves this composable is snapped to the start of the period
+  // the precision selects, so `tempRangeStart`, the emitted value and the range
+  // comparisons above all speak the same granularity.
+  const normalize = (date: Date) => {
+    if (precision.value === 'year') return startOfYear(date)
+    if (precision.value === 'month') return startOfMonth(date)
+    return startOfDay(date)
+  }
 
   const formatValue = (date: Date) => {
     const vf =
       props.valueFormat && 'value' in props.valueFormat
         ? props.valueFormat.value
         : props.valueFormat
-    return format(date, vf || DEFAULT_FORMAT)
+    return format(date, vf || KUN_CALENDAR_VALUE_FORMATS[precision.value])
   }
 
   const selectDate = (
-    date: Date
+    input: Date
   ): [string | null, string | null] | string | null => {
+    const date = normalize(input)
     if (props.mode.value === 'single') {
       return formatValue(date)
     }
@@ -202,11 +311,17 @@ export const useCalendar = (props: {
 
   return {
     viewingDate,
+    precision,
     i18n,
     parseDate,
     calendarGrid,
+    monthGrid,
+    yearGrid,
+    decadeLabel,
     navigateMonth,
     navigateYear,
+    navigateDecade,
+    normalize,
     selectDate,
     formatDate,
     tempRangeStart,

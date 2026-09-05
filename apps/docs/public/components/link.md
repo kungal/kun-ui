@@ -67,7 +67,7 @@
 | --- | --- | --- | --- |
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"primary"` |  |
-| `href` | `string` | `undefined` |  |
+| `href` | `string` | — |  |
 | `isShowAnchorIcon` | `boolean` | `false` |  |
 | `rel` | `string` | `undefined` | `rel` for the rendered link. Replaces the default rather than adding to it, matching NuxtLink: with `target="_blank"` and no `rel`, KunUI emits `noopener noreferrer`; passing `rel="noopener"` emits exactly that, which is how you keep the `Referer` header (analytics on the other side count the visit as a referral instead of direct traffic). `noopener` is still added back to any `_blank` link unless the value contains the spec's `opener` token; `rel=""` removes the attribute entirely. |
 | `size` | `KunUISize` | `"md"` |  |

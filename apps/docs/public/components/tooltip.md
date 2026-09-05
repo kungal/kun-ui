@@ -84,7 +84,7 @@
 | `delayShow` | `number` | `100` |
 | `hideOnMobile` | `boolean` | `true` |
 | `position` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `showArrow` | `boolean` | `false` |
 | `text` | `string` | `""` |
 

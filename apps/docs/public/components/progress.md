@@ -102,7 +102,7 @@ const progress = ref(40)
 | `color` | `KunUIColor` | `"primary"` |
 | `indeterminate` | `boolean` | `false` |
 | `max` | `number` | `100` |
-| `rounded` | `KunUIRounded` | `undefined` |
+| `rounded` | `KunUIRounded` | — |
 | `showLabel` | `boolean` | `false` |
 | `size` | `KunUISize` | `"md"` |
 | `value` | `number` | `0` |

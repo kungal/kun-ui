@@ -136,7 +136,7 @@ const amount = ref('')
 | `placeholder` | `string` | `""` |  |
 | `required` | `boolean` | `false` |  |
 | `revealPassword` | `boolean` | `false` |  |
-| `rounded` | `KunUIRounded` | `undefined` |  |
+| `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
 | `type` | `string` | `"text"` |  |
 
