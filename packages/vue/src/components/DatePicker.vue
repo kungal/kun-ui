@@ -12,6 +12,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
 import {
   useCalendar,
+  stepPeriod,
   KUN_CALENDAR_VALUE_FORMATS,
 } from '../composables/useCalendar'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
@@ -44,11 +45,14 @@ const props = withDefaults(defineProps<KunDatePickerProps>(), {
 // `format`, `valueFormat` and `placeholder` all default off `precision`, so they
 // cannot be withDefaults literals. A month picker that emitted 'yyyy-MM-dd'
 // would round-trip the day it happened to be opened on.
+// `||`, not `??`: date-fns throws on an empty pattern ("Cannot read properties
+// of null"), which aborts the render and freezes the trigger text. `valueFormat`
+// already fell back through `formatValue`'s `||`; these two now agree.
 const resolvedValueFormat = computed<string | undefined>(
-  () => props.valueFormat ?? KUN_CALENDAR_VALUE_FORMATS[props.precision]
+  () => props.valueFormat || KUN_CALENDAR_VALUE_FORMATS[props.precision]
 )
 const resolvedFormat = computed(
-  () => props.format ?? KUN_CALENDAR_VALUE_FORMATS[props.precision]
+  () => props.format || KUN_CALENDAR_VALUE_FORMATS[props.precision]
 )
 const PLACEHOLDERS: Record<KunDatePickerPrecision, string> = {
   day: '请选择日期',
@@ -155,7 +159,15 @@ const VIEWS = ['day', 'month', 'year'] as const
 const view = ref<KunDatePickerPrecision>(props.precision)
 watch(
   () => props.precision,
-  (p) => (view.value = p)
+  (p) => {
+    view.value = p
+    // The page has to follow the view. Without this the grid rendered whatever
+    // page `viewingDate` was left on while `activeDate` pointed at a cell that
+    // page does not contain — measured as `aria-activedescendant` naming a
+    // missing id AND zero cells carrying `tabindex="0"`, i.e. a grid with no
+    // active cell at all, healed only by the next arrow press.
+    viewingDate.value = new Date(activeDate.value)
+  }
 )
 watch(isOpen, (open) => {
   if (!open) return
@@ -201,14 +213,8 @@ watch(viewingDate, (val) => {
 // depends on the view. Both coarse grids are 3 columns wide, so a vertical step
 // is 3 cells there and 7 (a week) in the day grid.
 const moveActive = (step: number, axis: 'x' | 'y') => {
-  const d = new Date(activeDate.value)
-  if (view.value === 'day') {
-    d.setDate(d.getDate() + (axis === 'x' ? step : step * 7))
-  } else if (view.value === 'month') {
-    d.setMonth(d.getMonth() + (axis === 'x' ? step : step * 3))
-  } else {
-    d.setFullYear(d.getFullYear() + (axis === 'x' ? step : step * 3))
-  }
+  const rows = view.value === 'day' ? 7 : 3
+  const d = stepPeriod(activeDate.value, view.value, axis === 'x' ? step : step * rows)
   activeDate.value = d
   const leftPage =
     view.value === 'day'
@@ -230,9 +236,33 @@ const activeKey = computed(() => {
   return formatDate(activeDate.value, view.value === 'month' ? 'yyyy-MM' : 'yyyy-MM-dd')
 })
 
+// The `disabled` attribute on a cell stops the mouse and nothing else, so the
+// keyboard path has to look the cell up itself. Committing a greyed-out date was
+// measurable at every precision, and in a coarse grid Enter on a disabled month
+// drilled into a page whose every day is disabled — somewhere a mouse cannot go.
+const activeCellDisabled = computed(() => {
+  const grid =
+    view.value === 'day'
+      ? calendarGrid.value
+      : view.value === 'month'
+        ? monthGrid.value
+        : yearGrid.value
+  return grid.find((c) => c.key === activeKey.value)?.isDisabled ?? false
+})
+
 // preventDefault only on the keys handled here. The blanket `@keydown.prevent`
 // this replaced also cancelled Tab (focus could never leave the picker) and
 // Enter (the trigger's own activation), leaving the calendar unopenable.
+// The panel is teleported to <body>, so a keydown inside it does not bubble to
+// the trigger's handler: measured, clicking a chevron or the zoom header left
+// the panel open with every arrow key and Escape dead. Enter and Space stay with
+// whatever button holds focus — a native button activates on them by itself, and
+// stealing them here would page the calendar AND commit a date.
+const onPanelKeydown = (e: KeyboardEvent) => {
+  if (e.target !== dropdownRef.value && (e.key === 'Enter' || e.key === ' ')) return
+  onKeydown(e)
+}
+
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
   if (!isOpen.value) {
@@ -262,7 +292,7 @@ const onKeydown = (e: KeyboardEvent) => {
     case 'Enter':
     case ' ':
       e.preventDefault()
-      handleCellSelect(activeDate.value)
+      if (!activeCellDisabled.value) handleCellSelect(activeDate.value)
       break
     case 'Escape':
       e.preventDefault()
@@ -273,7 +303,12 @@ const onKeydown = (e: KeyboardEvent) => {
 
 const displayValue = computed(() => {
   if (props.mode === 'single') {
-    const d = parseDate(props.modelValue as string)
+    // The prop type allows an array in either mode, and `mode` can be flipped at
+    // runtime with a range still in the model — `[null, null]` is exactly what
+    // `clearDate` emits. Handing that to parseISO threw out of the render
+    // function and froze the component on its last good DOM.
+    const mv = props.modelValue
+    const d = parseDate(Array.isArray(mv) ? mv[0] : mv)
     return d ? formatDate(d, resolvedFormat.value) : ''
   }
   if (Array.isArray(props.modelValue) && props.modelValue.every((d) => d)) {
@@ -300,6 +335,9 @@ const handleCellSelect = (date: Date) => {
   if (view.value !== props.precision) {
     viewingDate.value = new Date(date)
     view.value = view.value === 'year' ? 'month' : 'day'
+    // The clicked button unmounts with its grid and focus falls to <body>, out
+    // of reach of both keydown handlers. Park it on the panel instead.
+    nextTick(() => dropdownRef.value?.focus({ preventScroll: true }))
     return
   }
   handleDateSelect(date)
@@ -315,6 +353,10 @@ const handleDateSelect = (date: Date) => {
 
 const clearDate = () => {
   if (props.disabled) return
+  // Without this the half-picked start survived 清空 and the NEXT click closed a
+  // range around it: pick Sep 10, clear, click Sep 20, and the model came back
+  // ['2026-09-10', '2026-09-20'].
+  tempRangeStart.value = null
   const newValue: string | null | [string | null, string | null] =
     props.mode === 'single' ? null : [null, null]
   emit('update:modelValue', newValue)
@@ -447,6 +489,8 @@ const isInPreviewRange = (date: Date) => {
           :style="[floatingStyles, { minWidth: '260px', transformOrigin }]"
           role="dialog"
           aria-modal="true"
+          tabindex="-1"
+          @keydown="onPanelKeydown"
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -546,7 +590,7 @@ const isInPreviewRange = (date: Date) => {
                 type="button"
                 :disabled="cell.isDisabled"
                 :class="periodCellClass(cell)"
-                :aria-label="cell.key"
+                :aria-label="`${cell.label} ${cell.date.getFullYear()}`"
                 :aria-selected="cell.isSelected"
                 :tabindex="cell.key === activeKey ? 0 : -1"
                 @click="handleCellSelect(cell.date)"

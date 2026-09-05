@@ -83,10 +83,16 @@ const { floatingStyles, transformOrigin } = useKunFloating(buttonRef, dropdownRe
     size({
       apply({ rects, elements, availableHeight, availableWidth }) {
         const w = props.popupWidth
+        // A number is a *requested* width, not a licence to leave the screen:
+        // `popupWidth: 700` in a 360px viewport measured 348px off the right
+        // edge and grew documentElement.scrollWidth to 2008, i.e. the whole page
+        // got a horizontal scrollbar. `shift()` cannot rescue a popup wider than
+        // the viewport, so the cap applies to every mode except `trigger`, which
+        // is on-screen by construction.
         Object.assign(elements.floating.style, {
           width: typeof w === 'number' ? `${w}px` : w === 'auto' ? '' : `${rects.reference.width}px`,
           minWidth: w === 'auto' ? `${rects.reference.width}px` : '',
-          maxWidth: w === 'auto' ? `${Math.max(0, availableWidth - 8)}px` : '',
+          maxWidth: w === 'trigger' ? '' : `${Math.max(0, availableWidth - 8)}px`,
           maxHeight: `${Math.min(280, availableHeight - 8)}px`,
         })
       },
@@ -128,20 +134,27 @@ watch(
 
 // Model order, not `options` order: the hidden form inputs already iterate the
 // model, so ordering the chips by the list made the two disagree.
-const selectedOptions = computed(() =>
-  selected.value
-    .map((v) => optionByValue.value.get(v) ?? optionCache.value.get(v))
-    .filter((o): o is O => !!o)
+//
+// A value that neither `options` nor the cache can name still gets a chip, off
+// its own raw value. Dropping it made the chips disagree with the count: model
+// ['clannad', 'deleted-tag'] rendered one chip plus an unexplained "+1" badge
+// that carried no remove button, so the value could not be seen or removed.
+// Element Plus and antd both fall back to the value for the same reason.
+const selectedChips = computed<{ value: T; label: string }[]>(() =>
+  selected.value.map((v) => {
+    const o = optionByValue.value.get(v) ?? optionCache.value.get(v)
+    return { value: v, label: o ? o.label : String(v) }
+  })
 )
-const singleLabel = computed(() => selectedOptions.value[0]?.label ?? '')
+const singleLabel = computed(() => selectedChips.value[0]?.label ?? '')
 const hasSelection = computed(() => selected.value.length > 0)
 
 // Uncapped, the trigger grows a row per selection — fine for a form field,
 // fatal for a filter bar. 0 visible chips falls through to the text branch.
 const visibleTags = computed(() =>
   props.maxVisibleTags == null
-    ? selectedOptions.value
-    : selectedOptions.value.slice(0, Math.max(0, props.maxVisibleTags))
+    ? selectedChips.value
+    : selectedChips.value.slice(0, Math.max(0, props.maxVisibleTags))
 )
 const hiddenTagCount = computed(
   () => selected.value.length - visibleTags.value.length
@@ -164,8 +177,11 @@ const filtered = computed(() => {
   return props.options.filter((o) => o.label.toLowerCase().includes(q))
 })
 
+// `showSpinner` gates this: while the spinner is up the rows are not rendered,
+// and an `aria-activedescendant` naming an id that is not in the DOM makes the
+// listbox read to a screen reader as having no active option at all.
 const activeId = computed(() =>
-  activeIndex.value >= 0 && filtered.value[activeIndex.value]
+  activeIndex.value >= 0 && !showSpinner.value && filtered.value[activeIndex.value]
     ? `${kunUniqueId.value}-opt-${activeIndex.value}`
     : undefined
 )
@@ -210,12 +226,37 @@ onBeforeUnmount(cancelPendingSearch)
 
 const showSpinner = computed(() => props.loading || pending.value)
 
+const applySearch = (value: string) => {
+  // Element Plus bails on an unchanged query (`previousQuery === val`) for the
+  // reason we need it: compositionend and the browser's own final `input` can
+  // both deliver the committed text, and that would emit @search twice.
+  if (value === query.value) return
+  query.value = value
+  // The highlight is an index into a list the new query is about to replace.
+  // KunAutocomplete records the incident: with the index kept, Enter committed
+  // whichever row happened to land at it in the NEXT query's results.
+  activeIndex.value = firstEnabled()
+  emitSearch(value)
+}
+
+// `v-model` on a text input installs Vue's own composition guard — its input
+// listener opens with `if (e.target.composing) return` and replays one event on
+// compositionend. Reading the value off the event instead (below) opts out of
+// that. Measured over CDP `Input.imeSetComposition` in Chrome 152: typing 你好
+// through a Pinyin IME re-filtered on every romaji keystroke, collapsing the
+// panel to `noResultText` while the candidate window was still open, and fired
+// five @search emits before the real one. So track composition here.
+const composing = ref(false)
+const onCompositionEnd = (e: CompositionEvent) => {
+  composing.value = false
+  applySearch((e.target as HTMLInputElement).value)
+}
+
 const onSearchInput = (e: Event) => {
+  if (composing.value) return
   // Value off the event, never read back out of state — the rule 2.26.3 was
   // cut for. @search must carry the text that was just typed.
-  const value = (e.target as HTMLInputElement).value
-  query.value = value
-  emitSearch(value)
+  applySearch((e.target as HTMLInputElement).value)
 }
 
 // ── open / close ─────────────────────────────────────────────────────────
@@ -255,7 +296,7 @@ onClickOutside(buttonRef, (event) => {
 
 // ── selection actions ────────────────────────────────────────────────────
 const selectOption = (option: O) => {
-  if (option.disabled) return
+  if (props.disabled || option.disabled) return
   const origIndex = props.options.findIndex((o) => o.value === option.value)
   if (props.multiple) {
     const cur = Array.isArray(modelValue.value) ? [...modelValue.value] : []
@@ -272,6 +313,7 @@ const selectOption = (option: O) => {
 }
 
 const selectActive = () => {
+  if (showSpinner.value) return
   const opt = filtered.value[activeIndex.value]
   if (opt) selectOption(opt)
 }
@@ -298,6 +340,7 @@ const scrollActiveIntoView = () => {
 }
 
 const moveActive = (dir: 1 | -1) => {
+  if (showSpinner.value) return
   const n = filtered.value.length
   if (!n) return
   let i = activeIndex.value
@@ -312,6 +355,7 @@ const moveActive = (dir: 1 | -1) => {
 }
 
 const setEdgeActive = (dir: 1 | -1) => {
+  if (showSpinner.value) return
   activeIndex.value = dir === 1 ? firstEnabled(0, 1) : firstEnabled(filtered.value.length - 1, -1)
   scrollActiveIntoView()
 }
@@ -320,6 +364,7 @@ const setEdgeActive = (dir: 1 | -1) => {
 let typeBuffer = ''
 let typeTimer: ReturnType<typeof setTimeout> | null = null
 const typeahead = (char: string) => {
+  if (showSpinner.value) return
   typeBuffer += char.toLowerCase()
   if (typeTimer) clearTimeout(typeTimer)
   typeTimer = setTimeout(() => (typeBuffer = ''), 600)
@@ -407,7 +452,10 @@ watch(filtered, () => {
     :class="
       cn(
         'relative',
-        fullWidth ? 'w-full' : 'inline-block align-top',
+        // `w-fit` is not redundant with `inline-block`: a grid item is
+        // blockified, and `justify-self: stretch` then filled the whole track —
+        // measured 287px against 90px in normal flow.
+        fullWidth ? 'w-full' : 'inline-block w-fit align-top',
         props.className,
         props.classNames?.root
       )
@@ -568,6 +616,8 @@ watch(filtered, () => {
               "
               @keydown="onKeydown"
               @input="onSearchInput"
+              @compositionstart="composing = true"
+              @compositionend="onCompositionEnd"
             />
           </div>
 

@@ -822,8 +822,13 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
 // `T` is the value type; `O` is the option shape. `O` defaults to the plain
 // option, but callers can pass a richer object (avatar, description, …) and read
 // it back — typed — in the `#option` scoped slot.
-/** Per-part class hooks for KunSelect. Each string is merged *after* the
- *  component's own classes, so a utility here wins the `cn()` conflict. */
+/** Per-part class hooks for KunSelect, merged *after* the component's own
+ *  classes. `cn()` is tailwind-merge, which drops the losing class only for the
+ *  scales it knows: padding, colour, border colour, typography and layout all
+ *  override cleanly. It does NOT know KunUI's custom scales, so `rounded-kun-*`,
+ *  `shadow-kun-*` and `z-kun-*` survive alongside whatever you pass and CSS
+ *  source order decides the winner — measured, `classNames.trigger:
+ *  'rounded-full'` leaves the radius at 12px. Use the `rounded` prop for radius. */
 export interface KunSelectClassNames {
   /** The outer wrapper — the same target as the legacy `className`. */
   root?: string
@@ -886,21 +891,30 @@ export interface KunSelectProps<
   /** Icon rendered before the value in the trigger — a filter glyph for a filter
    *  bar, a category glyph for a field. Must be one of the bundled icon names. */
   icon?: string
-  /** Stretch the control to its container. Turn it off in a filter bar, where a
-   *  control should be only as wide as its own label.
+  /** Stretch the control to its container. Turn it off in a filter bar, so the
+   *  trigger shrinks to its own content. The wrapper shrink-wraps its widest
+   *  child, so a long `label`, `description` or `error` widens it too — a filter
+   *  pill wants none of those.
    *  @default true */
   fullWidth?: boolean
   /** How many chips a `multiple` trigger renders before collapsing the rest into
    *  a `+N` badge. `0` renders no chips at all and the trigger reads
-   *  `{placeholder} · {n}` — what a filter pill wants, and what keeps a filter
-   *  bar from growing a row per selection. Unset renders every chip. */
+   *  `{placeholder} · {n}`, or a bare count when there is no placeholder — what
+   *  a filter pill wants, and what keeps a filter bar from growing a row per
+   *  selection. Unset renders every chip. */
   maxVisibleTags?: number
   /** Popup width. The default pins it to the trigger, which is wrong the moment
    *  the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'`
-   *  sizes to the content and keeps the trigger width as a floor.
+   *  sizes to the content and keeps the trigger width as a floor. Every mode
+   *  but `'trigger'` is capped to the viewport, so a fixed width chosen for a
+   *  desktop layout cannot hang off the edge of a phone.
    *  @default 'trigger' */
   popupWidth?: KunSelectPopupWidth
-  /** Per-part class hooks, merged after the component's own classes. */
+  /** Per-part class hooks (root / trigger / popup / list / option / chip),
+   *  merged after the component's own classes. Padding, colour, border colour
+   *  and typography override cleanly; KunUI's own `rounded-kun-*`,
+   *  `shadow-kun-*` and `z-kun-*` scales do not, because tailwind-merge cannot
+   *  see them — reach for the `rounded` prop instead of a radius utility. */
   classNames?: KunSelectClassNames
   /** Skip the built-in label filter — you own `options` and drive them from
    *  `@search` (remote/async suggestions). Requires `searchable`.
@@ -1187,6 +1201,8 @@ export interface KunDatePickerProps {
    *  @default 'day' */
   precision?: KunDatePickerPrecision
   label?: string
+  /** Trigger text when nothing is selected. Defaults follow `precision`.
+   *  @default '请选择日期' | '请选择月份' | '请选择年份' */
   placeholder?: string
   error?: string
   disabled?: boolean

@@ -3,6 +3,7 @@ import {
   format,
   parseISO,
   isValid,
+  addDays,
   addMonths,
   addYears,
   startOfMonth,
@@ -38,6 +39,30 @@ export const KUN_CALENDAR_VALUE_FORMATS: Record<KunCalendarPrecision, string> = 
 }
 
 const DEFAULT_FORMAT = KUN_CALENDAR_VALUE_FORMATS.day
+
+// `new Date(y, m, 1)` maps a year of 0–99 to 1900 + y. `parseISO` accepts
+// '0005', so a model value that old built a grid of 1900s: nothing matched the
+// selection, and clicking the cell labelled "5" emitted '1905'.
+const periodStart = (year: number, month = 0) => {
+  const d = new Date(year, month, 1)
+  d.setFullYear(year)
+  return d
+}
+
+// Stepping a coarse grid must NOT go through `setMonth`/`setFullYear`: the
+// caller's date carries a day-of-month and both OVERFLOW rather than clamp.
+// Measured — from Jan 31, +1 month lands on Mar 3 (February skipped) and -1
+// lands on Mar 3 as well, i.e. the key does not move at all. Snapping to the
+// period start first also stops the day drifting across a page turn.
+export const stepPeriod = (
+  date: Date,
+  unit: KunCalendarPrecision,
+  amount: number
+): Date => {
+  if (unit === 'day') return addDays(date, amount)
+  if (unit === 'month') return addMonths(startOfMonth(date), amount)
+  return addYears(startOfYear(date), amount)
+}
 
 const formatDate = (date: Date, formatStr = DEFAULT_FORMAT): string =>
   format(date, formatStr)
@@ -104,19 +129,28 @@ export const useCalendar = (props: {
     const monthsOverride =
       props.months && 'value' in props.months ? props.months.value : props.months
 
-    const weekdaysShort =
-      weekdaysOverride ||
+    // Padded from the locale rather than taken wholesale: an override shorter
+    // than the grid (`months: ['A','B','C']`) left nine blank cells that were
+    // still enabled and still committed a real value.
+    const pad = (fallback: string[], override?: string[]) =>
+      fallback.map((d, i) => override?.[i] ?? d)
+
+    const weekdaysShort = pad(
       [...Array(7)].map((_, i) =>
         format(new Date(2023, 0, i + 1), 'EEEEEE', { locale })
-      )
-    const months =
-      monthsOverride ||
-      [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLLL', { locale }))
+      ),
+      weekdaysOverride
+    )
+    const months = pad(
+      [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLLL', { locale })),
+      monthsOverride
+    )
     // Grid labels: 'LLLL' is "September", which does not fit a 3-column cell in
     // any locale with long month names. 'LLL' is the standalone abbreviation.
-    const monthsShort =
-      monthsOverride ||
-      [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLL', { locale }))
+    const monthsShort = pad(
+      [...Array(12)].map((_, i) => format(new Date(2023, i, 1), 'LLL', { locale })),
+      monthsOverride
+    )
 
     return { weekdays: weekdaysShort, months, monthsShort }
   })
@@ -207,7 +241,7 @@ export const useCalendar = (props: {
     const { single, rangeStart, rangeEnd } = bounds.value
     const now = new Date()
     return Array.from({ length: 12 }, (_, m) => {
-      const date = new Date(year, m, 1)
+      const date = periodStart(year, m)
       const end = endOfMonth(date)
       const isRangeStartCell = !!rangeStart && isSameMonth(date, rangeStart)
       const isRangeEndCell = !!rangeEnd && isSameMonth(date, rangeEnd)
@@ -241,7 +275,7 @@ export const useCalendar = (props: {
     const now = new Date()
     return Array.from({ length: 12 }, (_, i) => {
       const y = base - 1 + i
-      const date = new Date(y, 0, 1)
+      const date = periodStart(y)
       const end = endOfYear(date)
       const isRangeStartCell = !!rangeStart && isSameYear(date, rangeStart)
       const isRangeEndCell = !!rangeEnd && isSameYear(date, rangeEnd)

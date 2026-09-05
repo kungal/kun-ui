@@ -1113,7 +1113,9 @@
       {
         "name": "placeholder",
         "type": "string",
-        "required": false
+        "required": false,
+        "default": "'请选择日期' | '请选择月份' | '请选择年份'",
+        "description": "Trigger text when nothing is selected. Defaults follow `precision`."
       },
       {
         "name": "precision",
@@ -2720,7 +2722,7 @@
         "name": "classNames",
         "type": "KunSelectClassNames",
         "required": false,
-        "description": "Per-part class hooks, merged after the component's own classes."
+        "description": "Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes. Padding, colour, border colour and typography override cleanly; KunUI's own `rounded-kun-*`, `shadow-kun-*` and `z-kun-*` scales do not, because tailwind-merge cannot see them — reach for the `rounded` prop instead of a radius utility."
       },
       {
         "name": "clearable",
@@ -2773,7 +2775,7 @@
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Stretch the control to its container. Turn it off in a filter bar, where a control should be only as wide as its own label."
+        "description": "Stretch the control to its container. Turn it off in a filter bar, so the trigger shrinks to its own content. The wrapper shrink-wraps its widest child, so a long `label`, `description` or `error` widens it too — a filter pill wants none of those."
       },
       {
         "name": "icon",
@@ -2812,7 +2814,7 @@
         "name": "maxVisibleTags",
         "type": "number",
         "required": false,
-        "description": "How many chips a `multiple` trigger renders before collapsing the rest into a `+N` badge. `0` renders no chips at all and the trigger reads `{placeholder} · {n}` — what a filter pill wants, and what keeps a filter bar from growing a row per selection. Unset renders every chip."
+        "description": "How many chips a `multiple` trigger renders before collapsing the rest into a `+N` badge. `0` renders no chips at all and the trigger reads `{placeholder} · {n}`, or a bare count when there is no placeholder — what a filter pill wants, and what keeps a filter bar from growing a row per selection. Unset renders every chip."
       },
       {
         "name": "multiple",
@@ -2845,7 +2847,7 @@
         "type": "KunSelectPopupWidth",
         "required": false,
         "default": "\"trigger\"",
-        "description": "Popup width. The default pins it to the trigger, which is wrong the moment the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'` sizes to the content and keeps the trigger width as a floor."
+        "description": "Popup width. The default pins it to the trigger, which is wrong the moment the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'` sizes to the content and keeps the trigger width as a floor. Every mode but `'trigger'` is capped to the viewport, so a fixed width chosen for a desktop layout cannot hang off the edge of a phone."
       },
       {
         "name": "rounded",

@@ -185,7 +185,7 @@ const date = ref('')
 | `mode` | `KunDatePickerMode` | `"single"` |  |
 | `modelValue` | `string \| [string \| null, string \| null] \| null` | `""` |  |
 | `months` | `string[]` | — | Full month names. Also the source for the month grid's labels, where the abbreviated form is used unless this overrides it. |
-| `placeholder` | `string` | — |  |
+| `placeholder` | `string` | `'请选择日期' \| '请选择月份' \| '请选择年份'` | Trigger text when nothing is selected. Defaults follow `precision`. |
 | `precision` | `KunDatePickerPrecision` | `"day"` | What one click commits: a day, a whole month, or a whole year. The panel opens on the matching grid and the value is the first instant of the period, so `month` emits `'2026-09'` and `year` emits `'2026'`. |
 | `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
