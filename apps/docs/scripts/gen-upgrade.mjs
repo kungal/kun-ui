@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { marked } from 'marked'
+import { escapeDefineTokens } from './viteDefineSafe.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const DOCS = join(here, '../../../docs')
@@ -28,10 +29,14 @@ const out = GUIDES.map(({ slug, file }) => {
     .trim()
 
   // Point the cross-links between guides at the in-page anchors on this route.
-  const html = marked
-    .parse(body)
-    .replace(/href="\.\/UPGRADE-1\.x\.md[^"]*"/g, 'href="#v1x"')
-    .replace(/href="\.\/UPGRADE-0\.5\.2-to-1\.0\.0\.md[^"]*"/g, 'href="#v052-to-100"')
+  // escapeDefineTokens: this JSON is imported as a module, so Vite's `define`
+  // reaches inside it — see viteDefineSafe.mjs.
+  const html = escapeDefineTokens(
+    marked
+      .parse(body)
+      .replace(/href="\.\/UPGRADE-1\.x\.md[^"]*"/g, 'href="#v1x"')
+      .replace(/href="\.\/UPGRADE-0\.5\.2-to-1\.0\.0\.md[^"]*"/g, 'href="#v052-to-100"')
+  )
 
   return { slug, title, html }
 })

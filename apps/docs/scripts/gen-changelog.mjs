@@ -8,6 +8,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { marked } from 'marked'
+import { escapeDefineTokens } from './viteDefineSafe.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const SRC = join(here, '../../../packages/vue/CHANGELOG.md')
@@ -48,7 +49,9 @@ const out = sections.map(({ version, body }) => {
       ? 'minor'
       : 'patch'
   const md = clean(body)
-  return { version, type, html: md ? marked.parse(md) : '' }
+  // escapeDefineTokens: this JSON is imported as a module, so Vite's `define`
+  // reaches inside it — see viteDefineSafe.mjs.
+  return { version, type, html: md ? escapeDefineTokens(marked.parse(md)) : '' }
 })
 
 writeFileSync(OUT, JSON.stringify(out, null, 2) + '\n')

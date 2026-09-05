@@ -15,6 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, relative } from 'node:path'
 import { createJiti } from 'jiti'
+import { findDefineTokens } from './viteDefineSafe.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..', '..', '..')
@@ -260,6 +261,26 @@ if (anyTyped.length) {
   )
   for (const p of anyTyped.slice(0, 10)) console.error(`  ${p}`)
   if (anyTyped.length > 10) console.error(`  … and ${anyTyped.length - 10} more`)
+  process.exit(1)
+}
+
+// These descriptions are rendered as plain text, so the HTML-entity trick the
+// changelog uses would show up literally. Refuse instead: a JSDoc block naming
+// one of Nuxt's define keys would be silently rewritten by the bundler — a
+// sentence about `import.meta.env.DEV` would ship reading `false`.
+const defineTokened = Object.entries(out).flatMap(([name, { props, events }]) =>
+  [...props, ...events].flatMap((p) =>
+    findDefineTokens(p.description).map((t) => `${name}.${p.name}: ${t}`)
+  )
+)
+if (defineTokened.length) {
+  console.error(
+    `gen-meta: ${defineTokened.length} description(s) name a Vite define key, which the docs bundle would substitute:`
+  )
+  for (const d of defineTokened) console.error(`  ${d}`)
+  console.error(
+    'gen-meta: reword them (e.g. "NODE_ENV" alone) — see scripts/viteDefineSafe.mjs.'
+  )
   process.exit(1)
 }
 
