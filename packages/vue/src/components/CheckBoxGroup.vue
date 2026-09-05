@@ -77,17 +77,22 @@ const isBlocked = (option: KunCheckBoxGroupOption<T>) =>
 
 const toggleOption = (option: KunCheckBoxGroupOption<T>) => {
   if (isOptionDisabled(option)) return
+  // @change carries `next`, not a read-back of `modelValue`: with v-model bound
+  // on the parent, a defineModel ref still reads as the pre-click array in the
+  // same tick (vuejs/core#11832), so the payload was one click behind.
   if (selectedSet.value.has(option.value)) {
-    modelValue.value = modelValue.value.filter((v) => v !== option.value)
-    emits('change', modelValue.value)
+    const next = modelValue.value.filter((v) => v !== option.value)
+    modelValue.value = next
+    emits('change', next)
     return
   }
   if (props.max != null && modelValue.value.length >= props.max) {
     emits('invalid', 'max-reached')
     return
   }
-  modelValue.value = [...modelValue.value, option.value]
-  emits('change', modelValue.value)
+  const next = [...modelValue.value, option.value]
+  modelValue.value = next
+  emits('change', next)
 }
 
 // WAI-ARIA checkbox pattern: each box is its own Tab stop; Space/Enter toggles.

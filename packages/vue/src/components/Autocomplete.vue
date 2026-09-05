@@ -86,13 +86,20 @@ const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, dropdownR
   ],
 })
 
-const filtered = computed(() => {
-  if (props.manualFilter || !dirty.value || !modelValue.value.trim()) {
-    return props.options
-  }
-  const q = modelValue.value.trim().toLowerCase()
+// Filtering takes the query as an argument because `modelValue` is a defineModel
+// ref: with v-model bound on the parent, reading it back in the same tick still
+// returns the pre-keystroke text (vuejs/core#11832, closed as expected behaviour
+// — the value only comes back after the parent re-renders). onInput needs the
+// list for the text that was *just* typed.
+const filterOptions = (query: string) => {
+  if (props.manualFilter || !query.trim()) return props.options
+  const q = query.trim().toLowerCase()
   return props.options.filter((o) => o.label.toLowerCase().includes(q))
-})
+}
+
+const filtered = computed(() =>
+  dirty.value ? filterOptions(modelValue.value) : props.options
+)
 
 const activeId = computed(() =>
   activeIndex.value >= 0 && filtered.value[activeIndex.value]
@@ -100,7 +107,8 @@ const activeId = computed(() =>
     : undefined
 )
 
-const firstEnabled = () => filtered.value.findIndex((o) => !o.disabled)
+const firstEnabledOf = (list: readonly T[]) => list.findIndex((o) => !o.disabled)
+const firstEnabled = () => firstEnabledOf(filtered.value)
 
 const open = () => {
   if (props.disabled || isOpen.value) return
@@ -182,11 +190,17 @@ const selectOption = (option: T) => {
 }
 
 const onInput = (e: Event) => {
-  modelValue.value = (e.target as HTMLInputElement).value
+  // Everything here runs off `value`, never off `modelValue.value` (see
+  // filterOptions): @search used to fire one keystroke behind — typing "key"
+  // searched "", "k", "ke" — and the highlight was the first enabled row of the
+  // *previous* query's list, so Enter could commit an option the user never saw
+  // highlighted.
+  const value = (e.target as HTMLInputElement).value
+  modelValue.value = value
   dirty.value = true
-  emitSearch(modelValue.value)
+  emitSearch(value)
   open()
-  activeIndex.value = firstEnabled()
+  activeIndex.value = firstEnabledOf(filterOptions(value))
 }
 
 const onKeydown = (e: KeyboardEvent) => {

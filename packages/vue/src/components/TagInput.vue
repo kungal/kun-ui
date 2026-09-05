@@ -88,35 +88,43 @@ const isDuplicate = (candidate: string, against: string[]): boolean => {
   return against.some((t) => t.toLowerCase() === lower)
 }
 
-const tryAdd = (raw: string): boolean => {
+// Validates against `against` and returns the list after the add, or null if the
+// tag was rejected. It cannot read `tags.value` itself: that is a defineModel ref,
+// and with v-model bound on the parent it still returns the pre-write array for
+// the rest of the tick (vuejs/core#11832, closed as expected behaviour). Adding in
+// a loop off `tags.value` meant every fragment rebuilt the *pre-paste* array —
+// pasting "a,b,c" left a single tag "c" — and maxTags/duplicate checks all
+// measured the array as it was before the paste started.
+const tryAdd = (raw: string, against: string[]): string[] | null => {
   const v = normalize(raw)
-  if (!v) return false
+  if (!v) return null
   if (v.length < props.minTagLength) {
     emit('invalid', 'too-short', raw)
-    return false
+    return null
   }
   if (v.length > props.maxTagLength) {
     emit('invalid', 'too-long', raw)
-    return false
+    return null
   }
-  if (tags.value.length >= props.maxTags) {
+  if (against.length >= props.maxTags) {
     emit('invalid', 'max-reached', raw)
-    return false
+    return null
   }
-  if (!props.allowDuplicates && isDuplicate(v, tags.value)) {
+  if (!props.allowDuplicates && isDuplicate(v, against)) {
     emit('invalid', 'duplicate', raw)
-    return false
+    return null
   }
   if (props.validate) {
-    const result = props.validate(v, tags.value)
+    const result = props.validate(v, against)
     if (result !== true) {
       emit('invalid', 'custom', raw, result)
-      return false
+      return null
     }
   }
-  tags.value = [...tags.value, v]
+  const next = [...against, v]
+  tags.value = next
   emit('add', v)
-  return true
+  return next
 }
 
 const splitAndAdd = (chunk: string): number => {
@@ -129,12 +137,16 @@ const splitAndAdd = (chunk: string): number => {
       parts.push(escape(d))
     }
   }
-  if (!parts.length) return tryAdd(chunk) ? 1 : 0
+  if (!parts.length) return tryAdd(chunk, tags.value) ? 1 : 0
   const re = new RegExp(parts.join('|'))
   const fragments = chunk.split(re)
+  let list = tags.value
   let added = 0
   for (const f of fragments) {
-    if (tryAdd(f)) added++
+    const next = tryAdd(f, list)
+    if (!next) continue
+    list = next
+    added++
   }
   return added
 }
@@ -143,8 +155,9 @@ const removeAt = (index: number) => {
   if (props.disabled || props.readonly) return
   const removed = tags.value[index]
   if (removed === undefined) return
-  tags.value = tags.value.filter((_, i) => i !== index)
-  chipRefs.value.length = tags.value.length
+  const next = tags.value.filter((_, i) => i !== index)
+  tags.value = next
+  chipRefs.value.length = next.length
   emit('remove', removed, index)
 }
 
