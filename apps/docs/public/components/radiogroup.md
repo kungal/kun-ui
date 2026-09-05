@@ -168,7 +168,7 @@ const options: KunRadioOption[] = [
 | `hideIndicator` | `boolean` | `false` | `card` variant only: drop the radio-dot indicator and signal selection with the tinted border/fill alone (the icon-card look). No effect on classic/pill. |
 | `label` | `string` | `""` |  |
 | `orientation` | `KunRadioOrientation` | `"vertical"` |  |
-| `rounded` | `KunUIRounded` | — |  |
+| `rounded` | `KunUIRounded` | — | `card` variant only — it is the only variant with a surface of its own to round. `classic` is a dot plus a label, and `pill` is a pill by definition; both ignore this. |
 | `size` | `KunUISize` | `"md"` |  |
 | `variant` | `KunRadioVariant` | `"classic"` |  |
 

@@ -171,12 +171,16 @@ const date = ref('')
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| `className` | `string` | `""` | Extra classes for the outer wrapper. Use `classNames` to reach the trigger, panel, grid or cells. |
+| `classNames` | `KunDatePickerClassNames` | — | Per-part class hooks (root / trigger / popup / grid / cell), merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. There is no `popupWidth`: the panel is always content-width with a 260px floor and never follows the trigger, so a short pill still gets a full calendar. |
 | `clearable` | `boolean` | `true` |  |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
 | `darkBorder` | `boolean` | `true` |  |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` |  |
 | `format` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the text shown in the trigger. Defaults follow `precision`. |
+| `fullWidth` | `boolean` | `true` | Stretch the control to its container. Turn it off in a filter bar, so the trigger shrinks to its own content. The wrapper shrink-wraps its widest child, so a long `label` or `error` widens it too — a filter pill wants neither. |
+| `icon` | `string` | `""` | Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. The trailing calendar glyph is the disclosure indicator and stays either way. Must be one of the bundled icon names. |
 | `isDateDisabled` | `((date: Date) => boolean)` | — | Extra per-cell veto. Called with the FIRST instant of the period a cell covers — the day itself, the 1st of the month, or January 1st — so one predicate works at every precision. |
 | `label` | `string` | `""` |  |
 | `locale` | `string` | — |  |

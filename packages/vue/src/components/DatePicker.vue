@@ -40,6 +40,10 @@ const props = withDefaults(defineProps<KunDatePickerProps>(), {
   rounded: undefined,
   size: 'md',
   color: 'default',
+  icon: '',
+  fullWidth: true,
+  className: '',
+  classNames: undefined,
 })
 
 // `format`, `valueFormat` and `placeholder` all default off `precision`, so they
@@ -320,12 +324,19 @@ const displayValue = computed(() => {
     const d = parseDate(Array.isArray(mv) ? mv[0] : mv)
     return d ? formatDate(d, resolvedFormat.value) : ''
   }
-  if (Array.isArray(props.modelValue) && props.modelValue.every((d) => d)) {
-    const start = parseDate(props.modelValue[0])
-    const end = parseDate(props.modelValue[1])
-    if (!start || !end) return ''
-    return `${formatDate(start, resolvedFormat.value)} - ${formatDate(end, resolvedFormat.value)}`
-  }
+  if (!Array.isArray(props.modelValue)) return ''
+  const start = parseDate(props.modelValue[0])
+  const end = parseDate(props.modelValue[1])
+  const fmt = (d: Date) => formatDate(d, resolvedFormat.value)
+  if (start && end) return `${fmt(start)} - ${fmt(end)}`
+  // A half-open range is not hypothetical: `selectDate` emits `[start, null]` on
+  // the FIRST click of every range selection. Rendering '' for it left the
+  // trigger reading "nothing selected" while the consumer's model already held
+  // ['2021', null], and `clearable`'s `&& displayValue` took the clear button
+  // away with it — click outside at that point and the value was both invisible
+  // and unclearable. The dangling dash is the point: it says which end is set.
+  if (start) return `${fmt(start)} -`
+  if (end) return `- ${fmt(end)}`
   return ''
 })
 
@@ -409,7 +420,8 @@ const periodCellClass = (cell: {
       !cell.isSelected &&
       'bg-primary/10 rounded-none',
     cell.isRangeStart && 'rounded-r-none',
-    cell.isRangeEnd && 'rounded-l-none'
+    cell.isRangeEnd && 'rounded-l-none',
+    props.classNames?.cell
   )
 
 const isInPreviewRange = (date: Date) => {
@@ -422,7 +434,19 @@ const isInPreviewRange = (date: Date) => {
 </script>
 
 <template>
-  <div ref="datePickerRef" class="relative w-full">
+  <div
+    ref="datePickerRef"
+    :class="
+      cn(
+        'relative',
+        // `w-fit` is not redundant with `inline-block`: a grid item is
+        // blockified, and `justify-self: stretch` then fills the whole track.
+        fullWidth ? 'w-full' : 'inline-block w-fit align-top',
+        props.className,
+        props.classNames?.root
+      )
+    "
+  >
     <label
       v-if="label"
       :id="`${kunUniqueId}-label`"
@@ -449,19 +473,22 @@ const isInPreviewRange = (date: Date) => {
         :aria-activedescendant="isOpen ? cellId(activeKey) : undefined"
         :class="
           cn(
-            'flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
+            'flex cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
+            fullWidth && 'w-full',
             kunControlSizeClasses[props.size],
             roundedClass,
             'bg-content1 shadow-kun-sm border',
             error
               ? cn('border-danger-300', kunFocusRingClasses.danger)
               : cn('border-kun', kunFocusRingClasses[color]),
-            disabled && 'cursor-not-allowed opacity-60'
+            disabled && 'cursor-not-allowed opacity-60',
+            props.classNames?.trigger
           )
         "
         @click="toggle"
         @keydown="onKeydown"
       >
+        <KunIcon v-if="icon" :name="icon" class="text-default-500 shrink-0" />
         <span class="block min-w-0 flex-1 truncate" :class="{ 'text-default-400': !displayValue }">
           {{ displayValue || resolvedPlaceholder }}
         </span>
@@ -505,7 +532,8 @@ const isInPreviewRange = (date: Date) => {
           :class="
             cn(
               'bg-content1 z-kun-popover p-3 shadow-kun-md',
-              roundedClass
+              roundedClass,
+              props.classNames?.popup
             )
           "
           :style="[floatingStyles, { minWidth: '260px', transformOrigin }]"
@@ -567,7 +595,7 @@ const isInPreviewRange = (date: Date) => {
           <div
             v-if="view === 'day'"
             :id="gridId"
-            class="mt-1"
+            :class="cn('mt-1', props.classNames?.grid)"
             role="grid"
             :aria-label="headerLabel"
           >
@@ -605,7 +633,8 @@ const isInPreviewRange = (date: Date) => {
                         !day.isSelected &&
                         'bg-primary/10 rounded-none',
                       day.isRangeStart && 'rounded-r-none',
-                      day.isRangeEnd && 'rounded-l-none'
+                      day.isRangeEnd && 'rounded-l-none',
+                      props.classNames?.cell
                     )
                   "
                   :aria-label="day.date.toDateString()"
@@ -624,7 +653,7 @@ const isInPreviewRange = (date: Date) => {
           <div
             v-else-if="view === 'month'"
             :id="gridId"
-            class="mt-3"
+            :class="cn('mt-3', props.classNames?.grid)"
             role="grid"
             :aria-label="headerLabel"
           >
@@ -661,7 +690,7 @@ const isInPreviewRange = (date: Date) => {
           <div
             v-else
             :id="gridId"
-            class="mt-3"
+            :class="cn('mt-3', props.classNames?.grid)"
             role="grid"
             :aria-label="headerLabel"
           >

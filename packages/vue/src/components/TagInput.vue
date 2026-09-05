@@ -41,6 +41,7 @@ const props = withDefaults(defineProps<KunTagInputProps>(), {
   showCounter: false,
   rounded: undefined,
   className: '',
+  classNames: undefined,
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -315,7 +316,8 @@ const containerClasses = computed(() =>
     props.error && 'border-danger',
     props.disabled && 'opacity-50 cursor-not-allowed bg-default-100',
     props.readonly && 'cursor-default',
-    props.className
+    props.className,
+    props.classNames?.field
   )
 )
 
@@ -326,7 +328,8 @@ const chipClasses = computed(() =>
     'inline-flex items-center gap-1 rounded-full font-medium whitespace-nowrap select-none',
     kunVariantClasses('flat', props.color),
     kunChipSizeClasses[props.size],
-    kunFocusRingClasses[props.color]
+    kunFocusRingClasses[props.color],
+    props.classNames?.chip
   )
 )
 
@@ -334,7 +337,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
 </script>
 
 <template>
-  <div class="w-full">
+  <div :class="cn('w-full', props.classNames?.root)">
     <label
       v-if="label"
       :for="kunUniqueId"
@@ -387,7 +390,12 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
         :disabled="disabled"
         :readonly="isAtMax"
         :aria-describedby="error || helper ? `${kunUniqueId}-msg` : undefined"
-        class="placeholder-default-400 min-w-[80px] flex-1 bg-transparent outline-none disabled:cursor-not-allowed read-only:cursor-not-allowed"
+        :class="
+          cn(
+            'placeholder-default-400 min-w-[80px] flex-1 bg-transparent outline-none disabled:cursor-not-allowed read-only:cursor-not-allowed',
+            props.classNames?.input
+          )
+        "
         @keydown="onKeydown"
         @compositionstart="onCompositionStart"
         @compositionend="onCompositionEnd"

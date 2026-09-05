@@ -89,7 +89,8 @@ const b = ref<string[]>(['vue', 'react'])
 | --- | --- | --- | --- |
 | `allowDuplicates` | `boolean` | `false` |  |
 | `caseSensitive` | `boolean` | `false` |  |
-| `className` | `string` | `""` |  |
+| `className` | `string` | `""` | Extra classes for the bordered field. Use `classNames` to reach the outer wrapper, the tags or the text input. |
+| `classNames` | `KunTagInputClassNames` | — | Per-part class hooks, merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` scales included. |
 | `color` | `KunUIColor` | `"primary"` |  |
 | `confirmOnBlur` | `boolean` | `true` |  |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
@@ -104,7 +105,7 @@ const b = ref<string[]>(['vue', 'react'])
 | `placeholder` | `string` | `""` |  |
 | `readonly` | `boolean` | `false` |  |
 | `respectComposition` | `boolean` | `true` |  |
-| `rounded` | `KunUIRounded` | — |  |
+| `rounded` | `KunUIRounded` | — | Radius of the field. It deliberately does not reach the tags: a tag IS a `<KunChip>` and stays a pill at every setting, so a `KunChip` next to the field and a tag inside it never disagree. Reach a tag with `classNames.chip`. |
 | `showCounter` | `boolean` | `false` |  |
 | `size` | `KunUISize` | `"md"` |  |
 | `splitChars` | `(string \| RegExp)[]` | `["\n", ",", "，", ";"]` |  |

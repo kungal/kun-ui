@@ -956,7 +956,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "`card` variant only — it is the only variant with a surface of its own to round. `classic` is a box plus a label, and `pill` is a pill by definition; both ignore this."
       },
       {
         "name": "size",
@@ -1294,6 +1295,19 @@
   "KunDatePicker": {
     "props": [
       {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Extra classes for the outer wrapper. Use `classNames` to reach the trigger, panel, grid or cells."
+      },
+      {
+        "name": "classNames",
+        "type": "KunDatePickerClassNames",
+        "required": false,
+        "description": "Per-part class hooks (root / trigger / popup / grid / cell), merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. There is no `popupWidth`: the panel is always content-width with a 260px floor and never follows the trigger, so a short pill still gets a full calendar."
+      },
+      {
         "name": "clearable",
         "type": "boolean",
         "required": false,
@@ -1330,6 +1344,20 @@
         "required": false,
         "default": "'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy'",
         "description": "date-fns pattern for the text shown in the trigger. Defaults follow `precision`."
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Stretch the control to its container. Turn it off in a filter bar, so the trigger shrinks to its own content. The wrapper shrink-wraps its widest child, so a long `label` or `error` widens it too — a filter pill wants neither."
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. The trailing calendar glyph is the disclosure indicator and stays either way. Must be one of the bundled icon names."
       },
       {
         "name": "isDateDisabled",
@@ -3091,7 +3119,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "`card` variant only — it is the only variant with a surface of its own to round. `classic` is a dot plus a label, and `pill` is a pill by definition; both ignore this."
       },
       {
         "name": "size",
@@ -4200,7 +4229,14 @@
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes for the bordered field. Use `classNames` to reach the outer wrapper, the tags or the text input."
+      },
+      {
+        "name": "classNames",
+        "type": "KunTagInputClassNames",
+        "required": false,
+        "description": "Per-part class hooks, merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "color",
@@ -4290,7 +4326,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Radius of the field. It deliberately does not reach the tags: a tag IS a `<KunChip>` and stays a pill at every setting, so a `KunChip` next to the field and a tag inside it never disagree. Reach a tag with `classNames.chip`."
       },
       {
         "name": "showCounter",

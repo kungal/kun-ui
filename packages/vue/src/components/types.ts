@@ -812,6 +812,9 @@ export interface KunRadioGroupProps<T extends KunRadioValue = KunRadioValue> {
   orientation?: KunRadioOrientation
   color?: KunUIColor
   size?: KunUISize
+  /** `card` variant only — it is the only variant with a surface of its own to
+   *  round. `classic` is a dot plus a label, and `pill` is a pill by
+   *  definition; both ignore this. */
   rounded?: KunUIRounded
   /**
    * `card` variant only: drop the radio-dot indicator and signal selection with
@@ -852,6 +855,9 @@ export interface KunCheckBoxGroupProps<
   orientation?: KunCheckBoxGroupOrientation
   color?: KunUIColor
   size?: KunUISize
+  /** `card` variant only — it is the only variant with a surface of its own to
+   *  round. `classic` is a box plus a label, and `pill` is a pill by
+   *  definition; both ignore this. */
   rounded?: KunUIRounded
   /**
    * Cap on how many options can be selected at once. A click that would exceed
@@ -1253,6 +1259,20 @@ export type KunDatePickerMode = 'single' | 'range'
  *  enum, which multiplies every future granularity by every future mode. */
 export type KunDatePickerPrecision = 'day' | 'month' | 'year'
 
+export interface KunDatePickerClassNames {
+  /** The outer wrapper — the same target as `className`. */
+  root?: string
+  /** The `role="combobox"` trigger. */
+  trigger?: string
+  /** The teleported panel surface. */
+  popup?: string
+  /** The `role="grid"` calendar — day, month or year, whichever is showing. */
+  grid?: string
+  /** Every date cell button inside the grid. */
+  cell?: string
+}
+
+
 export interface KunDatePickerProps {
   /** Focus-ring accent (the resting border/text stay neutral). */
   color?: KunUIColor
@@ -1298,6 +1318,26 @@ export interface KunDatePickerProps {
   months?: string[]
   rounded?: KunUIRounded
   size?: KunUISize
+  /** Icon rendered before the value in the trigger — a filter glyph for a filter
+   *  bar, a category glyph for a field. The trailing calendar glyph is the
+   *  disclosure indicator and stays either way. Must be one of the bundled icon
+   *  names. */
+  icon?: string
+  /** Stretch the control to its container. Turn it off in a filter bar, so the
+   *  trigger shrinks to its own content. The wrapper shrink-wraps its widest
+   *  child, so a long `label` or `error` widens it too — a filter pill wants
+   *  neither.
+   *  @default true */
+  fullWidth?: boolean
+  /** Extra classes for the outer wrapper. Use `classNames` to reach the trigger,
+   *  panel, grid or cells. */
+  className?: string
+  /** Per-part class hooks (root / trigger / popup / grid / cell), merged after
+   *  the component's own classes so yours wins the conflict — KunUI's own
+   *  `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. There is no
+   *  `popupWidth`: the panel is always content-width with a 260px floor and
+   *  never follows the trigger, so a short pill still gets a full calendar. */
+  classNames?: KunDatePickerClassNames
 }
 
 // ── FileInput ──────────────────────────────────────────────────────────
@@ -1335,6 +1375,19 @@ export type KunTagInputInvalidReason =
 
 export type KunTagInputValidator = (tag: string, all: string[]) => true | string
 
+export interface KunTagInputClassNames {
+  /** The outer wrapper — label, field and the message line below it. */
+  root?: string
+  /** The bordered field holding the tags and the input — the same target as the
+   *  legacy `className`. */
+  field?: string
+  /** Every tag chip. The only way to change a tag's radius: `rounded` sizes the
+   *  field and leaves the tags as pills. */
+  chip?: string
+  /** The text input inside the field. */
+  input?: string
+}
+
 export interface KunTagInputProps {
   label?: string
   placeholder?: string
@@ -1361,8 +1414,18 @@ export interface KunTagInputProps {
   disabled?: boolean
   readonly?: boolean
   showCounter?: boolean
+  /** Radius of the field. It deliberately does not reach the tags: a tag IS a
+   *  `<KunChip>` and stays a pill at every setting, so a `KunChip` next to the
+   *  field and a tag inside it never disagree. Reach a tag with
+   *  `classNames.chip`. */
   rounded?: KunUIRounded
+  /** Extra classes for the bordered field. Use `classNames` to reach the outer
+   *  wrapper, the tags or the text input. */
   className?: string
+  /** Per-part class hooks, merged after the component's own classes so yours
+   *  wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` scales
+   *  included. */
+  classNames?: KunTagInputClassNames
 }
 
 // ── Upload ─────────────────────────────────────────────────────────────
