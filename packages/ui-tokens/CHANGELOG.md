@@ -1,5 +1,7 @@
 # @kungal/ui-tokens
 
+## 2.31.0
+
 ## 2.30.0
 
 ### Minor Changes
