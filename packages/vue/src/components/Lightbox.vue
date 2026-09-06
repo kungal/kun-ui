@@ -19,8 +19,9 @@ import type { KunLightboxProps } from './types'
 // `document.activeElement` stays BODY, so neither its Escape handler nor the
 // dialog's fires, both stay open and the body scroll lock is never released
 // (a backdrop click still recovers). Any overlay opened ON TOP of an open
-// Lightbox is dead the same way. Not fixed: the fix is either to stop using the
-// top layer here or to route close requests centrally.
+// Lightbox is dead the same way. Not fixed — the fix is either to stop using
+// the top layer here or to route close requests centrally. What the other
+// overlays do instead is NAME it: see utils/warnTopLayerConflict.
 defineOptions({ name: 'KunLightbox' })
 
 const props = defineProps<KunLightboxProps>()

@@ -22,7 +22,7 @@ const toPath = (slug: string) => `/components/${slug}`
 const componentCategories: { title: string; slugs: string[] }[] = [
   {
     title: '通用',
-    slugs: ['button', 'icon', 'brand', 'copy', 'header', 'link', 'reaction'],
+    slugs: ['button', 'buttongroup', 'icon', 'brand', 'copy', 'header', 'link', 'reaction'],
   },
   {
     title: '布局',
@@ -38,6 +38,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
       'select',
       'autocomplete',
       'checkbox',
+      'checkboxgroup',
       'radiogroup',
       'switch',
       'slider',

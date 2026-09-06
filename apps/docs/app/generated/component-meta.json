@@ -139,7 +139,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "debounce",
@@ -476,61 +477,71 @@
         "name": "ariaLabel",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Accessible name. Falls back to the slot text, or to `\"button\"` for `isIconOnly`; set it whenever the button carries no readable text."
       },
       {
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"primary\""
+        "default": "\"primary\"",
+        "description": "Semantic colour the variant is painted in."
       },
       {
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks clicks and dims the button. In link mode the block is a JS guard, because `disabled` is a no-op on an `<a>` and the link would still navigate."
       },
       {
         "name": "fullWidth",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Stretch to the container's full width."
       },
       {
         "name": "href",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Render an `<a>` (NuxtLink under Nuxt) instead of a `<button>`, keeping the button's appearance."
       },
       {
         "name": "icon",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Render the `#icon` slot beside the label. Without it that slot is not rendered at all."
       },
       {
         "name": "iconPosition",
         "type": "\"right\" | \"left\"",
         "required": false,
-        "default": "\"left\""
+        "default": "\"left\"",
+        "description": "Which side of the label the `#icon` slot sits on."
       },
       {
         "name": "isIconOnly",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Fixed square button, sized to the same-`size` text button's height so icon and text buttons line up in a row. Give it an `ariaLabel` — it has no text of its own."
       },
       {
         "name": "loading",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Prepends a spinner and blocks clicks. The label stays in place, so a row of buttons does not reflow mid-request."
       },
       {
         "name": "rel",
@@ -542,31 +553,36 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. Left unset it follows the app-wide config (default `md`) so every KunUI surface shares one radius."
       },
       {
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Height, padding and font size. It is the shared form-control scale, so a button lines up with an input or select of the same `size`."
       },
       {
         "name": "target",
         "type": "\"_self\" | \"_blank\" | \"_parent\" | \"_top\"",
         "required": false,
-        "default": "\"_self\""
+        "default": "\"_self\"",
+        "description": "Link target — link mode only. `_blank` also picks a safe default `rel`."
       },
       {
         "name": "type",
         "type": "\"button\" | \"submit\" | \"reset\"",
         "required": false,
-        "default": "\"button\""
+        "default": "\"button\"",
+        "description": "Native `type` of the rendered `<button>` — `submit` is what makes a button submit its surrounding form. Ignored in link mode (`href`)."
       },
       {
         "name": "variant",
         "type": "KunUIVariant",
         "required": false,
-        "default": "\"solid\""
+        "default": "\"solid\"",
+        "description": "Visual style: `solid` filled, `bordered` outline, `light` text-only with a tinted hover, `flat` a soft tint, `shadow` filled with elevation."
       }
     ],
     "events": [
@@ -598,13 +614,15 @@
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "orientation",
         "type": "KunButtonGroupOrientation",
         "required": false,
-        "default": "\"horizontal\""
+        "default": "\"horizontal\"",
+        "description": "Lay the segments out as a row or a column; the collapsed seam and the squared inner corners follow."
       }
     ],
     "events": [],
@@ -651,7 +669,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "href",
@@ -892,42 +911,49 @@
       {
         "name": "modelValue",
         "type": "KunCheckBoxGroupValue[]",
-        "required": true
+        "required": true,
+        "description": "The selected values, two-way bound with `v-model`. Required: a checkbox group with no model has nothing to select into."
       },
       {
         "name": "options",
         "type": "readonly KunCheckBoxGroupOption<KunCheckBoxGroupValue>[]",
-        "required": true
+        "required": true,
+        "description": "The selectable options. `value` is what lands in the model; `label` is shown, and `description` / `icon` / `disabled` are optional per option."
       },
       {
         "name": "ariaLabel",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Accessible name for the group. Not needed when `label` is set — that becomes the group's name."
       },
       {
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"primary\""
+        "default": "\"primary\"",
+        "description": "Semantic colour of the selected state and the focus ring."
       },
       {
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks the whole group and dims it. A single option is disabled through its own `disabled`."
       },
       {
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message below the group."
       },
       {
         "name": "hideIndicator",
@@ -940,7 +966,8 @@
         "name": "label",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Visible label above the group, wired to it with `aria-labelledby`."
       },
       {
         "name": "max",
@@ -952,7 +979,8 @@
         "name": "orientation",
         "type": "KunCheckBoxGroupOrientation",
         "required": false,
-        "default": "\"vertical\""
+        "default": "\"vertical\"",
+        "description": "Stack the options vertically, or wrap them in a row."
       },
       {
         "name": "rounded",
@@ -964,13 +992,15 @@
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Box, icon and text scale — shared with KunCheckBox and KunRadioGroup, so equal `size` renders identically across the three."
       },
       {
         "name": "variant",
         "type": "KunCheckBoxGroupVariant",
         "required": false,
-        "default": "\"classic\""
+        "default": "\"classic\"",
+        "description": "Presentation: `classic` box + label, `pill` filter chips, `card` bordered cards with an optional icon."
       }
     ],
     "events": [
@@ -1325,7 +1355,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "disabled",
@@ -1482,7 +1513,8 @@
         "name": "withLabel",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Legacy opt-in for the divider's inline label."
       }
     ],
     "events": [],
@@ -1686,13 +1718,15 @@
         "name": "accept",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Native `accept` filter for the picker, e.g. `\"image/*\"` or `\".pdf,.zip\"`. A filter, not a guarantee — validate on the server too."
       },
       {
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "description",
@@ -1705,84 +1739,98 @@
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks the picker and dims the trigger."
       },
       {
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message below the trigger. Setting it also paints the invalid state and hides `description`."
       },
       {
         "name": "files",
         "type": "File[]",
         "required": false,
-        "default": "[]"
+        "default": "[]",
+        "description": "The picked files in `multiple` mode, two-way bound with `v-model:files`. Always an array; empty when nothing is picked."
       },
       {
         "name": "fullWidth",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Stretch the trigger to the container's full width."
       },
       {
         "name": "hint",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field."
       },
       {
         "name": "maxSize",
         "type": "number",
-        "required": false
+        "required": false,
+        "description": "Largest accepted file, in BYTES. A file over it is rejected and reported through `error`."
       },
       {
         "name": "modelValue",
         "type": "File | null",
         "required": false,
-        "default": "null"
+        "default": "null",
+        "description": "The picked file, two-way bound with `v-model`. `null` when nothing is picked; stays `null` in `multiple` mode — read `v-model:files` there."
       },
       {
         "name": "multiple",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Allow picking more than one file."
       },
       {
         "name": "showFileName",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Print the picked file name (or the count, when `multiple`) next to the trigger."
       },
       {
         "name": "triggerColor",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"primary\""
+        "default": "\"primary\"",
+        "description": "Semantic colour of the trigger button."
       },
       {
         "name": "triggerIcon",
         "type": "string",
         "required": false,
-        "default": "\"lucide:upload\""
+        "default": "\"lucide:upload\"",
+        "description": "Icon name on the trigger button. Must be one of KunUI's bundled icons — an unbundled name renders nothing."
       },
       {
         "name": "triggerSize",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Size of the trigger button, on the shared form-control scale."
       },
       {
         "name": "triggerText",
         "type": "string",
         "required": false,
-        "default": "\"选择文件\""
+        "default": "\"选择文件\"",
+        "description": "Label on the trigger button."
       },
       {
         "name": "triggerVariant",
         "type": "KunUIVariant",
         "required": false,
-        "default": "\"flat\""
+        "default": "\"flat\"",
+        "description": "Visual style of the trigger button (see KunButton `variant`)."
       }
     ],
     "events": [
@@ -1876,18 +1924,21 @@
       {
         "name": "src",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "Image URL. Under Nuxt it is handed to the injected `<NuxtImg>`, so a provider path or a remote URL both work."
       },
       {
         "name": "alt",
         "type": "string",
         "required": false,
-        "default": "\"image\""
+        "default": "\"image\"",
+        "description": "Alternative text. Write the empty string for a decorative image so screen readers skip it."
       },
       {
         "name": "ariaLabel",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Accessible name, when it has to differ from `alt`."
       },
       {
         "name": "aspectRatio",
@@ -1898,17 +1949,20 @@
       {
         "name": "className",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Classes for the WRAPPER element (the box that holds the skeleton and the aspect ratio). Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included."
       },
       {
         "name": "decoding",
         "type": "\"auto\" | \"sync\" | \"async\"",
-        "required": false
+        "required": false,
+        "description": "Native `decoding` hint. `async` keeps a large image from blocking the frame it lands in."
       },
       {
         "name": "densities",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Pixel densities to generate, e.g. `'x1 x2'`, via"
       },
       {
         "name": "fallbackSrc",
@@ -1919,17 +1973,20 @@
       {
         "name": "fetchpriority",
         "type": "\"auto\" | \"high\" | \"low\"",
-        "required": false
+        "required": false,
+        "description": "Native fetch priority. `high` for the one image that is the page's LCP; leave the rest alone."
       },
       {
         "name": "format",
         "type": "string",
-        "required": false
+        "required": false,
+        "description": "Output format to transcode to (`webp`, `avif`, …), via"
       },
       {
         "name": "height",
         "type": "string | number",
-        "required": false
+        "required": false,
+        "description": "Intrinsic height. See `width`."
       },
       {
         "name": "imageClassName",
@@ -1941,23 +1998,27 @@
         "name": "loading",
         "type": "\"lazy\" | \"eager\"",
         "required": false,
-        "default": "\"lazy\""
+        "default": "\"lazy\"",
+        "description": "Native loading hint. `lazy` defers the fetch until the image nears the viewport; use `eager` for anything above the fold."
       },
       {
         "name": "objectFit",
         "type": "\"fill\" | \"none\" | \"cover\" | \"contain\" | \"scale-down\"",
         "required": false,
-        "default": "\"cover\""
+        "default": "\"cover\"",
+        "description": "How the image fills its box once `aspectRatio` or an explicit size gives it one."
       },
       {
         "name": "placeholder",
         "type": "string | number | boolean | [w: number, h: number, q?: number, b?: number]",
-        "required": false
+        "required": false,
+        "description": "Blur-up placeholder generated by"
       },
       {
         "name": "preload",
         "type": "boolean | { fetchPriority: \"auto\" | \"high\" | \"low\"; }",
-        "required": false
+        "required": false,
+        "description": "Emit a `<link rel=\"preload\">` for this image, via"
       },
       {
         "name": "provider",
@@ -1968,7 +2029,8 @@
       {
         "name": "quality",
         "type": "string | number",
-        "required": false
+        "required": false,
+        "description": "Compression quality passed to"
       },
       {
         "name": "sizes",
@@ -1992,7 +2054,8 @@
       {
         "name": "width",
         "type": "string | number",
-        "required": false
+        "required": false,
+        "description": "Intrinsic width. Set it together with `height` so the browser reserves the box and the page does not shift as the image arrives."
       }
     ],
     "events": [
@@ -2145,7 +2208,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "description",
@@ -2170,7 +2234,8 @@
         "name": "helperText",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field."
       },
       {
         "name": "isClearable",
@@ -2637,13 +2702,15 @@
         "name": "ariaLabel",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Accessible name, for a field with no visible `label`."
       },
       {
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"default\""
+        "default": "\"default\"",
+        "description": "Focus-ring accent; the resting border stays neutral."
       },
       {
         "name": "controls",
@@ -2656,7 +2723,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "description",
@@ -2669,43 +2737,50 @@
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks input and dims the field, steppers included."
       },
       {
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message below the field. Setting it also paints the invalid state and hides `description`."
       },
       {
         "name": "isInvalid",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Paint the invalid state without printing a message — for when the error is shown elsewhere (a form summary)."
       },
       {
         "name": "label",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Visible label above the field."
       },
       {
         "name": "max",
         "type": "number",
         "required": false,
-        "default": "Number.POSITIVE_INFINITY"
+        "default": "Number.POSITIVE_INFINITY",
+        "description": "Upper bound. The value is clamped to it, and the + stepper stops there."
       },
       {
         "name": "min",
         "type": "number",
         "required": false,
-        "default": "Number.NEGATIVE_INFINITY"
+        "default": "Number.NEGATIVE_INFINITY",
+        "description": "Lower bound. The value is clamped to it, and the − stepper stops there."
       },
       {
         "name": "modelValue",
         "type": "number | null",
         "required": false,
-        "default": "null"
+        "default": "null",
+        "description": "The numeric value, two-way bound with `v-model`. `null` is the empty field — distinct from `0`."
       },
       {
         "name": "name",
@@ -2717,7 +2792,8 @@
         "name": "placeholder",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Placeholder shown while the field is empty."
       },
       {
         "name": "precision",
@@ -2729,30 +2805,35 @@
         "name": "readonly",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Value is selectable but not editable, and the steppers do nothing."
       },
       {
         "name": "required",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Marks the field required for native validation and assistive tech."
       },
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. Unset follows the app-wide config (default `md`)."
       },
       {
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Height, padding and font size, on the shared form-control scale."
       },
       {
         "name": "step",
         "type": "number",
         "required": false,
-        "default": "1"
+        "default": "1",
+        "description": "Increment applied by the steppers and by ArrowUp / ArrowDown."
       }
     ],
     "events": [
@@ -3417,7 +3498,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "debounce",
@@ -4220,13 +4302,15 @@
         "name": "allowDuplicates",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Accept a tag that is already in the list. Off by default; a repeat emits `invalid` with `duplicate`."
       },
       {
         "name": "caseSensitive",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Treat `Vue` and `vue` as different tags when checking for duplicates."
       },
       {
         "name": "className",
@@ -4245,13 +4329,15 @@
         "name": "color",
         "type": "KunUIColor",
         "required": false,
-        "default": "\"primary\""
+        "default": "\"primary\"",
+        "description": "Focus-ring accent; the resting border stays neutral."
       },
       {
         "name": "confirmOnBlur",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Commit whatever is half-typed in the field when it loses focus, instead of discarding it."
       },
       {
         "name": "description",
@@ -4264,67 +4350,78 @@
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks input and dims the field."
       },
       {
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message below the field. Setting it also paints the invalid state and hides `description`."
       },
       {
         "name": "helperText",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field."
       },
       {
         "name": "label",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Visible label above the field."
       },
       {
         "name": "maxTagLength",
         "type": "number",
         "required": false,
-        "default": "100"
+        "default": "100",
+        "description": "Longest accepted tag, in characters. Default 100."
       },
       {
         "name": "maxTags",
         "type": "number",
         "required": false,
-        "default": "Number.POSITIVE_INFINITY"
+        "default": "Number.POSITIVE_INFINITY",
+        "description": "Cap on how many tags can be added. Reaching it emits `invalid` with `max-reached`."
       },
       {
         "name": "minTagLength",
         "type": "number",
         "required": false,
-        "default": "1"
+        "default": "1",
+        "description": "Shortest accepted tag, in characters. Default 1, i.e. no empty tags."
       },
       {
         "name": "modelValue",
         "type": "string[]",
         "required": false,
-        "default": "[]"
+        "default": "[]",
+        "description": "The tags, two-way bound with `v-model`. Every add and remove writes a new array — the model is never mutated in place."
       },
       {
         "name": "placeholder",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Placeholder shown in the text input while it is empty."
       },
       {
         "name": "readonly",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Tags stay visible but cannot be added or removed."
       },
       {
         "name": "respectComposition",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Ignore Enter while an IME composition is in progress, so confirming Chinese/Japanese/Korean candidates does not add a tag by accident."
       },
       {
         "name": "rounded",
@@ -4336,47 +4433,55 @@
         "name": "showCounter",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Show a live `used / maxTags` counter. Hidden when `maxTags` is unset."
       },
       {
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Height, padding and font size, on the shared form-control scale."
       },
       {
         "name": "splitChars",
         "type": "(string | RegExp)[]",
         "required": false,
-        "default": "[\"\\n\", \",\", \"，\", \";\"]"
+        "default": "[\"\\n\", \",\", \"，\", \";\"]",
+        "description": "Characters (or patterns) that end a tag as you type. Default `[\"\\n\", \",\", \"，\", \";\"]` — the full-width comma is there because a CJK keyboard produces it without the user noticing."
       },
       {
         "name": "splitOnPaste",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Split pasted text on `splitChars`, so a pasted list becomes many tags instead of one."
       },
       {
         "name": "transform",
         "type": "((raw: string) => string)",
-        "required": false
+        "required": false,
+        "description": "Normalise a raw entry before it is validated and added — lowercasing, stripping a leading `#`, and so on. Runs after `trim`."
       },
       {
         "name": "trim",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Strip leading and trailing whitespace before a tag is added."
       },
       {
         "name": "validate",
         "type": "KunTagInputValidator",
-        "required": false
+        "required": false,
+        "description": "Custom rule run on every candidate tag. Return `true` to accept, or a message string to reject; the message arrives with the `invalid` event."
       },
       {
         "name": "variant",
         "type": "KunTagInputVariant",
         "required": false,
-        "default": "\"flat\""
+        "default": "\"flat\"",
+        "description": "Field style: `bordered` outline, or `flat` filled with no border."
       }
     ],
     "events": [
@@ -4438,7 +4543,8 @@
         "name": "autoGrow",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Grow the field with its content up to `maxHeight`, instead of scrolling at a fixed `rows`."
       },
       {
         "name": "color",
@@ -4451,7 +4557,8 @@
         "name": "darkBorder",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Legacy dark-mode border toggle."
       },
       {
         "name": "description",
@@ -4464,102 +4571,119 @@
         "name": "disabled",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Blocks input and dims the field."
       },
       {
         "name": "error",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Error message below the field. Setting it also paints the invalid state and hides `description`."
       },
       {
         "name": "hint",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field."
       },
       {
         "name": "label",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Visible label above the field, tied to it by `id` so a click focuses the textarea."
       },
       {
         "name": "maxHeight",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Ceiling for `autoGrow`, any CSS length (e.g. `\"12rem\"`). The field scrolls internally past it instead of growing forever."
       },
       {
         "name": "maxlength",
         "type": "number",
         "required": false,
-        "default": "100007"
+        "default": "100007",
+        "description": "Native maximum length. Also the denominator of `showCharCount`."
       },
       {
         "name": "minlength",
         "type": "number",
         "required": false,
-        "default": "1"
+        "default": "1",
+        "description": "Native minimum length, enforced by form validation."
       },
       {
         "name": "modelValue",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "The textarea's text, two-way bound with `v-model`."
       },
       {
         "name": "name",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Native form field name, for an uncontrolled `<form>` submit."
       },
       {
         "name": "placeholder",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Placeholder text. It is not a label — pair it with `label` or `ariaLabel`."
       },
       {
         "name": "readonly",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Value is selectable and copyable but not editable — unlike `disabled`, it stays focusable and is still submitted."
       },
       {
         "name": "required",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Marks the field required for native validation and assistive tech."
       },
       {
         "name": "resize",
         "type": "\"none\" | \"horizontal\" | \"vertical\" | \"both\"",
         "required": false,
-        "default": "\"none\""
+        "default": "\"none\"",
+        "description": "Which way the user may drag the native resize handle."
       },
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. Unset follows the app-wide config (default `md`)."
       },
       {
         "name": "rows",
         "type": "number",
         "required": false,
-        "default": "4"
+        "default": "4",
+        "description": "Initial visible rows — the field's height before `autoGrow` takes over."
       },
       {
         "name": "showCharCount",
         "type": "boolean",
         "required": false,
-        "default": "false"
+        "default": "false",
+        "description": "Show a live `used / maxlength` counter under the field. Needs `maxlength` to show the denominator."
       },
       {
         "name": "size",
         "type": "KunUISize",
         "required": false,
-        "default": "\"md\""
+        "default": "\"md\"",
+        "description": "Height, padding and font size, on the shared form-control scale."
       }
     ],
     "events": [
@@ -4742,7 +4866,8 @@
         "name": "hint",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Helper text below the field."
       },
       {
         "name": "initialImage",

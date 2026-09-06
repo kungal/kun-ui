@@ -282,7 +282,7 @@ const options: CityOption[] = [
 | `ariaLabel` | `string` | `""` |  |
 | `clearable` | `boolean` | `false` |  |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). Default 'default'. |
-| `darkBorder` | `boolean` | `true` |  |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
 | `debounce` | `number` | `0` | Debounce the `@search` emit by N ms; the input text still updates instantly (a responsive field). 0 (default) emits on every keystroke — set e.g. 300 for remote sources so you fetch once the user pauses, not per keypress. |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). |
 | `disabled` | `boolean` | `false` |  |

@@ -175,7 +175,7 @@ const date = ref('')
 | `classNames` | `KunDatePickerClassNames` | — | Per-part class hooks (root / trigger / popup / grid / cell), merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. There is no `popupWidth`: the panel is always content-width with a 260px floor and never follows the trigger, so a short pill still gets a full calendar. |
 | `clearable` | `boolean` | `true` |  |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
-| `darkBorder` | `boolean` | `true` |  |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` |  |
 | `format` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the text shown in the trigger. Defaults follow `precision`. |

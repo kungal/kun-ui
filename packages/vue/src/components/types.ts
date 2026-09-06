@@ -12,19 +12,45 @@ import type {
 // Mid-line is safe.
 
 export interface KunButtonProps {
+  /** Visual style: `solid` filled, `bordered` outline, `light` text-only with
+   *  a tinted hover, `flat` a soft tint, `shadow` filled with elevation. */
   variant?: KunUIVariant
+  /** Semantic colour the variant is painted in. */
   color?: KunUIColor
+  /** Height, padding and font size. It is the shared form-control scale, so a
+   *  button lines up with an input or select of the same `size`. */
   size?: KunUISize
+  /** Corner radius. Left unset it follows the app-wide config (default `md`)
+   *  so every KunUI surface shares one radius. */
   rounded?: KunUIRounded
+  /** Native `type` of the rendered `<button>` — `submit` is what makes a
+   *  button submit its surrounding form. Ignored in link mode (`href`). */
   type?: 'button' | 'submit' | 'reset'
+  /** Blocks clicks and dims the button. In link mode the block is a JS guard,
+   *  because `disabled` is a no-op on an `<a>` and the link would still
+   *  navigate. */
   disabled?: boolean
+  /** Prepends a spinner and blocks clicks. The label stays in place, so a row
+   *  of buttons does not reflow mid-request. */
   loading?: boolean
+  /** Stretch to the container's full width. */
   fullWidth?: boolean
+  /** Fixed square button, sized to the same-`size` text button's height so
+   *  icon and text buttons line up in a row. Give it an `ariaLabel` — it has
+   *  no text of its own. */
   isIconOnly?: boolean
+  /** Render the `#icon` slot beside the label. Without it that slot is not
+   *  rendered at all. */
   icon?: boolean
+  /** Which side of the label the `#icon` slot sits on. */
   iconPosition?: 'left' | 'right'
+  /** Extra classes, merged after the component's own classes so yours wins
+   *  the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. */
   className?: string
+  /** Render an `<a>` (NuxtLink under Nuxt) instead of a `<button>`, keeping
+   *  the button's appearance. */
   href?: string
+  /** Link target — link mode only. `_blank` also picks a safe default `rel`. */
   target?: '_blank' | '_self' | '_parent' | '_top'
   /**
    * `rel` for the rendered link. Replaces the default rather than adding to
@@ -37,6 +63,8 @@ export interface KunButtonProps {
    * @default undefined
    */
   rel?: string
+  /** Accessible name. Falls back to the slot text, or to `"button"` for
+   *  `isIconOnly`; set it whenever the button carries no readable text. */
   ariaLabel?: string
 }
 
@@ -48,9 +76,13 @@ export interface KunButtonProps {
 export type KunButtonGroupOrientation = 'horizontal' | 'vertical'
 
 export interface KunButtonGroupProps {
+  /** Lay the segments out as a row or a column; the collapsed seam and the
+   *  squared inner corners follow. */
   orientation?: KunButtonGroupOrientation
   /** Accessible name for the group (role="group"). */
   ariaLabel?: string
+  /** Extra classes, merged after the component's own classes so yours wins
+   *  the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. */
   className?: string
 }
 
@@ -72,6 +104,7 @@ export interface KunCardProps {
   rounded?: KunUIRounded
   color?: KunUIColor | 'background'
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
@@ -338,14 +371,28 @@ export interface KunPopoverProps {
 
 // ── Image ──────────────────────────────────────────────────────────────
 export interface KunImageProps {
+  /** Image URL. Under Nuxt it is handed to the injected `<NuxtImg>`, so a
+   *  provider path or a remote URL both work. */
   src: string
+  /** Alternative text. Write the empty string for a decorative image so
+   *  screen readers skip it. */
   alt?: string
   /** Shown if `src` fails to load (broken URL, 404). Resets when `src` changes. */
   fallbackSrc?: string
+  /** Native loading hint. `lazy` defers the fetch until the image nears the
+   *  viewport; use `eager` for anything above the fold. */
   loading?: 'lazy' | 'eager'
+  /** Classes for the WRAPPER element (the box that holds the skeleton and the
+   *  aspect ratio). Extra classes, merged after the component's own classes
+   *  so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*`
+   *  scales included. */
   className?: string
+  /** Accessible name, when it has to differ from `alt`. */
   ariaLabel?: string
+  /** Intrinsic width. Set it together with `height` so the browser reserves
+   *  the box and the page does not shift as the image arrives. */
   width?: string | number
+  /** Intrinsic height. See `width`. */
   height?: string | number
   /**
    * Renders a sibling skeleton overlay while loading (Radix-Avatar
@@ -362,28 +409,37 @@ export interface KunImageProps {
    * is absolutely positioned and fills the box.
    */
   aspectRatio?: string
+  /** How the image fills its box once `aspectRatio` or an explicit size gives
+   *  it one. */
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
   /** Classes for the inner image (wrapper gets `className`). */
   imageClassName?: string
+  /** Native `decoding` hint. `async` keeps a large image from blocking the
+   *  frame it lands in. */
   decoding?: 'sync' | 'async' | 'auto'
+  /** Native fetch priority. `high` for the one image that is the page's LCP;
+   *  leave the rest alone. */
   fetchpriority?: 'high' | 'low' | 'auto'
-  /** @nuxt/image blur-up placeholder. Only applied when an image component is
+  /** Blur-up placeholder generated by @nuxt/image — `true` for the default, a
+   *  blur radius, or `[w, h, q, b]`. Only applied when an image component is
    *  injected (Nuxt); the native `<img>` default ignores it. */
   placeholder?:
     | string
     | number
     | boolean
     | [w: number, h: number, q?: number, b?: number]
-  /** @nuxt/image output format (`webp`, `avif`, …). Nuxt only. */
-  format?: string
-  /** @nuxt/image compression quality. Nuxt only. */
-  quality?: string | number
-  /** @nuxt/image preload hint — emits `<link rel="preload">` for this image.
+  /** Output format to transcode to (`webp`, `avif`, …), via @nuxt/image.
    *  Nuxt only. */
+  format?: string
+  /** Compression quality passed to @nuxt/image, 1–100. Nuxt only. */
+  quality?: string | number
+  /** Emit a `<link rel="preload">` for this image, via @nuxt/image — for the
+   *  one image that is the page's LCP. Nuxt only. */
   preload?: boolean | { fetchPriority: 'auto' | 'high' | 'low' }
   /** Which @nuxt/image provider resolves the URL. Nuxt only. */
   provider?: 'ipx' | 'none' | (string & {})
-  /** @nuxt/image pixel densities to generate, e.g. `'x1 x2'`. Nuxt only. */
+  /** Pixel densities to generate, e.g. `'x1 x2'`, via @nuxt/image. Nuxt
+   *  only. */
   densities?: string
   /** Responsive `sizes` hint for @nuxt/image. Nuxt only. */
   sizes?: string
@@ -428,7 +484,9 @@ export interface KunDividerProps {
   color?: KunUIColor
   borderStyle?: 'solid' | 'dashed'
   className?: string
-  /** @deprecated No-op — a label renders automatically when default-slot content is present. */
+  /** Legacy opt-in for the divider's inline label.
+   *  @deprecated No-op — a label renders automatically when default-slot content
+   *  is present. */
   withLabel?: boolean
 }
 
@@ -523,7 +581,8 @@ export interface KunInputProps {
   color?: KunUIColor
   className?: string
   placeholder?: string
-  /** @deprecated Use `description` (unified across all KunUI form controls). */
+  /** Helper text below the field.
+   *  @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
   /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
@@ -538,6 +597,7 @@ export interface KunInputProps {
   required?: boolean
   disabled?: boolean
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
@@ -560,17 +620,31 @@ export interface KunTextareaProps {
    * Focus-ring accent (the resting border/text stay neutral). Default 'default'.
    */
   color?: KunUIColor
+  /** Placeholder text. It is not a label — pair it with `label` or
+   *  `ariaLabel`. */
   placeholder?: string
+  /** Visible label above the field, tied to it by `id` so a click focuses the
+   *  textarea. */
   label?: string
+  /** Native form field name, for an uncontrolled `<form>` submit. */
   name?: string
-  /** @deprecated Use `description` (unified across all KunUI form controls). */
+  /** Helper text below the field.
+   *  @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
   /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
+  /** Error message below the field. Setting it also paints the invalid state
+   *  and hides `description`. */
   error?: string
+  /** Ceiling for `autoGrow`, any CSS length (e.g. `"12rem"`). The field
+   *  scrolls internally past it instead of growing forever. */
   maxHeight?: string
+  /** Blocks input and dims the field. */
   disabled?: boolean
+  /** Value is selectable and copyable but not editable — unlike `disabled`,
+   *  it stays focusable and is still submitted. */
   readonly?: boolean
+  /** Marks the field required for native validation and assistive tech. */
   required?: boolean
   /**
    * Focus the field on mount. Focus is moved with `preventScroll`, so it never
@@ -579,53 +653,81 @@ export interface KunTextareaProps {
    * to it there threw the page to the top.
    */
   autofocus?: boolean
+  /** Show a live `used / maxlength` counter under the field. Needs
+   *  `maxlength` to show the denominator. */
   showCharCount?: boolean
+  /** Grow the field with its content up to `maxHeight`, instead of scrolling
+   *  at a fixed `rows`. */
   autoGrow?: boolean
+  /** Initial visible rows — the field's height before `autoGrow` takes over. */
   rows?: number
+  /** Native maximum length. Also the denominator of `showCharCount`. */
   maxlength?: number
+  /** Native minimum length, enforced by form validation. */
   minlength?: number
+  /** Which way the user may drag the native resize handle. */
   resize?: 'none' | 'vertical' | 'horizontal' | 'both'
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
    * toggled is gone. Safe to remove from call sites.
    */
   darkBorder?: boolean
+  /** Corner radius. Unset follows the app-wide config (default `md`). */
   rounded?: KunUIRounded
+  /** Height, padding and font size, on the shared form-control scale. */
   size?: KunUISize
 }
 
 // ── NumberInput ────────────────────────────────────────────────────────
 export interface KunNumberInputProps {
+  /** Lower bound. The value is clamped to it, and the − stepper stops there. */
   min?: number
+  /** Upper bound. The value is clamped to it, and the + stepper stops there. */
   max?: number
+  /** Increment applied by the steppers and by ArrowUp / ArrowDown. */
   step?: number
+  /** Height, padding and font size, on the shared form-control scale. */
   size?: KunUISize
+  /** Focus-ring accent; the resting border stays neutral. */
   color?: KunUIColor
+  /** Visible label above the field. */
   label?: string
+  /** Placeholder shown while the field is empty. */
   placeholder?: string
+  /** Error message below the field. Setting it also paints the invalid state
+   *  and hides `description`. */
   error?: string
   /** Helper text below the field (hidden when `error` is set). */
   description?: string
+  /** Paint the invalid state without printing a message — for when the error
+   *  is shown elsewhere (a form summary). */
   isInvalid?: boolean
+  /** Blocks input and dims the field, steppers included. */
   disabled?: boolean
+  /** Value is selectable but not editable, and the steppers do nothing. */
   readonly?: boolean
+  /** Marks the field required for native validation and assistive tech. */
   required?: boolean
   /** Show the −/+ stepper buttons (default true). */
   controls?: boolean
   /** Round/display to this many decimal places. */
   precision?: number
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
    * toggled is gone. Safe to remove from call sites.
    */
   darkBorder?: boolean
+  /** Corner radius. Unset follows the app-wide config (default `md`). */
   rounded?: KunUIRounded
   /** Native form field name (emits a hidden input mirroring the value). */
   name?: string
+  /** Accessible name, for a field with no visible `label`. */
   ariaLabel?: string
 }
 
@@ -686,6 +788,7 @@ export interface KunAutocompleteProps<
    *  bucket applies to both. */
   rounded?: KunUIRounded
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
@@ -853,12 +956,23 @@ export interface KunCheckBoxGroupOption<
 export interface KunCheckBoxGroupProps<
   T extends KunCheckBoxGroupValue = KunCheckBoxGroupValue,
 > {
+  /** The selectable options. `value` is what lands in the model; `label` is
+   *  shown, and `description` / `icon` / `disabled` are optional per option. */
   options: readonly KunCheckBoxGroupOption<T>[]
+  /** Accessible name for the group. Not needed when `label` is set — that
+   *  becomes the group's name. */
   ariaLabel?: string
+  /** Visible label above the group, wired to it with `aria-labelledby`. */
   label?: string
+  /** Presentation: `classic` box + label, `pill` filter chips, `card`
+   *  bordered cards with an optional icon. */
   variant?: KunCheckBoxGroupVariant
+  /** Stack the options vertically, or wrap them in a row. */
   orientation?: KunCheckBoxGroupOrientation
+  /** Semantic colour of the selected state and the focus ring. */
   color?: KunUIColor
+  /** Box, icon and text scale — shared with KunCheckBox and KunRadioGroup, so
+   *  equal `size` renders identically across the three. */
   size?: KunUISize
   /** `card` variant only — it is the only variant with a surface of its own to
    *  round. `classic` is a box plus a label, and `pill` is a pill by
@@ -875,8 +989,13 @@ export interface KunCheckBoxGroupProps<
    * the tinted border/fill alone (the icon-card look).
    */
   hideIndicator?: boolean
+  /** Blocks the whole group and dims it. A single option is disabled through
+   *  its own `disabled`. */
   disabled?: boolean
+  /** Error message below the group. */
   error?: string
+  /** Extra classes, merged after the component's own classes so yours wins
+   *  the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. */
   className?: string
 }
 
@@ -930,6 +1049,7 @@ export interface KunSelectProps<
   description?: string
   disabled?: boolean
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
@@ -1300,6 +1420,7 @@ export interface KunDatePickerProps {
   error?: string
   disabled?: boolean
   /**
+   * Legacy dark-mode border toggle.
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
    * unified `--color-kun-border` token (the `border-kun` utility), which already
    * flips light↔dark — so the old light-translucent / dark-solid split this prop
@@ -1357,24 +1478,44 @@ export interface KunDatePickerProps {
 
 // ── FileInput ──────────────────────────────────────────────────────────
 export interface KunFileInputProps {
+  /** Native `accept` filter for the picker, e.g. `"image/*"` or
+   *  `".pdf,.zip"`. A filter, not a guarantee — validate on the server too. */
   accept?: string
+  /** Allow picking more than one file. */
   multiple?: boolean
+  /** Largest accepted file, in BYTES. A file over it is rejected and reported
+   *  through `error`. */
   maxSize?: number
-  /** @deprecated Use `description` (unified across all KunUI form controls). */
+  /** Helper text below the field.
+   *  @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
   /**
    * Helper text below the trigger (hidden when `error` is set). Canonical name.
    */
   description?: string
+  /** Error message below the trigger. Setting it also paints the invalid
+   *  state and hides `description`. */
   error?: string
+  /** Blocks the picker and dims the trigger. */
   disabled?: boolean
+  /** Label on the trigger button. */
   triggerText?: string
+  /** Icon name on the trigger button. Must be one of KunUI's bundled icons —
+   *  an unbundled name renders nothing. */
   triggerIcon?: string
+  /** Visual style of the trigger button (see KunButton `variant`). */
   triggerVariant?: KunUIVariant
+  /** Semantic colour of the trigger button. */
   triggerColor?: KunUIColor
+  /** Size of the trigger button, on the shared form-control scale. */
   triggerSize?: KunUISize
+  /** Stretch the trigger to the container's full width. */
   fullWidth?: boolean
+  /** Print the picked file name (or the count, when `multiple`) next to the
+   *  trigger. */
   showFileName?: boolean
+  /** Extra classes, merged after the component's own classes so yours wins
+   *  the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. */
   className?: string
 }
 
@@ -1404,30 +1545,62 @@ export interface KunTagInputClassNames {
 }
 
 export interface KunTagInputProps {
+  /** Visible label above the field. */
   label?: string
+  /** Placeholder shown in the text input while it is empty. */
   placeholder?: string
-  /** @deprecated Use `description` (unified across all KunUI form controls). */
+  /** Helper text below the field.
+   *  @deprecated Use `description` (unified across all KunUI form controls). */
   helperText?: string
   /** Helper text below the field (hidden when `error` is set). Canonical name. */
   description?: string
+  /** Error message below the field. Setting it also paints the invalid state
+   *  and hides `description`. */
   error?: string
+  /** Cap on how many tags can be added. Reaching it emits `invalid` with
+   *  `max-reached`. */
   maxTags?: number
+  /** Longest accepted tag, in characters. Default 100. */
   maxTagLength?: number
+  /** Shortest accepted tag, in characters. Default 1, i.e. no empty tags. */
   minTagLength?: number
+  /** Accept a tag that is already in the list. Off by default; a repeat emits
+   *  `invalid` with `duplicate`. */
   allowDuplicates?: boolean
+  /** Treat `Vue` and `vue` as different tags when checking for duplicates. */
   caseSensitive?: boolean
+  /** Strip leading and trailing whitespace before a tag is added. */
   trim?: boolean
+  /** Normalise a raw entry before it is validated and added — lowercasing,
+   *  stripping a leading `#`, and so on. Runs after `trim`. */
   transform?: (raw: string) => string
+  /** Custom rule run on every candidate tag. Return `true` to accept, or a
+   *  message string to reject; the message arrives with the `invalid` event. */
   validate?: KunTagInputValidator
+  /** Characters (or patterns) that end a tag as you type. Default `["\n",
+   *  ",", "，", ";"]` — the full-width comma is there because a CJK keyboard
+   *  produces it without the user noticing. */
   splitChars?: (string | RegExp)[]
+  /** Split pasted text on `splitChars`, so a pasted list becomes many tags
+   *  instead of one. */
   splitOnPaste?: boolean
+  /** Commit whatever is half-typed in the field when it loses focus, instead
+   *  of discarding it. */
   confirmOnBlur?: boolean
+  /** Ignore Enter while an IME composition is in progress, so confirming
+   *  Chinese/Japanese/Korean candidates does not add a tag by accident. */
   respectComposition?: boolean
+  /** Focus-ring accent; the resting border stays neutral. */
   color?: KunUIColor
+  /** Height, padding and font size, on the shared form-control scale. */
   size?: KunUISize
+  /** Field style: `bordered` outline, or `flat` filled with no border. */
   variant?: KunTagInputVariant
+  /** Blocks input and dims the field. */
   disabled?: boolean
+  /** Tags stay visible but cannot be added or removed. */
   readonly?: boolean
+  /** Show a live `used / maxTags` counter. Hidden when `maxTags` is unset. */
   showCounter?: boolean
   /** Radius of the field. It deliberately does not reach the tags: a tag IS a
    *  `<KunChip>` and stays a pill at every setting, so a `KunChip` next to the
@@ -1448,7 +1621,8 @@ export interface KunUploadProps {
   size: number
   aspect: number
   initialImage?: string
-  /** @deprecated Use `description` (unified across all KunUI form controls). */
+  /** Helper text below the field.
+   *  @deprecated Use `description` (unified across all KunUI form controls). */
   hint?: string
   /** Helper text below the dropzone. Canonical name. */
   description?: string

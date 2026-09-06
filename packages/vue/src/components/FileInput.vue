@@ -29,7 +29,11 @@ const props = withDefaults(defineProps<KunFileInputProps>(), {
   className: '',
 })
 
+/** The picked file, two-way bound with `v-model`. `null` when nothing is
+ *  picked; stays `null` in `multiple` mode — read `v-model:files` there. */
 const file = defineModel<File | null>({ default: null })
+/** The picked files in `multiple` mode, two-way bound with `v-model:files`.
+ *  Always an array; empty when nothing is picked. */
 const filesModel = defineModel<File[]>('files', { default: () => [] })
 
 const emit = defineEmits<{

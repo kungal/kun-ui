@@ -476,7 +476,7 @@ const options: UserOption[] = [
 | `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius; `classNames.chip` is the only way to reach a chip. |
 | `clearable` | `boolean` | `false` | Show an X to reset the selection (single) — chips already remove per-item. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
-| `darkBorder` | `boolean` | `true` |  |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
 | `debounce` | `number` | `0` | Debounce the `@search` emit by N ms; the filter field itself still updates instantly. 0 (default) emits on every keystroke — set e.g. 300 for a remote source so you fetch once the user pauses, not per keypress. |
 | `description` | `string` | `""` | Helper text under the field (hidden when `error` is set). |
 | `disabled` | `boolean` | `false` |  |

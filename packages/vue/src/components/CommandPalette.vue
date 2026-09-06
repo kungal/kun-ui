@@ -11,6 +11,7 @@ import {
 import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
@@ -183,6 +184,7 @@ const toggle = () => (isOpen.value ? close() : open())
 
 watch(isOpen, (openNow) => {
   if (openNow) {
+    warnTopLayerConflict('KunCommandPalette')
     lock()
     activeIndex.value = firstEnabled()
     nextTick(() => inputRef.value?.focus({ preventScroll: true }))

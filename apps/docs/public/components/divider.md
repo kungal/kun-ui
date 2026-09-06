@@ -73,13 +73,13 @@
 
 ## Props
 
-| 属性 | 类型 | 默认值 |
-| --- | --- | --- |
-| `borderStyle` | `"solid" \| "dashed"` | `"solid"` |
-| `className` | `string` | `""` |
-| `color` | `KunUIColor` | `"default"` |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
-| `withLabel` | `boolean` | `false` |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `borderStyle` | `"solid" \| "dashed"` | `"solid"` |  |
+| `className` | `string` | `""` |  |
+| `color` | `KunUIColor` | `"default"` |  |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |  |
+| `withLabel` | `boolean` | `false` | Legacy opt-in for the divider's inline label. |
 
 ## Slots
 

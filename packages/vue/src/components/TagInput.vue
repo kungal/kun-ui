@@ -50,6 +50,8 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 // `description` is the canonical helper name; `helperText` is the deprecated alias.
 const helper = computed(() => props.description || props.helperText)
 
+/** The tags, two-way bound with `v-model`. Every add and remove writes a new
+ *  array — the model is never mutated in place. */
 const tags = defineModel<string[]>({ default: () => [] })
 
 const emit = defineEmits<{

@@ -321,25 +321,23 @@ remainder.
 
 ### Scroll lock — known limitations
 
-- **The lock does nothing if `<html>` is your scroll container.** Per CSS
-  Overflow 3 §3.1.4, `<body>`'s `overflow` reaches the viewport only while
-  `<html>`'s own `overflow` is `visible`. So on a page with
-  `html { overflow-y: scroll }` or `html { overflow-x: hidden }`, the page keeps
-  scrolling behind an open Modal. If you need one of those, move the declaration
-  to `<body>`, or use `html { scrollbar-gutter: stable }` — which is what
-  `overflow-y: scroll` is usually reaching for anyway, and it also makes the
-  whole compensation above a no-op.
+- **A scroll container of your own is not locked.** The lock covers the
+  viewport — `<html>` and `<body>` are both locked, so `html { overflow-y:
+  scroll }` and `html { overflow-x: hidden }` are fine (they were a silent
+  no-op before 2.31.0). An app that scrolls inside an element of its own
+  (`#app { overflow: auto }` under a full-height html/body) is a different
+  shape and KunUI cannot find that element: lock it yourself while an overlay
+  is open.
 - **The width is measured once, when the overlay opens.** Zooming or resizing
   while it is open leaves both the body padding and `--kun-scrollbar-width`
   stale until the next open.
-- **An inline `overflow-y` / `overflow-x` on `<body>` is not preserved.** The
-  lock saves and restores the `overflow` shorthand, and the CSSOM cannot build a
-  shorthand out of a single longhand. Set those from a stylesheet, not inline.
 - **Nothing can be opened on top of an open `KunLightbox`.** It is the one
   component that uses the native top layer (`<dialog>.showModal()`), which makes
   everything outside its own subtree inert — including any KunUI overlay, which
   all teleport to `<body>`. A Modal or CommandPalette opened over a Lightbox
-  renders but cannot take focus or be dismissed with Escape.
+  renders but cannot take focus or be dismissed with Escape. In development
+  KunUI prints a named `console.warn` when you do it, instead of leaving you
+  with a page that just looks frozen.
 
 ### Troubleshooting CSS
 

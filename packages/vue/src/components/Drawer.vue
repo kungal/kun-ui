@@ -13,6 +13,7 @@ import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
+import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
 import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
@@ -119,6 +120,7 @@ const { lock, unlock } = useBodyScrollLock()
 let locked = false
 const applyLock = (shouldLock: boolean) => {
   if (shouldLock && !locked) {
+    warnTopLayerConflict('KunDrawer')
     lock()
     locked = true
   } else if (!shouldLock && locked) {

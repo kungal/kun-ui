@@ -161,7 +161,7 @@ const clicks = ref(0)
 | `clickable` | `boolean` | `false` |  |
 | `color` | `KunUIColor \| "background"` | `"background"` |  |
 | `contentClass` | `string` | `""` |  |
-| `darkBorder` | `boolean` | `false` |  |
+| `darkBorder` | `boolean` | `false` | Legacy dark-mode border toggle. |
 | `href` | `string` | — |  |
 | `isHoverable` | `boolean` | `false` |  |
 | `isTransparent` | `boolean` | `false` |  |

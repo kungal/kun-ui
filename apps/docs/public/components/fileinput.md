@@ -94,23 +94,23 @@ const b = ref<File | null>(null)
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `accept` | `string` | `""` |  |
-| `className` | `string` | `""` |  |
+| `accept` | `string` | `""` | Native `accept` filter for the picker, e.g. `"image/*"` or `".pdf,.zip"`. A filter, not a guarantee — validate on the server too. |
+| `className` | `string` | `""` | Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. |
 | `description` | `string` | `""` | Helper text below the trigger (hidden when `error` is set). Canonical name. |
-| `disabled` | `boolean` | `false` |  |
-| `error` | `string` | `""` |  |
-| `files` | `File[]` | `[]` |  |
-| `fullWidth` | `boolean` | `false` |  |
-| `hint` | `string` | `""` |  |
-| `maxSize` | `number` | — |  |
-| `modelValue` | `File \| null` | `null` |  |
-| `multiple` | `boolean` | `false` |  |
-| `showFileName` | `boolean` | `true` |  |
-| `triggerColor` | `KunUIColor` | `"primary"` |  |
-| `triggerIcon` | `string` | `"lucide:upload"` |  |
-| `triggerSize` | `KunUISize` | `"md"` |  |
-| `triggerText` | `string` | `"选择文件"` |  |
-| `triggerVariant` | `KunUIVariant` | `"flat"` |  |
+| `disabled` | `boolean` | `false` | Blocks the picker and dims the trigger. |
+| `error` | `string` | `""` | Error message below the trigger. Setting it also paints the invalid state and hides `description`. |
+| `files` | `File[]` | `[]` | The picked files in `multiple` mode, two-way bound with `v-model:files`. Always an array; empty when nothing is picked. |
+| `fullWidth` | `boolean` | `false` | Stretch the trigger to the container's full width. |
+| `hint` | `string` | `""` | Helper text below the field. |
+| `maxSize` | `number` | — | Largest accepted file, in BYTES. A file over it is rejected and reported through `error`. |
+| `modelValue` | `File \| null` | `null` | The picked file, two-way bound with `v-model`. `null` when nothing is picked; stays `null` in `multiple` mode — read `v-model:files` there. |
+| `multiple` | `boolean` | `false` | Allow picking more than one file. |
+| `showFileName` | `boolean` | `true` | Print the picked file name (or the count, when `multiple`) next to the trigger. |
+| `triggerColor` | `KunUIColor` | `"primary"` | Semantic colour of the trigger button. |
+| `triggerIcon` | `string` | `"lucide:upload"` | Icon name on the trigger button. Must be one of KunUI's bundled icons — an unbundled name renders nothing. |
+| `triggerSize` | `KunUISize` | `"md"` | Size of the trigger button, on the shared form-control scale. |
+| `triggerText` | `string` | `"选择文件"` | Label on the trigger button. |
+| `triggerVariant` | `KunUIVariant` | `"flat"` | Visual style of the trigger button (see KunButton `variant`). |
 
 ## Events
 

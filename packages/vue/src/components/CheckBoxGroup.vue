@@ -41,6 +41,8 @@ const props = withDefaults(defineProps<KunCheckBoxGroupProps<T>>(), {
 
 // Array model — this is the whole point of the component: a multi-select FORM
 // field whose value is a real array (vs a ToggleGroup, which is a toolbar).
+/** The selected values, two-way bound with `v-model`. Required: a checkbox
+ *  group with no model has nothing to select into. */
 const modelValue = defineModel<T[]>({ required: true })
 
 const emits = defineEmits<{

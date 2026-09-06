@@ -42,6 +42,7 @@ const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 // `description` is the canonical helper name; `hint` is the deprecated alias.
 const helper = computed(() => props.description || props.hint)
 
+/** The textarea's text, two-way bound with `v-model`. */
 const modelValue = defineModel<string>({ default: '' })
 
 const kunUniqueId = useKunUniqueId('kun-textarea')

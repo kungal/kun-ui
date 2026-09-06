@@ -61,7 +61,7 @@
 | `size` * | `number` | — |  |
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` | Helper text below the dropzone. Canonical name. |
-| `hint` | `string` | `""` |  |
+| `hint` | `string` | `""` | Helper text below the field. |
 | `initialImage` | `string` | `""` |  |
 | `rounded` | `KunUIRounded` | — |  |
 

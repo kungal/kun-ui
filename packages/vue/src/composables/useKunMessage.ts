@@ -1,5 +1,7 @@
 import { computed, ref, type Ref } from 'vue'
 
+import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
+
 // ─────────────────────────────────────────────────────────────────────────
 // Message store — the framework-neutral half of KunUI's toast system.
 //
@@ -72,6 +74,8 @@ export const useKunMessage = (
   // into every page's SSR HTML, and vanish on hydration (empty client store →
   // hydration mismatch). No-op on the server — trigger toasts from client code.
   if (typeof document === 'undefined') return ''
+
+  warnTopLayerConflict('useKunMessage')
 
   const existingMessage = messages.value.find(
     (m) =>

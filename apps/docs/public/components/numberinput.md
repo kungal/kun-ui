@@ -204,26 +204,26 @@ const v = ref<number | null>(42)
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `""` |  |
-| `color` | `KunUIColor` | `"default"` |  |
+| `ariaLabel` | `string` | `""` | Accessible name, for a field with no visible `label`. |
+| `color` | `KunUIColor` | `"default"` | Focus-ring accent; the resting border stays neutral. |
 | `controls` | `boolean` | `true` | Show the −/+ stepper buttons (default true). |
-| `darkBorder` | `boolean` | `true` |  |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). |
-| `disabled` | `boolean` | `false` |  |
-| `error` | `string` | `""` |  |
-| `isInvalid` | `boolean` | `false` |  |
-| `label` | `string` | `""` |  |
-| `max` | `number` | `Number.POSITIVE_INFINITY` |  |
-| `min` | `number` | `Number.NEGATIVE_INFINITY` |  |
-| `modelValue` | `number \| null` | `null` |  |
+| `disabled` | `boolean` | `false` | Blocks input and dims the field, steppers included. |
+| `error` | `string` | `""` | Error message below the field. Setting it also paints the invalid state and hides `description`. |
+| `isInvalid` | `boolean` | `false` | Paint the invalid state without printing a message — for when the error is shown elsewhere (a form summary). |
+| `label` | `string` | `""` | Visible label above the field. |
+| `max` | `number` | `Number.POSITIVE_INFINITY` | Upper bound. The value is clamped to it, and the + stepper stops there. |
+| `min` | `number` | `Number.NEGATIVE_INFINITY` | Lower bound. The value is clamped to it, and the − stepper stops there. |
+| `modelValue` | `number \| null` | `null` | The numeric value, two-way bound with `v-model`. `null` is the empty field — distinct from `0`. |
 | `name` | `string` | — | Native form field name (emits a hidden input mirroring the value). |
-| `placeholder` | `string` | `""` |  |
+| `placeholder` | `string` | `""` | Placeholder shown while the field is empty. |
 | `precision` | `number` | — | Round/display to this many decimal places. |
-| `readonly` | `boolean` | `false` |  |
-| `required` | `boolean` | `false` |  |
-| `rounded` | `KunUIRounded` | — |  |
-| `size` | `KunUISize` | `"md"` |  |
-| `step` | `number` | `1` |  |
+| `readonly` | `boolean` | `false` | Value is selectable but not editable, and the steppers do nothing. |
+| `required` | `boolean` | `false` | Marks the field required for native validation and assistive tech. |
+| `rounded` | `KunUIRounded` | — | Corner radius. Unset follows the app-wide config (default `md`). |
+| `size` | `KunUISize` | `"md"` | Height, padding and font size, on the shared form-control scale. |
+| `step` | `number` | `1` | Increment applied by the steppers and by ArrowUp / ArrowDown. |
 
 ## Events
 

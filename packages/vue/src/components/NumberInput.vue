@@ -35,6 +35,8 @@ const props = withDefaults(defineProps<KunNumberInputProps>(), {
   ariaLabel: '',
 })
 
+/** The numeric value, two-way bound with `v-model`. `null` is the empty
+ *  field — distinct from `0`. */
 const modelValue = defineModel<number | null>({ default: null })
 
 const emit = defineEmits<{
