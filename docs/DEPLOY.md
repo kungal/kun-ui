@@ -39,14 +39,39 @@ push to main ─► GitHub Actions (docs-image.yml) build ─► push GHCR
    `docker-compose.prod.yml` (or a Docker provider with the image directly).
    - **Domains** tab: add `ui.kungal.com` · path `/` · service `docs` · port
      **6757**. Dokploy injects the Traefik labels + issues TLS.
-4. **Auto-deploy on each build (recommended, avoids the "deploys the previous
-   image" race):**
-   - Copy the app's **deploy webhook URL** → repo Actions secret
-     `DOKPLOY_WEBHOOK_DOCS`.
-   - **Disable** the app's Dokploy *Auto Deploy* (so the only trigger is the CI
-     `deploy` job, which fires *after* the image is pushed).
+4. **Auto-deploy on each build** — copy the app's **deploy webhook URL** → repo
+   Actions secret `DOKPLOY_WEBHOOK_DOCS`, then set the app up so that endpoint
+   will actually accept the call:
+   - **Auto Deploy: ON.** It gates the webhook endpoint itself — with it off,
+     every call is answered `400 Automatic deployments are disabled`. (Dokploy
+     does not poll; CI is the only caller either way.)
+   - **Branch: `main`**, matching the branch CI sends in the payload.
+   - **Watch Paths: empty.** `docs-image.yml`'s own `paths:` filter already
+     decides when a deploy is warranted; a second filter here only adds a way to
+     silently skip one.
    - Without the secret the `deploy` job logs a skip; the image is still on
      GHCR — redeploy manually in Dokploy.
+
+   The endpoint is a *git provider* webhook, not a "deploy now" button: it reads
+   the branch out of the request body and refuses anything that does not match.
+   CI therefore POSTs a GitHub push payload (`X-GitHub-Event: push`,
+   `{"ref": "refs/heads/main", …}`). A bodyless POST is always refused with
+   `{"message":"Branch Not Match"}` — and refusals come back as HTTP **301**,
+   which `curl -f` does not treat as an error. That combination kept the
+   `deploy` job green through three releases while the live site served an old
+   image, so the job now checks the status *and* the response body.
+
+## What is actually live
+
+Every build stamps its commit into the docs bundle (`GIT_SHA` build arg →
+`runtimeConfig.public.kunGitSha`), and Nuxt embeds public runtime config in the
+prerendered HTML. The `deploy` job polls for it after triggering the webhook —
+a queued deployment that never lands now fails CI instead of passing silently.
+To check by hand:
+
+```bash
+curl -s https://ui.kungal.com/ | grep -o 'kunGitSha:"[^"]*"'
+```
 
 ## Rollback
 

@@ -21,6 +21,13 @@ const kunComponentCount: number = (
     .match(/'Kun\w+'/g) ?? []
 ).length
 
+// The commit this bundle was built from, stamped by docker/docs.Dockerfile's
+// GIT_SHA arg. It has no UI — Nuxt embeds public runtime config in the
+// prerendered HTML, and the deploy job greps the live site for it. Without that
+// check a Dokploy redeploy that silently never ran looks exactly like a green
+// build; three releases shipped while ui.kungal.com stayed on an old image.
+const kunGitSha: string = process.env.GIT_SHA ?? 'dev'
+
 // The KunUI docs site, built WITH KunUI (dogfooding). Everything KunUI-related
 // (component auto-imports, NuxtLink/@nuxt/icon/@nuxt/image injection) comes from
 // the layer; the app owns its Tailwind entry (app/assets/css/main.css) and its
@@ -31,7 +38,7 @@ export default defineNuxtConfig({
   extends: ['@kungal/ui-nuxt'],
 
   runtimeConfig: {
-    public: { kunVersion, kunComponentCount },
+    public: { kunVersion, kunComponentCount, kunGitSha },
   },
 
   css: ['~/assets/css/main.css'],

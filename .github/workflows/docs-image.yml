@@ -43,6 +43,8 @@ jobs:
           tags: |
             ghcr.io/kungal/kun-ui-docs:latest
             ghcr.io/kungal/kun-ui-docs:${{ github.sha }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           cache-from: type=gha,scope=kun-ui-docs
           cache-to: type=gha,mode=max,scope=kun-ui-docs
 
@@ -50,14 +52,58 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # Dokploy's deploy webhook is a git-provider endpoint, not a "deploy now"
+      # button: it reads the branch out of the request body and compares it with
+      # the app's configured branch. A bodyless POST has no branch, so it was
+      # answered `{"message":"Branch Not Match"}` every time — with HTTP **301**,
+      # which `curl -f` does not treat as an error (it only fails on >= 400).
+      # The job stayed green for three releases while ui.kungal.com served an old
+      # image. So: send a GitHub push payload, and check the status AND the body.
+      # Requires, in Dokploy: Auto Deploy ON (the endpoint 400s without it),
+      # branch `main`, Watch Paths empty (this workflow's `paths:` already
+      # decides when to deploy).
       - name: Trigger Dokploy redeploy
+        id: trigger
         env:
-          # Set this to the Dokploy app's deploy webhook URL (and disable that
-          # app's Auto Deploy) so it pulls the freshly-built :latest.
           WEBHOOK: ${{ secrets.DOKPLOY_WEBHOOK_DOCS }}
+          REF: ${{ github.ref }}
+          SHA: ${{ github.sha }}
+          MSG: ${{ github.event.head_commit.message || github.sha }}
         run: |
           if [ -z "$WEBHOOK" ]; then
             echo "DOKPLOY_WEBHOOK_DOCS not set; image pushed to GHCR, skipping redeploy."
+            echo 'triggered=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          curl -fsS -X POST "$WEBHOOK"
+          payload=$(jq -nc \
+            --arg ref "$REF" --arg sha "$SHA" --arg msg "${MSG%%$'\n'*}" \
+            '{ref: $ref, after: $sha, commits: [], head_commit: {id: $sha, message: $msg}}')
+          code=$(curl -sS -o dokploy.txt -w '%{http_code}' -X POST "$WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -H 'X-GitHub-Event: push' \
+            -d "$payload")
+          echo "HTTP $code — $(cat dokploy.txt)"
+          if [ "$code" != '200' ] || ! grep -q 'deployed successfully' dokploy.txt; then
+            echo "::error::Dokploy refused the redeploy (HTTP $code): $(cat dokploy.txt)"
+            exit 1
+          fi
+          echo 'triggered=true' >> "$GITHUB_OUTPUT"
+
+      # A 200 only means Dokploy queued the deployment. What we actually care
+      # about is that the domain serves THIS build, so poll for the sha stamped
+      # into the prerendered HTML by nuxt.config's runtimeConfig.public.
+      - name: Wait for the live site to serve this build
+        if: steps.trigger.outputs.triggered == 'true'
+        env:
+          SITE: https://ui.kungal.com/
+          SHA: ${{ github.sha }}
+        run: |
+          for i in $(seq 1 40); do
+            if curl -fsS --max-time 20 -H 'Cache-Control: no-cache' "$SITE" | grep -q "$SHA"; then
+              echo "$SITE is serving $SHA (after $(( (i - 1) * 15 ))s)."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::$SITE did not pick up $SHA within 10 minutes. The image is on GHCR; redeploy in Dokploy."
+          exit 1

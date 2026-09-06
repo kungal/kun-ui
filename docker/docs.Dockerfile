@@ -31,6 +31,8 @@ FROM deps AS build
 COPY tsconfig.base.json ./
 COPY packages packages
 COPY apps/docs apps/docs
+ARG GIT_SHA=dev
+ENV GIT_SHA=${GIT_SHA}
 # core (tsup) + vue (vite + vue-tsc) must be built so the docs can import their
 # dist (style.css) and resolve types. tokens / ui-nuxt ship source (no build).
 # Props tables come from the committed app/generated/component-meta.json, so
