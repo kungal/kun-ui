@@ -100,6 +100,8 @@ Recurring traps in that loop:
 - Playwright blocks the `file:` protocol — serve harnesses over `python3 -m http.server`.
 - Playwright screenshots can land in the repo root instead of the reported path; `.playwright-mcp/` is gitignored, so write there, and `fd` any strays before committing.
 - The Bash tool's cwd persists between calls — a `cd apps/docs` breaks every later relative path. Use absolute paths.
+- Playwright's `.click()` scrolls its target into view first. Measuring a scroll position across a click therefore measures the auto-scroll, not the component: an overlay opened from a button near the top of the page read `scrollY: 0` and looked like the lock had reset the page. Park the page so the target is already in view, or click via `page.evaluate`.
+- Read a lock's effect from `getComputedStyle`, not from `window.scrollTo`: `overflow: hidden` still permits programmatic scrolling (that is what separates it from `clip`), so a scripted scroll "succeeding" proves nothing. Use `page.mouse.wheel` for a real user scroll — and away from any inner scroll container, or you are testing that instead.
 - Real CDP touch events cost ~44 ms each, capping synthetic gesture velocity at ~0.34 px/ms; use in-page synthetic `TouchEvent`s for velocity-sensitive tests and keep real touch for the ones that need native scrolling.
 - Before assuming a dev server is yours, check — port 5199 belongs to another project on this machine.
 
