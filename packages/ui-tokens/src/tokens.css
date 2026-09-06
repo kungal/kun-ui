@@ -311,6 +311,30 @@
   z-index: var(--z-kun-message, 9999);
 }
 
+/* How much viewport width an open overlay took away when it hid the page
+ * scrollbar. `useBodyScrollLock` writes the live value onto <html> while a
+ * Modal/Drawer/Lightbox/CommandPalette is open and removes it on close; this
+ * declaration is the unlocked resting value so a consumer never has to reason
+ * about the variable being absent.
+ *
+ * It is 0 whenever nothing was actually removed — overlay scrollbars, or a page
+ * that reserves its own `scrollbar-gutter: stable`. Otherwise it is the
+ * scrollbar width, and the initial containing block really did grow, so a
+ * `position: fixed` element that is right-anchored or centred needs it. Apply
+ * it as a MARGIN, not folded into the anchor: an invalid var() substitution
+ * makes the whole declaration invalid at computed-value time, and a dropped
+ * margin merely loses the compensation where a dropped `left` sends the element
+ * to its static position.
+ *
+ *   margin-right: var(--kun-scrollbar-width, 0px);
+ *
+ * Plain :root + a literal fallback at every use, same reasoning as the z-index
+ * and border blocks: a @theme variable can be tree-shaken out of a consumer's
+ * build. */
+:root {
+  --kun-scrollbar-width: 0px;
+}
+
 /* Canonical neutral border — the SINGLE source of truth for every structural
  * hairline (inputs, cards, dividers, popovers, tabs, tables…). Defaults to the
  * `default-100` step — a very light hairline that just delineates a surface

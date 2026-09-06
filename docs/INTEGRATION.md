@@ -252,6 +252,71 @@ or mirror its state onto that class.
 }
 ```
 
+### `--kun-scrollbar-width` — compensating your own fixed elements
+
+When a Modal / Drawer / Lightbox / CommandPalette opens, KunUI locks body
+scroll, which hides the page scrollbar. In-flow content is held still for you
+(KunUI pads `<body>` by exactly the width that disappeared), but padding cannot
+reach a `position: fixed` element: fixed positioning resolves against the
+initial containing block, and *that* grows by the scrollbar width. So a fixed
+header, FAB or side rail of yours will slide sideways by ~15px unless you
+compensate it.
+
+KunUI publishes the width it removed on `<html>` while a lock is active. It is
+`0px` at rest, and `0px` whenever nothing was actually removed — overlay
+scrollbars (macOS, iOS, most mobile), or a page that reserves its own
+`scrollbar-gutter: stable` — so one declaration is correct everywhere:
+
+```css
+/* anchored to the right edge — take back all of it */
+.my-fixed-toolbar { right: 1rem; margin-right: var(--kun-scrollbar-width, 0px); }
+/* centred against the viewport — take back half */
+.my-fixed-centred { margin-left: calc(var(--kun-scrollbar-width, 0px) / -2); }
+```
+
+Two rules for using it. **Keep the `0px` fallback** — the variable is only
+guaranteed if you import `@kungal/ui-tokens`. And **compensate with a margin
+rather than folding it into `left`/`right`/`top`**: a declaration containing
+`var()` is only checked after substitution, so if the variable ever holds
+something that isn't a length the whole declaration becomes invalid at
+computed-value time — a bad `margin` falls back to `0` and you merely lose the
+compensation, a bad `left` falls back to `auto` and the element jumps to its
+static position.
+
+A full-bleed fixed element (`inset: 0`, or `left: 0; right: 0`) needs nothing
+for its own box — it simply spans the wider one. Its **children** may still
+need it: anything right-aligned or centred inside that box moves with the box's
+new width. KunUI's own toasts already compensate themselves.
+
+If you set `scrollbar-gutter: stable` on `<html>` yourself, you are already
+immune and KunUI stays out of the way — it detects the reserved gutter and adds
+no padding at all. KunUI deliberately does not set `scrollbar-gutter` for you:
+a reserved gutter is outside the initial containing block, so every full-bleed
+backdrop would stop ~15px short of the screen edge with no way to paint the
+remainder.
+
+### Scroll lock — known limitations
+
+- **The lock does nothing if `<html>` is your scroll container.** Per CSS
+  Overflow 3 §3.1.4, `<body>`'s `overflow` reaches the viewport only while
+  `<html>`'s own `overflow` is `visible`. So on a page with
+  `html { overflow-y: scroll }` or `html { overflow-x: hidden }`, the page keeps
+  scrolling behind an open Modal. If you need one of those, move the declaration
+  to `<body>`, or use `html { scrollbar-gutter: stable }` — which is what
+  `overflow-y: scroll` is usually reaching for anyway, and it also makes the
+  whole compensation above a no-op.
+- **The width is measured once, when the overlay opens.** Zooming or resizing
+  while it is open leaves both the body padding and `--kun-scrollbar-width`
+  stale until the next open.
+- **An inline `overflow-y` / `overflow-x` on `<body>` is not preserved.** The
+  lock saves and restores the `overflow` shorthand, and the CSSOM cannot build a
+  shorthand out of a single longhand. Set those from a stylesheet, not inline.
+- **Nothing can be opened on top of an open `KunLightbox`.** It is the one
+  component that uses the native top layer (`<dialog>.showModal()`), which makes
+  everything outside its own subtree inert — including any KunUI overlay, which
+  all teleport to `<body>`. A Modal or CommandPalette opened over a Lightbox
+  renders but cannot take focus or be dismissed with Escape.
+
 ### Troubleshooting CSS
 
 - **Components look unstyled / layout is broken** → a `@source` path isn't

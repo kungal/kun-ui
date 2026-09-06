@@ -44,13 +44,50 @@ const positionedMessages = computed(() => {
   return groups
 })
 
+// The centred placements carry no horizontal anchor here — they get `left` and
+// their half-width shift from positionStyles below.
 const positionClasses: Record<KunMessagePosition, string> = {
-  'top-center': 'top-4 left-1/2 -translate-x-1/2 items-center',
+  'top-center': 'top-4 items-center',
   'top-left': 'top-4 left-4 items-start',
   'top-right': 'top-4 right-4 items-end',
-  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
+  'bottom-center': 'bottom-4 items-center',
   'bottom-left': 'bottom-4 left-4 items-start',
   'bottom-right': 'bottom-4 right-4 items-end',
+}
+
+// This container is `position: fixed`, so its containing block is the initial
+// containing block — which GROWS by the scrollbar width when an overlay hides
+// it. Body padding cannot reach it (that only compensates in-flow content), so
+// a visible toast slides sideways the moment a Modal opens: measured on the
+// docs site, a `top-right` toast went from right=1458.4 to right=1473.6 when
+// KunCommandPalette opened. useBodyScrollLock publishes the width it removed;
+// each placement takes back the part that moves it — all of it when anchored to
+// the right edge, half when centred against `left: 50%` of a wider ICB, none
+// when anchored left. The published width is 0 whenever nothing was removed
+// (overlay scrollbars, or a page reserving its own gutter), so this costs
+// nothing there.
+//
+// The compensation is a MARGIN, never the anchor itself. A declaration
+// containing var() is only validated after substitution, so a consumer who sets
+// the variable to a bare `16` makes it invalid at computed-value time: as
+// `margin-left` that falls back to `0` and the toast merely stays uncompensated,
+// but as part of `left` it would fall back to `auto`, dropping the container to
+// its static position and dragging it half its own width off the screen. `left`
+// and the half-width shift are inline too, so a consumer's Tailwind scan can
+// never be what decides whether a toast lands on screen (iron rule 5).
+const COMPENSATE = 'var(--kun-scrollbar-width, 0px)'
+const CENTRED = {
+  left: '50%',
+  translate: '-50% 0',
+  marginLeft: `calc(${COMPENSATE} / -2)`,
+}
+const positionStyles: Record<KunMessagePosition, Record<string, string>> = {
+  'top-center': CENTRED,
+  'top-left': {},
+  'top-right': { marginRight: COMPENSATE },
+  'bottom-center': CENTRED,
+  'bottom-left': {},
+  'bottom-right': { marginRight: COMPENSATE },
 }
 </script>
 
@@ -71,6 +108,7 @@ const positionClasses: Record<KunMessagePosition, string> = {
           'pointer-events-none fixed z-kun-message flex w-full max-w-sm flex-col p-4',
           positionClasses[position as KunMessagePosition],
         ]"
+        :style="positionStyles[position as KunMessagePosition]"
       >
         <!-- `relative` makes THIS wrapper the containing block for a leaving item
              (which goes `position: absolute`). Without it, the item's `width: 100%`

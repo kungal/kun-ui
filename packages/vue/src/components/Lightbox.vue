@@ -11,6 +11,16 @@ import type { KunLightboxProps } from './types'
 // from the browser; we own scroll-lock, ←/→ nav, backdrop-click close, and
 // the viewer mechanics: wheel zoom, drag/pan, pinch, swipe, double-tap zoom,
 // rotate, download). No Nuxt coupling — explicit imports only.
+//
+// This is the ONE component that uses `showModal()`, and it pays the price the
+// rest of the library avoids by teleporting to <body> instead: everything
+// outside a top-layer subtree is inert. Observed in Chrome 152 — open this
+// viewer, then Ctrl+K for KunCommandPalette: the palette renders but
+// `document.activeElement` stays BODY, so neither its Escape handler nor the
+// dialog's fires, both stay open and the body scroll lock is never released
+// (a backdrop click still recovers). Any overlay opened ON TOP of an open
+// Lightbox is dead the same way. Not fixed: the fix is either to stop using the
+// top layer here or to route close requests centrally.
 defineOptions({ name: 'KunLightbox' })
 
 const props = defineProps<KunLightboxProps>()
