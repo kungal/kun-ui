@@ -19,7 +19,7 @@ KunUI, the shared cross-framework component library for the NextMoe/KunGal ecosy
 
 React (`@kungal/ui-react`) is a planned future layer — `docs/architecture.md` carries the honest constraint analysis (no technology runs `.vue` inside React) and the phased roadmap.
 
-Apps: `apps/docs` (the Nuxt docs site, also the release-verification surface), `apps/playground` (Vite), `apps/nuxt-playground`. All three are in the changesets `ignore` list.
+Apps: `apps/docs` (the Nuxt docs site, also the release-verification surface), `apps/playground` (Vite), `apps/nuxt-playground`. The two playgrounds are in the changesets `ignore` list; `@kungal/docs` is not, so it takes a patch bump on every release — harmless, it is private and never publishes.
 
 ## Commands
 
