@@ -226,7 +226,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both."
       },
       {
         "name": "size",
@@ -1421,7 +1422,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both."
       },
       {
         "name": "size",
@@ -3395,7 +3397,7 @@
         "name": "classNames",
         "type": "KunSelectClassNames",
         "required": false,
-        "description": "Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius — it keeps the two in step; `classNames.chip` is the only way to reach a chip."
+        "description": "Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius; `classNames.chip` is the only way to reach a chip."
       },
       {
         "name": "clearable",
@@ -3525,7 +3527,8 @@
       {
         "name": "rounded",
         "type": "KunUIRounded",
-        "required": false
+        "required": false,
+        "description": "Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both."
       },
       {
         "name": "searchable",

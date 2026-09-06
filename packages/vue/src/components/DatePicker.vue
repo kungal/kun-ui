@@ -5,6 +5,7 @@ import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui
 import {
   cn,
   kunRoundedClasses,
+  kunPanelRoundedClass,
   kunControlSizeClasses,
   kunFocusRingClasses,
 } from '@kungal/ui-core'
@@ -69,6 +70,7 @@ const resolvedPlaceholder = computed(
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+const panelRoundedClass = computed(() => kunPanelRoundedClass(rounded.value))
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | null | [string | null, string | null]]
@@ -532,7 +534,7 @@ const isInPreviewRange = (date: Date) => {
           :class="
             cn(
               'bg-content1 z-kun-popover p-3 shadow-kun-md',
-              roundedClass,
+              panelRoundedClass,
               props.classNames?.popup
             )
           "

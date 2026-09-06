@@ -5,6 +5,7 @@ import { size } from '@floating-ui/vue'
 import {
   cn,
   kunRoundedClasses,
+  kunPanelRoundedClass,
   kunControlSizeClasses,
   kunFocusRingClasses,
 } from '@kungal/ui-core'
@@ -51,6 +52,7 @@ const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+const panelRoundedClass = computed(() => kunPanelRoundedClass(rounded.value))
 
 // null/[] represents "nothing selected"; single = scalar, multiple = array.
 const modelValue = defineModel<T | T[] | null>({ required: true })
@@ -602,7 +604,7 @@ watch(filtered, () => {
           :class="
             cn(
               'bg-content1 z-kun-popover flex flex-col overflow-hidden p-1 shadow-kun-md',
-              roundedClass,
+              panelRoundedClass,
               props.classNames?.popup
             )
           "

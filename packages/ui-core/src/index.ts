@@ -31,6 +31,7 @@ export {
   kunRoundedClasses,
   KUN_DEFAULT_ROUNDED,
   resolveRounded,
+  kunPanelRoundedClass,
 } from './rounded'
 
 export {

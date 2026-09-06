@@ -679,6 +679,11 @@ export interface KunAutocompleteProps<
   isInvalid?: boolean
   disabled?: boolean
   size?: KunUISize
+  /** Corner radius. When unset it follows the nearest KunUIConfigProvider's
+   *  `rounded`. `full` means a pill, which is only defined for the single-line
+   *  trigger — the floating panel falls back to `lg`, because `9999px` on an
+   *  n-row panel is clamped by the browser to half its short side. Every other
+   *  bucket applies to both. */
   rounded?: KunUIRounded
   /**
    * @deprecated No-op since 0.18.0. Every neutral border now resolves to the
@@ -935,6 +940,11 @@ export interface KunSelectProps<
   /** Extra classes for the outer wrapper. Use `classNames` to reach the trigger,
    *  popup, list, options or chips. */
   className?: string
+  /** Corner radius. When unset it follows the nearest KunUIConfigProvider's
+   *  `rounded`. `full` means a pill, which is only defined for the single-line
+   *  trigger — the floating panel falls back to `lg`, because `9999px` on an
+   *  n-row panel is clamped by the browser to half its short side. Every other
+   *  bucket applies to both. */
   rounded?: KunUIRounded
   size?: KunUISize
   /** Multi-select: v-model becomes an array; the trigger shows removable chips
@@ -976,8 +986,8 @@ export interface KunSelectProps<
   /** Per-part class hooks (root / trigger / popup / list / option / chip),
    *  merged after the component's own classes, so yours wins the conflict —
    *  KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included.
-   *  `rounded` is still the right tool for the trigger and popup radius — it
-   *  keeps the two in step; `classNames.chip` is the only way to reach a chip. */
+   *  `rounded` is still the right tool for the trigger and popup radius;
+   *  `classNames.chip` is the only way to reach a chip. */
   classNames?: KunSelectClassNames
   /** Skip the built-in label filter — you own `options` and drive them from
    *  `@search` (remote/async suggestions). Requires `searchable`.
@@ -1316,6 +1326,11 @@ export interface KunDatePickerProps {
   /** Full month names. Also the source for the month grid's labels, where the
    *  abbreviated form is used unless this overrides it. */
   months?: string[]
+  /** Corner radius. When unset it follows the nearest KunUIConfigProvider's
+   *  `rounded`. `full` means a pill, which is only defined for the single-line
+   *  trigger — the floating panel falls back to `lg`, because `9999px` on an
+   *  n-row panel is clamped by the browser to half its short side. Every other
+   *  bucket applies to both. */
   rounded?: KunUIRounded
   size?: KunUISize
   /** Icon rendered before the value in the trigger — a filter glyph for a filter

@@ -5,6 +5,7 @@ import { size as floatingSize } from '@floating-ui/vue'
 import {
   cn,
   kunRoundedClasses,
+  kunPanelRoundedClass,
   kunControlSizeClasses,
   kunFocusRingClasses,
 } from '@kungal/ui-core'
@@ -63,6 +64,7 @@ const emit = defineEmits<{
 
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
+const panelRoundedClass = computed(() => kunPanelRoundedClass(rounded.value))
 const kunUniqueId = useKunUniqueId('kun-autocomplete')
 const listId = computed(() => `${kunUniqueId.value}-listbox`)
 
@@ -394,7 +396,7 @@ defineExpose({
           :class="
             cn(
               'bg-content1 z-kun-popover flex flex-col overflow-hidden p-1 shadow-kun-md',
-              roundedClass
+              panelRoundedClass
             )
           "
         >

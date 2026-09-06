@@ -29,3 +29,15 @@ export const resolveRounded = (
   fallback: KunUIRounded | undefined,
   configDefault: KunUIRounded = KUN_DEFAULT_ROUNDED
 ): KunUIRounded => prop ?? fallback ?? configDefault
+
+// A floating panel has no correct `full`. `border-radius: 9999px` on an n-row
+// listbox is not a pill — CSS Backgrounds 3 §5.5 scales every corner by
+// min(side / sum of its radii), so the used radius is half the short side. A
+// measured 80x116 KunSelect popup rendered 40px corners and pushed its option
+// labels inward; the docs' own FilterBar example prescribed `rounded="full"`
+// and shipped that. `full` means "pill", and a pill is only defined for a
+// single-line control. So a trigger + panel component keeps `full` on the
+// trigger and resolves the panel to `lg`, the bucket --radius-kun-lg documents
+// as "containers / floating panels". Every other bucket passes through.
+export const kunPanelRoundedClass = (rounded: KunUIRounded): string =>
+  kunRoundedClasses[rounded === 'full' ? 'lg' : rounded]

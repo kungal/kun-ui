@@ -473,7 +473,7 @@ const options: UserOption[] = [
 | `options` * | `readonly KunSelectOption<KunSelectValue>[]` | — |  |
 | `ariaLabel` | `string` | `""` |  |
 | `className` | `string` | `""` | Extra classes for the outer wrapper. Use `classNames` to reach the trigger, popup, list, options or chips. |
-| `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius — it keeps the two in step; `classNames.chip` is the only way to reach a chip. |
+| `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius; `classNames.chip` is the only way to reach a chip. |
 | `clearable` | `boolean` | `false` | Show an X to reset the selection (single) — chips already remove per-item. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
 | `darkBorder` | `boolean` | `true` |  |
@@ -493,7 +493,7 @@ const options: UserOption[] = [
 | `noResultText` | `string` | `"无匹配项"` | Shown when the filter matches nothing. |
 | `placeholder` | `string` | `""` |  |
 | `popupWidth` | `KunSelectPopupWidth` | `"trigger"` | Popup width. The default pins it to the trigger, which is wrong the moment the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'` sizes to the content and keeps the trigger width as a floor. Every mode but `'trigger'` is capped to the viewport, so a fixed width chosen for a desktop layout cannot hang off the edge of a phone. |
-| `rounded` | `KunUIRounded` | — |  |
+| `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `searchable` | `boolean` | `false` | Render a filter input at the top of the list. Also the switch that enables `@search` / `manualFilter` — without it there is nothing to type into. |
 | `searchPlaceholder` | `string` | `"搜索…"` |  |
 | `size` | `KunUISize` | `"md"` |  |

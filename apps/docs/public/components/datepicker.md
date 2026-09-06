@@ -191,7 +191,7 @@ const date = ref('')
 | `months` | `string[]` | — | Full month names. Also the source for the month grid's labels, where the abbreviated form is used unless this overrides it. |
 | `placeholder` | `string` | `'请选择日期' \| '请选择月份' \| '请选择年份'` | Trigger text when nothing is selected. Defaults follow `precision`. |
 | `precision` | `KunDatePickerPrecision` | `"day"` | What one click commits: a day, a whole month, or a whole year. The panel opens on the matching grid and the value is the first instant of the period, so `month` emits `'2026-09'` and `year` emits `'2026'`. |
-| `rounded` | `KunUIRounded` | — |  |
+| `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `size` | `KunUISize` | `"md"` |  |
 | `valueFormat` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the emitted v-model string. Defaults follow `precision`; keep it ISO-shaped so the value parses back. |
 | `weekdays` | `string[]` | — |  |

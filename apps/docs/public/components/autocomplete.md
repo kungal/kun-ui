@@ -296,7 +296,7 @@ const options: CityOption[] = [
 | `name` | `string` | — |  |
 | `noResultText` | `string` | `"无匹配项"` |  |
 | `placeholder` | `string` | `""` |  |
-| `rounded` | `KunUIRounded` | — |  |
+| `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `size` | `KunUISize` | `"md"` |  |
 
 ## Events
