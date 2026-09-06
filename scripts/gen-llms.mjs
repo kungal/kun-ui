@@ -241,6 +241,42 @@ const writeBoth = (name, content) => {
 writeBoth('llms.txt', lines.join('\n'))
 
 // ── llms-full.txt ───────────────────────────────────────────────────────
+// Section 12 of INTEGRATION.md was a hand-typed copy of the same list, and it
+// drifted the same way: 18 names behind (no KunAccordion / KunCarousel /
+// KunCommandPalette / KunSteps / KunSkeleton / …) under a heading that still
+// said 53. llms-full.txt inlines this file verbatim, so that stale list was what
+// agents read. It is now written from `components` above, which the guard has
+// just pinned to KUN_COMPONENT_NAMES. Rewritten BEFORE the file is read below.
+{
+  const path = join(root, 'docs/INTEGRATION.md')
+  const src = readFileSync(path, 'utf8')
+  const START = '<!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->'
+  const END = '<!-- END AUTO-GENERATED component reference -->'
+  const i = src.indexOf(START)
+  const j = src.indexOf(END)
+  if (i === -1 || j === -1) {
+    console.error(`gen-llms: docs/INTEGRATION.md is missing the component-reference markers.`)
+    process.exit(1)
+  }
+  const body = [`## 12. Component reference (${components.length})`, '']
+  for (const [cat, rows] of groupBy(components, 1)) {
+    body.push(`**${cat}:** ${rows.map(([n]) => `\`${n}\``).join(' · ')}`, '')
+  }
+  body.push(
+    'In Nuxt all are auto-imported. In plain Vue they\'re named exports of',
+    '`@kungal/ui-vue` (or registered globally via `app.use(KunUI)`).'
+  )
+  const next = src.slice(0, i + START.length) + '\n' + body.join('\n') + '\n' + src.slice(j)
+  // The package table in section 1 carries the same number.
+  writeFileSync(
+    path,
+    next.replace(
+      /The Vue 3 component layer \(\d+ components\)/,
+      `The Vue 3 component layer (${components.length} components)`
+    )
+  )
+}
+
 const integration = readFileSync(join(root, 'docs/INTEGRATION.md'), 'utf8')
 const full = []
 full.push(`# ${meta.name} — full documentation for LLMs`, '')

@@ -41,7 +41,7 @@ pnpm changeset             # record a changeset for the release train
 
 - **No changesets on the push → the workflow bails out early and publishes nothing.** Harmless, cheap.
 - The `fixed` group versions all four `@kungal/*` together, so one `'@kungal/ui-vue': minor` changeset bumps all four.
-- The changeset body *is* the release note and the docs `/changelog` entry. Write it for a consumer: what changed, what it costs them, why the design is what it is.
+- The changeset body *is* the release note and the docs `/changelog` entry. **Write it in English** (the user's call, 2026-09-06 — entries up to 2.28.0 are Chinese and stay as published). Write it for a consumer: what changed, what it costs them, why the design is what it is.
 - A `docs-image` run showing **cancelled** on the feature commit is expected, not a failure — the `[skip ci]` bump commit supersedes it under the workflow's concurrency group and a fresh run starts on the bump.
 - Verify a release from npm, not from a green check: `npm pack @kungal/ui-vue@<v>` and grep `dist/index.js` for the new symbols and class strings.
 
@@ -74,7 +74,7 @@ English, and short. Never write restatements, section banners, or `TODO` without
 
 ## Conventions
 
-- **Path-scoped commits** (`git commit -- <paths>`), never `add -A`. Note everything after `--` is a path, so a message must come from `-F <file>` or precede the `--`. English-only commit messages and comments.
+- **Path-scoped commits** (`git commit -- <paths>`), never `add -A`. Note everything after `--` is a path, so a message must come from `-F <file>` or precede the `--`. English-only commit messages, comments, and changeset / release notes.
 - All frontend functions are arrow functions; compose classes with `cn()`.
 - A new component must be added to `KUN_COMPONENT_NAMES` (`packages/vue/src/componentNames.ts`) — the single source the Nuxt layer auto-registers from, and typed against `Record<KunComponentName, Component>` in `index.ts`, which fails typecheck if you forget.
 - Icons are **bundled, never fetched**: only the 30 names in `WANT` in `packages/ui-core/scripts/gen-icons.mjs` exist. Using an unbundled name renders nothing. Add it there and run `pnpm gen:icons`. (`apps/docs` registers ~15 extra ones for its own pages — those are not available to consumers.)

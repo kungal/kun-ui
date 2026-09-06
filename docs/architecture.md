@@ -77,7 +77,7 @@ This answers all three goals at once: **Nuxt** (`ui-nuxt`), **plain Vue**
 | Phase | Work | Output | Est. |
 | --- | --- | --- | --- |
 | **P0** ✅ | Extract `@kungal/ui-tokens` (CSS) + `@kungal/ui-core` (cn/variants/types/utils) | shared foundation | done |
-| **P1** ✅ | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; `NuxtLink`/`Icon`/`Image`/`navigate` behind injectable config slots; toast/alert/loli moved off the `render()`+appContext hack to store + provider; icons bundled (no fetch). **All 53 components migrated.** | pure Vue 3 lib (works in any Vue app) | done |
+| **P1** ✅ | Decouple `@kungal/ui-vue` from Nuxt: auto-imports → explicit; `NuxtLink`/`Icon`/`Image`/`navigate` behind injectable config slots; toast/alert/loli moved off the `render()`+appContext hack to store + provider; icons bundled (no fetch). **All components migrated.** | pure Vue 3 lib (works in any Vue app) | done |
 | **P2** ✅ | `@kungal/ui-nuxt` thin Layer: register ui-vue as auto-imports + inject NuxtLink/@nuxt/icon (verified by SSR prerender in apps/nuxt-playground) | existing Nuxt DX, zero regression | done |
 | **P3** | `@kungal/ui-react`: ~20 presentational components on tokens+core | React/Next minimal set | ~1 wk |
 | **P4** | React interactive components on Ark UI/Zag | React feature parity | 2–3 wk |
@@ -140,7 +140,7 @@ Final batch — `KunAlertProvider` / `KunLoli` / `KunLoliProvider`
 off the same `render()` + stolen-appContext hack onto the store +
 mounted-provider pattern (mount `<KunAlertProvider/>` + `<KunLoliProvider/>`
 once); `loliAssets` → `getRandomLoli()` (per-call random, asset at
-`/alert/{name}.webp`). **53 components total — P1 COMPLETE.** Every component
+`/alert/{name}.webp`). **P1 COMPLETE.** Every component
 from the original Nuxt-layer lib now runs Nuxt-decoupled in `@kungal/ui-vue`,
 with the Nuxt DX restored by `@kungal/ui-nuxt`. Next phase: `@kungal/ui-react`. (Avatar/Group are deferred: they couple to the app's KunUser
 model + getRandomSticker + a hardcoded user route, so they need a small

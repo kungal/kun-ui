@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { site } from '~/site.config'
 
+// Version and component count come from nuxt.config's runtimeConfig, which reads
+// packages/vue's package.json and componentNames.ts at build time. Typed by hand
+// they said "v0.2" and "53 个组件" against a published 2.28.0 with 70.
+const { kunVersion, kunComponentCount } = useRuntimeConfig().public
+
 const installCmd =
   'pnpm add @kungal/ui-nuxt @kungal/ui-vue @kungal/ui-core @kungal/ui-tokens tailwindcss @tailwindcss/vite'
 
 const features = [
   { icon: 'lucide:zap', title: 'SSR 优先 · 高性能', desc: '全部组件 SSR 安全、水合零报错,极低运行时开销。' },
-  { icon: 'lucide:layout-grid', title: '53 个组件', desc: '表单、浮层、反馈、展示、人物 —— 一应俱全。' },
+  { icon: 'lucide:layout-grid', title: `${kunComponentCount} 个组件`, desc: '表单、浮层、反馈、展示、人物 —— 一应俱全。' },
   { icon: 'lucide:palette', title: '设计令牌 + 框架无关核心', desc: '@kungal/ui-tokens 与 @kungal/ui-core,跨框架视觉与 API 一致。' },
   { icon: 'lucide:wifi-off', title: '图标全内置 · 绝不联网', desc: '内联 SVG 渲染,运行时绝不请求 Iconify。' },
   { icon: 'lucide:moon', title: '暗色模式 · 类型安全', desc: '.kun-dark-mode 一键切换,完整 TypeScript 类型。' },
@@ -19,7 +24,7 @@ const showcase = [
 ]
 
 const resources = [
-  { icon: 'lucide:book-open', title: '组件文档', desc: '53 个组件的示例与属性。', to: '/components/button', external: false },
+  { icon: 'lucide:book-open', title: '组件文档', desc: `${kunComponentCount} 个组件的示例与属性。`, to: '/components/button', external: false },
   { icon: 'lucide:github', title: 'GitHub', desc: '源码、Issue 与发布(AGPL-3.0)。', to: 'https://github.com/kungal/kun-ui', external: true },
   { icon: 'lucide:package', title: 'npm', desc: '@kungal scope 下的四个包。', to: 'https://www.npmjs.com/package/@kungal/ui-vue', external: true },
   { icon: 'lucide:bot', title: 'llms.txt', desc: '给 AI 工具的机器可读文档。', to: '/llms.txt', external: true },
@@ -40,14 +45,14 @@ const support = [
         class="bg-primary/10 pointer-events-none absolute -top-40 left-1/2 h-96 w-[48rem] -translate-x-1/2 rounded-full blur-3xl"
       />
       <div class="relative mx-auto max-w-6xl px-6 pt-14 pb-10 text-center">
-        <KunChip color="primary" variant="flat">Vue 3 · Nuxt 4 · 已发布 v0.2</KunChip>
+        <KunChip color="primary" variant="flat">Vue 3 · Nuxt 4 · 已发布 v{{ kunVersion }}</KunChip>
         <h1 class="mt-5 text-5xl font-extrabold tracking-tight sm:text-6xl">
           Kun<span class="text-primary">UI</span>
         </h1>
         <p class="text-primary mt-3 text-xl font-medium sm:text-2xl">{{ site.slogan }}</p>
         <p class="text-default-600 mx-auto mt-4 max-w-2xl text-lg">
           面向 Vue、Nuxt 的现代组件库(React、Next.js、SolidJS、SolidStart 规划中)——
-          极致 SSR 支持、超低延迟、零外部依赖、生产就绪,助你更快交付 Web 应用。
+          极致 SSR 支持、超低延迟、运行时依赖克制、生产就绪,助你更快交付 Web 应用。
         </p>
         <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
           <KunButton color="primary" size="lg" href="/components/button">
@@ -85,7 +90,7 @@ const support = [
           color="success"
           icon="lucide:circle-check"
           title="现已支持 · Vue 3 / Nuxt 4"
-          description="已发布到 npm,生产可用:53 个组件、设计令牌与核心、全部内置图标。"
+          :description="`已发布到 npm,生产可用:${kunComponentCount} 个组件、设计令牌与核心、全部内置图标。`"
         />
         <KunInfo
           color="info"

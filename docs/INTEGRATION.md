@@ -1,7 +1,7 @@
 # KunUI Integration Guide
 
 How to add KunUI to your own project and integrate it yourself. This guide is
-accurate to the **published `0.1.x`** packages and is meant to be read by a
+accurate to the **currently published** packages and is meant to be read by a
 consuming project (Nuxt or plain Vue) with **no changes required on the KunUI
 side**.
 
@@ -22,7 +22,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (53 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (70 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -446,33 +446,26 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 
 ---
 
-## 12. Component reference (53)
+<!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
+## 12. Component reference (70)
 
-**Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` ·
-`KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` ·
-`KunNull`
+**Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
-**Buttons & feedback:** `KunButton` · `KunRipple` · `KunLoading` · `KunCopy` ·
-`KunRating`
+**Buttons & feedback:** `KunButton` · `KunButtonGroup` · `KunRipple` · `KunLoading` · `KunCopy` · `KunRating` · `KunReaction` · `KunShatter`
 
-**Media & content:** `KunImage` · `KunImageNative` · `KunIcon` · `KunBrand` ·
-`KunContent` · `KunText` · `KunMarkdown`
+**Media & content:** `KunImage` · `KunCarousel` · `KunCarouselItem` · `KunImageNative` · `KunIcon` · `KunBrand` · `KunContent` · `KunText` · `KunMarkdown`
 
-**Navigation & overlays:** `KunLink` · `KunTab` · `KunModal` · `KunDrawer` ·
-`KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunPagination`
-· `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+**Navigation & overlays:** `KunLink` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
 
-**Forms:** `KunInput` · `KunTextarea` · `KunSelect` · `KunSwitch` ·
-`KunCheckBox` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput`
-· `KunTagInput` · `KunUpload`
+**Forms:** `KunInput` · `KunTextarea` · `KunNumberInput` · `KunPinInput` · `KunSelect` · `KunAutocomplete` · `KunSwitch` · `KunCheckBox` · `KunCheckBoxGroup` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput` · `KunTagInput` · `KunUpload`
 
 **People:** `KunAvatar` · `KunAvatarGroup` · `KunUserChip`
 
-**Overlay providers (mount once):** `KunMessageProvider` · `KunAlertProvider` ·
-`KunLoliProvider` (and the standalone `KunLoli`)
+**Overlay providers (mount once near app root):** `KunMessageProvider` · `KunAlertProvider` · `KunLoliProvider` · `KunLoli`
 
 In Nuxt all are auto-imported. In plain Vue they're named exports of
 `@kungal/ui-vue` (or registered globally via `app.use(KunUI)`).
+<!-- END AUTO-GENERATED component reference -->
 
 ---
 

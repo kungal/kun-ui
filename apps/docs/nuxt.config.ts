@@ -1,4 +1,25 @@
+import { readFileSync } from 'node:fs'
 import tailwindcss from '@tailwindcss/vite'
+
+// The homepage's version badge and "N components" counts are library state, not
+// copy. Hand-typed they went stale silently: the site said "v0.2" and "53 个组件"
+// while npm was at 2.28.0 with 70. Resolved here at build time from the two
+// sources of truth — package.json is what `changeset version` bumps, and
+// componentNames.ts is what the Nuxt layer registers from. The docs image is
+// built from the release commit, so the badge is the version being published.
+//
+// Read as text rather than imported: importing `@kungal/ui-vue` from this file
+// would make `nuxt dev` require a prior `pnpm build` (workspace deps resolve to
+// dist), which is not true today.
+const read = (rel: string) =>
+  readFileSync(new URL(rel, import.meta.url), 'utf8')
+
+const kunVersion: string = JSON.parse(read('../../packages/vue/package.json')).version
+const kunComponentCount: number = (
+  read('../../packages/vue/src/componentNames.ts')
+    .match(/export const KUN_COMPONENT_NAMES = \[([\s\S]*?)\]/)![1]
+    .match(/'Kun\w+'/g) ?? []
+).length
 
 // The KunUI docs site, built WITH KunUI (dogfooding). Everything KunUI-related
 // (component auto-imports, NuxtLink/@nuxt/icon/@nuxt/image injection) comes from
@@ -8,6 +29,10 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   extends: ['@kungal/ui-nuxt'],
+
+  runtimeConfig: {
+    public: { kunVersion, kunComponentCount },
+  },
 
   css: ['~/assets/css/main.css'],
 

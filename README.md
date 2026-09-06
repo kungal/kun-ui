@@ -3,9 +3,9 @@
 A **cross-framework** component library. One design language, one shared
 brain, multiple render layers.
 
-> Status: **P0–P2 complete and published to npm (`0.1.x`).** Shared foundation
+> Status: **P0–P2 complete and published to npm.** Shared foundation
 > (`@kungal/ui-tokens` + `@kungal/ui-core`), the full Vue layer (`@kungal/ui-vue`,
-> **all 53 components migrated, Nuxt-decoupled**), and the Nuxt layer
+> **every component migrated, Nuxt-decoupled**), and the Nuxt layer
 > (`@kungal/ui-nuxt`) are done. React (`@kungal/ui-react`) is the next phase.
 > See [`docs/architecture.md`](./docs/architecture.md).
 
@@ -75,7 +75,7 @@ radius, same variant matrix.
 | --- | --- | --- |
 | [`@kungal/ui-tokens`](./packages/ui-tokens) | Tailwind v4 design tokens (CSS) | ✅ landed |
 | [`@kungal/ui-core`](./packages/ui-core) | framework-agnostic TS foundation | ✅ landed |
-| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | ✅ **P1 complete — all 53 components migrated.** display: Button/Card/Icon/Ripple/Badge/Chip/Progress/Info/Loading/Divider/Image/ImageNative/Link/Brand/Favicon/Null/Markdown; overlay: Modal/Message/Tooltip/Popover/Tab/Select/Dropdown/Drawer/ContextMenu/Lightbox(+Gallery/GalleryItem); form: Input/Textarea/Switch/CheckBox/Slider/RadioGroup/DatePicker/FileInput/TagInput/Upload; content: Content/Text; people: Avatar/AvatarGroup/UserChip/Header; alert: AlertProvider/Loli(+Provider); util: Copy/Rating/Pagination/ScrollShadow/FadeCard |
+| [`@kungal/ui-vue`](./packages/vue) | pure Vue 3 components (Nuxt-decoupled) | ✅ **P1 complete.** The component list lives in [`docs/INTEGRATION.md` §12](./docs/INTEGRATION.md#12-component-reference), generated from `KUN_COMPONENT_NAMES` — a copy here went 18 names stale. |
 | [`@kungal/ui-nuxt`](./packages/nuxt) | Nuxt Layer wrapper (auto-imports + NuxtLink/@nuxt/icon injection) | ✅ landed (P2) |
 | `@kungal/ui-react` | React components on Ark UI | ⏳ planned (P3/P4) |
 
