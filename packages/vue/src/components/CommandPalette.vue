@@ -8,6 +8,7 @@ import {
   ref,
   watch,
 } from 'vue'
+import { useEventListener } from '@vueuse/core'
 import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
@@ -181,6 +182,15 @@ const close = () => {
   isOpen.value = false
 }
 const toggle = () => (isOpen.value ? close() : open())
+
+// Escape is handled on the input, and the results are real <button>/<a>
+// elements — so one Tab takes focus off the input and Escape stops closing the
+// dialog. Measured in Chrome 152: two Tabs put focus on a BUTTON[role=option]
+// and Escape left the palette open. There is no focus trap here to keep focus
+// inside, so the listener goes on the window rather than the panel.
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && isOpen.value) close()
+})
 
 watch(isOpen, (openNow) => {
   if (openNow) {

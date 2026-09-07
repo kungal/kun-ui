@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends KunAutocompleteOption = KunAutocompleteOption">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside, useEventListener } from '@vueuse/core'
 import { size as floatingSize } from '@floating-ui/vue'
 import {
   cn,
@@ -300,6 +300,18 @@ onClickOutside(triggerRef, (event) => {
   close()
 })
 
+// The whole keyboard interface lives on the input, so focus must never leave
+// it while the panel is open. Options already stop that with `@mousedown.prevent`
+// — the gap was the panel's OWN padding: measured in Chrome 152, a click on the
+// 4px strip around the list moved `document.activeElement` to BODY with the
+// panel still open, and Escape, the arrows and Enter were all dead until the
+// user clicked elsewhere. `.self` so a focusable element inside a custom
+// `option` slot can still be clicked. The window listener is the backstop for
+// exactly that case.
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && isOpen.value) close()
+})
+
 watch(filtered, () => {
   if (!isOpen.value) return
   if (
@@ -399,6 +411,7 @@ defineExpose({
               panelRoundedClass
             )
           "
+          @mousedown.self.prevent
         >
           <ul
             ref="listRef"
@@ -406,6 +419,7 @@ defineExpose({
             class="scrollbar-hide min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-kun-sm text-sm"
             role="listbox"
             :aria-busy="showSpinner || undefined"
+            @mousedown.self.prevent
           >
             <!-- Async in flight (or debounce armed): a spinner instead of options
                  / noResultText, so a pending fetch never reads as "no matches". -->

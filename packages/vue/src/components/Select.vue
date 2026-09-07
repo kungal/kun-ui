@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue, O extends KunSelectOption<T> = KunSelectOption<T>">
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside, useEventListener } from '@vueuse/core'
 import { size } from '@floating-ui/vue'
 import {
   cn,
@@ -306,6 +306,20 @@ onClickOutside(buttonRef, (event) => {
   close(false)
 })
 
+// Escape has to work wherever focus is, and inside the panel that is NOT the
+// trigger: the <ul> is `tabindex="-1"`, so a real mouse click on an option (or
+// on the list's own padding) focuses the LIST, and the panel is teleported to
+// <body>, so its keydown never bubbles to the trigger. Measured in Chrome 152,
+// before the panel-level handler below existed: after clicking one option of a
+// non-searchable multiple Select, ArrowDown / Enter / type-ahead / Escape were
+// all dead and only a click outside could close it. The handler on the panel
+// covers everything the panel contains; this window listener is the backstop
+// for focus we do not own — a custom `option` slot with a focusable element in
+// it. Same shape as KunDropdown and KunPopover.
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && isOpen.value) close()
+})
+
 // ── selection actions ────────────────────────────────────────────────────
 const selectOption = (option: O) => {
   if (props.disabled || option.disabled) return
@@ -433,7 +447,12 @@ const onKeydown = (e: KeyboardEvent) => {
       close()
       break
     case 'Tab':
-      close(false)
+      // preventDefault + return focus, rather than letting the browser move on:
+      // the panel is teleported to the END of <body>, so a native Tab out of it
+      // has nothing after it and wraps to the top of the PAGE. Focus goes back
+      // to the trigger and the next Tab continues from there, as in KunDropdown.
+      e.preventDefault()
+      close()
       break
     default:
       if (
@@ -608,8 +627,16 @@ watch(filtered, () => {
               props.classNames?.popup
             )
           "
+          @keydown="onKeydown"
+          @mousedown.self.prevent
         >
-          <div v-if="searchable" class="p-1">
+          <!-- The panel's own padding must not take focus off whatever has it:
+               the root is not focusable, so a click on it moved
+               `document.activeElement` to BODY and left the arrows and Enter
+               dead with the panel open (measured, Chrome 152). `.self` keeps
+               clicks on real children — including a focusable element in a
+               custom `option` slot — working normally. -->
+          <div v-if="searchable" class="p-1" @mousedown.self.prevent>
             <input
               ref="searchRef"
               :value="query"
@@ -626,7 +653,6 @@ watch(filtered, () => {
                   kunFocusRingClasses[color]
                 )
               "
-              @keydown="onKeydown"
               @input="onSearchInput"
               @compositionstart="composing = true"
               @compositionend="onCompositionEnd"
