@@ -44,6 +44,21 @@ export interface KunUIConfig {
    *  the user id. Default `/user/{id}/info`; override per app. */
   userLinkTemplate: string
 
+  /** Images KunAvatar picks from for a user with no avatar. Default `[]` →
+   *  every such user gets the bundled `KUN_AVATAR_FALLBACK` data URI.
+   *
+   *  Supply ABSOLUTE, immutable image URLs; KunUI never assembles one. The
+   *  pick is `hash(user.name) % pool.length`, so the array is an index space,
+   *  not a ranking: replace an entry in place to move only the users who land
+   *  on it, and avoid changing its length, which re-assigns everyone.
+   *
+   *  In the NextMoe ecosystem the pool comes from sticker.kungal.com's
+   *  `/api/v1/avatar-pool`, fetched by the host's SERVER (never per render,
+   *  never by a browser) — most accounts have no avatar, so these are among
+   *  the most-requested images anywhere and must stay a small, immutable,
+   *  edge-cacheable set. */
+  avatarFallbackPool: string[]
+
   /** Element/component KunImage renders for the actual image. Default
    *  `'img'` (native — KunImage keeps its skeleton/aspect/objectFit logic
    *  and passes only standard HTML img attributes). The Nuxt layer injects
@@ -66,6 +81,7 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
   },
   imageComponent: 'img',
   userLinkTemplate: '/user/{id}/info',
+  avatarFallbackPool: [],
 }
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {
@@ -76,10 +92,32 @@ export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {
 // there is no active setup() (e.g. a Nuxt plugin that has the vueApp but
 // not a component instance). `app.provide` makes the config visible to
 // every KunUI component in the app, on both server and client.
+//
+// It MERGES over whatever a previous call installed instead of replacing it.
+// `app.provide` is last-write-wins, so before this the @kungal/ui-nuxt layer
+// plugin (linkComponent/iconComponent/imageComponent/navigate) and an app's
+// own plugin could not both configure KunUI: whichever ran second silently
+// reset the other's keys to the built-in defaults, turning every NuxtLink
+// back into a full-page `<a>`. Order no longer matters; later keys win.
+//
+// The second call mutates the installed object rather than re-providing one.
+// Re-providing the same key makes Vue log `App already provides property with
+// key "Symbol(kun-ui-config)"` on every boot -- a warning aimed at a mistake,
+// printed at what is now the supported pattern. Mutation is safe here because
+// every caller is a plugin: they all run before the first render, and no
+// component has read the object yet. This config is deliberately not
+// reactive, so installing after mount was never supported either way.
 export const installKunUIConfig = (
   app: App,
   config: Partial<KunUIConfig> = {}
 ): void => {
+  const installed = app.runWithContext(() =>
+    inject<KunUIConfig | undefined>(KUN_UI_CONFIG_KEY, undefined)
+  )
+  if (installed) {
+    Object.assign(installed, config)
+    return
+  }
   app.provide(KUN_UI_CONFIG_KEY, { ...KUN_UI_DEFAULT_CONFIG, ...config })
 }
 

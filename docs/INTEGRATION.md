@@ -390,9 +390,12 @@ per-instance prop  >  KunUIConfig provider  >  built-in default
 | `imageComponent` | `Component \| string` | `'img'` | What `KunImage` renders. The Nuxt layer injects `<NuxtImg>`. |
 | `iconComponent` | `Component \| string \| null` | `null` | Fallback renderer for icons not in the registry. The Nuxt layer injects an `@nuxt/icon` wrapper. |
 | `userLinkTemplate` | `string` | `'/user/{id}/info'` | Path `KunAvatar` navigates to; `{id}` is replaced. |
+| `avatarFallbackPool` | `string[]` | `[]` | Images `KunAvatar` picks from for a user with no avatar. Empty → the bundled `KUN_AVATAR_FALLBACK` data URI. See §7.1. |
 
-**In Nuxt** all of these are set for you by `@kungal/ui-nuxt` — you usually
-don't touch this.
+**In Nuxt** the first four are set for you by `@kungal/ui-nuxt` — you usually
+don't touch those. `installKunUIConfig` **merges** over whatever a previous
+call installed, so your own plugin can set `avatarFallbackPool` without
+resetting the layer's `linkComponent` / `imageComponent`, in either order.
 
 **In plain Vue** set them with either:
 
@@ -411,6 +414,47 @@ provideKunUIConfig({
 ```
 
 `useKunUIConfig()` reads the resolved config if you're building wrappers.
+
+### 7.1 The avatar fallback pool
+
+Most accounts in a community site have no avatar image, so whatever renders in
+their place is, in practice, the site's default avatar — and one of the most
+requested images it serves. `avatarFallbackPool` is that set.
+
+Rules that matter more than they look:
+
+- **Supply absolute, immutable URLs.** KunUI never assembles one from a
+  template. The predecessor of this API hardcoded a host and a
+  `/stickers/{pack}/{n}.webp` path — an address for a *position in a mutable
+  collection* — and every avatar-less account across six sites 404'd the day
+  that collection moved. Content-addressed URLs (`…/<hash>_128.webp`) cannot
+  rot that way and can be cached `immutable` for a year.
+- **The pool is an index space, not a ranking.** The pick is
+  `hash(user.name) % pool.length`, so replacing one entry moves only the users
+  who land on it, while changing the array's *length* re-assigns everybody.
+  Edit slots; avoid resizing.
+- **Keep it small and fetch it server-side.** A pool of 64 at ~5 KB each is
+  ~340 KB — the whole set a browser can ever download, once, if the images are
+  served `immutable`. Fetch the list on your server (once an hour is plenty),
+  never per render and never from the browser.
+
+In the NextMoe ecosystem the list comes from
+`https://sticker.kungal.com/api/v1/avatar-pool`, which returns ready
+`_128` CDN URLs:
+
+```ts
+// app/plugins/kun-avatar-pool.ts  (Nuxt)
+export default defineNuxtPlugin(async (nuxtApp) => {
+  const pool = useState<string[]>('kun-avatar-pool', () => AVATAR_POOL_FALLBACK)
+  if (import.meta.server) pool.value = await fetchAvatarPool()
+  installKunUIConfig(nuxtApp.vueApp, { avatarFallbackPool: pool.value })
+})
+```
+
+`useState` carries the server's list into the payload, so client and server
+pick identically and there is no hydration mismatch. Ship a baked
+`AVATAR_POOL_FALLBACK` constant so a failed fetch degrades to a stale pool
+rather than to one repeated image.
 
 ---
 
@@ -486,7 +530,8 @@ import type { KunUser } from '@kungal/ui-vue' // re-exported from @kungal/ui-cor
 interface KunUser {
   id: number
   name: string
-  avatar: string // URL; empty falls back to a deterministic sticker
+  avatar: string // URL; empty falls back to a deterministic pick from
+                 // config.avatarFallbackPool (§7.1)
 }
 ```
 

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cn, getRandomSticker } from '@kungal/ui-core'
+import { cn, pickAvatarFallback, KUN_AVATAR_FALLBACK } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunImage from './Image.vue'
 import type { KunAvatarProps } from './types'
 
-// User avatar. Falls back to a deterministic sticker when there's no image,
-// and navigates via config.navigate + config.userLinkTemplate on click
-// (was a hardcoded `navigateTo('/user/:id/info')`).
+// User avatar. Falls back to a deterministic pick from
+// config.avatarFallbackPool when there's no image, and navigates via
+// config.navigate + config.userLinkTemplate on click (was a hardcoded
+// `navigateTo('/user/:id/info')`).
 defineOptions({ name: 'KunAvatar' })
 
 const props = withDefaults(defineProps<KunAvatarProps>(), {
@@ -54,9 +55,9 @@ const userAvatarSrc = computed(() => {
   // and the CDN's own variant convention like `<hash>_100.webp` vs
   // `avatar-100.webp`) is the consumer's concern: it knows its image host, so it
   // passes the resolved URL it wants. `size` here only sets the rendered
-  // dimensions. Empty/missing avatar → a deterministic sticker, stable per name
-  // so the same unknown user always gets the same one.
-  return props.user?.avatar || getRandomSticker(props.user?.name ?? '')
+  // dimensions. Empty/missing avatar → a deterministic pick from the host's
+  // pool, stable per name so the same unknown user always gets the same one.
+  return props.user?.avatar || pickAvatarFallback(props.user?.name ?? '', config.avatarFallbackPool)
 })
 </script>
 
@@ -76,7 +77,7 @@ const userAvatarSrc = computed(() => {
     <KunImage
       :class-name="cn('inline-block rounded-full', sizeClasses, props.imageClassName)"
       :src="userAvatarSrc"
-      :fallback-src="getRandomSticker(user?.name ?? '')"
+      :fallback-src="KUN_AVATAR_FALLBACK"
       :alt="user?.name ?? '未知用户'"
     />
   </component>

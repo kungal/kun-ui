@@ -217,7 +217,7 @@ export {
 } from './composables/useKunAlert'
 export { useKunLoliInfo, useKunLoliState } from './composables/useKunLoliInfo'
 // Re-export framework-agnostic helpers consumers commonly reach for.
-export { getRandomSticker, decodeIfEncoded } from '@kungal/ui-core'
+export { pickAvatarFallback, getRandomSticker, KUN_AVATAR_FALLBACK, decodeIfEncoded } from '@kungal/ui-core'
 
 // Message (toast) system — imperative trigger + read store. Mount
 // <KunMessageProvider/> once near your app root.
