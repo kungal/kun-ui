@@ -45,29 +45,55 @@ jobs:
 
           pnpm ci:version  # changeset version: bump package.json + CHANGELOG, drop .changeset/*.md
 
+          VERSION=$(node -p "require('./packages/vue/package.json').version")
+
           if git diff --quiet; then
-            echo "No changesets present — nothing to release."
-            echo "released=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            # No changesets — but don't bail before checking npm: a publish that
+            # dies mid-flight (2.35.1: the registry 422'd ui-nuxt's provenance
+            # after three packages were already up) leaves main bumped while
+            # npm, the tags and the Release are incomplete. `changeset publish`
+            # skips versions npm already has, so falling through to the publish
+            # tail is a safe resume. Note re-running the *failed* run does not
+            # recover: its SHA still carries the changesets, so it re-versions
+            # and its push back to main is non-fast-forward. Recover by pushing
+            # any commit to main (an empty one is fine) and landing here.
+            RESUME=false
+            for PKG in ui-tokens ui-core ui-vue ui-nuxt; do
+              npm view "@kungal/${PKG}@${VERSION}" version >/dev/null 2>&1 || RESUME=true
+            done
+            if [ "${RESUME}" = false ]; then
+              echo "No changesets present — nothing to release."
+              echo "released=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Resuming the interrupted ${VERSION} publish."
+          else
+            # Refresh the docs /changelog page data from the just-updated CHANGELOG
+            # so it ships inside this same release commit (no hand-written docs).
+            pnpm --filter @kungal/docs gen:changelog || true
+
+            # The pub.dev package's version is locked to the npm lockstep version:
+            # pub refuses a publish whose pubspec version doesn't match the tag
+            # this job pushes, and gen-tokens.mjs refuses to run when the two
+            # diverge. Sync before the bump is committed so both travel together.
+            node scripts/sync-pub-version.mjs
+
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "ci: release packages [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"   # commit the bump back to main
           fi
 
-          # Refresh the docs /changelog page data from the just-updated CHANGELOG
-          # so it ships inside this same release commit (no hand-written docs).
-          pnpm --filter @kungal/docs gen:changelog || true
-
-          # The pub.dev package's version is locked to the npm lockstep version:
-          # pub refuses a publish whose pubspec version doesn't match the tag
-          # this job pushes, and gen-tokens.mjs refuses to run when the two
-          # diverge. Sync before the bump is committed so both travel together.
-          node scripts/sync-pub-version.mjs
-
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "ci: release packages [skip ci]"
-          git push origin "HEAD:${GITHUB_REF_NAME}"   # commit the bump back to main
-
           pnpm ci:publish      # build packages + changeset publish (OIDC + provenance)
+
+          # changeset publish only tags what it publishes in this run, so a
+          # resume never tags the packages that made it to npm before the
+          # failure — recreate any missing tag (no-op on a clean run).
+          for PKG in ui-tokens ui-core ui-vue ui-nuxt; do
+            TAG="@kungal/${PKG}@${VERSION}"
+            git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null || git tag "${TAG}"
+          done
           git push origin --tags
 
           # pub.dev's OIDC publishing is tag-scoped: the token's ref claim must
