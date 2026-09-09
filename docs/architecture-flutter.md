@@ -297,7 +297,8 @@ against a shared spec."
 
 Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
 durations included), **tier 1 in 2.34.0** (`kun_ui_icons`), **tier 2 in
-2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`). Tiers 3–4 have not
+2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`), **tier 3 in 2.35.1**
+(`contracts/` — the acceptance list and the parity checker). Tier 4 has not
 started.
 
 | Tier | What | Where it lives | Shared? |
@@ -305,7 +306,7 @@ started.
 | **0** | **Tokens.** Extend `gen-tokens.mjs`'s in-memory model to emit **three sibling outputs**: `palette.generated.css` (byte-identical), generated Dart, and a DTCG 2025.10 interop export. | `packages/ui-tokens-flutter/` → `kun_ui_tokens` on pub.dev; `tokens.dtcg.json` in `@kungal/ui-tokens` | 🟢 generated |
 | **1** | **Icons.** Add `gen:icons:flutter`; one SVG source, two outputs. Repo shape modelled on `microsoft/fluentui-system-icons`. | `@kungal/ui-core` `WANT` → Dart asset package | 🟢 generated |
 | **2** | **Motion.** Beziers/durations cross as consts (§3.4, no sampling); ballistic animations share their *physics parameters*, from which web bakes keyframes and Flutter bakes `CatmullRomCurve.precompute` tables. | tokens package | 🟢 generated |
-| **3** | **Component contracts.** `component-meta.json` (70 components) becomes the Flutter port's acceptance list and a parity report. | this repo | 🟡 spec |
+| **3** | **Component contracts.** `component-meta.json` (70 components) becomes the Flutter port's acceptance list and a parity report. | `contracts/` in this repo | 🟡 spec |
 | **4** | **Component implementations.** Hand-written widgets on `ThemeExtension`; Widgetbook plays the role `apps/docs` plays here. | separate `kun-ui-flutter` repo | 🔴 separate |
 
 Notes that are easy to get wrong:
@@ -358,6 +359,19 @@ Notes that are easy to get wrong:
   form. The shared source is `packages/ui-tokens/scripts/motion-physics.mjs`,
   which generates both `KUN_SHATTER_PHYSICS` (ui-core, consumed by the web
   component) and `KunShatterPhysics` (kun_ui_tokens).
+- **Tier 3 classifies as data, and defaults new API to portable.**
+  `contracts/component-contracts.json` (generated from `component-meta.json`
+  by `scripts/gen-flutter-contracts.mjs`, CI-gated like every generated file)
+  distills each component to the surface a Flutter port must answer for; the
+  hand-curated part is only the *exclusions* — 13 web-only components and the
+  web-only props (class pass-throughs, link mode, `<form>` names, ARIA id
+  plumbing), each with a reason, in `contracts/flutter-portability.mjs`. A
+  new component or prop enters the contract automatically: the wrong default
+  would be silence, §2.3's drift arriving at the contract level. The parity
+  checker (`scripts/flutter-parity.mjs`) treats absence as information — §7
+  decision 3 — and only *claimed-but-unanswered* or *stale* surface as
+  failure. Composable contracts wait for tier 4 to define a Dart API; most
+  composables are records of browser pathology with nothing to cross (§4.1).
 - **Do not port 70 components.** Scope tier 4 from what the Flutter apps
   actually need — realistically ~20 — and let the rest arrive on demand.
   Iron rule: one consumer is not a component.
