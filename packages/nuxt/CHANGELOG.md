@@ -1,5 +1,12 @@
 # @kungal/ui-nuxt
 
+## 2.34.0
+
+### Patch Changes
+
+- @kungal/ui-vue@2.34.0
+- @kungal/ui-tokens@2.34.0
+
 ## 2.33.0
 
 ### Patch Changes
