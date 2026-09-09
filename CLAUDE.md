@@ -39,7 +39,7 @@ pnpm changeset             # record a changeset for the release train
 
 `.changeset/*.md` → commit → push `main` → `release.yml`: `changeset version`, `gen:changelog`, commit `ci: release packages [skip ci]` back to main, `ci:publish` (build + `changeset publish`, OIDC + provenance), push tags, create the GitHub Release from the newest CHANGELOG block, dispatch `docs-image`.
 
-- **No changesets on the push → the workflow bails out early and publishes nothing.** Harmless, cheap.
+- **No changesets on the push → the workflow bails out early and publishes nothing.** Harmless, cheap. One exception: if the current version is missing from npm or the `@kungal/ui-vue@<v>` tag is missing from the remote, the run resumes the interrupted publish tail instead — 2.35.1 died mid-publish twice (a registry-side E422 on one package's provenance, then a stale registry edge re-attempting the already-published packages), and re-running the failed job cannot recover (its SHA re-versions and pushes non-fast-forward); push any commit to main instead.
 - The `fixed` group versions all four `@kungal/*` together, so one `'@kungal/ui-vue': minor` changeset bumps all four.
 - The changeset body *is* the release note and the docs `/changelog` entry. **Write it in English** (the user's call, 2026-09-06 — entries up to 2.28.0 are Chinese and stay as published). Write it for a consumer: what changed, what it costs them, why the design is what it is.
 - A `docs-image` run showing **cancelled** on the feature commit is expected, not a failure — the `[skip ci]` bump commit supersedes it under the workflow's concurrency group and a fresh run starts on the bump.
