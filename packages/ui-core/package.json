@@ -43,6 +43,7 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "gen:icons": "node scripts/gen-icons.mjs",
+    "gen:icons:flutter": "node scripts/gen-icons-flutter.mjs",
     "gen:scales": "node scripts/gen-tw-scales.mjs",
     "clean": "rm -rf dist"
   },
@@ -53,6 +54,9 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.111",
     "@iconify-json/svg-spinners": "^1.2.4",
+    "oslllo-svg-fixer": "^6.0.1",
+    "svg2ttf": "^6.1.0",
+    "svgicons2svgfont": "^16.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.7.0"
   }

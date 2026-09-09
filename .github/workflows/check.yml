@@ -125,15 +125,16 @@ jobs:
 
   flutter-tokens:
     name: Flutter token package
-    # packages/ui-tokens-flutter is Dart written by a Node script. Nothing else
-    # in this repo can compile it: `pnpm build` skips it (no package.json),
-    # `pnpm typecheck` is TypeScript, and the "generated files" job only proves
-    # the emitter is deterministic — not that what it emitted is valid Dart. So
-    # without this job the first thing to meet a Dart compiler would be pub.dev,
-    # after release.yml had already tagged and published.
+    # packages/ui-tokens-flutter and packages/ui-icons-flutter are Dart written
+    # by Node scripts. Nothing else in this repo can compile them: `pnpm build`
+    # skips them (no package.json), `pnpm typecheck` is TypeScript, and the
+    # "generated files" job only proves the emitters are deterministic — not
+    # that what they emitted is valid Dart. So without this job the first thing
+    # to meet a Dart compiler would be pub.dev, after release.yml had already
+    # tagged and published.
     #
     # `dart format --set-exit-if-changed` is the load-bearing half: CI
-    # regenerates through Node only, so the emitter's output has to already be
+    # regenerates through Node only, so the emitters' output has to already be
     # format-clean — there is no `dart format` step that could fix it up.
     runs-on: ubuntu-latest
     steps:
@@ -152,3 +153,12 @@ jobs:
 
       - run: flutter analyze --fatal-infos
         working-directory: packages/ui-tokens-flutter
+
+      - run: flutter pub get
+        working-directory: packages/ui-icons-flutter
+
+      - run: dart format --output=none --set-exit-if-changed .
+        working-directory: packages/ui-icons-flutter
+
+      - run: flutter analyze --fatal-infos
+        working-directory: packages/ui-icons-flutter

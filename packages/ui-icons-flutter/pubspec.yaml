@@ -1,0 +1,32 @@
+name: kun_ui_icons
+version: 2.33.0
+description: >-
+  The KunUI icon set for Flutter: the lucide icons its web components render,
+  outlined into a bundled icon font with one IconData constant each.
+
+repository: https://github.com/kungal/kun-ui
+homepage: https://github.com/kungal/kun-ui
+issue_tracker: https://github.com/kungal/kun-ui/issues
+
+environment:
+  # The floor is kun_ui_tokens', because the two ship on one release train at
+  # one version and are meant to sit side by side. The icons alone need less —
+  # Dart 3 for `abstract final class`, and Flutter 3.19, where Icon began
+  # forcing `height: 1.0` with even leading ("Ensure Icon vertically centers
+  # its icon glyph", flutter#138937). This font is emitted with descent 0, so
+  # the glyph fills its box only because Icon overrides the font's own metrics.
+  sdk: ^3.6.0
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+
+flutter:
+  fonts:
+    - family: KunUiIcons
+      fonts:
+        - asset: lib/fonts/KunUiIcons.ttf

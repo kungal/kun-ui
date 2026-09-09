@@ -13,7 +13,7 @@ widgets are written separately. Tokens are shared, and they are generated.
 
 ```yaml
 dependencies:
-  kun_ui_tokens: ^2.32.1
+  kun_ui_tokens: ^2.33.0
 ```
 
 Requires Flutter `>=3.27.0`: every color is a `const Color.from(...)`, the
@@ -57,7 +57,8 @@ so the eventual widget layer stays free to pick its own theming model.
 - **Parity.** Colors are sRGB-clamped OKLCH, the same `clampChroma` pass the
   CSS goes through, so an app and the websites render the same color.
 - **Version lockstep.** This package's version always equals the version of
-  the four `@kungal/*` npm packages. `2.32.1` here is `2.32.1` there.
+  the four `@kungal/*` npm packages; they are bumped together and published
+  from one commit. This release is `kun_ui_tokens 2.33.0`.
 
 ## Contributing
 

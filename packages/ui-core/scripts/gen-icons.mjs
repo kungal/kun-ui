@@ -3,29 +3,12 @@
 // writes them inline into src/icons-data.ts. The data is then BUNDLED — KunUI
 // never fetches an icon at runtime.
 //
-// Add an icon: put its name in WANT below and run `pnpm --filter @kungal/ui-core
-// gen:icons`. The @iconify-json packages stay devDependencies (build-time
-// only); the generated literal is what ships.
+// Add an icon: put its name in WANT (scripts/icons-manifest.mjs) and run
+// `pnpm --filter @kungal/ui-core gen:icons`. The @iconify-json packages stay
+// devDependencies (build-time only); the generated literal is what ships.
 
 import { readFileSync, writeFileSync } from 'node:fs'
-
-// Names KunUI's own components use (current + the full set from the original
-// lib, so future component ports already have their icons bundled).
-const WANT = {
-  lucide: [
-    'x', 'check', 'info', 'circle-check', 'circle-x', 'triangle-alert',
-    'chevron-right', 'chevron-left', 'chevron-down', 'chevrons-right',
-    'chevrons-left', 'arrow-right', 'arrow-left', 'plus', 'minus', 'upload', 'zoom-in', 'zoom-out',
-    'rotate-cw', 'rotate-ccw', 'refresh-ccw', 'external-link', 'download',
-    'copy', 'calendar', 'lollipop', 'eye', 'eye-off', 'search', 'filter',
-  ],
-  'svg-spinners': ['90-ring-with-bg'],
-}
-
-const PKG = {
-  lucide: '@iconify-json/lucide',
-  'svg-spinners': '@iconify-json/svg-spinners',
-}
+import { PKG, WANT } from './icons-manifest.mjs'
 
 const out = {}
 for (const [prefix, names] of Object.entries(WANT)) {

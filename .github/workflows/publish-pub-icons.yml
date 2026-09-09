@@ -1,0 +1,23 @@
+# Publishes packages/ui-icons-flutter to pub.dev via OIDC. The sibling of
+# publish-pub.yml, which carries the full story behind both triggers: the tag
+# push comes from GITHUB_TOKEN and GitHub starts no workflow for it, so
+# release.yml dispatches this one explicitly, and the tag filter is a plain
+# glob because the documented `[0-9]+` quantifier syntax matched nothing.
+#
+# As there too, the FIRST version cannot go through this workflow — pub.dev
+# requires the initial `dart pub publish` to be run manually by a human before
+# automated publishing can be enabled.
+name: Publish icons to pub.dev
+
+on:
+  push:
+    tags: ['kun_ui_icons-v*']
+  workflow_dispatch:
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # OIDC token for pub.dev automated publishing
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: packages/ui-icons-flutter
