@@ -1,5 +1,5 @@
 name: kun_ui_icons
-version: 2.34.0
+version: 2.35.0
 description: >-
   The KunUI icon set for Flutter: the lucide icons its web components render,
   outlined into a bundled icon font with one IconData constant each.

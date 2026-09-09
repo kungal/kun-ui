@@ -1,5 +1,12 @@
 # @kungal/ui-vue
 
+## 2.35.0
+
+### Patch Changes
+
+- Updated dependencies [91109ca]
+  - @kungal/ui-core@2.35.0
+
 ## 2.34.0
 
 ### Patch Changes
