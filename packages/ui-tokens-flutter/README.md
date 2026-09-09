@@ -49,6 +49,13 @@ There is deliberately no `KunTheme` here. This package is theme-system
 agnostic — plain `const` holders, no `ThemeExtension`, no Material coupling —
 so the eventual widget layer stays free to pick its own theming model.
 
+Beyond the easing/duration scale, `KunShatterPhysics` carries the ballistic
+model behind the web `KunShatter` component — outward impulse, air-drag
+decay, gravity as a t² acceleration — as plain constants with the equations
+in the doc comments. A Flutter shatter that samples that model bakes the
+same trajectories the web bakes into its keyframes, instead of re-tuning
+the feel by eye.
+
 ## Guarantees
 
 - **Contrast.** Every `onSolid` clears WCAG AA (≥ 4.5:1) against its `solid`

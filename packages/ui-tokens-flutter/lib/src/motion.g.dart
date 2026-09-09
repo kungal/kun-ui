@@ -38,3 +38,96 @@ abstract final class KunDurations {
   /// Web token `--kun-dur-exit`. Exits run about 30% shorter than enters.
   static const Duration exit = Duration(milliseconds: 180);
 }
+
+/// The ballistic model behind the web `KunShatter` component, as data.
+///
+/// These are the physics parameters one level above the sampled keyframes:
+/// the web bakes its per-shard WAAPI keyframes from exactly these numbers,
+/// so a Flutter shatter that samples this model reproduces the same motion
+/// instead of re-tuning the feel by eye.
+///
+/// The model, per shard (rng() uniform in [0,1); lengths in logical px):
+/// ```
+/// reach   = spread × elementDiagonal × reachFactor
+/// launch  = reach × (launchMin + rng·launchSpan)
+/// vx, vy  = dirX × launch,  dirY × launch × verticalFactor
+/// g       = gravity × reach × (gravityMin + rng·gravitySpan)
+/// ```
+/// over normalised time t ∈ [0,1], sampled into [keyframeSteps] linear
+/// segments:
+/// ```
+/// drag(t)  = 1 − (1−t)^dragExponent
+/// x(t)     = vx·drag(t)
+/// y(t)     = vy·drag(t) + g·t²
+/// rot(t)   = spin·t,  spin = (2·rng−1) × rotation
+/// scale(t) = 1 − (1−scaleEnd)·t
+/// ```
+/// Gravity is a t² acceleration, not a linear end-offset, and the samples
+/// are joined linearly — one fat ease over the whole flight reads as
+/// "snap, then freeze" rather than physical.
+abstract final class KunShatterPhysics {
+  /// How many linear keyframe segments each trajectory is sampled into.
+  static const int keyframeSteps = 16;
+
+  /// reach = spread × elementDiagonal × `reachFactor` — the distance scale
+  /// every other length-like constant multiplies.
+  static const double reachFactor = 0.5;
+
+  /// Outward launch speed, in units of reach:
+  /// `launchMin` + rng·`launchSpan`. A gentle push, not a hard snap.
+  static const double launchMin = 0.32;
+
+  /// The random span above [launchMin].
+  static const double launchSpan = 0.55;
+
+  /// Vertical launch damping — shards fly a little flatter than their
+  /// radial direction, and gravity then owns the vertical.
+  static const double verticalFactor = 0.8;
+
+  /// Downward acceleration, in units of reach, applied ×t²:
+  /// `gravityMin` + rng·`gravitySpan`.
+  static const double gravityMin = 0.85;
+
+  /// The random span above [gravityMin].
+  static const double gravitySpan = 0.5;
+
+  /// drag(t) = 1 − (1−t)^`dragExponent` — how fast the launch impulse
+  /// decays against air drag.
+  static const double dragExponent = 1.7;
+
+  /// Shards shrink slightly as they fly: end scale =
+  /// `scaleEndMin` + rng·`scaleEndSpan`.
+  static const double scaleEndMin = 0.8;
+
+  /// The random span above [scaleEndMin].
+  static const double scaleEndSpan = 0.16;
+
+  /// Fade starts late in the flight, at `fadeOutStartMin` +
+  /// rng·`fadeOutStartSpan` of t — the glass is seen flying, not
+  /// dissolving.
+  static const double fadeOutStartMin = 0.5;
+
+  /// The random span above [fadeOutStartMin].
+  static const double fadeOutStartSpan = 0.18;
+
+  /// Reassemble eases home along 1 − (1−t)^`settleExponent` — decelerate
+  /// into place.
+  static const double settleExponent = 2;
+
+  /// Reassembling shards fade in over the first `fadeInWindow` of t.
+  static const double fadeInWindow = 0.4;
+
+  /// Shards nearest the impact let go first: delay = (dist/maxDist) ×
+  /// min(duration×`staggerFraction`, `staggerCapMs`).
+  static const double staggerFraction = 0.22;
+
+  /// The stagger ceiling, in milliseconds.
+  static const int staggerCapMs = 120;
+
+  /// The tuned flight duration.
+  static const Duration defaultDuration = Duration(milliseconds: 1100);
+
+  /// The tuned maximum random spin per shard, in degrees:
+  /// spin = (2·rng−1) × rotation.
+  static const double defaultRotationDeg = 140;
+}

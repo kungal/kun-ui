@@ -295,6 +295,11 @@ is exactly why generated Dart must be published as a package, not copied.
 Only tiers 0–2 are *shared*. Tiers 3–4 are "written separately, verified
 against a shared spec."
 
+Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
+durations included), **tier 1 in 2.34.0** (`kun_ui_icons`), **tier 2 in
+2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`). Tiers 3–4 have not
+started.
+
 | Tier | What | Where it lives | Shared? |
 | --- | --- | --- | --- |
 | **0** | **Tokens.** Extend `gen-tokens.mjs`'s in-memory model to emit **three sibling outputs**: `palette.generated.css` (byte-identical), generated Dart, and a DTCG 2025.10 interop export. | `packages/ui-tokens-flutter/` → `kun_ui_tokens` on pub.dev; `tokens.dtcg.json` in `@kungal/ui-tokens` | 🟢 generated |
@@ -342,6 +347,17 @@ Notes that are easy to get wrong:
   package must not foreclose it either way. (forui also models input
   modality — touch/pointer — and breakpoints as theme dimensions; worth
   stealing when tier 4 starts.)
+- **Tier 2 shipped parameters, not spline tables.** §3.4 offered
+  `CatmullRomCurve.precompute` for cross-platform parity of the sampled
+  curves; implementation rejected it, because the one ballistic animation in
+  production (KunShatter) has a closed-form model — `drag(t) = 1 − (1−t)^1.7`
+  with t² gravity — and a sampled spline would only *approximate* what the
+  exponents state exactly. That is §3.4's own principle ("the physics
+  parameters, one level above the samples") carried one level further.
+  Precomputed tables remain the right tool for a future curve with no closed
+  form. The shared source is `packages/ui-tokens/scripts/motion-physics.mjs`,
+  which generates both `KUN_SHATTER_PHYSICS` (ui-core, consumed by the web
+  component) and `KunShatterPhysics` (kun_ui_tokens).
 - **Do not port 70 components.** Scope tier 4 from what the Flutter apps
   actually need — realistically ~20 — and let the rest arrive on demand.
   Iron rule: one consumer is not a component.

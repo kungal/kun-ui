@@ -42,6 +42,11 @@ export {
   type KunSelectionSize,
 } from './controlSize'
 
+// The KunShatter ballistic model — shared motion tokens. The same manifest
+// (packages/ui-tokens/scripts/motion-physics.mjs) generates kun_ui_tokens'
+// `KunShatterPhysics`, so the web and Flutter renditions cannot drift.
+export { KUN_SHATTER_PHYSICS } from './motionPhysics.generated'
+
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
 export { pickAvatarFallback, getRandomSticker } from './avatarFallback'

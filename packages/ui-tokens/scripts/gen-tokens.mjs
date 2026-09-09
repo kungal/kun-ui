@@ -18,6 +18,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { oklch, clampChroma, wcagContrast, formatHex, parse, rgb } from 'culori'
+import { SHATTER_PHYSICS } from './motion-physics.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = join(HERE, '../src/palette.generated.css')
@@ -497,6 +498,81 @@ const DURATION_DOCS = {
   exit: ['Web token `--kun-dur-exit`. Exits run about 30% shorter than enters.'],
 }
 
+// The ballistic model's constants come from motion-physics.mjs — the same
+// module Shatter.vue consumes (via ui-core's gen-motion.mjs) — so the Dart
+// class below and the web keyframes can never disagree. Sampled spline tables
+// (CatmullRomCurve.precompute) were considered and rejected: every curve in
+// this model has a closed form, and a table would only approximate what the
+// exponents state exactly.
+const PHYSICS_DART = [
+  ['int', 'keyframeSteps', String(SHATTER_PHYSICS.keyframeSteps), [
+    'How many linear keyframe segments each trajectory is sampled into.',
+  ]],
+  ['double', 'reachFactor', String(SHATTER_PHYSICS.reachFactor), [
+    'reach = spread × elementDiagonal × `reachFactor` — the distance scale',
+    'every other length-like constant multiplies.',
+  ]],
+  ['double', 'launchMin', String(SHATTER_PHYSICS.launchMin), [
+    'Outward launch speed, in units of reach:',
+    '`launchMin` + rng·`launchSpan`. A gentle push, not a hard snap.',
+  ]],
+  ['double', 'launchSpan', String(SHATTER_PHYSICS.launchSpan), [
+    'The random span above [launchMin].',
+  ]],
+  ['double', 'verticalFactor', String(SHATTER_PHYSICS.verticalFactor), [
+    'Vertical launch damping — shards fly a little flatter than their',
+    'radial direction, and gravity then owns the vertical.',
+  ]],
+  ['double', 'gravityMin', String(SHATTER_PHYSICS.gravityMin), [
+    'Downward acceleration, in units of reach, applied ×t²:',
+    '`gravityMin` + rng·`gravitySpan`.',
+  ]],
+  ['double', 'gravitySpan', String(SHATTER_PHYSICS.gravitySpan), [
+    'The random span above [gravityMin].',
+  ]],
+  ['double', 'dragExponent', String(SHATTER_PHYSICS.dragExponent), [
+    'drag(t) = 1 − (1−t)^`dragExponent` — how fast the launch impulse',
+    'decays against air drag.',
+  ]],
+  ['double', 'scaleEndMin', String(SHATTER_PHYSICS.scaleEndMin), [
+    'Shards shrink slightly as they fly: end scale =',
+    '`scaleEndMin` + rng·`scaleEndSpan`.',
+  ]],
+  ['double', 'scaleEndSpan', String(SHATTER_PHYSICS.scaleEndSpan), [
+    'The random span above [scaleEndMin].',
+  ]],
+  ['double', 'fadeOutStartMin', String(SHATTER_PHYSICS.fadeOutStartMin), [
+    'Fade starts late in the flight, at `fadeOutStartMin` +',
+    'rng·`fadeOutStartSpan` of t — the glass is seen flying, not',
+    'dissolving.',
+  ]],
+  ['double', 'fadeOutStartSpan', String(SHATTER_PHYSICS.fadeOutStartSpan), [
+    'The random span above [fadeOutStartMin].',
+  ]],
+  ['double', 'settleExponent', String(SHATTER_PHYSICS.settleExponent), [
+    'Reassemble eases home along 1 − (1−t)^`settleExponent` — decelerate',
+    'into place.',
+  ]],
+  ['double', 'fadeInWindow', String(SHATTER_PHYSICS.fadeInWindow), [
+    'Reassembling shards fade in over the first `fadeInWindow` of t.',
+  ]],
+  ['double', 'staggerFraction', String(SHATTER_PHYSICS.staggerFraction), [
+    'Shards nearest the impact let go first: delay = (dist/maxDist) ×',
+    'min(duration×`staggerFraction`, `staggerCapMs`).',
+  ]],
+  ['int', 'staggerCapMs', String(SHATTER_PHYSICS.staggerCapMs), [
+    'The stagger ceiling, in milliseconds.',
+  ]],
+  ['Duration', 'defaultDuration',
+    `Duration(milliseconds: ${SHATTER_PHYSICS.defaultDurationMs})`, [
+    'The tuned flight duration.',
+  ]],
+  ['double', 'defaultRotationDeg', String(SHATTER_PHYSICS.defaultRotationDeg), [
+    'The tuned maximum random spin per shard, in degrees:',
+    'spin = (2·rng−1) × rotation.',
+  ]],
+]
+
 const motionDart = [
   ...DART_BANNER,
   '',
@@ -525,6 +601,42 @@ const motionDart = [
     ...(i ? [''] : []),
     ...dartDoc(2, DURATION_DOCS[k]),
     `  static const Duration ${k} = Duration(milliseconds: ${durations[k]});`,
+  ]),
+  '}',
+  '',
+  ...dartDoc(0, [
+    'The ballistic model behind the web `KunShatter` component, as data.',
+    '',
+    'These are the physics parameters one level above the sampled keyframes:',
+    'the web bakes its per-shard WAAPI keyframes from exactly these numbers,',
+    'so a Flutter shatter that samples this model reproduces the same motion',
+    'instead of re-tuning the feel by eye.',
+    '',
+    'The model, per shard (rng() uniform in [0,1); lengths in logical px):',
+    '```',
+    'reach   = spread × elementDiagonal × reachFactor',
+    'launch  = reach × (launchMin + rng·launchSpan)',
+    'vx, vy  = dirX × launch,  dirY × launch × verticalFactor',
+    'g       = gravity × reach × (gravityMin + rng·gravitySpan)',
+    '```',
+    'over normalised time t ∈ [0,1], sampled into [keyframeSteps] linear',
+    'segments:',
+    '```',
+    'drag(t)  = 1 − (1−t)^dragExponent',
+    'x(t)     = vx·drag(t)',
+    'y(t)     = vy·drag(t) + g·t²',
+    'rot(t)   = spin·t,  spin = (2·rng−1) × rotation',
+    'scale(t) = 1 − (1−scaleEnd)·t',
+    '```',
+    'Gravity is a t² acceleration, not a linear end-offset, and the samples',
+    'are joined linearly — one fat ease over the whole flight reads as',
+    '"snap, then freeze" rather than physical.',
+  ]),
+  'abstract final class KunShatterPhysics {',
+  ...PHYSICS_DART.flatMap(([type, name, value, doc], i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, doc),
+    `  static const ${type} ${name} = ${value};`,
   ]),
   '}',
   '',

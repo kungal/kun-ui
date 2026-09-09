@@ -45,6 +45,7 @@
     "gen:icons": "node scripts/gen-icons.mjs",
     "gen:icons:flutter": "node scripts/gen-icons-flutter.mjs",
     "gen:scales": "node scripts/gen-tw-scales.mjs",
+    "gen:motion": "node scripts/gen-motion.mjs",
     "clean": "rm -rf dist"
   },
   "dependencies": {

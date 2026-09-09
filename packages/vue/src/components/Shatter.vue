@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
-import { cn } from '@kungal/ui-core'
+import { cn, KUN_SHATTER_PHYSICS } from '@kungal/ui-core'
 import type { KunShatterProps } from './types'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -180,6 +180,29 @@ function resolveOrigin(w: number, h: number): Pt {
 }
 
 // ── shard model ─────────────────────────────────────────────────────────────
+// The trajectory constants are shared motion tokens, not this component's own:
+// the same manifest (packages/ui-tokens/scripts/motion-physics.mjs) generates
+// kun_ui_tokens' KunShatterPhysics for the Flutter side. Tune the feel there —
+// a literal re-inlined here silently forks the two platforms.
+const {
+  keyframeSteps,
+  reachFactor,
+  launchMin,
+  launchSpan,
+  verticalFactor,
+  gravityMin,
+  gravitySpan,
+  dragExponent,
+  scaleEndMin,
+  scaleEndSpan,
+  fadeOutStartMin,
+  fadeOutStartSpan,
+  settleExponent,
+  fadeInWindow,
+  staggerFraction,
+  staggerCapMs,
+} = KUN_SHATTER_PHYSICS
+
 type ShardDesc = {
   minX: number
   minY: number
@@ -200,9 +223,8 @@ function generateShards(w: number, h: number, seedVal: number, ox: number, oy: n
   const rng = mulberry32(seedVal || 1)
   const n = clamp(Math.round(props.pieces), 2, 160)
   const cells = voronoiCells(makeSeeds(w, h, n, rng, ox, oy), w, h)
-  const reach = props.spread * Math.hypot(w, h) * 0.5
+  const reach = props.spread * Math.hypot(w, h) * reachFactor
   const maxD = Math.max(1, Math.hypot(Math.max(ox, w - ox), Math.max(oy, h - oy)))
-  const STEPS = 16
   const descs: ShardDesc[] = []
 
   for (const cell of cells) {
@@ -240,22 +262,22 @@ function generateShards(w: number, h: number, seedVal: number, ox: number, oy: n
     }
     dx /= dl
     dy /= dl
-    const launch = reach * (0.32 + rng() * 0.55) // gentle outward push, not a hard snap
+    const launch = reach * (launchMin + rng() * launchSpan) // gentle outward push, not a hard snap
     const vx = dx * launch
-    const vy = dy * launch * 0.8
-    const grav = props.gravity * reach * (0.85 + rng() * 0.5) // downward accel (applied ×t²)
+    const vy = dy * launch * verticalFactor
+    const grav = props.gravity * reach * (gravityMin + rng() * gravitySpan) // downward accel (applied ×t²)
     const spin = (rng() * 2 - 1) * props.rotation
-    const sEnd = 0.8 + rng() * 0.16
-    const fadeFrom = 0.5 + rng() * 0.18
+    const sEnd = scaleEndMin + rng() * scaleEndSpan
+    const fadeFrom = fadeOutStartMin + rng() * fadeOutStartSpan
     // Shards nearest the impact let go first — the fracture propagates outward.
-    const delay = (dl / maxD) * Math.min(props.duration * 0.22, 120)
+    const delay = (dl / maxD) * Math.min(props.duration * staggerFraction, staggerCapMs)
     // Scattered rest position (where 'out' ends and 'in' begins) — identical math.
     const ex = vx // drag(1) == 1
     const ey = vy + grav
 
     const kf: Keyframe[] = []
-    for (let i = 0; i <= STEPS; i++) {
-      const t = i / STEPS
+    for (let i = 0; i <= keyframeSteps; i++) {
+      const t = i / keyframeSteps
       let x: number
       let y: number
       let rot: number
@@ -263,7 +285,7 @@ function generateShards(w: number, h: number, seedVal: number, ox: number, oy: n
       let op: number
       if (mode === 'out') {
         // home → scattered: launch out, decelerate (drag), accelerate down (gravity), fade out late.
-        const drag = 1 - Math.pow(1 - t, 1.7)
+        const drag = 1 - Math.pow(1 - t, dragExponent)
         x = vx * drag
         y = vy * drag + grav * t * t
         rot = spin * t
@@ -272,13 +294,13 @@ function generateShards(w: number, h: number, seedVal: number, ox: number, oy: n
       } else {
         // scattered → home: converge and *decelerate into place* (easeOut), unwind
         // the spin, scale back up, fade in early. Starts exactly where 'out' ended.
-        const e = 1 - Math.pow(1 - t, 2) // easeOut: slow into home
+        const e = 1 - Math.pow(1 - t, settleExponent) // easeOut: slow into home
         const f = 1 - e
         x = ex * f
         y = ey * f
         rot = spin * f
         sc = sEnd + (1 - sEnd) * e
-        op = !props.fade ? 1 : Math.min(1, t / 0.4)
+        op = !props.fade ? 1 : Math.min(1, t / fadeInWindow)
       }
       kf.push({
         offset: +t.toFixed(4),
