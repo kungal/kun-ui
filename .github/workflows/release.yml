@@ -61,6 +61,12 @@ jobs:
             for PKG in ui-tokens ui-core ui-vue ui-nuxt; do
               npm view "@kungal/${PKG}@${VERSION}" version >/dev/null 2>&1 || RESUME=true
             done
+            # npm complete is not release complete: the 2.35.1 resume run's
+            # publish exited 1 on the packages the first run had already
+            # shipped (a stale registry edge re-attempted them), so the tail
+            # was skipped again with all of npm in place. The tag is the
+            # tail's first artifact — its absence means the tail never ran.
+            git ls-remote --exit-code origin "refs/tags/@kungal/ui-vue@${VERSION}" >/dev/null 2>&1 || RESUME=true
             if [ "${RESUME}" = false ]; then
               echo "No changesets present — nothing to release."
               echo "released=false" >> "$GITHUB_OUTPUT"
