@@ -9,6 +9,11 @@ renderer that has no DOM, no CSS, and no Tailwind?**
 Research date: **2026-09-07**. Every claim below is sourced; version
 numbers and star counts are as of that date.
 
+Revised **2026-09-09** after an independent second verification pass
+(all load-bearing claims re-checked against primary sources). The
+direction survived review; §3.3, §3.4, §4.2, §5 and §6 carry refinements
+from that pass, and the §7 decisions are now made.
+
 ---
 
 ## 1. The honest constraint
@@ -172,26 +177,53 @@ landed in `3.26.0-0.1.pre`, stable in **Flutter 3.27**:
 - **deprecated**: `value`, `red`, `green`, `blue`, `opacity`,
   `withOpacity()` (→ `withValues(alpha: …)`).
 
-So generated Dart must target `Color.from(...)`. This also means the
+So generated Dart must target `Color.from(...)`. As of 2026-09 the
+current stable is **Flutter 3.47** (2026-08), so this API is long
+settled, and the ecosystem decision is "target latest Flutter only" —
+the package's honest floor is simply the API floor, `>=3.27`.
+`Color.from` is a **const constructor** (verified against the API docs),
+which is what makes a generated `static const` token class possible at
+all; it takes normalised doubles, so generated values keep the
+generator's precision instead of quantising to 8-bit hex on the way out.
+
+This also means the
 gamut question is real and must be decided deliberately: several KunUI
 hues are clamped to sRGB today by `clampChroma(..., 'rgb')` in
 `gen-tokens.mjs`, and a P3-capable phone could show more. **Ship sRGB-clamped
 values first** so web and app match, and treat P3 as a separate, later,
 explicitly-measured decision.
 
-### 3.4 Motion is portable as *data*
+### 3.4 Motion is portable as *data* — at two different levels
 
-Flutter has
-[`CatmullRomCurve(List<Offset> controlPoints, {double tension = 0.0})`](https://api.flutter.dev/flutter/animation/CatmullRomCurve-class.html)
-and `CatmullRomCurve.precompute(...)`. The curve passes through `(0,0)`,
-every supplied control point, and `(1,1)`.
+The four named easings (`--ease-kun-standard/out/in/emphasized`) are
+plain cubic-beziers, and Flutter's
+[`Cubic(a, b, c, d)`](https://api.flutter.dev/flutter/animation/Cubic-class.html)
+is the same parametrisation — they cross as
+`const Cubic(0.2, 0, 0, 1)` with **no sampling step at all**. The same
+is true of the duration scale (`Duration(milliseconds: …)`).
 
-This matters more than it looks. KunUI's house rule is that motion must
-feel physical, and the technique that satisfied it was **sampling a real
-ballistic trajectory into ~16 linear keyframes** rather than fitting one
-fat bezier. On Flutter that same sample table feeds `CatmullRomCurve`
-directly. **The motion identity crosses as a data file** — it does not have
-to be re-eyeballed per platform.
+Sampling matters for the *ballistic* animations. KunUI's house rule is
+that motion must feel physical, and the technique that satisfied it was
+**sampling a real ballistic trajectory into ~16 linear keyframes**
+rather than fitting one fat bezier. For those, the shared source of
+truth should be **the physics parameters** (gravity, launch velocity),
+one level above the samples: the web output bakes keyframes from them
+(the existing house method, unchanged) and the Flutter output either
+bakes the same table into
+[`CatmullRomCurve.precompute(...)`](https://api.flutter.dev/flutter/animation/CatmullRomCurve-class.html)
+(deterministic cross-platform parity) or, for gesture-driven cases
+(a drawer released mid-drag), runs the SDK's own
+`SpringSimulation`/`GravitySimulation` live — something CSS cannot do.
+
+Where the industry is heading, verified 2026-09: **M3 Expressive
+(2025-05) made spring *parameters* the motion token**, not curves — but
+the Flutter SDK itself does **not** ship M3 Expressive motion, the
+Flutter team is not currently working on it, and the gap is filled by
+the community [`motor`](https://pub.dev/packages/motor) package
+(`MaterialSpringMotion` tokens). KunUI takes physics-as-tokens (the
+direction) without taking `motor` (the dependency): iron rule #4's
+spirit holds on the Dart side too, and `flutter/physics` +
+`CatmullRomCurve` are in the SDK.
 
 ## 4. What crosses, measured against this repo
 
@@ -236,7 +268,7 @@ Dart has no purge step, so the rule is web-only — but the *reason* behind it
 (the library must not depend on a consumer's build pipeline to be correct)
 is exactly why generated Dart must be published as a package, not copied.
 
-### 4.2 Two shortcuts, rejected
+### 4.2 Three shortcuts, rejected
 
 - **Flutter Web replacing the Vue layer.** CanvasKit renders to a canvas
   rather than semantic DOM, so a crawler sees the bootstrap HTML shell and
@@ -247,6 +279,16 @@ is exactly why generated Dart must be published as a package, not copied.
 - **A WebView wrapping the Vue components.** That is not a design-system
   decision; it converts the app into a shell and forfeits every reason to
   have chosen Flutter.
+- **[WebF](https://github.com/openwebf/webf) rendering the Vue components
+  inside Flutter.** The modern version of the WebView shortcut: a
+  W3C/WHATWG-compliant web runtime on Flutter that claims Vue apps run
+  unmodified. Rejected for the *design system* on the same grounds as the
+  WebView — it embeds a JS runtime and its own CSS engine, so building
+  KunUI on it would make every downstream Flutter app a hybrid app — plus
+  one of its own: it only just announced beta (2026). A downstream app
+  rendering one rich-content screen with it is an app-level call (the
+  Flutter analogue of iron rule #4's "an app may take such a dependency
+  locally; the library may not"); it is not an architecture for KunUI.
 
 ## 5. The plan — five tiers
 
@@ -255,9 +297,9 @@ against a shared spec."
 
 | Tier | What | Where it lives | Shared? |
 | --- | --- | --- | --- |
-| **0** | **Tokens.** Reshape `gen-tokens.mjs` to emit a DTCG 2025.10 intermediate, then derive *both* `palette.generated.css` (unchanged output) and Dart. | `packages/ui-tokens/tokens.dtcg.json` → `kun_ui_tokens` on pub.dev | 🟢 generated |
+| **0** | **Tokens.** Extend `gen-tokens.mjs`'s in-memory model to emit **three sibling outputs**: `palette.generated.css` (byte-identical), generated Dart, and a DTCG 2025.10 interop export. | `packages/ui-tokens-flutter/` → `kun_ui_tokens` on pub.dev; `tokens.dtcg.json` in `@kungal/ui-tokens` | 🟢 generated |
 | **1** | **Icons.** Add `gen:icons:flutter`; one SVG source, two outputs. Repo shape modelled on `microsoft/fluentui-system-icons`. | `@kungal/ui-core` `WANT` → Dart asset package | 🟢 generated |
-| **2** | **Motion.** Sample tables to JSON; web → keyframes, Flutter → `CatmullRomCurve.precompute`. | tokens package | 🟢 generated |
+| **2** | **Motion.** Beziers/durations cross as consts (§3.4, no sampling); ballistic animations share their *physics parameters*, from which web bakes keyframes and Flutter bakes `CatmullRomCurve.precompute` tables. | tokens package | 🟢 generated |
 | **3** | **Component contracts.** `component-meta.json` (70 components) becomes the Flutter port's acceptance list and a parity report. | this repo | 🟡 spec |
 | **4** | **Component implementations.** Hand-written widgets on `ThemeExtension`; Widgetbook plays the role `apps/docs` plays here. | separate `kun-ui-flutter` repo | 🔴 separate |
 
@@ -272,6 +314,34 @@ Notes that are easy to get wrong:
   brand-new generated file is *untracked* and `git diff` cannot see it. The
   Dart artifacts need the same treatment for the same reason.
 - **Tier 0 emits `Color.from(...)`, not `Color(0xFF…)`** (§3.2, §3.3).
+- **DTCG is an export, not the pivot.** The single source of truth is the
+  *policy* in `gen-tokens.mjs` (`HUES`, the ramp, the AA assertion) — a
+  DTCG file stores resolved values and cannot express any of that. So the
+  generator's one in-memory model emits CSS, Dart and DTCG as siblings;
+  the working generator is not rewritten around a format whose only
+  in-repo consumer would be ourselves. The DTCG file exists for what it
+  is good at: interop with Figma and external token tooling.
+- **Tier 1 hides two traps the "one SVG source" framing glosses over.**
+  (a) The 30 bundled icons are lucide, which is **stroke-based** — and the
+  Flutter-native delivery is an icon font + `IconData` (free
+  `IconTheme` color/size inheritance, `--tree-shake-icons`, zero runtime
+  deps; `fluentui-system-icons` ships exactly this, `fonts/` + one Dart
+  file), so the pipeline needs an explicit **stroke→outline** conversion
+  step (lucide's own font build does this upstream; every lucide Flutter
+  package is such a regenerated font). (b) The 30th icon,
+  `svg-spinners:90-ring-with-bg`, is an *animated* SVG — no static format
+  carries it; the Flutter side gets a hand-written rotating-arc widget in
+  tier 4. The honest tier-1 count is 29 crossing, 1 not.
+- **Tier 0's generated Dart is theme-system-agnostic plain `const`
+  classes** — not `ThemeExtension` subclasses. Verified 2026-09: the
+  modern independent design systems on Flutter (forui's
+  `FTheme`/`FThemeData`, shadcn_ui's `ShadTheme`) do **not** hang off
+  Material's `ThemeData`; KunUI is its own design language, not a
+  Material skin, so the eventual `kun-ui-flutter` will likely want its
+  own `KunTheme` InheritedWidget. That is tier 4's decision — the token
+  package must not foreclose it either way. (forui also models input
+  modality — touch/pointer — and breakpoints as theme dimensions; worth
+  stealing when tier 4 starts.)
 - **Do not port 70 components.** Scope tier 4 from what the Flutter apps
   actually need — realistically ~20 — and let the rest arrive on demand.
   Iron rule: one consumer is not a component.
@@ -280,9 +350,18 @@ Notes that are easy to get wrong:
 
 - **This opens a second product line, not a package.** Four npm packages in
   lockstep becomes four npm packages *plus* a pub.dev package on a different
-  registry, with a different publish channel, a different auth model (npm
-  OIDC trusted publishing does not extend to pub.dev) and a different
-  version cadence. `release.yml` grows a second leg. Budget accordingly.
+  registry. The publish channel is less alien than first feared, though:
+  pub.dev supports [automated publishing from GitHub Actions via OIDC](https://dart.dev/tools/pub/automated-publishing),
+  **triggered by pushing a git tag** matching a configured pattern (e.g.
+  `kun_ui_tokens-v{{version}}`, set in the package's Admin tab), with
+  `permissions: id-token: write` and the reusable
+  `dart-lang/setup-dart` publish workflow — and `release.yml` already
+  pushes tags, so the pub leg is a second workflow listening on the same
+  release train, not a second train. Two hard constraints: **the first
+  version must be published manually** (`dart pub publish`), and the
+  `pubspec.yaml` version must match the tag — which is why the version
+  bump step must sync `pubspec.yaml` from `@kungal/ui-tokens`'s
+  `package.json` (the lockstep extends to pub.dev).
 - **The dominant failure mode is drift, not difficulty.** §2.3's `zinc.dart`
   is the exhibit. Mitigation is entirely in tier 0: generate, and gate.
 - **Iron rule #1 tension.** "This repo is upstream for the whole ecosystem"
@@ -290,17 +369,19 @@ Notes that are easy to get wrong:
   moment someone hand-writes a colour in the Flutter repo, the rule is
   broken in a way no downstream policy can catch.
 
-## 7. Open decisions
+## 7. Decisions (made 2026-09-09)
 
-These need a human call before tier 0 starts:
+Confirmed by the maintainer after the second verification pass:
 
-1. **Does `kun_ui_tokens` publish from this repo or from `kun-ui-flutter`?**
-   Publishing from here keeps iron rule #1 literally true and is the
-   recommendation; it also means this repo grows Dart tooling in CI.
-2. **sRGB-clamped now, or P3 from the start?** Recommendation: sRGB, so the
-   app and the sites match, and revisit with measurements.
-3. **Which ~20 components does tier 4 cover?** Driven by the Flutter apps,
-   not by parity with the web list.
+1. **`kun_ui_tokens` publishes from this repo** (`packages/ui-tokens-flutter/`).
+   Iron rule #1 stays literally true; this repo grows Dart tooling in CI
+   (`flutter analyze` on the generated package) and a tag-triggered pub.dev
+   publish workflow (§6).
+2. **sRGB-clamped now.** The generated Dart carries exactly the values the
+   CSS carries — same `clampChroma(..., 'rgb')` pass, same numbers — so the
+   app and the sites match. P3 is a later, explicitly-measured decision.
+3. **Tier 4 scope comes from the Flutter apps on demand**, not from parity
+   with the web list.
 
 ---
 
