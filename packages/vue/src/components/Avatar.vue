@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { cn, pickAvatarFallback, KUN_AVATAR_FALLBACK } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
+import { warnEmptyAvatarPool } from '../utils/warnEmptyAvatarPool'
 import KunImage from './Image.vue'
 import type { KunAvatarProps } from './types'
 
@@ -59,6 +60,17 @@ const userAvatarSrc = computed(() => {
   // pool, stable per name so the same unknown user always gets the same one.
   return props.user?.avatar || pickAvatarFallback(props.user?.name ?? '', config.avatarFallbackPool)
 })
+
+// A watcher, not a one-shot check in setup: `user` is commonly undefined on the
+// first render and filled in when the request resolves, so a setup-time check
+// would miss the very apps that need the warning.
+if (process.env.NODE_ENV !== 'production') {
+  watchEffect(() => {
+    if (!props.user?.avatar && config.avatarFallbackPool.length === 0) {
+      warnEmptyAvatarPool()
+    }
+  })
+}
 </script>
 
 <template>

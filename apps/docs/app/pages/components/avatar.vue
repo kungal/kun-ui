@@ -22,6 +22,17 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Sizes.vue" :source="SizesSrc"><Sizes /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">贴纸兜底</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      没有头像的用户会从 <code>avatarFallbackPool</code> 里按名字哈希取一张，同一个人永远拿到同一张。
+      这个池子由宿主应用提供（KunUI 不内置任何外部地址）——不配置的话，所有人都会渲染同一张内置兜底图。
+      配置方法见
+      <KunLink
+        href="https://github.com/kungal/kun-ui/blob/main/docs/INTEGRATION.md#71-the-avatar-fallback-pool"
+        target="_blank"
+        color="primary"
+        >INTEGRATION.md §7.1</KunLink
+      >。
+    </p>
     <Demo title="StickerFallback.vue" :source="StickerFallbackSrc"><StickerFallback /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">可点击跳转</h2>

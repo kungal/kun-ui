@@ -390,7 +390,7 @@ per-instance prop  >  KunUIConfig provider  >  built-in default
 | `imageComponent` | `Component \| string` | `'img'` | What `KunImage` renders. The Nuxt layer injects `<NuxtImg>`. |
 | `iconComponent` | `Component \| string \| null` | `null` | Fallback renderer for icons not in the registry. The Nuxt layer injects an `@nuxt/icon` wrapper. |
 | `userLinkTemplate` | `string` | `'/user/{id}/info'` | Path `KunAvatar` navigates to; `{id}` is replaced. |
-| `avatarFallbackPool` | `string[]` | `[]` | Images `KunAvatar` picks from for a user with no avatar. Empty → the bundled `KUN_AVATAR_FALLBACK` data URI. See §7.1. |
+| `avatarFallbackPool` | `string[]` | `[]` | Images `KunAvatar` picks from for a user with no avatar. Empty → the bundled `KUN_AVATAR_FALLBACK` data URI for *every* such user (dev warning). See §7.1. |
 
 **In Nuxt** the first four are set for you by `@kungal/ui-nuxt` — you usually
 don't touch those. `installKunUIConfig` **merges** over whatever a previous
@@ -437,13 +437,73 @@ Rules that matter more than they look:
   ~340 KB — the whole set a browser can ever download, once, if the images are
   served `immutable`. Fetch the list on your server (once an hour is plenty),
   never per render and never from the browser.
+- **An empty pool is not an error, it is a uniform site.** The default is `[]`,
+  and `pickAvatarFallback` reads that as "no choice to make": it returns the
+  single bundled `KUN_AVATAR_FALLBACK` data URI for every seed. Nothing throws
+  and nothing 404s — every avatar-less user just renders the same picture. The
+  KunUI docs site shipped exactly that for a release. Since 2.32.1 KunAvatar
+  logs a dev-only warning when it happens; in production it stays silent, so do
+  not rely on noticing it there.
 
 In the NextMoe ecosystem the list comes from
-`https://sticker.kungal.com/api/v1/avatar-pool`, which returns ready
-`_128` CDN URLs:
+`https://sticker.kungal.com/api/v1/avatar-pool`, which returns ready `_128` CDN
+URLs. **The payload is wrapped** — assigning the response itself to
+`avatarFallbackPool` hands KunUI an object where an array belongs, which lands
+you right back on the one repeated image:
+
+```jsonc
+{
+  "code": 0,
+  "data": {
+    "version": "cd41af02cb0050ea",   // changes when the pool changes
+    "variant": "128",
+    "urls": ["https://image.kungal.iloveren.link/c6/97/c697…_128.webp", "…"] // 64 of them
+  }
+}
+```
+
+Two files, and this is the whole recipe for an **SSR** app:
 
 ```ts
-// app/plugins/kun-avatar-pool.ts  (Nuxt)
+// app/utils/avatarPool.ts
+interface KunAvatarPoolResponse {
+  code: number
+  data: { version: string; variant: string; urls: string[] } | null
+}
+
+// Baked snapshot, so a failed or offline fetch degrades to a STALE POOL rather
+// than to one repeated image. Keep it the same length as the live pool: the
+// pick is `hash(name) % pool.length`, so a shorter fallback re-assigns everyone.
+export const AVATAR_POOL_FALLBACK: string[] = [
+  'https://image.kungal.iloveren.link/c6/97/c697…_128.webp',
+  /* … the rest of the pool … */
+]
+
+// One fetch per process, NOT per render. Module scope is safe here precisely
+// because the list is immutable and not user-specific — module-scoped state that
+// IS user-visible is shared across SSR requests and will leak between users.
+let poolPromise: Promise<string[]> | null = null
+
+export const fetchAvatarPool = (): Promise<string[]> =>
+  (poolPromise ??= (async () => {
+    try {
+      const res = await $fetch<KunAvatarPoolResponse>(
+        'https://sticker.kungal.com/api/v1/avatar-pool',
+        { timeout: 5000, retry: 1 }
+      )
+      const urls = res?.data?.urls
+      return Array.isArray(urls) && urls.length > 0 ? urls : AVATAR_POOL_FALLBACK
+    } catch {
+      // Never fail a build or a render over the default avatar.
+      return AVATAR_POOL_FALLBACK
+    }
+  })())
+```
+
+```ts
+// app/plugins/kun-avatar-pool.ts
+import { installKunUIConfig } from '@kungal/ui-vue'
+
 export default defineNuxtPlugin(async (nuxtApp) => {
   const pool = useState<string[]>('kun-avatar-pool', () => AVATAR_POOL_FALLBACK)
   if (import.meta.server) pool.value = await fetchAvatarPool()
@@ -451,10 +511,35 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 })
 ```
 
-`useState` carries the server's list into the payload, so client and server
-pick identically and there is no hydration mismatch. Ship a baked
-`AVATAR_POOL_FALLBACK` constant so a failed fetch degrades to a stale pool
-rather than to one repeated image.
+`useState` is what keeps server and client picking identically: the list is
+serialized into the payload, so hydration sees the same array — and therefore
+the same `hash(name) % pool.length` — as the server did. Refetching on the
+client instead could return a pool of a different length and reshuffle every
+avatar on hydration.
+
+`installKunUIConfig` merges over whatever a previous call installed (§7), so
+this plugin and the `@kungal/ui-nuxt` layer's own config plugin can both run in
+either order.
+
+**A fully prerendered site should bundle the list instead.** A fetched value can
+reach the browser only through the payload, and since the config is installed
+app-wide, that payload rides on every page — on this repo's docs site the
+`/colors` page carried all 64 URLs without rendering a single avatar. Both
+versions were built and measured: fetch + `useState` put `/components/avatar` at
+80797 B raw / 11922 B gzip, a bundled constant at 71494 B / 8567 B. A bundled
+constant costs nothing extra, because server and client already both have it and
+pick identically with no transfer:
+
+```ts
+// app/plugins/kun-avatar-pool.ts  — prerendered site
+export default defineNuxtPlugin((nuxtApp) => {
+  installKunUIConfig(nuxtApp.vueApp, { avatarFallbackPool: KUN_AVATAR_POOL })
+})
+```
+
+That is what `apps/docs` in this repo does (`app/utils/avatarPool.ts`), and it is
+only safe because the URLs are content-addressed: a bundled snapshot of
+`<sha256>_128.webp` cannot rot, so it never needs refreshing for correctness.
 
 ---
 
