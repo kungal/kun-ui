@@ -122,3 +122,33 @@ jobs:
             exit 1
           fi
           echo "Generated files are in sync."
+
+  flutter-tokens:
+    name: Flutter token package
+    # packages/ui-tokens-flutter is Dart written by a Node script. Nothing else
+    # in this repo can compile it: `pnpm build` skips it (no package.json),
+    # `pnpm typecheck` is TypeScript, and the "generated files" job only proves
+    # the emitter is deterministic — not that what it emitted is valid Dart. So
+    # without this job the first thing to meet a Dart compiler would be pub.dev,
+    # after release.yml had already tagged and published.
+    #
+    # `dart format --set-exit-if-changed` is the load-bearing half: CI
+    # regenerates through Node only, so the emitter's output has to already be
+    # format-clean — there is no `dart format` step that could fix it up.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+        working-directory: packages/ui-tokens-flutter
+
+      - run: dart format --output=none --set-exit-if-changed .
+        working-directory: packages/ui-tokens-flutter
+
+      - run: flutter analyze --fatal-infos
+        working-directory: packages/ui-tokens-flutter

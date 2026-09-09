@@ -55,6 +55,12 @@ jobs:
           # so it ships inside this same release commit (no hand-written docs).
           pnpm --filter @kungal/docs gen:changelog || true
 
+          # The pub.dev package's version is locked to the npm lockstep version:
+          # pub refuses a publish whose pubspec version doesn't match the tag
+          # this job pushes, and gen-tokens.mjs refuses to run when the two
+          # diverge. Sync before the bump is committed so both travel together.
+          node scripts/sync-pub-version.mjs
+
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -63,6 +69,19 @@ jobs:
 
           pnpm ci:publish      # build packages + changeset publish (OIDC + provenance)
           git push origin --tags
+
+          # pub.dev's OIDC publishing is triggered by a tag, not by a workflow
+          # call, so the pub leg listens on this train rather than running its
+          # own (publish-pub.yml). changeset only tags the npm packages, hence a
+          # tag of our own — guarded because a re-run must not fail on a tag
+          # that already exists.
+          PUB_VERSION=$(node -p "require('./packages/ui-tokens/package.json').version")
+          if git rev-parse -q --verify "refs/tags/kun_ui_tokens-v${PUB_VERSION}" >/dev/null; then
+            echo "pub tag already exists; skipping"
+          else
+            git tag "kun_ui_tokens-v${PUB_VERSION}"
+            git push origin "kun_ui_tokens-v${PUB_VERSION}"
+          fi
 
           echo "released=true" >> "$GITHUB_OUTPUT"
           echo "version=$(node -p "require('./packages/vue/package.json').version")" >> "$GITHUB_OUTPUT"

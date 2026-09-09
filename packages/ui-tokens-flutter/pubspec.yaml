@@ -1,0 +1,23 @@
+name: kun_ui_tokens
+version: 2.32.1
+description: >-
+  Generated design tokens for the KunUI design system: semantic colors, corner
+  radius, motion curves and elevation, emitted from the same source as the web
+  stylesheet.
+
+repository: https://github.com/kungal/kun-ui
+homepage: https://github.com/kungal/kun-ui
+issue_tracker: https://github.com/kungal/kun-ui/issues
+
+environment:
+  # Color.from — normalised doubles and a const constructor — landed in the
+  # wide-gamut migration, stable in Flutter 3.27. Every generated color uses it.
+  sdk: ^3.6.0
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0

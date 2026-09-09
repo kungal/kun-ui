@@ -1,0 +1,17 @@
+# Publishes packages/ui-tokens-flutter to pub.dev via OIDC when release.yml
+# pushes a kun_ui_tokens-v* tag. The FIRST version cannot go through this
+# workflow — pub.dev requires the initial `dart pub publish` to be run
+# manually by a human before automated publishing can be enabled.
+name: Publish to pub.dev
+
+on:
+  push:
+    tags: ['kun_ui_tokens-v[0-9]+.[0-9]+.[0-9]+*']
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # OIDC token for pub.dev automated publishing
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: packages/ui-tokens-flutter

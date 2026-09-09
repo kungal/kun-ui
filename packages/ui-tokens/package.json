@@ -35,7 +35,8 @@
     "./css": "./src/tokens.css",
     "./tokens.css": "./src/tokens.css",
     "./base.css": "./src/base.css",
-    "./index.css": "./src/index.css"
+    "./index.css": "./src/index.css",
+    "./tokens.dtcg.json": "./src/tokens.dtcg.json"
   },
   "scripts": {
     "build": "echo \"@kungal/ui-tokens ships CSS source, no build step\"",

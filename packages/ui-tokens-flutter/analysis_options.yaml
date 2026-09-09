@@ -1,0 +1,6 @@
+# The analyzer block is written by `flutter pub get` (3.47+ migration) — if the
+# build/** exclude is removed, the next pub get rewrites this file to add it back.
+analyzer:
+  exclude:
+    - build/**
+include: package:flutter_lints/flutter.yaml

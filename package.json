@@ -19,6 +19,7 @@
     "gen:changelog": "pnpm --filter @kungal/docs gen:changelog",
     "gen:upgrade": "pnpm --filter @kungal/docs gen:upgrade",
     "gen:llms": "node scripts/gen-llms.mjs",
+    "sync:pub": "node scripts/sync-pub-version.mjs",
     "changeset": "changeset",
     "ci:version": "changeset version",
     "ci:publish": "pnpm -r --filter \"./packages/*\" build && changeset publish"
