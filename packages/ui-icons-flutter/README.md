@@ -14,7 +14,7 @@ generated.
 
 ```yaml
 dependencies:
-  kun_ui_icons: ^2.35.0
+  kun_ui_icons: ^2.35.1
 ```
 
 The font is bundled by the package; there is nothing to declare in your own
@@ -60,7 +60,7 @@ official icon font ships, not a re-drawing.
 - **Version lockstep.** This package's version always equals the version of
   the four `@kungal/*` npm packages and of `kun_ui_tokens`; they are bumped
   together and published from one commit. This release is
-  `kun_ui_icons 2.35.0`.
+  `kun_ui_icons 2.35.1`.
 
 ## Contributing
 

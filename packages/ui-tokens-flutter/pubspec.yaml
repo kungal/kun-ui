@@ -1,5 +1,5 @@
 name: kun_ui_tokens
-version: 2.35.0
+version: 2.35.1
 description: >-
   Generated design tokens for the KunUI design system: semantic colors, corner
   radius, motion curves and elevation, emitted from the same source as the web
