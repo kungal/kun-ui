@@ -3,6 +3,12 @@
 This document captures the analysis behind the monorepo layout and the
 phased plan to take KunUI from "Nuxt-only" to "Nuxt + plain Vue + React".
 
+**Flutter** is analysed separately in
+[`architecture-flutter.md`](./architecture-flutter.md): the NextMoe apps are
+all Flutter, and the constraint there is harder than the React one — no DOM,
+no CSS, no Tailwind — so the answer is a generated token/icon/motion layer
+plus a hand-written widget layer, not a shared render layer.
+
 ## 1. The honest constraint
 
 There is **no technology that runs `.vue` files inside React.** Vue SFCs,

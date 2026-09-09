@@ -36,6 +36,7 @@ See the Integration guide for the required Tailwind entry stylesheet.
 - [Using KunUI with AI tools](https://github.com/kungal/kun-ui/blob/main/docs/USING-WITH-AI.md): How to point Claude Code / Cursor at KunUI and a paste-able rules block.
 - [Releasing](https://github.com/kungal/kun-ui/blob/main/docs/RELEASING.md): How the four packages are versioned and published (Changesets + npm OIDC).
 - [Architecture](https://github.com/kungal/kun-ui/blob/main/docs/architecture.md): Why the library is split into tokens / core / vue / nuxt.
+- [Architecture: Flutter](https://github.com/kungal/kun-ui/blob/main/docs/architecture-flutter.md): Why Flutter gets generated tokens/icons/motion and a hand-written widget layer, never shared component code.
 
 ## Components
 

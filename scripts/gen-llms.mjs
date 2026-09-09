@@ -184,6 +184,7 @@ const docs = [
   ['Using KunUI with AI tools', 'docs/USING-WITH-AI.md', 'How to point Claude Code / Cursor at KunUI and a paste-able rules block.'],
   ['Releasing', 'docs/RELEASING.md', 'How the four packages are versioned and published (Changesets + npm OIDC).'],
   ['Architecture', 'docs/architecture.md', 'Why the library is split into tokens / core / vue / nuxt.'],
+  ['Architecture: Flutter', 'docs/architecture-flutter.md', 'Why Flutter gets generated tokens/icons/motion and a hand-written widget layer, never shared component code.'],
 ]
 
 const groupBy = (arr, i) => {
