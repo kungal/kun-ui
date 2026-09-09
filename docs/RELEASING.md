@@ -112,12 +112,23 @@ release train but publishes to a different registry.
   commit. Run it by hand with `pnpm sync:pub`. `gen-tokens.mjs` refuses to run
   when the two versions disagree — a diverged pubspec would otherwise fail at
   the registry, after npm had already shipped.
-- **Tag-triggered OIDC publish.** After pushing the npm tags, `release.yml`
+- **Dispatched OIDC publish.** After pushing the npm tags, `release.yml`
   pushes `kun_ui_tokens-v<version>` (guarded, so a re-run skips an existing
-  tag). `publish-pub.yml` listens on that pattern and calls
+  tag) and then **dispatches** `publish-pub.yml` on that tag ref with
+  `gh workflow run`. The dispatch is not belt-and-braces, it is the trigger:
+  the tag is pushed with `GITHUB_TOKEN`, and GitHub never starts workflows
+  for events made with that token — the 2.33.0 tag push started nothing.
+  `workflow_dispatch` is exempt from that suppression. The workflow calls
   `dart-lang/setup-dart/.github/workflows/publish.yml@v1`, which installs
-  Flutter, checks that the pubspec version matches the tag, and publishes with
-  `id-token: write` — no token secret, same model as npm.
+  Flutter and publishes with `id-token: write` — no token secret, same model
+  as npm; pub.dev verifies server-side that the tag's `{{version}}` equals
+  the pubspec version.
+- **If the pub leg didn't run** (npm published but pub.dev is a version
+  behind): re-push the tag with your own credentials —
+  `git push origin :refs/tags/kun_ui_tokens-v<v> && git push origin kun_ui_tokens-v<v>`
+  — or `gh workflow run publish-pub.yml --ref kun_ui_tokens-v<v>`. Both are
+  idempotent from pub.dev's side; a duplicate publish of an existing version
+  is refused, not shipped twice.
 - **The first release must be manual.** pub.dev only offers automated
   publishing for a package that already exists, so version one goes out as
   `dart pub publish` from `packages/ui-tokens-flutter` by a human with an

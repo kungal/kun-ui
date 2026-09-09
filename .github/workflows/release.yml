@@ -70,18 +70,23 @@ jobs:
           pnpm ci:publish      # build packages + changeset publish (OIDC + provenance)
           git push origin --tags
 
-          # pub.dev's OIDC publishing is triggered by a tag, not by a workflow
-          # call, so the pub leg listens on this train rather than running its
-          # own (publish-pub.yml). changeset only tags the npm packages, hence a
-          # tag of our own — guarded because a re-run must not fail on a tag
-          # that already exists.
+          # pub.dev's OIDC publishing is tag-scoped: the token's ref claim must
+          # match the tag pattern configured on pub.dev. changeset only tags
+          # the npm packages, hence a tag of our own — guarded because a re-run
+          # must not fail on a tag that already exists. The dispatch below is
+          # what actually starts publish-pub.yml: this tag push uses
+          # GITHUB_TOKEN, and GitHub never starts workflows for events made
+          # with that token (the 2.33.0 tag push started nothing).
+          # workflow_dispatch is exempt from that suppression.
           PUB_VERSION=$(node -p "require('./packages/ui-tokens/package.json').version")
           if git rev-parse -q --verify "refs/tags/kun_ui_tokens-v${PUB_VERSION}" >/dev/null; then
-            echo "pub tag already exists; skipping"
+            echo "pub tag already exists; skipping tag creation"
           else
             git tag "kun_ui_tokens-v${PUB_VERSION}"
             git push origin "kun_ui_tokens-v${PUB_VERSION}"
           fi
+          gh workflow run publish-pub.yml --ref "kun_ui_tokens-v${PUB_VERSION}" \
+            || echo "Could not dispatch publish-pub — re-push the tag or dispatch it manually (docs/RELEASING.md)."
 
           echo "released=true" >> "$GITHUB_OUTPUT"
           echo "version=$(node -p "require('./packages/vue/package.json').version")" >> "$GITHUB_OUTPUT"

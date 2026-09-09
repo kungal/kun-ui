@@ -1,12 +1,23 @@
-# Publishes packages/ui-tokens-flutter to pub.dev via OIDC when release.yml
-# pushes a kun_ui_tokens-v* tag. The FIRST version cannot go through this
-# workflow — pub.dev requires the initial `dart pub publish` to be run
-# manually by a human before automated publishing can be enabled.
+# Publishes packages/ui-tokens-flutter to pub.dev via OIDC. The FIRST version
+# cannot go through this workflow — pub.dev requires the initial
+# `dart pub publish` to be run manually by a human before automated publishing
+# can be enabled.
+#
+# Two triggers, both earned by the first release. release.yml pushes its tags
+# with GITHUB_TOKEN, and GitHub never starts workflows for events made with
+# that token — so the train dispatches this workflow explicitly
+# (workflow_dispatch is exempt from that suppression), and the tag trigger
+# remains for a human re-pushing the tag as recovery. The tag filter is a
+# plain glob on purpose: the documented `[0-9]+` quantifier syntax matched
+# nothing — a user-credentialed push of kun_ui_tokens-v2.33.0 produced zero
+# runs until the pattern was simplified. Version correctness is enforced by
+# pub.dev server-side ({{version}} in the tag must equal pubspec.yaml).
 name: Publish to pub.dev
 
 on:
   push:
-    tags: ['kun_ui_tokens-v[0-9]+.[0-9]+.[0-9]+*']
+    tags: ['kun_ui_tokens-v*']
+  workflow_dispatch:
 
 jobs:
   publish:
