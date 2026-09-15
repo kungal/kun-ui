@@ -299,8 +299,10 @@ Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
 durations included), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined by
 `kun_ui_messages`), **tier 2 in
 2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`), **tier 3 in 2.35.1**
-(`contracts/` — the acceptance list and the parity checker). Tier 4 has not
-started.
+(`contracts/` — the acceptance list and the parity checker), and **tier 4
+started 2026-09**: `kun_ui` 0.1.0 is on pub.dev from the separate
+`kungal/kun-ui-flutter` repo, claiming `KunButton`, `KunCard`, `KunChip` and
+`KunInput` against this repo's contracts.
 
 | Tier | What | Where it lives | Shared? |
 | --- | --- | --- | --- |
@@ -309,7 +311,7 @@ started.
 | **1** | **Strings.** Add `gen:messages:flutter`; one catalog source, two outputs. A locale's `dateLocale` does not cross — it is a date-fns object, and the Flutter calendar grid resolves from `code` instead. | `@kungal/ui-core/src/locale/*.json` → `kun_ui_messages` on pub.dev | 🟢 generated |
 | **2** | **Motion.** Beziers/durations cross as consts (§3.4, no sampling); ballistic animations share their *physics parameters*, from which web bakes keyframes and Flutter bakes `CatmullRomCurve.precompute` tables. | tokens package | 🟢 generated |
 | **3** | **Component contracts.** `component-meta.json` (70 components) becomes the Flutter port's acceptance list and a parity report. | `contracts/` in this repo | 🟡 spec |
-| **4** | **Component implementations.** Hand-written widgets on `ThemeExtension`; Widgetbook plays the role `apps/docs` plays here. | separate `kun-ui-flutter` repo | 🔴 separate |
+| **4** | **Component implementations.** Hand-written widgets on KunUI's own `KunTheme` `InheritedWidget` — *not* `ThemeExtension`, see the note below; Widgetbook plays the role `apps/docs` plays here. | separate `kun-ui-flutter` repo | 🔴 separate |
 
 Notes that are easy to get wrong:
 
@@ -339,7 +341,8 @@ Notes that are easy to get wrong:
   package is such a regenerated font). (b) The 30th icon,
   `svg-spinners:90-ring-with-bg`, is an *animated* SVG — no static format
   carries it; the Flutter side gets a hand-written rotating-arc widget in
-  tier 4. The honest tier-1 count is 29 crossing, 1 not.
+  tier 4 (shipped as `KunSpinner` in `kun_ui` 0.1.0). The honest tier-1 count
+  is 29 crossing, 1 not.
 - **Tier 1's strings are methods, not a map.** TypeScript proves a message
   *path* is spelled right (`KunMessagePath` is a template-literal union) but
   cannot prove `t('datePicker.monthCell', { year })` supplied every
@@ -353,11 +356,13 @@ Notes that are easy to get wrong:
   modern independent design systems on Flutter (forui's
   `FTheme`/`FThemeData`, shadcn_ui's `ShadTheme`) do **not** hang off
   Material's `ThemeData`; KunUI is its own design language, not a
-  Material skin, so the eventual `kun-ui-flutter` will likely want its
-  own `KunTheme` InheritedWidget. That is tier 4's decision — the token
-  package must not foreclose it either way. (forui also models input
-  modality — touch/pointer — and breakpoints as theme dimensions; worth
-  stealing when tier 4 starts.)
+  Material skin. Tier 4 made that call the same way: `kun_ui` 0.1.0 ships
+  `KunTheme`/`KunThemeData`, a plain `InheritedWidget`, and its iron rule 4
+  forbids Material inside library code outright. The token package stayed
+  agnostic, which is what let tier 4 decide freely. (forui also models input
+  modality — touch/pointer — and breakpoints as theme dimensions; breakpoints
+  were worth stealing and `KunThemeData` carries them, input modality was
+  not — see that repo's `docs/architecture.md`.)
 - **Tier 2 shipped parameters, not spline tables.** §3.4 offered
   `CatmullRomCurve.precompute` for cross-platform parity of the sampled
   curves; implementation rejected it, because the one ballistic animation in
