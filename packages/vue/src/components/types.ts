@@ -530,7 +530,7 @@ export interface KunProgressProps {
   showLabel?: boolean
   indeterminate?: boolean
   className?: string
-  /** Accessible name for the progressbar (e.g. "上传进度"). */
+  /** Accessible name for the progressbar (e.g. "Upload progress"). */
   ariaLabel?: string
 }
 
@@ -560,6 +560,8 @@ export interface KunInfoProps {
 // ── Loading ────────────────────────────────────────────────────────────
 export interface KunLoadingProps {
   loading?: boolean
+  /** Text under the spinner / mascot.
+   *  @default locale loading.description */
   description?: string
   /** Image shown while loading. Defaults to a bundled mascot (base64 data
    *  URI — no network request, no consumer asset needed). Pass any URL or
@@ -753,6 +755,8 @@ export interface KunPinInputProps {
   rounded?: KunUIRounded
   /** Native form field name (emits a hidden input mirroring the joined value). */
   name?: string
+  /** Accessible name for the group; each cell appends its position to it.
+   *  @default locale pinInput.label */
   ariaLabel?: string
 }
 
@@ -803,6 +807,8 @@ export interface KunAutocompleteProps<
    * (remote/async suggestions). Default false (client-side filter).
    */
   manualFilter?: boolean
+  /** Shown when the filter matches nothing.
+   *  @default locale autocomplete.noResult */
   noResultText?: string
   /**
    * Async data source: show a loading spinner in the dropdown (instead of
@@ -810,7 +816,8 @@ export interface KunAutocompleteProps<
    * your fetch — set true when the request starts, false when the results land.
    */
   loading?: boolean
-  /** Text under the loading spinner. Default '加载中…'. */
+  /** Text under the loading spinner.
+   *  @default locale autocomplete.loading */
   loadingText?: string
   /**
    * Debounce the `@search` emit by N ms; the input text still updates instantly
@@ -1075,8 +1082,11 @@ export interface KunSelectProps<
   searchable?: boolean
   /** Show an X to reset the selection (single) — chips already remove per-item. */
   clearable?: boolean
+  /** Placeholder in the in-panel search box.
+   *  @default locale select.searchPlaceholder */
   searchPlaceholder?: string
-  /** Shown when the filter matches nothing. */
+  /** Shown when the filter matches nothing.
+   *  @default locale select.noResult */
   noResultText?: string
   /** Native form field name — emits hidden input(s) so the value is collected
    *  by the surrounding <form> / FormData. */
@@ -1117,7 +1127,8 @@ export interface KunSelectProps<
    *  while a remote `@search` request is in flight. Drive it from your fetch —
    *  true when the request starts, false when the results land. */
   loading?: boolean
-  /** Text under the loading spinner. @default '加载中…' */
+  /** Text under the loading spinner.
+   *  @default locale select.loading */
   loadingText?: string
   /** Debounce the `@search` emit by N ms; the filter field itself still updates
    *  instantly. 0 (default) emits on every keystroke — set e.g. 300 for a remote
@@ -1191,7 +1202,8 @@ export interface KunCopyProps {
   size?: KunUISize
   rounded?: KunUIRounded
   className?: string
-  /** Label shown briefly after a successful copy. Default '已复制'. */
+  /** Label shown briefly after a successful copy.
+   *  @default locale copy.copied */
   copiedText?: string
 }
 
@@ -1229,7 +1241,8 @@ export interface KunReactionProps {
   disabled?: boolean
   /** Disable the pop / burst / count-roll animations (also off under reduced-motion). */
   disableAnimation?: boolean
-  /** Accessible label base; the count is appended for the full name. Default `点赞`. */
+  /** Accessible label base; the count is appended for the full name.
+   *  @default locale reaction.label */
   label?: string
 }
 
@@ -1290,6 +1303,8 @@ export interface KunShatterProps {
 
 // ── Null (empty state) ─────────────────────────────────────────────────
 export interface KunNullProps {
+  /** The empty-state line.
+   *  @default locale null.description */
   description?: string
   /** Show the empty-state image. Default true. */
   isShowSticker?: boolean
@@ -1415,7 +1430,7 @@ export interface KunDatePickerProps {
   precision?: KunDatePickerPrecision
   label?: string
   /** Trigger text when nothing is selected. Defaults follow `precision`.
-   *  @default '请选择日期' | '请选择月份' | '请选择年份' */
+   *  @default locale datePicker.placeholderDay | …Month | …Year */
   placeholder?: string
   error?: string
   disabled?: boolean
@@ -1498,7 +1513,8 @@ export interface KunFileInputProps {
   error?: string
   /** Blocks the picker and dims the trigger. */
   disabled?: boolean
-  /** Label on the trigger button. */
+  /** Label on the trigger button.
+   *  @default locale fileInput.trigger */
   triggerText?: string
   /** Icon name on the trigger button. Must be one of KunUI's bundled icons —
    *  an unbundled name renders nothing. */
@@ -1773,6 +1789,8 @@ export interface KunCarouselProps {
    * Default `true`; auto-disabled when there are too few slides to loop cleanly.
    */
   loop?: boolean
+  /** Accessible name for the carousel region.
+   *  @default locale carousel.label */
   ariaLabel?: string
   className?: string
 }
@@ -1816,10 +1834,15 @@ export interface KunCommandPaletteProps<
   items?: readonly T[] | readonly KunCommandGroup<T>[]
   /** Async search in flight → a loading state instead of the no-result text. */
   loading?: boolean
+  /** Placeholder in the search input; also the dialog's accessible name when
+   *  `ariaLabel` is unset.
+   *  @default locale commandPalette.placeholder */
   placeholder?: string
-  /** Shown when `query` is non-empty but there are no results. */
+  /** Shown when `query` is non-empty but there are no results.
+   *  @default locale commandPalette.noResult */
   noResultText?: string
-  /** Shown when `query` is empty (a hint / "recent"). */
+  /** Shown when `query` is empty (a hint / "recent").
+   *  @default locale commandPalette.empty */
   emptyText?: string
   /** Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string
    *  sets a custom key (still with meta/ctrl); `false` disables it. */

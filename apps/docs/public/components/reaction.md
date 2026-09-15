@@ -206,7 +206,7 @@ const liked = ref(false)
 | `disableAnimation` | `boolean` | `false` | Disable the pop / burst / count-roll animations (also off under reduced-motion). |
 | `disabled` | `boolean` | `false` |  |
 | `icon` | `string` | `"lucide:heart"` | Icon name (default a heart); filled + coloured when active. Override the whole glyph (emoji / image / per-state) with the `#icon` slot instead. |
-| `label` | `string` | `"点赞"` | Accessible label base; the count is appended for the full name. Default `点赞`. |
+| `label` | `string` | `locale reaction.label` | Accessible label base; the count is appended for the full name. |
 | `modelValue` | `boolean` | `false` |  |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` |  |
 | `toggle` | `boolean` | `true` | `true` (default) = a like/press TOGGLE: pressed state (`aria-pressed`), icon fill + colour, and a celebratory burst. `false` = a one-shot ACTION (share / more …) in the same compact skin — no self-toggle, no burst, just a tactile pop; handle the click with a native `@click`. Lets a whole reactions row use one component instead of mixing in a heavier icon button. In BOTH modes the filled/coloured skin follows the `active` model. So an action-mode reaction can be a controlled "menu button": wrap it as a `KunPopover` trigger, bind `:model-value` to your own state (e.g. 收藏 = "in ≥1 list"), and the click opens the picker instead of self-toggling. |

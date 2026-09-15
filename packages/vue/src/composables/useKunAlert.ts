@@ -13,7 +13,9 @@ export interface KunAlertOptions {
   title?: string
   message?: string
   showCancel?: boolean
-  // Confirm/cancel button labels (default 确定 / 取消).
+  // Confirm/cancel button labels. Empty falls back to the active KunUI
+  // locale (`alert.confirm` / `alert.cancel`), resolved by KunAlertProvider —
+  // this store is module-level and has no component to inject from.
   confirmText?: string
   cancelText?: string
   // Intent of the confirm action — drives the confirm button color.
@@ -32,8 +34,8 @@ const state = ref<KunAlertState>({
   title: '',
   message: '',
   showCancel: true,
-  confirmText: '确定',
-  cancelText: '取消',
+  confirmText: '',
+  cancelText: '',
   type: 'info',
   confirmColor: undefined,
 })
@@ -66,8 +68,8 @@ export const useKunAlert = (opts: KunAlertOptions = {}): Promise<boolean> => {
       title: opts.title ?? '',
       message: opts.message ?? '',
       showCancel: opts.showCancel ?? true,
-      confirmText: opts.confirmText ?? '确定',
-      cancelText: opts.cancelText ?? '取消',
+      confirmText: opts.confirmText ?? '',
+      cancelText: opts.cancelText ?? '',
       type: opts.type ?? 'info',
       confirmColor: opts.confirmColor,
     }

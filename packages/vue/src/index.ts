@@ -154,6 +154,21 @@ export {
   KUN_UI_DEFAULT_CONFIG,
   type KunUIConfig,
 } from './config/useKunUIConfig'
+// Locale — KunUI's own strings. `zh-CN` is the built-in default; every other
+// locale is its own entry point (`@kungal/ui-vue/locale/en`) so only the one
+// you import is bundled.
+export {
+  useKunLocale,
+  translateKunMessage,
+  type KunTranslate,
+} from './locale/useKunLocale'
+export {
+  defineKunLocale,
+  type KunLocale,
+  type KunMessages,
+  type KunMessagePath,
+} from './locale/types'
+export { default as kunLocaleZhCN } from './locale/zh-CN'
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
@@ -161,7 +176,10 @@ export {
   useKunPointerMenu,
   type KunPointerMenuOptions,
 } from './composables/useKunPointerMenu'
-export { useKunCopy } from './composables/useKunCopy'
+export {
+  useKunCopy,
+  type KunCopyMessages,
+} from './composables/useKunCopy'
 export { useSpoilerContent } from './composables/useSpoilerContent'
 export { useContentLightbox } from './composables/useContentLightbox'
 export { useContentBlurUp } from './composables/useContentBlurUp'

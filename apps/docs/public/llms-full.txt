@@ -415,6 +415,7 @@ per-instance prop  >  KunUIConfig provider  >  built-in default
 | `iconComponent` | `Component \| string \| null` | `null` | Fallback renderer for icons not in the registry. The Nuxt layer injects an `@nuxt/icon` wrapper. |
 | `userLinkTemplate` | `string` | `'/user/{id}/info'` | Path `KunAvatar` navigates to; `{id}` is replaced. |
 | `avatarFallbackPool` | `string[]` | `[]` | Images `KunAvatar` picks from for a user with no avatar. Empty → the bundled `KUN_AVATAR_FALLBACK` data URI for *every* such user (dev warning). See §7.1. |
+| `locale` | `KunLocale` | `zh-CN` | The strings KunUI renders on its own — accessible names for icon-only controls, empty/loading states, built-in button labels. See §7.2. |
 
 **In Nuxt** the first four are set for you by `@kungal/ui-nuxt` — you usually
 don't touch those. `installKunUIConfig` **merges** over whatever a previous
@@ -567,6 +568,61 @@ only safe because the URLs are content-addressed: a bundled snapshot of
 
 ---
 
+### 7.2 Locale
+
+Every string KunUI renders by itself lives in one `KunLocale` object. The
+built-in default is **zh-CN**, so an app that never touches this behaves exactly
+as it always has.
+
+```ts
+import { installKunUIConfig } from '@kungal/ui-vue'
+import en from '@kungal/ui-vue/locale/en'
+
+installKunUIConfig(app, { locale: en })
+```
+
+Only the locale you import is bundled — `zh-CN` ships inside the main entry,
+every other locale is its own entry point.
+
+A per-instance prop still wins, so a single component can override one string
+without a custom locale:
+
+```vue
+<KunSelect :no-result-text="'nothing found'" />
+```
+
+Write your own by filling in `KunMessages` — `defineKunLocale` only gives you
+the type-check, so a missing key is a compile error rather than a `{key}`
+leaking into an aria-label:
+
+```ts
+import { defineKunLocale } from '@kungal/ui-vue'
+
+export default defineKunLocale({
+  name: 'Nederlands',
+  code: 'nl',
+  messages: { modal: { close: 'Sluiten' }, /* …every other namespace… */ },
+})
+```
+
+Values interpolate with `{name}` placeholders, and the whole string is one
+template on purpose: a placeholder's position moves between languages
+(`Decrease {field}` vs `{field} verringern`), so it can never be assembled from
+fragments at the call site.
+
+**SSR.** The locale rides on the config, which is provided per app — and so
+per request. It is deliberately *not* a module-level singleton: one would leak
+the language of whichever request rendered last into another request's HTML.
+Like the rest of `KunUIConfig` it is read once where it is used, so switching
+language at runtime means re-providing the config and re-keying the subtree.
+
+**Two escape hatches for code that runs outside `setup()`.** `useKunAlert` is a
+module-level store with no component to inject from, so leave `confirmText` /
+`cancelText` unset and `KunAlertProvider` resolves them against the active
+locale. `useKunCopy` runs from an event handler, so it takes its two toast
+strings as an argument — `KunCopy` passes the resolved ones; pass your own if
+you call it directly and are not on zh-CN.
+
 ## 8. Toasts, confirm dialogs & mascot
 
 These are **store + provider** systems: mount the provider once, trigger from
@@ -697,6 +753,7 @@ Auto-imported by the Nuxt layer; named exports of `@kungal/ui-vue` otherwise.
 | `useKunLoliInfo` / `useKunLoliState` | Trigger / read the mascot popup |
 | `useKunUIConfig` | Read the resolved `KunUIConfig` |
 | `provideKunUIConfig` / `installKunUIConfig` | Set `KunUIConfig` |
+| `useKunLocale` | Resolve KunUI's own strings — `{ locale, t }` (§7.2) |
 | `useKunCopy` | Copy-to-clipboard helper |
 | `useKunUniqueId` | SSR-safe unique id generation |
 | `useResolvedRounded` | Resolve a component's effective radius |

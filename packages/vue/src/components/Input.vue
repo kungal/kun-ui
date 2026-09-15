@@ -9,9 +9,12 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunInputProps } from './types'
 
 defineOptions({ name: 'KunInput', inheritAttrs: false })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunInputProps>(), {
   type: 'text',
@@ -197,7 +200,7 @@ defineExpose({
           type="button"
           tabindex="-1"
           class="text-default-400 hover:text-default-600 flex items-center"
-          aria-label="清除"
+          :aria-label="t('input.clear')"
           @click="clear"
         >
           <KunIcon name="lucide:circle-x" class="size-4" />
@@ -207,7 +210,7 @@ defineExpose({
           type="button"
           tabindex="-1"
           class="text-default-400 hover:text-default-600 flex items-center"
-          :aria-label="isRevealed ? '隐藏密码' : '显示密码'"
+          :aria-label="isRevealed ? t('input.hide') : t('input.reveal')"
           :aria-pressed="isRevealed"
           @click="isRevealed = !isRevealed"
         >

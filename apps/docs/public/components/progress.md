@@ -97,7 +97,7 @@ const progress = ref(40)
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `""` | Accessible name for the progressbar (e.g. "上传进度"). |
+| `ariaLabel` | `string` | `""` | Accessible name for the progressbar (e.g. "Upload progress"). |
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"primary"` |  |
 | `indeterminate` | `boolean` | `false` |  |

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import KunImageNative from './ImageNative.vue'
 import { KUN_NULL_IMAGE } from '../assets/nullImage'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunNullProps } from './types'
 
 // Empty-state placeholder. The default image is bundled (base64 data URI) —
@@ -9,8 +10,9 @@ import type { KunNullProps } from './types'
 // the image via `src`, or hide it entirely with `isShowSticker={false}`.
 defineOptions({ name: 'KunNull' })
 
+const { t } = useKunLocale()
+
 withDefaults(defineProps<KunNullProps>(), {
-  description: '莲说这里什么都没有',
   isShowSticker: true,
   src: KUN_NULL_IMAGE,
 })
@@ -24,6 +26,6 @@ withDefaults(defineProps<KunNullProps>(), {
       class-name="w-72 h-auto rounded-kun-lg"
       alt="empty"
     />
-    <span class="text-default-500">{{ description }}</span>
+    <span class="text-default-500">{{ description ?? t('null.description') }}</span>
   </div>
 </template>

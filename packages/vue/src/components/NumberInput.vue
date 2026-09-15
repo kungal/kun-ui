@@ -9,9 +9,12 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunNumberInputProps } from './types'
 
 defineOptions({ name: 'KunNumberInput', inheritAttrs: false })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunNumberInputProps>(), {
   min: Number.NEGATIVE_INFINITY,
@@ -215,7 +218,7 @@ defineExpose({
             sz.btn
           )
         "
-        aria-label="减少"
+        :aria-label="t('numberInput.decrement')"
         @click="stepBy(-1)"
       >
         <KunIcon name="lucide:minus" class="size-4" />
@@ -262,7 +265,7 @@ defineExpose({
             sz.btn
           )
         "
-        aria-label="增加"
+        :aria-label="t('numberInput.increment')"
         @click="stepBy(1)"
       >
         <KunIcon name="lucide:plus" class="size-4" />

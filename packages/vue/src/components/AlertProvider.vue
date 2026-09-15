@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunUIColor } from '@kungal/ui-core'
 import { useKunAlertState } from '../composables/useKunAlert'
 import KunButton from './Button.vue'
@@ -9,6 +10,8 @@ import KunModal from './Modal.vue'
 // your app root: <KunAlertProvider />. Replaces the original's imperative
 // render() + stolen Nuxt appContext.
 defineOptions({ name: 'KunAlertProvider' })
+
+const { t } = useKunLocale()
 
 const { state, handleConfirm, handleCancel } = useKunAlertState()
 
@@ -26,7 +29,7 @@ const confirmColor = computed<KunUIColor>(() => {
   <KunModal
     :model-value="state.show"
     role="alertdialog"
-    :aria-label="state.title || '确认'"
+    :aria-label="state.title || t('alert.title')"
     class-name="z-kun-alert fixed"
     @update:model-value="(value: boolean) => !value && handleCancel()"
   >
@@ -43,10 +46,10 @@ const confirmColor = computed<KunUIColor>(() => {
           color="default"
           @click="handleCancel"
         >
-          {{ state.cancelText }}
+          {{ state.cancelText || t('alert.cancel') }}
         </KunButton>
         <KunButton :color="confirmColor" @click="handleConfirm">
-          {{ state.confirmText }}
+          {{ state.confirmText || t('alert.confirm') }}
         </KunButton>
       </div>
     </div>

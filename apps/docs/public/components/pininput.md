@@ -143,7 +143,7 @@ const pin = ref('12')
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `"验证码"` |  |
+| `ariaLabel` | `string` | `locale pinInput.label` | Accessible name for the group; each cell appends its position to it. |
 | `autofocus` | `boolean` | `false` | Focus the first cell on mount. Focus is moved with `preventScroll` (see KunInput), so a code field below the fold never yanks the page to itself. |
 | `color` | `KunUIColor` | `"primary"` |  |
 | `disabled` | `boolean` | `false` |  |

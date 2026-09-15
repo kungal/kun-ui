@@ -4,6 +4,7 @@ import { cn, type KunUISize } from '@kungal/ui-core'
 import KunImageNative from './ImageNative.vue'
 import KunIcon from './Icon.vue'
 import { KUN_LOADING_IMAGE } from '../assets/loadingImage'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunLoadingProps } from './types'
 
 // Three modes:
@@ -15,9 +16,10 @@ import type { KunLoadingProps } from './types'
 // Announced to assistive tech via role="status" + aria-busy.
 defineOptions({ name: 'KunLoading' })
 
+const { t } = useKunLocale()
+
 const props = withDefaults(defineProps<KunLoadingProps>(), {
   loading: false,
-  description: '正在摸鱼中...咕咕咕',
   src: KUN_LOADING_IMAGE,
   spinner: false,
   size: 'md',
@@ -70,7 +72,7 @@ const spinnerSize: Record<KunUISize, string> = {
               class-name="w-80 h-auto rounded-kun-md"
             />
             <span :class="spinner ? 'text-default-600 text-sm' : 'info text-xl'">
-              {{ description }}
+              {{ description ?? t('loading.description') }}
             </span>
           </div>
         </div>
@@ -97,7 +99,7 @@ const spinnerSize: Record<KunUISize, string> = {
         :src="src"
         class-name="w-80 h-auto rounded-kun-md"
       />
-      <span :class="spinner ? 'text-default-600 text-sm' : 'info'">{{ description }}</span>
+      <span :class="spinner ? 'text-default-600 text-sm' : 'info'">{{ description ?? t('loading.description') }}</span>
     </div>
   </div>
 </template>

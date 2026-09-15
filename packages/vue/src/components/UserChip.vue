@@ -3,12 +3,15 @@ import { computed } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import KunAvatar from './Avatar.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunUserChipProps } from './types'
 
 // Avatar + name (+ optional description). When the user has an id and
 // isNavigation (default), the WHOLE chip is one real <a>/link to the profile
 // (crawlable, name as anchor text); the inner avatar then isn't a nested link.
 defineOptions({ name: 'KunUserChip' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunUserChipProps>(), {
   size: 'md',
@@ -49,7 +52,7 @@ const linkProps = computed(() => {
     />
 
     <div class="flex min-w-0 flex-col text-sm">
-      <span class="truncate">{{ user?.name || '未知用户' }}</span>
+      <span class="truncate">{{ user?.name || t('avatar.unknownUser') }}</span>
       <span v-if="description" class="text-default-500 truncate">{{ description }}</span>
     </div>
   </component>

@@ -7,6 +7,7 @@ import { checkImageValid, resizeImage } from '../utils/handleFileChange'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import KunModal from './Modal.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunUploadProps } from './types'
 import 'vue-advanced-cropper/dist/style.css'
 import 'vue-advanced-cropper/dist/theme.compact.css'
@@ -14,6 +15,8 @@ import 'vue-advanced-cropper/dist/theme.compact.css'
 // Image upload with drag-drop + crop (vue-advanced-cropper) + canvas resize.
 // Emits the final webp Blob. cn/rounded from @kungal/ui-core; no Nuxt coupling.
 defineOptions({ name: 'KunUpload' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunUploadProps>(), {
   initialImage: '',
@@ -128,7 +131,7 @@ const handleApplyCrop = () => {
       <img
         v-if="selectedFileUrl || initialImage"
         :src="selectedFileUrl || initialImage"
-        alt="上传图片"
+        :alt="t('upload.imageAlt')"
         :class="cn('h-full w-full object-cover', roundedClass)"
       />
 
@@ -148,7 +151,7 @@ const handleApplyCrop = () => {
     >
       <div class="max-w-xl">
         <div class="mb-4">
-          <h3 class="text-lg font-semibold">裁剪图片</h3>
+          <h3 class="text-lg font-semibold">{{ t('upload.cropTitle') }}</h3>
         </div>
 
         <Cropper
@@ -160,10 +163,10 @@ const handleApplyCrop = () => {
 
         <div class="mt-4 flex justify-end space-x-2">
           <KunButton variant="light" color="danger" @click="showCropper = false">
-            取消
+            {{ t('upload.cancel') }}
           </KunButton>
           <KunButton variant="solid" color="primary" @click="handleApplyCrop">
-            确定
+            {{ t('upload.confirm') }}
           </KunButton>
         </div>
       </div>

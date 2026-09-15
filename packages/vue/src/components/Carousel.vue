@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import { cn } from '@kungal/ui-core'
 import { KUN_CAROUSEL } from '../composables/carouselContext'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunCarouselProps } from './types'
 
 // Horizontal slider on native CSS scroll-snap (touch swipe + momentum + SSR for
@@ -19,6 +20,8 @@ import type { KunCarouselProps } from './types'
 // the DOM, so Vue never fights it.
 defineOptions({ name: 'KunCarousel' })
 
+const { t } = useKunLocale()
+
 const props = withDefaults(defineProps<KunCarouselProps>(), {
   slidesPerView: 1,
   gap: '1rem',
@@ -26,7 +29,6 @@ const props = withDefaults(defineProps<KunCarouselProps>(), {
   showIndicators: true,
   autoplay: 0,
   loop: true,
-  ariaLabel: '轮播',
   className: '',
 })
 
@@ -293,7 +295,7 @@ onBeforeUnmount(() => {
     :class="cn('group/carousel relative', className)"
     role="region"
     aria-roledescription="carousel"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel ?? t('carousel.label')"
     @pointerenter="stopAutoplay"
     @pointerleave="startAutoplay"
     @focusin="stopAutoplay"
@@ -323,7 +325,7 @@ onBeforeUnmount(() => {
     <template v-if="arrowsVisible">
       <button
         type="button"
-        aria-label="上一张"
+        :aria-label="t('carousel.prev')"
         :disabled="!loopActive && activeDot <= 0"
         class="border-kun bg-background/80 text-foreground absolute top-1/2 left-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="prev"
@@ -332,7 +334,7 @@ onBeforeUnmount(() => {
       </button>
       <button
         type="button"
-        aria-label="下一张"
+        :aria-label="t('carousel.next')"
         :disabled="!loopActive && activeDot >= maxIndex"
         class="border-kun bg-background/80 text-foreground absolute top-1/2 right-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="next"
@@ -346,13 +348,13 @@ onBeforeUnmount(() => {
       v-if="dotsVisible"
       class="mt-3 flex items-center justify-center gap-2"
       role="group"
-      aria-label="轮播导航"
+      :aria-label="t('carousel.nav')"
     >
       <button
         v-for="i in dotCount"
         :key="i"
         type="button"
-        :aria-label="`跳到第 ${i} 张`"
+        :aria-label="t('carousel.goto', { index: i })"
         :aria-current="activeDot === i - 1 ? 'true' : undefined"
         :class="
           cn(

@@ -4,6 +4,7 @@ import { cn, pickAvatarFallback, KUN_AVATAR_FALLBACK } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import { warnEmptyAvatarPool } from '../utils/warnEmptyAvatarPool'
 import KunImage from './Image.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunAvatarProps } from './types'
 
 // User avatar. Falls back to a deterministic pick from
@@ -11,6 +12,8 @@ import type { KunAvatarProps } from './types'
 // config.navigate + config.userLinkTemplate on click (was a hardcoded
 // `navigateTo('/user/:id/info')`).
 defineOptions({ name: 'KunAvatar' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunAvatarProps>(), {
   size: 'md',
@@ -90,7 +93,7 @@ if (process.env.NODE_ENV !== 'production') {
       :class-name="cn('inline-block rounded-full', sizeClasses, props.imageClassName)"
       :src="userAvatarSrc"
       :fallback-src="KUN_AVATAR_FALLBACK"
-      :alt="user?.name ?? '未知用户'"
+      :alt="user?.name ?? t('avatar.unknownUser')"
     />
   </component>
 </template>

@@ -1,4 +1,5 @@
 import { nextTick, watch, type Ref } from 'vue'
+import { useKunLocale } from '../locale/useKunLocale'
 
 // Click/keyboard-to-reveal spoilers (+ code-block copy buttons) for a v-html
 // prose container. DOM-level and framework-neutral — operates on the rendered
@@ -375,7 +376,7 @@ const makeIcon = (svg: string): Node =>
     true
   )
 
-const injectCopyButtons = (container: HTMLElement) => {
+const injectCopyButtons = (container: HTMLElement, copyLabel: string) => {
   container.querySelectorAll('pre').forEach((pre) => {
     if (pre.dataset.kunCopyReady) return
     // leave pipeline-emitted copy buttons (forum/moyu/wiki) untouched
@@ -387,7 +388,7 @@ const injectCopyButtons = (container: HTMLElement) => {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'kun-prose-copy'
-    btn.setAttribute('aria-label', '复制代码')
+    btn.setAttribute('aria-label', copyLabel)
     btn.appendChild(makeIcon(COPY_ICON))
     Object.assign(btn.style, {
       position: 'absolute',
@@ -412,6 +413,7 @@ const injectCopyButtons = (container: HTMLElement) => {
 }
 
 export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
+  const { t } = useKunLocale()
   const localFields = new Set<HTMLElement>()
 
   const tagSpoiler = (el: HTMLElement) => {
@@ -421,7 +423,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
       el.setAttribute('tabindex', '0')
       el.setAttribute('aria-expanded', 'false')
       if (!el.hasAttribute('aria-label')) {
-        el.setAttribute('aria-label', '剧透内容,点击或按回车显示')
+        el.setAttribute('aria-label', t('spoiler.reveal'))
       }
     }
     createField(el)
@@ -470,7 +472,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
         }
       })
       .catch((err) => {
-        console.error('复制失败:', err)
+        console.error('[KunUI] copy failed:', err)
       })
   }
 
@@ -508,7 +510,7 @@ export const useSpoilerContent = (containerRef: Ref<HTMLElement | null>) => {
     container
       .querySelectorAll<HTMLElement>('.kun-spoiler.kun-spoiler-hidden')
       .forEach(tagSpoiler)
-    injectCopyButtons(container)
+    injectCopyButtons(container, t('spoiler.copyCode'))
     container.addEventListener('click', handleContainerClick)
     container.addEventListener('keydown', handleContainerKeydown)
   }

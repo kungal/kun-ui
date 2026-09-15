@@ -12,9 +12,12 @@ import { cn, kunFocusRingClasses } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunPaginationProps } from './types'
 
 defineOptions({ name: 'KunPagination' })
+
+const { t } = useKunLocale()
 
 const props = defineProps<KunPaginationProps>()
 
@@ -247,7 +250,7 @@ onKeyStroke('ArrowRight', (e) => {
 
 <template>
   <nav
-    aria-label="分页导航"
+    :aria-label="t('pagination.nav')"
     class="flex w-full flex-wrap items-center justify-between gap-4"
   >
     <div class="flex flex-wrap items-center gap-2">
@@ -256,7 +259,7 @@ onKeyStroke('ArrowRight', (e) => {
           :is-icon-only="true"
           variant="light"
           size="sm"
-          aria-label="上一页"
+          :aria-label="t('pagination.prev')"
           :href="pageHref && currentPage > 1 ? pageHref(currentPage - 1) : undefined"
           :disabled="isLoading || currentPage <= 1"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage <= 1 }"
@@ -295,7 +298,7 @@ onKeyStroke('ArrowRight', (e) => {
                 size="sm"
                 :disabled="isLoading"
                 :href="pageHref ? pageHref(it.page) : undefined"
-                :aria-label="`第 ${it.page} 页`"
+                :aria-label="t('pagination.page', { page: it.page })"
                 :aria-current="currentPage === it.page ? 'page' : undefined"
                 :class-name="pageButtonClass(it.page)"
                 @click="handlePageChange(it.page)"
@@ -311,7 +314,7 @@ onKeyStroke('ArrowRight', (e) => {
           :is-icon-only="true"
           variant="light"
           size="sm"
-          aria-label="下一页"
+          :aria-label="t('pagination.next')"
           :href="pageHref && currentPage < totalPage ? pageHref(currentPage + 1) : undefined"
           :disabled="isLoading || currentPage >= totalPage"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage >= totalPage }"
@@ -322,13 +325,13 @@ onKeyStroke('ArrowRight', (e) => {
       </div>
 
       <div class="text-default-500 hidden items-center gap-2 text-sm sm:flex">
-        您可以使用 <KunIcon name="lucide:arrow-left" />
-        <KunIcon name="lucide:arrow-right" /> 来进行快速翻页
+        {{ t('pagination.hintBefore') }} <KunIcon name="lucide:arrow-left" />
+        <KunIcon name="lucide:arrow-right" /> {{ t('pagination.hintAfter') }}
       </div>
     </div>
 
     <div class="flex items-center gap-2">
-      <label :for="kunUniqueId" class="text-sm">跳转到页数</label>
+      <label :for="kunUniqueId" class="text-sm">{{ t('pagination.jumpLabel') }}</label>
       <input
         :id="kunUniqueId"
         v-model="jumpToPage"
@@ -349,7 +352,7 @@ onKeyStroke('ArrowRight', (e) => {
         @keyup.enter="handleJumpToPage"
       />
       <KunButton size="sm" :disabled="isLoading" @click="handleJumpToPage">
-        跳转
+        {{ t('pagination.jump') }}
       </KunButton>
     </div>
   </nav>

@@ -11,9 +11,12 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunTagInputInvalidReason, KunTagInputProps } from './types'
 
 defineOptions({ name: 'KunTagInput' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunTagInputProps>(), {
   label: '',
@@ -362,7 +365,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
         :ref="(el) => setChipRef(el as Element | null, index)"
         :class="chipClasses"
         :tabindex="disabled || readonly ? -1 : 0"
-        :aria-label="`标签 ${tag}`"
+        :aria-label="t('tagInput.tag', { tag })"
         @keydown="onChipKeydown($event, index)"
         @click.stop
       >
@@ -372,7 +375,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
             v-if="!readonly && !disabled"
             type="button"
             tabindex="-1"
-            :aria-label="`移除标签 ${tag}`"
+            :aria-label="t('tagInput.removeTag', { tag })"
             class="hover:text-danger -mr-0.5 ml-1 inline-flex cursor-pointer rounded-full p-0.5 transition-colors focus:outline-none"
             @click.stop="removeAt(index)"
           >

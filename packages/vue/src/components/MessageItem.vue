@@ -2,11 +2,14 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { cn } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunMessageType } from '../composables/useKunMessage'
 
 // Internal toast item rendered by <KunMessageProvider>. Decoupled: explicit
 // imports (vue / @kungal/ui-core / sibling KunIcon) instead of Nuxt auto-imports.
 defineOptions({ name: 'KunMessageItem' })
+
+const { t } = useKunLocale()
 
 const props = defineProps<{
   id: string
@@ -213,7 +216,7 @@ const typeStyles = computed(() => {
     <button
       type="button"
       data-kun-toast-close
-      aria-label="关闭"
+      :aria-label="t('message.close')"
       class="ml-2 flex size-6 shrink-0 items-center justify-center rounded-full opacity-0 transition hover:bg-black/10 focus-visible:opacity-100 group-hover:opacity-100 dark:hover:bg-white/10"
       @click="emit('remove', id)"
     >

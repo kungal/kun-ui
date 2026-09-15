@@ -216,8 +216,8 @@
           "name": "loadingText",
           "type": "string",
           "required": false,
-          "default": "\"加载中…\"",
-          "description": "Text under the loading spinner. Default '加载中…'."
+          "default": "locale autocomplete.loading",
+          "description": "Text under the loading spinner."
         },
         {
           "name": "manualFilter",
@@ -236,7 +236,8 @@
           "name": "noResultText",
           "type": "string",
           "required": false,
-          "default": "\"无匹配项\""
+          "default": "locale autocomplete.noResult",
+          "description": "Shown when the filter matches nothing."
         },
         {
           "name": "placeholder",
@@ -698,7 +699,8 @@
           "name": "ariaLabel",
           "type": "string",
           "required": false,
-          "default": "\"轮播\""
+          "default": "locale carousel.label",
+          "description": "Accessible name for the carousel region."
         },
         {
           "name": "autoplay",
@@ -1043,7 +1045,7 @@
           "name": "emptyText",
           "type": "string",
           "required": false,
-          "default": "\"输入关键字搜索\"",
+          "default": "locale commandPalette.empty",
           "description": "Shown when `query` is empty (a hint / \"recent\")."
         },
         {
@@ -1071,7 +1073,7 @@
           "name": "noResultText",
           "type": "string",
           "required": false,
-          "default": "\"无结果\"",
+          "default": "locale commandPalette.noResult",
           "description": "Shown when `query` is non-empty but there are no results."
         },
         {
@@ -1084,7 +1086,8 @@
           "name": "placeholder",
           "type": "string",
           "required": false,
-          "default": "\"搜索…\""
+          "default": "locale commandPalette.placeholder",
+          "description": "Placeholder in the search input; also the dialog's accessible name when `ariaLabel` is unset."
         },
         {
           "name": "query",
@@ -1218,8 +1221,8 @@
           "name": "copiedText",
           "type": "string",
           "required": false,
-          "default": "\"已复制\"",
-          "description": "Label shown briefly after a successful copy. Default '已复制'."
+          "default": "locale copy.copied",
+          "description": "Label shown briefly after a successful copy."
         },
         {
           "name": "name",
@@ -1356,7 +1359,7 @@
           "name": "placeholder",
           "type": "string",
           "required": false,
-          "default": "'请选择日期' | '请选择月份' | '请选择年份'",
+          "default": "locale datePicker.placeholderDay | …Month | …Year",
           "description": "Trigger text when nothing is selected. Defaults follow `precision`."
         },
         {
@@ -1714,7 +1717,7 @@
           "name": "triggerText",
           "type": "string",
           "required": false,
-          "default": "\"选择文件\"",
+          "default": "locale fileInput.trigger",
           "description": "Label on the trigger button."
         },
         {
@@ -2099,7 +2102,8 @@
           "name": "description",
           "type": "string",
           "required": false,
-          "default": "\"正在摸鱼中...咕咕咕\""
+          "default": "locale loading.description",
+          "description": "Text under the spinner / mascot."
         },
         {
           "name": "loading",
@@ -2292,7 +2296,8 @@
           "name": "description",
           "type": "string",
           "required": false,
-          "default": "\"莲说这里什么都没有\""
+          "default": "locale null.description",
+          "description": "The empty-state line."
         },
         {
           "name": "isShowSticker",
@@ -2501,7 +2506,8 @@
           "name": "ariaLabel",
           "type": "string",
           "required": false,
-          "default": "\"验证码\""
+          "default": "locale pinInput.label",
+          "description": "Accessible name for the group; each cell appends its position to it."
         },
         {
           "name": "autofocus",
@@ -2689,7 +2695,7 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Accessible name for the progressbar (e.g. \"上传进度\")."
+          "description": "Accessible name for the progressbar (e.g. \"Upload progress\")."
         },
         {
           "name": "color",
@@ -2929,8 +2935,8 @@
           "name": "label",
           "type": "string",
           "required": false,
-          "default": "\"点赞\"",
-          "description": "Accessible label base; the count is appended for the full name. Default `点赞`."
+          "default": "locale reaction.label",
+          "description": "Accessible label base; the count is appended for the full name."
         },
         {
           "name": "modelValue",
@@ -3082,7 +3088,7 @@
           "name": "loadingText",
           "type": "string",
           "required": false,
-          "default": "\"加载中…\"",
+          "default": "locale select.loading",
           "description": "Text under the loading spinner."
         },
         {
@@ -3109,7 +3115,7 @@
           "name": "noResultText",
           "type": "string",
           "required": false,
-          "default": "\"无匹配项\"",
+          "default": "locale select.noResult",
           "description": "Shown when the filter matches nothing."
         },
         {
@@ -3142,7 +3148,8 @@
           "name": "searchPlaceholder",
           "type": "string",
           "required": false,
-          "default": "\"搜索…\""
+          "default": "locale select.searchPlaceholder",
+          "description": "Placeholder in the in-panel search box."
         },
         {
           "name": "size",

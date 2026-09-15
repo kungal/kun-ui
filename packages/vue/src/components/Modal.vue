@@ -23,6 +23,7 @@ import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useVisualViewportHeight } from '../composables/useVisualViewportHeight'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunModalPlacement, KunModalProps, KunModalSize } from './types'
 
 // Nuxt-decoupled Modal. Same behaviour as the Nuxt original — Teleport to
@@ -30,6 +31,8 @@ import type { KunModalPlacement, KunModalProps, KunModalSize } from './types'
 // dependency is an explicit import (vue / @vueuse / @kungal/ui-core / siblings)
 // instead of a Nuxt auto-import.
 defineOptions({ name: 'KunModal' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunModalProps>(), {
   className: '',
@@ -477,7 +480,7 @@ onUnmounted(() => {
             class-name="absolute top-1 right-1"
             rounded="full"
             :is-icon-only="true"
-            aria-label="关闭"
+            :aria-label="t('modal.close')"
             @click="
               () => {
                 modelValue = false

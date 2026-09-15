@@ -54,7 +54,7 @@ const loading = ref(true)
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `description` | `string` | `"正在摸鱼中...咕咕咕"` |  |
+| `description` | `string` | `locale loading.description` | Text under the spinner / mascot. |
 | `loading` | `boolean` | `false` |  |
 | `size` | `KunUISize` | `"md"` | Spinner size (spinner mode only). Default 'md'. |
 | `spinner` | `boolean` | `false` | Render a compact spinner icon instead of the full mascot image — for small inline loading states (next to a button, a table cell, etc.). |

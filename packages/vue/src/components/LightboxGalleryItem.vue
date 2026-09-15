@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { inject, onUnmounted, reactive, watchEffect } from 'vue'
 import { KunLightboxGalleryKey } from './LightboxGallery.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 
 // Registers itself with the nearest <KunLightboxGallery> so a click opens the
 // shared lightbox at this item's current position. Two modes: auto-wrap
 // (default) or render-prop via `v-slot="{ open }"` + `:wrap="false"`.
 defineOptions({ name: 'KunLightboxGalleryItem' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(
   defineProps<{
@@ -49,7 +52,7 @@ const onKeydown = (e: KeyboardEvent) => {
     v-if="wrap"
     role="button"
     tabindex="0"
-    :aria-label="alt || '查看大图'"
+    :aria-label="alt || t('lightboxGallery.view')"
     class="cursor-zoom-in"
     @click="open"
     @keydown="onKeydown"

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import KunAvatar from './Avatar.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunAvatarGroupProps } from './types'
 
 // Overlapping/stacked avatars with an optional "+N" overflow chip.
 defineOptions({ name: 'KunAvatarGroup' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunAvatarGroupProps>(), {
   ellipsis: true,
@@ -25,7 +28,7 @@ const overflow = computed(() =>
 )
 
 const groupLabel = computed(
-  () => props.ariaLabel ?? `${grandTotal.value} 位用户`
+  () => props.ariaLabel ?? t('avatarGroup.label', { count: grandTotal.value })
 )
 </script>
 

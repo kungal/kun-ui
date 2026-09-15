@@ -20,11 +20,15 @@ import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunDatePickerPrecision, KunDatePickerProps } from './types'
+import type { KunMessagePath } from '../locale/types'
 
 // Nuxt-decoupled date picker (single + range), @floating-ui positioned,
 // date-fns powered. All icons bundled; no Nuxt coupling.
 defineOptions({ name: 'KunDatePicker' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunDatePickerProps>(), {
   modelValue: '',
@@ -59,13 +63,13 @@ const resolvedValueFormat = computed<string | undefined>(
 const resolvedFormat = computed(
   () => props.format || KUN_CALENDAR_VALUE_FORMATS[props.precision]
 )
-const PLACEHOLDERS: Record<KunDatePickerPrecision, string> = {
-  day: '请选择日期',
-  month: '请选择月份',
-  year: '请选择年份',
+const PLACEHOLDER_KEYS: Record<KunDatePickerPrecision, KunMessagePath> = {
+  day: 'datePicker.placeholderDay',
+  month: 'datePicker.placeholderMonth',
+  year: 'datePicker.placeholderYear',
 }
 const resolvedPlaceholder = computed(
-  () => props.placeholder ?? PLACEHOLDERS[props.precision]
+  () => props.placeholder ?? t(PLACEHOLDER_KEYS[props.precision])
 )
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -211,7 +215,13 @@ const headerLabel = computed(() => {
 // label has to name the step, not the view: in the month grid that button moves
 // a year, and reading "Previous month" out loud there is simply wrong.
 const stepLabel = computed(() =>
-  view.value === 'day' ? 'month' : view.value === 'month' ? 'year' : 'decade'
+  t(
+    view.value === 'day'
+      ? 'datePicker.unitMonth'
+      : view.value === 'month'
+        ? 'datePicker.unitYear'
+        : 'datePicker.unitDecade'
+  )
 )
 const stepPage = (dir: number) => {
   if (view.value === 'day') navigateMonth(dir)
@@ -506,7 +516,7 @@ const isInPreviewRange = (date: Date) => {
             v-if="clearable && displayValue && !disabled"
             type="button"
             class="text-default-500 hover:text-default-800 -m-1.5 flex items-center p-1.5"
-            aria-label="Clear date"
+            :aria-label="t('datePicker.clear')"
             @click.stop="clearDate"
             @mousedown.stop.prevent
           >
@@ -547,10 +557,10 @@ const isInPreviewRange = (date: Date) => {
               <!-- The double chevrons only exist in the day grid: in the month
                    grid the single ones already step a year, and in the year grid
                    a decade. -->
-              <KunButton v-if="view === 'day'" variant="light" :is-icon-only="true" size="sm" aria-label="Previous year" @click="navigateYear(-1)">
+              <KunButton v-if="view === 'day'" variant="light" :is-icon-only="true" size="sm" :aria-label="t('datePicker.prevYear')" @click="navigateYear(-1)">
                 <KunIcon name="lucide:chevrons-left" />
               </KunButton>
-              <KunButton variant="light" :is-icon-only="true" size="sm" :aria-label="`Previous ${stepLabel}`" @click="stepPage(-1)">
+              <KunButton variant="light" :is-icon-only="true" size="sm" :aria-label="t('datePicker.prevPage', { unit: stepLabel })" @click="stepPage(-1)">
                 <KunIcon name="lucide:chevron-left" />
               </KunButton>
             </div>
@@ -564,16 +574,16 @@ const isInPreviewRange = (date: Date) => {
                   canZoomOut ? 'hover:bg-default/20 cursor-pointer' : 'cursor-default'
                 )
               "
-              :aria-label="canZoomOut ? `${headerLabel} — zoom out` : headerLabel"
+              :aria-label="canZoomOut ? t('datePicker.zoomOut', { label: headerLabel }) : headerLabel"
               @click="zoomOut"
             >
               {{ headerLabel }}
             </button>
             <div class="flex items-center gap-2">
-              <KunButton variant="light" :is-icon-only="true" size="sm" :aria-label="`Next ${stepLabel}`" @click="stepPage(1)">
+              <KunButton variant="light" :is-icon-only="true" size="sm" :aria-label="t('datePicker.nextPage', { unit: stepLabel })" @click="stepPage(1)">
                 <KunIcon name="lucide:chevron-right" />
               </KunButton>
-              <KunButton v-if="view === 'day'" variant="light" :is-icon-only="true" size="sm" aria-label="Next year" @click="navigateYear(1)">
+              <KunButton v-if="view === 'day'" variant="light" :is-icon-only="true" size="sm" :aria-label="t('datePicker.nextYear')" @click="navigateYear(1)">
                 <KunIcon name="lucide:chevrons-right" />
               </KunButton>
             </div>
@@ -734,15 +744,15 @@ const isInPreviewRange = (date: Date) => {
               :disabled="isTodayDisabled"
               @click="handleDateSelect(new Date())"
             >
-              今天
+              {{ t('datePicker.today') }}
             </KunButton>
             <span v-else />
             <div class="flex gap-2">
               <KunButton v-if="clearable" size="sm" variant="light" @click="clearDate">
-                清空
+                {{ t('datePicker.clear') }}
               </KunButton>
               <KunButton size="sm" variant="light" @click="isOpen = false">
-                关闭
+                {{ t('datePicker.close') }}
               </KunButton>
             </div>
           </div>

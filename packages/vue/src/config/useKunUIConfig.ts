@@ -1,5 +1,7 @@
 import { inject, provide, type App, type Component, type InjectionKey } from 'vue'
 import { KUN_DEFAULT_ROUNDED, type KunUIRounded } from '@kungal/ui-core'
+import kunZhCN from '../locale/zh-CN'
+import type { KunLocale } from '../locale/types'
 
 // Global KunUI defaults applied to every component in a Vue subtree (or the
 // whole app if provided at root). Each component still accepts per-instance
@@ -66,6 +68,16 @@ export interface KunUIConfig {
    *  (provider/format/quality/densities/sizes/placeholder/preload) take
    *  effect; with the native default those props are omitted. */
   imageComponent: Component | string
+
+  /** Strings KunUI renders on its own — accessible names for icon-only
+   *  controls, empty/loading states, the built-in confirm/cancel labels.
+   *  Default `zh-CN`; import `@kungal/ui-vue/locale/en` (or any other locale
+   *  entry) and pass it here to switch, or pass your own `KunLocale`.
+   *
+   *  A component prop that sets the same text still wins. Read once where it
+   *  is used, like every other key here — provide it per app (per request
+   *  under SSR), not by mutating a module-level singleton. */
+  locale: KunLocale
 }
 
 const KUN_UI_CONFIG_KEY: InjectionKey<KunUIConfig> = Symbol('kun-ui-config')
@@ -82,6 +94,7 @@ export const KUN_UI_DEFAULT_CONFIG: KunUIConfig = {
   imageComponent: 'img',
   userLinkTemplate: '/user/{id}/info',
   avatarFallbackPool: [],
+  locale: kunZhCN,
 }
 
 export const provideKunUIConfig = (config: Partial<KunUIConfig> = {}): void => {

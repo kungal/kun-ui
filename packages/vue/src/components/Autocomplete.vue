@@ -17,6 +17,7 @@ import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
 
 // A combobox: a text field with a suggestion list. v-model is the field text
@@ -24,6 +25,8 @@ import type { KunAutocompleteOption, KunAutocompleteProps } from './types'
 // full option so the parent can read `.value`; @search fires per keystroke for
 // remote/async sources (pair with `manualFilter`).
 defineOptions({ name: 'KunAutocomplete', inheritAttrs: false })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunAutocompleteProps<T>>(), {
   label: '',
@@ -39,9 +42,7 @@ const props = withDefaults(defineProps<KunAutocompleteProps<T>>(), {
   clearable: false,
   allowCustomValue: true,
   manualFilter: false,
-  noResultText: '无匹配项',
   loading: false,
-  loadingText: '加载中…',
   debounce: 0,
   name: undefined,
   ariaLabel: '',
@@ -382,7 +383,7 @@ defineExpose({
         type="button"
         tabindex="-1"
         class="text-default-400 hover:text-default-600 absolute inset-y-0 right-0 flex items-center pr-3"
-        aria-label="清除"
+        :aria-label="t('autocomplete.clear')"
         @click="clear"
       >
         <KunIcon name="lucide:circle-x" class="size-4" />
@@ -424,7 +425,7 @@ defineExpose({
             <!-- Async in flight (or debounce armed): a spinner instead of options
                  / noResultText, so a pending fetch never reads as "no matches". -->
             <li v-if="showSpinner" class="flex justify-center px-3 py-6">
-              <KunLoading spinner size="sm" :description="loadingText" />
+              <KunLoading spinner size="sm" :description="loadingText ?? t('autocomplete.loading')" />
             </li>
 
             <template v-else>
@@ -468,7 +469,7 @@ defineExpose({
                 v-if="!filtered.length"
                 class="text-default-400 px-3 py-6 text-center text-sm"
               >
-                {{ noResultText }}
+                {{ noResultText ?? t('autocomplete.noResult') }}
               </li>
             </template>
           </ul>

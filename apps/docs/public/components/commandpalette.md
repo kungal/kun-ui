@@ -205,13 +205,13 @@ const onSubmit = (q: string) => {
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `""` | Accessible name for the dialog. |
-| `emptyText` | `string` | `"输入关键字搜索"` | Shown when `query` is empty (a hint / "recent"). |
+| `emptyText` | `string` | `locale commandPalette.empty` | Shown when `query` is empty (a hint / "recent"). |
 | `highlight` | `boolean` | `true` | Highlight the query terms in the default item render. Default `true`. |
 | `items` | `readonly KunCommandItem[] \| readonly KunCommandGroup<KunCommandItem>[]` | `[]` | Results to show: a flat item list (one unlabelled group) OR grouped. You compute these from `v-model:query` — the shell does no matching itself. |
 | `loading` | `boolean` | `false` | Async search in flight → a loading state instead of the no-result text. |
-| `noResultText` | `string` | `"无结果"` | Shown when `query` is non-empty but there are no results. |
+| `noResultText` | `string` | `locale commandPalette.noResult` | Shown when `query` is non-empty but there are no results. |
 | `open` | `boolean` | `false` |  |
-| `placeholder` | `string` | `"搜索…"` |  |
+| `placeholder` | `string` | `locale commandPalette.placeholder` | Placeholder in the search input; also the dialog's accessible name when `ariaLabel` is unset. |
 | `query` | `string` | `""` |  |
 | `shortcut` | `string \| boolean` | `true` | Global open shortcut. `true` (default) = ⌘K / Ctrl-K; a single-char string sets a custom key (still with meta/ctrl); `false` disables it. |
 

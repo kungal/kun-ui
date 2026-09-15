@@ -16,6 +16,7 @@ import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type {
   KunCommandGroup,
   KunCommandItem,
@@ -28,12 +29,11 @@ import type {
 // `v-model:query`, and it renders + navigates them. Selecting emits `@select`.
 defineOptions({ name: 'KunCommandPalette', inheritAttrs: false })
 
+const { t } = useKunLocale()
+
 const props = withDefaults(defineProps<KunCommandPaletteProps<T>>(), {
   items: () => [],
   loading: false,
-  placeholder: '搜索…',
-  noResultText: '无结果',
-  emptyText: '输入关键字搜索',
   shortcut: true,
   highlight: true,
   ariaLabel: '',
@@ -51,6 +51,10 @@ const emit = defineEmits<{
    */
   submit: [query: string]
 }>()
+
+const resolvedPlaceholder = computed(
+  () => props.placeholder ?? t('commandPalette.placeholder')
+)
 
 const isOpen = defineModel<boolean>('open', { default: false })
 const query = defineModel<string>('query', { default: '' })
@@ -281,7 +285,7 @@ defineExpose({ open, close, toggle })
           class="kun-command-panel bg-content1 border-kun rounded-kun-lg shadow-kun-lg flex max-h-[70dvh] w-full max-w-xl flex-col overflow-hidden border"
           role="dialog"
           aria-modal="true"
-          :aria-label="ariaLabel || placeholder"
+          :aria-label="ariaLabel || resolvedPlaceholder"
         >
           <!-- input -->
           <div class="border-kun flex items-center gap-3 border-b px-4">
@@ -294,7 +298,7 @@ defineExpose({ open, close, toggle })
               enterkeyhint="search"
               autocomplete="off"
               spellcheck="false"
-              :placeholder="placeholder"
+              :placeholder="resolvedPlaceholder"
               :aria-controls="listId"
               :aria-expanded="isOpen"
               :aria-activedescendant="activeId"
@@ -304,7 +308,7 @@ defineExpose({ open, close, toggle })
             <button
               type="button"
               class="text-default-400 hover:text-default-600 flex shrink-0 cursor-pointer items-center"
-              aria-label="关闭"
+              :aria-label="t('commandPalette.close')"
               @click="close"
             >
               <KunIcon name="lucide:x" />
@@ -320,7 +324,9 @@ defineExpose({ open, close, toggle })
           >
             <template v-if="loading">
               <slot name="loading">
-                <p class="text-default-400 px-3 py-6 text-center text-sm">加载中…</p>
+                <p class="text-default-400 px-3 py-6 text-center text-sm">
+                  {{ t('commandPalette.loading') }}
+                </p>
               </slot>
             </template>
 
@@ -393,12 +399,12 @@ defineExpose({ open, close, toggle })
             <template v-else>
               <slot v-if="query.trim()" name="no-result" :query="query">
                 <p class="text-default-400 px-3 py-6 text-center text-sm">
-                  {{ noResultText }}:<span class="text-default-600">{{ query }}</span>
+                  {{ noResultText ?? t('commandPalette.noResult') }}:<span class="text-default-600">{{ query }}</span>
                 </p>
               </slot>
               <slot v-else name="empty">
                 <p class="text-default-400 px-3 py-6 text-center text-sm">
-                  {{ emptyText }}
+                  {{ emptyText ?? t('commandPalette.empty') }}
                 </p>
               </slot>
             </template>
@@ -409,10 +415,10 @@ defineExpose({ open, close, toggle })
             <div
               class="border-kun text-default-400 flex items-center gap-4 border-t px-4 py-2 text-[11px]"
             >
-              <span><kbd class="text-default-500">↑↓</kbd> 选择</span>
-              <span><kbd class="text-default-500">↵</kbd> 打开</span>
-              <span><kbd class="text-default-500">esc</kbd> 关闭</span>
-              <span class="ml-auto">{{ flat.length }} 条结果</span>
+              <span><kbd class="text-default-500">↑↓</kbd> {{ t('commandPalette.hintSelect') }}</span>
+              <span><kbd class="text-default-500">↵</kbd> {{ t('commandPalette.hintOpen') }}</span>
+              <span><kbd class="text-default-500">esc</kbd> {{ t('commandPalette.hintClose') }}</span>
+              <span class="ml-auto">{{ t('commandPalette.resultCount', { count: flat.length }) }}</span>
             </div>
           </slot>
         </div>

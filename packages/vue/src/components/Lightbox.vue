@@ -5,6 +5,7 @@ import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { wheelDeltaPx } from '../utils/wheelDeltaPx'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunLightboxProps } from './types'
 
 // Modern <dialog>-based image viewer (focus trap / ESC / inert / ::backdrop
@@ -23,6 +24,8 @@ import type { KunLightboxProps } from './types'
 // the top layer here or to route close requests centrally. What the other
 // overlays do instead is NAME it: see utils/warnTopLayerConflict.
 defineOptions({ name: 'KunLightbox' })
+
+const { t } = useKunLocale()
 
 const props = defineProps<KunLightboxProps>()
 
@@ -541,7 +544,7 @@ onUnmounted(() => {
 <template>
   <dialog
     ref="dialogRef"
-    aria-label="图片查看器"
+    :aria-label="t('lightbox.label')"
     class="kun-lightbox-dialog bg-transparent text-foreground p-0 m-0 max-w-none max-h-none w-screen h-screen overflow-hidden backdrop:bg-default-800/80"
     @close="onDialogClose"
     @click="onDialogClick"
@@ -595,7 +598,7 @@ onUnmounted(() => {
         variant="light"
         size="lg"
         rounded="lg"
-        aria-label="关闭"
+        :aria-label="t('lightbox.close')"
         class-name="absolute top-4 right-4 z-50 bg-black/70 backdrop-blur-md border border-white/10 shadow-lg"
         @click.stop="emit('update:isOpen', false)"
       >
@@ -609,7 +612,7 @@ onUnmounted(() => {
           variant="light"
           size="xl"
           rounded="lg"
-          aria-label="上一张"
+          :aria-label="t('lightbox.prev')"
           class-name="absolute left-4 top-1/2 z-50 hidden -translate-y-1/2 bg-black/70 backdrop-blur-md border border-white/10 shadow-lg md:flex"
           @click.stop="prev"
         >
@@ -621,7 +624,7 @@ onUnmounted(() => {
           variant="light"
           size="xl"
           rounded="lg"
-          aria-label="下一张"
+          :aria-label="t('lightbox.next')"
           class-name="absolute right-4 top-1/2 z-50 hidden -translate-y-1/2 bg-black/70 backdrop-blur-md border border-white/10 shadow-lg md:flex"
           @click.stop="next"
         >
@@ -642,7 +645,7 @@ onUnmounted(() => {
             v-for="(img, i) in images"
             :key="`thumb-${i}`"
             type="button"
-            :aria-label="`跳转到第 ${i + 1} 张`"
+            :aria-label="t('lightbox.goto', { index: i + 1 })"
             :aria-current="i === currentIndex"
             class="shrink-0 overflow-hidden rounded-md border-2 transition-all"
             :class="
@@ -671,27 +674,27 @@ onUnmounted(() => {
           class="kun-lightbox-toolbar pointer-events-auto flex items-center gap-1 rounded-full border border-white/10 bg-black/70 px-2 py-1.5 shadow-lg backdrop-blur-md"
           @click.stop
         >
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="缩小" @click="zoomOut">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomOut')" @click="zoomOut">
             <KunIcon name="lucide:zoom-out" class="text-white" />
           </KunButton>
           <span class="min-w-[3.5rem] text-center text-sm font-medium tabular-nums text-white" aria-live="polite">
             {{ zoomPercent }}%
           </span>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="放大" @click="zoomIn">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomIn')" @click="zoomIn">
             <KunIcon name="lucide:zoom-in" class="text-white" />
           </KunButton>
           <span class="mx-1 h-5 w-px bg-default-200/30" aria-hidden="true" />
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="向左旋转 90°" @click="rotateLeft">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateLeft')" @click="rotateLeft">
             <KunIcon name="lucide:rotate-ccw" class="text-white" />
           </KunButton>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="向右旋转 90°" @click="rotateRight">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateRight')" @click="rotateRight">
             <KunIcon name="lucide:rotate-cw" class="text-white" />
           </KunButton>
           <span class="mx-1 h-5 w-px bg-default-200/30" aria-hidden="true" />
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="重置缩放/旋转/位置" @click="resetTransform">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.reset')" @click="resetTransform">
             <KunIcon name="lucide:refresh-ccw" class="text-white" />
           </KunButton>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" aria-label="下载" @click="downloadImage">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.download')" @click="downloadImage">
             <KunIcon name="lucide:download" class="text-white" />
           </KunButton>
         </div>

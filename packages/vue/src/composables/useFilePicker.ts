@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import { useKunLocale } from '../locale/useKunLocale'
 
 export interface KunFilePickerOptions {
   accept?: string
@@ -21,6 +22,7 @@ export interface KunFilePickerReturn {
 export const useFilePicker = (
   options: KunFilePickerOptions = {}
 ): KunFilePickerReturn => {
+  const { t } = useKunLocale()
   const files = ref<File[]>([])
 
   const pickFiles = () => {
@@ -35,7 +37,10 @@ export const useFilePicker = (
         const tooBig = selected.find((f) => f.size > options.maxSize!)
         if (tooBig) {
           options.onError?.(
-            `${tooBig.name} 超过大小限制 (${formatBytes(options.maxSize)})`,
+            t('filePicker.tooLarge', {
+              name: tooBig.name,
+              size: formatBytes(options.maxSize),
+            }),
             tooBig
           )
           return

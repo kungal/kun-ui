@@ -19,6 +19,7 @@ const KUN_COMPOSABLES = [
   'useKunMessageState',
   'useKunUIConfig',
   'provideKunUIConfig',
+  'useKunLocale',
   'useResolvedRounded',
   'useRipple',
   'useKunUniqueId',

@@ -290,11 +290,11 @@ const options: CityOption[] = [
 | `isInvalid` | `boolean` | `false` |  |
 | `label` | `string` | `""` |  |
 | `loading` | `boolean` | `false` | Async data source: show a loading spinner in the dropdown (instead of `noResultText`) while a remote `@search` request is in flight. Drive it from your fetch — set true when the request starts, false when the results land. |
-| `loadingText` | `string` | `"加载中…"` | Text under the loading spinner. Default '加载中…'. |
+| `loadingText` | `string` | `locale autocomplete.loading` | Text under the loading spinner. |
 | `manualFilter` | `boolean` | `false` | Skip built-in label filtering — you control `options` from `@search` (remote/async suggestions). Default false (client-side filter). |
 | `modelValue` | `string` | `""` |  |
 | `name` | `string` | — |  |
-| `noResultText` | `string` | `"无匹配项"` |  |
+| `noResultText` | `string` | `locale autocomplete.noResult` | Shown when the filter matches nothing. |
 | `placeholder` | `string` | `""` |  |
 | `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `size` | `KunUISize` | `"md"` |  |

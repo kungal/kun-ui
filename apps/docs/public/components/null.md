@@ -35,7 +35,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `description` | `string` | `"莲说这里什么都没有"` |  |
+| `description` | `string` | `locale null.description` | The empty-state line. |
 | `isShowSticker` | `boolean` | `true` | Show the empty-state image. Default true. |
 | `src` | `string` | `KUN_NULL_IMAGE` | The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request). Pass any URL or data URI to override. |
 

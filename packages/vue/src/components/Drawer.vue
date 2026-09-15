@@ -22,6 +22,7 @@ import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type {
   KunDrawerPlacement,
   KunDrawerProps,
@@ -31,6 +32,8 @@ import type {
 // Nuxt-decoupled Drawer (modal mechanics: scroll-lock + focus-trap + Esc).
 // Responsive: below md it becomes a bottom sheet by default.
 defineOptions({ name: 'KunDrawer' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunDrawerProps>(), {
   placement: 'right',
@@ -350,7 +353,7 @@ onUnmounted(() => {
               size="sm"
               rounded="full"
               :is-icon-only="true"
-              aria-label="关闭抽屉"
+              :aria-label="t('drawer.close')"
               class-name="shrink-0"
               @click="handleCloseButton"
             >

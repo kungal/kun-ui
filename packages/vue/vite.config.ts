@@ -10,9 +10,13 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+      // Extra locales are their own entries, not named exports of the barrel:
+      // a consumer on zh-CN must not pay for every other language's strings.
+      entry: {
+        index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+        'locale/en': fileURLToPath(new URL('./src/locale/en.ts', import.meta.url)),
+      },
       formats: ['es'],
-      fileName: 'index',
       cssFileName: 'style',
     },
     rollupOptions: {

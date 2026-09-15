@@ -17,9 +17,12 @@ import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
 defineOptions({ name: 'KunSelect' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
   placeholder: '',
@@ -36,8 +39,6 @@ const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
   multiple: false,
   searchable: false,
   clearable: false,
-  searchPlaceholder: '搜索…',
-  noResultText: '无匹配项',
   name: undefined,
   icon: undefined,
   fullWidth: true,
@@ -46,7 +47,6 @@ const props = withDefaults(defineProps<KunSelectProps<T, O>>(), {
   classNames: undefined,
   manualFilter: false,
   loading: false,
-  loadingText: '加载中…',
   debounce: 0,
 })
 
@@ -549,7 +549,7 @@ watch(filtered, () => {
             v-if="!disabled"
             type="button"
             class="hover:text-danger flex shrink-0 items-center"
-            :aria-label="`移除 ${opt.label}`"
+            :aria-label="t('select.removeOption', { label: opt.label })"
             @click.stop="removeValue(opt.value)"
             @mousedown.stop.prevent
           >
@@ -581,7 +581,7 @@ watch(filtered, () => {
         v-if="clearable && hasSelection && !disabled"
         type="button"
         class="text-default-400 hover:text-default-600 flex shrink-0 items-center"
-        aria-label="清除"
+        :aria-label="t('select.clear')"
         @click.stop="clearAll"
         @mousedown.stop.prevent
       >
@@ -642,7 +642,7 @@ watch(filtered, () => {
               :value="query"
               type="text"
               enterkeyhint="done"
-              :placeholder="searchPlaceholder"
+              :placeholder="searchPlaceholder ?? t('select.searchPlaceholder')"
               role="combobox"
               :aria-controls="listId"
               :aria-expanded="isOpen"
@@ -677,7 +677,7 @@ watch(filtered, () => {
                  options / noResultText, so a pending fetch never reads as
                  "no matches". -->
             <li v-if="showSpinner" class="flex justify-center px-3 py-6">
-              <KunLoading spinner size="sm" :description="loadingText" />
+              <KunLoading spinner size="sm" :description="loadingText ?? t('select.loading')" />
             </li>
 
             <template v-else>
@@ -726,7 +726,7 @@ watch(filtered, () => {
                 v-if="!filtered.length"
                 class="text-default-400 px-3 py-6 text-center text-sm"
               >
-                {{ noResultText }}
+                {{ noResultText ?? t('select.noResult') }}
               </li>
             </template>
           </ul>

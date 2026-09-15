@@ -109,7 +109,7 @@ const b = ref<File | null>(null)
 | `triggerColor` | `KunUIColor` | `"primary"` | Semantic colour of the trigger button. |
 | `triggerIcon` | `string` | `"lucide:upload"` | Icon name on the trigger button. Must be one of KunUI's bundled icons — an unbundled name renders nothing. |
 | `triggerSize` | `KunUISize` | `"md"` | Size of the trigger button, on the shared form-control scale. |
-| `triggerText` | `string` | `"选择文件"` | Label on the trigger button. |
+| `triggerText` | `string` | `locale fileInput.trigger` | Label on the trigger button. |
 | `triggerVariant` | `KunUIVariant` | `"flat"` | Visual style of the trigger button (see KunButton `variant`). |
 
 ## Events

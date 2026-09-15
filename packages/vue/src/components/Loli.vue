@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { getRandomLoli } from '../utils/loliAssets'
 import KunImage from './Image.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunLoliProps } from './types'
 
 // The loli mascot popup. Usually rendered by <KunLoliProvider> driven by
@@ -10,6 +11,8 @@ import type { KunLoliProps } from './types'
 // the image is a bundled base64 data URI (no consumer asset, no network request).
 // Animation classes (animate-fadeInUp/swing/etc.) come from @kungal/ui-tokens.
 defineOptions({ name: 'KunLoli' })
+
+const { t } = useKunLocale()
 
 const props = defineProps<KunLoliProps>()
 
@@ -74,7 +77,7 @@ onBeforeUnmount(() => {
 
       <button
         type="button"
-        aria-label="关闭"
+        :aria-label="t('loli.close')"
         class="hover:bg-default/40 absolute top-1 right-1 inline-flex cursor-pointer overflow-hidden rounded-full border-transparent bg-transparent p-2 text-sm font-medium transition-all hover:opacity-80 active:scale-[0.97]"
         @click="close"
       >

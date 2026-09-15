@@ -4,12 +4,15 @@ import { cn } from '@kungal/ui-core'
 import { useFilePicker } from '../composables/useFilePicker'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunFileInputProps } from './types'
 
 // Thin declarative wrapper over useFilePicker. Two named v-models:
 //   single (default): v-model="file"        File | null
 //   multi:            v-model:files="files"  File[]
 defineOptions({ name: 'KunFileInput' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunFileInputProps>(), {
   accept: '',
@@ -19,7 +22,6 @@ const props = withDefaults(defineProps<KunFileInputProps>(), {
   description: '',
   error: '',
   disabled: false,
-  triggerText: '选择文件',
   triggerIcon: 'lucide:upload',
   triggerVariant: 'flat',
   triggerColor: 'primary',
@@ -67,7 +69,7 @@ watch(pickedFiles, (next) => {
 const displayName = computed<string | null>(() => {
   if (props.multiple) {
     const n = filesModel.value.length
-    return n === 0 ? null : `已选 ${n} 个文件`
+    return n === 0 ? null : t('fileInput.selected', { count: n })
   }
   return file.value?.name ?? null
 })
@@ -92,7 +94,7 @@ const handlePick = () => {
           @click="handlePick"
         >
           <KunIcon v-if="triggerIcon" :name="triggerIcon" class="mr-1 size-4" />
-          {{ triggerText }}
+          {{ triggerText ?? t('fileInput.trigger') }}
         </KunButton>
       </slot>
       <span

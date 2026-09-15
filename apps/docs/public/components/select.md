@@ -485,17 +485,17 @@ const options: UserOption[] = [
 | `icon` | `string` | — | Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. Must be one of the bundled icon names. |
 | `label` | `string` | `""` |  |
 | `loading` | `boolean` | `false` | Async data source: show a spinner in the list (instead of `noResultText`) while a remote `@search` request is in flight. Drive it from your fetch — true when the request starts, false when the results land. |
-| `loadingText` | `string` | `"加载中…"` | Text under the loading spinner. |
+| `loadingText` | `string` | `locale select.loading` | Text under the loading spinner. |
 | `manualFilter` | `boolean` | `false` | Skip the built-in label filter — you own `options` and drive them from `@search` (remote/async suggestions). Requires `searchable`. |
 | `maxVisibleTags` | `number` | — | How many chips a `multiple` trigger renders before collapsing the rest into a `+N` badge. `0` renders no chips at all and the trigger reads `{placeholder} · {n}`, or a bare count when there is no placeholder — what a filter pill wants, and what keeps a filter bar from growing a row per selection. Unset renders every chip. |
 | `multiple` | `boolean` | `false` | Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling. |
 | `name` | `string` | — | Native form field name — emits hidden input(s) so the value is collected by the surrounding <form> / FormData. |
-| `noResultText` | `string` | `"无匹配项"` | Shown when the filter matches nothing. |
+| `noResultText` | `string` | `locale select.noResult` | Shown when the filter matches nothing. |
 | `placeholder` | `string` | `""` |  |
 | `popupWidth` | `KunSelectPopupWidth` | `"trigger"` | Popup width. The default pins it to the trigger, which is wrong the moment the trigger is a short pill — a 90px trigger gets a 90px list. `'auto'` sizes to the content and keeps the trigger width as a floor. Every mode but `'trigger'` is capped to the viewport, so a fixed width chosen for a desktop layout cannot hang off the edge of a phone. |
 | `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `searchable` | `boolean` | `false` | Render a filter input at the top of the list. Also the switch that enables `@search` / `manualFilter` — without it there is nothing to type into. |
-| `searchPlaceholder` | `string` | `"搜索…"` |  |
+| `searchPlaceholder` | `string` | `locale select.searchPlaceholder` | Placeholder in the in-panel search box. |
 | `size` | `KunUISize` | `"md"` |  |
 
 ## Events

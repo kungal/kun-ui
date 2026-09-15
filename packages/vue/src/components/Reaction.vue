@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { cn, kunTextClasses, type KunUIColor } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunReactionProps } from './types'
 
 // A like / reaction control: a compact pill (icon + optional count), NOT a full
@@ -12,6 +13,8 @@ import type { KunReactionProps } from './types'
 // no external library; everything is disabled under `prefers-reduced-motion`.
 defineOptions({ name: 'KunReaction' })
 
+const { t } = useKunLocale()
+
 const props = withDefaults(defineProps<KunReactionProps>(), {
   icon: 'lucide:heart',
   color: 'danger',
@@ -19,7 +22,6 @@ const props = withDefaults(defineProps<KunReactionProps>(), {
   size: 'md',
   disabled: false,
   disableAnimation: false,
-  label: '点赞',
 })
 
 const active = defineModel<boolean>({ default: false })
@@ -87,8 +89,11 @@ const sizeMap = {
 } as const
 const sz = computed(() => sizeMap[props.size])
 
+const resolvedLabel = computed(() => props.label ?? t('reaction.label'))
 const accessibleName = computed(() =>
-  typeof count.value === 'number' ? `${props.label},${count.value}` : props.label
+  typeof count.value === 'number'
+    ? `${resolvedLabel.value},${count.value}`
+    : resolvedLabel.value
 )
 
 // The active colour can be a palette key (→ a `text-*` class) or any CSS colour

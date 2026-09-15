@@ -7,9 +7,12 @@ import {
   type KunUISize,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunPinInputProps } from './types'
 
 defineOptions({ name: 'KunPinInput' })
+
+const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunPinInputProps>(), {
   length: 6,
@@ -23,8 +26,9 @@ const props = withDefaults(defineProps<KunPinInputProps>(), {
   placeholder: '',
   rounded: undefined,
   name: undefined,
-  ariaLabel: '验证码',
 })
+
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? t('pinInput.label'))
 
 const modelValue = defineModel<string>({ default: '' })
 
@@ -147,7 +151,7 @@ onMounted(() => {
   <div
     class="inline-flex items-center gap-2"
     role="group"
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
   >
     <input
       v-for="(_, idx) in length"
@@ -160,7 +164,7 @@ onMounted(() => {
       maxlength="1"
       :disabled="disabled"
       :placeholder="placeholder"
-      :aria-label="`${ariaLabel} 第 ${idx + 1} 位`"
+      :aria-label="t('pinInput.digit', { label: resolvedAriaLabel, index: idx + 1 })"
       :aria-invalid="isInvalid || undefined"
       :class="
         cn(

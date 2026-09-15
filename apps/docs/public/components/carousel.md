@@ -69,7 +69,7 @@ const slides = ['公告一', '公告二', '公告三']
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `"轮播"` |  |
+| `ariaLabel` | `string` | `locale carousel.label` | Accessible name for the carousel region. |
 | `autoplay` | `number` | `0` | Autoplay interval in ms (0 = off). Pauses on hover/focus, off under reduced-motion. |
 | `className` | `string` | `""` |  |
 | `gap` | `string` | `"1rem"` | Gap between slides (any CSS length). |

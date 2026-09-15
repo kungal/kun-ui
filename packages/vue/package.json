@@ -40,6 +40,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./locale/en": {
+      "types": "./dist/locale/en.d.ts",
+      "import": "./dist/locale/en.js"
+    },
     "./style.css": "./dist/style.css",
     "./prose.css": "./dist/prose.css"
   },

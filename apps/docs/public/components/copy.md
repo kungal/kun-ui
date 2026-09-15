@@ -66,7 +66,7 @@
 | `text` * | `string` | — |  |
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"primary"` |  |
-| `copiedText` | `string` | `"已复制"` | Label shown briefly after a successful copy. Default '已复制'. |
+| `copiedText` | `string` | `locale copy.copied` | Label shown briefly after a successful copy. |
 | `name` | `string` | `""` |  |
 | `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunUISize` | `"md"` |  |
