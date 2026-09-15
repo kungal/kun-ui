@@ -81,6 +81,41 @@ for (const name of ['KunUIVariant', 'KunUIColor', 'KunUISize', 'KunUIRounded']) 
   vocabulary[name] = members
 }
 
+// ── Locale-sourced defaults ─────────────────────────────────────────────
+// A prop whose placeholder/empty text comes from the active locale declares it
+// as `@default locale <path>` in its JSDoc, which reaches the meta as a plain
+// string. Lift the paths out so the contract states it structurally: the
+// Flutter port resolves the same keys from kun_ui_messages instead of
+// hard-coding a default the web no longer has.
+//
+// Checked against the built-in catalog, so renaming a message key fails here
+// rather than leaving 16 contract entries pointing at nothing.
+const catalog = JSON.parse(
+  readFileSync(
+    join(root, 'packages', 'ui-core', 'src', 'locale', 'zh-CN.json'),
+    'utf8'
+  )
+).messages
+
+const localeDefault = (component, prop, value) => {
+  if (typeof value !== 'string' || !value.startsWith('locale ')) return null
+  const paths = value
+    .slice('locale '.length)
+    .split('|')
+    .map((x) => x.trim())
+    .filter(Boolean)
+  for (const path of paths) {
+    const [namespace, key] = path.split('.')
+    if (!catalog[namespace]?.[key]) {
+      console.error(
+        `gen-flutter-contracts: ${component}.${prop} has @default locale ${path}, which is not a key in packages/ui-core/src/locale/zh-CN.json.`
+      )
+      process.exit(1)
+    }
+  }
+  return paths
+}
+
 // ── Emit ────────────────────────────────────────────────────────────────
 const components = {}
 for (const name of Object.keys(meta).sort()) {
@@ -97,7 +132,8 @@ for (const name of Object.keys(meta).sort()) {
     } else if (WEB_ONLY_PROPS[name]?.[p.name]) {
       webOnlyProps[p.name] = WEB_ONLY_PROPS[name][p.name]
     } else {
-      crossing.push(p)
+      const from = localeDefault(name, p.name, p.default)
+      crossing.push(from ? { ...p, defaultFrom: { locale: from } } : p)
     }
   }
   components[name] = {
@@ -112,9 +148,10 @@ for (const name of Object.keys(meta).sort()) {
 const counts = Object.values(components).reduce(
   (acc, c) => {
     acc[c.status === 'portable' ? 'portable' : 'webOnly']++
+    for (const p of c.props ?? []) if (p.defaultFrom) acc.localeDefaults++
     return acc
   },
-  { portable: 0, webOnly: 0 }
+  { portable: 0, webOnly: 0, localeDefaults: 0 }
 )
 
 const out = {
@@ -131,5 +168,5 @@ writeFileSync(
   `${JSON.stringify(out, null, 2)}\n`
 )
 console.log(
-  `wrote contracts/component-contracts.json — ${counts.portable} portable, ${counts.webOnly} web-only`
+  `wrote contracts/component-contracts.json — ${counts.portable} portable, ${counts.webOnly} web-only, ${counts.localeDefaults} locale-sourced defaults`
 )

@@ -33,7 +33,7 @@ export default defineConfig({
         if (id.endsWith('.css')) return false
         return (
           id === 'vue' ||
-          id === '@kungal/ui-core' ||
+          id.startsWith('@kungal/ui-core') ||
           id === 'thumbhash' ||
           id === 'focus-trap' ||
           id === 'date-fns' ||

@@ -558,7 +558,11 @@ installKunUIConfig(app, { locale: en })
 ```
 
 Only the locale you import is bundled — `zh-CN` ships inside the main entry,
-every other locale is its own entry point.
+every other locale is its own entry point. The strings themselves live in
+`@kungal/ui-core` (`KUN_CATALOG_ZH_CN`, `@kungal/ui-core/locale/en`), which is
+what any non-Vue layer reads and what the `kun_ui_messages` pub package is
+generated from; `@kungal/ui-vue` re-exports everything you need, so a Vue app
+never has to import `@kungal/ui-core` for this.
 
 A per-instance prop still wins, so a single component can override one string
 without a custom locale:

@@ -3,7 +3,10 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "noEmit": true
+    "noEmit": true,
+    // process.env.NODE_ENV is the one Node global ui-core names: it is the
+    // bundler define token every dev-only warning has to be gated on.
+    "types": ["node"]
   },
   "include": ["src"]
 }

@@ -1430,7 +1430,7 @@ export interface KunDatePickerProps {
   precision?: KunDatePickerPrecision
   label?: string
   /** Trigger text when nothing is selected. Defaults follow `precision`.
-   *  @default locale datePicker.placeholderDay | …Month | …Year */
+   *  @default locale datePicker.placeholderDay | datePicker.placeholderMonth | datePicker.placeholderYear */
   placeholder?: string
   error?: string
   disabled?: boolean

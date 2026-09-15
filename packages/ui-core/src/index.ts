@@ -47,6 +47,18 @@ export {
 // `KunShatterPhysics`, so the web and Flutter renditions cannot drift.
 export { KUN_SHATTER_PHYSICS } from './motionPhysics.generated'
 
+// Locale — KunUI's own strings, framework-free. `zh-CN` is the built-in
+// default and ships here; every other catalog is its own entry point
+// (`@kungal/ui-core/locale/en`) so only the one you import is bundled.
+export type {
+  KunMessages,
+  KunMessageCatalog,
+  KunMessagePath,
+  KunTranslate,
+} from './locale/types'
+export { translateKunMessage } from './locale/translate'
+export { KUN_CATALOG_ZH_CN } from './locale/zh-CN'
+
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
 export { pickAvatarFallback, getRandomSticker } from './avatarFallback'

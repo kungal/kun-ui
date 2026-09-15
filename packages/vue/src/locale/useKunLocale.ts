@@ -1,36 +1,14 @@
 import { getCurrentInstance } from 'vue'
+import { translateKunMessage } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import zhCN from './zh-CN'
-import type { KunLocale, KunMessagePath, KunMessages } from './types'
+import type { KunTranslate } from '@kungal/ui-core'
+import type { KunLocale } from './types'
 
-export type KunTranslate = (
-  path: KunMessagePath,
-  params?: Record<string, string | number>
-) => string
-
-export const translateKunMessage = (
-  messages: KunMessages,
-  path: KunMessagePath,
-  params?: Record<string, string | number>
-): string => {
-  const [namespace, key] = path.split('.') as [keyof KunMessages, string]
-  const group = messages[namespace] as Record<string, string> | undefined
-  const template = group?.[key]
-
-  if (typeof template !== 'string') {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        `[KunUI] no locale message at "${path}". A custom locale must supply every key in KunMessages.`
-      )
-    }
-    return path
-  }
-
-  if (!params) return template
-  return template.replace(/\{(\w+)\}/g, (raw, name: string) =>
-    params[name] === undefined ? raw : String(params[name])
-  )
-}
+// Re-exported so a consumer already on @kungal/ui-vue never has to add
+// @kungal/ui-core to reach the resolver.
+export { translateKunMessage }
+export type { KunTranslate }
 
 // Resolves KunUI's own strings. The locale lives on the KunUI config, so it is
 // per-app (per-request under SSR) rather than module-global — a module-level

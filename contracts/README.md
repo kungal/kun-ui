@@ -38,11 +38,43 @@ Details that keep the file honest:
   `update:modelValue` event (named models: prop `x` plus `update:x`). A
   Flutter port typically maps the pair to `value` + `onChanged`.
 - **Defaults are quoted as the docs quote them** (`"\"primary\""` is the
-  string `'primary'`); a conditional default is described, not valued.
+  string `'primary'`); a conditional default is described, not valued. A
+  default that comes from the locale also carries `defaultFrom` (below).
 - **Composables are out of scope.** Most are records of browser pathology
   that have nothing to cross (§4.1); the imperative capabilities
   (`useKunMessage`, `useKunAlert`, `useKunLoliInfo`, the config provider)
   get their Dart API contracts when tier 4 defines that API.
+
+## Locale-sourced defaults
+
+Sixteen props have no literal default: their placeholder or empty-state text is
+resolved from the active locale. The contract says so structurally rather than
+only in prose —
+
+```json
+{
+  "name": "noResultText",
+  "type": "string",
+  "required": false,
+  "default": "locale autocomplete.noResult",
+  "defaultFrom": { "locale": ["autocomplete.noResult"] }
+}
+```
+
+— so the port reads the same key from `kun_ui_messages` (tier 1) instead of
+hard-coding a string the web no longer carries. More than one path means the
+default is chosen at runtime: `KunDatePicker.placeholder` follows `precision`.
+The generator fails if a path is not a key in the built-in catalog, so renaming
+a message cannot leave the contract pointing at nothing.
+
+**One field of a locale does not cross.** `name`, `code` and `messages` are
+plain data and are exactly what `kun_ui_messages` is generated from.
+`dateLocale` is a date-fns object backing the calendar grid — weekday and month
+names, and the full date each day cell announces — and has no Dart counterpart.
+On Flutter the grid resolves from `code` instead, which is why
+`KunDatePicker.locale` stays a plain BCP 47 string in the contract: the web's
+fallback order (`dateLocale` → `code` → `en-US`) collapses to `code` → the
+platform default.
 
 ## The parity report
 

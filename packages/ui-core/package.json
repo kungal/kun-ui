@@ -36,6 +36,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./locale/en": {
+      "types": "./dist/locale/en.d.ts",
+      "import": "./dist/locale/en.js",
+      "require": "./dist/locale/en.cjs"
     }
   },
   "scripts": {
@@ -55,6 +60,7 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.111",
     "@iconify-json/svg-spinners": "^1.2.4",
+    "@types/node": "^22.10.0",
     "oslllo-svg-fixer": "^6.0.1",
     "svg2ttf": "^6.1.0",
     "svgicons2svgfont": "^16.0.0",

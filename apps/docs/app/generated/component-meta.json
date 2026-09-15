@@ -1445,7 +1445,7 @@
         "name": "placeholder",
         "type": "string",
         "required": false,
-        "default": "locale datePicker.placeholderDay | …Month | …Year",
+        "default": "locale datePicker.placeholderDay | datePicker.placeholderMonth | datePicker.placeholderYear",
         "description": "Trigger text when nothing is selected. Defaults follow `precision`."
       },
       {

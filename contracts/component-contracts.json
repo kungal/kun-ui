@@ -217,7 +217,12 @@
           "type": "string",
           "required": false,
           "default": "locale autocomplete.loading",
-          "description": "Text under the loading spinner."
+          "description": "Text under the loading spinner.",
+          "defaultFrom": {
+            "locale": [
+              "autocomplete.loading"
+            ]
+          }
         },
         {
           "name": "manualFilter",
@@ -237,7 +242,12 @@
           "type": "string",
           "required": false,
           "default": "locale autocomplete.noResult",
-          "description": "Shown when the filter matches nothing."
+          "description": "Shown when the filter matches nothing.",
+          "defaultFrom": {
+            "locale": [
+              "autocomplete.noResult"
+            ]
+          }
         },
         {
           "name": "placeholder",
@@ -700,7 +710,12 @@
           "type": "string",
           "required": false,
           "default": "locale carousel.label",
-          "description": "Accessible name for the carousel region."
+          "description": "Accessible name for the carousel region.",
+          "defaultFrom": {
+            "locale": [
+              "carousel.label"
+            ]
+          }
         },
         {
           "name": "autoplay",
@@ -1046,7 +1061,12 @@
           "type": "string",
           "required": false,
           "default": "locale commandPalette.empty",
-          "description": "Shown when `query` is empty (a hint / \"recent\")."
+          "description": "Shown when `query` is empty (a hint / \"recent\").",
+          "defaultFrom": {
+            "locale": [
+              "commandPalette.empty"
+            ]
+          }
         },
         {
           "name": "highlight",
@@ -1074,7 +1094,12 @@
           "type": "string",
           "required": false,
           "default": "locale commandPalette.noResult",
-          "description": "Shown when `query` is non-empty but there are no results."
+          "description": "Shown when `query` is non-empty but there are no results.",
+          "defaultFrom": {
+            "locale": [
+              "commandPalette.noResult"
+            ]
+          }
         },
         {
           "name": "open",
@@ -1087,7 +1112,12 @@
           "type": "string",
           "required": false,
           "default": "locale commandPalette.placeholder",
-          "description": "Placeholder in the search input; also the dialog's accessible name when `ariaLabel` is unset."
+          "description": "Placeholder in the search input; also the dialog's accessible name when `ariaLabel` is unset.",
+          "defaultFrom": {
+            "locale": [
+              "commandPalette.placeholder"
+            ]
+          }
         },
         {
           "name": "query",
@@ -1222,7 +1252,12 @@
           "type": "string",
           "required": false,
           "default": "locale copy.copied",
-          "description": "Label shown briefly after a successful copy."
+          "description": "Label shown briefly after a successful copy.",
+          "defaultFrom": {
+            "locale": [
+              "copy.copied"
+            ]
+          }
         },
         {
           "name": "name",
@@ -1361,8 +1396,15 @@
           "name": "placeholder",
           "type": "string",
           "required": false,
-          "default": "locale datePicker.placeholderDay | …Month | …Year",
-          "description": "Trigger text when nothing is selected. Defaults follow `precision`."
+          "default": "locale datePicker.placeholderDay | datePicker.placeholderMonth | datePicker.placeholderYear",
+          "description": "Trigger text when nothing is selected. Defaults follow `precision`.",
+          "defaultFrom": {
+            "locale": [
+              "datePicker.placeholderDay",
+              "datePicker.placeholderMonth",
+              "datePicker.placeholderYear"
+            ]
+          }
         },
         {
           "name": "precision",
@@ -1721,7 +1763,12 @@
           "type": "string",
           "required": false,
           "default": "locale fileInput.trigger",
-          "description": "Label on the trigger button."
+          "description": "Label on the trigger button.",
+          "defaultFrom": {
+            "locale": [
+              "fileInput.trigger"
+            ]
+          }
         },
         {
           "name": "triggerVariant",
@@ -2106,7 +2153,12 @@
           "type": "string",
           "required": false,
           "default": "locale loading.description",
-          "description": "Text under the spinner / mascot."
+          "description": "Text under the spinner / mascot.",
+          "defaultFrom": {
+            "locale": [
+              "loading.description"
+            ]
+          }
         },
         {
           "name": "loading",
@@ -2300,7 +2352,12 @@
           "type": "string",
           "required": false,
           "default": "locale null.description",
-          "description": "The empty-state line."
+          "description": "The empty-state line.",
+          "defaultFrom": {
+            "locale": [
+              "null.description"
+            ]
+          }
         },
         {
           "name": "isShowSticker",
@@ -2510,7 +2567,12 @@
           "type": "string",
           "required": false,
           "default": "locale pinInput.label",
-          "description": "Accessible name for the group; each cell appends its position to it."
+          "description": "Accessible name for the group; each cell appends its position to it.",
+          "defaultFrom": {
+            "locale": [
+              "pinInput.label"
+            ]
+          }
         },
         {
           "name": "autofocus",
@@ -2939,7 +3001,12 @@
           "type": "string",
           "required": false,
           "default": "locale reaction.label",
-          "description": "Accessible label base; the count is appended for the full name."
+          "description": "Accessible label base; the count is appended for the full name.",
+          "defaultFrom": {
+            "locale": [
+              "reaction.label"
+            ]
+          }
         },
         {
           "name": "modelValue",
@@ -3092,7 +3159,12 @@
           "type": "string",
           "required": false,
           "default": "locale select.loading",
-          "description": "Text under the loading spinner."
+          "description": "Text under the loading spinner.",
+          "defaultFrom": {
+            "locale": [
+              "select.loading"
+            ]
+          }
         },
         {
           "name": "manualFilter",
@@ -3119,7 +3191,12 @@
           "type": "string",
           "required": false,
           "default": "locale select.noResult",
-          "description": "Shown when the filter matches nothing."
+          "description": "Shown when the filter matches nothing.",
+          "defaultFrom": {
+            "locale": [
+              "select.noResult"
+            ]
+          }
         },
         {
           "name": "placeholder",
@@ -3152,7 +3229,12 @@
           "type": "string",
           "required": false,
           "default": "locale select.searchPlaceholder",
-          "description": "Placeholder in the in-panel search box."
+          "description": "Placeholder in the in-panel search box.",
+          "defaultFrom": {
+            "locale": [
+              "select.searchPlaceholder"
+            ]
+          }
         },
         {
           "name": "size",
