@@ -99,31 +99,33 @@ A PR with no changeset publishes nothing — correct for docs/CI-only changes.
   will fail at the publish step (no package on npm / OIDC not configured yet).
   That is expected — it goes green once the bootstrap is done.
 
-## The pub.dev packages: `kun_ui_tokens` and `kun_ui_icons`
+## The pub.dev packages: `kun_ui_tokens`, `kun_ui_icons`, `kun_ui_messages`
 
-Two Dart packages ride the same release train and publish to a different
-registry. Both are wholly generated — `packages/ui-tokens-flutter` by
+Three Dart packages ride the same release train and publish to a different
+registry. All are wholly generated — `packages/ui-tokens-flutter` by
 `packages/ui-tokens/scripts/gen-tokens.mjs`, `packages/ui-icons-flutter` by
-`packages/ui-core/scripts/gen-icons-flutter.mjs` — and everything below applies
-to each of them, with its own name, directory and workflow:
+`packages/ui-core/scripts/gen-icons-flutter.mjs`, `packages/ui-messages-flutter`
+by `packages/ui-core/scripts/gen-messages-flutter.mjs` — and everything below
+applies to each of them, with its own name, directory and workflow:
 
 | pub package | directory | workflow | tag |
 | --- | --- | --- | --- |
 | `kun_ui_tokens` | `packages/ui-tokens-flutter` | `publish-pub.yml` | `kun_ui_tokens-v<version>` |
 | `kun_ui_icons` | `packages/ui-icons-flutter` | `publish-pub-icons.yml` | `kun_ui_icons-v<version>` |
+| `kun_ui_messages` | `packages/ui-messages-flutter` | `publish-pub-messages.yml` | `kun_ui_messages-v<version>` |
 
 - **Version lockstep.** Every pub version always equals the npm version. The
   `Version and publish` step runs `node scripts/sync-pub-version.mjs` right
-  after `changeset version`, which rewrites both `pubspec.yaml` files, mirrors
-  the newest CHANGELOG block into both, and rewrites the version literals in
-  both `README.md` files — a pub README is the package page, so a stale
+  after `changeset version`, which rewrites every `pubspec.yaml`, mirrors
+  the newest CHANGELOG block into each, and rewrites the version literals in
+  each `README.md` — a pub README is the package page, so a stale
   version there is published, and `kun_ui_tokens` advertised `2.32.1` for the
   whole of `2.33.0` before this was synced. It all travels inside the one
   `ci: release packages` commit. Run it by hand with `pnpm sync:pub`. Each
   generator refuses to run when its pubspec disagrees — a diverged pubspec
   would otherwise fail at the registry, after npm had already shipped.
 - **Dispatched OIDC publish.** After pushing the npm tags, `release.yml` loops
-  over the two packages: it pushes each tag (guarded, so a re-run skips an
+  over the three packages: it pushes each tag (guarded, so a re-run skips an
   existing tag) and then **dispatches** that package's workflow on the tag ref
   with `gh workflow run`. The dispatch is not belt-and-braces, it is the
   trigger: the tags are pushed with `GITHUB_TOKEN`, and GitHub never starts
@@ -145,13 +147,14 @@ to each of them, with its own name, directory and workflow:
   authenticated `dart pub login`.
 - **Then enable it on pub.dev**: package page → **Admin** → *Automated
   publishing* → *Enable publishing from GitHub Actions*, with repository
-  `kungal/kun-ui` and tag pattern `kun_ui_tokens-v{{version}}` or
-  `kun_ui_icons-v{{version}}`. Leave the "require GitHub Actions environment"
-  box empty — neither workflow declares an environment.
-- **CI gate.** `check.yml`'s `flutter-tokens` job runs `flutter pub get`,
-  `dart format --set-exit-if-changed` and `flutter analyze --fatal-infos` over
-  both packages on every PR. The generated Dart is written by Node scripts, so
-  this is the only thing between the emitters and pub.dev.
+  `kungal/kun-ui` and that package's tag pattern (`kun_ui_tokens-v{{version}}`,
+  `kun_ui_icons-v{{version}}`, `kun_ui_messages-v{{version}}`). Leave the
+  "require GitHub Actions environment" box empty — no workflow declares one.
+- **CI gate.** `check.yml`'s `flutter-tokens` job resolves, format-checks and
+  analyzes all three packages on every PR (`kun_ui_messages` through the Dart
+  tools rather than Flutter's, because it declares no Flutter dependency). The
+  generated Dart is written by Node scripts, so this is the only thing between
+  the emitters and pub.dev.
 
 ## Consuming from another project (e.g. infra)
 

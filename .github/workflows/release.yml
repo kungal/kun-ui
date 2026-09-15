@@ -111,7 +111,7 @@ jobs:
           # with that token (the 2.33.0 tag push started nothing).
           # workflow_dispatch is exempt from that suppression.
           PUB_VERSION=$(node -p "require('./packages/ui-tokens/package.json').version")
-          for PUB in "kun_ui_tokens:publish-pub.yml" "kun_ui_icons:publish-pub-icons.yml"; do
+          for PUB in "kun_ui_tokens:publish-pub.yml" "kun_ui_icons:publish-pub-icons.yml" "kun_ui_messages:publish-pub-messages.yml"; do
             TAG="${PUB%%:*}-v${PUB_VERSION}"
             WORKFLOW="${PUB##*:}"
             if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then

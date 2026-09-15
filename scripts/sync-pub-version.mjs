@@ -1,5 +1,6 @@
-// Brings the pub.dev packages (`kun_ui_tokens`, `kun_ui_icons`) back into
-// version lockstep with @kungal/ui-tokens after `changeset version`.
+// Brings the pub.dev packages (`kun_ui_tokens`, `kun_ui_icons`,
+// `kun_ui_messages`) back into version lockstep with @kungal/ui-tokens after
+// `changeset version`.
 //
 // pub.dev refuses a publish whose pubspec version does not match the git tag
 // that triggered it, and release.yml derives those tags from the npm version —
@@ -16,6 +17,7 @@ const NPM_CHANGELOG = join(ROOT, 'packages/ui-tokens/CHANGELOG.md')
 const PUB_PACKAGES = [
   ['kun_ui_tokens', 'packages/ui-tokens-flutter'],
   ['kun_ui_icons', 'packages/ui-icons-flutter'],
+  ['kun_ui_messages', 'packages/ui-messages-flutter'],
 ]
 
 const version = JSON.parse(readFileSync(NPM_PKG, 'utf8')).version

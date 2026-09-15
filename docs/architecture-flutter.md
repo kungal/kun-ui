@@ -296,7 +296,8 @@ Only tiers 0–2 are *shared*. Tiers 3–4 are "written separately, verified
 against a shared spec."
 
 Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
-durations included), **tier 1 in 2.34.0** (`kun_ui_icons`), **tier 2 in
+durations included), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined by
+`kun_ui_messages`), **tier 2 in
 2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`), **tier 3 in 2.35.1**
 (`contracts/` — the acceptance list and the parity checker). Tier 4 has not
 started.
@@ -305,6 +306,7 @@ started.
 | --- | --- | --- | --- |
 | **0** | **Tokens.** Extend `gen-tokens.mjs`'s in-memory model to emit **three sibling outputs**: `palette.generated.css` (byte-identical), generated Dart, and a DTCG 2025.10 interop export. | `packages/ui-tokens-flutter/` → `kun_ui_tokens` on pub.dev; `tokens.dtcg.json` in `@kungal/ui-tokens` | 🟢 generated |
 | **1** | **Icons.** Add `gen:icons:flutter`; one SVG source, two outputs. Repo shape modelled on `microsoft/fluentui-system-icons`. | `@kungal/ui-core` `WANT` → Dart asset package | 🟢 generated |
+| **1** | **Strings.** Add `gen:messages:flutter`; one catalog source, two outputs. A locale's `dateLocale` does not cross — it is a date-fns object, and the Flutter calendar grid resolves from `code` instead. | `@kungal/ui-core/src/locale/*.json` → `kun_ui_messages` on pub.dev | 🟢 generated |
 | **2** | **Motion.** Beziers/durations cross as consts (§3.4, no sampling); ballistic animations share their *physics parameters*, from which web bakes keyframes and Flutter bakes `CatmullRomCurve.precompute` tables. | tokens package | 🟢 generated |
 | **3** | **Component contracts.** `component-meta.json` (70 components) becomes the Flutter port's acceptance list and a parity report. | `contracts/` in this repo | 🟡 spec |
 | **4** | **Component implementations.** Hand-written widgets on `ThemeExtension`; Widgetbook plays the role `apps/docs` plays here. | separate `kun-ui-flutter` repo | 🔴 separate |
@@ -338,6 +340,14 @@ Notes that are easy to get wrong:
   `svg-spinners:90-ring-with-bg`, is an *animated* SVG — no static format
   carries it; the Flutter side gets a hand-written rotating-arc widget in
   tier 4. The honest tier-1 count is 29 crossing, 1 not.
+- **Tier 1's strings are methods, not a map.** TypeScript proves a message
+  *path* is spelled right (`KunMessagePath` is a template-literal union) but
+  cannot prove `t('datePicker.monthCell', { year })` supplied every
+  placeholder — a forgotten one ships a literal `{month}` into an aria-label.
+  Dart can, so each templated string generates a method with required named
+  parameters and that failure mode does not exist on the Flutter side. The
+  generator refuses to run when a key or a `{placeholder}` exists in one
+  language and not another.
 - **Tier 0's generated Dart is theme-system-agnostic plain `const`
   classes** — not `ThemeExtension` subclasses. Verified 2026-09: the
   modern independent design systems on Flutter (forui's

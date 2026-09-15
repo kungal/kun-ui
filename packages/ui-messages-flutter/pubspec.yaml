@@ -1,0 +1,20 @@
+name: kun_ui_messages
+version: 2.36.0
+description: >-
+  KunUI's own user-visible strings for Dart: accessible names, empty and
+  loading states, and built-in button labels, generated from the same catalogs
+  the web components resolve.
+
+repository: https://github.com/kungal/kun-ui
+homepage: https://github.com/kungal/kun-ui
+issue_tracker: https://github.com/kungal/kun-ui/issues
+
+environment:
+  # Pure Dart — no Flutter import, so this is usable from a CLI or a server
+  # renderer too. The floor is kun_ui_tokens', not this package's own need,
+  # because the three ship on one release train at one version and are meant
+  # to sit side by side in one pubspec.
+  sdk: ^3.6.0
+
+dev_dependencies:
+  lints: ^6.0.0

@@ -124,9 +124,9 @@ jobs:
           echo "Generated files are in sync."
 
   flutter-tokens:
-    name: Flutter token package
-    # packages/ui-tokens-flutter and packages/ui-icons-flutter are Dart written
-    # by Node scripts. Nothing else in this repo can compile them: `pnpm build`
+    name: Flutter packages
+    # The three packages/ui-*-flutter directories are Dart written by Node
+    # scripts. Nothing else in this repo can compile them: `pnpm build`
     # skips them (no package.json), `pnpm typecheck` is TypeScript, and the
     # "generated files" job only proves the emitters are deterministic — not
     # that what they emitted is valid Dart. So without this job the first thing
@@ -162,3 +162,15 @@ jobs:
 
       - run: flutter analyze --fatal-infos
         working-directory: packages/ui-icons-flutter
+
+      # kun_ui_messages declares no Flutter dependency — plain Dart strings,
+      # usable from a CLI or a server renderer too. Resolve and analyze it with
+      # the Dart tools so a Flutter import creeping in fails here.
+      - run: dart pub get
+        working-directory: packages/ui-messages-flutter
+
+      - run: dart format --output=none --set-exit-if-changed .
+        working-directory: packages/ui-messages-flutter
+
+      - run: dart analyze --fatal-infos
+        working-directory: packages/ui-messages-flutter
