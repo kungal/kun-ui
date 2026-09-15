@@ -1,5 +1,72 @@
 # @kungal/ui-vue
 
+## 2.37.0
+
+### Minor Changes
+
+- d1a2f6e: KunUI's own strings moved to `@kungal/ui-core`. Nothing you import has to change.
+
+  The two catalogs — `zh-CN` and `en` — now live in `@kungal/ui-core` as plain
+  data, next to the variant matrix and the radius system, instead of inside the
+  Vue layer. `@kungal/ui-vue` re-exports everything it exported before
+  (`KunMessages`, `KunMessagePath`, `translateKunMessage`, `defineKunLocale`,
+  `kunLocaleZhCN`, and `@kungal/ui-vue/locale/en`), so a Vue app sees no
+  difference at all.
+
+  Why move them: a locale is 91 strings of plain data, and every render layer
+  needs the same 91. Leaving them in `@kungal/ui-vue` would have made the Vue
+  package the upstream of the planned React layer, and of the Flutter port, for
+  text that has nothing to do with Vue. They are authored as JSON now, which is
+  also what lets a build-time generator read them without evaluating TypeScript.
+
+  New, if you want it:
+
+  - `@kungal/ui-core` exports `KUN_CATALOG_ZH_CN`, `translateKunMessage` and the
+    `KunMessages` / `KunMessageCatalog` / `KunMessagePath` types;
+    `@kungal/ui-core/locale/en` exports `KUN_CATALOG_EN`. Only the catalog you
+    import is bundled, exactly as before.
+  - A `KunLocale` is now a catalog plus the one field that cannot leave the web:
+    `dateLocale`, the date-fns locale backing `KunDatePicker`'s calendar grid.
+
+  Every string is byte-identical to 2.36.0 — both catalogs were read back out of
+  the previous release and all 182 values compared. Rendered output does not
+  change.
+
+  The Flutter contract gained one thing alongside this: the sixteen props whose
+  default comes from the locale now carry it structurally as
+  `defaultFrom: { "locale": [...] }`, not only as prose, and the generator fails
+  if such a path is not a real message key.
+
+### Patch Changes
+
+- b7da1b9: KunUI's strings are now a Dart package too: `kun_ui_messages` on pub.dev.
+
+  It is generated from the same catalogs the web resolves from, so a string
+  cannot exist on one platform only, and it rides the existing release train at
+  the same version as `kun_ui_tokens` and `kun_ui_icons`. Pure Dart — it declares
+  no Flutter dependency.
+
+  A string with a `{placeholder}` becomes a **method with required named
+  parameters**, not a field:
+
+  ```dart
+  messages.datePicker.monthCell(year: 2026, month: '9月')  // 2026年9月
+  messages.avatarGroup.label(count: 3)                     // 3 位用户
+  ```
+
+  That is the one thing the web side cannot offer. TypeScript proves a message
+  path is spelled right, because `KunMessagePath` is a template-literal union,
+  but it cannot prove every placeholder was supplied — a forgotten one ships a
+  literal `{month}` into an accessibility label. In Dart it is a compile error.
+
+  The generator refuses to run when a key or a `{placeholder}` exists in one
+  language and not another, so a translation cannot silently drop a value.
+
+  Nothing changes for npm consumers; this is a patch bump to carry the pub
+  package onto the train.
+
+  - @kungal/ui-core@2.37.0
+
 ## 2.36.0
 
 ### Minor Changes
