@@ -1409,7 +1409,9 @@
       {
         "name": "locale",
         "type": "string",
-        "required": false
+        "required": false,
+        "default": "the active KunUI locale's dateLocale, else its code",
+        "description": "Language of the calendar GRID — weekday and month names, and the full date each day cell announces. Only `'zh-CN'` / `'ja'` / `'en'` are bundled; for anything else put a date-fns locale object on your `KunLocale.dateLocale` instead of passing a tag here."
       },
       {
         "name": "maxDate",
@@ -1475,7 +1477,8 @@
       {
         "name": "weekdays",
         "type": "string[]",
-        "required": false
+        "required": false,
+        "description": "Short weekday headers, Sunday first. Overrides the locale's, index by index — a shorter array leaves the rest as the locale had them."
       }
     ],
     "events": [

@@ -28,7 +28,7 @@ import type { KunMessagePath } from '../locale/types'
 // date-fns powered. All icons bundled; no Nuxt coupling.
 defineOptions({ name: 'KunDatePicker' })
 
-const { t } = useKunLocale()
+const { t, locale: kunLocale } = useKunLocale()
 
 const props = withDefaults(defineProps<KunDatePickerProps>(), {
   modelValue: '',
@@ -138,10 +138,17 @@ const {
   minDate,
   maxDate,
   isDateDisabled,
-  locale,
   weekdays,
   months,
 } = toRefs(props)
+
+// The calendar grid is dates, not strings, so `messages` cannot localize it.
+// Before this it defaulted to en-US regardless of the active locale: a zh-CN
+// app rendered `Su Mo Tu` over Chinese buttons, and every day cell announced
+// an English `toDateString()`.
+const calendarLocale = computed(
+  () => props.locale ?? kunLocale.dateLocale ?? kunLocale.code
+)
 const {
   viewingDate,
   i18n,
@@ -156,6 +163,7 @@ const {
   navigateDecade,
   selectDate,
   formatDate,
+  formatLocalized,
   tempRangeStart,
 } = useCalendar({
   modelValue,
@@ -164,7 +172,7 @@ const {
   minDate,
   maxDate,
   isDateDisabled,
-  locale,
+  locale: calendarLocale,
   weekdays,
   months,
   valueFormat: resolvedValueFormat,
@@ -593,7 +601,8 @@ const isInPreviewRange = (date: Date) => {
                headers are hidden to screen readers to make navigating with a
                touch screen reader easier. The day names are already included in
                the label of each cell." Ours are — the cell label is a full
-               `toDateString()`. -->
+               localized date (`PPPP`), which carries the weekday in every
+               locale date-fns ships. Shortening it breaks that contract. -->
           <div
             v-if="view === 'day'"
             class="text-default-600 mt-3 grid grid-cols-7 text-center text-xs"
@@ -649,7 +658,7 @@ const isInPreviewRange = (date: Date) => {
                       props.classNames?.cell
                     )
                   "
-                  :aria-label="day.date.toDateString()"
+                  :aria-label="formatLocalized(day.date, 'PPPP')"
                   :aria-selected="day.isSelected"
                   :tabindex="day.key === activeKey ? 0 : -1"
                   @click="handleCellSelect(day.date)"
@@ -686,7 +695,12 @@ const isInPreviewRange = (date: Date) => {
                   type="button"
                   :disabled="cell.isDisabled"
                   :class="periodCellClass(cell)"
-                  :aria-label="`${cell.label} ${cell.date.getFullYear()}`"
+                  :aria-label="
+                    t('datePicker.monthCell', {
+                      month: cell.label,
+                      year: cell.date.getFullYear(),
+                    })
+                  "
                   :aria-selected="cell.isSelected"
                   :tabindex="cell.key === activeKey ? 0 : -1"
                   @click="handleCellSelect(cell.date)"

@@ -7,6 +7,8 @@
 // "Decrease {fieldLabel}" for en-US and "{fieldLabel} verringern" for de-DE),
 // so an interpolated string must stay one template here and never be assembled
 // from fragments at the call site.
+import type { Locale as KunDateFnsLocale } from 'date-fns'
+
 export interface KunMessages {
   alert: { title: string; confirm: string; cancel: string }
   autocomplete: { clear: string; loading: string; noResult: string }
@@ -37,7 +39,9 @@ export interface KunMessages {
   /** `success` / `failure` take `{text}`, the copied string. */
   copy: { copied: string; success: string; failure: string }
   /** `prevPage` / `nextPage` take `{unit}`, filled from `unitMonth` /
-   *  `unitYear` / `unitDecade`; `zoomOut` takes `{label}`. */
+   *  `unitYear` / `unitDecade`; `zoomOut` takes `{label}`; `monthCell` takes
+   *  `{month}` and `{year}` — one template, because Chinese puts the year
+   *  first. */
   datePicker: {
     placeholderDay: string
     placeholderMonth: string
@@ -53,6 +57,7 @@ export interface KunMessages {
     unitMonth: string
     unitYear: string
     unitDecade: string
+    monthCell: string
   }
   drawer: { close: string }
   /** `selected` takes `{count}`. */
@@ -118,9 +123,16 @@ export interface KunMessages {
 export interface KunLocale {
   /** Endonym, for a language switcher's own list (e.g. `简体中文`). */
   name: string
-  /** BCP 47 tag. Not used for matching — KunUI never picks a locale for you. */
+  /** BCP 47 tag. Not used for matching — KunUI never picks a locale for you.
+   *  It is the last-resort fallback for `dateLocale`. */
   code: string
   messages: KunMessages
+  /** date-fns locale backing the calendar grid — weekday and month names, and
+   *  the full date each day cell announces. Omit it and KunDatePicker falls
+   *  back to `code` (it knows `zh-CN` / `ja` / `en`), then to `en-US`. Supply
+   *  it for any other language: the grid is dates, not strings, so `messages`
+   *  alone cannot localize it. */
+  dateLocale?: KunDateFnsLocale
 }
 
 /** Dotted path into `KunMessages`, e.g. `'pagination.prev'`. */

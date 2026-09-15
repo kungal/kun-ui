@@ -1457,7 +1457,14 @@ export interface KunDatePickerProps {
    *  covers — the day itself, the 1st of the month, or January 1st — so one
    *  predicate works at every precision. */
   isDateDisabled?: (date: Date) => boolean
+  /** Language of the calendar GRID — weekday and month names, and the full
+   *  date each day cell announces. Only `'zh-CN'` / `'ja'` / `'en'` are
+   *  bundled; for anything else put a date-fns locale object on your
+   *  `KunLocale.dateLocale` instead of passing a tag here.
+   *  @default the active KunUI locale's dateLocale, else its code */
   locale?: string
+  /** Short weekday headers, Sunday first. Overrides the locale's, index by
+   *  index — a shorter array leaves the rest as the locale had them. */
   weekdays?: string[]
   /** Full month names. Also the source for the month grid's labels, where the
    *  abbreviated form is used unless this overrides it. */

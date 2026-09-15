@@ -1,8 +1,10 @@
+import { enUS } from 'date-fns/locale'
 import type { KunLocale } from './types'
 
 const en: KunLocale = {
   name: 'English',
   code: 'en',
+  dateLocale: enUS,
   messages: {
     alert: { title: 'Confirm', confirm: 'OK', cancel: 'Cancel' },
     autocomplete: {
@@ -51,6 +53,7 @@ const en: KunLocale = {
       unitMonth: 'month',
       unitYear: 'year',
       unitDecade: 'decade',
+      monthCell: '{month} {year}',
     },
     drawer: { close: 'Close drawer' },
     fileInput: { trigger: 'Choose files', selected: '{count} files selected' },

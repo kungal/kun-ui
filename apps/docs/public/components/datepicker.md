@@ -183,7 +183,7 @@ const date = ref('')
 | `icon` | `string` | `""` | Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. The trailing calendar glyph is the disclosure indicator and stays either way. Must be one of the bundled icon names. |
 | `isDateDisabled` | `((date: Date) => boolean)` | — | Extra per-cell veto. Called with the FIRST instant of the period a cell covers — the day itself, the 1st of the month, or January 1st — so one predicate works at every precision. |
 | `label` | `string` | `""` |  |
-| `locale` | `string` | — |  |
+| `locale` | `string` | `the active KunUI locale's dateLocale, else its code` | Language of the calendar GRID — weekday and month names, and the full date each day cell announces. Only `'zh-CN'` / `'ja'` / `'en'` are bundled; for anything else put a date-fns locale object on your `KunLocale.dateLocale` instead of passing a tag here. |
 | `maxDate` | `string \| Date` | — |  |
 | `minDate` | `string \| Date` | — |  |
 | `mode` | `KunDatePickerMode` | `"single"` |  |
@@ -194,7 +194,7 @@ const date = ref('')
 | `rounded` | `KunUIRounded` | — | Corner radius. When unset it follows the nearest KunUIConfigProvider's `rounded`. `full` means a pill, which is only defined for the single-line trigger — the floating panel falls back to `lg`, because `9999px` on an n-row panel is clamped by the browser to half its short side. Every other bucket applies to both. |
 | `size` | `KunUISize` | `"md"` |  |
 | `valueFormat` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the emitted v-model string. Defaults follow `precision`; keep it ISO-shaped so the value parses back. |
-| `weekdays` | `string[]` | — |  |
+| `weekdays` | `string[]` | — | Short weekday headers, Sunday first. Overrides the locale's, index by index — a shorter array leaves the rest as the locale had them. |
 
 ## Events
 

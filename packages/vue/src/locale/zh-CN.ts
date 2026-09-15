@@ -1,3 +1,4 @@
+import { zhCN as zhCNDates } from 'date-fns/locale'
 import type { KunLocale } from './types'
 
 // KunUI's built-in default. The strings here are the ones the components used
@@ -6,6 +7,7 @@ import type { KunLocale } from './types'
 const zhCN: KunLocale = {
   name: '简体中文',
   code: 'zh-CN',
+  dateLocale: zhCNDates,
   messages: {
     alert: { title: '确认', confirm: '确定', cancel: '取消' },
     autocomplete: { clear: '清除', loading: '加载中…', noResult: '无匹配项' },
@@ -50,6 +52,7 @@ const zhCN: KunLocale = {
       unitMonth: '月',
       unitYear: '年',
       unitDecade: '个十年',
+      monthCell: '{year}年{month}',
     },
     drawer: { close: '关闭抽屉' },
     fileInput: { trigger: '选择文件', selected: '已选 {count} 个文件' },

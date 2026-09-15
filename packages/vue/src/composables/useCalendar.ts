@@ -22,6 +22,7 @@ import {
   startOfDay,
   startOfToday,
 } from 'date-fns'
+import type { Locale as DateFnsLocale } from 'date-fns'
 import { enUS, ja, zhCN } from 'date-fns/locale'
 
 // Calendar grid + selection logic for KunDatePicker. Pure date-fns + Vue
@@ -83,8 +84,12 @@ const parseDate = (
   return isValid(d) ? d : null
 }
 
-const getLocale = (localeStr?: string) => {
-  switch (localeStr) {
+// Accepts a resolved date-fns locale (what KunLocale.dateLocale carries) or a
+// tag naming one of the three bundled here. Anything else falls to en-US —
+// KunUI bundles only these, so a fourth language must pass the object.
+const getLocale = (locale?: string | DateFnsLocale): DateFnsLocale => {
+  if (locale && typeof locale !== 'string') return locale
+  switch (locale) {
     case 'ja':
       return ja
     case 'zh-CN':
@@ -101,7 +106,7 @@ export const useCalendar = (props: {
   minDate?: Ref<string | Date | undefined>
   maxDate?: Ref<string | Date | undefined>
   isDateDisabled?: Ref<((date: Date) => boolean) | undefined>
-  locale?: Ref<string | undefined> | string
+  locale?: Ref<string | DateFnsLocale | undefined> | string
   weekdays?: Ref<string[] | undefined>
   months?: Ref<string[] | undefined>
   valueFormat?: Ref<string | undefined>
@@ -119,6 +124,12 @@ export const useCalendar = (props: {
   const localeObject = computed(() =>
     getLocale(typeof props.locale === 'string' ? props.locale : props.locale?.value)
   )
+
+  // Locale-aware formatting for the caller's accessible names. Separate from
+  // `formatDate`, which speaks the machine `valueFormat` and must not be
+  // localized.
+  const formatLocalized = (date: Date, pattern: string) =>
+    format(date, pattern, { locale: localeObject.value })
 
   const i18n = computed(() => {
     const locale = localeObject.value
@@ -366,6 +377,7 @@ export const useCalendar = (props: {
     normalize,
     selectDate,
     formatDate,
+    formatLocalized,
     tempRangeStart,
   }
 }

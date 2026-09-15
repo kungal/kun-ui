@@ -586,6 +586,20 @@ template on purpose: a placeholder's position moves between languages
 (`Decrease {field}` vs `{field} verringern`), so it can never be assembled from
 fragments at the call site.
 
+**The calendar grid is dates, not strings.** `KunDatePicker`'s weekday and month
+names, and the full date each day cell announces, come from a date-fns locale,
+so `KunLocale` carries one alongside `messages`:
+
+```ts
+import { enUS } from 'date-fns/locale'
+
+defineKunLocale({ name: 'English', code: 'en', dateLocale: enUS, messages: { … } })
+```
+
+Omit it and KunUI falls back to `code` (it bundles `zh-CN` / `ja` / `en`), then
+to `en-US`. `KunDatePicker`'s own `locale` prop still wins over both, and
+changes only the grid — the buttons around it keep following `messages`.
+
 **SSR.** The locale rides on the config, which is provided per app — and so
 per request. It is deliberately *not* a module-level singleton: one would leak
 the language of whichever request rendered last into another request's HTML.
