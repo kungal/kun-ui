@@ -18,8 +18,6 @@ const props = withDefaults(defineProps<KunUserChipProps>(), {
   description: '',
   className: '',
   isNavigation: true,
-  disableFloating: false,
-  floatingPosition: 'top',
 })
 
 const config = useKunUIConfig()
@@ -44,8 +42,6 @@ const linkProps = computed(() => {
     "
   >
     <KunAvatar
-      :floating-position="props.floatingPosition"
-      :disable-floating="props.disableFloating"
       :user="user"
       :size="size"
       :is-navigation="false"

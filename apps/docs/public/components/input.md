@@ -124,11 +124,11 @@ const amount = ref('')
 | `autofocus` | `boolean` | `false` | Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top. |
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"default"` |  |
-| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` |  |
-| `helperText` | `string` | `""` | Helper text below the field. |
+| `helperText` | `string` | `""` | Helper text below the field. **已废弃**：Use `description` (unified across all KunUI form controls). |
 | `isClearable` | `boolean` | `false` | Show an X button to clear the value when non-empty. |
 | `isInvalid` | `boolean` | `false` | Mark the field invalid (danger ring) without showing an error message. |
 | `label` | `string` | `""` |  |

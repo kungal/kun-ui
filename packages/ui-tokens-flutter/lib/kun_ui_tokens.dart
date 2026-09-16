@@ -10,7 +10,9 @@
 /// whatever theme it already has.
 library;
 
+export 'src/blur.g.dart';
 export 'src/colors.g.dart';
+export 'src/layout.g.dart';
 export 'src/motion.g.dart';
 export 'src/radius.g.dart';
 export 'src/shadows.g.dart';

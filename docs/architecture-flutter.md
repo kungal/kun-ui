@@ -231,7 +231,7 @@ spirit holds on the Dart side too, and `flutter/physics` +
 | --- | --- | --- |
 | OKLCH palette: 7 hues × 11 shades + solid + on-colour | 🟢 generate | plus the **WCAG AA assertion** — the most valuable invariant we own |
 | Radius buckets (`--radius-kun-*`, 5) | 🟢 generate | `--kun-radius-scale` becomes a theme field |
-| Elevation (`--shadow-kun-sm/md/lg`) | 🟢 generate | maps to `BoxShadow`; offsets/blur port, spread semantics differ slightly |
+| Elevation (`--shadow-kun-sm/md/lg`) | 🟢 generate | maps to `BoxShadow`; offsets and spread port as-is, blur must be converted (see §5) |
 | Motion: 4 easings + 4 durations + sampled curves | 🟢 generate | §3.4 |
 | The 30 icons in `WANT` | 🟢 generate | one SVG source → both |
 | Component *contracts* (props/events/slots) | 🟡 spec only | `apps/docs/app/generated/component-meta.json`, 70 entries |
@@ -296,9 +296,12 @@ Only tiers 0–2 are *shared*. Tiers 3–4 are "written separately, verified
 against a shared spec."
 
 Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
-durations included; spacing and the type scale joined in 2.38.0), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined by
-`kun_ui_messages`), **tier 2 in
-2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`), **tier 3 in 2.35.1**
+durations included; spacing and the type scale joined in 2.38.0, the
+container, breakpoint and blur scales, the glow shadow, the default transition
+and white/black in 2.39.0), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined
+by `kun_ui_messages`, and in 2.39.0 by the two images components draw
+offline), **tier 2 in 2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`,
+joined by `KunSwipeDismissPhysics` in 2.39.0), **tier 3 in 2.35.1**
 (`contracts/` — the acceptance list and the parity checker), and **tier 4
 started 2026-09**: `kun_ui` 0.1.0 is on pub.dev from the separate
 `kungal/kun-ui-flutter` repo, claiming `KunButton`, `KunCard`, `KunChip` and
@@ -339,6 +342,49 @@ Notes that are easy to get wrong:
   alternative the port also proposed, a per-component layout table read by
   both Vue and Flutter, was declined: it moves component implementation
   into the shared tiers, which this section rules out.
+- **2.39.0 applied the same rule to every Tailwind default the port hit
+  next**: `--container-*` (`KunContainerWidths`), `--breakpoint-*`
+  (`KunBreakpointWidths` — not `KunBreakpoints`, which `kun_ui` already
+  defines and re-exports this package beside), `--blur-*` (`KunBlur`),
+  `--shadow-lg` (`KunShadows.glow`, the `shadow` variant's geometry) and
+  `--default-transition-*` (`KunDefaultTransition`). The last one is there
+  because about thirty web call sites — `KunButton` and `KunChip` among them
+  — write `transition`/`transition-colors` with no `duration-*` or `ease-*`
+  and so run Tailwind's 150 ms `cubic-bezier(0.4, 0, 0.2, 1)`; the port
+  reported one of them (KunTab's scroll buttons) as a missing kun timing.
+  Moving all thirty onto `--kun-dur-fast`/`--ease-kun-standard` would change
+  the press feel of every button on every site, which is a design decision,
+  not a token fix; publishing what they actually run is. `--color-white`
+  and `--color-black` are KunUI's own declarations in `tokens.css`, so they
+  are read from there — the guard that refuses a Tailwind read for a name
+  `tokens.css` declares caught exactly that. KunTab and KunCarousel used the
+  bare `backdrop-blur`, which Tailwind v4 keeps only as a deprecated alias
+  compiled to a literal `blur(8px)` outside the theme; they now say
+  `backdrop-blur-sm`, the same 8 px through `--blur-sm`.
+- **`BoxShadow.blurRadius` is not a CSS blur radius.** css-backgrounds-3
+  draws a shadow's blur as "a Gaussian blur with a standard deviation equal
+  to half the blur radius"; Flutter converts `blurRadius` with
+  `Shadow.convertRadiusToSigma`, σ = 0.57735·r + 0.5. `KunShadows` copied
+  the CSS number from 2.33.0 to 2.38.0, so every elevation drew about 20%
+  softer. Measured on the same shapes (Chromium 153, `flutter test` 3.47.2):
+  a black 40/15/6 px blur differed from the copied value by up to 11/13/18 of
+  255 per pixel and from the converted one by 0–1; `shadow-kun-lg` on a
+  rounded box had 6249 channels more than 2/255 off before and 33 after, and
+  the tinted glow sits within 7/255 in the shadow (10/255 on the fill's
+  antialiased edge). The generator now converts. `filter`/`backdrop-filter`
+  `blur()` is different again: it takes the standard deviation itself, as
+  `ImageFilter.blur` does, and the two fitted the same σ, so `KunBlur` steps
+  pass straight through.
+- **Declined in the same round**, each for the reason the type scale's
+  layout table was: Pagination's 150/120/340 ms, its pop keyframes and
+  `PHASE_MS` (one component's choreography, locked to each other as literals
+  on purpose — a consumer override of `--kun-dur-fast` must not desync the
+  pill from the numbers), and Select's 600 ms type-ahead reset. The port
+  copies those from the source at the tag it pins. Switching the `shadow`
+  variant to `shadow-kun-lg` was also declined: `--shadow-kun-*` is the
+  elevation scale for floating surfaces, the glow is a tinted variant
+  effect, and swapping one for the other restyles every `variant="shadow"`
+  button on every site.
 - **DTCG is an export, not the pivot.** The single source of truth is the
   *policy* in `gen-tokens.mjs` (`HUES`, the ramp, the AA assertion) — a
   DTCG file stores resolved values and cannot express any of that. So the
@@ -358,6 +404,14 @@ Notes that are easy to get wrong:
   carries it; the Flutter side gets a hand-written rotating-arc widget in
   tier 4 (shipped as `KunSpinner` in `kun_ui` 0.1.0). The honest tier-1 count
   is 29 crossing, 1 not.
+- **Tier 1 also carries two bitmaps** (2.39.0): KunNull's mascot and
+  KunAvatar's last fallback, under the same no-network rule as the icons.
+  The repo keeps them only as the data URIs the web inlines, so
+  `gen-icons-flutter.mjs` decodes those into `lib/images/` and emits
+  `KunImages` (`AssetImage`s with `package: 'kun_ui_icons'`), and refuses to
+  run when `pubspec.yaml` does not list an image — an unlisted package asset
+  is not bundled, and the app finds out from an "Unable to load asset" at
+  runtime.
 - **Tier 1's strings are methods, not a map.** TypeScript proves a message
   *path* is spelled right (`KunMessagePath` is a template-literal union) but
   cannot prove `t('datePicker.monthCell', { year })` supplied every
@@ -389,6 +443,18 @@ Notes that are easy to get wrong:
   form. The shared source is `packages/ui-tokens/scripts/motion-physics.mjs`,
   which generates both `KUN_SHATTER_PHYSICS` (ui-core, consumed by the web
   component) and `KunShatterPhysics` (kun_ui_tokens).
+- **The sheet drag is §3.4's gesture-driven case, and only its feel
+  crosses** (2.39.0). `useKunSwipeDismiss` has seven constants; three are
+  the feel — the distance ratio and flick velocity that dismiss (vaul's),
+  and the rubber-band limit — and now come from the same manifest as
+  `KUN_SWIPE_DISMISS_PHYSICS` / `KunSwipeDismissPhysics` (velocity in px/s
+  on the Dart side, the unit of `DragEndDetails`). The other four answer
+  browser mechanics: a 6 px claim threshold set under Chrome's touch slop
+  (Flutter's gesture arena uses `kTouchSlop`, 18), a 100 ms velocity window
+  (`VelocityTracker` samples its own), a cooldown after momentum scrolling,
+  and a grace period while the enter animation runs (a Flutter sheet can read
+  its route animation's status). Sharing those would hand the port numbers
+  tuned for a different machine.
 - **Tier 3 classifies as data, and defaults new API to portable.**
   `contracts/component-contracts.json` (generated from `component-meta.json`
   by `scripts/gen-flutter-contracts.mjs`, CI-gated like every generated file)

@@ -7,6 +7,7 @@ interface PropRow {
   required?: boolean
   default?: string
   description?: string
+  deprecated?: string
 }
 defineProps<{ rows: PropRow[] }>()
 </script>
@@ -36,7 +37,12 @@ defineProps<{ rows: PropRow[] }>()
           <td class="text-default-500 px-4 py-2 font-mono whitespace-nowrap">
             {{ r.default ?? '—' }}
           </td>
-          <td class="text-default-600 px-4 py-2">{{ r.description }}</td>
+          <td class="text-default-600 px-4 py-2">
+            {{ r.description }}
+            <span v-if="r.deprecated" class="text-warning-700 dark:text-warning">
+              <strong>已废弃：</strong>{{ r.deprecated }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>

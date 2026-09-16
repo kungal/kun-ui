@@ -327,7 +327,7 @@ onBeforeUnmount(() => {
         type="button"
         :aria-label="t('carousel.prev')"
         :disabled="!loopActive && activeDot <= 0"
-        class="border-kun bg-background/80 text-foreground absolute top-1/2 left-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
+        class="border-kun bg-background/80 text-foreground absolute top-1/2 left-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur-sm transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="prev"
       >
         <KunIcon name="lucide:chevron-left" class="size-5" />
@@ -336,7 +336,7 @@ onBeforeUnmount(() => {
         type="button"
         :aria-label="t('carousel.next')"
         :disabled="!loopActive && activeDot >= maxIndex"
-        class="border-kun bg-background/80 text-foreground absolute top-1/2 right-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
+        class="border-kun bg-background/80 text-foreground absolute top-1/2 right-2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border shadow-kun-sm backdrop-blur-sm transition disabled:pointer-events-none disabled:opacity-0 hover:scale-105"
         @click="next"
       >
         <KunIcon name="lucide:chevron-right" class="size-5" />

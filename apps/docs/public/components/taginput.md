@@ -96,7 +96,7 @@ const b = ref<string[]>(['vue', 'react'])
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
 | `disabled` | `boolean` | `false` | Blocks input and dims the field. |
 | `error` | `string` | `""` | Error message below the field. Setting it also paints the invalid state and hides `description`. |
-| `helperText` | `string` | `""` | Helper text below the field. |
+| `helperText` | `string` | `""` | Helper text below the field. **已废弃**：Use `description` (unified across all KunUI form controls). |
 | `label` | `string` | `""` | Visible label above the field. |
 | `maxTagLength` | `number` | `100` | Longest accepted tag, in characters. Default 100. |
 | `maxTags` | `number` | `Number.POSITIVE_INFINITY` | Cap on how many tags can be added. Reaching it emits `invalid` with `max-reached`. |

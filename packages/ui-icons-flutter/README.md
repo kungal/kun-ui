@@ -17,8 +17,8 @@ dependencies:
   kun_ui_icons: ^2.38.0
 ```
 
-The font is bundled by the package; there is nothing to declare in your own
-`pubspec.yaml`.
+The font and the images are bundled by the package; there is nothing to
+declare in your own `pubspec.yaml`.
 
 ## Use
 
@@ -38,6 +38,14 @@ IconButton(
 the enclosing `IconTheme` and are dropped from release builds by Flutter's
 `--tree-shake-icons` like any other const icon.
 
+`KunImages` holds the two bitmaps KunUI's components draw without a network
+request, as `AssetImage`s:
+
+```dart
+const Image(image: KunImages.nullImage, width: 250); // KunNull's mascot
+const Image(image: KunImages.avatarFallback);        // KunAvatar's last fallback
+```
+
 ## What is in it
 
 Every [lucide](https://lucide.dev) icon KunUI's own components use. One icon in
@@ -49,6 +57,10 @@ The glyphs are outlined, not stroked. lucide draws with strokes; a font glyph
 has only filled contours, so the generator runs lucide's own font pipeline
 (rasterise, trace, pack) to convert them. The shapes are the ones lucide's
 official icon font ships, not a re-drawing.
+
+The two images are KunNull's empty-state mascot (500×333) and KunAvatar's
+terminal fallback (128×128), both WebP. They are the exact bytes the web
+components inline as data URIs, decoded by the generator.
 
 ## Guarantees
 
@@ -64,7 +76,8 @@ official icon font ships, not a re-drawing.
 
 ## Contributing
 
-`lib/kun_ui_icons.dart` and `lib/fonts/KunUiIcons.ttf` are generated. Add an
+`lib/kun_ui_icons.dart`, `lib/fonts/KunUiIcons.ttf` and `lib/images/` are
+generated. Add an
 icon to `WANT` in
 [`packages/ui-core/scripts/icons-manifest.mjs`](https://github.com/kungal/kun-ui/blob/main/packages/ui-core/scripts/icons-manifest.mjs)
 and run `pnpm gen:icons && pnpm gen:icons:flutter`; a PR that edits `lib`

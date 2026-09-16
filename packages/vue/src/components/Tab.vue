@@ -254,7 +254,7 @@ const maskStyle = computed(() => {
 const scrollBtnClasses = (side: 'left' | 'right') =>
   cn(
     'absolute top-1/2 z-20 inline-flex size-7 -translate-y-1/2 items-center justify-center',
-    'rounded-full border border-kun bg-background/80 text-default-600 shadow-kun-sm backdrop-blur',
+    'rounded-full border border-kun bg-background/80 text-default-600 shadow-kun-sm backdrop-blur-sm',
     'opacity-80 transition-[color,opacity] hover:text-foreground hover:opacity-100',
     side === 'left' ? 'left-0.5' : 'right-0.5'
   )

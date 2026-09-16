@@ -74,6 +74,15 @@ const cleanType = (t) =>
     .replace(/\s*\|\s*undefined\b/g, '')
     .trim()
 
+// A `@deprecated` prop still type-checks and still renders in the table, and
+// its description alone ("Legacy dark-mode border toggle.") does not say it
+// does nothing — the Flutter contract listed such props as API to port.
+const deprecation = (tags) => {
+  const tag = tags?.find((t) => t.name === 'deprecated')
+  if (!tag) return undefined
+  return (tag.text || '').replace(/\s+/g, ' ').trim() || 'Deprecated.'
+}
+
 // ── Generic components ──────────────────────────────────────────────────
 // vue-component-meta reports an *uninstantiated* generic SFC, so a prop typed
 // `items: T[]` comes back as the literal `"T[]"` — accurate to the source and
@@ -198,6 +207,7 @@ for (const name of names) {
           p.tags?.find((t) => t.name === 'default')?.text?.trim() ??
           undefined,
         description: (p.description || '').replace(/\s+/g, ' ').trim() || undefined,
+        deprecated: deprecation(p.tags),
       }))
       // model props (v-model) first, then required, then alpha
       .sort((a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name))

@@ -141,8 +141,15 @@ class KunColorScheme {
   final KunColorScale neutral;
 }
 
-/// The two generated KunUI color schemes.
+/// The two generated KunUI color schemes, and the two colors that do not
+/// change with the mode.
 abstract final class KunColors {
+  /// Web token `--color-white`, the same in light and dark.
+  static const Color white = Color.from(alpha: 1, red: 1, green: 1, blue: 1);
+
+  /// Web token `--color-black`, the same in light and dark.
+  static const Color black = Color.from(alpha: 1, red: 0, green: 0, blue: 0);
+
   /// The light scheme — what `:root` ships on the web.
   static const KunColorScheme light = KunColorScheme(
     background: Color.from(alpha: 1, red: 0.9569, green: 0.9569, blue: 0.9687),

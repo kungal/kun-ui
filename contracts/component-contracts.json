@@ -165,7 +165,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "debounce",
@@ -307,12 +308,15 @@
           "name": "disableFloating",
           "type": "boolean",
           "required": false,
-          "description": "Accepted but unused (kept so existing call sites don't TS-error)."
+          "description": "Legacy floating user-card toggle.",
+          "deprecated": "No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them."
         },
         {
           "name": "floatingPosition",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
-          "required": false
+          "required": false,
+          "description": "Legacy floating user-card placement.",
+          "deprecated": "No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them."
         },
         {
           "name": "isNavigation",
@@ -644,7 +648,8 @@
           "type": "boolean",
           "required": false,
           "default": "false",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "isHoverable",
@@ -1310,7 +1315,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "disabled",
@@ -1477,7 +1483,8 @@
           "type": "boolean",
           "required": false,
           "default": "false",
-          "description": "Legacy opt-in for the divider's inline label."
+          "description": "Legacy opt-in for the divider's inline label.",
+          "deprecated": "No-op — a label renders automatically when default-slot content is present."
         }
       ],
       "webOnlyProps": {
@@ -1708,7 +1715,8 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Helper text below the field."
+          "description": "Helper text below the field.",
+          "deprecated": "Use `description` (unified across all KunUI form controls)."
         },
         {
           "name": "maxSize",
@@ -1943,7 +1951,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "description",
@@ -1969,7 +1978,8 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Helper text below the field."
+          "description": "Helper text below the field.",
+          "deprecated": "Use `description` (unified across all KunUI form controls)."
         },
         {
           "name": "isClearable",
@@ -2407,7 +2417,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "description",
@@ -3100,7 +3111,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "debounce",
@@ -3938,7 +3950,8 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Helper text below the field."
+          "description": "Helper text below the field.",
+          "deprecated": "Use `description` (unified across all KunUI form controls)."
         },
         {
           "name": "label",
@@ -4122,7 +4135,8 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "Legacy dark-mode border toggle."
+          "description": "Legacy dark-mode border toggle.",
+          "deprecated": "No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites."
         },
         {
           "name": "description",
@@ -4150,7 +4164,8 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Helper text below the field."
+          "description": "Helper text below the field.",
+          "deprecated": "Use `description` (unified across all KunUI form controls)."
         },
         {
           "name": "label",
@@ -4170,8 +4185,7 @@
           "name": "maxlength",
           "type": "number",
           "required": false,
-          "default": "100007",
-          "description": "Native maximum length. Also the denominator of `showCharCount`."
+          "description": "Native maximum length; unset, the field takes any length. Also the denominator of `showCharCount`."
         },
         {
           "name": "minlength",
@@ -4233,7 +4247,7 @@
           "type": "boolean",
           "required": false,
           "default": "false",
-          "description": "Show a live `used / maxlength` counter under the field. Needs `maxlength` to show the denominator."
+          "description": "Show a live character counter in the field's corner: `used/maxlength` when `maxlength` is set, the bare count otherwise."
         },
         {
           "name": "size",
@@ -4415,7 +4429,8 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Helper text below the field."
+          "description": "Helper text below the field.",
+          "deprecated": "Use `description` (unified across all KunUI form controls)."
         },
         {
           "name": "initialImage",
@@ -4459,13 +4474,15 @@
           "name": "disableFloating",
           "type": "boolean",
           "required": false,
-          "default": "false"
+          "description": "Legacy floating user-card toggle.",
+          "deprecated": "No-op: KunUserChip renders no floating card. Accepted so existing call sites still type-check; safe to remove from them."
         },
         {
           "name": "floatingPosition",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
           "required": false,
-          "default": "\"top\""
+          "description": "Legacy floating user-card placement.",
+          "deprecated": "No-op: KunUserChip renders no floating card. Accepted so existing call sites still type-check; safe to remove from them."
         },
         {
           "name": "isNavigation",

@@ -207,7 +207,7 @@ const v = ref<number | null>(42)
 | `ariaLabel` | `string` | `""` | Accessible name, for a field with no visible `label`. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent; the resting border stays neutral. |
 | `controls` | `boolean` | `true` | Show the −/+ stepper buttons (default true). |
-| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). |
 | `disabled` | `boolean` | `false` | Blocks input and dims the field, steppers included. |
 | `error` | `string` | `""` | Error message below the field. Setting it also paints the invalid state and hides `description`. |

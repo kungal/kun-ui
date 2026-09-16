@@ -83,3 +83,29 @@ export const SHATTER_PHYSICS = {
   defaultDurationMs: 1100,
   defaultRotationDeg: 140,
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Drag-to-dismiss on a bottom sheet (KunModal / KunDrawer in their phone form,
+// packages/vue/src/composables/useKunSwipeDismiss.ts): the release rule and the
+// overdrag resistance, which are what a user feels. Per gesture:
+//   panelHeight = min(panel height, viewport height)
+//   dismiss on release when offset > 0 and
+//     (velocity > closeVelocity or offset ≥ panelHeight × closeDistanceRatio)
+//   an upward drag of d px moves the panel rubberBandLimit × (1 − e^(−d / rubberBandLimit))
+//
+// Only the feel is shared. The composable's other constants — the claim
+// threshold under Chrome's touch slop, the velocity sampling window, the
+// cooldown after momentum scrolling, the grace period while the enter
+// animation plays — answer browser mechanics that a Flutter gesture
+// recognizer, VelocityTracker and route animation answer on their own.
+// ─────────────────────────────────────────────────────────────────────────────
+export const SWIPE_DISMISS_PHYSICS = {
+  // vaul's CLOSE_THRESHOLD, and close to Base UI's flat 40px on a typical sheet.
+  closeDistanceRatio: 0.25,
+  // px/ms — a flick past this dismisses regardless of distance. vaul's
+  // VELOCITY_THRESHOLD.
+  closeVelocity: 0.4,
+  // px. Slope 1 at zero, so the sheet yields at first and then firmly refuses
+  // instead of tearing off the bottom edge.
+  rubberBandLimit: 32,
+}

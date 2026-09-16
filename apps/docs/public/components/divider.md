@@ -79,7 +79,7 @@
 | `className` | `string` | `""` |  |
 | `color` | `KunUIColor` | `"default"` |  |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |  |
-| `withLabel` | `boolean` | `false` | Legacy opt-in for the divider's inline label. |
+| `withLabel` | `boolean` | `false` | Legacy opt-in for the divider's inline label. **已废弃**：No-op — a label renders automatically when default-slot content is present. |
 
 ## Slots
 

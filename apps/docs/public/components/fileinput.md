@@ -101,7 +101,7 @@ const b = ref<File | null>(null)
 | `error` | `string` | `""` | Error message below the trigger. Setting it also paints the invalid state and hides `description`. |
 | `files` | `File[]` | `[]` | The picked files in `multiple` mode, two-way bound with `v-model:files`. Always an array; empty when nothing is picked. |
 | `fullWidth` | `boolean` | `false` | Stretch the trigger to the container's full width. |
-| `hint` | `string` | `""` | Helper text below the field. |
+| `hint` | `string` | `""` | Helper text below the field. **已废弃**：Use `description` (unified across all KunUI form controls). |
 | `maxSize` | `number` | — | Largest accepted file, in BYTES. A file over it is rejected and reported through `error`. |
 | `modelValue` | `File \| null` | `null` | The picked file, two-way bound with `v-model`. `null` when nothing is picked; stays `null` in `multiple` mode — read `v-model:files` there. |
 | `multiple` | `boolean` | `false` | Allow picking more than one file. |

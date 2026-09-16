@@ -92,8 +92,8 @@ const user: KunUser = {
 | `user` * | `KunUser \| null` | — |  |
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` |  |
-| `disableFloating` | `boolean` | `false` |  |
-| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` |  |
+| `disableFloating` | `boolean` | — | Legacy floating user-card toggle. **已废弃**：No-op: KunUserChip renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — | Legacy floating user-card placement. **已废弃**：No-op: KunUserChip renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `isNavigation` | `boolean` | `true` | When true (default) and the user has an id, the whole chip is a real <a>/link to the user's profile (crawlable, name as anchor text). |
 | `size` | `KunAvatarSize` | `"md"` |  |
 

@@ -2,7 +2,7 @@ name: kun_ui_icons
 version: 2.38.0
 description: >-
   The KunUI icon set for Flutter: the lucide icons its web components render,
-  outlined into a bundled icon font with one IconData constant each.
+  as a bundled icon font, plus the two images its components draw offline.
 
 repository: https://github.com/kungal/kun-ui
 homepage: https://github.com/kungal/kun-ui
@@ -26,6 +26,9 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+  assets:
+    - lib/images/null.webp
+    - lib/images/avatar_fallback.webp
   fonts:
     - family: KunUiIcons
       fonts:

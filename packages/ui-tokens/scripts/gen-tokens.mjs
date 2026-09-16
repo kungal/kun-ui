@@ -19,7 +19,7 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { oklch, clampChroma, wcagContrast, formatHex, parse, rgb } from 'culori'
-import { SHATTER_PHYSICS } from './motion-physics.mjs'
+import { SHATTER_PHYSICS, SWIPE_DISMISS_PHYSICS } from './motion-physics.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = join(HERE, '../src/palette.generated.css')
@@ -317,6 +317,7 @@ const RADII = ['none', 'sm', 'md', 'lg', 'full']
 const EASINGS = ['standard', 'out', 'in', 'emphasized']
 const DURATIONS = ['fast', 'base', 'slow', 'exit']
 const ELEVATIONS = ['sm', 'md', 'lg']
+const BASE_COLORS = ['white', 'black']
 const radius = Object.fromEntries(
   RADII.map((k) => [k, px(cssValue(`--radius-kun-${k}`))])
 )
@@ -329,11 +330,15 @@ const durations = Object.fromEntries(
 const elevations = Object.fromEntries(
   ELEVATIONS.map((k) => [k, shadowLayers(cssValue(`--shadow-kun-${k}`))])
 )
+const baseColors = Object.fromEntries(
+  BASE_COLORS.map((k) => [k, rgb(parse(cssValue(`--color-${k}`)))])
+)
 
-// ── spacing and the type scale: Tailwind's defaults, read from Tailwind ─────
-// KunUI never declares `--spacing` or `--text-*`; its components are written
-// against Tailwind v4's default theme, so that file is what these are read
-// from. Restated here, the numbers would go stale silently on a Tailwind
+// ── Tailwind's defaults, read from Tailwind ─────────────────────────────────
+// KunUI never declares `--spacing`, `--text-*`, `--container-*`,
+// `--breakpoint-*`, `--blur-*`, `--shadow-lg` or the default transition; its
+// components are written against Tailwind v4's default theme, so that file is
+// what these are read from. Restated here, the numbers would go stale silently on a Tailwind
 // upgrade; read, a changed default is a diff in the generated files and fails
 // the CI gate.
 const twTheme = readFileSync(
@@ -360,7 +365,25 @@ const ratio = (v) => {
 }
 
 const TEXT_STEPS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl']
+const CONTAINER_STEPS = ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl']
+const BREAKPOINT_STEPS = ['sm', 'md', 'lg', 'xl', '2xl']
+const BLUR_STEPS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl']
 const spacingUnit = remPx(twValue('--spacing'))
+const scaleOf = (steps, prefix, read) =>
+  Object.fromEntries(steps.map((k) => [k, read(twValue(`${prefix}${k}`))]))
+const containers = scaleOf(CONTAINER_STEPS, '--container-', remPx)
+const breakpoints = scaleOf(BREAKPOINT_STEPS, '--breakpoint-', remPx)
+const blurs = scaleOf(BLUR_STEPS, '--blur-', px)
+// KunUI's `shadow` variant is `shadow-lg shadow-{color}/…`: Tailwind's
+// geometry, with every layer's color replaced by the tint.
+const glowLayers = shadowLayers(twValue('--shadow-lg'))
+// What `transition`, `transition-colors` and friends run at when a component
+// gives no `duration-*` / `ease-*` class — most of KunUI's hover and press
+// feedback.
+const defaultTransition = {
+  duration: ms(twValue('--default-transition-duration')),
+  easing: bezier(twValue('--default-transition-timing-function')),
+}
 const textScale = Object.fromEntries(
   TEXT_STEPS.map((k) => {
     const fontSize = remPx(twValue(`--text-${k}`))
@@ -375,6 +398,19 @@ const textScale = Object.fromEntries(
 // precision instead of quantising to 8-bit hex the way Style Dictionary's
 // `color/hex8flutter` transform does.
 const dartNum = (n) => String(round(n, 4))
+// The spec draws a box-shadow's blur as "a Gaussian blur with a standard
+// deviation equal to half the blur radius" (css-backgrounds-3); Flutter turns
+// `BoxShadow.blurRadius` into σ = 0.57735·r + 0.5 (Shadow.convertRadiusToSigma).
+// Up to 2.38.0 the CSS number went through unchanged and every shadow drew
+// about 20% softer: against Chromium 153, a black 6px blur was off by up to
+// 18/255 per pixel, and by 0–1/255 once converted.
+const dartBlurRadius = (cssBlur) => {
+  if (cssBlur === 0) return 0
+  const r = (cssBlur / 2 - 0.5) / 0.57735
+  if (r <= 0) throw new Error(`BoxShadow cannot express a ${cssBlur}px CSS blur`)
+  return r
+}
+const dartScaleName = (k) => k.replace(/^(\d)(xs|xl)$/, '$2$1')
 const dartColor = (chanStr) => {
   const c = rgb(ofChan(chanStr))
   const ch = (n) => dartNum(Math.min(1, Math.max(0, n)))
@@ -389,6 +425,12 @@ const DART_BANNER = [
 // outer const constructor call is written with one to stay vertical.
 const dartDoc = (indent, lines) =>
   lines.map((l) => `${' '.repeat(indent)}///${l ? ` ${l}` : ''}`)
+const TAILWIND_NOTE = [
+  "The values are Tailwind v4's default theme, which KunUI's components are",
+  'written against and never redeclare. A site that overrides them in its own',
+  '`@theme` renders differently from these; these are what the components',
+  'were designed at.',
+]
 const dartField = (indent, name, chanStr) =>
   `${' '.repeat(indent)}${name}: ${dartColor(chanStr)},`
 
@@ -508,8 +550,21 @@ const colorsDart = [
   ]),
   '}',
   '',
-  ...dartDoc(0, ['The two generated KunUI color schemes.']),
+  ...dartDoc(0, [
+    'The two generated KunUI color schemes, and the two colors that do not',
+    'change with the mode.',
+  ]),
   'abstract final class KunColors {',
+  ...BASE_COLORS.flatMap((k) => {
+    const c = baseColors[k]
+    return [
+      ...dartDoc(2, [
+        `Web token \`--color-${k}\`, the same in light and dark.`,
+      ]),
+      `  static const Color ${k} = Color.from(alpha: 1, red: ${dartNum(c.r)}, green: ${dartNum(c.g)}, blue: ${dartNum(c.b)});`,
+      '',
+    ]
+  }),
   ...dartDoc(2, ['The light scheme — what `:root` ships on the web.']),
   ...schemeLiteral('light'),
   '',
@@ -645,6 +700,21 @@ const motionDart = [
   '}',
   '',
   ...dartDoc(0, [
+    'What a web transition utility (`transition`, `transition-colors`, …)',
+    'runs at when the component names no `duration-*` or `ease-*`: most of',
+    "KunUI's hover and press feedback.",
+    '',
+    ...TAILWIND_NOTE,
+  ]),
+  'abstract final class KunDefaultTransition {',
+  ...dartDoc(2, ['Web `--default-transition-duration`.']),
+  `  static const Duration duration = Duration(milliseconds: ${defaultTransition.duration});`,
+  '',
+  ...dartDoc(2, ['Web `--default-transition-timing-function`.']),
+  `  static const Curve curve = Cubic(${defaultTransition.easing.map(String).join(', ')});`,
+  '}',
+  '',
+  ...dartDoc(0, [
     'The ballistic model behind the web `KunShatter` component, as data.',
     '',
     'These are the physics parameters one level above the sampled keyframes:',
@@ -678,6 +748,41 @@ const motionDart = [
     ...dartDoc(2, doc),
     `  static const ${type} ${name} = ${value};`,
   ]),
+  '}',
+  '',
+  ...dartDoc(0, [
+    'Drag-to-dismiss on a bottom sheet — the feel of the web `KunModal` and',
+    '`KunDrawer` sheets, as data.',
+    '',
+    'On release the sheet dismisses when it moved down and either',
+    '```',
+    'velocity > closeVelocity',
+    'offset  >= min(panelHeight, viewportHeight) × closeDistanceRatio',
+    '```',
+    'An upward drag of d px moves the panel',
+    '`rubberBandLimit × (1 − e^(−d / rubberBandLimit))`: it yields at first',
+    'and then firmly stops.',
+    '',
+    'The drag slop, velocity sampling and scroll hand-off are not here: the web',
+    "tunes those to browser behaviour, and Flutter's gesture arena,",
+    '`VelocityTracker` and scroll notifications own them.',
+  ]),
+  'abstract final class KunSwipeDismissPhysics {',
+  ...dartDoc(2, [
+    'The fraction of the panel height, capped at the viewport, that',
+    'dismisses on release.',
+  ]),
+  `  static const double closeDistanceRatio = ${dartNum(SWIPE_DISMISS_PHYSICS.closeDistanceRatio)};`,
+  '',
+  ...dartDoc(2, [
+    'The release velocity that dismisses regardless of distance, in logical',
+    'pixels per second — the unit of `DragEndDetails.primaryVelocity`. The',
+    `web states it as ${SWIPE_DISMISS_PHYSICS.closeVelocity} px/ms.`,
+  ]),
+  `  static const double closeVelocity = ${dartNum(SWIPE_DISMISS_PHYSICS.closeVelocity * 1000)};`,
+  '',
+  ...dartDoc(2, ['The asymptote of an upward overdrag, in logical pixels.']),
+  `  static const double rubberBandLimit = ${dartNum(SWIPE_DISMISS_PHYSICS.rubberBandLimit)};`,
   '}',
   '',
 ].join('\n')
@@ -724,6 +829,11 @@ const shadowsDart = [
   ...dartDoc(0, [
     'The KunUI elevation scale — one shadow per tier, so every floating',
     'surface of a kind shares an elevation instead of picking one ad hoc.',
+    '',
+    "Each `blurRadius` is converted from the web's blur, not copied: CSS",
+    'blurs a shadow with σ = blur / 2, and `BoxShadow` with',
+    'σ = 0.57735 × blurRadius + 0.5. Convert the same way when writing a',
+    'shadow from a CSS value by hand.',
   ]),
   'abstract final class KunShadows {',
   ...ELEVATIONS.flatMap((k, i) => [
@@ -736,22 +846,35 @@ const shadowsDart = [
       '    BoxShadow(',
       `      color: Color.from(alpha: ${l.alpha}, red: 0, green: 0, blue: 0),`,
       `      offset: Offset(${l.x}, ${l.y}),`,
-      `      blurRadius: ${l.blur},`,
+      `      blurRadius: ${dartNum(dartBlurRadius(l.blur))},`,
       `      spreadRadius: ${l.spread},`,
       '    ),',
     ]),
     '  ];',
   ]),
+  '',
+  ...dartDoc(2, [
+    "Web `shadow-lg` tinted by `shadow-<color>`: Tailwind's `--shadow-lg`",
+    'geometry with every layer drawn in [color], which is how Tailwind',
+    "applies a shadow color. KunUI's `shadow` variant is this glow; its tint",
+    "is set in ui-core's `variants.ts`.",
+  ]),
+  '  static List<BoxShadow> glow(Color color) {',
+  '    return [',
+  ...glowLayers.flatMap((l) => [
+    '      BoxShadow(',
+    '        color: color,',
+    `        offset: const Offset(${l.x}, ${l.y}),`,
+    `        blurRadius: ${dartNum(dartBlurRadius(l.blur))},`,
+    `        spreadRadius: ${l.spread},`,
+    '      ),',
+  ]),
+  '    ];',
+  '  }',
   '}',
   '',
 ].join('\n')
 
-const TAILWIND_NOTE = [
-  "The values are Tailwind v4's default theme, which KunUI's components are",
-  'written against and never redeclare. A site that overrides them in its own',
-  '`@theme` renders differently from these; these are what the components',
-  'were designed at.',
-]
 const spacingDart = [
   ...DART_BANNER,
   '',
@@ -773,7 +896,6 @@ const spacingDart = [
   '',
 ].join('\n')
 
-const dartTextName = (k) => k.replace(/^(\d)xl$/, 'xl$1')
 const textDart = [
   ...DART_BANNER,
   '',
@@ -803,7 +925,7 @@ const textDart = [
     return [
       ...(i ? [''] : []),
       ...dartDoc(2, [`Web \`text-${k}\`: ${dartNum(fontSize)}px on a ${dartNum(linePx)}px line.`]),
-      `  static const TextStyle ${dartTextName(k)} = TextStyle(`,
+      `  static const TextStyle ${dartScaleName(k)} = TextStyle(`,
       `    fontSize: ${dartNum(fontSize)},`,
       `    height: ${height},`,
       '    leadingDistribution: TextLeadingDistribution.even,',
@@ -814,9 +936,77 @@ const textDart = [
   '',
 ].join('\n')
 
+const digitNames = (steps) =>
+  steps.includes('3xs')
+    ? ['A Dart name cannot start with a digit, so `3xs` is `xs3` and `2xl` is', '`xl2`.']
+    : ['A Dart name cannot start with a digit, so `2xl` is `xl2`.']
+const layoutDart = [
+  ...DART_BANNER,
+  '',
+  ...dartDoc(0, [
+    'The KunUI container widths, in logical pixels: what a named size in',
+    '`max-w-*`, `w-*` and the other sizing utilities resolves to.',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    ...digitNames(CONTAINER_STEPS),
+  ]),
+  'abstract final class KunContainerWidths {',
+  ...CONTAINER_STEPS.flatMap((k, i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, [`Web \`--container-${k}\`.`]),
+    `  static const double ${dartScaleName(k)} = ${dartNum(containers[k])};`,
+  ]),
+  '}',
+  '',
+  ...dartDoc(0, [
+    'The KunUI responsive breakpoints, in logical pixels. A web `md:` class',
+    'applies from `width >= md`, and a `max-md:` class below it.',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    ...digitNames(BREAKPOINT_STEPS),
+  ]),
+  'abstract final class KunBreakpointWidths {',
+  ...BREAKPOINT_STEPS.flatMap((k, i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, [`Web \`--breakpoint-${k}\`.`]),
+    `  static const double ${dartScaleName(k)} = ${dartNum(breakpoints[k])};`,
+  ]),
+  '}',
+  '',
+].join('\n')
+
+const blurDart = [
+  ...DART_BANNER,
+  '',
+  ...dartDoc(0, [
+    'The KunUI blur scale, used by `blur-*` and `backdrop-blur-*`.',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    'A step is a Gaussian standard deviation in logical pixels. CSS `blur()`',
+    'and `ImageFilter.blur` both take exactly that, so a step passes straight',
+    'through: `ImageFilter.blur(sigmaX: KunBlur.sm, sigmaY: KunBlur.sm)`.',
+    '`BoxShadow.blurRadius` is a different unit; see `KunShadows`.',
+    '',
+    ...digitNames(BLUR_STEPS),
+  ]),
+  'abstract final class KunBlur {',
+  ...BLUR_STEPS.flatMap((k, i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, [`Web \`--blur-${k}\`.`]),
+    `  static const double ${dartScaleName(k)} = ${dartNum(blurs[k])};`,
+  ]),
+  '}',
+  '',
+].join('\n')
+
 mkdirSync(DART_DIR, { recursive: true })
 const dartFiles = {
+  'blur.g.dart': blurDart,
   'colors.g.dart': colorsDart,
+  'layout.g.dart': layoutDart,
   'motion.g.dart': motionDart,
   'radius.g.dart': radiusDart,
   'shadows.g.dart': shadowsDart,
@@ -841,6 +1031,12 @@ const dtcgColor = (chanStr) => ({
 })
 const dtcgDimension = (value) => ({ value, unit: 'px' })
 const TAILWIND_DTCG_NOTE = TAILWIND_NOTE.join(' ').replace(/`/g, '')
+const dtcgScale = (steps, values) => ({
+  $description: TAILWIND_DTCG_NOTE,
+  ...Object.fromEntries(
+    steps.map((k) => [k, { $type: 'dimension', $value: dtcgDimension(values[k]) }])
+  ),
+})
 const dtcgMode = (mode) => {
   const idx = mode === 'light' ? 0 : 1
   const group = {}
@@ -862,7 +1058,27 @@ const dtcg = {
     'KunUI design tokens, DTCG Format Module 2025.10. Generated by ' +
     'packages/ui-tokens/scripts/gen-tokens.mjs from the same model that emits ' +
     'palette.generated.css and the kun_ui_tokens Dart package. Do not edit.',
-  color: { light: dtcgMode('light'), dark: dtcgMode('dark') },
+  color: {
+    ...Object.fromEntries(
+      BASE_COLORS.map((k) => {
+        const c = baseColors[k]
+        return [
+          k,
+          {
+            $type: 'color',
+            $value: {
+              colorSpace: 'srgb',
+              components: [c.r, c.g, c.b],
+              alpha: 1,
+              hex: formatHex(c),
+            },
+          },
+        ]
+      })
+    ),
+    light: dtcgMode('light'),
+    dark: dtcgMode('dark'),
+  },
   radius: Object.fromEntries(
     RADII.map((k) => [k, { $type: 'dimension', $value: dtcgDimension(radius[k]) }])
   ),
@@ -876,6 +1092,14 @@ const dtcg = {
         { $type: 'duration', $value: { value: durations[k], unit: 'ms' } },
       ])
     ),
+    defaultTransition: {
+      $description: TAILWIND_DTCG_NOTE,
+      duration: {
+        $type: 'duration',
+        $value: { value: defaultTransition.duration, unit: 'ms' },
+      },
+      easing: { $type: 'cubicBezier', $value: defaultTransition.easing },
+    },
   },
   elevation: Object.fromEntries(
     ELEVATIONS.map((k) => [
@@ -901,6 +1125,9 @@ const dtcg = {
     $description: TAILWIND_DTCG_NOTE,
     unit: { $type: 'dimension', $value: dtcgDimension(spacingUnit) },
   },
+  container: dtcgScale(CONTAINER_STEPS, containers),
+  breakpoint: dtcgScale(BREAKPOINT_STEPS, breakpoints),
+  blur: dtcgScale(BLUR_STEPS, blurs),
   // Plain fontSize/lineHeight pairs, not the `typography` composite: 2025.10
   // makes all five of its sub-values required, and fontFamily, fontWeight and
   // letterSpacing are not part of this scale.

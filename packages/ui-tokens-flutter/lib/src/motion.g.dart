@@ -39,6 +39,22 @@ abstract final class KunDurations {
   static const Duration exit = Duration(milliseconds: 180);
 }
 
+/// What a web transition utility (`transition`, `transition-colors`, …)
+/// runs at when the component names no `duration-*` or `ease-*`: most of
+/// KunUI's hover and press feedback.
+///
+/// The values are Tailwind v4's default theme, which KunUI's components are
+/// written against and never redeclare. A site that overrides them in its own
+/// `@theme` renders differently from these; these are what the components
+/// were designed at.
+abstract final class KunDefaultTransition {
+  /// Web `--default-transition-duration`.
+  static const Duration duration = Duration(milliseconds: 150);
+
+  /// Web `--default-transition-timing-function`.
+  static const Curve curve = Cubic(0.4, 0, 0.2, 1);
+}
+
 /// The ballistic model behind the web `KunShatter` component, as data.
 ///
 /// These are the physics parameters one level above the sampled keyframes:
@@ -130,4 +146,33 @@ abstract final class KunShatterPhysics {
   /// The tuned maximum random spin per shard, in degrees:
   /// spin = (2·rng−1) × rotation.
   static const double defaultRotationDeg = 140;
+}
+
+/// Drag-to-dismiss on a bottom sheet — the feel of the web `KunModal` and
+/// `KunDrawer` sheets, as data.
+///
+/// On release the sheet dismisses when it moved down and either
+/// ```
+/// velocity > closeVelocity
+/// offset  >= min(panelHeight, viewportHeight) × closeDistanceRatio
+/// ```
+/// An upward drag of d px moves the panel
+/// `rubberBandLimit × (1 − e^(−d / rubberBandLimit))`: it yields at first
+/// and then firmly stops.
+///
+/// The drag slop, velocity sampling and scroll hand-off are not here: the web
+/// tunes those to browser behaviour, and Flutter's gesture arena,
+/// `VelocityTracker` and scroll notifications own them.
+abstract final class KunSwipeDismissPhysics {
+  /// The fraction of the panel height, capped at the viewport, that
+  /// dismisses on release.
+  static const double closeDistanceRatio = 0.25;
+
+  /// The release velocity that dismisses regardless of distance, in logical
+  /// pixels per second — the unit of `DragEndDetails.primaryVelocity`. The
+  /// web states it as 0.4 px/ms.
+  static const double closeVelocity = 400;
+
+  /// The asymptote of an upward overdrag, in logical pixels.
+  static const double rubberBandLimit = 32;
 }

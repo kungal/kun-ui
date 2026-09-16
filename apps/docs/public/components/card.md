@@ -161,7 +161,7 @@ const clicks = ref(0)
 | `clickable` | `boolean` | `false` |  |
 | `color` | `KunUIColor \| "background"` | `"background"` |  |
 | `contentClass` | `string` | `""` |  |
-| `darkBorder` | `boolean` | `false` | Legacy dark-mode border toggle. |
+| `darkBorder` | `boolean` | `false` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `href` | `string` | — |  |
 | `isHoverable` | `boolean` | `false` |  |
 | `isTransparent` | `boolean` | `false` |  |

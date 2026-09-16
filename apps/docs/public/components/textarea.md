@@ -93,14 +93,14 @@ const text = ref('')
 | `autofocus` | `boolean` | `false` | Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top. |
 | `autoGrow` | `boolean` | `false` | Grow the field with its content up to `maxHeight`, instead of scrolling at a fixed `rows`. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). Default 'default'. |
-| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. |
+| `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `description` | `string` | `""` | Helper text below the field (hidden when `error` is set). Canonical name. |
 | `disabled` | `boolean` | `false` | Blocks input and dims the field. |
 | `error` | `string` | `""` | Error message below the field. Setting it also paints the invalid state and hides `description`. |
-| `hint` | `string` | `""` | Helper text below the field. |
+| `hint` | `string` | `""` | Helper text below the field. **已废弃**：Use `description` (unified across all KunUI form controls). |
 | `label` | `string` | `""` | Visible label above the field, tied to it by `id` so a click focuses the textarea. |
 | `maxHeight` | `string` | `""` | Ceiling for `autoGrow`, any CSS length (e.g. `"12rem"`). The field scrolls internally past it instead of growing forever. |
-| `maxlength` | `number` | `100007` | Native maximum length. Also the denominator of `showCharCount`. |
+| `maxlength` | `number` | — | Native maximum length; unset, the field takes any length. Also the denominator of `showCharCount`. |
 | `minlength` | `number` | `1` | Native minimum length, enforced by form validation. |
 | `modelValue` | `string` | `""` | The textarea's text, two-way bound with `v-model`. |
 | `name` | `string` | `""` | Native form field name, for an uncontrolled `<form>` submit. |
@@ -110,7 +110,7 @@ const text = ref('')
 | `resize` | `"none" \| "horizontal" \| "vertical" \| "both"` | `"none"` | Which way the user may drag the native resize handle. |
 | `rounded` | `KunUIRounded` | — | Corner radius. Unset follows the app-wide config (default `md`). |
 | `rows` | `number` | `4` | Initial visible rows — the field's height before `autoGrow` takes over. |
-| `showCharCount` | `boolean` | `false` | Show a live `used / maxlength` counter under the field. Needs `maxlength` to show the denominator. |
+| `showCharCount` | `boolean` | `false` | Show a live character counter in the field's corner: `used/maxlength` when `maxlength` is set, the bare count otherwise. |
 | `size` | `KunUISize` | `"md"` | Height, padding and font size, on the shared form-control scale. |
 
 ## Events

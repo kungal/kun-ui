@@ -61,7 +61,7 @@
 | `size` * | `number` | — |  |
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` | Helper text below the dropzone. Canonical name. |
-| `hint` | `string` | `""` | Helper text below the field. |
+| `hint` | `string` | `""` | Helper text below the field. **已废弃**：Use `description` (unified across all KunUI form controls). |
 | `initialImage` | `string` | `""` |  |
 | `rounded` | `KunUIRounded` | — |  |
 

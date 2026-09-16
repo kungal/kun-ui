@@ -56,21 +56,33 @@ There is deliberately no `KunTheme` here. This package is theme-system
 agnostic — plain `const` holders, no `ThemeExtension`, no Material coupling —
 so the eventual widget layer stays free to pick its own theming model.
 
-`KunSpacing` and `KunText` are the spacing unit and the type scale KunUI's
-components are written against. On the web those are Tailwind v4's defaults
-(`--spacing`, `--text-*`), which KunUI does not redeclare, so the generator
-reads them straight out of Tailwind's `theme.css`. A site that overrides them
-in its own `@theme` renders differently; these are the design values. Each
-`KunText` style sets `leadingDistribution: TextLeadingDistribution.even` —
-CSS's half-leading — because Flutter's default, `proportional`, sets the
-glyphs lower in the line box than a browser does.
+`KunSpacing`, `KunText`, `KunContainerWidths`, `KunBreakpointWidths`,
+`KunBlur`, `KunShadows.glow` and `KunDefaultTransition` are the Tailwind v4
+defaults KunUI's components are written against — `--spacing`, `--text-*`,
+`--container-*`, `--breakpoint-*`, `--blur-*`, `--shadow-lg` and the default
+transition. KunUI does not redeclare them, so the generator reads them straight
+out of Tailwind's `theme.css`. A site that overrides them in its own `@theme`
+renders differently; these are the design values. Each `KunText` style sets
+`leadingDistribution: TextLeadingDistribution.even` — CSS's half-leading —
+because Flutter's default, `proportional`, sets the glyphs lower in the line
+box than a browser does.
+
+Blur needs care in one direction only. A `KunBlur` step is a Gaussian
+standard deviation, which is what both CSS `blur()` and `ImageFilter.blur`
+take, so it passes straight through. `BoxShadow.blurRadius` is not a CSS
+shadow blur: CSS blurs a shadow with σ = blur / 2 and Flutter with
+σ = 0.57735 × blurRadius + 0.5, so every `blurRadius` in `KunShadows` is
+converted, and a shadow written by hand from a CSS value needs the same
+conversion.
 
 Beyond the easing/duration scale, `KunShatterPhysics` carries the ballistic
 model behind the web `KunShatter` component — outward impulse, air-drag
 decay, gravity as a t² acceleration — as plain constants with the equations
 in the doc comments. A Flutter shatter that samples that model bakes the
 same trajectories the web bakes into its keyframes, instead of re-tuning
-the feel by eye.
+the feel by eye. `KunSwipeDismissPhysics` does the same for dragging a
+bottom sheet closed: the distance and flick velocity that dismiss it, and
+how hard it resists an upward drag.
 
 ## Guarantees
 

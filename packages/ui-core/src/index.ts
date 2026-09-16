@@ -42,10 +42,14 @@ export {
   type KunSelectionSize,
 } from './controlSize'
 
-// The KunShatter ballistic model — shared motion tokens. The same manifest
+// Shared motion models. The same manifest
 // (packages/ui-tokens/scripts/motion-physics.mjs) generates kun_ui_tokens'
-// `KunShatterPhysics`, so the web and Flutter renditions cannot drift.
-export { KUN_SHATTER_PHYSICS } from './motionPhysics.generated'
+// `KunShatterPhysics` and `KunSwipeDismissPhysics`, so the web and Flutter
+// renditions cannot drift.
+export {
+  KUN_SHATTER_PHYSICS,
+  KUN_SWIPE_DISMISS_PHYSICS,
+} from './motionPhysics.generated'
 
 // Locale — KunUI's own strings, framework-free. `zh-CN` is the built-in
 // default and ships here; every other catalog is its own entry point

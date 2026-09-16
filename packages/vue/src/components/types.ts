@@ -655,15 +655,16 @@ export interface KunTextareaProps {
    * to it there threw the page to the top.
    */
   autofocus?: boolean
-  /** Show a live `used / maxlength` counter under the field. Needs
-   *  `maxlength` to show the denominator. */
+  /** Show a live character counter in the field's corner: `used/maxlength`
+   *  when `maxlength` is set, the bare count otherwise. */
   showCharCount?: boolean
   /** Grow the field with its content up to `maxHeight`, instead of scrolling
    *  at a fixed `rows`. */
   autoGrow?: boolean
   /** Initial visible rows — the field's height before `autoGrow` takes over. */
   rows?: number
-  /** Native maximum length. Also the denominator of `showCharCount`. */
+  /** Native maximum length; unset, the field takes any length. Also the
+   *  denominator of `showCharCount`. */
   maxlength?: number
   /** Native minimum length, enforced by form validation. */
   minlength?: number
@@ -1666,8 +1667,17 @@ export interface KunAvatarProps {
   isNavigation?: boolean
   className?: string
   imageClassName?: string
-  /** Accepted but unused (kept so existing call sites don't TS-error). */
+  /**
+   * Legacy floating user-card toggle.
+   * @deprecated No-op: KunAvatar renders no floating card. Accepted so
+   * existing call sites still type-check; safe to remove from them.
+   */
   disableFloating?: boolean
+  /**
+   * Legacy floating user-card placement.
+   * @deprecated No-op: KunAvatar renders no floating card. Accepted so
+   * existing call sites still type-check; safe to remove from them.
+   */
   floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
 }
 
@@ -1694,7 +1704,17 @@ export interface KunUserChipProps {
    * <a>/link to the user's profile (crawlable, name as anchor text).
    */
   isNavigation?: boolean
+  /**
+   * Legacy floating user-card toggle.
+   * @deprecated No-op: KunUserChip renders no floating card. Accepted so
+   * existing call sites still type-check; safe to remove from them.
+   */
   disableFloating?: boolean
+  /**
+   * Legacy floating user-card placement.
+   * @deprecated No-op: KunUserChip renders no floating card. Accepted so
+   * existing call sites still type-check; safe to remove from them.
+   */
   floatingPosition?: 'top' | 'bottom' | 'left' | 'right'
 }
 

@@ -76,7 +76,7 @@ function propsSection(title) {
   // sees. Only where it says something, though: prop descriptions are still
   // sparse, and an all-empty fourth column is pure noise in a file whose whole
   // job is to be read into a context window.
-  const described = comp.props.some((p) => p.description)
+  const described = comp.props.some((p) => p.description || p.deprecated)
   const rows = comp.props.map((p) => {
     const def =
       p.default == null || p.default === '' ? '—' : `\`${esc(p.default)}\``
@@ -85,7 +85,10 @@ function propsSection(title) {
       `\`${esc(p.type)}\``,
       def,
     ]
-    if (described) cells.push(esc(p.description ?? ''))
+    if (described) {
+      const note = p.deprecated ? `**已废弃**：${p.deprecated}` : ''
+      cells.push(esc([p.description, note].filter(Boolean).join(' ')))
+    }
     return `| ${cells.join(' | ')} |`
   })
   const head = described ? '属性 | 类型 | 默认值 | 说明' : '属性 | 类型 | 默认值'

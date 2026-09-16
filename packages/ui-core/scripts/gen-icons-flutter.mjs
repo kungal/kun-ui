@@ -15,6 +15,9 @@
 // has no stroke, only a filled contour — so the outline step is not an
 // optimisation, it is the only way these shapes become glyphs at all.
 //
+// The package also carries the two bitmaps KunUI's components render under the
+// same no-network rule: KunNull's mascot and KunAvatar's last fallback.
+//
 // Run: pnpm --filter @kungal/ui-core gen:icons:flutter
 // ─────────────────────────────────────────────────────────────────────────────
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -31,6 +34,7 @@ const PUB_DIR = join(HERE, '../../ui-icons-flutter')
 const FONT_OUT = join(PUB_DIR, 'lib/fonts/KunUiIcons.ttf')
 const DART_OUT = join(PUB_DIR, 'lib/kun_ui_icons.dart')
 const PUBSPEC = join(PUB_DIR, 'pubspec.yaml')
+const IMAGE_DIR = join(PUB_DIR, 'lib/images')
 const CODEPOINTS = join(HERE, 'icon-codepoints.json')
 const NPM_PKG = join(HERE, '../../ui-tokens/package.json')
 
@@ -192,6 +196,67 @@ const ttf = Buffer.from(svg2ttf(chunks.join(''), { ts: 0 }).buffer)
 mkdirSync(dirname(FONT_OUT), { recursive: true })
 writeFileSync(FONT_OUT, ttf)
 
+// ── images ──────────────────────────────────────────────────────────────────
+// The web inlines these as data URIs and the repo keeps no other copy, so the
+// data URI is the source: decoded here, the app bundles the exact bytes the
+// web renders.
+const IMAGES = [
+  {
+    dart: 'nullImage',
+    webName: 'KUN_NULL_IMAGE',
+    source: join(HERE, '../../vue/src/assets/nullImage.ts'),
+    file: 'null.webp',
+    doc: ["KunNull's empty-state mascot"],
+  },
+  {
+    dart: 'avatarFallback',
+    webName: 'KUN_AVATAR_FALLBACK',
+    source: join(HERE, '../src/avatarFallbackImage.ts'),
+    file: 'avatar_fallback.webp',
+    doc: [
+      "KunAvatar's last fallback",
+      'what renders when the app configured no avatar pool, or a pool image',
+      'failed to load.',
+    ],
+  },
+]
+// RIFF container; the canvas size sits in the VP8X, VP8 or VP8L chunk header.
+const webpSize = (b) => {
+  const chunk = b.toString('latin1', 12, 16)
+  if (chunk === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)]
+  if (chunk === 'VP8 ') return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff]
+  if (chunk === 'VP8L') {
+    const bits = b.readUInt32LE(21)
+    return [1 + (bits & 0x3fff), 1 + ((bits >> 14) & 0x3fff)]
+  }
+  throw new Error(`unrecognised WebP chunk "${chunk}"`)
+}
+const pubspecText = readFileSync(PUBSPEC, 'utf8')
+mkdirSync(IMAGE_DIR, { recursive: true })
+for (const image of IMAGES) {
+  const m = readFileSync(image.source, 'utf8').match(
+    new RegExp(`export const ${image.webName} =\\s*'data:image/webp;base64,([A-Za-z0-9+/=]+)'`)
+  )
+  if (!m) {
+    console.error(`\n✗ ${image.source} no longer exports ${image.webName} as a WebP data URI.`)
+    process.exit(1)
+  }
+  image.bytes = Buffer.from(m[1], 'base64')
+  if (image.bytes.toString('latin1', 0, 4) !== 'RIFF' || image.bytes.toString('latin1', 8, 12) !== 'WEBP') {
+    console.error(`\n✗ ${image.webName} does not decode to a WebP file.`)
+    process.exit(1)
+  }
+  ;[image.width, image.height] = webpSize(image.bytes)
+  image.asset = `lib/images/${image.file}`
+  // A package asset missing from its own pubspec is not bundled, and the app
+  // finds out at runtime, with an "Unable to load asset" error.
+  if (!pubspecText.includes(`- ${image.asset}\n`)) {
+    console.error(`\n✗ packages/ui-icons-flutter/pubspec.yaml does not list ${image.asset} under flutter.assets.`)
+    process.exit(1)
+  }
+  writeFileSync(join(IMAGE_DIR, image.file), image.bytes)
+}
+
 // ── Dart ────────────────────────────────────────────────────────────────────
 // Emitted pre-wrapped in dart format's tall style: CI runs
 // `dart format --set-exit-if-changed` and there is no formatting step that
@@ -233,6 +298,26 @@ const dart = [
   ]),
   '}',
   '',
+  '/// The bitmaps KunUI components draw without a network request.',
+  '///',
+  '/// The bytes the web components inline as data URIs, bundled here as',
+  '/// package assets; nothing needs declaring in your own `pubspec.yaml`:',
+  '///',
+  '/// ```dart',
+  '/// const Image(image: KunImages.nullImage, width: 250)',
+  '/// ```',
+  'abstract final class KunImages {',
+  ...IMAGES.flatMap((image, i) => [
+    ...(i ? [''] : []),
+    `  /// ${image.doc[0]}, a ${image.width}×${image.height} WebP (web \`${image.webName}\`)${image.doc.length > 1 ? ':' : '.'}`,
+    ...image.doc.slice(1).map((l) => `  /// ${l}`),
+    `  static const AssetImage ${image.dart} = AssetImage(`,
+    `    '${image.asset}',`,
+    '    package: _package,',
+    '  );',
+  ]),
+  '}',
+  '',
 ].join('\n')
 writeFileSync(DART_OUT, dart)
 
@@ -240,14 +325,19 @@ console.log(
   `gen-icons-flutter: ${crossing.length} icons → ${PUB_NAME} ` +
     `(${[...EXCLUDE].join(', ')} excluded — animated)`
 )
-console.log(`  lib/fonts/KunUiIcons.ttf  ${ttf.length} bytes`)
+const logWidth = Math.max(...IMAGES.map((i) => i.asset.length)) + 1
+console.log(`  ${'lib/fonts/KunUiIcons.ttf'.padEnd(logWidth)} ${ttf.length} bytes`)
+for (const image of IMAGES)
+  console.log(
+    `  ${image.asset.padEnd(logWidth)} ${image.bytes.length} bytes, ${image.width}×${image.height}`
+  )
 const used = crossing.map((i) => i.codepoint)
 console.log(
-  `  lib/kun_ui_icons.dart     ${hex(Math.min(...used))}..${hex(Math.max(...used))}`
+  `  ${'lib/kun_ui_icons.dart'.padEnd(logWidth)} ${hex(Math.min(...used))}..${hex(Math.max(...used))}`
 )
 console.log(
   allocated.length
-    ? `  icon-codepoints.json      allocated ${allocated.length}: ${allocated.join(', ')}`
-    : '  icon-codepoints.json      unchanged'
+    ? `  ${'icon-codepoints.json'.padEnd(logWidth)} allocated ${allocated.length}: ${allocated.join(', ')}`
+    : `  ${'icon-codepoints.json'.padEnd(logWidth)} unchanged`
 )
 console.log(`(pub lockstep ok — ${PUB_NAME} ${pubVersion})`)

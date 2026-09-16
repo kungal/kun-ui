@@ -1,6 +1,7 @@
-// Publish the shared ballistic model (packages/ui-tokens/scripts/
-// motion-physics.mjs) as TypeScript so KunShatter consumes the same constants
-// gen-tokens.mjs emits into kun_ui_tokens' `KunShatterPhysics`. Output:
+// Publish the shared motion models (packages/ui-tokens/scripts/
+// motion-physics.mjs) as TypeScript so KunShatter and useKunSwipeDismiss
+// consume the same constants gen-tokens.mjs emits into kun_ui_tokens'
+// `KunShatterPhysics` and `KunSwipeDismissPhysics`. Output:
 // src/motionPhysics.generated.ts (committed).
 //
 //   pnpm gen        (from the repo root — runs every generator in order)
@@ -15,7 +16,10 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { SHATTER_PHYSICS } from '../../ui-tokens/scripts/motion-physics.mjs'
+import {
+  SHATTER_PHYSICS,
+  SWIPE_DISMISS_PHYSICS,
+} from '../../ui-tokens/scripts/motion-physics.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const sfcFile = join(here, '..', '..', 'vue', 'src', 'components', 'Shatter.vue')
@@ -37,9 +41,10 @@ const assertDefault = (prop, expected) => {
 assertDefault('duration', SHATTER_PHYSICS.defaultDurationMs)
 assertDefault('rotation', SHATTER_PHYSICS.defaultRotationDeg)
 
-const body = Object.entries(SHATTER_PHYSICS)
-  .map(([key, value]) => `  ${key}: ${value},`)
-  .join('\n')
+const body = (model) =>
+  Object.entries(model)
+    .map(([key, value]) => `  ${key}: ${value},`)
+    .join('\n')
 
 writeFileSync(
   outFile,
@@ -55,11 +60,23 @@ writeFileSync(
  * the manifest, never inline in a component.
  */
 export const KUN_SHATTER_PHYSICS = {
-${body}
+${body(SHATTER_PHYSICS)}
+} as const
+
+/**
+ * Drag-to-dismiss on a bottom sheet, as data: dismiss on release when the
+ * sheet moved down and either the release velocity exceeds \`closeVelocity\`
+ * (px/ms) or the offset reaches \`closeDistanceRatio\` of the panel height
+ * (capped at the viewport); an upward drag of d px moves the panel
+ * \`rubberBandLimit × (1 − e^(−d / rubberBandLimit))\`. The same manifest
+ * generates \`KunSwipeDismissPhysics\` in kun_ui_tokens.
+ */
+export const KUN_SWIPE_DISMISS_PHYSICS = {
+${body(SWIPE_DISMISS_PHYSICS)}
 } as const
 `
 )
 
 console.log(
-  `wrote motionPhysics.generated.ts — ${Object.keys(SHATTER_PHYSICS).length} constants, Shatter.vue defaults in agreement`
+  `wrote motionPhysics.generated.ts — ${Object.keys(SHATTER_PHYSICS).length} shatter + ${Object.keys(SWIPE_DISMISS_PHYSICS).length} swipe-dismiss constants, Shatter.vue defaults in agreement`
 )

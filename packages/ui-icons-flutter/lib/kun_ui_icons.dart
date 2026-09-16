@@ -232,3 +232,27 @@ abstract final class KunIcons {
     fontPackage: _package,
   );
 }
+
+/// The bitmaps KunUI components draw without a network request.
+///
+/// The bytes the web components inline as data URIs, bundled here as
+/// package assets; nothing needs declaring in your own `pubspec.yaml`:
+///
+/// ```dart
+/// const Image(image: KunImages.nullImage, width: 250)
+/// ```
+abstract final class KunImages {
+  /// KunNull's empty-state mascot, a 500×333 WebP (web `KUN_NULL_IMAGE`).
+  static const AssetImage nullImage = AssetImage(
+    'lib/images/null.webp',
+    package: _package,
+  );
+
+  /// KunAvatar's last fallback, a 128×128 WebP (web `KUN_AVATAR_FALLBACK`):
+  /// what renders when the app configured no avatar pool, or a pool image
+  /// failed to load.
+  static const AssetImage avatarFallback = AssetImage(
+    'lib/images/avatar_fallback.webp',
+    package: _package,
+  );
+}

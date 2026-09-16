@@ -40,6 +40,10 @@ Details that keep the file honest:
 - **Defaults are quoted as the docs quote them** (`"\"primary\""` is the
   string `'primary'`); a conditional default is described, not valued. A
   default that comes from the locale also carries `defaultFrom` (below).
+- **A `@deprecated` prop carries a `deprecated` field** with the tag's text.
+  It stays in `props` — the web still accepts it, and a manifest that already
+  omits it must keep validating — but most are no-ops kept for call-site
+  compatibility, and a new port can `omit` them citing that field.
 - **Composables are out of scope.** Most are records of browser pathology
   that have nothing to cross (§4.1); the imperative capabilities
   (`useKunMessage`, `useKunAlert`, `useKunLoliInfo`, the config provider)

@@ -5,13 +5,18 @@ import 'package:flutter/painting.dart';
 
 /// The KunUI elevation scale — one shadow per tier, so every floating
 /// surface of a kind shares an elevation instead of picking one ad hoc.
+///
+/// Each `blurRadius` is converted from the web's blur, not copied: CSS
+/// blurs a shadow with σ = blur / 2, and `BoxShadow` with
+/// σ = 0.57735 × blurRadius + 0.5. Convert the same way when writing a
+/// shadow from a CSS value by hand.
 abstract final class KunShadows {
   /// Web token `--shadow-kun-sm`, for tooltips and small hints.
   static const List<BoxShadow> sm = [
     BoxShadow(
       color: Color.from(alpha: 0.08, red: 0, green: 0, blue: 0),
       offset: Offset(0, 1),
-      blurRadius: 5,
+      blurRadius: 3.4641,
       spreadRadius: -2,
     ),
   ];
@@ -21,13 +26,13 @@ abstract final class KunShadows {
     BoxShadow(
       color: Color.from(alpha: 0.07, red: 0, green: 0, blue: 0),
       offset: Offset(0, 3),
-      blurRadius: 10,
+      blurRadius: 7.7942,
       spreadRadius: -4,
     ),
     BoxShadow(
       color: Color.from(alpha: 0.1, red: 0, green: 0, blue: 0),
       offset: Offset(0, 6),
-      blurRadius: 18,
+      blurRadius: 14.7224,
       spreadRadius: -6,
     ),
   ];
@@ -37,14 +42,35 @@ abstract final class KunShadows {
     BoxShadow(
       color: Color.from(alpha: 0.11, red: 0, green: 0, blue: 0),
       offset: Offset(0, 6),
-      blurRadius: 18,
+      blurRadius: 14.7224,
       spreadRadius: -8,
     ),
     BoxShadow(
       color: Color.from(alpha: 0.16, red: 0, green: 0, blue: 0),
       offset: Offset(0, 12),
-      blurRadius: 36,
+      blurRadius: 30.3109,
       spreadRadius: -12,
     ),
   ];
+
+  /// Web `shadow-lg` tinted by `shadow-<color>`: Tailwind's `--shadow-lg`
+  /// geometry with every layer drawn in [color], which is how Tailwind
+  /// applies a shadow color. KunUI's `shadow` variant is this glow; its tint
+  /// is set in ui-core's `variants.ts`.
+  static List<BoxShadow> glow(Color color) {
+    return [
+      BoxShadow(
+        color: color,
+        offset: const Offset(0, 10),
+        blurRadius: 12.1244,
+        spreadRadius: -3,
+      ),
+      BoxShadow(
+        color: color,
+        offset: const Offset(0, 4),
+        blurRadius: 4.3301,
+        spreadRadius: -4,
+      ),
+    ];
+  }
 }

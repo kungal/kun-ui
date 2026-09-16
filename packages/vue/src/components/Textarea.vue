@@ -27,7 +27,6 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
   showCharCount: false,
   autoGrow: false,
   rows: 4,
-  maxlength: 100007,
   minlength: 1,
   resize: 'none',
   darkBorder: true,
@@ -161,10 +160,10 @@ defineExpose({
       />
 
       <div
-        v-if="maxlength && showCharCount"
+        v-if="showCharCount"
         class="text-default-500 absolute right-2 bottom-2 text-xs"
       >
-        {{ modelValue.length }}/{{ maxlength }}
+        {{ maxlength ? `${modelValue.length}/${maxlength}` : modelValue.length }}
       </div>
     </div>
 

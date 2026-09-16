@@ -27,17 +27,12 @@
 
 import { onScopeDispose, watch, type Ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
+import { KUN_SWIPE_DISMISS_PHYSICS } from '@kungal/ui-core'
 
 // Travel needed before the gesture is claimed, in px. Under Chrome's own touch
 // slop so the decision lands before the browser commits to a scroll — once it
 // has, `preventDefault()` on later moves is ignored.
 const DRAG_START_THRESHOLD = 6
-// Fraction of the panel's own height that dismisses on release. vaul's
-// CLOSE_THRESHOLD, and close to Base UI's flat 40px on a typical sheet.
-const CLOSE_DISTANCE_RATIO = 0.25
-// px/ms at release that dismisses regardless of distance — a flick. vaul's
-// VELOCITY_THRESHOLD.
-const CLOSE_VELOCITY = 0.4
 // Window the release velocity is measured over.
 const VELOCITY_WINDOW = 100
 // No dragging this soon after the sheet appears: the enter animation
@@ -49,10 +44,14 @@ const OPEN_GRACE = 300
 // drag and dismiss the sheet the user was only reading. vaul's
 // SCROLL_LOCK_TIMEOUT.
 const SCROLL_COOLDOWN = 100
-// How far an upward drag gives before it stops, in px. Asymptotic, so the sheet
-// yields at first (slope 1 at zero) and then firmly refuses instead of tearing
-// off the bottom edge.
-const RUBBER_BAND_LIMIT = 32
+// The release rule and the overdrag resistance are the gesture's feel, shared
+// with kun_ui_tokens' `KunSwipeDismissPhysics`: tune them in
+// packages/ui-tokens/scripts/motion-physics.mjs, never here.
+const {
+  closeDistanceRatio: CLOSE_DISTANCE_RATIO,
+  closeVelocity: CLOSE_VELOCITY,
+  rubberBandLimit: RUBBER_BAND_LIMIT,
+} = KUN_SWIPE_DISMISS_PHYSICS
 
 // Controls whose own gesture is a drag, so the sheet must not steal it.
 const NO_DRAG_SELECTOR =

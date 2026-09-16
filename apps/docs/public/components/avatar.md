@@ -88,8 +88,8 @@ const user: KunUser = { id: 42, name: 'Kun', avatar }
 | --- | --- | --- | --- |
 | `user` * | `KunUser \| null` | — | Nullable — upstream user hydration can return a missing brief; Avatar falls back to a deterministic sticker. |
 | `className` | `string` | `""` |  |
-| `disableFloating` | `boolean` | — | Accepted but unused (kept so existing call sites don't TS-error). |
-| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — |  |
+| `disableFloating` | `boolean` | — | Legacy floating user-card toggle. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
+| `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — | Legacy floating user-card placement. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `imageClassName` | `string` | `""` |  |
 | `isNavigation` | `boolean` | `true` |  |
 | `size` | `KunAvatarSize` | `"md"` |  |
