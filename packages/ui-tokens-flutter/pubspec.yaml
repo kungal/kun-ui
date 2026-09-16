@@ -1,5 +1,5 @@
 name: kun_ui_tokens
-version: 2.37.0
+version: 2.38.0
 description: >-
   Generated design tokens for the KunUI design system: semantic colors, radius,
   motion, elevation, spacing and type scale, emitted from the same source as

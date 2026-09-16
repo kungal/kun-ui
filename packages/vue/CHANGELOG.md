@@ -1,5 +1,11 @@
 # @kungal/ui-vue
 
+## 2.38.0
+
+### Patch Changes
+
+- @kungal/ui-core@2.38.0
+
 ## 2.37.0
 
 ### Minor Changes
