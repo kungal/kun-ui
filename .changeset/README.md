@@ -9,6 +9,10 @@ It is how KunUI versions and publishes its packages.
 2. Run `pnpm changeset` and answer the prompts:
    - All four packages share **one locked version** (the `fixed` group in
      `config.json`), so picking a bump for any of them bumps them all together.
+   - The summary, though, lands only in the CHANGELOGs of the packages you
+     pick. Always pick `@kungal/ui-vue` — the GitHub Release is cut from its
+     CHANGELOG — plus `@kungal/ui-tokens` when the pub.dev packages change,
+     since their CHANGELOGs mirror that one.
    - Choose `patch` / `minor` / `major` and write a short summary — it becomes
      the CHANGELOG entry.
 3. Commit the generated `.changeset/*.md` file alongside your code and open a PR.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import changelog from '~/generated/changelog.json'
 
-// Auto-generated from @kungal/ui-vue's CHANGELOG.md (see scripts/gen-changelog.mjs),
+// Auto-generated from the four packages' CHANGELOG.md (see scripts/gen-changelog.mjs),
 // refreshed on every release. The HTML is pre-rendered at build time from our own
 // changelog (trusted content), so v-html is safe here.
 useKunSeoMeta()

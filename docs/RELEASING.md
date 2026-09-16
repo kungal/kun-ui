@@ -61,8 +61,11 @@ After this, CI never needs a token again.
    ```
    Pick a bump (`patch` / `minor` / `major`) and write a one-line summary.
    Because the four packages are a `fixed` group, the bump applies to all of
-   them and they stay on the same version. Commit the generated
-   `.changeset/*.md` with your code.
+   them and they stay on the same version. The summary does not: it lands only
+   in the CHANGELOGs of the packages you picked, so always pick
+   `@kungal/ui-vue` (the GitHub Release is cut from its CHANGELOG), plus
+   `@kungal/ui-tokens` when the pub.dev packages change (theirs mirror that
+   one). Commit the generated `.changeset/*.md` with your code.
 
 2. Open a PR and merge it to `main`.
 

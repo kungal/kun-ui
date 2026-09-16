@@ -1,8 +1,8 @@
 [
   {
     "version": "2.38.0",
-    "type": "patch",
-    "html": ""
+    "type": "minor",
+    "html": "<ul>\n<li><p>Spacing and the type scale are now generated tokens: <code>KunSpacing</code> and <code>KunText</code> in <code>kun_ui_tokens</code>, <code>spacing</code> and <code>text</code> in <code>tokens.dtcg.json</code></p>\n<p>Until now the token exports carried colour, radius, motion and elevation, but not the two scales every component is laid out with. The Flutter port felt the gap first: a form label had to hand-type <code>fontSize: 14, height: 20 / 14</code>, and a gallery heading borrowed the control-size table because there was no type scale to take.</p>\n<p><strong>Where the numbers come from.</strong> KunUI has never declared <code>--spacing</code> or <code>--text-*</code> — its components are written against Tailwind v4&#39;s default theme. So <code>gen-tokens.mjs</code> reads both straight out of <code>tailwindcss/theme.css</code> rather than restating them: a Tailwind upgrade that changes a default shows up as a diff in the generated files, and the generator refuses to run if KunUI&#39;s own <code>tokens.css</code> ever starts declaring either. The values describe the scale the components were designed at; a site that overrides <code>--spacing</code> or <code>--text-*</code> in its own <code>@theme</code> renders differently from them.</p>\n<ul>\n<li><strong>Dart.</strong> <code>KunSpacing.unit</code> (4) is the step every spacing utility multiplies — <code>px-4</code> is <code>KunSpacing.unit * 4</code>, which stays a <code>const</code> expression. <code>KunText.xs</code> … <code>KunText.xl9</code> are const <code>TextStyle</code>s carrying only <code>fontSize</code> and <code>height</code> (<code>2xl</code>–<code>9xl</code> become <code>xl2</code>–<code>xl9</code>, since a Dart name cannot start with a digit); colour, weight and family stay null and inherit.</li>\n<li><strong>Half-leading.</strong> Every <code>KunText</code> style sets <code>leadingDistribution: TextLeadingDistribution.even</code>, which is what CSS does. Measured with the same font metrics in Chromium and <code>flutter test</code>, Flutter&#39;s default <code>proportional</code> sits the baseline 1.2–2.6 px lower than the browser at <code>xs</code>–<code>4xl</code>; <code>even</code> matches it to within Chromium&#39;s pixel rounding.</li>\n<li><strong>DTCG.</strong> <code>spacing.unit</code> is a <code>dimension</code>; each <code>text.&lt;step&gt;</code> is a <code>fontSize</code> dimension plus a unitless <code>lineHeight</code> number. They are not <code>typography</code> composites, because the 2025.10 format requires all five of that type&#39;s sub-values, and family, weight and letter-spacing are not part of this scale.</li>\n</ul>\n<p>Nothing changes for web consumers: no CSS changed.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "2.37.0",
@@ -21,18 +21,18 @@
   },
   {
     "version": "2.35.0",
-    "type": "patch",
-    "html": ""
+    "type": "minor",
+    "html": "<ul>\n<li><p>Motion crosses to Flutter as physics, not keyframes (tier 2 of the Flutter roadmap).</p>\n<p>KunShatter&#39;s ballistic model — outward impulse, air-drag decay <code>1 − (1−t)^1.7</code>, gravity as a t² acceleration, per-shard scale/fade envelopes, the outward-propagating stagger — now lives in one shared manifest (<code>packages/ui-tokens/scripts/motion-physics.mjs</code>) instead of inline literals in the component. Two artifacts are generated from it:</p>\n<ul>\n<li><code>KUN_SHATTER_PHYSICS</code>, a new export of <code>@kungal/ui-core</code>, which <code>KunShatter</code> now consumes. Same numbers as before — the baked keyframes are unchanged, so nothing moves differently.</li>\n<li><code>KunShatterPhysics</code> in the <code>kun_ui_tokens</code> pub package, documenting the full model, so a Flutter shatter samples the identical trajectories instead of re-tuning the feel by eye.</li>\n</ul>\n<p>The four cubic-bezier easings and the duration scale already crossed in 2.33.0 as <code>KunEasing</code>/<code>KunDurations</code> — they need no sampling at all (<code>Cubic(a, b, c, d)</code> is the same parametrisation as CSS <code>cubic-bezier</code>). The ballistic motion is the part that cannot cross as a curve constant, and its parameters are one level above the samples: the web bakes WAAPI keyframes from them at runtime, Flutter can bake the same tables or run them through its own simulations. Sampled spline tables (<code>CatmullRomCurve.precompute</code>) were rejected — every curve in this model has a closed form, and a table would only approximate what the exponents state exactly.</p>\n<p>Nothing to do as a consumer of the npm packages.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "2.34.0",
-    "type": "patch",
-    "html": ""
+    "type": "minor",
+    "html": "<ul>\n<li><p>Icons now generate into two targets: the web bundle and a <code>kun_ui_icons</code> package on pub.dev</p>\n<p>The icon list in <code>@kungal/ui-core</code> has always been the single source for every\nicon KunUI renders — a fixed set, extracted from <code>@iconify-json</code> at build time\nand inlined, so the library never fetches an icon at runtime. It now emits two\noutputs from that one list instead of one:</p>\n<ul>\n<li><strong><code>icons-data.ts</code> — byte-identical.</strong> Nothing about the web layer changes.\nSame icons, same data, same bundle size. The list itself moved out of\n<code>gen-icons.mjs</code> into <code>scripts/icons-manifest.mjs</code> so both generators read it;\nthe generated file is unchanged.</li>\n<li><strong><code>kun_ui_icons</code> on pub.dev</strong>, generated into <code>packages/ui-icons-flutter</code>.\nThe NextMoe/KunGal apps are Flutter, and Flutter has no DOM to hand an SVG\nbody to — its native icon delivery is a font plus <code>IconData</code>, which is what\nbuys free <code>IconTheme</code> colour and size inheritance, <code>--tree-shake-icons</code>, and\nno runtime dependency. So the generator outlines the icons and packs them\ninto a bundled TTF with one <code>const IconData</code> each:\n<code>Icon(KunIcons.circleCheck)</code>. Its version is locked to the npm version, like\n<code>kun_ui_tokens</code>: <code>2.33.0</code> here is <code>2.33.0</code> there.</li>\n</ul>\n<p>lucide draws with <strong>strokes</strong>, and a font glyph has no stroke — only filled\ncontours. The generator therefore runs lucide&#39;s own font pipeline (rasterise at\n800px, trace back to an outline, pack at a 1000-unit em), which is the proof\nthese exact shapes convert: it is how lucide&#39;s official icon font is built. The\ncodepoints are allocated once into a committed manifest and never reassigned,\nso an app compiled against an older version keeps rendering the icon it\ncompiled against.</p>\n<p>One icon does not cross. <code>svg-spinners:90-ring-with-bg</code> is an <em>animated</em> SVG,\nand no static font format carries motion, so the Flutter package ships 30 of\nthe 31 bundled icons; a Flutter app wants a real progress-indicator widget for\nthat one anyway. Nothing about the spinner changes on the web.</p>\n<p>Nothing to do as a consumer of the npm packages: no component, no icon and no\ngenerated data changed.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "2.33.0",
-    "type": "patch",
-    "html": ""
+    "type": "minor",
+    "html": "<ul>\n<li><p>Tokens now generate into three targets: the CSS, a Dart package, and a DTCG export</p>\n<p><code>gen-tokens.mjs</code> has always been the single source of truth for every KunUI\ncolour — the OKLCH hue policy, the shared lightness ramp, and the WCAG-AA\nassertion that fails the build when a solid/on-colour pair drops below 4.5:1.\nIt now emits three sibling outputs from that one in-memory model instead of one:</p>\n<ul>\n<li><strong><code>palette.generated.css</code> — byte-identical.</strong> Nothing about the web layer\nchanges. Same values, same file.</li>\n<li><strong><code>kun_ui_tokens</code> on pub.dev</strong>, generated into <code>packages/ui-tokens-flutter</code>.\nThe NextMoe/KunGal apps are Flutter, which has no DOM, no CSS cascade and no\nTailwind, so a Flutter app could only ever have hand-transcribed the palette.\nEvery design system that does that drifts on its first retheme. This package\nis emitted from the same numbers the stylesheet ships — sRGB-clamped OKLCH\nthrough the same <code>clampChroma</code> pass — as plain <code>const</code> holders\n(<code>KunColors.light.primary.solid</code>, <code>KunEasing.standard</code>, <code>KunRadius.md</code>,\n<code>KunShadows.md</code>) with no <code>ThemeExtension</code> and no Material coupling. Its\nversion is locked to the npm version: <code>2.32.1</code> here is <code>2.32.1</code> there.</li>\n<li><strong>A DTCG 2025.10 export</strong> at the new subpath\n<code>@kungal/ui-tokens/tokens.dtcg.json</code>, for Figma and external token tooling.\nColours carry their OKLCH components plus an sRGB <code>hex</code> fallback; radius,\neasing, duration and elevation carry their spec types. It is an <em>export</em>, not\nthe pivot — a resolved-value format cannot express the hue policy or the\ncontrast assertion, so the generator stays the source of truth.</li>\n</ul>\n<p>The generator also now reads the radius, motion and elevation tokens back out of\n<code>tokens.css</code> rather than duplicating them, which turns that file&#39;s &quot;keep the\n<code>@theme</code> and <code>:root</code> copies in sync&quot; instruction into a build failure when they\ndisagree.</p>\n<p>Nothing to do as a consumer: no CSS changed, and the new export subpath is\nadditive.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "2.32.1",
@@ -312,7 +312,7 @@
   {
     "version": "1.14.2",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(tokens): lighten the secondary colour to a softer pink</p>\n<p><code>secondary</code>&#39;s solid lightness goes 0.74 → 0.80 (OKLCH <code>0.8 0.152 341.5</code>) — a paler,\nfresher pink. Its foreground flips to dark (white is illegible on the lighter fill);\nthe generator re-derives it by measured contrast and still asserts WCAG AA on every\nsolid pair in both light and dark.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "1.14.1",
@@ -332,7 +332,7 @@
   {
     "version": "1.12.1",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(nuxt): register KunReaction for auto-import</p>\n<p><code>KunReaction</code> (added in 1.11.0) was wired into the plain-Vue plugin and the docs\nbut not into the Nuxt layer&#39;s <code>KUN_COMPONENTS</code> auto-import list, so downstream\nNuxt templates hit <code>[Vue warn]: Failed to resolve component: KunReaction</code>. Added\nit to the list. No other component was affected — the rest are in sync.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "1.12.0",
@@ -387,7 +387,7 @@
   {
     "version": "1.8.3",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(tokens): lighten the page background a touch</p>\n<p>The light page background goes from <code>#eeeef1</code> back up to <code>#f2f2f5</code> — the previous\nvalue made the step up to a white card feel abrupt. Cards still pop (≈13 units)\nbut the transition is gentler. Dark mode unchanged.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "1.8.2",
@@ -397,7 +397,7 @@
   {
     "version": "1.8.1",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>feat(tokens): add <code>--kun-surface-opacity</code> for themeable surface transparency (glass)</p>\n<p>The raised surface (<code>content1</code> — cards, popovers, dropdowns, inputs, modal,\ndrawer) now resolves its alpha through <code>--kun-surface-opacity</code>, default <code>1</code>\n(fully opaque, no visual change). A site with a background image (e.g. a galgame\npage) can make every surface see-through at once, with no component changes:</p>\n<pre><code class=\"language-css\">:root {\n  --kun-surface-opacity: 0.7;\n  --kun-background-blur: 12px;\n}\n</code></pre>\n<p>Components don&#39;t ship a <code>backdrop-blur</code> on every surface, so set\n<code>--kun-background-blur</code> too if you want true frosted glass rather than plain\ntranslucency. Default sites are unaffected.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "1.8.0",
@@ -487,12 +487,12 @@
   {
     "version": "0.22.2",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(core): <code>shadow</code> button variant now actually casts its colored glow</p>\n<p>The <code>shadow</code> variant set a shadow <em>color</em> (<code>shadow-{color}/40</code>) but never a shadow\n<em>size</em>, so <code>--tw-shadow</code> stayed empty and the button rendered with `box-shadow:</p>\n</li>\n</ul>\n<p>none<code>— it looked identical to</code>solid<code>. Added </code>shadow-lg<code>to every entry so the   geometry exists and the tint applies: each shadow button now floats with a soft   diffuse glow in its own color (the button&#39;s</code>overflow-hidden` doesn&#39;t clip an\n  outset box-shadow, so it shows in both themes).</p>\n"
   },
   {
     "version": "0.22.1",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(core): consistent dark-mode fill for solid / shadow buttons</p>\n<p>Filled (<code>solid</code> / <code>shadow</code>) buttons keep white text in both themes, but the dark\ncolor scale is inverted — <code>bg-{color}</code> (a <code>-500</code>/<code>-600</code> step) renders <em>light</em> in\ndark mode, so the fills came out pale and at wildly different levels: <code>info</code>\n≈ L88% (near-white, white text barely legible), <code>default</code> ≈ L65%, <code>secondary</code>\n≈ L72%, and <code>success</code> disagreed between the two variants (solid pinned\n<code>dark:bg-success-300</code> ≈ L35% while shadow used the un-pinned <code>bg-success-600</code>\n≈ L66%).</p>\n<p>Each color now pins a <code>dark:bg-{color}-{n}</code> so every solid/shadow button lands at\na consistent ~L44–55% in dark mode (info/success/default → ~L44–46, the rest\n~L47–55) — one saturated tier with legible white text. Light mode is unchanged.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "0.22.0",
@@ -532,7 +532,7 @@
   {
     "version": "0.17.2",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>fix(tokens): restore Modal / Drawer / Tab-indicator / toast / FadeCard animations</p>\n<p>The motion duration tokens (<code>--kun-dur-fast/base/slow/exit</code>) were declared only\ninside <code>@theme</code>. Tailwind v4 only emits an <code>@theme</code> variable to <code>:root</code> when its\nscanner sees it &quot;used&quot;, and these tokens have no utility namespace and are read\nsolely via <code>var(--kun-dur-base)</code> inside component <code>&lt;style&gt;</code> blocks / inline\nstyles — which Tailwind never scans. So in a normal downstream build they were\ntree-shaken out of <code>:root</code>, every <code>transition: … var(--kun-dur-…) …</code> resolved to\n<code>var(&lt;undefined&gt;)</code>, the whole shorthand was invalidated, and the enter/leave\nanimations on Modal, Drawer, the Tab indicator, toasts and FadeCard silently\ncollapsed to instant (regression from the &quot;unified motion system&quot; change).</p>\n<p>They are now mirrored into a plain <code>:root</code> block (never tree-shaken), exactly\nlike the z-index fallbacks, so the animations resolve in every consumer build.\nNo API change.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "0.17.1",
@@ -617,7 +617,7 @@
   {
     "version": "0.5.1",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>Add a runtime <code>--kun-radius-scale</code> knob for corner radius.</p>\n<p>The scalable radius tokens (<code>sm</code> / <code>md</code> / <code>lg</code>) now multiply their base by\n<code>var(--kun-radius-scale, 1)</code>, so a consumer can drive <strong>every</strong> KunUI corner at\nonce from a single CSS variable — live, with no re-render and no config change:</p>\n<pre><code class=\"language-css\">:root {\n  --kun-radius-scale: 0;\n} /* square corners everywhere */\n:root {\n  --kun-radius-scale: 1.5;\n} /* 50% rounder everywhere   */\n</code></pre>\n<p>The default (<code>1</code>) leaves everything unchanged. <code>none</code> and <code>full</code> deliberately\ndon&#39;t scale (a square stays square; a pill stays a pill). Because\n<code>--kun-radius-scale</code> is a separate, consumer-owned variable that the token\n<code>calc()</code> reads, it avoids the cascade-order trap of trying to override\n<code>--radius-kun-*</code> directly. (Small controls clamp <code>border-radius</code> to ~half their\nheight, so a button can&#39;t get rounder than a pill — by design.)</p>\n</li>\n</ul>\n"
   },
   {
     "version": "0.5.0",
@@ -652,7 +652,7 @@
   {
     "version": "0.3.1",
     "type": "patch",
-    "html": ""
+    "html": "<ul>\n<li><p>Fix floating layers (popover / tooltip / modal / dropdown / drawer / select /\ncontext-menu / alert / message) stacking at <code>auto</code> and getting covered by\npositioned elements (carousels, sticky headers) in some consumer builds.</p>\n<p>The <code>z-kun-*</code> z-index utilities deref a <code>@theme</code> variable with no fallback\n(<code>z-index: var(--z-kun-popover)</code>). Tailwind v4 only emits a <code>@theme</code> variable to\n<code>:root</code> when its tree-shaker considers it &quot;used&quot;, and a custom <code>@utility</code>\nreferencing the var does not reliably count as usage across consumer\nbuilds/versions — so <code>--z-kun-*</code> can be dropped from <code>:root</code>, leaving\n<code>z-index: var(&lt;undefined&gt;)</code> → no z-index. Each utility now carries a literal\nfallback (e.g. <code>var(--z-kun-popover, 9300)</code>), so the z-index always resolves;\na consumer&#39;s <code>:root { --z-kun-*: … }</code> override still wins when present.</p>\n</li>\n</ul>\n"
   },
   {
     "version": "0.3.0",
