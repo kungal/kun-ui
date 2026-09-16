@@ -15,6 +15,7 @@
 // @kungal/ui-tokens gen`. Tune colors ONLY here, never in the generated CSS.
 // ─────────────────────────────────────────────────────────────────────────────
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { oklch, clampChroma, wcagContrast, formatHex, parse, rgb } from 'culori'
@@ -327,6 +328,45 @@ const durations = Object.fromEntries(
 )
 const elevations = Object.fromEntries(
   ELEVATIONS.map((k) => [k, shadowLayers(cssValue(`--shadow-kun-${k}`))])
+)
+
+// ── spacing and the type scale: Tailwind's defaults, read from Tailwind ─────
+// KunUI never declares `--spacing` or `--text-*`; its components are written
+// against Tailwind v4's default theme, so that file is what these are read
+// from. Restated here, the numbers would go stale silently on a Tailwind
+// upgrade; read, a changed default is a diff in the generated files and fails
+// the CI gate.
+const twTheme = readFileSync(
+  createRequire(import.meta.url).resolve('tailwindcss/theme.css'),
+  'utf8'
+)
+const twValue = (name) => {
+  if (cssValues(name).length)
+    throw new Error(`tokens.css now declares ${name}; read it from there, not from Tailwind`)
+  const m = twTheme.match(new RegExp(`^\\s*${name}:\\s*([^;]+);`, 'm'))
+  if (!m) throw new Error(`tailwindcss/theme.css declares no ${name}`)
+  return m[1].trim()
+}
+const remPx = (v) => {
+  const m = v.match(/^([\d.]+)rem$/)
+  if (!m) throw new Error(`not a rem length: "${v}"`)
+  return Number(m[1]) * 16
+}
+const ratio = (v) => {
+  if (/^[\d.]+$/.test(v)) return Number(v)
+  const m = v.match(/^calc\(([\d.]+) \/ ([\d.]+)\)$/)
+  if (!m) throw new Error(`not a unitless line height: "${v}"`)
+  return Number(m[1]) / Number(m[2])
+}
+
+const TEXT_STEPS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl']
+const spacingUnit = remPx(twValue('--spacing'))
+const textScale = Object.fromEntries(
+  TEXT_STEPS.map((k) => {
+    const fontSize = remPx(twValue(`--text-${k}`))
+    const lineHeight = ratio(twValue(`--text-${k}--line-height`))
+    return [k, { fontSize, lineHeight, linePx: round(fontSize * lineHeight, 4) }]
+  })
 )
 
 // ── Dart emitter ────────────────────────────────────────────────────────────
@@ -706,12 +746,82 @@ const shadowsDart = [
   '',
 ].join('\n')
 
+const TAILWIND_NOTE = [
+  "The values are Tailwind v4's default theme, which KunUI's components are",
+  'written against and never redeclare. A site that overrides them in its own',
+  '`@theme` renders differently from these; these are what the components',
+  'were designed at.',
+]
+const spacingDart = [
+  ...DART_BANNER,
+  '',
+  ...dartDoc(0, [
+    'The KunUI spacing scale, in logical pixels.',
+    '',
+    ...TAILWIND_NOTE,
+  ]),
+  'abstract final class KunSpacing {',
+  ...dartDoc(2, [
+    'Web token `--spacing`, the step every spacing utility multiplies:',
+    '`mt-1` is `unit`, `px-4` is `unit * 4`, `py-1.5` is `unit * 1.5`.',
+    '',
+    'A product of consts is itself const, so `unit * 4` works inside a',
+    '`const` widget.',
+  ]),
+  `  static const double unit = ${dartNum(spacingUnit)};`,
+  '}',
+  '',
+].join('\n')
+
+const dartTextName = (k) => k.replace(/^(\d)xl$/, 'xl$1')
+const textDart = [
+  ...DART_BANNER,
+  '',
+  "import 'package:flutter/painting.dart';",
+  '',
+  ...dartDoc(0, [
+    'The KunUI type scale: font size and line height, nothing else.',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    'Color, weight and family are left null, so they inherit from the',
+    'ambient `DefaultTextStyle`; add them with `copyWith`.',
+    '',
+    'Every style sets `leadingDistribution` to',
+    "`TextLeadingDistribution.even`, which is CSS's half-leading. Flutter's",
+    'default, `proportional`, splits the extra line height by the font\'s',
+    'ascent/descent ratio, which sets the glyphs lower in the line box than',
+    'the web does.',
+    '',
+    '`text-2xl` to `text-9xl` are named `xl2` to `xl9`: a Dart name cannot',
+    'start with a digit.',
+  ]),
+  'abstract final class KunText {',
+  ...TEXT_STEPS.flatMap((k, i) => {
+    const { fontSize, linePx } = textScale[k]
+    const height = linePx === fontSize ? '1' : `${dartNum(linePx)} / ${dartNum(fontSize)}`
+    return [
+      ...(i ? [''] : []),
+      ...dartDoc(2, [`Web \`text-${k}\`: ${dartNum(fontSize)}px on a ${dartNum(linePx)}px line.`]),
+      `  static const TextStyle ${dartTextName(k)} = TextStyle(`,
+      `    fontSize: ${dartNum(fontSize)},`,
+      `    height: ${height},`,
+      '    leadingDistribution: TextLeadingDistribution.even,',
+      '  );',
+    ]
+  }),
+  '}',
+  '',
+].join('\n')
+
 mkdirSync(DART_DIR, { recursive: true })
 const dartFiles = {
   'colors.g.dart': colorsDart,
   'motion.g.dart': motionDart,
   'radius.g.dart': radiusDart,
   'shadows.g.dart': shadowsDart,
+  'spacing.g.dart': spacingDart,
+  'text.g.dart': textDart,
 }
 for (const [name, body] of Object.entries(dartFiles))
   writeFileSync(join(DART_DIR, name), body)
@@ -730,6 +840,7 @@ const dtcgColor = (chanStr) => ({
   },
 })
 const dtcgDimension = (value) => ({ value, unit: 'px' })
+const TAILWIND_DTCG_NOTE = TAILWIND_NOTE.join(' ').replace(/`/g, '')
 const dtcgMode = (mode) => {
   const idx = mode === 'light' ? 0 : 1
   const group = {}
@@ -786,6 +897,25 @@ const dtcg = {
       },
     ])
   ),
+  spacing: {
+    $description: TAILWIND_DTCG_NOTE,
+    unit: { $type: 'dimension', $value: dtcgDimension(spacingUnit) },
+  },
+  // Plain fontSize/lineHeight pairs, not the `typography` composite: 2025.10
+  // makes all five of its sub-values required, and fontFamily, fontWeight and
+  // letterSpacing are not part of this scale.
+  text: {
+    $description: TAILWIND_DTCG_NOTE,
+    ...Object.fromEntries(
+      TEXT_STEPS.map((k) => [
+        k,
+        {
+          fontSize: { $type: 'dimension', $value: dtcgDimension(textScale[k].fontSize) },
+          lineHeight: { $type: 'number', $value: textScale[k].lineHeight },
+        },
+      ])
+    ),
+  },
 }
 writeFileSync(DTCG_OUT, JSON.stringify(dtcg, null, 2) + '\n')
 

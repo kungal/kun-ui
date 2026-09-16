@@ -35,7 +35,14 @@ Container(
     borderRadius: BorderRadius.circular(KunRadius.md),
     boxShadow: KunShadows.md,
   ),
-  child: Text('Kun', style: TextStyle(color: scheme.primary.onSolid)),
+  padding: const EdgeInsets.symmetric(
+    horizontal: KunSpacing.unit * 4, // web px-4
+    vertical: KunSpacing.unit * 2, // web py-2
+  ),
+  child: Text(
+    'Kun',
+    style: KunText.sm.copyWith(color: scheme.primary.onSolid),
+  ),
 );
 
 AnimatedContainer(
@@ -48,6 +55,15 @@ AnimatedContainer(
 There is deliberately no `KunTheme` here. This package is theme-system
 agnostic — plain `const` holders, no `ThemeExtension`, no Material coupling —
 so the eventual widget layer stays free to pick its own theming model.
+
+`KunSpacing` and `KunText` are the spacing unit and the type scale KunUI's
+components are written against. On the web those are Tailwind v4's defaults
+(`--spacing`, `--text-*`), which KunUI does not redeclare, so the generator
+reads them straight out of Tailwind's `theme.css`. A site that overrides them
+in its own `@theme` renders differently; these are the design values. Each
+`KunText` style sets `leadingDistribution: TextLeadingDistribution.even` —
+CSS's half-leading — because Flutter's default, `proportional`, sets the
+glyphs lower in the line box than a browser does.
 
 Beyond the easing/duration scale, `KunShatterPhysics` carries the ballistic
 model behind the web `KunShatter` component — outward impulse, air-drag

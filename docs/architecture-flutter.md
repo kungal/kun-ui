@@ -296,7 +296,7 @@ Only tiers 0–2 are *shared*. Tiers 3–4 are "written separately, verified
 against a shared spec."
 
 Status: **tier 0 shipped in 2.33.0** (`kun_ui_tokens` on pub.dev, easings and
-durations included), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined by
+durations included; spacing and the type scale joined in 2.38.0), **tier 1 in 2.34.0** (`kun_ui_icons`, later joined by
 `kun_ui_messages`), **tier 2 in
 2.35.0** (`KunShatterPhysics` in `kun_ui_tokens`), **tier 3 in 2.35.1**
 (`contracts/` — the acceptance list and the parity checker), and **tier 4
@@ -324,6 +324,21 @@ Notes that are easy to get wrong:
   brand-new generated file is *untracked* and `git diff` cannot see it. The
   Dart artifacts need the same treatment for the same reason.
 - **Tier 0 emits `Color.from(...)`, not `Color(0xFF…)`** (§3.2, §3.3).
+- **Spacing and the type scale are Tailwind's, so they are read from
+  Tailwind.** KunUI never declares `--spacing` or `--text-*`; its components
+  use Tailwind v4's defaults. Tier 0 shipped without them, and the first
+  port felt it: `kun_ui`'s `KunInput` hand-typed `fontSize: 14, height:
+  20 / 14` for its label, and its gallery borrowed the control-size table
+  as a heading style. `gen-tokens.mjs` now reads both out of
+  `tailwindcss/theme.css`, so a changed Tailwind default is a generated
+  diff, and it refuses to run once `tokens.css` declares either itself.
+  `KunText` sets `leadingDistribution: even`: measured with one font in
+  Chromium and in `flutter test`, CSS half-leading and Flutter's default
+  `proportional` put the baseline 1.2–2.6 px apart at `xs`–`4xl`, and
+  `even` lands within Chromium's pixel rounding (≤ 0.6 px). The
+  alternative the port also proposed, a per-component layout table read by
+  both Vue and Flutter, was declined: it moves component implementation
+  into the shared tiers, which this section rules out.
 - **DTCG is an export, not the pivot.** The single source of truth is the
   *policy* in `gen-tokens.mjs` (`HUES`, the ramp, the AA assertion) — a
   DTCG file stores resolved values and cannot express any of that. So the

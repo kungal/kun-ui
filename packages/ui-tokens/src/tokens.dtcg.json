@@ -2819,5 +2819,187 @@
         }
       ]
     }
+  },
+  "spacing": {
+    "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at.",
+    "unit": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    }
+  },
+  "text": {
+    "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at.",
+    "xs": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.3333333333333333
+      }
+    },
+    "sm": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.4285714285714286
+      }
+    },
+    "base": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.5
+      }
+    },
+    "lg": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 18,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.5555555555555556
+      }
+    },
+    "xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.4
+      }
+    },
+    "2xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.3333333333333333
+      }
+    },
+    "3xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 30,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.2
+      }
+    },
+    "4xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 36,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1.1111111111111112
+      }
+    },
+    "5xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 48,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1
+      }
+    },
+    "6xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 60,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1
+      }
+    },
+    "7xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 72,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1
+      }
+    },
+    "8xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 96,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1
+      }
+    },
+    "9xl": {
+      "fontSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 128,
+          "unit": "px"
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 1
+      }
+    }
   }
 }

@@ -14,3 +14,5 @@ export 'src/colors.g.dart';
 export 'src/motion.g.dart';
 export 'src/radius.g.dart';
 export 'src/shadows.g.dart';
+export 'src/spacing.g.dart';
+export 'src/text.g.dart';
