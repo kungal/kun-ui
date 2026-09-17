@@ -56,16 +56,24 @@ There is deliberately no `KunTheme` here. This package is theme-system
 agnostic — plain `const` holders, no `ThemeExtension`, no Material coupling —
 so the eventual widget layer stays free to pick its own theming model.
 
-`KunSpacing`, `KunText`, `KunContainerWidths`, `KunBreakpointWidths`,
-`KunBlur`, `KunShadows.glow` and `KunDefaultTransition` are the Tailwind v4
-defaults KunUI's components are written against — `--spacing`, `--text-*`,
-`--container-*`, `--breakpoint-*`, `--blur-*`, `--shadow-lg` and the default
-transition. KunUI does not redeclare them, so the generator reads them straight
-out of Tailwind's `theme.css`. A site that overrides them in its own `@theme`
-renders differently; these are the design values. Each `KunText` style sets
-`leadingDistribution: TextLeadingDistribution.even` — CSS's half-leading —
-because Flutter's default, `proportional`, sets the glyphs lower in the line
-box than a browser does.
+`KunSpacing`, `KunText`, `KunFontWeights`, `KunRounded`,
+`KunContainerWidths`, `KunBreakpointWidths`, `KunBlur`, `KunShadows.glow`,
+`KunDefaultTransition`, `KunPulse` and `KunSpin` are the Tailwind v4 defaults
+KunUI's components are written against — `--spacing`, `--text-*`,
+`--font-weight-*`, `--radius-*`, `--container-*`, `--breakpoint-*`,
+`--blur-*`, `--shadow-lg`, the default transition, `animate-pulse` and
+`animate-spin`. KunUI does not redeclare them, so the generator reads them
+straight out of Tailwind's `theme.css`. A site that overrides them in its own
+`@theme` renders differently; these are the design values. Each `KunText`
+style sets `leadingDistribution: TextLeadingDistribution.even` — CSS's
+half-leading — because Flutter's default, `proportional`, sets the glyphs
+lower in the line box than a browser does. `KunPulse.curve` eases each half
+of the cycle, not the whole of it; the class doc shows the controller that
+draws the web's fade.
+
+`scheme.border` is the hairline the web's `border-kun` draws on inputs, cards
+and dividers. `KunColors.globalOpacity` is the alpha the web draws
+`background` and `neutral.shade100` at; the schemes store both opaque.
 
 Blur needs care in one direction only. A `KunBlur` step is a Gaussian
 standard deviation, which is what both CSS `blur()` and `ImageFilter.blur`
@@ -91,6 +99,13 @@ how hard it resists an upward drag.
   illegible pair cannot reach a release.
 - **Parity.** Colors are sRGB-clamped OKLCH, the same `clampChroma` pass the
   CSS goes through, so an app and the websites render the same color.
+- **Coverage.** Every theme value a KunUI web component uses, Tailwind's or
+  KunUI's own, is here, except the few that
+  [`theme-coverage.mjs`](https://github.com/kungal/kun-ui/blob/main/packages/ui-tokens/scripts/theme-coverage.mjs)
+  lists with a reason, the z-index layers and KunLoli's popup choreography
+  among them. The generator scans the components with Tailwind's own
+  compiler and fails on anything else, so a component cannot start using a
+  value this package lacks.
 - **Version lockstep.** This package's version always equals the version of
   the four `@kungal/*` npm packages; they are bumped together and published
   from one commit. This release is `kun_ui_tokens 2.39.0`.

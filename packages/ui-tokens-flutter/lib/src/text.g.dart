@@ -11,7 +11,8 @@ import 'package:flutter/painting.dart';
 /// were designed at.
 ///
 /// Color, weight and family are left null, so they inherit from the
-/// ambient `DefaultTextStyle`; add them with `copyWith`.
+/// ambient `DefaultTextStyle`; add them with `copyWith`, taking the weight
+/// from [KunFontWeights].
 ///
 /// Every style sets `leadingDistribution` to
 /// `TextLeadingDistribution.even`, which is CSS's half-leading. Flutter's
@@ -112,4 +113,39 @@ abstract final class KunText {
     height: 1,
     leadingDistribution: TextLeadingDistribution.even,
   );
+}
+
+/// Tailwind's font weight scale: web `font-medium` is [medium].
+///
+/// The values are Tailwind v4's default theme, which KunUI's components are
+/// written against and never redeclare. A site that overrides them in its own
+/// `@theme` renders differently from these; these are what the components
+/// were designed at.
+abstract final class KunFontWeights {
+  /// Web `--font-weight-thin`.
+  static const FontWeight thin = FontWeight.w100;
+
+  /// Web `--font-weight-extralight`.
+  static const FontWeight extralight = FontWeight.w200;
+
+  /// Web `--font-weight-light`.
+  static const FontWeight light = FontWeight.w300;
+
+  /// Web `--font-weight-normal`.
+  static const FontWeight normal = FontWeight.w400;
+
+  /// Web `--font-weight-medium`.
+  static const FontWeight medium = FontWeight.w500;
+
+  /// Web `--font-weight-semibold`.
+  static const FontWeight semibold = FontWeight.w600;
+
+  /// Web `--font-weight-bold`.
+  static const FontWeight bold = FontWeight.w700;
+
+  /// Web `--font-weight-extrabold`.
+  static const FontWeight extrabold = FontWeight.w800;
+
+  /// Web `--font-weight-black`.
+  static const FontWeight black = FontWeight.w900;
 }

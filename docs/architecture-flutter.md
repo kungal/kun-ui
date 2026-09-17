@@ -385,6 +385,39 @@ Notes that are easy to get wrong:
   elevation scale for floating surfaces, the glow is a tinted variant
   effect, and swapping one for the other restyles every `variant="shadow"`
   button on every site.
+- **2.40.0 stopped waiting for the port to find the next one.** The port
+  held back KunSkeleton and KunAvatar because `animate-pulse` had no token,
+  one more Tailwind default found by getting stuck on it. So
+  `gen-tokens.mjs` now takes the inventory itself
+  (`scripts/theme-coverage.mjs`): Tailwind's scanner reads
+  `packages/vue/src` and `packages/ui-core/src`, Tailwind's compiler builds
+  what it found against `theme.css` and `tokens.css`, and a variable those
+  files declare is a dependency when the built CSS or a source file
+  references it through `var()`. Tailwind copies shadows, breakpoints and
+  container queries into the utility instead of writing a `var()`, so those
+  values are swapped for unique marker lengths before the build and found
+  by the marker. Each dependency must be something the generator read, or
+  be listed in `NOT_GENERATED` with a reason; a listing that matches nothing
+  fails too. The first inventory found 222 dependencies, 23 of them without
+  a Dart twin. Generated: `KunPulse` and `KunSpin`; `KunRounded`,
+  Tailwind's own radius scale, which KunSkeleton's text variant, KunLightbox
+  and KunCommandPalette's match highlight use directly and which ignores
+  `--kun-radius-scale`; `KunFontWeights`, which the port was writing as
+  `FontWeight.w500`; `KunColorScheme.border`, the `border-kun` hairline,
+  which it was writing as `neutral.shade100`; and `KunColors.globalOpacity`,
+  the alpha the web gives `--color-background` and `--color-default-100`,
+  which the scheme docs used to wave off as per-component compositing.
+  Listed instead: the `--z-kun-*` layers (Flutter stacks by Overlay order),
+  KunLoli's animate.css keyframes (one component's choreography, like
+  Pagination's pop), the opt-in glass knobs, the live
+  `--kun-scrollbar-width`, and `--ease-out`, which no class uses: the
+  scanner reads the CSS keyword in an inline `transition` string as the
+  utility. `KunPulse` is where a port can go wrong with the right numbers.
+  The web eases each half of the cycle; a Flutter `repeat(reverse: true)`
+  over half the duration matched Chromium 153 within 0.0008 opacity at
+  every 25 ms sample over two cycles, and easing the whole cycle once is up
+  to 0.14 off. KunImage's loading layer, which KunAvatar draws through, now
+  pulses only under `motion-safe:`, as KunSkeleton's always did.
 - **DTCG is an export, not the pivot.** The single source of truth is the
   *policy* in `gen-tokens.mjs` (`HUES`, the ramp, the AA assertion) — a
   DTCG file stores resolved values and cannot express any of that. So the

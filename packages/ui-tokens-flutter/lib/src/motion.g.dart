@@ -55,6 +55,46 @@ abstract final class KunDefaultTransition {
   static const Curve curve = Cubic(0.4, 0, 0.2, 1);
 }
 
+/// Web `animate-pulse`: a loading placeholder fading down and back up,
+/// over and over.
+///
+/// The values are Tailwind v4's default theme, which KunUI's components are
+/// written against and never redeclare. A site that overrides them in its own
+/// `@theme` renders differently from these; these are what the components
+/// were designed at.
+///
+/// The web eases each half of a cycle with [curve], down to [midOpacity]
+/// and back, rather than easing the whole cycle once. [curve] is symmetric,
+/// so an `AnimationController` of half [duration] running
+/// `repeat(reverse: true)` under a `CurvedAnimation` with [curve] draws the
+/// same fade.
+abstract final class KunPulse {
+  /// One full cycle: web `--animate-pulse`.
+  static const Duration duration = Duration(milliseconds: 2000);
+
+  /// The ease of each half-cycle.
+  static const Curve curve = Cubic(0.4, 0, 0.6, 1);
+
+  /// The opacity half-way through a cycle, which starts and ends at the
+  /// widget's own opacity.
+  static const double midOpacity = 0.5;
+}
+
+/// Web `animate-spin`: one clockwise turn per [duration] at constant speed,
+/// over and over.
+///
+/// The values are Tailwind v4's default theme, which KunUI's components are
+/// written against and never redeclare. A site that overrides them in its own
+/// `@theme` renders differently from these; these are what the components
+/// were designed at.
+abstract final class KunSpin {
+  /// One full turn: web `--animate-spin`.
+  static const Duration duration = Duration(milliseconds: 1000);
+
+  /// Constant speed: web `linear`.
+  static const Curve curve = Curves.linear;
+}
+
 /// The ballistic model behind the web `KunShatter` component, as data.
 ///
 /// These are the physics parameters one level above the sampled keyframes:

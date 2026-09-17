@@ -31,6 +31,9 @@ class KunColorScale {
   final Color shade50;
 
   /// Web token `--color-<hue>-100`.
+  ///
+  /// The web draws the `neutral` scale's step at [KunColors.globalOpacity];
+  /// the value here is opaque.
   final Color shade100;
 
   /// Web token `--color-<hue>-200`.
@@ -96,8 +99,8 @@ class KunColorScheme {
 
   /// Web token `--color-background`, the page beneath everything.
   ///
-  /// The opaque base color. The web layer composites glass and alpha
-  /// surfaces on top of it per component; nothing here is translucent.
+  /// Stored opaque, like every color here; the web draws it at
+  /// [KunColors.globalOpacity].
   final Color background;
 
   /// Web token `--color-foreground`, the default text color.
@@ -139,11 +142,24 @@ class KunColorScheme {
   /// Named `neutral` rather than the web token name `default`, which is a
   /// Dart reserved word.
   final KunColorScale neutral;
+
+  /// Web token `--color-kun-border` (the `border-kun` utility), the hairline on
+  /// inputs, cards, dividers and popovers: [neutral]'s `shade100`, drawn
+  /// opaque.
+  Color get border => neutral.shade100;
 }
 
-/// The two generated KunUI color schemes, and the two colors that do not
-/// change with the mode.
+/// The two generated KunUI color schemes, and what does not change with
+/// the mode.
 abstract final class KunColors {
+  /// Web `--kun-global-opacity`. On the web, `--color-background` and
+  /// `--color-default-100` carry this alpha; the schemes store them opaque, so
+  /// web `bg-default-100` is
+  /// `neutral.shade100.withValues(alpha: globalOpacity)`.
+  ///
+  /// This is the default; a site may set its own.
+  static const double globalOpacity = 0.7;
+
   /// Web token `--color-white`, the same in light and dark.
   static const Color white = Color.from(alpha: 1, red: 1, green: 1, blue: 1);
 

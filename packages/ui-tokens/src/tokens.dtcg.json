@@ -1302,6 +1302,10 @@
           "alpha": 1,
           "hex": "#d4d4d8"
         }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{color.light.default.100}"
       }
     },
     "dark": {
@@ -2579,7 +2583,18 @@
           "alpha": 1,
           "hex": "#52525b"
         }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{color.dark.default.100}"
       }
+    }
+  },
+  "opacity": {
+    "global": {
+      "$description": "The alpha of --color-background and --color-default-100; the color tokens store both opaque.",
+      "$type": "number",
+      "$value": 0.7
     }
   },
   "radius": {
@@ -2615,6 +2630,65 @@
       "$type": "dimension",
       "$value": {
         "value": 9999,
+        "unit": "px"
+      }
+    }
+  },
+  "rounded": {
+    "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at.",
+    "xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "4xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
         "unit": "px"
       }
     }
@@ -2703,6 +2777,48 @@
           0.4,
           0,
           0.2,
+          1
+        ]
+      }
+    },
+    "pulse": {
+      "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at. The easing applies to each half of a cycle.",
+      "duration": {
+        "$type": "duration",
+        "$value": {
+          "value": 2000,
+          "unit": "ms"
+        }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.4,
+          0,
+          0.6,
+          1
+        ]
+      },
+      "midOpacity": {
+        "$type": "number",
+        "$value": 0.5
+      }
+    },
+    "spin": {
+      "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at. One full turn per duration.",
+      "duration": {
+        "$type": "duration",
+        "$value": {
+          "value": 1000,
+          "unit": "ms"
+        }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "$value": [
+          0,
+          0,
+          1,
           1
         ]
       }
@@ -3057,6 +3173,45 @@
         "value": 64,
         "unit": "px"
       }
+    }
+  },
+  "fontWeight": {
+    "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at.",
+    "thin": {
+      "$type": "fontWeight",
+      "$value": 100
+    },
+    "extralight": {
+      "$type": "fontWeight",
+      "$value": 200
+    },
+    "light": {
+      "$type": "fontWeight",
+      "$value": 300
+    },
+    "normal": {
+      "$type": "fontWeight",
+      "$value": 400
+    },
+    "medium": {
+      "$type": "fontWeight",
+      "$value": 500
+    },
+    "semibold": {
+      "$type": "fontWeight",
+      "$value": 600
+    },
+    "bold": {
+      "$type": "fontWeight",
+      "$value": 700
+    },
+    "extrabold": {
+      "$type": "fontWeight",
+      "$value": 800
+    },
+    "black": {
+      "$type": "fontWeight",
+      "$value": 900
     }
   },
   "text": {

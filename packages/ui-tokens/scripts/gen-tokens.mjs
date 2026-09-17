@@ -20,6 +20,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { oklch, clampChroma, wcagContrast, formatHex, parse, rgb } from 'culori'
 import { SHATTER_PHYSICS, SWIPE_DISMISS_PHYSICS } from './motion-physics.mjs'
+import { checkThemeCoverage } from './theme-coverage.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = join(HERE, '../src/palette.generated.css')
@@ -246,6 +247,9 @@ if (pubVersion !== npmVersion) {
   process.exit(1)
 }
 
+// Every web variable a Dart value is generated from, for checkThemeCoverage.
+const published = new Set([...css.matchAll(/(--[\w-]+):/g)].map((m) => m[1]))
+
 // ── read the hand-authored tokens (radius / motion / elevation) out of CSS ──
 const cssText = readFileSync(CSS_SRC, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
 const cssValues = (name) =>
@@ -262,6 +266,7 @@ const cssValue = (name) => {
   const [first] = vs
   if (vs.some((v) => v !== first))
     throw new Error(`tokens.css declares ${name} more than once, disagreeing: ${vs.join(' | ')}`)
+  published.add(name)
   return first
 }
 
@@ -333,14 +338,24 @@ const elevations = Object.fromEntries(
 const baseColors = Object.fromEntries(
   BASE_COLORS.map((k) => [k, rgb(parse(cssValue(`--color-${k}`)))])
 )
+const borderStep = cssValue('--color-kun-border').match(/^oklch\(var\(--(\w+)-(\d+)\)\)$/)
+if (!borderStep || !HUES[borderStep[1]] || !SHADES.includes(Number(borderStep[2])))
+  throw new Error('--color-kun-border is no longer one palette step')
+const globalOpacity = Number(cssValue('--kun-global-opacity'))
+if (!(globalOpacity >= 0 && globalOpacity <= 1))
+  throw new Error('--kun-global-opacity is not an alpha')
+const translucent = themeColorLines
+  .filter((l) => l.includes('var(--kun-global-opacity)'))
+  .map((l) => l.match(/--[\w-]+/)[0])
 
 // ── Tailwind's defaults, read from Tailwind ─────────────────────────────────
-// KunUI never declares `--spacing`, `--text-*`, `--container-*`,
-// `--breakpoint-*`, `--blur-*`, `--shadow-lg` or the default transition; its
-// components are written against Tailwind v4's default theme, so that file is
-// what these are read from. Restated here, the numbers would go stale silently on a Tailwind
-// upgrade; read, a changed default is a diff in the generated files and fails
-// the CI gate.
+// KunUI never declares the Tailwind scales its components use (`--spacing`,
+// `--text-*`, `--radius-*`, …), the default transition or `animate-pulse`;
+// the components are written against Tailwind v4's default theme, so that
+// file is what these are read from. Restated here, the numbers would go stale
+// silently on a Tailwind upgrade; read, a changed default is a diff in the
+// generated files and fails the CI gate. Which ones a component uses is
+// theme-coverage.mjs's inventory, not this list.
 const twTheme = readFileSync(
   createRequire(import.meta.url).resolve('tailwindcss/theme.css'),
   'utf8'
@@ -350,6 +365,7 @@ const twValue = (name) => {
     throw new Error(`tokens.css now declares ${name}; read it from there, not from Tailwind`)
   const m = twTheme.match(new RegExp(`^\\s*${name}:\\s*([^;]+);`, 'm'))
   if (!m) throw new Error(`tailwindcss/theme.css declares no ${name}`)
+  published.add(name)
   return m[1].trim()
 }
 const remPx = (v) => {
@@ -365,6 +381,8 @@ const ratio = (v) => {
 }
 
 const TEXT_STEPS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl']
+const FONT_WEIGHT_STEPS = ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black']
+const ROUNDED_STEPS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']
 const CONTAINER_STEPS = ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl']
 const BREAKPOINT_STEPS = ['sm', 'md', 'lg', 'xl', '2xl']
 const BLUR_STEPS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl']
@@ -374,6 +392,12 @@ const scaleOf = (steps, prefix, read) =>
 const containers = scaleOf(CONTAINER_STEPS, '--container-', remPx)
 const breakpoints = scaleOf(BREAKPOINT_STEPS, '--breakpoint-', remPx)
 const blurs = scaleOf(BLUR_STEPS, '--blur-', px)
+const rounded = scaleOf(ROUNDED_STEPS, '--radius-', remPx)
+const fontWeights = scaleOf(FONT_WEIGHT_STEPS, '--font-weight-', (v) => {
+  const n = Number(v)
+  if (!(Number.isInteger(n / 100) && n >= 100 && n <= 900)) throw new Error(`FontWeight has no w${v}`)
+  return n
+})
 // KunUI's `shadow` variant is `shadow-lg shadow-{color}/…`: Tailwind's
 // geometry, with every layer's color replaced by the tint.
 const glowLayers = shadowLayers(twValue('--shadow-lg'))
@@ -384,6 +408,37 @@ const defaultTransition = {
   duration: ms(twValue('--default-transition-duration')),
   easing: bezier(twValue('--default-transition-timing-function')),
 }
+const twKeyframes = (name) => {
+  const at = twTheme.indexOf(`@keyframes ${name} {`)
+  if (at < 0) throw new Error(`tailwindcss/theme.css declares no @keyframes ${name}`)
+  const open = twTheme.indexOf('{', at)
+  let depth = 0
+  for (let i = open; i < twTheme.length; i++) {
+    if (twTheme[i] === '{') depth++
+    else if (twTheme[i] === '}' && --depth === 0)
+      return twTheme.slice(open + 1, i).replace(/\s+/g, ' ').trim()
+  }
+  throw new Error(`@keyframes ${name} never closes`)
+}
+const twAnimation = (name, framesPattern) => {
+  const v = twValue(`--animate-${name}`)
+  const m = v.match(/^(\S+) ([\d.]+)(ms|s) (linear|cubic-bezier\([^)]+\)) infinite$/)
+  if (!m || m[1] !== name) throw new Error(`unrecognised --animate-${name}: "${v}"`)
+  const duration = Number(m[2]) * (m[3] === 's' ? 1000 : 1)
+  if (!Number.isInteger(duration)) throw new Error(`--animate-${name} is not a whole ms`)
+  const frames = twKeyframes(name).match(framesPattern)
+  if (!frames) throw new Error(`unrecognised @keyframes ${name}: "${twKeyframes(name)}"`)
+  return { duration, easing: m[4] === 'linear' ? null : bezier(m[4]), frames }
+}
+const pulse = twAnimation('pulse', /^50% \{ opacity: ([\d.]+); \}$/)
+// KunPulse's doc has the port play the second half as the first one
+// reversed, which is the same ease only for a curve symmetric about the
+// centre.
+const [pulseX1, pulseY1, pulseX2, pulseY2] = pulse.easing ?? []
+if (!pulse.easing || Math.abs(pulseX1 + pulseX2 - 1) > 1e-9 || Math.abs(pulseY1 + pulseY2 - 1) > 1e-9)
+  throw new Error(`--animate-pulse no longer runs a symmetric cubic-bezier: ${pulse.easing}`)
+const spin = twAnimation('spin', /^to \{ transform: rotate\(360deg\); \}$/)
+if (spin.easing) throw new Error('--animate-spin no longer runs linear')
 const textScale = Object.fromEntries(
   TEXT_STEPS.map((k) => {
     const fontSize = remPx(twValue(`--text-${k}`))
@@ -411,6 +466,10 @@ const dartBlurRadius = (cssBlur) => {
   return r
 }
 const dartScaleName = (k) => k.replace(/^(\d)(xs|xl)$/, '$2$1')
+const digitNames = (steps) =>
+  steps.includes('3xs')
+    ? ['A Dart name cannot start with a digit, so `3xs` is `xs3` and `2xl` is', '`xl2`.']
+    : ['A Dart name cannot start with a digit, so `2xl` is `xl2`.']
 const dartColor = (chanStr) => {
   const c = rgb(ofChan(chanStr))
   const ch = (n) => dartNum(Math.min(1, Math.max(0, n)))
@@ -425,6 +484,14 @@ const DART_BANNER = [
 // outer const constructor call is written with one to stay vertical.
 const dartDoc = (indent, lines) =>
   lines.map((l) => `${' '.repeat(indent)}///${l ? ` ${l}` : ''}`)
+// For a doc sentence built from generated names; a member doc is indented 2.
+const wrapDoc = (text, width = 74) =>
+  text.match(/(?:`[^`]*`|\S)+/g).reduce((lines, word) => {
+    const last = lines.at(-1)
+    if (last !== undefined && `${last} ${word}`.length <= width) lines[lines.length - 1] += ` ${word}`
+    else lines.push(word)
+    return lines
+  }, [])
 const TAILWIND_NOTE = [
   "The values are Tailwind v4's default theme, which KunUI's components are",
   'written against and never redeclare. A site that overrides them in its own',
@@ -451,6 +518,12 @@ SCALE_DOCS.shade50 = [
   "Web token `--color-<hue>-50`, the ramp's faintest step — a tint that",
   "barely lifts off the mode's background.",
 ]
+SCALE_DOCS.shade100 = [
+  'Web token `--color-<hue>-100`.',
+  '',
+  "The web draws the `neutral` scale's step at [KunColors.globalOpacity];",
+  'the value here is opaque.',
+]
 SCALE_DOCS.shade500 = [
   "Web token `--color-<hue>-500`, the ramp's fixed midpoint — the one step",
   'whose value is identical in light and dark.',
@@ -471,8 +544,8 @@ const SCHEME_FIELDS = [
   ['background', 'Color', [
     'Web token `--color-background`, the page beneath everything.',
     '',
-    'The opaque base color. The web layer composites glass and alpha',
-    'surfaces on top of it per component; nothing here is translucent.',
+    'Stored opaque, like every color here; the web draws it at',
+    '[KunColors.globalOpacity].',
   ]],
   ['foreground', 'Color', ['Web token `--color-foreground`, the default text color.']],
   ['content1', 'Color', [
@@ -548,13 +621,31 @@ const colorsDart = [
     ...dartDoc(2, doc),
     `  final ${type} ${f};`,
   ]),
+  '',
+  ...dartDoc(2, wrapDoc(
+    'Web token `--color-kun-border` (the `border-kun` utility), the hairline ' +
+      `on inputs, cards, dividers and popovers: [${DART_HUE_NAMES[borderStep[1]]}]'s ` +
+      `\`shade${borderStep[2]}\`, drawn opaque.`
+  )),
+  `  Color get border => ${DART_HUE_NAMES[borderStep[1]]}.shade${borderStep[2]};`,
   '}',
   '',
   ...dartDoc(0, [
-    'The two generated KunUI color schemes, and the two colors that do not',
-    'change with the mode.',
+    'The two generated KunUI color schemes, and what does not change with',
+    'the mode.',
   ]),
   'abstract final class KunColors {',
+  ...dartDoc(2, [
+    ...wrapDoc(
+      `Web \`--kun-global-opacity\`. On the web, ${translucent.map((n) => `\`${n}\``).join(' and ')} ` +
+        'carry this alpha; the schemes store them opaque, so web `bg-default-100` is ' +
+        '`neutral.shade100.withValues(alpha: globalOpacity)`.'
+    ),
+    '',
+    'This is the default; a site may set its own.',
+  ]),
+  `  static const double globalOpacity = ${dartNum(globalOpacity)};`,
+  '',
   ...BASE_COLORS.flatMap((k) => {
     const c = baseColors[k]
     return [
@@ -715,6 +806,46 @@ const motionDart = [
   '}',
   '',
   ...dartDoc(0, [
+    'Web `animate-pulse`: a loading placeholder fading down and back up,',
+    'over and over.',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    'The web eases each half of a cycle with [curve], down to [midOpacity]',
+    'and back, rather than easing the whole cycle once. [curve] is symmetric,',
+    'so an `AnimationController` of half [duration] running',
+    '`repeat(reverse: true)` under a `CurvedAnimation` with [curve] draws the',
+    'same fade.',
+  ]),
+  'abstract final class KunPulse {',
+  ...dartDoc(2, ['One full cycle: web `--animate-pulse`.']),
+  `  static const Duration duration = Duration(milliseconds: ${pulse.duration});`,
+  '',
+  ...dartDoc(2, ['The ease of each half-cycle.']),
+  `  static const Curve curve = Cubic(${pulse.easing.map(String).join(', ')});`,
+  '',
+  ...dartDoc(2, [
+    'The opacity half-way through a cycle, which starts and ends at the',
+    "widget's own opacity.",
+  ]),
+  `  static const double midOpacity = ${dartNum(Number(pulse.frames[1]))};`,
+  '}',
+  '',
+  ...dartDoc(0, [
+    'Web `animate-spin`: one clockwise turn per [duration] at constant speed,',
+    'over and over.',
+    '',
+    ...TAILWIND_NOTE,
+  ]),
+  'abstract final class KunSpin {',
+  ...dartDoc(2, ['One full turn: web `--animate-spin`.']),
+  `  static const Duration duration = Duration(milliseconds: ${spin.duration});`,
+  '',
+  ...dartDoc(2, ['Constant speed: web `linear`.']),
+  '  static const Curve curve = Curves.linear;',
+  '}',
+  '',
+  ...dartDoc(0, [
     'The ballistic model behind the web `KunShatter` component, as data.',
     '',
     'These are the physics parameters one level above the sampled keyframes:',
@@ -809,6 +940,25 @@ const radiusDart = [
     ...(i ? [''] : []),
     ...dartDoc(2, RADIUS_DOCS[k]),
     `  static const double ${k} = ${dartNum(radius[k])};`,
+  ]),
+  '}',
+  '',
+  ...dartDoc(0, [
+    "Tailwind's own corner radius scale, in logical pixels: web `rounded-md`",
+    'and the other steps without `kun-`, which a few components use instead',
+    'of [KunRadius].',
+    '',
+    ...TAILWIND_NOTE,
+    '',
+    'Unlike [KunRadius], these ignore `--kun-radius-scale`.',
+    '',
+    ...digitNames(ROUNDED_STEPS),
+  ]),
+  'abstract final class KunRounded {',
+  ...ROUNDED_STEPS.flatMap((k, i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, [`Web \`--radius-${k}\`.`]),
+    `  static const double ${dartScaleName(k)} = ${dartNum(rounded[k])};`,
   ]),
   '}',
   '',
@@ -907,7 +1057,8 @@ const textDart = [
     ...TAILWIND_NOTE,
     '',
     'Color, weight and family are left null, so they inherit from the',
-    'ambient `DefaultTextStyle`; add them with `copyWith`.',
+    'ambient `DefaultTextStyle`; add them with `copyWith`, taking the weight',
+    'from [KunFontWeights].',
     '',
     'Every style sets `leadingDistribution` to',
     "`TextLeadingDistribution.even`, which is CSS's half-leading. Flutter's",
@@ -934,12 +1085,21 @@ const textDart = [
   }),
   '}',
   '',
+  ...dartDoc(0, [
+    "Tailwind's font weight scale: web `font-medium` is [medium].",
+    '',
+    ...TAILWIND_NOTE,
+  ]),
+  'abstract final class KunFontWeights {',
+  ...FONT_WEIGHT_STEPS.flatMap((k, i) => [
+    ...(i ? [''] : []),
+    ...dartDoc(2, [`Web \`--font-weight-${k}\`.`]),
+    `  static const FontWeight ${k} = FontWeight.w${fontWeights[k]};`,
+  ]),
+  '}',
+  '',
 ].join('\n')
 
-const digitNames = (steps) =>
-  steps.includes('3xs')
-    ? ['A Dart name cannot start with a digit, so `3xs` is `xs3` and `2xl` is', '`xl2`.']
-    : ['A Dart name cannot start with a digit, so `2xl` is `xl2`.']
 const layoutDart = [
   ...DART_BANNER,
   '',
@@ -1050,6 +1210,7 @@ const dtcgMode = (mode) => {
   }
   for (const n of Object.keys(NEUTRALS))
     group[n] = dtcgColor(neutralChan(NEUTRALS[n][idx]))
+  group.border = { $type: 'color', $value: `{color.${mode}.${borderStep[1]}.${borderStep[2]}}` }
   return group
 }
 
@@ -1079,9 +1240,17 @@ const dtcg = {
     light: dtcgMode('light'),
     dark: dtcgMode('dark'),
   },
+  opacity: {
+    global: {
+      $description: `The alpha of ${translucent.join(' and ')}; the color tokens store both opaque.`,
+      $type: 'number',
+      $value: globalOpacity,
+    },
+  },
   radius: Object.fromEntries(
     RADII.map((k) => [k, { $type: 'dimension', $value: dtcgDimension(radius[k]) }])
   ),
+  rounded: dtcgScale(ROUNDED_STEPS, rounded),
   motion: {
     easing: Object.fromEntries(
       EASINGS.map((k) => [k, { $type: 'cubicBezier', $value: easings[k] }])
@@ -1099,6 +1268,17 @@ const dtcg = {
         $value: { value: defaultTransition.duration, unit: 'ms' },
       },
       easing: { $type: 'cubicBezier', $value: defaultTransition.easing },
+    },
+    pulse: {
+      $description: `${TAILWIND_DTCG_NOTE} The easing applies to each half of a cycle.`,
+      duration: { $type: 'duration', $value: { value: pulse.duration, unit: 'ms' } },
+      easing: { $type: 'cubicBezier', $value: pulse.easing },
+      midOpacity: { $type: 'number', $value: Number(pulse.frames[1]) },
+    },
+    spin: {
+      $description: `${TAILWIND_DTCG_NOTE} One full turn per duration.`,
+      duration: { $type: 'duration', $value: { value: spin.duration, unit: 'ms' } },
+      easing: { $type: 'cubicBezier', $value: [0, 0, 1, 1] },
     },
   },
   elevation: Object.fromEntries(
@@ -1131,6 +1311,12 @@ const dtcg = {
   // Plain fontSize/lineHeight pairs, not the `typography` composite: 2025.10
   // makes all five of its sub-values required, and fontFamily, fontWeight and
   // letterSpacing are not part of this scale.
+  fontWeight: {
+    $description: TAILWIND_DTCG_NOTE,
+    ...Object.fromEntries(
+      FONT_WEIGHT_STEPS.map((k) => [k, { $type: 'fontWeight', $value: fontWeights[k] }])
+    ),
+  },
   text: {
     $description: TAILWIND_DTCG_NOTE,
     ...Object.fromEntries(
@@ -1159,3 +1345,18 @@ if (fail) {
   process.exit(1)
 }
 console.log('✓ all solid pairs ≥ 4.5:1 (WCAG AA) in both modes')
+
+const coverage = await checkThemeCoverage(published)
+if (coverage.problems.length) {
+  console.error('\n✗ theme coverage — kun_ui_tokens and the components disagree:')
+  for (const p of coverage.problems) console.error(`  ${p}`)
+  console.error(
+    '  Generate the value in this file, or list it with a reason in\n' +
+      '  scripts/theme-coverage.mjs NOT_GENERATED.'
+  )
+  process.exit(1)
+}
+console.log(
+  `✓ kun_ui_tokens carries all ${coverage.deps.size - coverage.excused} theme values the components use ` +
+    `(${coverage.excused} more are listed in NOT_GENERATED)`
+)

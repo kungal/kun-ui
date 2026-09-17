@@ -252,7 +252,7 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
       :class="
         status === 'error'
           ? 'opacity-0'
-          : 'bg-default-200 animate-pulse opacity-100'
+          : 'bg-default-200 motion-safe:animate-pulse opacity-100'
       "
     />
     <component

@@ -189,14 +189,16 @@ importers:
         version: 5.9.3
 
   packages/ui-tokens:
-    dependencies:
-      tailwindcss:
-        specifier: ^4.0.0
-        version: 4.3.0
     devDependencies:
+      '@tailwindcss/oxide':
+        specifier: ^4.3.0
+        version: 4.3.0
       culori:
         specifier: ^4.0.2
         version: 4.0.2
+      tailwindcss:
+        specifier: ^4.3.0
+        version: 4.3.0
 
   packages/vue:
     dependencies:

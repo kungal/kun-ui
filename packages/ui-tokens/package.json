@@ -48,6 +48,8 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
-    "culori": "^4.0.2"
+    "@tailwindcss/oxide": "^4.3.0",
+    "culori": "^4.0.2",
+    "tailwindcss": "^4.3.0"
   }
 }

@@ -22,3 +22,41 @@ abstract final class KunRadius {
   /// Web token `--radius-kun-full`. A pill: clamp it to half the height.
   static const double full = 9999;
 }
+
+/// Tailwind's own corner radius scale, in logical pixels: web `rounded-md`
+/// and the other steps without `kun-`, which a few components use instead
+/// of [KunRadius].
+///
+/// The values are Tailwind v4's default theme, which KunUI's components are
+/// written against and never redeclare. A site that overrides them in its own
+/// `@theme` renders differently from these; these are what the components
+/// were designed at.
+///
+/// Unlike [KunRadius], these ignore `--kun-radius-scale`.
+///
+/// A Dart name cannot start with a digit, so `2xl` is `xl2`.
+abstract final class KunRounded {
+  /// Web `--radius-xs`.
+  static const double xs = 2;
+
+  /// Web `--radius-sm`.
+  static const double sm = 4;
+
+  /// Web `--radius-md`.
+  static const double md = 6;
+
+  /// Web `--radius-lg`.
+  static const double lg = 8;
+
+  /// Web `--radius-xl`.
+  static const double xl = 12;
+
+  /// Web `--radius-2xl`.
+  static const double xl2 = 16;
+
+  /// Web `--radius-3xl`.
+  static const double xl3 = 24;
+
+  /// Web `--radius-4xl`.
+  static const double xl4 = 32;
+}
