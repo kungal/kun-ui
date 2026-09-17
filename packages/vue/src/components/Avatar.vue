@@ -69,7 +69,9 @@ const userAvatarSrc = computed(() => {
 // would miss the very apps that need the warning.
 if (process.env.NODE_ENV !== 'production') {
   watchEffect(() => {
-    if (!props.user?.avatar && config.avatarFallbackPool.length === 0) {
+    // A missing user gets the pick for an empty name, one image for all of them
+    // with or without a pool, so it is not what the warning is about.
+    if (props.user && !props.user.avatar && config.avatarFallbackPool.length === 0) {
       warnEmptyAvatarPool()
     }
   })

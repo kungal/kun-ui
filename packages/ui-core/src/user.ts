@@ -8,6 +8,10 @@
 // over the host's configured `avatarFallbackPool`. Both of those were once
 // otherwise, and this comment described the old behaviour for a release.
 export interface KunUser {
+  /**
+   * `0` means there is no profile to link to — an unknown or deleted author,
+   * a signed-out viewer. KunAvatar and KunUserChip render it without a link.
+   */
   id: number
   name: string
   avatar: string

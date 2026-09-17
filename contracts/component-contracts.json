@@ -322,7 +322,8 @@
           "name": "isNavigation",
           "type": "boolean",
           "required": false,
-          "default": "true"
+          "default": "true",
+          "description": "When true (default) and `user.id` is not 0, the avatar is a real <a>/link to the user's profile (`userLinkTemplate`)."
         },
         {
           "name": "size",
@@ -4489,7 +4490,7 @@
           "type": "boolean",
           "required": false,
           "default": "true",
-          "description": "When true (default) and the user has an id, the whole chip is a real <a>/link to the user's profile (crawlable, name as anchor text)."
+          "description": "When true (default) and `user.id` is not 0, the whole chip is a real <a>/link to the user's profile (crawlable, name as anchor text)."
         },
         {
           "name": "size",

@@ -1664,6 +1664,10 @@ export interface KunAvatarProps {
    */
   user: KunUser | null | undefined
   size?: KunAvatarSize
+  /**
+   * When true (default) and `user.id` is not 0, the avatar is a real <a>/link
+   * to the user's profile (`userLinkTemplate`).
+   */
   isNavigation?: boolean
   className?: string
   imageClassName?: string
@@ -1700,7 +1704,7 @@ export interface KunUserChipProps {
   description?: string
   className?: string
   /**
-   * When true (default) and the user has an id, the whole chip is a real
+   * When true (default) and `user.id` is not 0, the whole chip is a real
    * <a>/link to the user's profile (crawlable, name as anchor text).
    */
   isNavigation?: boolean

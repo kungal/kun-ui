@@ -91,7 +91,7 @@ const user: KunUser = { id: 42, name: 'Kun', avatar }
 | `disableFloating` | `boolean` | — | Legacy floating user-card toggle. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — | Legacy floating user-card placement. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `imageClassName` | `string` | `""` |  |
-| `isNavigation` | `boolean` | `true` |  |
+| `isNavigation` | `boolean` | `true` | When true (default) and `user.id` is not 0, the avatar is a real <a>/link to the user's profile (`userLinkTemplate`). |
 | `size` | `KunAvatarSize` | `"md"` |  |
 
 ---
