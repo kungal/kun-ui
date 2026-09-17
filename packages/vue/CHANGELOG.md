@@ -1,5 +1,16 @@
 # @kungal/ui-vue
 
+## 2.40.3
+
+### Patch Changes
+
+- fc6b386: **KunInput waits for IME composition, as KunTextarea does.** Typing 你好 with a Pinyin IME used to emit `n`, `ni`, … `nihao`, then `你好` through `v-model`. It now emits `你好` once, when the word is committed. That is what KunTextarea has always done, because Vue's own `v-model` guard handles it there. The model is still a string under `type="number"`, which is why KunInput does not simply use `v-model` on its `<input>`. One cost: a keyboard that composes Latin text too, as some Android keyboards do, now updates the model once per committed word rather than once per letter. If you need the text before it is committed, listen to the native `input` event, which KunInput forwards to its `<input>`.
+
+  **Re-rendering during composition no longer erases the text being composed**, in KunInput, a searchable KunSelect and KunAutocomplete. These fields bind `:value`, and any re-render while the IME was composing wrote the field back to its committed text. In KunSelect and KunAutocomplete, moving the mouse over the options was enough, because the highlight re-renders: the pinyin disappeared and the IME never sent `compositionend`. The word the user committed next then never reached the model or `@search`. While composing, the fields are now bound to the text they already contain.
+
+- 33a6dc1: **A second finger no longer strands a sheet halfway through a swipe.** When a second finger touched down during a drag-to-dismiss on a KunModal or KunDrawer sheet, the drag was dropped with its transform still applied, and nothing moved the panel again (the Flutter port measured it at +40px). Now the finger that started the drag controls it until that finger lifts, the same way the Flutter port's gesture recognizer tracks only its first pointer. Other fingers are ignored, and lifting one of them does not end the drag. Their moves are still cancelled, so the page cannot pinch-zoom under the sheet. Without that, a second finger spreading away zoomed the page to 5× in Chrome 153. A second finger that lands before the drag has started is still a pinch, not a dismiss.
+  - @kungal/ui-core@2.40.3
+
 ## 2.40.2
 
 ### Patch Changes
