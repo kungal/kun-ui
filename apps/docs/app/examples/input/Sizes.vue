@@ -4,7 +4,7 @@ const v = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput v-model="v" size="xs" placeholder="xs" />
     <KunInput v-model="v" size="sm" placeholder="sm" />
     <KunInput v-model="v" size="md" placeholder="md" />

@@ -41,7 +41,7 @@ const onSelect = (opt: KunAutocompleteOption) => {
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete
       v-model="text"
       :options="options"

@@ -4,7 +4,7 @@ const open = ref<string[]>(['a'])
 </script>
 
 <template>
-  <KunAccordion v-model="open" multiple class-name="max-w-lg">
+  <KunAccordion v-model="open" multiple class-name="w-full max-w-lg">
     <KunAccordionItem value="a" title="可以同时展开多个" icon="lucide:check">
       传入 multiple 后,多个区块可同时打开;v-model 绑定一个数组。
     </KunAccordionItem>

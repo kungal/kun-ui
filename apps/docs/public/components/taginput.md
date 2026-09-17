@@ -35,7 +35,7 @@ const c = ref<string[]>(['vue', 'react'])
 </script>
 
 <template>
-  <div class="flex max-w-md flex-col gap-4">
+  <div class="flex w-full max-w-md flex-col gap-4">
     <KunTagInput v-model="a" variant="bordered" label="bordered（默认）" />
     <KunTagInput v-model="b" variant="flat" label="flat" />
     <KunTagInput v-model="c" variant="flat" color="secondary" label="flat · secondary" />
@@ -52,7 +52,7 @@ const tags = ref<string[]>(['vue', 'nuxt'])
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunTagInput
       v-model="tags"
       label="技术栈"
@@ -76,7 +76,7 @@ const b = ref<string[]>(['vue', 'react'])
 </script>
 
 <template>
-  <div class="flex max-w-md flex-col gap-4">
+  <div class="flex w-full max-w-md flex-col gap-4">
     <KunTagInput v-model="a" label="禁用" :disabled="true" />
     <KunTagInput v-model="b" label="标签" error="至少需要一个标签" />
   </div>

@@ -15,7 +15,7 @@ const items: MailTab[] = [
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <!-- The #tab slot renders custom tab content; compose a KunBadge for an
          unread count or an "unsaved" dot. The sliding indicator measures the
          button, so the wider tab is tracked automatically. -->

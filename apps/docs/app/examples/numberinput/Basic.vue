@@ -7,7 +7,7 @@ const free = ref<number | null>(null)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput v-model="qty" label="Quantity" :min="0" :max="10" />
     <KunNumberInput
       v-model="price"

@@ -4,7 +4,7 @@ const files = ref<File[]>([])
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunFileInput
       v-model:files="files"
       :multiple="true"

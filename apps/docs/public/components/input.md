@@ -32,7 +32,7 @@ const v = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput v-model="v" size="xs" placeholder="xs" />
     <KunInput v-model="v" size="sm" placeholder="sm" />
     <KunInput v-model="v" size="md" placeholder="md" />
@@ -53,7 +53,7 @@ const c = ref('locked')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput v-model="a" label="With error" error="This field is required." />
     <KunInput v-model="b" label="Invalid (no message)" is-invalid />
     <KunInput v-model="c" label="Disabled" disabled />
@@ -71,7 +71,7 @@ const password = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput
       v-model="text"
       label="可清除"
@@ -99,7 +99,7 @@ const amount = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput v-model="search" placeholder="Search…" description="带前缀图标">
       <template #prefix>
         <KunIcon name="lucide:search" class="text-default-400 size-4" />

@@ -5,7 +5,7 @@ const amount = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput v-model="search" placeholder="Search…" description="带前缀图标">
       <template #prefix>
         <KunIcon name="lucide:search" class="text-default-400 size-4" />

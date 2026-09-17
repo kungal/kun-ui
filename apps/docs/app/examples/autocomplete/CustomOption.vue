@@ -27,7 +27,7 @@ const options: CityOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete v-model="value" :options="options" label="City" placeholder="Type a city…">
       <!-- `option` is typed as CityOption — avatar/desc are available. -->
       <template #option="{ option }">

@@ -34,7 +34,7 @@ const files = ref<File[]>([])
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunFileInput
       v-model:files="files"
       :multiple="true"
@@ -59,7 +59,7 @@ const file = ref<File | null>(null)
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <!-- 默认插槽暴露 pick / disabled / fileName，可完全自定义触发器 -->
     <KunFileInput v-model="file" :show-file-name="false">
       <template #default="{ pick, fileName }">
@@ -83,7 +83,7 @@ const b = ref<File | null>(null)
 </script>
 
 <template>
-  <div class="flex max-w-md flex-col gap-4">
+  <div class="flex w-full max-w-md flex-col gap-4">
     <KunFileInput v-model="a" :disabled="true" trigger-text="已禁用" />
     <KunFileInput v-model="b" error="请选择一个文件" trigger-text="必填项" />
   </div>

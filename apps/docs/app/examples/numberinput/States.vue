@@ -7,7 +7,7 @@ const v = ref<number | null>(5)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput
       v-model="v"
       label="错误"

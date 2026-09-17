@@ -413,7 +413,7 @@ const items: MailTab[] = [
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <!-- The #tab slot renders custom tab content; compose a KunBadge for an
          unread count or an "unsaved" dot. The sliding indicator measures the
          button, so the wider tab is tracked automatically. -->
@@ -440,7 +440,7 @@ const items: MailTab[] = [
 | `color` | `KunUIColor` | `"primary"` |  |
 | `disableAnimation` | `boolean` | `false` |  |
 | `disabled` | `boolean` | `false` |  |
-| `fullWidth` | `boolean` | `false` |  |
+| `fullWidth` | `boolean` | `false` | Fill the container's width. Horizontal tabs split it evenly, though none gets narrower than its label; when they do not fit, the strip scrolls as usual. In a vertical column every tab takes the full width. Either way, `align` places each label inside its tab. |
 | `iconSize` | `string` | `"1em"` |  |
 | `innerClassName` | `string` | `""` |  |
 | `name` | `string` | — | ARIA id namespace shared with <KunTabPanel> (so a tab links to its panel via aria-controls/labelledby). Set a distinct `name` per tab group on a page. |

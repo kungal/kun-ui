@@ -4,7 +4,7 @@ const tags = ref<string[]>(['vue', 'nuxt'])
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunTagInput
       v-model="tags"
       label="技术栈"

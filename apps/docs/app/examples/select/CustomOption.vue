@@ -25,7 +25,7 @@ const options: UserOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunSelect v-model="value" :options="options" label="Assignee">
       <!-- `option` is typed as UserOption — avatar/desc are available. -->
       <template #option="{ option }">

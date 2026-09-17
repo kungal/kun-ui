@@ -4,7 +4,7 @@ const text = ref('')
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunTextarea
       v-model="text"
       label="Bio"

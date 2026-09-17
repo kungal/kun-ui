@@ -12,7 +12,7 @@ const isDateDisabled = (d: Date) => {
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunDatePicker
       v-model="date"
       label="自定义格式与禁用日期"

@@ -5,7 +5,7 @@ const password = ref('')
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-3">
+  <div class="flex w-full max-w-xs flex-col gap-3">
     <KunInput
       v-model="text"
       label="可清除"

@@ -8,7 +8,7 @@
 
 ```vue
 <template>
-  <KunCard class-name="max-w-sm">
+  <KunCard class-name="w-full max-w-sm">
     <h3 class="font-semibold">Card title</h3>
     <p class="text-default-600 mt-1 text-sm">
       A simple container with a border and padding.
@@ -79,7 +79,7 @@
 ```vue
 <template>
   <!-- is-hoverable：鼠标悬停时高亮背景。 -->
-  <KunCard is-hoverable color="default" class-name="max-w-sm">
+  <KunCard is-hoverable color="default" class-name="w-full max-w-sm">
     <h3 class="font-semibold">可悬停卡片</h3>
     <p class="text-default-600 mt-1 text-sm">将鼠标移到卡片上查看高亮效果。</p>
   </KunCard>
@@ -97,7 +97,7 @@ const clicks = ref(0)
 
 <template>
   <!-- clickable：渲染为 <button>，带点击缩放与涟漪效果。 -->
-  <KunCard clickable color="primary" class-name="max-w-sm" @click="clicks++">
+  <KunCard clickable color="primary" class-name="w-full max-w-sm" @click="clicks++">
     <h3 class="font-semibold">可点击卡片</h3>
     <p class="text-default-600 mt-1 text-sm">点击查看涟漪效果，已点击 {{ clicks }} 次。</p>
   </KunCard>
@@ -109,7 +109,7 @@ const clicks = ref(0)
 ```vue
 <template>
   <!-- href：卡片渲染为链接（底层使用 config.linkComponent）。 -->
-  <KunCard is-hoverable href="/components/button" class-name="max-w-sm">
+  <KunCard is-hoverable href="/components/button" class-name="w-full max-w-sm">
     <h3 class="font-semibold">链接卡片 →</h3>
     <p class="text-default-600 mt-1 text-sm">点击整张卡片跳转到按钮文档。</p>
   </KunCard>

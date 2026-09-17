@@ -42,7 +42,7 @@ const items: KunStepItem[] = [
 </script>
 
 <template>
-  <KunSteps :items="items" :current="1" orientation="vertical" class-name="max-w-xs" />
+  <KunSteps :items="items" :current="1" orientation="vertical" class-name="w-full max-w-xs" />
 </template>
 ```
 

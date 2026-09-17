@@ -75,7 +75,7 @@ const options: KunSelectOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunSelect
       v-model="value"
       :options="options"
@@ -136,7 +136,7 @@ const options: KunSelectOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunSelect
       v-model="value"
       :options="options"
@@ -197,7 +197,7 @@ const options: KunSelectOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunSelect v-model="value" :options="options" color="primary" label="primary" />
     <KunSelect v-model="value" :options="options" color="secondary" label="secondary" />
     <KunSelect v-model="value" :options="options" color="success" label="success" />
@@ -450,7 +450,7 @@ const options: UserOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunSelect v-model="value" :options="options" label="Assignee">
       <!-- `option` is typed as UserOption — avatar/desc are available. -->
       <template #option="{ option }">

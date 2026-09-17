@@ -4,7 +4,7 @@ const file = ref<File | null>(null)
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <!-- 默认插槽暴露 pick / disabled / fileName，可完全自定义触发器 -->
     <KunFileInput v-model="file" :show-file-name="false">
       <template #default="{ pick, fileName }">

@@ -12,7 +12,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunAutocomplete v-model="value" :options="options" color="primary" label="primary" />
     <KunAutocomplete v-model="value" :options="options" color="secondary" label="secondary" />
     <KunAutocomplete v-model="value" :options="options" color="success" label="success" />

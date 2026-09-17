@@ -4,7 +4,7 @@ const text = ref('')
 </script>
 
 <template>
-  <div class="grid max-w-md gap-4">
+  <div class="grid w-full max-w-md gap-4">
     <KunTextarea v-model="text" color="primary" placeholder="primary" :rows="2" />
     <KunTextarea v-model="text" color="secondary" placeholder="secondary" :rows="2" />
     <KunTextarea v-model="text" color="success" placeholder="success" :rows="2" />

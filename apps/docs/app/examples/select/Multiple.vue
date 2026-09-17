@@ -15,7 +15,7 @@ const options: KunSelectOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunSelect
       v-model="value"
       :options="options"

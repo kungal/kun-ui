@@ -16,7 +16,7 @@ const colors: KunUIColor[] = [
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-3">
+  <div class="grid w-full max-w-xs gap-3">
     <KunNumberInput
       v-for="c in colors"
       :key="c"

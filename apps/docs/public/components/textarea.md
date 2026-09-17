@@ -13,7 +13,7 @@ const text = ref('')
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunTextarea
       v-model="text"
       label="Bio"
@@ -34,7 +34,7 @@ const text = ref('')
 </script>
 
 <template>
-  <div class="max-w-md">
+  <div class="w-full max-w-md">
     <KunTextarea
       v-model="text"
       label="Bio"
@@ -58,7 +58,7 @@ const b = ref('Locked content')
 </script>
 
 <template>
-  <div class="grid max-w-md gap-4">
+  <div class="grid w-full max-w-md gap-4">
     <KunTextarea v-model="a" label="With error" error="Please enter a message." :rows="3" />
     <KunTextarea v-model="b" label="Disabled" disabled :rows="3" />
     <KunTextarea v-model="a" label="Small" size="sm" placeholder="size=sm" :rows="3" />
@@ -76,7 +76,7 @@ const text = ref('')
 </script>
 
 <template>
-  <div class="grid max-w-md gap-4">
+  <div class="grid w-full max-w-md gap-4">
     <KunTextarea v-model="text" color="primary" placeholder="primary" :rows="2" />
     <KunTextarea v-model="text" color="secondary" placeholder="secondary" :rows="2" />
     <KunTextarea v-model="text" color="success" placeholder="success" :rows="2" />

@@ -22,7 +22,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete
       v-model="value"
       :options="options"
@@ -51,7 +51,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete
       v-model="value"
       :options="options"
@@ -83,7 +83,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete
       v-model="value"
       :options="options"
@@ -114,7 +114,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunAutocomplete
       v-model="a"
       :options="options"
@@ -149,7 +149,7 @@ const options: KunAutocompleteOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunAutocomplete v-model="value" :options="options" color="primary" label="primary" />
     <KunAutocomplete v-model="value" :options="options" color="secondary" label="secondary" />
     <KunAutocomplete v-model="value" :options="options" color="success" label="success" />
@@ -206,7 +206,7 @@ const onSelect = (opt: KunAutocompleteOption) => {
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete
       v-model="text"
       :options="options"
@@ -258,7 +258,7 @@ const options: CityOption[] = [
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunAutocomplete v-model="value" :options="options" label="City" placeholder="Type a city…">
       <!-- `option` is typed as CityOption — avatar/desc are available. -->
       <template #option="{ option }">

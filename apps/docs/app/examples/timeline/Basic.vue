@@ -1,5 +1,5 @@
 <template>
-  <KunTimeline class-name="max-w-md">
+  <KunTimeline class-name="w-full max-w-md">
     <KunTimelineItem title="创建话题" time="3 天前">
       在「游戏讨论」板块发布了新话题。
     </KunTimelineItem>

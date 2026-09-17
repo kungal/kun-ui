@@ -79,7 +79,7 @@ const toggleAll = (v: boolean) => items.value.forEach((i) => (i.checked = v))
 </script>
 
 <template>
-  <div class="max-w-xs">
+  <div class="w-full max-w-xs">
     <KunCheckBox
       :model-value="allChecked()"
       :indeterminate="someChecked()"

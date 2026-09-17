@@ -12,7 +12,7 @@ const options: KunSelectOption[] = [
 </script>
 
 <template>
-  <div class="flex max-w-xs flex-col gap-4">
+  <div class="flex w-full max-w-xs flex-col gap-4">
     <KunSelect v-model="value" :options="options" color="primary" label="primary" />
     <KunSelect v-model="value" :options="options" color="secondary" label="secondary" />
     <KunSelect v-model="value" :options="options" color="success" label="success" />

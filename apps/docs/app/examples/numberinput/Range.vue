@@ -7,7 +7,7 @@ const qty = ref<number | null>(3)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-2">
+  <div class="grid w-full max-w-xs gap-2">
     <KunNumberInput
       v-model="qty"
       label="数量 (0 – 10)"

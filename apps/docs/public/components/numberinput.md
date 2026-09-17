@@ -16,7 +16,7 @@ const free = ref<number | null>(null)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput v-model="qty" label="Quantity" :min="0" :max="10" />
     <KunNumberInput
       v-model="price"
@@ -68,7 +68,7 @@ const rate = ref<number | null>(0.25)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput
       v-model="price"
       label="价格 (step 0.1, precision 2)"
@@ -100,7 +100,7 @@ const qty = ref<number | null>(3)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-2">
+  <div class="grid w-full max-w-xs gap-2">
     <KunNumberInput
       v-model="qty"
       label="数量 (0 – 10)"
@@ -133,7 +133,7 @@ const colors: KunUIColor[] = [
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-3">
+  <div class="grid w-full max-w-xs gap-3">
     <KunNumberInput
       v-for="c in colors"
       :key="c"
@@ -158,7 +158,7 @@ const v = ref<number | null>(5)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput
       v-model="v"
       label="错误"
@@ -189,7 +189,7 @@ const v = ref<number | null>(42)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput
       v-model="v"
       label="无步进按钮"

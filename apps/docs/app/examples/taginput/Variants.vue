@@ -6,7 +6,7 @@ const c = ref<string[]>(['vue', 'react'])
 </script>
 
 <template>
-  <div class="flex max-w-md flex-col gap-4">
+  <div class="flex w-full max-w-md flex-col gap-4">
     <KunTagInput v-model="a" variant="bordered" label="bordered（默认）" />
     <KunTagInput v-model="b" variant="flat" label="flat" />
     <KunTagInput v-model="c" variant="flat" color="secondary" label="flat · secondary" />

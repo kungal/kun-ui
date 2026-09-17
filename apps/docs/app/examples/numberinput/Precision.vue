@@ -8,7 +8,7 @@ const rate = ref<number | null>(0.25)
 </script>
 
 <template>
-  <div class="grid max-w-xs gap-4">
+  <div class="grid w-full max-w-xs gap-4">
     <KunNumberInput
       v-model="price"
       label="价格 (step 0.1, precision 2)"
