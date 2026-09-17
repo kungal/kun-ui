@@ -1,5 +1,28 @@
 # @kungal/ui-vue
 
+## 2.42.0
+
+### Minor Changes
+
+- 8d0812e: **Horizontal KunTab with `fullWidth` now splits the width between its tabs.** Until now the strip filled its container, but the tabs stayed packed at the start. On the solid, light and bordered variants that left an empty track to their right. On underlined and pills, `fullWidth` changed nothing you could see. Each tab now takes an equal share, and a tab is never narrower than its label. If the tabs do not fit, the strip scrolls as before. The sliding indicator follows the wider tabs. A vertical `fullWidth` column is unchanged.
+
+  If you set `fullWidth` on a horizontal strip and want the old packed layout, remove it. The strip then keeps only its content width, so wrap it in a full-width element if you need that.
+
+  Two fixes for disabled tabs:
+
+  - **Hover:** a disabled tab no longer turns to the foreground colour under the pointer. CSS `:hover` also matches disabled buttons.
+  - **Cursor:** in a strip with `disabled`, every tab now shows the not-allowed cursor. Before, only the gaps between the tabs did, because each tab's own pointer cursor overrode the strip's.
+
+### Patch Changes
+
+- a706a81: **Screen readers and KunInfo spacing:**
+
+  - **KunSwitch:** screen readers now announce it as a switch instead of a checkbox. It is still a native checkbox, now with `role="switch"`, so the on/off state still comes from `checked`.
+  - **KunNull:** the empty-state image is now decorative (`alt=""`). It used to have the hard-coded English alt text "empty", which was read before the description in every language. The description text already says what the image shows.
+  - **KunInfo with no title, no icon and no `#title` slot:** it no longer renders an empty heading. That empty heading added 8px above the description. A description-only info box is now 54px tall instead of 62px.
+  - **KunInfo classes that did nothing:** removed `bg-opacity-20`, which Tailwind v4 no longer generates, and a `bg-transparent` that `cn()` always dropped from `bordered`. Nothing changes on screen: `bordered` still shows the 15% tint in every colour.
+  - @kungal/ui-core@2.42.0
+
 ## 2.41.0
 
 ### Minor Changes
