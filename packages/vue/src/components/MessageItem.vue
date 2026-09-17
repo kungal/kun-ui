@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { cn } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -26,33 +26,45 @@ const emit = defineEmits<{
 
 const isRichText = computed(() => props.richText ?? false)
 const cssDuration = computed(() => `${props.duration}ms`)
-const progressBarRef = ref<HTMLDivElement | null>(null)
 
 // error / warn interrupt (assertive); info / success are polite.
 const isUrgent = computed(() => props.type === 'error' || props.type === 'warn')
 
 // Swipe-to-dismiss (mainly touch): drag horizontally; past the threshold the
-// toast is removed, otherwise it snaps back.
+// toast carries on the way it was thrown and fades, otherwise it snaps back.
 const SWIPE_DISMISS_PX = 80
+const SWIPE_EXIT =
+  'transform var(--kun-dur-exit, 180ms) var(--ease-kun-in, ease-in), opacity var(--kun-dur-exit, 180ms) var(--ease-kun-in, ease-in)'
 const dragX = ref(0)
 const dragging = ref(false)
+const exitDirection = ref(0)
 let startX = 0
-const dragStyle = computed(() =>
-  dragX.value !== 0
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const dragStyle = computed(() => {
+  if (exitDirection.value !== 0) {
+    return {
+      transform: `translateX(calc(${dragX.value}px + ${exitDirection.value * 100}%))`,
+      opacity: '0',
+      transition: prefersReducedMotion() ? 'none' : SWIPE_EXIT,
+    }
+  }
+  return dragX.value !== 0
     ? {
         transform: `translateX(${dragX.value}px)`,
         opacity: String(Math.max(0, 1 - Math.abs(dragX.value) / 200)),
-        transition: dragging.value ? 'none' : 'transform 0.2s, opacity 0.2s',
+        transition: 'none',
       }
     : {}
-)
+})
 
 const onPointerDown = (e: PointerEvent) => {
   // Ignore drags that start on the close button.
   if ((e.target as HTMLElement).closest('[data-kun-toast-close]')) return
   dragging.value = true
   startX = e.clientX
-  pauseTimer()
+  syncTimer()
   ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
 }
 const onPointerMove = (e: PointerEvent) => {
@@ -63,48 +75,64 @@ const onPointerUp = () => {
   if (!dragging.value) return
   dragging.value = false
   if (Math.abs(dragX.value) > SWIPE_DISMISS_PX) {
-    emit('remove', props.id)
+    exitDirection.value = Math.sign(dragX.value)
+    // The provider unmounts this item in the flush that removes it, discarding
+    // any render still queued here. Emitted at once, the exit style never
+    // reached the DOM: the leave transition read the drag's `transition: none`
+    // and the toast vanished where it was released, 48 ms later.
+    nextTick(() => emit('remove', props.id))
   } else {
     dragX.value = 0
-    resumeTimer()
+    syncTimer()
   }
 }
 
 // `ReturnType<typeof setTimeout>` instead of `NodeJS.Timeout` so this carries
 // no @types/node dependency — it runs in the browser.
 let timer: ReturnType<typeof setTimeout> | null = null
+const timerRunning = ref(false)
 const remainingTime = ref(props.duration)
 const startTime = ref(0)
+let hovered = false
 
-// Idempotent: pause/resume are each wired to multiple events (mouseenter +
-// pointerdown both pause; mouseleave + pointerup both resume). Without the
-// `!timer` / `timer` guards a single gesture would fire pause twice — each
+// Idempotent: syncTimer runs on every enter, leave, press and release, so one
+// gesture reaches pause or resume more than once (mouseenter + pointerdown both
+// pause). Without the `!timer` / `timer` guards pause would run twice — each
 // subtracting `Date.now() - startTime` against the SAME startTime — so
 // `remainingTime` is debited twice and the toast dismisses early.
 const pauseTimer = () => {
   if (props.duration <= 0 || !timer) return
   clearTimeout(timer)
   timer = null
-  if (progressBarRef.value) {
-    progressBarRef.value.style.animationPlayState = 'paused'
-  }
+  timerRunning.value = false
   remainingTime.value -= Date.now() - startTime.value
 }
 
 const resumeTimer = () => {
   if (props.duration <= 0 || timer) return
   startTime.value = Date.now()
-  if (progressBarRef.value) {
-    progressBarRef.value.style.animationPlayState = 'running'
-  }
+  timerRunning.value = true
   timer = setTimeout(() => emit('remove', props.id), remainingTime.value)
 }
 
-onMounted(() => {
-  if (props.duration > 0) {
-    resumeTimer()
-  }
-})
+// The countdown runs only while no mouse rests on the toast and no pointer is
+// pressed on it. Resuming on pointerup alone restarted it under a mouse that
+// had just clicked the toast, and a repeat of the toast restarted it likewise.
+const syncTimer = () =>
+  hovered || dragging.value || exitDirection.value !== 0
+    ? pauseTimer()
+    : resumeTimer()
+
+const onMouseEnter = () => {
+  hovered = true
+  syncTimer()
+}
+const onMouseLeave = () => {
+  hovered = false
+  syncTimer()
+}
+
+onMounted(syncTimer)
 
 onUnmounted(() => {
   if (timer) clearTimeout(timer)
@@ -114,9 +142,10 @@ watch(
   () => props.count,
   () => {
     if (timer) clearTimeout(timer)
-    timer = null // null it so the idempotent resumeTimer below re-arms
+    timer = null // null it so the idempotent syncTimer below re-arms
+    timerRunning.value = false
     remainingTime.value = props.duration
-    resumeTimer()
+    syncTimer()
   },
   { flush: 'post' }
 )
@@ -182,8 +211,8 @@ const typeStyles = computed(() => {
       )
     "
     :style="dragStyle"
-    @mouseenter="pauseTimer"
-    @mouseleave="resumeTimer"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
@@ -191,6 +220,7 @@ const typeStyles = computed(() => {
   >
     <KunIcon
       :name="typeStyles.iconName"
+      data-kun-toast-icon
       :class="cn('mt-0.5 mr-3 h-6 w-6 flex-shrink-0', typeStyles.icon)"
     />
 
@@ -224,16 +254,19 @@ const typeStyles = computed(() => {
     </button>
 
     <div
-      ref="progressBarRef"
       :key="count"
       class="progress-bar absolute bottom-0 left-0 h-1 w-full origin-left"
       :class="typeStyles.progress"
+      :style="{ animationPlayState: timerRunning ? 'running' : 'paused' }"
     />
   </div>
 </template>
 
 <style scoped>
-:deep(*) {
+/* base.css gives every element the foreground color, so the toast's own color
+   has to be inherited explicitly. The type icon is left out: its shade is a
+   utility class, which this unlayered rule used to override. */
+:deep(:not([data-kun-toast-icon])) {
   color: inherit;
 }
 
@@ -250,6 +283,5 @@ const typeStyles = computed(() => {
 
 .progress-bar {
   animation: shrink v-bind(cssDuration) linear forwards;
-  animation-play-state: running;
 }
 </style>
