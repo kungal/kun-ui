@@ -20,7 +20,7 @@
 
 ```vue
 <template>
-  <div class="flex items-center gap-4">
+  <div class="flex w-full max-w-sm items-center gap-4">
     <KunSkeleton variant="circle" height="3rem" />
     <div class="flex flex-1 flex-col gap-2">
       <KunSkeleton variant="text" width="40%" />
