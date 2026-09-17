@@ -115,6 +115,7 @@ export const useKunSwipeDismiss = (
   { enabled, fade, onDismiss }: UseKunSwipeDismissOptions
 ) => {
   let phase: 'idle' | 'pending' | 'dragging' = 'idle'
+  let touchId = 0
   let startX = 0
   let startY = 0
   let offset = 0
@@ -207,11 +208,20 @@ export const useKunSwipeDismiss = (
     return dt > 0 ? (last.y - first.y) / dt : 0
   }
 
+  // The finger that started the gesture owns it until it lifts, as the Flutter
+  // port's recognizer owns its first pointer. Reading `touches[0]` and resetting
+  // on every `touchstart` instead left the panel parked mid-drag (+40px, as the
+  // port measured) when a second finger landed: the drag was dropped with its
+  // transform still applied and no later event to settle it.
+  const ownTouch = (list: TouchList) =>
+    Array.from(list).find((t) => t.identifier === touchId)
+
   const onTouchStart = (e: TouchEvent) => {
+    if (phase === 'dragging') return
     phase = 'idle'
     const el = panel.value
     if (!el || !enabled() || !isKunCoarsePointer()) return
-    // Multi-touch is a pinch/zoom, never a dismiss.
+    // A second finger before the drag is claimed is a pinch/zoom, never a dismiss.
     if (e.touches.length !== 1) return
     const t = e.touches[0]!
     const at = eventTime(e)
@@ -220,6 +230,7 @@ export const useKunSwipeDismiss = (
     const target = t.target
     if (target instanceof Element && target.closest(NO_DRAG_SELECTOR)) return
 
+    touchId = t.identifier
     startX = t.clientX
     startY = t.clientY
     samples = [{ t: at, y: t.clientY }]
@@ -230,8 +241,14 @@ export const useKunSwipeDismiss = (
     if (phase === 'idle') return
     const el = panel.value
     if (!el) return
-    const t = e.touches[0]
-    if (!t) return
+    const t = ownTouch(e.changedTouches)
+    if (!t) {
+      // Still ours to cancel: left alone, a second finger spreading away from
+      // the dragging one pinch-zoomed the page under the sheet (scale 1 → 5
+      // over CDP touch in Chrome 153).
+      if (phase === 'dragging' && e.cancelable) e.preventDefault()
+      return
+    }
 
     const at = eventTime(e)
     samples.push({ t: at, y: t.clientY })
@@ -279,6 +296,7 @@ export const useKunSwipeDismiss = (
   }
 
   const onTouchEnd = (e: TouchEvent) => {
+    if (phase === 'idle' || !ownTouch(e.changedTouches)) return
     if (phase !== 'dragging') {
       phase = 'idle'
       return
