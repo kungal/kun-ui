@@ -96,7 +96,7 @@ const startTime = ref(0)
 let hovered = false
 
 // Idempotent: syncTimer runs on every enter, leave, press and release, so one
-// gesture reaches pause or resume more than once (mouseenter + pointerdown both
+// gesture reaches pause or resume more than once (pointerenter + pointerdown both
 // pause). Without the `!timer` / `timer` guards pause would run twice — each
 // subtracting `Date.now() - startTime` against the SAME startTime — so
 // `remainingTime` is debited twice and the toast dismisses early.
@@ -123,12 +123,12 @@ const syncTimer = () =>
     ? pauseTimer()
     : resumeTimer()
 
-const onMouseEnter = () => {
-  hovered = true
-  syncTimer()
-}
-const onMouseLeave = () => {
-  hovered = false
+// A tap is not a hover. Browsers follow one with compatibility mouse events,
+// a mouseenter and no mouseleave until the next tap elsewhere, so a tapped
+// toast stayed paused. Pointer events say which pointer it was.
+const onHover = (e: PointerEvent) => {
+  if (e.pointerType === 'touch') return
+  hovered = e.type === 'pointerenter'
   syncTimer()
 }
 
@@ -211,8 +211,8 @@ const typeStyles = computed(() => {
       )
     "
     :style="dragStyle"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
+    @pointerenter="onHover"
+    @pointerleave="onHover"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
