@@ -14,7 +14,7 @@ import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
-import { isImeComposing } from '../utils/imeComposition'
+import { isImeComposing, useImeComposition } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -251,25 +251,14 @@ const applySearch = (value: string) => {
   emitSearch(value)
 }
 
-// `v-model` on a text input installs Vue's own composition guard — its input
-// listener opens with `if (e.target.composing) return` and replays one event on
-// compositionend. Reading the value off the event instead (below) opts out of
-// that. Measured over CDP `Input.imeSetComposition` in Chrome 152: typing 你好
-// through a Pinyin IME re-filtered on every romaji keystroke, collapsing the
-// panel to `noResultText` while the candidate window was still open, and fired
-// five @search emits before the real one. So track composition here.
-const composing = ref(false)
-const onCompositionEnd = (e: CompositionEvent) => {
-  composing.value = false
-  applySearch((e.target as HTMLInputElement).value)
-}
-
-const onSearchInput = (e: Event) => {
-  if (composing.value) return
-  // Value off the event, never read back out of state — the rule 2.26.3 was
-  // cut for. @search must carry the text that was just typed.
-  applySearch((e.target as HTMLInputElement).value)
-}
+// Not `v-model`: the value comes off the event, never back out of state — the
+// rule 2.26.3 was cut for. @search must carry the text that was just typed.
+const {
+  composingText,
+  onCompositionStart,
+  onCompositionEnd,
+  onInput: onSearchInput,
+} = useImeComposition(applySearch)
 
 // ── open / close ─────────────────────────────────────────────────────────
 const open = () => {
@@ -639,7 +628,7 @@ watch(filtered, () => {
           <div v-if="searchable" class="p-1" @mousedown.self.prevent>
             <input
               ref="searchRef"
-              :value="query"
+              :value="composingText ?? query"
               type="text"
               enterkeyhint="done"
               :placeholder="searchPlaceholder ?? t('select.searchPlaceholder')"
@@ -654,7 +643,7 @@ watch(filtered, () => {
                 )
               "
               @input="onSearchInput"
-              @compositionstart="composing = true"
+              @compositionstart="onCompositionStart"
               @compositionend="onCompositionEnd"
             />
           </div>

@@ -14,7 +14,7 @@ import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
-import { isImeComposing } from '../utils/imeComposition'
+import { isImeComposing, useImeComposition } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import KunLoading from './Loading.vue'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -224,22 +224,8 @@ const applyInput = (value: string) => {
   activeIndex.value = firstEnabledOf(filterOptions(value))
 }
 
-// `:value` + a hand-written `@input` opts out of Vue's own composition guard:
-// runtime-dom's `vModelText` sets `e.target.composing` on compositionstart, its
-// input listener opens with `if (e.target.composing) return`, and compositionend
-// replays one event. KunSelect measured what losing it costs — typing 你好
-// through a Pinyin IME re-filtered on every romaji keystroke, collapsing the
-// panel to `noResultText` while the candidate window was still open.
-const composing = ref(false)
-const onCompositionEnd = (e: CompositionEvent) => {
-  composing.value = false
-  applyInput((e.target as HTMLInputElement).value)
-}
-
-const onInput = (e: Event) => {
-  if (composing.value) return
-  applyInput((e.target as HTMLInputElement).value)
-}
+const { composingText, onCompositionStart, onCompositionEnd, onInput } =
+  useImeComposition(applyInput)
 
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
@@ -346,7 +332,7 @@ defineExpose({
         ref="inputRef"
         enterkeyhint="done"
         v-bind="$attrs"
-        :value="modelValue"
+        :value="composingText ?? modelValue"
         type="text"
         role="combobox"
         aria-autocomplete="list"
@@ -371,7 +357,7 @@ defineExpose({
           )
         "
         @input="onInput"
-        @compositionstart="composing = true"
+        @compositionstart="onCompositionStart"
         @compositionend="onCompositionEnd"
         @focus="open"
         @click="open"

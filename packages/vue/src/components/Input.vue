@@ -10,6 +10,7 @@ import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
+import { useImeComposition } from '../utils/imeComposition'
 import type { KunInputProps } from './types'
 
 defineOptions({ name: 'KunInput', inheritAttrs: false })
@@ -89,9 +90,16 @@ const sizeClasses = computed(() => {
   return kunControlSizeClasses[props.size]
 })
 
-const handleInput = (event: Event) => {
-  modelValue.value = (event.target as HTMLInputElement).value
-}
+// Not `v-model` on the <input>: runtime-dom's `vModelText` casts the value to a
+// number under `type="number"`, and this model has always emitted the string.
+const {
+  composingText,
+  onCompositionStart: handleCompositionStart,
+  onCompositionEnd: handleCompositionEnd,
+  onInput: handleInput,
+} = useImeComposition((value) => {
+  modelValue.value = value
+})
 
 const handleBlur = (event: FocusEvent) => {
   isFocused.value = false
@@ -157,7 +165,7 @@ defineExpose({
         :id="kunUniqueId"
         ref="input"
         v-bind="$attrs"
-        :value="modelValue"
+        :value="composingText ?? modelValue"
         :type="resolvedType"
         :placeholder="placeholder"
         :disabled="disabled"
@@ -179,6 +187,8 @@ defineExpose({
           )
         "
         @input="handleInput"
+        @compositionstart="handleCompositionStart"
+        @compositionend="handleCompositionEnd"
         @blur="handleBlur"
         @focus="handleFocus"
       />
