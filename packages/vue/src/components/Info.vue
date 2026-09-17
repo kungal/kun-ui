@@ -41,10 +41,8 @@ const variantClasses = computed(() => {
       return 'border-[1.5px] border-transparent'
     case 'bordered':
       return 'border-[1.5px]'
-    case 'light':
-      return 'bg-opacity-20 border-[1.5px] border-transparent'
     case 'flat':
-      return 'bg-opacity-20 border-[1.5px] border-transparent shadow-none'
+      return 'border-[1.5px] border-transparent shadow-none'
     default:
       return 'border-[1.5px] border-transparent'
   }
@@ -55,13 +53,13 @@ const variantClasses = computed(() => {
 // soft tints with dark colored text, so they keep their own table.
 const colorVariants: Partial<Record<KunUIVariant, Record<KunUIColor, string>>> = {
   bordered: {
-    default: 'bg-transparent bg-default/15 border-default',
-    primary: 'bg-transparent bg-primary/15 border-primary text-primary',
-    secondary: 'bg-transparent bg-secondary/15 border-secondary text-secondary',
-    success: 'bg-transparent bg-success/15 border-success-600 text-success',
-    warning: 'bg-transparent bg-warning/15 border-warning-600 text-warning',
-    danger: 'bg-transparent bg-danger/15 border-danger text-danger',
-    info: 'bg-transparent bg-info/15 border-info text-info',
+    default: 'bg-default/15 border-default',
+    primary: 'bg-primary/15 border-primary text-primary',
+    secondary: 'bg-secondary/15 border-secondary text-secondary',
+    success: 'bg-success/15 border-success-600 text-success',
+    warning: 'bg-warning/15 border-warning-600 text-warning',
+    danger: 'bg-danger/15 border-danger text-danger',
+    info: 'bg-info/15 border-info text-info',
   },
   light: {
     default: 'bg-transparent hover:bg-default/40',
@@ -132,7 +130,11 @@ const titleColor = computed(() => {
       cn('space-y-2 p-4', roundedClass, variantClasses, colorClasses, className)
     "
   >
-    <h3 :class="cn('flex items-center gap-2 font-medium', titleColor)">
+    <!-- An empty heading still took `space-y-2`'s 8px above the description. -->
+    <h3
+      v-if="icon || title || $slots.title"
+      :class="cn('flex items-center gap-2 font-medium', titleColor)"
+    >
       <KunIcon v-if="icon" :name="icon" :class-name="'h-5 w-5 flex-shrink-0'" />
       <span v-if="title">{{ title }}</span>
       <slot name="title" />

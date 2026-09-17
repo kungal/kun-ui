@@ -20,11 +20,13 @@ withDefaults(defineProps<KunNullProps>(), {
 
 <template>
   <div class="m-auto flex flex-col items-center gap-3">
+    <!-- Decorative: the text below says it. With alt="empty", screen readers
+         announced an English "empty" before it in every locale. -->
     <KunImageNative
       v-if="isShowSticker"
       :src="src"
       class-name="w-72 h-auto rounded-kun-lg"
-      alt="empty"
+      alt=""
     />
     <span class="text-default-500">{{ description ?? t('null.description') }}</span>
   </div>

@@ -53,6 +53,7 @@ const size = computed(() => switchSizes[props.size])
     <input
       :id="kunUniqueId"
       type="checkbox"
+      role="switch"
       class="peer sr-only"
       :checked="modelValue"
       :disabled="disabled"
