@@ -67,7 +67,7 @@ const onLeave = () => {
       :aria-checked="current >= val"
       :class="
         cn(
-          'disabled:text-default-200 flex cursor-pointer items-center hover:scale-110 focus:outline-none disabled:cursor-not-allowed',
+          'disabled:text-default-200 flex cursor-pointer items-center rounded-full hover:scale-110 disabled:cursor-not-allowed',
           current >= val ? 'text-secondary' : 'text-default-300'
         )
       "

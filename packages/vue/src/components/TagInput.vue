@@ -376,7 +376,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
             type="button"
             tabindex="-1"
             :aria-label="t('tagInput.removeTag', { tag })"
-            class="hover:text-danger -mr-0.5 ml-1 inline-flex cursor-pointer rounded-full p-0.5 transition-colors focus:outline-none"
+            class="hover:text-danger -mr-0.5 ml-1 inline-flex cursor-pointer rounded-full p-0.5 transition-colors"
             @click.stop="removeAt(index)"
           >
             <KunIcon name="lucide:x" class="size-3.5" />

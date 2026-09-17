@@ -450,6 +450,11 @@ const tabClasses = (item: KunTabItem) => {
     // over the still-uncovered light background and read as "invisible until the
     // animation finished". Now both land together.
     'relative z-10 inline-flex items-center cursor-pointer select-none whitespace-nowrap transition-colors duration-kun-base ease-kun-standard',
+    // Inset, because the scrolling viewport clipped an outside focus ring to its
+    // side edges on the underlined and pills lists, which have no padding. In
+    // the tab's own text colour, because the base primary ring vanished inside
+    // a selected primary solid or pills tab — and focus follows selection.
+    'focus-visible:-outline-offset-2 focus-visible:outline-current/50',
     alignClass[resolvedAlign.value],
     sizeClasses[props.size],
     sizeGap[props.size],

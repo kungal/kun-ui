@@ -27,7 +27,45 @@
     color: inherit;
   }
 
-  *:focus {
+  /* Keyboard focus draws a ring; a click does not. This rule used to be
+   * `*:focus { outline: none }` with nothing drawn in its place, and tabbing
+   * through the docs site in Chrome 153 showed no focus at all on 26 component
+   * pages: the links in KunAvatar, KunUserChip, KunLink, KunBrand and KunCard,
+   * and the buttons of KunTab, KunAccordion, KunReaction and KunCarousel,
+   * among others. A component that draws its own ring sets `outline-none`,
+   * which wins from the utilities layer. */
+  :focus-visible {
+    outline: 2px solid oklch(var(--primary-accent) / 0.5);
+    outline-offset: 2px;
+  }
+
+  /* The same colour, width and offset before focus, so focusing flips only the
+   * style. From the initial `currentColor`, `medium` and `0`, an element with a
+   * `transition` class tweened into the ring from a 3px black outline: KunCard
+   * and KunAvatar, for about 80ms. */
+  :where(a[href], button, input, select, textarea, summary, [tabindex], [contenteditable]) {
+    outline-color: oklch(var(--primary-accent) / 0.5);
+    outline-width: 2px;
+    outline-offset: 2px;
+  }
+
+  /* A text field matches :focus-visible on a click too. KunUI's fields ring
+   * their wrapper instead, and an app's own fields keep the old reset. */
+  :where(
+      input:not(
+          [type='checkbox'],
+          [type='radio'],
+          [type='range'],
+          [type='button'],
+          [type='submit'],
+          [type='reset'],
+          [type='file'],
+          [type='color'],
+          [type='image']
+        ),
+      textarea,
+      [contenteditable]
+    ):focus {
     outline: none;
   }
 

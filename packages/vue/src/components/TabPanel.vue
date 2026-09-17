@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref, watch } from 'vue'
-import { cn } from '@kungal/ui-core'
 import {
   KUN_TAB_PANELS,
   kunTabId,
@@ -116,7 +115,7 @@ const onBeforeMatch = () => {
     :inert="loading || undefined"
     :data-kun-tab-loading="loading ? '' : undefined"
     :data-kun-tab-hidden="!hydrated && isHidden ? '' : undefined"
-    :class="cn('focus:outline-none', className)"
+    :class="className"
     @beforematch="onBeforeMatch"
   >
     <slot />

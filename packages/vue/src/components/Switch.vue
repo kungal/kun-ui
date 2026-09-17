@@ -60,9 +60,13 @@ const size = computed(() => switchSizes[props.size])
       @change="(event) => (modelValue = (event.target as HTMLInputElement).checked)"
     />
 
-    <div class="relative">
+    <!-- The ring sits here, on the input's sibling: `peer-*` matches siblings
+         only, and on the track nested below it never showed. -->
+    <div
+      class="relative rounded-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
+    >
       <div
-        class="rounded-full transition-colors duration-kun-fast ease-kun-standard peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
+        class="rounded-full transition-colors duration-kun-fast ease-kun-standard"
         :class="[
           size.track,
           // bg-primary is the mode-correct accent (no dark: pin needed); the
