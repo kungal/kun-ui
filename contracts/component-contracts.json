@@ -3735,7 +3735,8 @@
           "name": "fullWidth",
           "type": "boolean",
           "required": false,
-          "default": "false"
+          "default": "false",
+          "description": "Fill the container's width. Horizontal tabs split it evenly, though none gets narrower than its label; when they do not fit, the strip scrolls as usual. In a vertical column every tab takes the full width. Either way, `align` places each label inside its tab."
         },
         {
           "name": "iconSize",

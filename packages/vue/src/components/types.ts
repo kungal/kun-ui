@@ -215,6 +215,12 @@ export interface KunTabProps<T extends KunTabItem = KunTabItem> {
   color?: KunTabColor
   size?: KunTabSize
   orientation?: KunTabOrientation
+  /**
+   * Fill the container's width. Horizontal tabs split it evenly, though none
+   * gets narrower than its label; when they do not fit, the strip scrolls as
+   * usual. In a vertical column every tab takes the full width. Either way,
+   * `align` places each label inside its tab.
+   */
   fullWidth?: boolean
   // JSDoc, not `//`: the default is orientation-aware (see `resolvedAlign`), so
   // it can't be a literal in `withDefaults` — which is the only place the docs

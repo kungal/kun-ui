@@ -396,10 +396,12 @@ const listClasses = computed(() => {
   const base = isVertical.value
     ? cn('relative flex flex-col items-stretch', sizeGap[props.size])
     : // `w-max` lets the row grow past the viewport (so it scrolls); a
-      // full-width row fills it instead and the tabs distribute.
+      // full-width row is at least as wide as the viewport, and its `flex-1`
+      // tabs share that width. With a bare `w-full` the row filled the
+      // viewport but the tabs stayed packed at the start.
       cn(
         'relative flex items-center',
-        props.fullWidth ? 'w-full' : 'w-max',
+        props.fullWidth ? 'w-max min-w-full' : 'w-max',
         sizeGap[props.size]
       )
   switch (props.variant) {
@@ -440,6 +442,10 @@ const resolvedAlign = computed(
   () => props.align ?? (isVertical.value ? 'start' : 'center')
 )
 
+// `:hover` matches a disabled button too, so a disabled tab lit up under the
+// pointer.
+const unselected = 'text-default-500 not-aria-disabled:hover:text-foreground'
+
 const tabClasses = (item: KunTabItem) => {
   const selected = isSelected(item)
   const base = cn(
@@ -458,8 +464,11 @@ const tabClasses = (item: KunTabItem) => {
     alignClass[resolvedAlign.value],
     sizeClasses[props.size],
     sizeGap[props.size],
-    item.disabled && 'opacity-50 cursor-not-allowed',
-    isVertical.value && props.fullWidth && 'w-full'
+    item.disabled && 'opacity-50',
+    // Here, not only on the root: each tab's own `cursor-pointer` overrode the
+    // root's cursor on a disabled strip.
+    (item.disabled || props.disabled) && 'cursor-not-allowed',
+    props.fullWidth && (isVertical.value ? 'w-full' : 'flex-1')
   )
   // These three variants show the active state via the JS-measured sliding
   // indicator, which is absent until the client mounts. `!showIndicator` is true
@@ -476,7 +485,7 @@ const tabClasses = (item: KunTabItem) => {
         base,
         selected
           ? kunTextClasses[props.color]
-          : 'text-default-500 hover:text-foreground'
+          : unselected
       )
     case 'solid':
       return cn(
@@ -487,7 +496,7 @@ const tabClasses = (item: KunTabItem) => {
               kunSolidFgClasses[props.color],
               fallback && kunSolidBgClasses[props.color]
             )
-          : 'text-default-500 hover:text-foreground'
+          : unselected
       )
     case 'light':
       return cn(
@@ -495,7 +504,7 @@ const tabClasses = (item: KunTabItem) => {
         'rounded-kun-md',
         selected
           ? cn(kunTextClasses[props.color], fallback && softBgByColor[props.color])
-          : 'text-default-500 hover:text-foreground'
+          : unselected
       )
     case 'bordered':
       // Reserve the border width (transparent) on every tab so the sliding
@@ -506,7 +515,7 @@ const tabClasses = (item: KunTabItem) => {
         'rounded-kun-md border border-transparent',
         selected
           ? cn(kunTextClasses[props.color], fallback && kunBorderClasses[props.color])
-          : 'text-default-500 hover:text-foreground'
+          : unselected
       )
     case 'pills':
       return cn(
@@ -517,7 +526,7 @@ const tabClasses = (item: KunTabItem) => {
               kunSolidFgClasses[props.color],
               fallback && kunSolidBgClasses[props.color]
             )
-          : 'text-default-500 hover:text-foreground'
+          : unselected
       )
     default:
       return base
