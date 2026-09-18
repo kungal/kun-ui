@@ -1,3 +1,7 @@
+## 2.42.1
+
+- Version bump only, to stay in lockstep with the KunUI release train.
+
 ## 2.42.0
 
 - Version bump only, to stay in lockstep with the KunUI release train.
