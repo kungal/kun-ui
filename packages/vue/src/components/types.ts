@@ -1033,7 +1033,8 @@ export interface KunSelectOption<T extends KunSelectValue = KunSelectValue> {
 export interface KunSelectClassNames {
   /** The outer wrapper — the same target as the legacy `className`. */
   root?: string
-  /** The `role="combobox"` trigger. */
+  /** The trigger box: border, background, padding, focus ring. The
+   *  `role="combobox"` element is the value inside it, beside the clear button. */
   trigger?: string
   /** The teleported popup surface. */
   popup?: string
@@ -1084,14 +1085,16 @@ export interface KunSelectProps<
   /** Multi-select: v-model becomes an array; the trigger shows removable chips
    *  and the list stays open while toggling. A chip's × is pointer-only; from
    *  the keyboard, Backspace or Delete on the focused trigger removes the last
-   *  value. */
+   *  value, and a screen reader unticks the option in the list. */
   multiple?: boolean
   /** Render a filter input at the top of the list. Also the switch that enables
    *  `@search` / `manualFilter` — without it there is nothing to type into. */
   searchable?: boolean
-  /** Show an X that resets the whole selection. The X is pointer-only; from
-   *  the keyboard, Backspace or Delete on the focused trigger clears a single
-   *  Select (a `multiple` one removes its last value that way regardless). */
+  /** Show an X that resets the whole selection. The X is out of the Tab order
+   *  but is a labelled button to a screen reader, so touch screen-reader users
+   *  can reach it. From the keyboard, Backspace or Delete on the focused trigger
+   *  clears a single Select (a `multiple` one removes its last value that way
+   *  regardless). */
   clearable?: boolean
   /** Placeholder in the in-panel search box.
    *  @default locale select.searchPlaceholder */
@@ -1454,7 +1457,8 @@ export interface KunDatePickerProps {
    */
   darkBorder?: boolean
   /** Show an X in the trigger that clears the value. The X is pointer-only;
-   *  from the keyboard, Backspace or Delete on the focused trigger clears it. */
+   *  from the keyboard, Backspace or Delete on the focused trigger clears it,
+   *  and the panel's Clear button is the path for a screen reader. */
   clearable?: boolean
   /** date-fns pattern for the text shown in the trigger. Defaults follow
    *  `precision`.

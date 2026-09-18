@@ -173,7 +173,7 @@ const date = ref('')
 | --- | --- | --- | --- |
 | `className` | `string` | `""` | Extra classes for the outer wrapper. Use `classNames` to reach the trigger, panel, grid or cells. |
 | `classNames` | `KunDatePickerClassNames` | — | Per-part class hooks (root / trigger / popup / grid / cell), merged after the component's own classes so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. There is no `popupWidth`: the panel is always content-width with a 260px floor and never follows the trigger, so a short pill still gets a full calendar. |
-| `clearable` | `boolean` | `true` | Show an X in the trigger that clears the value. The X is pointer-only; from the keyboard, Backspace or Delete on the focused trigger clears it. |
+| `clearable` | `boolean` | `true` | Show an X in the trigger that clears the value. The X is pointer-only; from the keyboard, Backspace or Delete on the focused trigger clears it, and the panel's Clear button is the path for a screen reader. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
 | `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `disabled` | `boolean` | `false` |  |

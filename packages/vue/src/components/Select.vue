@@ -8,6 +8,7 @@ import {
   kunPanelRoundedClass,
   kunControlSizeClasses,
   kunFocusRingClasses,
+  type KunUIColor,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
@@ -77,13 +78,14 @@ const listId = computed(() => `${kunUniqueId.value}-listbox`)
 const isOpen = ref(false)
 const query = ref('')
 const activeIndex = ref(-1)
+const triggerRef = ref<HTMLElement | null>(null)
 const buttonRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
-useKunFloatingLayer(dropdownRef, { trigger: buttonRef })
+useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
 const listRef = ref<HTMLElement | null>(null)
 const searchRef = ref<HTMLInputElement | null>(null)
 
-const { floatingStyles, transformOrigin } = useKunFloating(buttonRef, dropdownRef, {
+const { floatingStyles, transformOrigin } = useKunFloating(triggerRef, dropdownRef, {
   placement: 'bottom-start',
   open: isOpen,
   offset: 4,
@@ -290,7 +292,7 @@ const close = (returnFocus = true) => {
 
 const toggle = () => (isOpen.value ? close() : open())
 
-onClickOutside(buttonRef, (event) => {
+onClickOutside(triggerRef, (event) => {
   if (dropdownRef.value?.contains(event.target as Node)) return
   close(false)
 })
@@ -342,6 +344,29 @@ const removeValue = (value: T) => {
 const clearAll = () => {
   if (props.disabled) return
   modelValue.value = props.multiple ? [] : null
+}
+
+// The button unmounts with the value, taking focus with it if a screen reader
+// had put focus there.
+const onClearClick = () => {
+  clearAll()
+  if (!isOpen.value) buttonRef.value?.focus({ preventScroll: true })
+}
+
+const onTriggerMousedown = (e: MouseEvent) => {
+  if (props.disabled || buttonRef.value?.contains(e.target as Node)) return
+  e.preventDefault()
+  buttonRef.value?.focus({ preventScroll: true })
+}
+
+const focusRingClasses: Record<KunUIColor, string> = {
+  default: 'has-focus-visible:ring-2 has-focus-visible:ring-default/50',
+  primary: 'has-focus-visible:ring-2 has-focus-visible:ring-primary/50',
+  secondary: 'has-focus-visible:ring-2 has-focus-visible:ring-secondary/50',
+  success: 'has-focus-visible:ring-2 has-focus-visible:ring-success/50',
+  warning: 'has-focus-visible:ring-2 has-focus-visible:ring-warning/50',
+  danger: 'has-focus-visible:ring-2 has-focus-visible:ring-danger/50',
+  info: 'has-focus-visible:ring-2 has-focus-visible:ring-info/50',
 }
 
 // ── keyboard ─────────────────────────────────────────────────────────────
@@ -504,18 +529,18 @@ watch(filtered, () => {
       {{ label }}
     </label>
 
+    <!-- The box is not the combobox; the combobox is the value inside it, so
+         the clear button can sit beside it rather than in it. Inside, its
+         label was read as part of the value (Chrome 153 computed
+         "Clannad 移除 Clannad Fate 移除 Fate 清除"), and hiding it from
+         assistive tech instead left a clearable single Select with no way to
+         clear by touch under TalkBack or VoiceOver: no Backspace without a
+         hardware keyboard, and picking the chosen option again keeps it.
+         WAI-ARIA gives a combobox's icon button this shape: "focusable but
+         not included in the page Tab sequence, and ... not a descendant of
+         the element with role combobox". -->
     <div
-      ref="buttonRef"
-      :id="kunUniqueId"
-      role="combobox"
-      :tabindex="disabled ? -1 : 0"
-      :aria-label="ariaLabel || (label ? undefined : 'select')"
-      :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
-      :aria-expanded="isOpen"
-      aria-haspopup="listbox"
-      :aria-controls="listId"
-      :aria-activedescendant="isOpen ? activeId : undefined"
-      :aria-disabled="disabled || undefined"
+      ref="triggerRef"
       :class="
         cn(
           'flex cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
@@ -524,76 +549,91 @@ watch(filtered, () => {
           roundedClass,
           'bg-content1 shadow-kun-sm border',
           error
-            ? cn('border-danger-300', kunFocusRingClasses.danger)
-            : cn('border-kun', kunFocusRingClasses[color]),
+            ? cn('border-danger-300', focusRingClasses.danger)
+            : cn('border-kun', focusRingClasses[color]),
           disabled && 'cursor-not-allowed opacity-60',
           props.classNames?.trigger
         )
       "
       @click="toggle"
-      @keydown="onKeydown"
+      @mousedown="onTriggerMousedown"
     >
       <KunIcon v-if="icon" :name="icon" class="text-default-500 shrink-0" />
 
-      <!-- Multiple: removable chips, capped by `maxVisibleTags` -->
-      <span v-if="showsChips" class="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-        <span
-          v-for="opt in visibleTags"
-          :key="String(opt.value)"
-          :class="
-            cn(
-              'bg-default-100 text-default-700 inline-flex max-w-full items-center gap-1 rounded-kun-sm px-1.5 py-0.5 text-xs',
-              props.classNames?.chip
-            )
-          "
-        >
-          <span class="truncate">{{ opt.label }}</span>
-          <!-- Pointer-only, as is the clear button: Backspace / Delete on the
-               trigger is their keyboard path (removeByKey). As tab stops inside
-               the combobox, Enter and Space bubbled to its handler and opened
-               the popup instead of removing. Exposed, their labels were read as
-               part of its value: Chrome 153 computed
-               "Clannad 移除 Clannad Fate 移除 Fate 清除". -->
-          <button
-            v-if="!disabled"
-            type="button"
-            tabindex="-1"
-            aria-hidden="true"
-            class="hover:text-danger flex shrink-0 items-center"
-            @click.stop="removeValue(opt.value)"
-            @mousedown.stop.prevent
+      <div
+        ref="buttonRef"
+        :id="kunUniqueId"
+        role="combobox"
+        :tabindex="disabled ? -1 : 0"
+        :aria-label="ariaLabel || (label ? undefined : 'select')"
+        :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
+        :aria-expanded="isOpen"
+        aria-haspopup="listbox"
+        :aria-controls="listId"
+        :aria-activedescendant="isOpen ? activeId : undefined"
+        :aria-disabled="disabled || undefined"
+        class="flex min-w-0 flex-1 items-center outline-none"
+        @keydown="onKeydown"
+      >
+        <!-- Multiple: removable chips, capped by `maxVisibleTags` -->
+        <span v-if="showsChips" class="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+          <span
+            v-for="opt in visibleTags"
+            :key="String(opt.value)"
+            :class="
+              cn(
+                'bg-default-100 text-default-700 inline-flex max-w-full items-center gap-1 rounded-kun-sm px-1.5 py-0.5 text-xs',
+                props.classNames?.chip
+              )
+            "
           >
-            <KunIcon name="lucide:x" class="size-3" />
-          </button>
+            <span class="truncate">{{ opt.label }}</span>
+            <!-- Hidden, unlike the clear button, because it has to sit inside
+                 the combobox and would be read as part of its value. Backspace
+                 / Delete on the combobox is its keyboard path (removeByKey), and
+                 unticking the option in the listbox its screen-reader one. -->
+            <button
+              v-if="!disabled"
+              type="button"
+              tabindex="-1"
+              aria-hidden="true"
+              class="hover:text-danger flex shrink-0 items-center"
+              @click.stop="removeValue(opt.value)"
+              @mousedown.stop.prevent
+            >
+              <KunIcon name="lucide:x" class="size-3" />
+            </button>
+          </span>
+          <span
+            v-if="hiddenTagCount > 0"
+            :class="
+              cn(
+                'bg-default-100 text-default-700 inline-flex shrink-0 items-center rounded-kun-sm px-1.5 py-0.5 text-xs tabular-nums',
+                props.classNames?.chip
+              )
+            "
+          >
+            +{{ hiddenTagCount }}
+          </span>
         </span>
-        <span
-          v-if="hiddenTagCount > 0"
-          :class="
-            cn(
-              'bg-default-100 text-default-700 inline-flex shrink-0 items-center rounded-kun-sm px-1.5 py-0.5 text-xs tabular-nums',
-              props.classNames?.chip
-            )
-          "
-        >
-          +{{ hiddenTagCount }}
-        </span>
-      </span>
 
-      <!-- Single, nothing selected, or every chip collapsed (`maxVisibleTags: 0`) -->
-      <span v-else class="block min-w-0 flex-1 truncate" :class="!hasSelection && 'text-default-400'">
-        {{ triggerText }}
-      </span>
+        <!-- Single, nothing selected, or every chip collapsed (`maxVisibleTags: 0`) -->
+        <span v-else class="block min-w-0 flex-1 truncate" :class="!hasSelection && 'text-default-400'">
+          {{ triggerText }}
+        </span>
+      </div>
 
       <!-- `flex`, not a bare block: an <svg> alone in a block button sits on the
            line box's text baseline, which pushed the clear icon ~2px above the
-           chevron. Same fix as KunDatePicker's trigger. -->
+           chevron. Same fix as KunDatePicker's trigger. Out of the Tab order:
+           Backspace / Delete on the combobox clears instead. -->
       <button
         v-if="clearable && hasSelection && !disabled"
         type="button"
         tabindex="-1"
-        aria-hidden="true"
+        :aria-label="t('select.clear')"
         class="text-default-400 hover:text-default-600 flex shrink-0 items-center"
-        @click.stop="clearAll"
+        @click.stop="onClearClick"
         @mousedown.stop.prevent
       >
         <KunIcon name="lucide:circle-x" class="size-4" />

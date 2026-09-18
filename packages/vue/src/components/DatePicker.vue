@@ -525,8 +525,9 @@ const isInPreviewRange = (date: Date) => {
                padding made the whole trigger 8px taller than a KunSelect of the
                same size. The negative margin keeps the tap target without
                putting that height back.
-               Pointer-only, for the reasons KunSelect's clear button is:
-               Backspace / Delete on the trigger clears instead. -->
+               Pointer-only: inside the combobox its label would be read as
+               part of the value. Backspace / Delete on the trigger clears from
+               the keyboard, and the panel's Clear button for a screen reader. -->
           <button
             v-if="clearable && displayValue && !disabled"
             type="button"

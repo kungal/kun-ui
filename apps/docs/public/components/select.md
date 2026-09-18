@@ -474,7 +474,7 @@ const options: UserOption[] = [
 | `ariaLabel` | `string` | `""` |  |
 | `className` | `string` | `""` | Extra classes for the outer wrapper. Use `classNames` to reach the trigger, popup, list, options or chips. |
 | `classNames` | `KunSelectClassNames` | — | Per-part class hooks (root / trigger / popup / list / option / chip), merged after the component's own classes, so yours wins the conflict — KunUI's own `rounded-kun-*` / `shadow-kun-*` / `z-kun-*` scales included. `rounded` is still the right tool for the trigger and popup radius; `classNames.chip` is the only way to reach a chip. |
-| `clearable` | `boolean` | `false` | Show an X that resets the whole selection. The X is pointer-only; from the keyboard, Backspace or Delete on the focused trigger clears a single Select (a `multiple` one removes its last value that way regardless). |
+| `clearable` | `boolean` | `false` | Show an X that resets the whole selection. The X is out of the Tab order but is a labelled button to a screen reader, so touch screen-reader users can reach it. From the keyboard, Backspace or Delete on the focused trigger clears a single Select (a `multiple` one removes its last value that way regardless). |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). |
 | `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `debounce` | `number` | `0` | Debounce the `@search` emit by N ms; the filter field itself still updates instantly. 0 (default) emits on every keystroke — set e.g. 300 for a remote source so you fetch once the user pauses, not per keypress. |
@@ -488,7 +488,7 @@ const options: UserOption[] = [
 | `loadingText` | `string` | `locale select.loading` | Text under the loading spinner. |
 | `manualFilter` | `boolean` | `false` | Skip the built-in label filter — you own `options` and drive them from `@search` (remote/async suggestions). Requires `searchable`. |
 | `maxVisibleTags` | `number` | — | How many chips a `multiple` trigger renders before collapsing the rest into a `+N` badge. `0` renders no chips at all and the trigger reads `{placeholder} · {n}`, or a bare count when there is no placeholder — what a filter pill wants, and what keeps a filter bar from growing a row per selection. Unset renders every chip. |
-| `multiple` | `boolean` | `false` | Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling. A chip's × is pointer-only; from the keyboard, Backspace or Delete on the focused trigger removes the last value. |
+| `multiple` | `boolean` | `false` | Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling. A chip's × is pointer-only; from the keyboard, Backspace or Delete on the focused trigger removes the last value, and a screen reader unticks the option in the list. |
 | `name` | `string` | — | Native form field name — emits hidden input(s) so the value is collected by the surrounding <form> / FormData. |
 | `noResultText` | `string` | `locale select.noResult` | Shown when the filter matches nothing. |
 | `placeholder` | `string` | `""` |  |
