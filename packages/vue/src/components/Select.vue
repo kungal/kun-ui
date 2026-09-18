@@ -392,10 +392,24 @@ const typeahead = (char: string) => {
   }
 }
 
+const removeByKey = () => {
+  if (props.multiple) {
+    const last = selected.value[selected.value.length - 1]
+    if (last !== undefined) removeValue(last)
+  } else if (props.clearable) {
+    clearAll()
+  }
+}
+
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
   if (isImeComposing(e)) return
   const key = e.key
+  if ((key === 'Backspace' || key === 'Delete') && e.target === buttonRef.value) {
+    e.preventDefault()
+    removeByKey()
+    return
+  }
   if (!isOpen.value) {
     if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(key)) {
       e.preventDefault()
@@ -534,11 +548,18 @@ watch(filtered, () => {
           "
         >
           <span class="truncate">{{ opt.label }}</span>
+          <!-- Pointer-only, as is the clear button: Backspace / Delete on the
+               trigger is their keyboard path (removeByKey). As tab stops inside
+               the combobox, Enter and Space bubbled to its handler and opened
+               the popup instead of removing. Exposed, their labels were read as
+               part of its value: Chrome 153 computed
+               "Clannad 移除 Clannad Fate 移除 Fate 清除". -->
           <button
             v-if="!disabled"
             type="button"
+            tabindex="-1"
+            aria-hidden="true"
             class="hover:text-danger flex shrink-0 items-center"
-            :aria-label="t('select.removeOption', { label: opt.label })"
             @click.stop="removeValue(opt.value)"
             @mousedown.stop.prevent
           >
@@ -569,8 +590,9 @@ watch(filtered, () => {
       <button
         v-if="clearable && hasSelection && !disabled"
         type="button"
+        tabindex="-1"
+        aria-hidden="true"
         class="text-default-400 hover:text-default-600 flex shrink-0 items-center"
-        :aria-label="t('select.clear')"
         @click.stop="clearAll"
         @mousedown.stop.prevent
       >

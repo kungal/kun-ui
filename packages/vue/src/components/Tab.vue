@@ -460,7 +460,10 @@ const tabClasses = (item: KunTabItem) => {
     // side edges on the underlined and pills lists, which have no padding. In
     // the tab's own text colour, because the base primary ring vanished inside
     // a selected primary solid or pills tab — and focus follows selection.
-    'focus-visible:-outline-offset-2 focus-visible:outline-current/50',
+    // Unprefixed, not `focus-visible:`: `transition-colors` covers
+    // outline-color, so a ring recoloured only on focus tweened out of the base
+    // layer's resting primary, ~250ms of primary over a white label.
+    '-outline-offset-2 outline-current/50',
     alignClass[resolvedAlign.value],
     sizeClasses[props.size],
     sizeGap[props.size],

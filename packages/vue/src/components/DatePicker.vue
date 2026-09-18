@@ -298,6 +298,11 @@ const onPanelKeydown = (e: KeyboardEvent) => {
 
 const onKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return
+  if ((e.key === 'Backspace' || e.key === 'Delete') && e.target === triggerRef.value) {
+    e.preventDefault()
+    if (props.clearable && displayValue.value) clearDate()
+    return
+  }
   if (!isOpen.value) {
     if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
       e.preventDefault()
@@ -519,12 +524,15 @@ const isInPreviewRange = (date: Date) => {
                centre and out of line with the calendar icon, while the button's
                padding made the whole trigger 8px taller than a KunSelect of the
                same size. The negative margin keeps the tap target without
-               putting that height back. -->
+               putting that height back.
+               Pointer-only, for the reasons KunSelect's clear button is:
+               Backspace / Delete on the trigger clears instead. -->
           <button
             v-if="clearable && displayValue && !disabled"
             type="button"
+            tabindex="-1"
+            aria-hidden="true"
             class="text-default-500 hover:text-default-800 -m-1.5 flex items-center p-1.5"
-            :aria-label="t('datePicker.clear')"
             @click.stop="clearDate"
             @mousedown.stop.prevent
           >

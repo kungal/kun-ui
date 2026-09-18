@@ -1351,7 +1351,8 @@
         "name": "clearable",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Show an X in the trigger that clears the value. The X is pointer-only; from the keyboard, Backspace or Delete on the focused trigger clears it."
       },
       {
         "name": "color",
@@ -3506,7 +3507,7 @@
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Show an X to reset the selection (single) — chips already remove per-item."
+        "description": "Show an X that resets the whole selection. The X is pointer-only; from the keyboard, Backspace or Delete on the focused trigger clears a single Select (a `multiple` one removes its last value that way regardless)."
       },
       {
         "name": "color",
@@ -3600,7 +3601,7 @@
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling."
+        "description": "Multi-select: v-model becomes an array; the trigger shows removable chips and the list stays open while toggling. A chip's × is pointer-only; from the keyboard, Backspace or Delete on the focused trigger removes the last value."
       },
       {
         "name": "name",

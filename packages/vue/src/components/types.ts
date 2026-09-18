@@ -1082,12 +1082,16 @@ export interface KunSelectProps<
   rounded?: KunUIRounded
   size?: KunUISize
   /** Multi-select: v-model becomes an array; the trigger shows removable chips
-   *  and the list stays open while toggling. */
+   *  and the list stays open while toggling. A chip's × is pointer-only; from
+   *  the keyboard, Backspace or Delete on the focused trigger removes the last
+   *  value. */
   multiple?: boolean
   /** Render a filter input at the top of the list. Also the switch that enables
    *  `@search` / `manualFilter` — without it there is nothing to type into. */
   searchable?: boolean
-  /** Show an X to reset the selection (single) — chips already remove per-item. */
+  /** Show an X that resets the whole selection. The X is pointer-only; from
+   *  the keyboard, Backspace or Delete on the focused trigger clears a single
+   *  Select (a `multiple` one removes its last value that way regardless). */
   clearable?: boolean
   /** Placeholder in the in-panel search box.
    *  @default locale select.searchPlaceholder */
@@ -1449,6 +1453,8 @@ export interface KunDatePickerProps {
    * toggled is gone. Safe to remove from call sites.
    */
   darkBorder?: boolean
+  /** Show an X in the trigger that clears the value. The X is pointer-only;
+   *  from the keyboard, Backspace or Delete on the focused trigger clears it. */
   clearable?: boolean
   /** date-fns pattern for the text shown in the trigger. Defaults follow
    *  `precision`.
