@@ -255,4 +255,10 @@ abstract final class KunImages {
     'lib/images/avatar_fallback.webp',
     package: _package,
   );
+
+  /// KunLoading's mascot, a 500×333 WebP (web `KUN_LOADING_IMAGE`).
+  static const AssetImage loadingImage = AssetImage(
+    'lib/images/loading.webp',
+    package: _package,
+  );
 }

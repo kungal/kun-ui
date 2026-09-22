@@ -25,6 +25,9 @@ const props = withDefaults(defineProps<KunProgressProps>(), {
   ariaLabel: '',
 })
 
+// aria-valuenow is the PERCENTAGE, so the range is 0..100 and not 0..max:
+// reporting `max` as the ceiling made a bar of 60 out of 60 announce "100 out
+// of 60" to a screen reader whenever max was not 100.
 const percentage = computed(() => {
   const safeMax = props.max || 100
   const safeValue = Math.min(Math.max(props.value, 0), safeMax)
@@ -106,7 +109,7 @@ const circleOffset = computed(
       :aria-label="ariaLabel || undefined"
       :aria-valuenow="indeterminate ? undefined : percentage"
       :aria-valuemin="0"
-      :aria-valuemax="max"
+      :aria-valuemax="100"
     >
       <svg
         class="h-24 w-24 -rotate-90 transform"
@@ -148,7 +151,7 @@ const circleOffset = computed(
       :aria-label="ariaLabel || undefined"
       :aria-valuenow="indeterminate ? undefined : percentage"
       :aria-valuemin="0"
-      :aria-valuemax="max"
+      :aria-valuemax="100"
       :class="[sizeClasses, roundedClass, className]"
     >
       <!-- Indeterminate: a partial bar sweeps across (unknown progress). -->

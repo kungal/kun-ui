@@ -29,6 +29,7 @@ flutter:
   assets:
     - lib/images/null.webp
     - lib/images/avatar_fallback.webp
+    - lib/images/loading.webp
   fonts:
     - family: KunUiIcons
       fonts:

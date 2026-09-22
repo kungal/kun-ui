@@ -219,6 +219,13 @@ const IMAGES = [
       'failed to load.',
     ],
   },
+  {
+    dart: 'loadingImage',
+    webName: 'KUN_LOADING_IMAGE',
+    source: join(HERE, '../../vue/src/assets/loadingImage.ts'),
+    file: 'loading.webp',
+    doc: ["KunLoading's mascot"],
+  },
 ]
 // RIFF container; the canvas size sits in the VP8X, VP8 or VP8L chunk header.
 const webpSize = (b) => {
