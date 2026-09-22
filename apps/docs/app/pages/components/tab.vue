@@ -23,6 +23,8 @@ import LazyLoading from '~/examples/tab/LazyLoading.vue'
 import LazyLoadingSrc from '~/examples/tab/LazyLoading.vue?raw'
 import Badge from '~/examples/tab/Badge.vue'
 import BadgeSrc from '~/examples/tab/Badge.vue?raw'
+import Link from '~/examples/tab/Link.vue'
+import LinkSrc from '~/examples/tab/Link.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -73,6 +75,17 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">自定义标签 · 徽标 / 圆点（#tab 插槽）</h2>
     <Demo title="Badge.vue" :source="BadgeSrc"><Badge /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">链接模式（每项一个页面）</h2>
+    <p class="text-default-600 mb-3 text-sm leading-relaxed">
+      给每一项传 <code>href</code>,标签就渲染成真正的
+      <code>&lt;a&gt;</code>:可被抓取、无 JS 也能用、⌘/Ctrl
+      点击会在新标签页打开。此时整条不再是 tablist 而是<strong>导航</strong>——它不会
+      再声明 <code>role="tab"</code> 与指向不存在面板的 <code>aria-controls</code>,而是
+      用 <code>aria-current="page"</code> 标记当前页,每个链接都能被 Tab 键逐个聚焦。
+      混排(部分项有 <code>href</code>)仍按 tablist 处理。
+    </p>
+    <Demo title="Link.vue" :source="LinkSrc"><Link /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTab.props" />

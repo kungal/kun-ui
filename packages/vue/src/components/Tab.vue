@@ -286,7 +286,7 @@ const moveFocus = (delta: number, e?: KeyboardEvent) => {
 }
 
 const onKeydown = (e: KeyboardEvent, idx: number) => {
-  if (props.disabled) return
+  if (props.disabled || isNav.value) return
   const forward = isVertical.value ? 'ArrowDown' : 'ArrowRight'
   const backward = isVertical.value ? 'ArrowUp' : 'ArrowLeft'
   switch (e.key) {
@@ -353,11 +353,67 @@ const tabBindings = (item: KunTabItem) => {
     : { to: item.href }
 }
 const onTabClick = (e: MouseEvent, item: KunTabItem, idx: number) => {
-  if (item.href) e.preventDefault()
+  if (!item.href) {
+    void selectTab(item, idx)
+    return
+  }
+  if (item.disabled || props.disabled) {
+    e.preventDefault()
+    return
+  }
+  // A modified click is the browser's "open in a new tab / window" gesture, not
+  // a selection. Swallowing it navigated the CURRENT page instead and lost the
+  // new tab; Radix and Reka both guard their link handler with `!event.metaKey`
+  // for this. The current page has not changed, so `value` must not move either.
+  if (
+    e.defaultPrevented ||
+    e.button !== 0 ||
+    e.metaKey ||
+    e.ctrlKey ||
+    e.shiftKey ||
+    e.altKey
+  ) {
+    return
+  }
+  e.preventDefault()
   void selectTab(item, idx)
 }
 const tabIdFor = (v: string) => kunTabId(props.name, v)
 const panelIdFor = (v: string) => kunTabPanelId(props.name, v)
+
+// A tab controls a panel; a link goes to a page. When every item carries an
+// `href` there is no panel anywhere on the page, so the strip is navigation and
+// must not claim otherwise: the APG requires `role="tab"` to carry
+// "aria-controls referring to its associated tabpanel element", and ours pointed
+// at an id that was never rendered. Navigation is marked the way every nav
+// primitive marks it (Radix / Reka / Base UI / Fluent all map an `active` flag
+// to `aria-current="page"`), and links stay individually tabbable — roving
+// tabindex plus arrow-key activation would have moved focus between pages.
+const isNav = computed(
+  () => props.items.length > 0 && props.items.every((i) => !!i.href)
+)
+
+const listA11y = computed(() =>
+  isNav.value ? {} : { role: 'tablist', 'aria-orientation': props.orientation }
+)
+
+const tabA11y = (item: KunTabItem) => {
+  const off = item.disabled || props.disabled
+  if (isNav.value) {
+    return {
+      'aria-current': isSelected(item) ? ('page' as const) : undefined,
+      'aria-disabled': off || undefined,
+      tabindex: off ? -1 : undefined,
+    }
+  }
+  return {
+    role: 'tab',
+    'aria-controls': panelIdFor(item.value),
+    'aria-selected': isSelected(item),
+    'aria-disabled': off,
+    tabindex: isSelected(item) && !off ? 0 : -1,
+  }
+}
 
 const isSelected = (item: KunTabItem) => value.value === item.value
 
@@ -632,12 +688,7 @@ const indicatorMergedStyle = computed(() => {
       :style="maskStyle"
       @scroll.passive="onViewportScroll"
     >
-      <div
-        ref="listRef"
-        :class="listClasses"
-        role="tablist"
-        :aria-orientation="orientation"
-      >
+      <div ref="listRef" :class="listClasses" v-bind="listA11y">
         <div
           v-if="showIndicator"
           aria-hidden="true"
@@ -650,13 +701,8 @@ const indicatorMergedStyle = computed(() => {
           v-for="(item, index) in items"
           :key="item.value"
           :ref="(el: unknown) => setTabRef(el as Element | null, index)"
-          v-bind="tabBindings(item)"
+          v-bind="{ ...tabBindings(item), ...tabA11y(item) }"
           :id="tabIdFor(item.value)"
-          role="tab"
-          :aria-controls="panelIdFor(item.value)"
-          :aria-selected="isSelected(item)"
-          :aria-disabled="item.disabled || disabled"
-          :tabindex="isSelected(item) && !item.disabled && !disabled ? 0 : -1"
           :class="tabClasses(item)"
           :style="tabStyle(item)"
           @click="onTabClick($event, item, index)"
