@@ -82,12 +82,54 @@ const user: KunUser = { id: 42, name: 'Kun', avatar }
 </template>
 ```
 
+### Decoration.vue
+
+```vue
+<script setup lang="ts">
+import type { KunUser } from '@kungal/ui-vue'
+
+const user: KunUser = {
+  id: 1,
+  name: 'Kun',
+  avatar: '/favicon.webp',
+  avatarDecoration: {
+    src: '/demo/decorations/sakura.png',
+    animatedSrc: '/demo/decorations/sakura.webp',
+  },
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-8">
+    <div class="flex flex-col items-center gap-3">
+      <KunAvatar :user="user" size="original-sm" :is-navigation="false" />
+      <span class="text-default-500 text-xs">hover</span>
+    </div>
+    <div class="flex flex-col items-center gap-3">
+      <KunAvatar :user="user" size="original-sm" decoration="always" :is-navigation="false" />
+      <span class="text-default-500 text-xs">always</span>
+    </div>
+    <div class="flex flex-col items-center gap-3">
+      <KunAvatar :user="user" size="original-sm" decoration="static" :is-navigation="false" />
+      <span class="text-default-500 text-xs">static</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <KunAvatar :user="user" size="sm" :is-navigation="false" />
+      <KunAvatar :user="user" size="md" :is-navigation="false" />
+      <KunAvatar :user="user" size="lg" :is-navigation="false" />
+      <KunAvatar :user="user" size="xl" :is-navigation="false" />
+    </div>
+  </div>
+</template>
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `user` * | `KunUser \| null` | — | Nullable — upstream user hydration can return a missing brief; Avatar falls back to a deterministic sticker. |
 | `className` | `string` | `""` |  |
+| `decoration` | `KunAvatarDecorationMode` | `"hover"` | How `user.avatarDecoration` is drawn. `hover` (default) shows the still frame and plays the animated one while the avatar is hovered or focused; `always` plays it continuously; `static` never animates; `none` hides the frame. Below the `md` size the frame is never drawn, and a reader who asked for reduced motion always gets the still image. |
 | `disableFloating` | `boolean` | — | Legacy floating user-card toggle. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `floatingPosition` | `"top" \| "right" \| "bottom" \| "left"` | — | Legacy floating user-card placement. **已废弃**：No-op: KunAvatar renders no floating card. Accepted so existing call sites still type-check; safe to remove from them. |
 | `imageClassName` | `string` | `""` |  |

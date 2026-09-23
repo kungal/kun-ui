@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue'
+import { computed, ref, watchEffect, type CSSProperties } from 'vue'
 import { cn, pickAvatarFallback, KUN_AVATAR_FALLBACK } from '@kungal/ui-core'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import { warnEmptyAvatarPool } from '../utils/warnEmptyAvatarPool'
@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<KunAvatarProps>(), {
   isNavigation: true,
   className: '',
   imageClassName: '',
+  decoration: 'hover',
 })
 
 const config = useKunUIConfig()
@@ -53,6 +54,46 @@ const sizeClasses = computed(() => {
   }
 })
 
+const frame = computed(() => {
+  const d = props.user?.avatarDecoration
+  if (!d?.src || props.decoration === 'none' || props.size === 'xs' || props.size === 'sm') {
+    return null
+  }
+  return d
+})
+
+const hovered = ref(false)
+const animated = computed(
+  () =>
+    !!frame.value?.animatedSrc &&
+    (props.decoration === 'always' || (props.decoration === 'hover' && hovered.value))
+)
+const hoverListeners = computed(() =>
+  props.decoration === 'hover' && frame.value?.animatedSrc
+    ? {
+        pointerenter: () => (hovered.value = true),
+        pointerleave: () => (hovered.value = false),
+        focusin: () => (hovered.value = true),
+        focusout: () => (hovered.value = false),
+      }
+    : {}
+)
+
+// The frame hangs 10% outside the avatar on every side. It must not move the
+// layout or take a click meant for the avatar link, so the geometry is an
+// inline style: a utility class can be purged by the consumer's Tailwind.
+const hostStyle: CSSProperties = { position: 'relative' }
+const frameStyle: CSSProperties = {
+  position: 'absolute',
+  left: '-10%',
+  top: '-10%',
+  width: '120%',
+  height: '120%',
+  pointerEvents: 'none',
+  display: 'block',
+}
+const frameImgStyle: CSSProperties = { display: 'block', width: '100%', height: '100%' }
+
 const userAvatarSrc = computed(() => {
   // KunAvatar renders the avatar URL exactly as given — it does NOT derive size
   // variants. Which URL to show (a pre-sized 100px thumbnail vs the original,
@@ -82,6 +123,7 @@ if (process.env.NODE_ENV !== 'production') {
   <component
     :is="isLink ? config.linkComponent : 'div'"
     v-bind="linkProps"
+    :style="frame ? hostStyle : undefined"
     :class="
       cn(
         'flex shrink-0 justify-center rounded-full transition duration-kun-fast ease-kun-standard',
@@ -90,6 +132,7 @@ if (process.env.NODE_ENV !== 'production') {
         className
       )
     "
+    v-on="hoverListeners"
   >
     <KunImage
       :class-name="cn('inline-block rounded-full', sizeClasses, props.imageClassName)"
@@ -97,5 +140,15 @@ if (process.env.NODE_ENV !== 'production') {
       :fallback-src="KUN_AVATAR_FALLBACK"
       :alt="user?.name ?? t('avatar.unknownUser')"
     />
+    <picture v-if="frame" aria-hidden="true" :style="frameStyle">
+      <source v-if="animated" media="(prefers-reduced-motion: reduce)" :srcset="frame.src" />
+      <img
+        :src="animated ? frame.animatedSrc : frame.src"
+        alt=""
+        decoding="async"
+        draggable="false"
+        :style="frameImgStyle"
+      />
+    </picture>
   </component>
 </template>

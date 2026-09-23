@@ -1673,6 +1673,8 @@ export interface KunUploadProps {
 // ── Avatar / Group / User chip ─────────────────────────────────────────
 export type KunAvatarSize = KunUISize | 'original' | 'original-sm'
 
+export type KunAvatarDecorationMode = 'hover' | 'always' | 'static' | 'none'
+
 export interface KunAvatarProps {
   /**
    * Nullable — upstream user hydration can return a missing brief; Avatar
@@ -1687,6 +1689,14 @@ export interface KunAvatarProps {
   isNavigation?: boolean
   className?: string
   imageClassName?: string
+  /**
+   * How `user.avatarDecoration` is drawn. `hover` (default) shows the still
+   * frame and plays the animated one while the avatar is hovered or focused;
+   * `always` plays it continuously; `static` never animates; `none` hides the
+   * frame. Below the `md` size the frame is never drawn, and a reader who
+   * asked for reduced motion always gets the still image.
+   */
+  decoration?: KunAvatarDecorationMode
   /**
    * Legacy floating user-card toggle.
    * @deprecated No-op: KunAvatar renders no floating card. Accepted so

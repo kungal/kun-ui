@@ -42,6 +42,7 @@ const groupLabel = computed(
       v-for="(user, index) in visibleUsers"
       :key="user.id ?? index"
       :user="user"
+      decoration="none"
     />
 
     <div
