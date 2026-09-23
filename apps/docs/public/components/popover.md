@@ -224,7 +224,7 @@ const groups = [
 | `position` | `KunPopoverPosition` | `"bottom-start"` |  |
 | `rounded` | `KunUIRounded` | — |  |
 | `showArrow` | `boolean` | `false` | Render a caret pointing at the trigger. |
-| `trigger` | `"click" \| "hover"` | `"click"` | How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click. |
+| `trigger` | `"hover" \| "click"` | `"click"` | How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click. |
 
 ## Slots
 

@@ -277,6 +277,13 @@
         "default": "\"\""
       },
       {
+        "name": "decoration",
+        "type": "KunAvatarDecorationMode",
+        "required": false,
+        "default": "\"hover\"",
+        "description": "How `user.avatarDecoration` is drawn. `hover` (default) shows the still frame and plays the animated one while the avatar is hovered or focused; `always` plays it continuously; `static` never animates; `none` hides the frame. Below the `md` size the frame is never drawn, and a reader who asked for reduced motion always gets the still image."
+      },
+      {
         "name": "disableFloating",
         "type": "boolean",
         "required": false,
@@ -2468,7 +2475,7 @@
       },
       {
         "name": "underline",
-        "type": "\"none\" | \"always\" | \"hover\"",
+        "type": "\"none\" | \"hover\" | \"always\"",
         "required": false,
         "default": "\"always\""
       }
@@ -3076,7 +3083,7 @@
       },
       {
         "name": "trigger",
-        "type": "\"click\" | \"hover\"",
+        "type": "\"hover\" | \"click\"",
         "required": false,
         "default": "\"click\"",
         "description": "How the popover opens. `'click'` (default) toggles + moves focus into the panel. `'hover'` opens on mouse hover with a coordinate safe-triangle so you can reach the panel without it closing — for navigation menus. Hover never steals focus; click/keyboard/Esc still work, and touch falls back to click."

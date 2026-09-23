@@ -15,4 +15,19 @@ export interface KunUser {
   id: number
   name: string
   avatar: string
+  /**
+   * An avatar frame drawn around the avatar (NextMoe `cosmetics.avatar_frame`).
+   * Absent or null → no frame.
+   */
+  avatarDecoration?: KunAvatarDecoration | null
+}
+
+/**
+ * A frame asset on a square canvas 1.2× the avatar, the avatar circle centred
+ * in it. `src` is the still image; `animatedSrc`, when present, is played on
+ * hover or always, depending on KunAvatar's `decoration`.
+ */
+export interface KunAvatarDecoration {
+  src: string
+  animatedSrc?: string
 }

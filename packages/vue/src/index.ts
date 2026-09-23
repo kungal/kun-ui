@@ -335,6 +335,7 @@ export type {
   KunUploadProps,
   KunAvatarProps,
   KunAvatarSize,
+  KunAvatarDecorationMode,
   KunAvatarGroupProps,
   KunUserChipProps,
   KunHeaderProps,
@@ -342,7 +343,7 @@ export type {
 } from './components/types'
 
 // User data model (lives in @kungal/ui-core; re-exported here for convenience).
-export type { KunUser } from '@kungal/ui-core'
+export type { KunUser, KunAvatarDecoration } from '@kungal/ui-core'
 
 // Typed as `Record<KunComponentName, …>` so this registry stays EXACTLY in sync
 // with the single source (componentNames.ts): a missing or extra entry is a

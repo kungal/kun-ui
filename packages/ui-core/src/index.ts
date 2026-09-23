@@ -67,7 +67,7 @@ export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
 export { pickAvatarFallback, getRandomSticker } from './avatarFallback'
 export { KUN_AVATAR_FALLBACK } from './avatarFallbackImage'
-export type { KunUser } from './user'
+export type { KunUser, KunAvatarDecoration } from './user'
 
 // Icon registry — bundled (no-fetch) icon data + consumer registration.
 export {

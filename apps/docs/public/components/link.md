@@ -73,7 +73,7 @@
 | `size` | `KunUISize` | `"md"` |  |
 | `target` | `"_self" \| "_blank" \| "_parent" \| "_top"` | `"_self"` |  |
 | `to` | `string \| Record<string, string>` | `""` |  |
-| `underline` | `"none" \| "always" \| "hover"` | `"always"` |  |
+| `underline` | `"none" \| "hover" \| "always"` | `"always"` |  |
 
 ## Slots
 

@@ -7,6 +7,8 @@ import StickerFallback from '~/examples/avatar/StickerFallback.vue'
 import StickerFallbackSrc from '~/examples/avatar/StickerFallback.vue?raw'
 import Navigation from '~/examples/avatar/Navigation.vue'
 import NavigationSrc from '~/examples/avatar/Navigation.vue?raw'
+import Decoration from '~/examples/avatar/Decoration.vue'
+import DecorationSrc from '~/examples/avatar/Decoration.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -37,6 +39,15 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">可点击跳转</h2>
     <Demo title="Navigation.vue" :source="NavigationSrc"><Navigation /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">头像框</h2>
+    <p class="text-default-500 mb-2 text-sm">
+      <code>user.avatarDecoration</code> 是画在头像外面的头像框：素材是头像 1.2 倍的正方形画布，头像圆居中。
+      头像框每边伸出 10%，不占布局、不接收点击。<code>decoration</code> 决定动图什么时候播放：默认
+      <code>hover</code> 只在悬停或获得焦点时播放，<code>always</code> 一直播放，<code>static</code> 只用静态图，
+      <code>none</code> 不画。<code>sm</code> 及更小的尺寸不画头像框；开启了减弱动态效果的读者永远只看到静态图。
+    </p>
+    <Demo title="Decoration.vue" :source="DecorationSrc"><Decoration /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunAvatar.props" />
