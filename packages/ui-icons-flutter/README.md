@@ -14,7 +14,7 @@ generated.
 
 ```yaml
 dependencies:
-  kun_ui_icons: ^2.45.0
+  kun_ui_icons: ^2.46.0
 ```
 
 The font and the images are bundled by the package; there is nothing to
@@ -72,7 +72,7 @@ components inline as data URIs, decoded by the generator.
 - **Version lockstep.** This package's version always equals the version of
   the four `@kungal/*` npm packages and of `kun_ui_tokens`; they are bumped
   together and published from one commit. This release is
-  `kun_ui_icons 2.45.0`.
+  `kun_ui_icons 2.46.0`.
 
 ## Contributing
 

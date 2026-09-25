@@ -1,5 +1,15 @@
 # @kungal/ui-core
 
+## 2.46.0
+
+### Minor Changes
+
+- 32c3e60: `KunBanner`, a full-width, one-sentence announcement strip for the top of a page: a maintenance window, a new release, an event. It takes `text` (or the default slot, where a link inherits the strip's colour and is underlined), an `icon`, `color`, a `solid` or `flat` `variant`, and a close button (`closable`, on by default). The `#actions` slot receives `{ dismiss }`, so a "Go vote" button can close the banner as well. Bind `v-model`, not `v-if`: closing collapses the strip over `--kun-dur-base` and the page below moves up with it instead of jumping 40px. The collapse is skipped under `prefers-reduced-motion`.
+
+  `storageKey` keeps a closed banner closed after a reload. The dismissal goes to `localStorage` under `kun-banner:<key>`, and `v-model` set back to `true` clears it. Give each announcement its own key: a new key shows again to everyone who closed the old one. The server cannot read `localStorage`, so KunBanner renders a one-line inline script in front of the banner. It runs before the banner is parsed and hides a closed one through a custom property on `<html>`. Measured in Chromium on the server-rendered docs: a closed banner is already `display: none` when it is inserted, it is never painted, the layout shift is zero, and there are no hydration warnings in dev or production. When storage is blocked, every access fails quietly and the banner simply shows. Under a CSP that forbids inline scripts, pass `nonce`. Without it, a closed banner shows until hydration removes it. A Nuxt app that renders per user can skip `storageKey` and bind `v-model` to `useCookie`, so the server never renders a closed banner, at the price of HTML that can no longer be cached as one page.
+
+  It is a named `region` landmark ("Announcement"), not `role="alert"`. An alert that arrives with the page is not announced, and one inserted later interrupts the screen reader. It stays in normal flow, not sticky: a sticky strip permanently covers content and can hide the focused element (WCAG 2.4.11). Put it first in the layout, above a sticky header, and show one at a time. Two new locale strings back it: `banner.label` and `banner.close`.
+
 ## 2.45.0
 
 ## 2.44.0

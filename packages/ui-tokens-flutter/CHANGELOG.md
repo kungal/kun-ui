@@ -1,3 +1,7 @@
+## 2.46.0
+
+- Version bump only, to stay in lockstep with the KunUI release train.
+
 ## 2.45.0
 
 ### Minor Changes
