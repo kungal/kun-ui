@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.47.1",
+    "type": "patch",
+    "html": "<ul>\n<li><code>KunScrollShadow</code> is now portable in the Flutter contract (<code>contracts/component-contracts.json</code>). Nothing changes on the web. The contract used to call it a pure-CSS answer to web scrollbars. The Flutter port now needs what it adds on top of a scroller: edge fades that show only while there is more content on that side, a vertical mouse wheel that scrolls a horizontal strip (<code>wheel</code>, with <code>&#39;contain&#39;</code> keeping the page still), and grab-to-scroll with a mouse (<code>draggable</code>). Flutter&#39;s <code>Scrollable</code> does none of these by default, and a Flutter app with horizontal shelves could not scroll them with a plain mouse wheel. Only <code>className</code> and <code>contentClass</code> stay web-only, as class pass-throughs do everywhere.</li>\n</ul>\n"
+  },
+  {
     "version": "2.47.0",
     "type": "minor",
     "html": "<ul>\n<li>Seven new locale strings under <code>textSelection</code>: <code>copy</code>, <code>cut</code>, <code>paste</code>, <code>selectAll</code>, <code>share</code>, <code>lookUp</code> and <code>searchWeb</code>. They label the menu a text field shows over its selection, and only the Flutter port draws that menu: on the web the browser draws its own, so no web component renders them and nothing on a page changes. They are in the shared catalogs because <code>kun_ui_messages</code> is generated from the same source, and a string that exists on one platform only is what that pipeline exists to prevent. If you supply a full catalog of your own for another language, add the group; the wording follows Flutter&#39;s own <code>WidgetsLocalizations</code> for both built-in languages.</li>\n</ul>\n"

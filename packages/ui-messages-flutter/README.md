@@ -13,7 +13,7 @@ they are generated.
 
 ```yaml
 dependencies:
-  kun_ui_messages: ^2.47.0
+  kun_ui_messages: ^2.47.1
 ```
 
 Pure Dart: no Flutter import, no dependencies.
@@ -82,7 +82,7 @@ they come from the SDK's own date symbols, resolved from `KunMessages.code`.
 - **Version lockstep.** This package's version always equals the version of
   the four `@kungal/*` npm packages and of `kun_ui_tokens` and `kun_ui_icons`;
   they are bumped together and published from one commit. This release is
-  `kun_ui_messages 2.47.0`.
+  `kun_ui_messages 2.47.1`.
 
 ## Contributing
 
