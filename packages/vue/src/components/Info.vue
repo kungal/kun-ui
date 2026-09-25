@@ -100,6 +100,17 @@ const colorClasses = computed(() => {
   return colorVariants[props.variant]?.[props.color] || ''
 })
 
+// @kungal/ui-tokens/base.css gives every element the foreground colour, so the
+// solid / shadow title and description never inherited the fill's foreground:
+// dark text on a blue box. `:where()` keeps it at zero specificity, so a colour
+// class on slotted content still wins. The soft variants are left out on
+// purpose: their description has always shipped in the neutral foreground.
+const inheritColor = computed(() =>
+  props.variant === 'solid' || props.variant === 'shadow'
+    ? '[:where(&)_*]:text-inherit'
+    : ''
+)
+
 // Title colour. The soft-tint variants use a dark colored title; solid / shadow
 // inherit the box's contrast-correct foreground (kunSolidClasses) — overriding
 // it with `text-{color}-900` is what made the solid title unreadable.
@@ -127,7 +138,14 @@ const titleColor = computed(() => {
 <template>
   <div
     :class="
-      cn('space-y-2 p-4', roundedClass, variantClasses, colorClasses, className)
+      cn(
+        'space-y-2 p-4',
+        roundedClass,
+        variantClasses,
+        colorClasses,
+        inheritColor,
+        className
+      )
     "
   >
     <!-- An empty heading still took `space-y-2`'s 8px above the description. -->
