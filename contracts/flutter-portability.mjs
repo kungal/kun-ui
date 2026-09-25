@@ -21,8 +21,6 @@ export const WEB_ONLY_COMPONENTS = {
     'Renders an HTML string via v-html; Flutter has no HTML renderer, and a rich-content screen is an app-level decision (architecture-flutter.md §4.2).',
   KunMarkdown:
     'An inline-SVG markdown glyph, not a renderer; glyphs reach Flutter as IconData through the kun_ui_icons font (tier 1).',
-  KunScrollShadow:
-    'A pure-CSS answer to web scrollbars (edge fades on a DOM scroller); Flutter scrolling has its own physics, viewports and Scrollbar.',
   KunImageNative: 'A bare <img> wrapper whose whole job is class merging.',
   KunLink:
     'Wraps the injected router link (<a>/NuxtLink); navigation belongs to the Flutter app’s router.',

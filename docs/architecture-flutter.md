@@ -259,11 +259,16 @@ context modules) are **records of browser pathology**, not design logic:
   `useKunCloseRequest` — Flutter answers these with `Navigator` routes,
   `FocusScope`, `PopScope` and `Shortcuts`/`Actions`.
 - Components that are web artifacts: `KunMarkdown`, `KunContent` (`v-html`),
-  `KunScrollShadow` (a deliberate pure-CSS answer — see iron rule #4),
   `KunLink`, `KunRipple` (Flutter has `InkWell`). `KunImage` was listed here
   until 2.45.0 for its `@nuxt/image` pipeline; its own layer (the ThumbHash
   blur-up, the pulse skeleton, the aspect-ratio box, `fallbackSrc`) is
   portable, and only the `<NuxtImg>` and native `<img>` hints stay web-only.
+  `KunScrollShadow` was listed here until 2.47.1 as a pure-CSS answer to
+  web scrollbars. The kungal app then needed exactly what it adds on top of
+  a scroller: the edge fades, a vertical wheel that scrolls a horizontal
+  shelf, and mouse drag. Flutter's `Scrollable` does none of the three by
+  default, so the component is portable. Only its class pass-throughs stay
+  web-only.
 
 **Iron rule #5 does not apply on Flutter.** "Correctness CSS goes inline,
 never in a class" exists because a consumer's Tailwind might purge a class.
