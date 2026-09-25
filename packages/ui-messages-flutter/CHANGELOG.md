@@ -1,3 +1,15 @@
+## 2.45.0
+
+### Minor Changes
+
+- ff569d7: `KunNavItem`, one destination of an app shell's navigation. Every kungal site has hand-written it: the forum's rail and sidebar are lists of `KunButton`s, `flat` for the current page and `light` otherwise. The kungal Flutter app wrote the same thing a second time. It is a full-width `KunButton` with a `label`, an `icon` (or an `#icon` slot, which takes a `KunBadge`-wrapped icon for an unread count), and an `href`. `current` paints the item `flat` in `color` and adds `aria-current="page"`, so a screen reader announces the current page. The forum's hand-written items never announced it. `stacked` puts the icon over the label for a rail or a bottom bar. KunUI does not read the route: the app decides which item is current, and it arranges the items itself, in a rail, a sidebar or a bar.
+
+  The code face is a token now. `tokens.css` declares `--kun-font-mono`, and `.kun-prose` sets both `code` and `kbd` in it, so `kbd` gains the full stack in place of `ui-monospace, monospace`. `kun_ui_tokens` carries it as `KunFontFamilies.mono`, with `monoFallback` and a `monoStyle` to merge onto a `KunText` step. Flutter has no `ui-monospace` keyword, so that entry is dropped from the Dart stack. `monospace` stays last, because Android and Linux resolve that name to the system's fixed-width face.
+
+  `KunImage` is portable in the Flutter contract. It had been marked web-only for its `@nuxt/image` pipeline, but the layer KunImage adds itself also crosses to Flutter: the ThumbHash blur-up, the pulse skeleton, the aspect-ratio box, `objectFit`, `fallbackSrc` and the `load` / `error` events. Only the `<NuxtImg>` optimisation props and the native `<img>` hints (`loading`, `decoding`, `fetchpriority`) stay web-only.
+
+  `KunImage`'s blur-up now cross-fades as its comments always said it did. The ThumbHash placeholder and the skeleton were removed the moment the image loaded, so the image faded in over the bare page: measured in Chromium, the placeholder was gone from the DOM in the same frame the image's opacity left 0, and the midpoint of the fade was a washed-out image on white. The placeholder now stays at full opacity until the image has finished fading in (`--kun-dur-slow`), and only then fades itself, so a transparent image does not keep it showing through. A failed load still fades it out at once, and a new `src` brings it back with no transition.
+
 ## 2.44.0
 
 - Version bump only, to stay in lockstep with the KunUI release train.
