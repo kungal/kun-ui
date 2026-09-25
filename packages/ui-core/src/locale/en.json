@@ -18,6 +18,10 @@
     "avatarGroup": {
       "label": "{count} users"
     },
+    "banner": {
+      "label": "Announcement",
+      "close": "Dismiss announcement"
+    },
     "carousel": {
       "label": "Carousel",
       "prev": "Previous slide",

@@ -21,6 +21,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunAvatar',
   'KunAvatarGroup',
   'KunBadge',
+  'KunBanner',
   'KunBrand',
   'KunButton',
   'KunButtonGroup',

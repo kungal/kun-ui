@@ -7,6 +7,7 @@ import KunAutocomplete from './components/Autocomplete.vue'
 import KunAvatar from './components/Avatar.vue'
 import KunAvatarGroup from './components/AvatarGroup.vue'
 import KunBadge from './components/Badge.vue'
+import KunBanner from './components/Banner.vue'
 import KunBrand from './components/Brand.vue'
 import KunButton from './components/Button.vue'
 import KunButtonGroup from './components/ButtonGroup.vue'
@@ -82,6 +83,7 @@ export {
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
+  KunBanner,
   KunBrand,
   KunButton,
   KunButtonGroup,
@@ -276,6 +278,7 @@ export type {
   KunDividerProps,
   KunNavItemProps,
   KunBadgeProps,
+  KunBannerProps,
   KunChipProps,
   KunProgressProps,
   KunInfoProps,
@@ -359,6 +362,7 @@ const components: Record<KunComponentName, Component> = {
   KunAvatar,
   KunAvatarGroup,
   KunBadge,
+  KunBanner,
   KunBrand,
   KunButton,
   KunButtonGroup,

@@ -19,6 +19,7 @@ export interface KunMessages {
   avatar: { unknownUser: string }
   /** `{count}` — number of users in the group. */
   avatarGroup: { label: string }
+  banner: { label: string; close: string }
   /** `goto` takes `{index}`, the 1-based slide number. */
   carousel: {
     label: string

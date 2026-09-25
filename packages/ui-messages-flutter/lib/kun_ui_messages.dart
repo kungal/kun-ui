@@ -69,6 +69,20 @@ class KunAvatarGroupStrings {
       _label.replaceAll('{count}', '$count');
 }
 
+/// Strings for `KunBanner`.
+class KunBannerStrings {
+  const KunBannerStrings({
+    required this.label,
+    required this.close,
+  });
+
+  /// `en`: Announcement
+  final String label;
+
+  /// `en`: Dismiss announcement
+  final String close;
+}
+
 /// Strings for `KunCarousel`.
 class KunCarouselStrings {
   const KunCarouselStrings({
@@ -618,6 +632,7 @@ class KunMessages {
     required this.autocomplete,
     required this.avatar,
     required this.avatarGroup,
+    required this.banner,
     required this.carousel,
     required this.chip,
     required this.commandPalette,
@@ -658,6 +673,8 @@ class KunMessages {
   final KunAvatarStrings avatar;
 
   final KunAvatarGroupStrings avatarGroup;
+
+  final KunBannerStrings banner;
 
   final KunCarouselStrings carousel;
 
@@ -726,6 +743,10 @@ class KunMessages {
     ),
     avatarGroup: KunAvatarGroupStrings(
       label: '{count} 位用户',
+    ),
+    banner: KunBannerStrings(
+      label: '公告',
+      close: '关闭公告',
     ),
     carousel: KunCarouselStrings(
       label: '轮播',
@@ -879,6 +900,10 @@ class KunMessages {
     ),
     avatarGroup: KunAvatarGroupStrings(
       label: '{count} users',
+    ),
+    banner: KunBannerStrings(
+      label: 'Announcement',
+      close: 'Dismiss announcement',
     ),
     carousel: KunCarouselStrings(
       label: 'Carousel',

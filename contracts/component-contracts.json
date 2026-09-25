@@ -457,6 +457,96 @@
         }
       ]
     },
+    "KunBanner": {
+      "status": "portable",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "default": "locale banner.label",
+          "description": "Accessible name of the banner's region landmark.",
+          "defaultFrom": {
+            "locale": [
+              "banner.label"
+            ]
+          }
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Draw a close button. Closing sets `v-model` to `false` and emits `close`; the banner collapses and the page below moves up."
+        },
+        {
+          "name": "color",
+          "type": "KunUIColor",
+          "required": false,
+          "default": "\"primary\"",
+          "description": "Semantic colour of the strip."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Bundled icon name shown before the text, e.g. `lucide:info`. Only the icons compiled into ui-core exist — an unbundled name renders nothing."
+        },
+        {
+          "name": "modelValue",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Whether the banner is shown. Starts open when unbound; with `storageKey`, a dismissal stored by an earlier visit sets it to `false` after mount."
+        },
+        {
+          "name": "storageKey",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Remember the open state in `localStorage` under this key, so a banner the user closed stays closed after a reload, and setting `v-model` back to `true` clears the record. Give each announcement its own key: a new key shows again to everyone who closed the old one. Characters other than letters, digits, `-` and `_` become `-`. A small inline script rendered in front of the banner hides a closed one before first paint, so a server-rendered page neither flashes it nor shifts."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "The one sentence the banner carries. For markup (a link, bold text) use the default slot, which renders in its place."
+        },
+        {
+          "name": "variant",
+          "type": "\"flat\" | \"solid\"",
+          "required": false,
+          "default": "\"solid\"",
+          "description": "`solid` fills the strip with the colour and a contrast-correct foreground; `flat` is a soft tint with coloured text."
+        }
+      ],
+      "webOnlyProps": {
+        "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters.",
+        "nonce": "CSP nonce for the inline script that hides a dismissed banner before the browser first paints server-rendered HTML; Flutter has no HTML parse to race and no CSP. The dismissal itself (storageKey) crosses — the port persists it with its own key-value store."
+      },
+      "events": [
+        {
+          "name": "close",
+          "type": ""
+        },
+        {
+          "name": "update:modelValue",
+          "type": "value: boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "type": "{ dismiss: () => void; }"
+        },
+        {
+          "name": "default",
+          "type": "{ dismiss: () => void; }"
+        }
+      ]
+    },
     "KunBrand": {
       "status": "portable",
       "props": [
@@ -3988,7 +4078,7 @@
         },
         {
           "name": "hiddenStrategy",
-          "type": "\"until-found\" | \"display\"",
+          "type": "\"display\" | \"until-found\"",
           "required": false,
           "description": "How inactive eager/lazy panels hide. until-found (default) keeps them findable by in-page search + deep links; display is plain display:none."
         },
@@ -4028,7 +4118,7 @@
       "props": [
         {
           "name": "hiddenStrategy",
-          "type": "\"until-found\" | \"display\"",
+          "type": "\"display\" | \"until-found\"",
           "required": false,
           "default": "\"until-found\""
         },

@@ -1,0 +1,34 @@
+<template>
+  <div class="border-default-200 w-full space-y-px overflow-hidden rounded-lg border">
+    <KunBanner
+      color="primary"
+      :closable="false"
+      text="新版本已上线,刷新页面即可体验。"
+    />
+    <KunBanner
+      color="warning"
+      icon="lucide:triangle-alert"
+      :closable="false"
+      text="图片上传暂时变慢,我们正在排查。"
+    />
+    <KunBanner
+      color="danger"
+      icon="lucide:circle-x"
+      :closable="false"
+      text="支付通道维护中,充值功能暂停使用。"
+    />
+    <KunBanner
+      color="success"
+      variant="flat"
+      icon="lucide:circle-check"
+      :closable="false"
+      text="你的邮箱已验证,现在可以发帖了。"
+    />
+    <KunBanner
+      color="default"
+      variant="flat"
+      :closable="false"
+      text="本站仅收录已发售作品的资料。"
+    />
+  </div>
+</template>

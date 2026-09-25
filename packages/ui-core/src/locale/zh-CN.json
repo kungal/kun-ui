@@ -18,6 +18,10 @@
     "avatarGroup": {
       "label": "{count} 位用户"
     },
+    "banner": {
+      "label": "公告",
+      "close": "关闭公告"
+    },
     "carousel": {
       "label": "轮播",
       "prev": "上一张",

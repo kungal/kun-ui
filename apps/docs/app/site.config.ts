@@ -82,6 +82,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/image': { title: 'Image', cn: '图片', description: '带骨架屏、宽高比与 object-fit 的图片;在 Nuxt 层下经由 @nuxt/image 渲染。' },
   '/components/imagenative': { title: 'ImageNative', cn: '原生图片', description: '原生 <img> + class 合并,适用于无需优化管线的场景。' },
   '/components/info': { title: 'Info', cn: '提示框', description: '带颜色、图标、标题与描述的内联提示框。' },
+  '/components/banner': { title: 'Banner', cn: '横幅', description: '贴在页面顶部的整宽公告条,一句话加可选的操作与关闭按钮;可以记住关闭状态,刷新后不再出现。' },
   '/components/input': { title: 'Input', cn: '输入框', description: '文本输入框(v-model),带标签、辅助 / 错误文本与尺寸。' },
   '/components/lightbox': { title: 'Lightbox', cn: '灯箱', description: '图片灯箱,可用画廊容器 + 项,或独立使用。' },
   '/components/link': { title: 'Link', cn: '链接', description: '样式化链接,经由注入的链接组件渲染(Nuxt 下为 NuxtLink)。' },

@@ -589,6 +589,40 @@ export interface KunInfoProps {
   rounded?: KunUIRounded
 }
 
+// ── Banner ─────────────────────────────────────────────────────────────
+export interface KunBannerProps {
+  /** The one sentence the banner carries. For markup (a link, bold text) use
+   *  the default slot, which renders in its place. */
+  text?: string
+  /** Semantic colour of the strip. */
+  color?: KunUIColor
+  /** `solid` fills the strip with the colour and a contrast-correct
+   *  foreground; `flat` is a soft tint with coloured text. */
+  variant?: 'solid' | 'flat'
+  /** Bundled icon name shown before the text, e.g. `lucide:info`. Only the
+   *  icons compiled into ui-core exist — an unbundled name renders nothing. */
+  icon?: string
+  /** Draw a close button. Closing sets `v-model` to `false` and emits `close`;
+   *  the banner collapses and the page below moves up. */
+  closable?: boolean
+  /** Remember the open state in `localStorage` under this key, so a banner the
+   *  user closed stays closed after a reload, and setting `v-model` back to
+   *  `true` clears the record. Give each announcement its own key: a new key
+   *  shows again to everyone who closed the old one. Characters other than
+   *  letters, digits, `-` and `_` become `-`. A small inline script rendered
+   *  in front of the banner hides a closed one before first paint, so a
+   *  server-rendered page neither flashes it nor shifts. */
+  storageKey?: string
+  /** CSP nonce for that inline script. Under a `script-src` that forbids
+   *  inline scripts and has no nonce for it, a closed banner shows until
+   *  hydration removes it. */
+  nonce?: string
+  /** Accessible name of the banner's region landmark.
+   *  @default locale banner.label */
+  ariaLabel?: string
+  className?: string
+}
+
 // ── Loading ────────────────────────────────────────────────────────────
 export interface KunLoadingProps {
   loading?: boolean

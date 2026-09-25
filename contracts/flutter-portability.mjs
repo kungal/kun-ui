@@ -66,6 +66,10 @@ export const WEB_ONLY_PROPS = {
     type: 'Native <button> form type (submit/reset); Flutter has no implicit form submission.',
   },
   KunCard: { href: LINK_MODE },
+  KunBanner: {
+    nonce:
+      'CSP nonce for the inline script that hides a dismissed banner before the browser first paints server-rendered HTML; Flutter has no HTML parse to race and no CSP. The dismissal itself (storageKey) crosses — the port persists it with its own key-value store.',
+  },
   KunImage: {
     loading:
       'Native <img> lazy-loading hint. Flutter fetches an image when its widget is built, so a lazily built list (ListView.builder) is what defers it.',

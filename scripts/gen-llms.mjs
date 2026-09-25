@@ -60,6 +60,7 @@ const components = [
   ['KunDivider', 'Layout & display', 'Horizontal/vertical separator with an optional centered label.'],
   ['KunHeader', 'Layout & display', 'Section heading (scale h1–h6) with brand styling.'],
   ['KunInfo', 'Layout & display', 'Inline callout box (color, icon, title, description; solid/flat/bordered). Rich body content goes in the default slot — there is no `description` slot; the heading has a `title` slot.'],
+  ['KunBanner', 'Layout & display', 'Full-width one-sentence announcement strip for the top of a page, in normal flow above the sticky header (text or default slot, icon, `solid`/`flat`, `closable`; the `#actions` slot gets `{ dismiss }`). Bind `v-model`, not `v-if`, so it can collapse on close. `storageKey` keeps a closed banner closed across reloads (localStorage, hidden before first paint under SSR by an inline script; pass `nonce` under a strict CSP); use a new key per announcement.'],
   ['KunProgress', 'Layout & display', 'Progress bar: linear/striped/gradient/circle, indeterminate, optional label.'],
   ['KunBadge', 'Layout & display', 'Count/dot badge wrapping a trigger (e.g. a button/icon); `max` caps the count.'],
   ['KunChip', 'Layout & display', 'Small tag/pill with color + variant.'],

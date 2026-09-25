@@ -86,7 +86,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
   },
   {
     title: '反馈',
-    slugs: ['feedback', 'info', 'loading', 'progress', 'skeleton', 'null'],
+    slugs: ['feedback', 'info', 'banner', 'loading', 'progress', 'skeleton', 'null'],
   },
   {
     title: '动效',
