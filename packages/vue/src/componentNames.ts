@@ -56,6 +56,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunMarkdown',
   'KunMessageProvider',
   'KunModal',
+  'KunNavItem',
   'KunNull',
   'KunNumberInput',
   'KunPagination',

@@ -160,8 +160,7 @@
 
 /* Code */
 .kun-prose code {
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-family: var(--kun-font-mono);
   font-size: 0.875em;
   background: oklch(var(--content2));
   border: 1px solid var(--color-kun-border, oklch(var(--foreground) / 0.12));
@@ -225,7 +224,7 @@
 
 /* Keyboard key */
 .kun-prose kbd {
-  font-family: ui-monospace, monospace;
+  font-family: var(--kun-font-mono);
   font-size: 0.8em;
   padding: 0.15em 0.45em;
   border-radius: 0.375em;

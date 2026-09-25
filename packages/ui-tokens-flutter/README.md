@@ -71,6 +71,12 @@ lower in the line box than a browser does. `KunPulse.curve` eases each half
 of the cycle, not the whole of it; the class doc shows the controller that
 draws the web's fade.
 
+`KunFontFamilies.mono` is KunUI's own: the code face `tokens.css` declares as
+`--kun-font-mono`, which `.kun-prose` sets code and `kbd` in. A CSS stack
+becomes a `fontFamily` plus a `fontFamilyFallback` list, minus the CSS-only
+keyword `ui-monospace`; merge `KunFontFamilies.monoStyle` onto a `KunText`
+step to use it.
+
 `scheme.border` is the hairline the web's `border-kun` draws on inputs, cards
 and dividers. `KunColors.globalOpacity` is the alpha the web draws
 `background` and `neutral.shade100` at; the schemes store both opaque.

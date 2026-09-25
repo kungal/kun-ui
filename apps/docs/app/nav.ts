@@ -69,7 +69,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
   },
   {
     title: '导航',
-    slugs: ['tab', 'pagination', 'steps'],
+    slugs: ['navitem', 'tab', 'pagination', 'steps'],
   },
   {
     title: '浮层',

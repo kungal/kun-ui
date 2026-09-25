@@ -12,7 +12,7 @@ import 'package:flutter/painting.dart';
 ///
 /// Color, weight and family are left null, so they inherit from the
 /// ambient `DefaultTextStyle`; add them with `copyWith`, taking the weight
-/// from [KunFontWeights].
+/// from [KunFontWeights] and a family from [KunFontFamilies].
 ///
 /// Every style sets `leadingDistribution` to
 /// `TextLeadingDistribution.even`, which is CSS's half-leading. Flutter's
@@ -148,4 +148,36 @@ abstract final class KunFontWeights {
 
   /// Web `--font-weight-black`.
   static const FontWeight black = FontWeight.w900;
+}
+
+/// KunUI's font stacks, as Flutter family lists.
+///
+/// A CSS `font-family` is a list the browser walks until a family is
+/// installed; a `TextStyle` takes the first name as `fontFamily` and the
+/// rest as `fontFamilyFallback`, which the engine walks the same way.
+///
+/// These name system fonts. Flutter on the web reaches none of them, so a
+/// web build that must show code in a fixed-width face bundles one and
+/// puts it first.
+abstract final class KunFontFamilies {
+  /// Web `--kun-font-mono`, the face `.kun-prose` sets code and `kbd` in:
+  /// the first family of `ui-monospace, SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace`
+  /// that names an installed font rather than a CSS keyword.
+  static const String mono = 'SFMono-Regular';
+
+  /// The rest of the [mono] stack, in order. `monospace` last is the
+  /// platform's own fixed-width face on Android and Linux.
+  static const List<String> monoFallback = <String>[
+    'Menlo',
+    'Consolas',
+    'Liberation Mono',
+    'monospace',
+  ];
+
+  /// [mono] and [monoFallback] as a style to merge onto a [KunText] step:
+  /// `KunText.sm.merge(KunFontFamilies.monoStyle)`.
+  static const TextStyle monoStyle = TextStyle(
+    fontFamily: mono,
+    fontFamilyFallback: monoFallback,
+  );
 }

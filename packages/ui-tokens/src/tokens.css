@@ -47,6 +47,10 @@
    * opts in for every surface at once, e.g. `--kun-backdrop-filter: blur(12px)`
    * (pair with a lowered --kun-surface-opacity). */
   --kun-backdrop-filter: none;
+
+  /* The code face: `.kun-prose code` and `kbd`. kun_ui_tokens carries it as
+   * KunFontFamilies.mono, so an app sets code in the same stack. */
+  --kun-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
 /* Opt-in frosted-glass backdrop for raised surfaces. At the default `none` it

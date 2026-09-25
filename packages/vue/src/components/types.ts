@@ -484,6 +484,32 @@ export interface KunLinkProps {
   isShowAnchorIcon?: boolean
 }
 
+// ── NavItem ────────────────────────────────────────────────────────────
+export interface KunNavItemProps {
+  /** The destination's name, shown under or beside the icon. */
+  label: string
+  /** Iconify name of the icon, e.g. `lucide:compass`. The `#icon` slot
+   *  replaces it — wrap the icon in a `KunBadge` there to show an unread
+   *  count on it. */
+  icon?: string
+  /** Where the item goes. It renders as a link, through the configured link
+   *  component; without it the item is a button and `click` is the action. */
+  href?: string
+  /** Marks the page the user is on: the item turns `flat` in `color`, and
+   *  says so to assistive technology with `aria-current="page"`. KunUI does
+   *  not read the route; the app decides which item is current. */
+  current?: boolean
+  /** Icon over label, as a rail or a bottom bar draws a destination. Off,
+   *  the icon sits beside the label, as a sidebar row draws it. */
+  stacked?: boolean
+  /** Colour of the current item. Every other item stays neutral. */
+  color?: KunUIColor
+  /** Blocks clicks and navigation and dims the item. */
+  disabled?: boolean
+  /** Extra classes for the underlying KunButton, merged last so yours win. */
+  className?: string
+}
+
 // ── Divider ────────────────────────────────────────────────────────────
 export interface KunDividerProps {
   orientation?: 'horizontal' | 'vertical'

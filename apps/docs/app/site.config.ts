@@ -88,6 +88,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/loading': { title: 'Loading', cn: '加载', description: '加载态:覆盖内容的遮罩或独立加载器;内置图片。' },
   '/components/markdown': { title: 'Markdown', cn: 'Markdown 字形', description: 'KunUI markdown 字形(内联 SVG)。' },
   '/components/modal': { title: 'Modal', cn: '对话框', description: '传送到 body 的对话框,焦点锁定、滚动锁定,可按 Esc 关闭。' },
+  '/components/navitem': { title: 'NavItem', cn: '导航项', description: '应用外壳里的一个导航目的地:一个铺满宽度的 KunButton,当前页为 flat 并带 aria-current="page";stacked 时图标在上、文字在下,用于侧轨或底栏。' },
   '/components/null': { title: 'Null', cn: '空状态', description: '空状态占位,内置看板娘图片与文案。' },
   '/components/numberinput': { title: 'NumberInput', cn: '数字输入框', description: '数字输入(v-model number|null),带步进按钮、min/max/step、小数精度与自动钳制。' },
   '/components/pagination': { title: 'Pagination', cn: '分页', description: '分页导航(v-model:current-page + total-page),带快速跳页。' },

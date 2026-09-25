@@ -22,6 +22,7 @@ import KunContextMenu from './components/ContextMenu.vue'
 import KunDatePicker from './components/DatePicker.vue'
 import KunCopy from './components/Copy.vue'
 import KunDivider from './components/Divider.vue'
+import KunNavItem from './components/NavItem.vue'
 import KunDropdown from './components/Dropdown.vue'
 import KunDrawer from './components/Drawer.vue'
 import KunFadeCard from './components/FadeCard.vue'
@@ -116,6 +117,7 @@ export {
   KunMarkdown,
   KunMessageProvider,
   KunModal,
+  KunNavItem,
   KunNull,
   KunNumberInput,
   KunPagination,
@@ -272,6 +274,7 @@ export type {
   KunImageNativeProps,
   KunLinkProps,
   KunDividerProps,
+  KunNavItemProps,
   KunBadgeProps,
   KunChipProps,
   KunProgressProps,
@@ -391,6 +394,7 @@ const components: Record<KunComponentName, Component> = {
   KunMarkdown,
   KunMessageProvider,
   KunModal,
+  KunNavItem,
   KunNull,
   KunNumberInput,
   KunPagination,

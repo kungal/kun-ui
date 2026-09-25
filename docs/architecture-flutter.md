@@ -260,7 +260,10 @@ context modules) are **records of browser pathology**, not design logic:
   `FocusScope`, `PopScope` and `Shortcuts`/`Actions`.
 - Components that are web artifacts: `KunMarkdown`, `KunContent` (`v-html`),
   `KunScrollShadow` (a deliberate pure-CSS answer — see iron rule #4),
-  `KunImage` (`@nuxt/image`), `KunLink`, `KunRipple` (Flutter has `InkWell`).
+  `KunLink`, `KunRipple` (Flutter has `InkWell`). `KunImage` was listed here
+  until 2.45.0 for its `@nuxt/image` pipeline; its own layer (the ThumbHash
+  blur-up, the pulse skeleton, the aspect-ratio box, `fallbackSrc`) is
+  portable, and only the `<NuxtImg>` and native `<img>` hints stay web-only.
 
 **Iron rule #5 does not apply on Flutter.** "Correctness CSS goes inline,
 never in a class" exists because a consumer's Tailwind might purge a class.

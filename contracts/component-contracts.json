@@ -1873,8 +1873,97 @@
       "reason": "Renders inline SVG from the web icon registry; Flutter consumes the same icons as IconData through the kun_ui_icons font (tier 1) and the SDK’s Icon widget. The one animated icon (the spinner) becomes a hand-written widget in tier 4."
     },
     "KunImage": {
-      "status": "web-only",
-      "reason": "Wraps the injected web image pipeline (NuxtImg: srcset, formats, placeholders); Flutter image loading and caching is its own stack."
+      "status": "portable",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true,
+          "description": "Image URL. Under Nuxt it is handed to the injected `<NuxtImg>`, so a provider path or a remote URL both work."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": false,
+          "default": "\"image\"",
+          "description": "Alternative text. Write the empty string for a decorative image so screen readers skip it."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "description": "Accessible name, when it has to differ from `alt`."
+        },
+        {
+          "name": "aspectRatio",
+          "type": "string",
+          "required": false,
+          "description": "CSS aspect-ratio on the wrapper, e.g. \"16 / 9\". When set the image is absolutely positioned and fills the box."
+        },
+        {
+          "name": "fallbackSrc",
+          "type": "string",
+          "required": false,
+          "description": "Shown if `src` fails to load (broken URL, 404). Resets when `src` changes."
+        },
+        {
+          "name": "height",
+          "type": "string | number",
+          "required": false,
+          "description": "Intrinsic height. See `width`."
+        },
+        {
+          "name": "objectFit",
+          "type": "\"fill\" | \"none\" | \"cover\" | \"contain\" | \"scale-down\"",
+          "required": false,
+          "default": "\"cover\"",
+          "description": "How the image fills its box once `aspectRatio` or an explicit size gives it one."
+        },
+        {
+          "name": "skeleton",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Renders a sibling skeleton overlay while loading (Radix-Avatar 3-state machine). Default true; set false for a bare element."
+        },
+        {
+          "name": "thumbhash",
+          "type": "string",
+          "required": false,
+          "description": "A ThumbHash (base64) → a blurred \"blur-up\" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`."
+        },
+        {
+          "name": "width",
+          "type": "string | number",
+          "required": false,
+          "description": "Intrinsic width. Set it together with `height` so the browser reserves the box and the page does not shift as the image arrives."
+        }
+      ],
+      "webOnlyProps": {
+        "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters.",
+        "decoding": "Native <img> decoding hint. Flutter always decodes images off the UI thread.",
+        "densities": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "fetchpriority": "Native fetch-priority hint for the browser’s request scheduler; Flutter’s image loading has no request priority.",
+        "format": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "imageClassName": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters.",
+        "loading": "Native <img> lazy-loading hint. Flutter fetches an image when its widget is built, so a lazily built list (ListView.builder) is what defers it.",
+        "placeholder": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "preload": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "provider": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "quality": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.",
+        "sizes": "An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching."
+      },
+      "events": [
+        {
+          "name": "error",
+          "type": "src: string, event?: Event"
+        },
+        {
+          "name": "load",
+          "type": "src: string, event?: Event"
+        }
+      ],
+      "slots": []
     },
     "KunImageNative": {
       "status": "web-only",
@@ -2359,6 +2448,74 @@
       "slots": [
         {
           "name": "default",
+          "type": "{}"
+        }
+      ]
+    },
+    "KunNavItem": {
+      "status": "portable",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "The destination's name, shown under or beside the icon."
+        },
+        {
+          "name": "color",
+          "type": "KunUIColor",
+          "required": false,
+          "default": "\"primary\"",
+          "description": "Colour of the current item. Every other item stays neutral."
+        },
+        {
+          "name": "current",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Marks the page the user is on: the item turns `flat` in `color`, and says so to assistive technology with `aria-current=\"page\"`. KunUI does not read the route; the app decides which item is current."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Blocks clicks and navigation and dims the item."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Where the item goes. It renders as a link, through the configured link component; without it the item is a button and `click` is the action."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Iconify name of the icon, e.g. `lucide:compass`. The `#icon` slot replaces it — wrap the icon in a `KunBadge` there to show an unread count on it."
+        },
+        {
+          "name": "stacked",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Icon over label, as a rail or a bottom bar draws a destination. Off, the icon sits beside the label, as a sidebar row draws it."
+        }
+      ],
+      "webOnlyProps": {
+        "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters."
+      },
+      "events": [
+        {
+          "name": "click",
+          "type": "event: MouseEvent"
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon",
           "type": "{}"
         }
       ]

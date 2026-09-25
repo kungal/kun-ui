@@ -1,6 +1,6 @@
 # KunUI — full documentation for LLMs
 
-> Cross-framework component library — 70 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 71 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
 
@@ -46,7 +46,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (70 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (71 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -738,7 +738,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 ---
 
 <!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
-## 12. Component reference (70)
+## 12. Component reference (71)
 
 **Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
@@ -746,7 +746,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 
 **Media & content:** `KunImage` · `KunCarousel` · `KunCarouselItem` · `KunImageNative` · `KunIcon` · `KunBrand` · `KunContent` · `KunText` · `KunMarkdown`
 
-**Navigation & overlays:** `KunLink` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+**Navigation & overlays:** `KunLink` · `KunNavItem` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
 
 **Forms:** `KunInput` · `KunTextarea` · `KunNumberInput` · `KunPinInput` · `KunSelect` · `KunAutocomplete` · `KunSwitch` · `KunCheckBox` · `KunCheckBoxGroup` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput` · `KunTagInput` · `KunUpload`
 
@@ -841,6 +841,7 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 ## Navigation & overlays
 
 - **KunLink** — Styled link; uses the injected link component (NuxtLink in Nuxt).
+- **KunNavItem** — One destination of an app shell's navigation: a full-width KunButton, `flat` in `color` and `aria-current="page"` while `current`, `light` otherwise. `stacked` puts the icon over the label (rail, bottom bar); the `#icon` slot takes a KunBadge-wrapped icon for an unread count.
 - **KunTab** — Tab bar (v-model value, items array; variants, orientation). Items with `href` render real <a> for crawlable tab-as-route.
 - **KunTabPanel** — One tab's content. SEO-first: mount=eager (default) SSRs every panel and hides inactive ones with hidden="until-found" (indexable + findable); mount=lazy/unmount opt out. Pairs with KunTab via `value`/`name`.
 - **KunTabPanels** — Optional wrapper sharing active (v-model) + mount/hiddenStrategy defaults across KunTabPanels, and auto-wiring find-in-page reveal.

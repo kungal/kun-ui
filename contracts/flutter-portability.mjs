@@ -23,8 +23,6 @@ export const WEB_ONLY_COMPONENTS = {
     'An inline-SVG markdown glyph, not a renderer; glyphs reach Flutter as IconData through the kun_ui_icons font (tier 1).',
   KunScrollShadow:
     'A pure-CSS answer to web scrollbars (edge fades on a DOM scroller); Flutter scrolling has its own physics, viewports and Scrollbar.',
-  KunImage:
-    'Wraps the injected web image pipeline (NuxtImg: srcset, formats, placeholders); Flutter image loading and caching is its own stack.',
   KunImageNative: 'A bare <img> wrapper whose whole job is class merging.',
   KunLink:
     'Wraps the injected router link (<a>/NuxtLink); navigation belongs to the Flutter app’s router.',
@@ -57,6 +55,8 @@ const ARIA_NAMESPACE =
   'Readable namespace for generated ARIA ids; Flutter Semantics has no id linkage.'
 const LINK_MODE =
   'Link mode renders an <a>; navigation belongs to the Flutter app’s router.'
+const NUXT_IMAGE =
+  'An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.'
 
 export const WEB_ONLY_PROPS = {
   KunButton: {
@@ -66,6 +66,21 @@ export const WEB_ONLY_PROPS = {
     type: 'Native <button> form type (submit/reset); Flutter has no implicit form submission.',
   },
   KunCard: { href: LINK_MODE },
+  KunImage: {
+    loading:
+      'Native <img> lazy-loading hint. Flutter fetches an image when its widget is built, so a lazily built list (ListView.builder) is what defers it.',
+    decoding:
+      'Native <img> decoding hint. Flutter always decodes images off the UI thread.',
+    fetchpriority:
+      'Native fetch-priority hint for the browser’s request scheduler; Flutter’s image loading has no request priority.',
+    placeholder: NUXT_IMAGE,
+    format: NUXT_IMAGE,
+    quality: NUXT_IMAGE,
+    preload: NUXT_IMAGE,
+    provider: NUXT_IMAGE,
+    densities: NUXT_IMAGE,
+    sizes: NUXT_IMAGE,
+  },
   KunBrand: {
     to: 'Router link target; navigation belongs to the Flutter app’s router.',
   },

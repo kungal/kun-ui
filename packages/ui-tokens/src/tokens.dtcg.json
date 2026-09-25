@@ -3175,6 +3175,19 @@
       }
     }
   },
+  "fontFamily": {
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Consolas",
+        "Liberation Mono",
+        "monospace"
+      ]
+    }
+  },
   "fontWeight": {
     "$description": "The values are Tailwind v4's default theme, which KunUI's components are written against and never redeclare. A site that overrides them in its own @theme renders differently from these; these are what the components were designed at.",
     "thin": {

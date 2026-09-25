@@ -446,6 +446,17 @@ const textScale = Object.fromEntries(
     return [k, { fontSize, lineHeight, linePx: round(fontSize * lineHeight, 4) }]
   })
 )
+// A CSS generic like `ui-monospace` is resolved by the browser and names no
+// installed family, so Flutter, which asks the platform for each name in turn,
+// could never match it. `monospace` is different: Android's fonts.xml and
+// Linux's fontconfig both answer to that name.
+const CSS_ONLY_FAMILIES = new Set(['ui-monospace', 'ui-sans-serif', 'ui-serif', 'ui-rounded', 'system-ui'])
+const monoStack = cssValue('--kun-font-mono')
+  .split(',')
+  .map((f) => f.trim().replace(/^(['"])(.*)\1$/, '$2'))
+const monoFamilies = monoStack.filter((f) => !CSS_ONLY_FAMILIES.has(f))
+if (monoFamilies.length < 2 || monoFamilies.at(-1) !== 'monospace')
+  throw new Error(`--kun-font-mono no longer ends in a stack Flutter can walk: ${monoStack.join(', ')}`)
 
 // ── Dart emitter ────────────────────────────────────────────────────────────
 // `Color.from` takes normalised doubles and is const from Flutter 3.27, which
@@ -1058,7 +1069,7 @@ const textDart = [
     '',
     'Color, weight and family are left null, so they inherit from the',
     'ambient `DefaultTextStyle`; add them with `copyWith`, taking the weight',
-    'from [KunFontWeights].',
+    'from [KunFontWeights] and a family from [KunFontFamilies].',
     '',
     'Every style sets `leadingDistribution` to',
     "`TextLeadingDistribution.even`, which is CSS's half-leading. Flutter's",
@@ -1096,6 +1107,43 @@ const textDart = [
     ...dartDoc(2, [`Web \`--font-weight-${k}\`.`]),
     `  static const FontWeight ${k} = FontWeight.w${fontWeights[k]};`,
   ]),
+  '}',
+  '',
+  ...dartDoc(0, [
+    "KunUI's font stacks, as Flutter family lists.",
+    '',
+    'A CSS `font-family` is a list the browser walks until a family is',
+    'installed; a `TextStyle` takes the first name as `fontFamily` and the',
+    'rest as `fontFamilyFallback`, which the engine walks the same way.',
+    '',
+    'These name system fonts. Flutter on the web reaches none of them, so a',
+    'web build that must show code in a fixed-width face bundles one and',
+    'puts it first.',
+  ]),
+  'abstract final class KunFontFamilies {',
+  ...dartDoc(2, [
+    `Web \`--kun-font-mono\`, the face \`.kun-prose\` sets code and \`kbd\` in:`,
+    `the first family of \`${monoStack.join(', ')}\``,
+    'that names an installed font rather than a CSS keyword.',
+  ]),
+  `  static const String mono = '${monoFamilies[0]}';`,
+  '',
+  ...dartDoc(2, [
+    'The rest of the [mono] stack, in order. `monospace` last is the',
+    "platform's own fixed-width face on Android and Linux.",
+  ]),
+  '  static const List<String> monoFallback = <String>[',
+  ...monoFamilies.slice(1).map((f) => `    '${f}',`),
+  '  ];',
+  '',
+  ...dartDoc(2, [
+    '[mono] and [monoFallback] as a style to merge onto a [KunText] step:',
+    '`KunText.sm.merge(KunFontFamilies.monoStyle)`.',
+  ]),
+  '  static const TextStyle monoStyle = TextStyle(',
+  '    fontFamily: mono,',
+  '    fontFamilyFallback: monoFallback,',
+  '  );',
   '}',
   '',
 ].join('\n')
@@ -1311,6 +1359,9 @@ const dtcg = {
   // Plain fontSize/lineHeight pairs, not the `typography` composite: 2025.10
   // makes all five of its sub-values required, and fontFamily, fontWeight and
   // letterSpacing are not part of this scale.
+  fontFamily: {
+    mono: { $type: 'fontFamily', $value: monoStack },
+  },
   fontWeight: {
     $description: TAILWIND_DTCG_NOTE,
     ...Object.fromEntries(

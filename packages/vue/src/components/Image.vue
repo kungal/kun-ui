@@ -209,6 +209,19 @@ const decodeThumb = (hash?: string): string | null => {
 }
 const thumbUrl = computed(() => decodeThumb(props.thumbhash))
 
+// The placeholder stays under the image until the image has faded in, and
+// only then fades itself: removed the moment the image loaded, it left the
+// image fading in over the bare page, so a blur-up read as a flash. A new
+// `src` brings it back at once, with no transition.
+const placeholderClass = computed(() =>
+  status.value === 'loading'
+    ? 'opacity-100'
+    : 'opacity-0 transition-opacity duration-kun-slow'
+)
+const placeholderStyle = computed(() =>
+  status.value === 'loaded' ? { transitionDelay: 'var(--kun-dur-slow)' } : undefined
+)
+
 // skeleton off → bare element, no wrapper. A thumbhash also needs the wrapper.
 const wrap = computed(() => props.skeleton || !!props.thumbhash)
 </script>
@@ -234,26 +247,28 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
     "
     :style="wrapperStyle"
   >
-    <!-- ThumbHash blur-up: the decoded placeholder, upscaled by bg-cover. Cross-
-         fades out on load; until it decodes the pulse skeleton below shows. -->
+    <!-- ThumbHash blur-up: the decoded placeholder, upscaled by bg-cover. Until
+         it decodes the pulse skeleton below shows. -->
     <div
-      v-if="status !== 'loaded' && thumbUrl"
+      v-if="thumbUrl"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 bg-cover bg-center transition-opacity duration-kun-slow"
-      :class="status === 'error' ? 'opacity-0' : 'opacity-100'"
-      :style="{ backgroundImage: `url(${thumbUrl})` }"
+      class="pointer-events-none absolute inset-0 bg-cover bg-center"
+      :class="placeholderClass"
+      :style="{ backgroundImage: `url(${thumbUrl})`, ...placeholderStyle }"
     />
     <!-- Sibling skeleton layer: animates the OVERLAY (not the painted image)
-         and sits behind transparent PNGs. Cross-fades out on `loaded`. -->
+         and sits behind transparent PNGs. -->
     <div
-      v-else-if="status !== 'loaded' && (skeleton || thumbhash)"
+      v-else-if="skeleton || thumbhash"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 transition-opacity duration-kun-slow"
-      :class="
-        status === 'error'
-          ? 'opacity-0'
-          : 'bg-default-200 motion-safe:animate-pulse opacity-100'
-      "
+      class="pointer-events-none absolute inset-0"
+      :class="[
+        placeholderClass,
+        status === 'loading'
+          ? 'bg-default-200 motion-safe:animate-pulse'
+          : status === 'loaded' && 'bg-default-200',
+      ]"
+      :style="placeholderStyle"
     />
     <component
       :is="imageComponent"

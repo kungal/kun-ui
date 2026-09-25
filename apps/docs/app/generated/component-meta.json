@@ -2696,6 +2696,77 @@
       }
     ]
   },
+  "KunNavItem": {
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": true,
+        "description": "The destination's name, shown under or beside the icon."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Extra classes for the underlying KunButton, merged last so yours win."
+      },
+      {
+        "name": "color",
+        "type": "KunUIColor",
+        "required": false,
+        "default": "\"primary\"",
+        "description": "Colour of the current item. Every other item stays neutral."
+      },
+      {
+        "name": "current",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Marks the page the user is on: the item turns `flat` in `color`, and says so to assistive technology with `aria-current=\"page\"`. KunUI does not read the route; the app decides which item is current."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Blocks clicks and navigation and dims the item."
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Where the item goes. It renders as a link, through the configured link component; without it the item is a button and `click` is the action."
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Iconify name of the icon, e.g. `lucide:compass`. The `#icon` slot replaces it — wrap the icon in a `KunBadge` there to show an unread count on it."
+      },
+      {
+        "name": "stacked",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Icon over label, as a rail or a bottom bar draws a destination. Off, the icon sits beside the label, as a sidebar row draws it."
+      }
+    ],
+    "events": [
+      {
+        "name": "click",
+        "type": "event: MouseEvent"
+      }
+    ],
+    "slots": [
+      {
+        "name": "icon",
+        "type": "{}"
+      }
+    ]
+  },
   "KunNull": {
     "props": [
       {

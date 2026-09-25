@@ -22,7 +22,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (70 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (71 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -714,7 +714,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 ---
 
 <!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
-## 12. Component reference (70)
+## 12. Component reference (71)
 
 **Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
@@ -722,7 +722,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 
 **Media & content:** `KunImage` · `KunCarousel` · `KunCarouselItem` · `KunImageNative` · `KunIcon` · `KunBrand` · `KunContent` · `KunText` · `KunMarkdown`
 
-**Navigation & overlays:** `KunLink` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+**Navigation & overlays:** `KunLink` · `KunNavItem` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
 
 **Forms:** `KunInput` · `KunTextarea` · `KunNumberInput` · `KunPinInput` · `KunSelect` · `KunAutocomplete` · `KunSwitch` · `KunCheckBox` · `KunCheckBoxGroup` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput` · `KunTagInput` · `KunUpload`
 
