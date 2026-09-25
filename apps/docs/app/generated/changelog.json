@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.47.2",
+    "type": "patch",
+    "html": "<ul>\n<li><code>lucide:heart</code> is now bundled. It is <code>KunReaction</code>&#39;s default <code>icon</code>, and an unbundled name renders nothing, so a reaction left on its default showed no glyph unless the site registered the heart itself. <code>kun_ui_icons</code> gains <code>KunIcons.heart</code> and <code>KunIcons.heartFilled</code>. The filled twin is Flutter-only: the web fills a stroke icon with <code>fill-current</code>, and a font glyph is a traced stroke that cannot be filled, so the generator traces a second glyph from the same SVG with its paths filled. The <code>FILLED</code> list in <code>icons-manifest.mjs</code> names the icons that get one.</li>\n</ul>\n"
+  },
+  {
     "version": "2.47.1",
     "type": "patch",
     "html": "<ul>\n<li><code>KunScrollShadow</code> is now portable in the Flutter contract (<code>contracts/component-contracts.json</code>). Nothing changes on the web. The contract used to call it a pure-CSS answer to web scrollbars. The Flutter port now needs what it adds on top of a scroller: edge fades that show only while there is more content on that side, a vertical mouse wheel that scrolls a horizontal strip (<code>wheel</code>, with <code>&#39;contain&#39;</code> keeping the page still), and grab-to-scroll with a mouse (<code>draggable</code>). Flutter&#39;s <code>Scrollable</code> does none of these by default, and a Flutter app with horizontal shelves could not scroll them with a plain mouse wheel. Only <code>className</code> and <code>contentClass</code> stay web-only, as class pass-throughs do everywhere.</li>\n</ul>\n"
