@@ -589,6 +589,40 @@ class KunTagInputStrings {
       _removeTag.replaceAll('{tag}', '$tag');
 }
 
+/// Strings for `KunTextSelection`.
+class KunTextSelectionStrings {
+  const KunTextSelectionStrings({
+    required this.copy,
+    required this.cut,
+    required this.paste,
+    required this.selectAll,
+    required this.share,
+    required this.lookUp,
+    required this.searchWeb,
+  });
+
+  /// `en`: Copy
+  final String copy;
+
+  /// `en`: Cut
+  final String cut;
+
+  /// `en`: Paste
+  final String paste;
+
+  /// `en`: Select all
+  final String selectAll;
+
+  /// `en`: Share
+  final String share;
+
+  /// `en`: Look Up
+  final String lookUp;
+
+  /// `en`: Search Web
+  final String searchWeb;
+}
+
 /// Strings for `KunUpload`.
 class KunUploadStrings {
   const KunUploadStrings({
@@ -656,6 +690,7 @@ class KunMessages {
     required this.select,
     required this.spoiler,
     required this.tagInput,
+    required this.textSelection,
     required this.upload,
   });
 
@@ -721,6 +756,8 @@ class KunMessages {
   final KunSpoilerStrings spoiler;
 
   final KunTagInputStrings tagInput;
+
+  final KunTextSelectionStrings textSelection;
 
   final KunUploadStrings upload;
 
@@ -872,6 +909,15 @@ class KunMessages {
     tagInput: KunTagInputStrings(
       tag: '标签 {tag}',
       removeTag: '移除标签 {tag}',
+    ),
+    textSelection: KunTextSelectionStrings(
+      copy: '复制',
+      cut: '剪切',
+      paste: '粘贴',
+      selectAll: '全选',
+      share: '分享',
+      lookUp: '查询',
+      searchWeb: '搜索',
     ),
     upload: KunUploadStrings(
       imageAlt: '上传图片',
@@ -1029,6 +1075,15 @@ class KunMessages {
     tagInput: KunTagInputStrings(
       tag: 'Tag {tag}',
       removeTag: 'Remove tag {tag}',
+    ),
+    textSelection: KunTextSelectionStrings(
+      copy: 'Copy',
+      cut: 'Cut',
+      paste: 'Paste',
+      selectAll: 'Select all',
+      share: 'Share',
+      lookUp: 'Look Up',
+      searchWeb: 'Search Web',
     ),
     upload: KunUploadStrings(
       imageAlt: 'Uploaded image',

@@ -147,6 +147,15 @@
       "tag": "Tag {tag}",
       "removeTag": "Remove tag {tag}"
     },
+    "textSelection": {
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "selectAll": "Select all",
+      "share": "Share",
+      "lookUp": "Look Up",
+      "searchWeb": "Search Web"
+    },
     "upload": {
       "imageAlt": "Uploaded image",
       "cropTitle": "Crop image",

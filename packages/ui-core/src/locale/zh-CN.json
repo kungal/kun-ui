@@ -147,6 +147,15 @@
       "tag": "标签 {tag}",
       "removeTag": "移除标签 {tag}"
     },
+    "textSelection": {
+      "copy": "复制",
+      "cut": "剪切",
+      "paste": "粘贴",
+      "selectAll": "全选",
+      "share": "分享",
+      "lookUp": "查询",
+      "searchWeb": "搜索"
+    },
     "upload": {
       "imageAlt": "上传图片",
       "cropTitle": "裁剪图片",

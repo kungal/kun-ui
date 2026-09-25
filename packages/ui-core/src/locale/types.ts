@@ -117,6 +117,17 @@ export interface KunMessages {
   spoiler: { copyCode: string; reveal: string }
   /** Both take `{tag}`. */
   tagInput: { tag: string; removeTag: string }
+  /** The menu a text field shows over its selection. Flutter only: on the
+   *  web the browser draws that menu, so no web component renders these. */
+  textSelection: {
+    copy: string
+    cut: string
+    paste: string
+    selectAll: string
+    share: string
+    lookUp: string
+    searchWeb: string
+  }
   upload: {
     imageAlt: string
     cropTitle: string
