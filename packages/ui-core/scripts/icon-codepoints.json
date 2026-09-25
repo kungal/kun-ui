@@ -28,5 +28,7 @@
   "lucide:eye": "0xE01A",
   "lucide:eye-off": "0xE01B",
   "lucide:search": "0xE01C",
-  "lucide:filter": "0xE01D"
+  "lucide:filter": "0xE01D",
+  "lucide:heart": "0xE01E",
+  "lucide:heart#filled": "0xE01F"
 }

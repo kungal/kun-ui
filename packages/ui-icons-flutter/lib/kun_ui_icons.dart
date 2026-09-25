@@ -231,6 +231,20 @@ abstract final class KunIcons {
     fontFamily: _family,
     fontPackage: _package,
   );
+
+  /// lucide: heart
+  static const IconData heart = IconData(
+    0xE01E,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: heart, filled — the web's `fill-current` on it.
+  static const IconData heartFilled = IconData(
+    0xE01F,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
 }
 
 /// The bitmaps KunUI components draw without a network request.

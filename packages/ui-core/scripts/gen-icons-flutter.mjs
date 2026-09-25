@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url'
 import SVGFixer from 'oslllo-svg-fixer'
 import svg2ttf from 'svg2ttf'
 import { SVGIcons2SVGFontStream } from 'svgicons2svgfont'
-import { PKG, WANT } from './icons-manifest.mjs'
+import { FILLED, PKG, WANT } from './icons-manifest.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const PUB_DIR = join(HERE, '../../ui-icons-flutter')
@@ -95,6 +95,16 @@ for (const [prefix, names] of Object.entries(WANT)) {
     crossing.push({ key, prefix, name, dart })
   }
 }
+for (const [prefix, names] of Object.entries(FILLED)) {
+  for (const name of names) {
+    const key = `${prefix}:${name}`
+    if (!crossing.some((icon) => icon.key === key)) {
+      console.error(`\n✗ FILLED names ${key}, which is not in WANT.`)
+      process.exit(1)
+    }
+    crossing.push({ key: `${key}#filled`, prefix, name, dart: `${camel(name)}Filled`, filled: true })
+  }
+}
 
 // ── codepoints: allocated once, never moved ─────────────────────────────────
 // A codepoint is part of the published API — an app that has already compiled
@@ -142,9 +152,11 @@ for (const icon of crossing) {
   icon.height = data.height ?? set.height ?? 24
   icon.svg =
     `<svg xmlns="http://www.w3.org/2000/svg" width="${icon.width}" height="${icon.height}" ` +
-    `viewBox="0 0 ${icon.width} ${icon.height}" fill="none" stroke="currentColor" ` +
+    `viewBox="0 0 ${icon.width} ${icon.height}" fill="${icon.filled ? 'currentColor' : 'none'}" stroke="currentColor" ` +
     'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-    `${data.body}</svg>`
+    // iconify writes fill="none" on each path, so the root's fill never
+    // reaches it: the first filled twin traced as an empty glyph.
+    `${icon.filled ? data.body.replaceAll('fill="none"', 'fill="currentColor"') : data.body}</svg>`
 }
 
 // svgicons2svgfont scales every glyph by ONE ratio (fontHeight / tallest
@@ -296,7 +308,9 @@ const dart = [
   'abstract final class KunIcons {',
   ...crossing.flatMap((icon, i) => [
     ...(i ? [''] : []),
-    `  /// ${icon.prefix}: ${icon.name}`,
+    icon.filled
+      ? `  /// ${icon.prefix}: ${icon.name}, filled — the web's \`fill-current\` on it.`
+      : `  /// ${icon.prefix}: ${icon.name}`,
     `  static const IconData ${icon.dart} = IconData(`,
     `    ${hex(icon.codepoint)},`,
     '    fontFamily: _family,',
