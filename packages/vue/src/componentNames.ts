@@ -42,6 +42,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunFadeCard',
   'KunFileInput',
   'KunHeader',
+  'KunHoverCard',
   'KunIcon',
   'KunImage',
   'KunImageNative',

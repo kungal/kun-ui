@@ -102,6 +102,7 @@ const components = [
   ['KunDrawer', 'Navigation & overlays', 'Slide-in panel from any edge (placement, size; v-model boolean).'],
   ['KunTooltip', 'Navigation & overlays', 'Hover/focus tooltip (text + trigger slot).'],
   ['KunPopover', 'Navigation & overlays', 'Floating popover anchored to a trigger slot.'],
+  ['KunHoverCard', 'Navigation & overlays', 'Preview card for a link (a user card on an avatar): opens on mouse hover after `openDelay` or on keyboard `:focus-visible`, never on touch; a click is never intercepted — it follows the link and closes the card. The trigger wrapper is `display: contents`, so it does not change the trigger\'s layout; the card anchors to the trigger slot\'s first element. No role and no focus move: the link stays the accessible interface, so put nothing in the card that the destination page lacks. The card mounts only while open (fetch in its setup) and its default slot gets `{ close }`; `v-model:open` tracks it. `group` = one open at a time across a list, siblings switch instantly. `disabled` renders the trigger alone.'],
   ['KunDropdown', 'Navigation & overlays', 'Menu of items anchored to a trigger (items array).'],
   ['KunContextMenu', 'Navigation & overlays', 'Right-click context menu (items array).'],
   ['KunCommandPalette', 'Navigation & overlays', 'Command-palette SHELL (v-model:open + ⌘K/Ctrl-K, v-model:query): dialog, keyboard nav, grouped rendering, match highlighting, a11y. It does NOT search — YOU compute `items` (flat, or KunCommandGroup[]) from `query`; picking one emits @select.'],

@@ -1,6 +1,6 @@
 # KunUI
 
-> Cross-framework component library — 72 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 73 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 Packages:
 - @kungal/ui-tokens: Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.
@@ -92,6 +92,7 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunDrawer: Slide-in panel from any edge (placement, size; v-model boolean).
 - KunTooltip: Hover/focus tooltip (text + trigger slot).
 - KunPopover: Floating popover anchored to a trigger slot.
+- KunHoverCard: Preview card for a link (a user card on an avatar): opens on mouse hover after `openDelay` or on keyboard `:focus-visible`, never on touch; a click is never intercepted — it follows the link and closes the card. The trigger wrapper is `display: contents`, so it does not change the trigger's layout; the card anchors to the trigger slot's first element. No role and no focus move: the link stays the accessible interface, so put nothing in the card that the destination page lacks. The card mounts only while open (fetch in its setup) and its default slot gets `{ close }`; `v-model:open` tracks it. `group` = one open at a time across a list, siblings switch instantly. `disabled` renders the trigger alone.
 - KunDropdown: Menu of items anchored to a trigger (items array).
 - KunContextMenu: Right-click context menu (items array).
 - KunCommandPalette: Command-palette SHELL (v-model:open + ⌘K/Ctrl-K, v-model:query): dialog, keyboard nav, grouped rendering, match highlighting, a11y. It does NOT search — YOU compute `items` (flat, or KunCommandGroup[]) from `query`; picking one emits @select.

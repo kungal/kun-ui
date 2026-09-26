@@ -95,6 +95,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/pagination': { title: 'Pagination', cn: '分页', description: '分页导航(v-model:current-page + total-page),带快速跳页。' },
   '/components/pininput': { title: 'PinInput', cn: 'PIN 输入框', description: 'OTP / PIN 分段输入(v-model 字符串):逐格输入、粘贴分发、掩码、填满触发 complete。' },
   '/components/popover': { title: 'Popover', cn: '气泡卡片', description: '锚定在触发槽上的浮层面板。' },
+  '/components/hovercard': { title: 'HoverCard', cn: '悬停卡片', description: '鼠标悬停或键盘聚焦在链接上时浮出的预览卡片,点击照常跟随链接,触屏上不出现。' },
   '/components/progress': { title: 'Progress', cn: '进度条', description: '进度条:实心 / 条纹 / 渐变 / 环形,支持不确定态与标签。' },
   '/components/radiogroup': { title: 'RadioGroup', cn: '单选组', description: '单选组(v-model + options),支持经典 / 卡片变体。' },
   '/components/rating': { title: 'Rating', cn: '评分', description: '星级评分输入(v-model number),支持只读与尺寸。' },

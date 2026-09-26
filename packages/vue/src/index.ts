@@ -29,6 +29,7 @@ import KunDrawer from './components/Drawer.vue'
 import KunFadeCard from './components/FadeCard.vue'
 import KunFileInput from './components/FileInput.vue'
 import KunHeader from './components/Header.vue'
+import KunHoverCard from './components/HoverCard.vue'
 import KunIcon from './components/Icon.vue'
 import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
@@ -104,6 +105,7 @@ export {
   KunFadeCard,
   KunFileInput,
   KunHeader,
+  KunHoverCard,
   KunIcon,
   KunImage,
   KunImageNative,
@@ -178,6 +180,7 @@ export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
 export {
   useKunPointerMenu,
+  type KunPointerMenu,
   type KunPointerMenuOptions,
 } from './composables/useKunPointerMenu'
 export {
@@ -271,6 +274,7 @@ export type {
   KunTabOrientation,
   KunTooltipProps,
   KunPopoverProps,
+  KunHoverCardProps,
   KunPopoverPosition,
   KunImageProps,
   KunImageNativeProps,
@@ -383,6 +387,7 @@ const components: Record<KunComponentName, Component> = {
   KunFadeCard,
   KunFileInput,
   KunHeader,
+  KunHoverCard,
   KunIcon,
   KunImage,
   KunImageNative,

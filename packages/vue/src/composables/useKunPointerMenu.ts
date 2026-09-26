@@ -81,12 +81,27 @@ type Handlers = {
 }
 const NOOP: Handlers = { pointerenter: () => {}, pointerleave: () => {} }
 
+export interface KunPointerMenu {
+  triggerHandlers: Handlers
+  panelHandlers: Handlers
+  /** Open after `openDelay` (at once while the group is hot), for an opener
+   *  that is not a mouse hover, such as keyboard focus. */
+  requestOpen: () => void
+  /** Close now and cancel a pending open. */
+  close: () => void
+}
+
 export function useKunPointerMenu(
   panelRef: Ref<HTMLElement | null>,
   options: KunPointerMenuOptions
-): { triggerHandlers: Handlers; panelHandlers: Handlers } {
+): KunPointerMenu {
   if (options.enabled === false || !isClient) {
-    return { triggerHandlers: NOOP, panelHandlers: NOOP }
+    return {
+      triggerHandlers: NOOP,
+      panelHandlers: NOOP,
+      requestOpen: () => {},
+      close: () => {},
+    }
   }
 
   const id = Symbol('kun-pointer-menu')
@@ -150,6 +165,7 @@ export function useKunPointerMenu(
   const requestClose = (exitX: number, exitY: number) => {
     clearOpenTimer()
     removeMoveListener()
+    if (!options.open.value) return
     const startGrace = () => {
       clearCloseTimer()
       closeTimer = setTimeout(doClose, closeDelay)
@@ -214,5 +230,7 @@ export function useKunPointerMenu(
   return {
     triggerHandlers: { pointerenter: onTriggerEnter, pointerleave: onTriggerLeave },
     panelHandlers: { pointerenter: onPanelEnter, pointerleave: onPanelLeave },
+    requestOpen,
+    close: doClose,
   }
 }

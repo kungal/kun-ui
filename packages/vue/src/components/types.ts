@@ -375,6 +375,44 @@ export interface KunPopoverProps {
   group?: string
 }
 
+// ── HoverCard ──────────────────────────────────────────────────────────
+export interface KunHoverCardProps {
+  /** Placement relative to the trigger. */
+  position?: KunPopoverPosition
+  /** Classes for the floating panel. */
+  innerClass?: string
+  /**
+   * Avoid viewport collisions: flip to the opposite side, shift along the edge,
+   * and cap height/width to the available space so tall content scrolls instead
+   * of overflowing. Set `false` to honour `position` verbatim.
+   */
+  autoPosition?: boolean
+  /** Corner radius of the card. Left unset it follows the app-wide config. */
+  rounded?: KunUIRounded
+  /** Render a caret pointing at the trigger. */
+  showArrow?: boolean
+  /**
+   * Force a fully opaque panel, ignoring a globally lowered
+   * `--kun-surface-opacity`. See KunPopover's `opaque`.
+   */
+  opaque?: boolean
+  /** ms a mouse must rest on the trigger, or keyboard focus stay on it, before
+   *  the card opens. */
+  openDelay?: number
+  /** ms grace after the pointer leaves the trigger or the card, long enough to
+   *  cross the gap between them. */
+  closeDelay?: number
+  /**
+   * Shared id for a list of cards (every author avatar on a page): only one is
+   * open at a time, and once one is open, moving to a sibling switches at once
+   * instead of waiting out `openDelay` again.
+   */
+  group?: string
+  /** Render the trigger alone, with no card and no listeners. For a trigger
+   *  that has nothing to preview, such as a deleted user. */
+  disabled?: boolean
+}
+
 // ── Image ──────────────────────────────────────────────────────────────
 export interface KunImageProps {
   /** Image URL. Under Nuxt it is handed to the injected `<NuxtImg>`, so a

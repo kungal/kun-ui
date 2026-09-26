@@ -77,6 +77,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
       'modal',
       'drawer',
       'popover',
+      'hovercard',
       'tooltip',
       'dropdown',
       'contextmenu',

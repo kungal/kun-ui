@@ -1,6 +1,6 @@
 # KunUI — full documentation for LLMs
 
-> Cross-framework component library — 72 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 73 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
 
@@ -46,7 +46,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (72 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (73 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -738,7 +738,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 ---
 
 <!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
-## 12. Component reference (72)
+## 12. Component reference (73)
 
 **Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunBanner` · `KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
@@ -746,7 +746,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 
 **Media & content:** `KunImage` · `KunCarousel` · `KunCarouselItem` · `KunImageNative` · `KunIcon` · `KunBrand` · `KunContent` · `KunText` · `KunMarkdown`
 
-**Navigation & overlays:** `KunLink` · `KunNavItem` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+**Navigation & overlays:** `KunLink` · `KunNavItem` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunHoverCard` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
 
 **Forms:** `KunInput` · `KunTextarea` · `KunNumberInput` · `KunPinInput` · `KunSelect` · `KunAutocomplete` · `KunSwitch` · `KunCheckBox` · `KunCheckBoxGroup` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput` · `KunTagInput` · `KunUpload`
 
@@ -850,6 +850,7 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunDrawer** — Slide-in panel from any edge (placement, size; v-model boolean).
 - **KunTooltip** — Hover/focus tooltip (text + trigger slot).
 - **KunPopover** — Floating popover anchored to a trigger slot.
+- **KunHoverCard** — Preview card for a link (a user card on an avatar): opens on mouse hover after `openDelay` or on keyboard `:focus-visible`, never on touch; a click is never intercepted — it follows the link and closes the card. The trigger wrapper is `display: contents`, so it does not change the trigger's layout; the card anchors to the trigger slot's first element. No role and no focus move: the link stays the accessible interface, so put nothing in the card that the destination page lacks. The card mounts only while open (fetch in its setup) and its default slot gets `{ close }`; `v-model:open` tracks it. `group` = one open at a time across a list, siblings switch instantly. `disabled` renders the trigger alone.
 - **KunDropdown** — Menu of items anchored to a trigger (items array).
 - **KunContextMenu** — Right-click context menu (items array).
 - **KunCommandPalette** — Command-palette SHELL (v-model:open + ⌘K/Ctrl-K, v-model:query): dialog, keyboard nav, grouped rendering, match highlighting, a11y. It does NOT search — YOU compute `items` (flat, or KunCommandGroup[]) from `query`; picking one emits @select.
