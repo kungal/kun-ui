@@ -143,6 +143,12 @@
       "copyCode": "Copy code",
       "reveal": "Spoiler — click or press Enter to reveal"
     },
+    "steps": {
+      "completed": "Completed: {title}",
+      "current": "Current step: {title}",
+      "pending": "Not started: {title}",
+      "error": "Error: {title}"
+    },
     "tagInput": {
       "tag": "Tag {tag}",
       "removeTag": "Remove tag {tag}"

@@ -115,6 +115,9 @@ export interface KunMessages {
     removeOption: string
   }
   spoiler: { copyCode: string; reveal: string }
+  /** Visually hidden state prefix read before each step's title; all four
+   *  take `{title}`. */
+  steps: { completed: string; current: string; pending: string; error: string }
   /** Both take `{tag}`. */
   tagInput: { tag: string; removeTag: string }
   /** The menu a text field shows over its selection. Flutter only: on the

@@ -1,28 +1,48 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, getCurrentInstance, useId, type CSSProperties } from 'vue'
 import {
   cn,
   kunSolidBgClasses,
   kunSolidFgClasses,
   kunTextClasses,
+  type KunMessagePath,
   type KunUIColor,
 } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
+import { useKunLocale } from '../locale/useKunLocale'
 import type { KunStepsProps, KunStepsSize } from './types'
 
 // Progress through a multi-step flow (registration, upload / submission wizard).
 // Data-driven (`items` + `current`); state is derived from `current`, so it's
 // SSR-safe with no measurement. Steps before `current` are done (✓), the one at
-// `current` is active, the rest pending.
+// `current` is active, the rest pending. Bound with `v-model:current`, each
+// indicator becomes a button whose hit area stretches over its whole step.
 defineOptions({ name: 'KunSteps' })
 
 const props = withDefaults(defineProps<KunStepsProps>(), {
   current: 0,
+  linear: true,
   color: 'primary',
   size: 'md',
   orientation: 'horizontal',
   className: '',
 })
+
+const emit = defineEmits<{
+  /** A step was clicked; carries its 0-based index. Never fires for the current
+   *  step, a `disabled` one, or — while `linear` — one after `current`. */
+  'update:current': [index: number]
+}>()
+
+const { t } = useKunLocale()
+const instance = getCurrentInstance()
+const baseId = `kun-steps-${useId()}`
+
+// Clickable only when someone listens. KunSteps shipped display-only, and the
+// forum's creator-application flow renders review status through a one-way
+// `:current`; it must not grow buttons that do nothing. Read at render time —
+// declaring `onUpdate:current` as a prop would publish it as API.
+const isInteractive = () => !!instance?.vnode.props?.['onUpdate:current']
 
 const isVertical = computed(() => props.orientation === 'vertical')
 
@@ -44,16 +64,101 @@ const activeRing: Record<KunUIColor, string> = {
   info: 'ring-info/25',
 }
 
-type State = 'done' | 'active' | 'pending'
+// A fainter halo on hover, previewing the one the step gets once current.
+const hoverRing: Record<KunUIColor, string> = {
+  default: 'hover:ring-4 hover:ring-default/15',
+  primary: 'hover:ring-4 hover:ring-primary/15',
+  secondary: 'hover:ring-4 hover:ring-secondary/15',
+  success: 'hover:ring-4 hover:ring-success/15',
+  warning: 'hover:ring-4 hover:ring-warning/15',
+  danger: 'hover:ring-4 hover:ring-danger/15',
+  info: 'hover:ring-4 hover:ring-info/15',
+}
+
+// Inline, not `sr-only`: that class comes from the consumer's Tailwind, and a
+// miss would print the state prefix next to every title.
+const visuallyHidden: CSSProperties = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: '0',
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  borderWidth: '0',
+}
+
+type State = 'done' | 'active' | 'pending' | 'error'
 const stateOf = (i: number): State =>
-  i < props.current ? 'done' : i === props.current ? 'active' : 'pending'
+  props.items[i]?.status === 'error'
+    ? 'error'
+    : i < props.current
+      ? 'done'
+      : i === props.current
+        ? 'active'
+        : 'pending'
+
+const stateMessage: Record<State, KunMessagePath> = {
+  done: 'steps.completed',
+  active: 'steps.current',
+  pending: 'steps.pending',
+  error: 'steps.error',
+}
+
+const toneOf = (i: number): KunUIColor => (stateOf(i) === 'error' ? 'danger' : props.color)
+
+const isReachable = (i: number) =>
+  !props.items[i]?.disabled && (!props.linear || i <= props.current)
+
+const isClickable = (i: number) =>
+  isInteractive() && i !== props.current && isReachable(i)
+
+const select = (i: number) => {
+  if (i !== props.current && isReachable(i)) emit('update:current', i)
+}
 
 const circleClass = (i: number) => {
   const state = stateOf(i)
-  if (state === 'pending')
-    return 'border-2 border-default-200 text-default-400 bg-transparent'
-  const filled = cn(kunSolidBgClasses[props.color], kunSolidFgClasses[props.color])
-  return state === 'active' ? cn(filled, 'ring-4', activeRing[props.color]) : filled
+  const tone = toneOf(i)
+  return cn(
+    'z-10 inline-flex shrink-0 items-center justify-center rounded-full font-medium transition-colors',
+    sz.value.circle,
+    state === 'pending'
+      ? 'border-2 border-default-200 text-default-400 bg-transparent'
+      : cn(kunSolidBgClasses[tone], kunSolidFgClasses[tone]),
+    i === props.current && cn('ring-4', activeRing[tone]),
+    isClickable(i) &&
+      cn('cursor-pointer transition after:absolute after:inset-0', hoverRing[tone])
+  )
+}
+
+const indicatorAttrs = (i: number) => {
+  if (!isInteractive()) return { 'aria-hidden': 'true' as const }
+  const item = props.items[i]
+  return {
+    type: 'button' as const,
+    disabled: !isReachable(i),
+    'aria-current': i === props.current ? ('step' as const) : undefined,
+    'aria-labelledby': `${baseId}-${i}-title`,
+    'aria-describedby': item?.description ? `${baseId}-${i}-desc` : undefined,
+    onClick: () => select(i),
+  }
+}
+
+const titleClass = (i: number) => {
+  const state = stateOf(i)
+  return cn(
+    'font-medium',
+    sz.value.title,
+    state === 'pending'
+      ? 'text-default-400'
+      : state === 'error'
+        ? kunTextClasses.danger
+        : state === 'active'
+          ? kunTextClasses[props.color]
+          : 'text-foreground'
+  )
 }
 
 // The connector AFTER a done step is coloured; otherwise muted.
@@ -72,10 +177,12 @@ const connectorClass = (i: number) =>
       :key="i"
       :class="
         isVertical
-          ? cn('flex', sz.gap)
+          ? cn('relative flex', sz.gap)
           : cn('relative flex-1 last:flex-none', i < items.length - 1 && 'pr-2')
       "
-      :aria-current="stateOf(i) === 'active' ? 'step' : undefined"
+      :aria-current="
+        !isInteractive() && i === current ? 'step' : undefined
+      "
     >
       <!-- Indicator column (circle + connector) -->
       <div
@@ -85,19 +192,16 @@ const connectorClass = (i: number) =>
             : 'flex w-full items-center'
         "
       >
-        <span
-          :class="
-            cn(
-              'relative z-10 inline-flex shrink-0 items-center justify-center rounded-full font-medium transition-colors',
-              sz.circle,
-              circleClass(i)
-            )
-          "
+        <component
+          :is="isInteractive() ? 'button' : 'span'"
+          :class="circleClass(i)"
+          v-bind="indicatorAttrs(i)"
         >
-          <KunIcon v-if="stateOf(i) === 'done'" name="lucide:check" :class="sz.icon" />
+          <KunIcon v-if="stateOf(i) === 'error'" name="lucide:x" :class="sz.icon" />
+          <KunIcon v-else-if="stateOf(i) === 'done'" name="lucide:check" :class="sz.icon" />
           <KunIcon v-else-if="item.icon" :name="item.icon" :class="sz.icon" />
           <template v-else>{{ i + 1 }}</template>
-        </span>
+        </component>
         <!-- connector -->
         <span
           v-if="i < items.length - 1"
@@ -119,22 +223,17 @@ const connectorClass = (i: number) =>
             : cn('mt-2', i < items.length - 1 ? 'pr-2' : '')
         "
       >
-        <p
-          :class="
-            cn(
-              'font-medium',
-              sz.title,
-              stateOf(i) === 'pending'
-                ? 'text-default-400'
-                : stateOf(i) === 'active'
-                  ? kunTextClasses[color]
-                  : 'text-foreground'
-            )
-          "
-        >
-          {{ item.title }}
+        <p :id="`${baseId}-${i}-title`" :class="titleClass(i)">
+          <span :style="visuallyHidden">
+            {{ t(stateMessage[stateOf(i)], { title: item.title }) }}
+          </span>
+          <span aria-hidden="true">{{ item.title }}</span>
         </p>
-        <p v-if="item.description" class="text-default-500 mt-0.5 text-xs">
+        <p
+          v-if="item.description"
+          :id="`${baseId}-${i}-desc`"
+          class="text-default-500 mt-0.5 text-xs"
+        >
           {{ item.description }}
         </p>
       </div>

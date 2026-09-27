@@ -1882,13 +1882,29 @@ export interface KunStepItem {
   description?: string
   /** Registered icon name; defaults to the step number (done shows a check). */
   icon?: string
+  /** Excludes this step from click navigation. Has no visual effect. */
+  disabled?: boolean
+  /** `'error'` marks the step failed (danger colour, an ✕), whatever its
+   *  position relative to `current`. */
+  status?: 'error'
 }
 export interface KunStepsProps {
+  /** The steps, in order. */
   items: KunStepItem[]
-  /** 0-based index of the current step; earlier steps render as done. */
+  /** 0-based index of the current step; earlier steps render as done. Bind it
+   *  with `v-model:current` to make the steps clickable — with a plain
+   *  `:current` they are display-only. */
   current?: number
+  /** With `v-model:current` bound: `true` lets a click go back to any earlier
+   *  step but never forward, so forward moves stay behind your own "next"
+   *  button and its validation; `false` makes every step reachable. */
+  linear?: boolean
+  /** Colour of the done and current steps. */
   color?: KunUIColor
+  /** Indicator and title size. */
   size?: KunStepsSize
+  /** Horizontal lays titles under the indicators; vertical stacks the steps
+   *  with titles beside them. */
   orientation?: 'horizontal' | 'vertical'
   className?: string
 }

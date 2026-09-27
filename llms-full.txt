@@ -812,7 +812,7 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunAccordion** — Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.
 - **KunAccordionItem** — One accordion section: `value` (required), `title`/`icon` or the `title` slot, `disabled`.
 - **KunSkeleton** — Loading placeholder (variant text/circle/rect, width/height); set `loaded` to swap in the real content.
-- **KunSteps** — Step / progress indicator (items array, `current` index; horizontal or vertical).
+- **KunSteps** — Step / progress indicator (items array, `current` index; horizontal or vertical). Bind `v-model:current` to make steps clickable (`linear` keeps clicks backward-only); per-item `disabled` and `status: 'error'`.
 - **KunTimeline** — Vertical timeline container for KunTimelineItem.
 - **KunTimelineItem** — One timeline entry (title, time, icon, color + default slot for the body).
 

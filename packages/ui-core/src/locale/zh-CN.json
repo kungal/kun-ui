@@ -143,6 +143,12 @@
       "copyCode": "复制代码",
       "reveal": "剧透内容,点击或按回车显示"
     },
+    "steps": {
+      "completed": "已完成：{title}",
+      "current": "当前步骤：{title}",
+      "pending": "未开始：{title}",
+      "error": "出错：{title}"
+    },
     "tagInput": {
       "tag": "标签 {tag}",
       "removeTag": "移除标签 {tag}"

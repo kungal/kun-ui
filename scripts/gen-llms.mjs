@@ -70,7 +70,7 @@ const components = [
   ['KunAccordion', 'Layout & display', 'Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.'],
   ['KunAccordionItem', 'Layout & display', 'One accordion section: `value` (required), `title`/`icon` or the `title` slot, `disabled`.'],
   ['KunSkeleton', 'Layout & display', 'Loading placeholder (variant text/circle/rect, width/height); set `loaded` to swap in the real content.'],
-  ['KunSteps', 'Layout & display', 'Step / progress indicator (items array, `current` index; horizontal or vertical).'],
+  ['KunSteps', 'Layout & display', 'Step / progress indicator (items array, `current` index; horizontal or vertical). Bind `v-model:current` to make steps clickable (`linear` keeps clicks backward-only); per-item `disabled` and `status: \'error\'`.'],
   ['KunTimeline', 'Layout & display', 'Vertical timeline container for KunTimelineItem.'],
   ['KunTimelineItem', 'Layout & display', 'One timeline entry (title, time, icon, color + default slot for the body).'],
   // Buttons & feedback

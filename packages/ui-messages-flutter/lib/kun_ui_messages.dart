@@ -569,6 +569,43 @@ class KunSpoilerStrings {
   final String reveal;
 }
 
+/// Strings for `KunSteps`.
+class KunStepsStrings {
+  const KunStepsStrings({
+    required String completed,
+    required String current,
+    required String pending,
+    required String error,
+  })  : _completed = completed,
+        _current = current,
+        _pending = pending,
+        _error = error;
+
+  final String _completed;
+
+  final String _current;
+
+  final String _pending;
+
+  final String _error;
+
+  /// `en`: Completed: {title}
+  String completed({required Object title}) =>
+      _completed.replaceAll('{title}', '$title');
+
+  /// `en`: Current step: {title}
+  String current({required Object title}) =>
+      _current.replaceAll('{title}', '$title');
+
+  /// `en`: Not started: {title}
+  String pending({required Object title}) =>
+      _pending.replaceAll('{title}', '$title');
+
+  /// `en`: Error: {title}
+  String error({required Object title}) =>
+      _error.replaceAll('{title}', '$title');
+}
+
 /// Strings for `KunTagInput`.
 class KunTagInputStrings {
   const KunTagInputStrings({
@@ -689,6 +726,7 @@ class KunMessages {
     required this.reaction,
     required this.select,
     required this.spoiler,
+    required this.steps,
     required this.tagInput,
     required this.textSelection,
     required this.upload,
@@ -754,6 +792,8 @@ class KunMessages {
   final KunSelectStrings select;
 
   final KunSpoilerStrings spoiler;
+
+  final KunStepsStrings steps;
 
   final KunTagInputStrings tagInput;
 
@@ -905,6 +945,12 @@ class KunMessages {
     spoiler: KunSpoilerStrings(
       copyCode: '复制代码',
       reveal: '剧透内容,点击或按回车显示',
+    ),
+    steps: KunStepsStrings(
+      completed: '已完成：{title}',
+      current: '当前步骤：{title}',
+      pending: '未开始：{title}',
+      error: '出错：{title}',
     ),
     tagInput: KunTagInputStrings(
       tag: '标签 {tag}',
@@ -1071,6 +1117,12 @@ class KunMessages {
     spoiler: KunSpoilerStrings(
       copyCode: 'Copy code',
       reveal: 'Spoiler — click or press Enter to reveal',
+    ),
+    steps: KunStepsStrings(
+      completed: 'Completed: {title}',
+      current: 'Current step: {title}',
+      pending: 'Not started: {title}',
+      error: 'Error: {title}',
     ),
     tagInput: KunTagInputStrings(
       tag: 'Tag {tag}',

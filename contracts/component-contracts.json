@@ -4013,38 +4013,55 @@
         {
           "name": "items",
           "type": "KunStepItem[]",
-          "required": true
+          "required": true,
+          "description": "The steps, in order."
         },
         {
           "name": "color",
           "type": "KunUIColor",
           "required": false,
-          "default": "\"primary\""
+          "default": "\"primary\"",
+          "description": "Colour of the done and current steps."
         },
         {
           "name": "current",
           "type": "number",
           "required": false,
           "default": "0",
-          "description": "0-based index of the current step; earlier steps render as done."
+          "description": "0-based index of the current step; earlier steps render as done. Bind it with `v-model:current` to make the steps clickable — with a plain `:current` they are display-only."
+        },
+        {
+          "name": "linear",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "With `v-model:current` bound: `true` lets a click go back to any earlier step but never forward, so forward moves stay behind your own \"next\" button and its validation; `false` makes every step reachable."
         },
         {
           "name": "orientation",
           "type": "\"horizontal\" | \"vertical\"",
           "required": false,
-          "default": "\"horizontal\""
+          "default": "\"horizontal\"",
+          "description": "Horizontal lays titles under the indicators; vertical stacks the steps with titles beside them."
         },
         {
           "name": "size",
           "type": "KunStepsSize",
           "required": false,
-          "default": "\"md\""
+          "default": "\"md\"",
+          "description": "Indicator and title size."
         }
       ],
       "webOnlyProps": {
         "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters."
       },
-      "events": [],
+      "events": [
+        {
+          "name": "update:current",
+          "type": "index: number",
+          "description": "A step was clicked; carries its 0-based index. Never fires for the current step, a `disabled` one, or — while `linear` — one after `current`."
+        }
+      ],
       "slots": []
     },
     "KunSwitch": {
