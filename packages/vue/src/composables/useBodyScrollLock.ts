@@ -18,13 +18,17 @@
 
 let count = 0
 
-// Both <html> and <body> are locked, not <body> alone. CSS Overflow 3 §3.1.4
-// propagates <body>'s overflow to the viewport ONLY while <html>'s own overflow
-// is `visible`, so on a page with `html { overflow-y: scroll }` (the common
-// no-layout-shift rule) or `html { overflow-x: hidden }` the body-only lock
-// this file used to do was a silent no-op: the page kept scrolling behind every
-// open overlay. <html>'s own overflow always propagates, so locking both covers
-// every page whose viewport scrolls, whichever element the author styled.
+// The lock goes on whichever element gives the viewport its overflow. CSS
+// Overflow 3 §3.1.4 takes <body>'s only while <html>'s is `visible` on both
+// axes, so on a page with `html { overflow-y: scroll }` (the common
+// no-layout-shift rule) or `html { overflow-x: hidden }` a body-only lock was a
+// silent no-op: the page kept scrolling behind every open overlay. Locking
+// BOTH, the fix that followed, has the opposite failure: with <html> hidden,
+// <body>'s `hidden` no longer reaches the viewport and makes <body> a scroll
+// container of its own. A sticky header sticks to the nearest one, and <body>'s
+// never scrolls, so the header left with the page — moyu's topbar vanished
+// behind its mobile menu once the page was scrolled. Base UI's
+// `getViewportScroller` picks the one element the same way.
 //
 // The inline styles we overwrite are captured at lock time so unlock puts the
 // page's own values back instead of blanking them (a host app that sets
@@ -78,6 +82,9 @@ const isIOS = () => {
   return /Mac/.test(navigator.userAgent) && navigator.maxTouchPoints > 1
 }
 
+const scrolls = (style: CSSStyleDeclaration) =>
+  [style.overflowX, style.overflowY].some((v) => v !== 'visible' && v !== 'clip')
+
 // Whether the page ALREADY reserves a stable scrollbar gutter of its own. It
 // then loses no width when the scrollbar is hidden, so compensating it IS the
 // shift — measured on the docs site, padding on top of a gutter that was never
@@ -129,13 +136,21 @@ const apply = (locked: boolean) => {
     // compensation silently becomes a no-op — which is what shipped until now,
     // leaving the page to jump 15px sideways on every open.
     const scrollbarWidth = window.innerWidth - html.clientWidth
-    const basePadding = Number.parseFloat(getComputedStyle(body).paddingRight)
+    const htmlStyle = getComputedStyle(html)
+    const bodyStyle = getComputedStyle(body)
+    const basePadding = Number.parseFloat(bodyStyle.paddingRight)
+    const viewportFromBody =
+      htmlStyle.overflowX === 'visible' && htmlStyle.overflowY === 'visible'
+    // A <body> that already scrolls itself (a full-height app scrolling in
+    // <body>) is locked as well; it was a scroll container before, so no sticky
+    // element changes the one it sticks to.
+    const lockBody = viewportFromBody || scrolls(bodyStyle)
 
     // How much width the page actually loses when the scrollbar goes away.
     const removed = pageReservesGutter(html) ? 0 : Math.max(0, scrollbarWidth)
 
-    html.style.overflow = 'hidden'
-    body.style.overflow = 'hidden'
+    if (!viewportFromBody) html.style.overflow = 'hidden'
+    if (lockBody) body.style.overflow = 'hidden'
     // `overflow: hidden` stops the page scrolling but NOT Chrome for Android's
     // pull-to-refresh, which reads a downward drag near the top of the screen
     // and reloads the page. On a bottom sheet that drag is the dismiss gesture,
