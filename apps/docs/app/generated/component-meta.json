@@ -481,6 +481,13 @@
         "description": "CSP nonce for that inline script. Under a `script-src` that forbids inline scripts and has no nonce for it, a closed banner shows until hydration removes it."
       },
       {
+        "name": "size",
+        "type": "\"sm\" | \"md\"",
+        "required": false,
+        "default": "\"md\"",
+        "description": "`md` is a 40px strip with `text-sm`. `sm` is a 32px strip with `text-xs` and tighter padding, for a standing notice (a content-mode reminder) that should not take a phone screen's worth of space once it wraps. In `sm`, put a `size=\"xs\"` button in `#actions` so it fits the strip."
+      },
+      {
         "name": "storageKey",
         "type": "string",
         "required": false,

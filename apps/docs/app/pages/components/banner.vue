@@ -5,6 +5,8 @@ import Colors from '~/examples/banner/Colors.vue'
 import ColorsSrc from '~/examples/banner/Colors.vue?raw'
 import Actions from '~/examples/banner/Actions.vue'
 import ActionsSrc from '~/examples/banner/Actions.vue?raw'
+import Compact from '~/examples/banner/Compact.vue'
+import CompactSrc from '~/examples/banner/Compact.vue?raw'
 import Persist from '~/examples/banner/Persist.vue'
 import PersistSrc from '~/examples/banner/Persist.vue?raw'
 import meta from '~/generated/component-meta.json'
@@ -23,6 +25,16 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">链接与操作</h2>
     <Demo title="Actions.vue" :source="ActionsSrc"><Actions /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">紧凑尺寸</h2>
+    <Demo title="Compact.vue" :source="CompactSrc"><Compact /></Demo>
+    <KunInfo
+      class="mt-3"
+      color="default"
+      icon="lucide:info"
+      title="一直显示的提示用 sm"
+      description="size=&quot;sm&quot; 的横幅高 32px,文字 text-xs。适合内容模式这类一直显示、不能关闭的提示:手机上一句话会折成好几行,sm 能少占一截高度。一次性的公告仍用默认的 md。sm 横幅的 #actions 里放 size=&quot;xs&quot; 的按钮。"
+    />
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">记住关闭状态</h2>
     <Demo title="Persist.vue" :source="PersistSrc"><Persist /></Demo>

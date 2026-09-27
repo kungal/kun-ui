@@ -637,6 +637,11 @@ export interface KunBannerProps {
   /** `solid` fills the strip with the colour and a contrast-correct
    *  foreground; `flat` is a soft tint with coloured text. */
   variant?: 'solid' | 'flat'
+  /** `md` is a 40px strip with `text-sm`. `sm` is a 32px strip with `text-xs`
+   *  and tighter padding, for a standing notice (a content-mode reminder)
+   *  that should not take a phone screen's worth of space once it wraps. In
+   *  `sm`, put a `size="xs"` button in `#actions` so it fits the strip. */
+  size?: 'sm' | 'md'
   /** Bundled icon name shown before the text, e.g. `lucide:info`. Only the
    *  icons compiled into ui-core exist — an unbundled name renders nothing. */
   icon?: string

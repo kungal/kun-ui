@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<KunBannerProps>(), {
   text: '',
   color: 'primary',
   variant: 'solid',
+  size: 'md',
   icon: '',
   closable: true,
   storageKey: '',
@@ -105,6 +106,29 @@ const dismiss = () => {
 // on slotted content still wins — an unlayered `:deep(*)` rule would not.
 const INHERIT_COLOR = '[:where(&)_*]:text-inherit'
 
+const sizes: Record<
+  NonNullable<KunBannerProps['size']>,
+  { row: string; column: string; message: string; icon: string; close: string; closeIcon: string }
+> = {
+  md: {
+    row: 'min-h-10 gap-3 px-4 py-1.5 text-sm sm:px-6',
+    column: 'gap-x-3',
+    message: 'gap-2',
+    icon: 'mt-0.5 size-4',
+    close: '-mr-1.5 size-7',
+    closeIcon: 'size-4',
+  },
+  sm: {
+    row: 'min-h-8 gap-2 px-3 py-1 text-xs sm:px-4',
+    column: 'gap-x-2',
+    message: 'gap-1.5',
+    icon: 'mt-px size-3.5',
+    close: '-mr-1 size-6',
+    closeIcon: 'size-3.5',
+  },
+}
+const sz = computed(() => sizes[props.size])
+
 const display = computed(() =>
   key.value ? `var(${hiddenVar(key.value)}, grid)` : 'grid'
 )
@@ -129,14 +153,19 @@ const display = computed(() =>
       :style="{ display }"
     >
       <div class="min-h-0 overflow-hidden">
-        <div class="flex min-h-10 items-center gap-3 px-4 py-1.5 text-sm sm:px-6">
+        <div :class="cn('flex items-center', sz.row)">
           <!-- Mirrors the close column, so the message centres on the page. -->
           <div class="hidden flex-1 sm:block" />
           <div
-            class="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 sm:flex-initial sm:justify-center"
+            :class="
+              cn(
+                'flex min-w-0 flex-1 flex-wrap items-center gap-y-1 sm:flex-initial sm:justify-center',
+                sz.column
+              )
+            "
           >
-            <div class="flex min-w-0 items-start gap-2">
-              <KunIcon v-if="icon" :name="icon" class="mt-0.5 size-4 shrink-0" />
+            <div :class="cn('flex min-w-0 items-start', sz.message)">
+              <KunIcon v-if="icon" :name="icon" :class="cn('shrink-0', sz.icon)" />
               <div
                 class="min-w-0 font-medium sm:text-center sm:text-balance [&_a]:text-current [&_a]:underline [&_a]:underline-offset-4"
               >
@@ -147,15 +176,26 @@ const display = computed(() =>
               <slot name="actions" :dismiss="dismiss" />
             </div>
           </div>
-          <div class="flex flex-none justify-end sm:flex-1">
+          <!-- Hidden on a phone when empty: its gap alone cost the message 12px
+               of width there, and a wrapped notice a whole extra line. -->
+          <div
+            :class="
+              cn('flex-none justify-end sm:flex sm:flex-1', closable ? 'flex' : 'hidden')
+            "
+          >
             <button
               v-if="closable"
               type="button"
-              class="-my-1 -mr-1.5 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md opacity-80 transition hover:bg-current/10 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-current"
+              :class="
+                cn(
+                  '-my-1 inline-flex shrink-0 cursor-pointer items-center justify-center rounded-md opacity-80 transition hover:bg-current/10 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-current',
+                  sz.close
+                )
+              "
               :aria-label="t('banner.close')"
               @click="dismiss"
             >
-              <KunIcon name="lucide:x" class="size-4" />
+              <KunIcon name="lucide:x" :class="sz.closeIcon" />
             </button>
           </div>
         </div>

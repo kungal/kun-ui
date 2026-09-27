@@ -103,6 +103,41 @@ const open = ref(true)
 </template>
 ```
 
+### Compact.vue
+
+```vue
+<script setup lang="ts">
+const sizes = ['md', 'sm'] as const
+</script>
+
+<template>
+  <div class="w-full space-y-4">
+    <figure v-for="size in sizes" :key="size" class="space-y-2">
+      <figcaption class="text-default-500 text-xs">
+        size="{{ size }}"{{ size === 'md' ? '(默认)' : '' }}
+      </figcaption>
+      <div class="border-default-200 bg-background overflow-hidden rounded-lg border">
+        <KunBanner
+          :size="size"
+          color="danger"
+          variant="flat"
+          icon="lucide:eye-off"
+          :closable="false"
+          text="当前为全年龄模式,R18 内容已隐藏 — 可在右上角切换为「模糊」或「直接显示」。"
+        />
+        <header class="border-default-200 flex items-center justify-between border-b px-4 py-3">
+          <span class="font-bold">Kun<span class="text-primary">Gal</span></span>
+          <nav class="text-default-500 flex gap-4 text-sm">
+            <span>话题</span><span>Galgame</span>
+          </nav>
+        </header>
+        <p class="text-default-600 p-4 text-sm">横幅一直显示时,在窄屏上用 sm 少占一截高度。</p>
+      </div>
+    </figure>
+  </div>
+</template>
+```
+
 ### Persist.vue
 
 ```vue
@@ -144,6 +179,7 @@ const open = ref(true)
 | `icon` | `string` | `""` | Bundled icon name shown before the text, e.g. `lucide:info`. Only the icons compiled into ui-core exist — an unbundled name renders nothing. |
 | `modelValue` | `boolean` | `true` | Whether the banner is shown. Starts open when unbound; with `storageKey`, a dismissal stored by an earlier visit sets it to `false` after mount. |
 | `nonce` | `string` | — | CSP nonce for that inline script. Under a `script-src` that forbids inline scripts and has no nonce for it, a closed banner shows until hydration removes it. |
+| `size` | `"sm" \| "md"` | `"md"` | `md` is a 40px strip with `text-sm`. `sm` is a 32px strip with `text-xs` and tighter padding, for a standing notice (a content-mode reminder) that should not take a phone screen's worth of space once it wraps. In `sm`, put a `size="xs"` button in `#actions` so it fits the strip. |
 | `storageKey` | `string` | `""` | Remember the open state in `localStorage` under this key, so a banner the user closed stays closed after a reload, and setting `v-model` back to `true` clears the record. Give each announcement its own key: a new key shows again to everyone who closed the old one. Characters other than letters, digits, `-` and `_` become `-`. A small inline script rendered in front of the banner hides a closed one before first paint, so a server-rendered page neither flashes it nor shifts. |
 | `text` | `string` | `""` | The one sentence the banner carries. For markup (a link, bold text) use the default slot, which renders in its place. |
 | `variant` | `"flat" \| "solid"` | `"solid"` | `solid` fills the strip with the colour and a contrast-correct foreground; `flat` is a soft tint with coloured text. |
