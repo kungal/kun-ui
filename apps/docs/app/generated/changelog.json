@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.50.0",
+    "type": "minor",
+    "html": "<ul>\n<li><p><code>KunBanner</code> takes <code>size=&quot;sm&quot;</code>: a 32px strip with <code>text-xs</code>, tighter padding, a 14px icon and a 24px close button, against the default <code>md</code>&#39;s 40px and <code>text-sm</code>. It is meant for a notice that stays up for the whole visit, such as a content-mode reminder with <code>:closable=&quot;false&quot;</code>, where one sentence wrapped to three lines on a phone. Measured on a 375px-wide strip, the moyu notice is 72px tall on 2.49.1 and 40px with <code>size=&quot;sm&quot;</code>. Put a <code>size=&quot;xs&quot;</code> button in <code>#actions</code> so it fits the strip.</p>\n<p>On a phone, a banner without a close button no longer keeps an empty close column. That column&#39;s gap took 12px of text width, so the same moyu notice at the default size now wraps to two lines (52px) instead of three. The column still exists from the <code>sm</code> breakpoint up, where it balances the centred message. Nothing else changes for <code>md</code>.</p>\n</li>\n</ul>\n"
+  },
+  {
     "version": "2.49.1",
     "type": "patch",
     "html": "<ul>\n<li><p>Every type in <code>components/types</code> is now exported from the package root. Thirteen had been left off the hand-kept list. As a result, <code>import type { KunStepItem } from &#39;@kungal/ui-vue&#39;</code>, the import the KunSteps docs examples use, failed with TS2614. The thirteen are <code>KunStepItem</code>, <code>KunStepsProps</code>, <code>KunStepsSize</code>, <code>KunTimelineProps</code>, <code>KunTimelineItemProps</code>, <code>KunAccordionProps</code>, <code>KunAccordionItemProps</code>, <code>KunCarouselProps</code>, <code>KunCarouselItemProps</code>, <code>KunSkeletonProps</code>, <code>KunTabPanelProps</code>, <code>KunTabPanelsProps</code> and <code>KunCardPadding</code>.</p>\n<p>The root now re-exports the whole module with <code>export type *</code>, so a new component&#39;s types can no longer be missed. That syntax needs TypeScript 5.0 or later in the consuming project.</p>\n</li>\n</ul>\n"
