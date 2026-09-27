@@ -56,6 +56,12 @@ jobs:
       # real consumer sees them: through dist and its generated .d.ts, not src.
       - run: pnpm typecheck:apps
 
+      # Unit tests for the pure algorithms in ui-core (the chat entity tree,
+      # the composer markdown round trip, the album mosaic, message grouping) —
+      # the parts the Flutter port reimplements and has to match. node:test on
+      # the TypeScript sources through Node's type stripping: no runner to install.
+      - run: pnpm test
+
       # Build the docs site. `docs-image` builds it too, but only on push to
       # main and via Docker — so until now a PR that broke the site merged green
       # and the failure surfaced as a red image build on main, after the fact.

@@ -69,6 +69,11 @@ export { pickAvatarFallback, getRandomSticker } from './avatarFallback'
 export { KUN_AVATAR_FALLBACK } from './avatarFallbackImage'
 export type { KunUser, KunAvatarDecoration } from './user'
 
+// Chat — the NextMoe `/v2/chat` wire types and the pure algorithms behind the
+// KunChat* components (entity tree, composer markdown, album mosaic, message
+// grouping). Framework-free so the Flutter port reproduces them exactly.
+export * from './chat/index.ts'
+
 // Icon registry — bundled (no-fetch) icon data + consumer registration.
 export {
   registerKunIcon,

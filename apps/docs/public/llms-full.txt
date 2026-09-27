@@ -1,6 +1,6 @@
 # KunUI — full documentation for LLMs
 
-> Cross-framework component library — 73 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 85 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
 
@@ -46,7 +46,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (73 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (85 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -738,7 +738,7 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 ---
 
 <!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
-## 12. Component reference (73)
+## 12. Component reference (85)
 
 **Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunBanner` · `KunProgress` · `KunBadge` · `KunChip` · `KunScrollShadow` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
@@ -747,6 +747,8 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 **Media & content:** `KunImage` · `KunCarousel` · `KunCarouselItem` · `KunImageNative` · `KunIcon` · `KunBrand` · `KunContent` · `KunText` · `KunMarkdown`
 
 **Navigation & overlays:** `KunLink` · `KunNavItem` · `KunTab` · `KunTabPanel` · `KunTabPanels` · `KunModal` · `KunDrawer` · `KunTooltip` · `KunPopover` · `KunHoverCard` · `KunDropdown` · `KunContextMenu` · `KunCommandPalette` · `KunPagination` · `KunLightbox` · `KunLightboxGallery` · `KunLightboxGalleryItem`
+
+**Chat:** `KunChatLayout` · `KunChatMessageList` · `KunChatBubble` · `KunChatText` · `KunChatComposer` · `KunChatConversationItem` · `KunChatHeader` · `KunChatPinnedBar` · `KunChatRequestBar` · `KunChatMessageMenu` · `KunChatReactionPicker` · `KunChatTyping`
 
 **Forms:** `KunInput` · `KunTextarea` · `KunNumberInput` · `KunPinInput` · `KunSelect` · `KunAutocomplete` · `KunSwitch` · `KunCheckBox` · `KunCheckBoxGroup` · `KunSlider` · `KunRadioGroup` · `KunDatePicker` · `KunFileInput` · `KunTagInput` · `KunUpload`
 
@@ -858,6 +860,21 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunLightbox** — Image lightbox/viewer (v-model:is-open, images array).
 - **KunLightboxGallery** — Gallery wrapper; click an item to open the lightbox.
 - **KunLightboxGalleryItem** — A single gallery item (src + slot for the thumbnail).
+
+## Chat
+
+- **KunChatLayout** — Responsive chat shell: conversation list and conversation side by side from `md` up, one pane at a time below (`show-conversation`). Slots #sidebar / default / #empty.
+- **KunChatMessageList** — Conversation scrollback for NextMoe `/v2/chat` messages (string ids): sender runs, sticky day pills, unread divider (opens there), older/newer paging without jumps, stick-to-bottom, scroll-down button with unread count, `scrollToSeq(seq)` + highlight, right-click / long-press menu, swipe-left to reply. Emits load-older, load-newer, read, jump, action, react, retry.
+- **KunChatBubble** — One message: own (right, primary tint) or theirs; reply / quote preview, photo or Telegram-mosaic album (lightbox), context card, reactions, time / edited / status (failed → `retry`). A service message renders as a centred pill. Photos need `resolve-media-url`.
+- **KunChatText** — Renders message `text` + `entities` (UTF-16 ranges): bold, italic, underline, strike, spoiler (click reveals all), code, pre (language + copy), blockquote, links, mentions. No v-html. `preview` = one-line form with masked spoilers.
+- **KunChatComposer** — Message input: auto-grow, Enter sends (touch: newline), composer markdown → `send({ text, entities })`, v-model:reply-to / quote / editing bars, attachments (paste / drop / pick → `attach(files)`), 4096 counter, throttled `typing`.
+- **KunChatConversationItem** — Conversation-list row: avatar, title, time + status, preview (typing › draft › last message), unread / @ badges, muted, pinned, selected; touch swipe actions.
+- **KunChatHeader** — Conversation top bar: back (mobile), avatar, title, subtitle that becomes "typing…"; #actions slot.
+- **KunChatPinnedBar** — Pinned-message bar: newest first, each click emits `jump(seq)` and steps to the next older one.
+- **KunChatRequestBar** — Message-request bar: accept / delete / block / report, with a per-action loading state.
+- **KunChatMessageMenu** — Message context menu at a point: quick-reaction row (expands to the full picker) + site-chosen actions (reply, quote, copy, edit, pin, unpin, delete, report, retry, or custom items).
+- **KunChatReactionPicker** — Reaction vocabulary grid (v-model key | null); animated `image_url` art or native emoji; one reaction per person.
+- **KunChatTyping** — Three-dot typing indicator + "X is typing…"; takes raw typing events and expires each after 6 s (useKunChatTyping).
 
 ## Forms
 

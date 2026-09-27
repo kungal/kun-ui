@@ -239,6 +239,153 @@ abstract final class KunIcons {
     fontPackage: _package,
   );
 
+  /// lucide: clock
+  static const IconData clock = IconData(
+    0xE020,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: check-check
+  static const IconData checkCheck = IconData(
+    0xE021,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: circle-alert
+  static const IconData circleAlert = IconData(
+    0xE022,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: reply
+  static const IconData reply = IconData(
+    0xE023,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: quote
+  static const IconData quote = IconData(
+    0xE024,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: pencil
+  static const IconData pencil = IconData(
+    0xE025,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: pin
+  static const IconData pin = IconData(
+    0xE026,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: pin-off
+  static const IconData pinOff = IconData(
+    0xE027,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: trash-2
+  static const IconData trash2 = IconData(
+    0xE028,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: flag
+  static const IconData flag = IconData(
+    0xE029,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: ban
+  static const IconData ban = IconData(
+    0xE02A,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: paperclip
+  static const IconData paperclip = IconData(
+    0xE02B,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: send-horizontal
+  static const IconData sendHorizontal = IconData(
+    0xE02C,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: smile-plus
+  static const IconData smilePlus = IconData(
+    0xE02D,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: image
+  static const IconData image = IconData(
+    0xE02E,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: at-sign
+  static const IconData atSign = IconData(
+    0xE02F,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: bell
+  static const IconData bell = IconData(
+    0xE030,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: bell-off
+  static const IconData bellOff = IconData(
+    0xE031,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: archive
+  static const IconData archive = IconData(
+    0xE032,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: mail
+  static const IconData mail = IconData(
+    0xE033,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
+  /// lucide: mail-open
+  static const IconData mailOpen = IconData(
+    0xE034,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
   /// lucide: heart, filled — the web's `fill-current` on it.
   static const IconData heartFilled = IconData(
     0xE01F,

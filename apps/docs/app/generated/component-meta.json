@@ -922,6 +922,1048 @@
       }
     ]
   },
+  "KunChatBubble": {
+    "props": [
+      {
+        "name": "message",
+        "type": "KunChatMessage",
+        "required": true,
+        "description": "The message. For an album, the one it acts as (reactions, replies)."
+      },
+      {
+        "name": "album",
+        "type": "KunChatMessage[] | null",
+        "required": false,
+        "default": "null",
+        "description": "Every photo of an album, in order; omitted for anything else."
+      },
+      {
+        "name": "currentUserId",
+        "type": "string",
+        "required": false,
+        "description": "The viewer's id, so a service message can say \"you\"."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Swallow clicks on the sender, reply and reactions, e.g. under a selection mode."
+      },
+      {
+        "name": "lightbox",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Open photos in a built-in KunLightbox on click. The message list turns this off and shows every loaded photo in one lightbox instead."
+      },
+      {
+        "name": "own",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Sent by the viewer: right-aligned, in the primary tint."
+      },
+      {
+        "name": "position",
+        "type": "KunChatBubblePosition",
+        "required": false,
+        "default": "\"single\"",
+        "description": "Where the bubble sits in its sender's run: it rounds the corners on the sender's side, and `single` / `last` draw the tail."
+      },
+      {
+        "name": "reactionOptions",
+        "type": "KunChatReactionOption[]",
+        "required": false,
+        "default": "[]",
+        "description": "The reaction vocabulary, to draw each reaction key."
+      },
+      {
+        "name": "resolveMediaUrl",
+        "type": "KunChatMediaUrlResolver",
+        "required": false,
+        "description": "Required to show photos."
+      },
+      {
+        "name": "resolveMessage",
+        "type": "((seq: number) => KunChatMessage)",
+        "required": false,
+        "description": "Finds a loaded message by seq — the text a \"pinned a message\" service line quotes."
+      },
+      {
+        "name": "showSender",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Show the sender's name on top: group chats, first of a run."
+      },
+      {
+        "name": "status",
+        "type": "KunChatSendStatus",
+        "required": false,
+        "description": "Delivery state of an own message. The clock / tick / double tick at the bottom corner; `failed` is a button that emits `retry`."
+      },
+      {
+        "name": "timeZone",
+        "type": "string",
+        "required": false,
+        "description": "IANA zone for the timestamp. Pass it when server-rendering, or the server's zone and the reader's disagree and hydration mismatches."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "Users the message refers to — its sender, a reply's sender, a service message's actors. A missing or `deleted` user shows as deleted."
+      }
+    ],
+    "events": [
+      {
+        "name": "link",
+        "type": "url: string, event: MouseEvent",
+        "description": "A link in the text or the context card was clicked."
+      },
+      {
+        "name": "mention",
+        "type": "userId: string, event: MouseEvent",
+        "description": "A mention in the text was clicked."
+      },
+      {
+        "name": "photo-click",
+        "type": "index: number",
+        "description": "A photo was clicked (index into the album). Fires with `lightbox` on as well."
+      },
+      {
+        "name": "react",
+        "type": "reaction: string | null",
+        "description": "A reaction chip was clicked: the key to set, or null to remove the viewer's own. One reaction per person, so setting replaces."
+      },
+      {
+        "name": "reply-click",
+        "type": "seq: number",
+        "description": "The reply preview was clicked: jump to the replied-to message."
+      },
+      {
+        "name": "retry",
+        "type": "",
+        "description": "The failed-status button was clicked."
+      },
+      {
+        "name": "user-click",
+        "type": "userId: string, event: MouseEvent",
+        "description": "The sender's name was clicked. It links to the profile unless you call `event.preventDefault()`."
+      }
+    ],
+    "slots": []
+  },
+  "KunChatComposer": {
+    "props": [
+      {
+        "name": "accept",
+        "type": "string",
+        "required": false,
+        "default": "\"image/*\"",
+        "description": "`accept` of the attach button's file picker. Pasted and dropped files are passed on unfiltered."
+      },
+      {
+        "name": "attachments",
+        "type": "KunChatAttachment[]",
+        "required": false,
+        "default": "[]",
+        "description": "Photos being uploaded for this message, shown above the input."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Replace the input with `disabledText`, e.g. for a deleted peer."
+      },
+      {
+        "name": "disabledText",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Why sending is not possible, shown in place of the input."
+      },
+      {
+        "name": "editing",
+        "type": "KunChatMessage | null",
+        "required": false,
+        "default": "null",
+        "description": "The message being edited. Setting it puts the message in the input (the draft is kept aside and comes back when editing ends); `edit` fires instead of `send`."
+      },
+      {
+        "name": "enterToSend",
+        "type": "boolean | \"auto\"",
+        "required": false,
+        "default": "\"auto\"",
+        "description": "Enter sends and Shift+Enter breaks the line, or the reverse. `auto`: Enter sends with a fine pointer, breaks the line on a touch screen."
+      },
+      {
+        "name": "maxLength",
+        "type": "number",
+        "required": false,
+        "default": "4096",
+        "description": "Longest message, counted on the parsed text. The counter shows in the last 200."
+      },
+      {
+        "name": "maxRows",
+        "type": "number",
+        "required": false,
+        "default": "8",
+        "description": "Growth limit of the input, in lines, before it scrolls."
+      },
+      {
+        "name": "modelValue",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "The input as typed, shortcuts included. Keep a draft as `parseKunChatMarkdown(value)` and restore it with `formatKunChatMarkdown`."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "default": "locale chatComposer.placeholder",
+        "description": "Placeholder text."
+      },
+      {
+        "name": "quote",
+        "type": "KunChatReplyQuote | null",
+        "required": false,
+        "default": "null",
+        "description": "The quoted part of `replyTo`, from the message menu's `quote`."
+      },
+      {
+        "name": "replyTo",
+        "type": "KunChatMessage | null",
+        "required": false,
+        "default": "null",
+        "description": "The message being replied to; the bar above the input shows it. Cleared on send and on cancel."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "Users, to name whoever a reply is to."
+      }
+    ],
+    "events": [
+      {
+        "name": "attach",
+        "type": "files: File[]",
+        "description": "Files were picked, pasted or dropped: upload them and list them in `attachments`."
+      },
+      {
+        "name": "edit",
+        "type": "message: KunChatFormattedText, target: KunChatMessage",
+        "description": "Save an edit of `target`. Editing ends and the draft comes back."
+      },
+      {
+        "name": "edit-last",
+        "type": "",
+        "description": "↑ in an empty input: start editing your last message, as Telegram Desktop does."
+      },
+      {
+        "name": "remove-attachment",
+        "type": "key: string",
+        "description": "The × of an attachment was clicked."
+      },
+      {
+        "name": "retry-attachment",
+        "type": "key: string",
+        "description": "A failed attachment (`error`) was clicked: upload it again."
+      },
+      {
+        "name": "send",
+        "type": "message: KunChatFormattedText",
+        "description": "Send a new message. The input is cleared and the reply consumed."
+      },
+      {
+        "name": "typing",
+        "type": "",
+        "description": "The user is typing: at most once per 5 s, never while editing. Send the typing notification."
+      },
+      {
+        "name": "update:editing",
+        "type": "value: KunChatMessage | null"
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string"
+      },
+      {
+        "name": "update:quote",
+        "type": "value: KunChatReplyQuote | null"
+      },
+      {
+        "name": "update:replyTo",
+        "type": "value: KunChatMessage | null"
+      }
+    ],
+    "slots": [
+      {
+        "name": "prefix",
+        "type": "any",
+        "description": "Before the input, after the attach button, e.g. an emoji button."
+      },
+      {
+        "name": "suffix",
+        "type": "any",
+        "description": "After the input, before the send button."
+      }
+    ]
+  },
+  "KunChatConversationItem": {
+    "props": [
+      {
+        "name": "avatar",
+        "type": "string | null",
+        "required": false,
+        "default": "null",
+        "description": "Avatar URL, e.g. a group photo. Defaults to `user`'s."
+      },
+      {
+        "name": "currentUserId",
+        "type": "string",
+        "required": false,
+        "description": "The viewer's id, so a service message can say \"you\"."
+      },
+      {
+        "name": "draft",
+        "type": "KunChatFormattedText | null",
+        "required": false,
+        "default": "null",
+        "description": "An unsent draft replaces the preview with \"草稿：…\"."
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": false,
+        "description": "Render the row as a link. Without it the row is a button."
+      },
+      {
+        "name": "kind",
+        "type": "KunChatKind",
+        "required": false,
+        "default": "\"direct\"",
+        "description": "A group prefixes the preview with its sender and names who is typing; a direct chat does neither."
+      },
+      {
+        "name": "lastMessage",
+        "type": "KunChatMessage | null",
+        "required": false,
+        "default": "null",
+        "description": "The newest message, previewed on the second line."
+      },
+      {
+        "name": "lastMessageSender",
+        "type": "string | null",
+        "required": false,
+        "default": "null",
+        "description": "Who sent `lastMessage`, as the preview prefix (\"你：\", \"鲲：\"). Omitted in a direct chat for the other side's messages."
+      },
+      {
+        "name": "leadingActions",
+        "type": "KunChatSwipeAction[]",
+        "required": false,
+        "default": "[]",
+        "description": "Revealed by swiping right on a touch screen."
+      },
+      {
+        "name": "markedUnread",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "\"Mark as unread\" was used: a badge with no number."
+      },
+      {
+        "name": "mentionCount",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "Unread mentions: an @ badge."
+      },
+      {
+        "name": "muted",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "A muted conversation's badge is grey."
+      },
+      {
+        "name": "pinned",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "A pin icon where the badge would be."
+      },
+      {
+        "name": "selected",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "The open conversation."
+      },
+      {
+        "name": "status",
+        "type": "KunChatSendStatus",
+        "required": false,
+        "description": "Delivery state of `lastMessage` when the viewer sent it."
+      },
+      {
+        "name": "time",
+        "type": "string | number | Date | null",
+        "required": false,
+        "default": "null",
+        "description": "Defaults to `lastMessage.created_at`."
+      },
+      {
+        "name": "timeZone",
+        "type": "string",
+        "required": false,
+        "description": "IANA zone for times and day boundaries. Pass it when server-rendering, or the server's zone and the reader's disagree and hydration mismatches."
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "description": "Row title. Defaults to `user`'s name."
+      },
+      {
+        "name": "trailingActions",
+        "type": "KunChatSwipeAction[]",
+        "required": false,
+        "default": "[]",
+        "description": "Revealed by swiping left on a touch screen."
+      },
+      {
+        "name": "typing",
+        "type": "KunChatTypingEvent[]",
+        "required": false,
+        "default": "[]",
+        "description": "Typing notifications; while one is live it replaces the preview."
+      },
+      {
+        "name": "unreadCount",
+        "type": "number",
+        "required": false,
+        "default": "0",
+        "description": "Unread messages; the badge caps at 999+."
+      },
+      {
+        "name": "user",
+        "type": "KunChatUser | null",
+        "required": false,
+        "default": "null",
+        "description": "The other person of a direct chat: title, avatar and deleted state."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "Users, to name who is typing in a group and who acted in a service message."
+      }
+    ],
+    "events": [
+      {
+        "name": "action",
+        "type": "key: string",
+        "description": "A swipe action was tapped."
+      },
+      {
+        "name": "click",
+        "type": "event: MouseEvent",
+        "description": "The row was activated. With `href` it also navigates."
+      }
+    ],
+    "slots": []
+  },
+  "KunChatHeader": {
+    "props": [
+      {
+        "name": "avatar",
+        "type": "string | null",
+        "required": false,
+        "default": "null",
+        "description": "Avatar URL, e.g. a group photo."
+      },
+      {
+        "name": "back",
+        "type": "boolean | \"mobile\"",
+        "required": false,
+        "default": "\"mobile\"",
+        "description": "The back button: `mobile` below the `md` breakpoint only."
+      },
+      {
+        "name": "kind",
+        "type": "KunChatKind",
+        "required": false,
+        "default": "\"direct\"",
+        "description": "A direct chat says \"typing…\"; a group names who is typing."
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Second line, e.g. a member count. Replaced while someone types."
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "description": "Title. Defaults to `user`'s name."
+      },
+      {
+        "name": "typing",
+        "type": "KunChatTypingEvent[]",
+        "required": false,
+        "default": "[]",
+        "description": "Typing notifications as received; while one is live it replaces the subtitle."
+      },
+      {
+        "name": "user",
+        "type": "KunChatUser | null",
+        "required": false,
+        "default": "null",
+        "description": "The other person of a direct chat: title and avatar."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "Users, to name who is typing in a group."
+      }
+    ],
+    "events": [
+      {
+        "name": "back",
+        "type": "",
+        "description": "The back button was clicked."
+      },
+      {
+        "name": "title-click",
+        "type": "event: MouseEvent",
+        "description": "The avatar or title was clicked, e.g. to open the profile or details."
+      }
+    ],
+    "slots": [
+      {
+        "name": "actions",
+        "type": "any",
+        "description": "Buttons on the right: search, call, a menu."
+      },
+      {
+        "name": "subtitle",
+        "type": "any",
+        "description": "Replaces the second line when nobody is typing."
+      }
+    ]
+  },
+  "KunChatLayout": {
+    "props": [
+      {
+        "name": "showConversation",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Which pane a narrow screen shows: the conversation, or the list. From `md` up both panes show."
+      },
+      {
+        "name": "sidebarWidth",
+        "type": "string",
+        "required": false,
+        "default": "\"22rem\"",
+        "description": "Width of the list pane from `md` up, as CSS."
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "any",
+        "description": "The open conversation."
+      },
+      {
+        "name": "empty",
+        "type": "any",
+        "description": "What the right pane shows with no conversation open, from `md` up."
+      },
+      {
+        "name": "sidebar",
+        "type": "any",
+        "description": "The conversation list."
+      }
+    ]
+  },
+  "KunChatMessageList": {
+    "props": [
+      {
+        "name": "currentUserId",
+        "type": "string",
+        "required": true,
+        "description": "The viewer's id. Their messages sit on the right, and a pending one they send (`status: 'sending'`) scrolls the list to the bottom."
+      },
+      {
+        "name": "messages",
+        "type": "KunChatMessage[]",
+        "required": true,
+        "description": "Messages in display order, oldest first. Pending ones go last, carrying `client_message_id` and `status`."
+      },
+      {
+        "name": "actions",
+        "type": "((message: KunChatMessage, own: boolean) => KunChatMessageAction[])",
+        "required": false,
+        "description": "Which actions the menu offers for a message — permissions are the site's call. `quote` shows only while text of the message is selected, `copy` only for a message with text. Default `['reply', 'copy']`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "locale chat.messages",
+        "description": "Accessible name of the scroll region."
+      },
+      {
+        "name": "groupWindow",
+        "type": "number",
+        "required": false,
+        "default": "600",
+        "description": "Longest gap, in seconds, inside one run of a sender's messages."
+      },
+      {
+        "name": "hasNewer",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "The list is a window that does not reach the newest message (after a jump): scrolling near the bottom emits `load-newer`, and the scroll-down button emits `latest`."
+      },
+      {
+        "name": "hasOlder",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "More history exists above: scrolling near the top emits `load-older`."
+      },
+      {
+        "name": "kind",
+        "type": "KunChatKind",
+        "required": false,
+        "default": "\"direct\"",
+        "description": "`group` shows names and avatars on others' messages; `direct` does not."
+      },
+      {
+        "name": "lastReadSeq",
+        "type": "number | null",
+        "required": false,
+        "default": "null",
+        "description": "The viewer's read cursor as it was when the conversation opened. The unread divider goes above the first later message someone else sent, and the list opens there. Keep it fixed while the conversation is open, or the divider walks down as messages get read."
+      },
+      {
+        "name": "loadingNewer",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "The same for `load-newer`, at the bottom."
+      },
+      {
+        "name": "loadingOlder",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "A `load-older` request is in flight: a spinner shows on top and no second request goes out. Without it, the list waits for the first message to change before asking again."
+      },
+      {
+        "name": "peerReadSeq",
+        "type": "number | null",
+        "required": false,
+        "default": "null",
+        "description": "The other side's read cursor: own messages at or below it show the double tick, unless they carry their own `status`."
+      },
+      {
+        "name": "reactionOptions",
+        "type": "KunChatReactionOption[]",
+        "required": false,
+        "default": "[]",
+        "description": "The reaction vocabulary: the menu's quick row, and the art on reaction chips."
+      },
+      {
+        "name": "resolveMediaUrl",
+        "type": "KunChatMediaUrlResolver",
+        "required": false,
+        "description": "Turns a photo's hash into a URL. Required to show photos."
+      },
+      {
+        "name": "swipeToReply",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Swipe a bubble left to reply, on touch screens."
+      },
+      {
+        "name": "timeZone",
+        "type": "string",
+        "required": false,
+        "description": "IANA zone for times and day boundaries. Pass it when server-rendering, or the server's zone and the reader's disagree and hydration mismatches."
+      },
+      {
+        "name": "unreadCount",
+        "type": "number",
+        "required": false,
+        "description": "Unread count on the scroll-down button. Defaults to the messages of others below the read position that the list has seen."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "The `users` of the chat responses: senders, reply targets, actors."
+      }
+    ],
+    "events": [
+      {
+        "name": "action",
+        "type": "action: string, message: KunChatMessage, detail: { quote?: KunChatReplyQuote; }",
+        "description": "A menu action, or a swipe (`reply`). `detail.quote` is set for `quote`: the selected part of the message. `copy` has already been done."
+      },
+      {
+        "name": "jump",
+        "type": "seq: number",
+        "description": "A reply target that is not loaded was clicked: load around it (`around_seq`), then call `scrollToSeq(seq)`."
+      },
+      {
+        "name": "latest",
+        "type": "",
+        "description": "The scroll-down button was pressed while `hasNewer`: reload the newest page, then call `scrollToBottom()`."
+      },
+      {
+        "name": "link",
+        "type": "url: string, event: MouseEvent",
+        "description": "A link in a message was clicked."
+      },
+      {
+        "name": "load-newer",
+        "type": "",
+        "description": "Scrolled near the bottom while `hasNewer`: fetch the page after."
+      },
+      {
+        "name": "load-older",
+        "type": "",
+        "description": "Scrolled near the top while `hasOlder`: fetch the page before."
+      },
+      {
+        "name": "mention",
+        "type": "userId: string, event: MouseEvent",
+        "description": "A mention in a message was clicked."
+      },
+      {
+        "name": "react",
+        "type": "message: KunChatMessage, reaction: string | null",
+        "description": "Set the viewer's reaction on a message, or remove it (null)."
+      },
+      {
+        "name": "read",
+        "type": "seq: number",
+        "description": "Others' messages up to this seq have been on screen while the page was visible: mark them read. Only ever increases."
+      },
+      {
+        "name": "retry",
+        "type": "message: KunChatMessage",
+        "description": "Resend a failed message."
+      },
+      {
+        "name": "user-click",
+        "type": "userId: string, event: MouseEvent",
+        "description": "A sender's avatar or name was clicked."
+      }
+    ],
+    "slots": [
+      {
+        "name": "empty",
+        "type": "any",
+        "description": "Shown when there are no messages."
+      },
+      {
+        "name": "footer",
+        "type": "any",
+        "description": "Below the last message, e.g. a typing bubble."
+      },
+      {
+        "name": "start",
+        "type": "any",
+        "description": "Above the first message once there is no older history, e.g. \"this is the start of your conversation\"."
+      }
+    ]
+  },
+  "KunChatMessageMenu": {
+    "props": [
+      {
+        "name": "visible",
+        "type": "boolean",
+        "required": true,
+        "description": "Whether the menu is open. It asks to close — Escape, a click outside, the page scrolling, a choice made — by emitting `close`."
+      },
+      {
+        "name": "actions",
+        "type": "KunChatMessageAction[]",
+        "required": false,
+        "default": "[\"reply\", \"copy\"]",
+        "description": "The actions, in order: built-in keys, or items of your own."
+      },
+      {
+        "name": "currentReaction",
+        "type": "string | null",
+        "required": false,
+        "default": "null",
+        "description": "The viewer's current reaction on the message, highlighted."
+      },
+      {
+        "name": "position",
+        "type": "{ x: number; y: number; } | null",
+        "required": false,
+        "default": "{ x: 0, y: 0 }",
+        "description": "Viewport point to open at — the cursor, or the long-press point."
+      },
+      {
+        "name": "quickReactions",
+        "type": "number",
+        "required": false,
+        "default": "7",
+        "description": "How many reactions the row shows before the expand button."
+      },
+      {
+        "name": "reactions",
+        "type": "KunChatReactionOption[]",
+        "required": false,
+        "default": "[]",
+        "description": "The quick-reaction row on top; empty hides it."
+      }
+    ],
+    "events": [
+      {
+        "name": "close",
+        "type": "",
+        "description": "The menu closed, for any reason."
+      },
+      {
+        "name": "react",
+        "type": "reaction: string | null",
+        "description": "A reaction was chosen: its key, or null when the current one was chosen again."
+      },
+      {
+        "name": "select",
+        "type": "action: string",
+        "description": "An action was chosen: a built-in key or one of your own items' keys."
+      }
+    ],
+    "slots": []
+  },
+  "KunChatPinnedBar": {
+    "props": [
+      {
+        "name": "messages",
+        "type": "KunChatMessage[]",
+        "required": true,
+        "description": "Pinned messages, in any order. The bar starts at the newest and each click moves to the next older one, as Telegram does."
+      },
+      {
+        "name": "resolveMediaUrl",
+        "type": "KunChatMediaUrlResolver",
+        "required": false,
+        "description": "Turns a pinned photo's hash into a URL, for the thumbnail."
+      },
+      {
+        "name": "unpinnable",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Show the × that emits `unpin`."
+      }
+    ],
+    "events": [
+      {
+        "name": "jump",
+        "type": "seq: number",
+        "description": "Scroll the conversation to this message (`scrollToSeq`)."
+      },
+      {
+        "name": "unpin",
+        "type": "seq: number",
+        "description": "The × was clicked for the message shown."
+      }
+    ],
+    "slots": [
+      {
+        "name": "actions",
+        "type": "any",
+        "description": "Extra buttons on the right, e.g. \"all pinned messages\"."
+      }
+    ]
+  },
+  "KunChatReactionPicker": {
+    "props": [
+      {
+        "name": "options",
+        "type": "KunChatReactionOption[]",
+        "required": true,
+        "description": "The reaction vocabulary, as `GET /v2/chat/reactions` serves it."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "locale chat.reactions",
+        "description": "Accessible name of the grid."
+      },
+      {
+        "name": "columns",
+        "type": "number",
+        "required": false,
+        "default": "8",
+        "description": "Columns of the grid."
+      },
+      {
+        "name": "modelValue",
+        "type": "string | null",
+        "required": false,
+        "default": "null",
+        "description": "The viewer's current reaction key, or null."
+      }
+    ],
+    "events": [
+      {
+        "name": "select",
+        "type": "reaction: string | null",
+        "description": "A reaction was chosen: its key, or null when the current one was chosen again (removing it). `v-model` has already been updated."
+      },
+      {
+        "name": "update:modelValue",
+        "type": "value: string | null"
+      }
+    ],
+    "slots": []
+  },
+  "KunChatRequestBar": {
+    "props": [
+      {
+        "name": "actions",
+        "type": "KunChatRequestAction[]",
+        "required": false,
+        "default": "[\"accept\", \"delete\", \"block\", \"report\"]",
+        "description": "The buttons, in order."
+      },
+      {
+        "name": "loading",
+        "type": "KunChatRequestAction | null",
+        "required": false,
+        "default": "null",
+        "description": "The action in flight: its button spins and the others wait."
+      },
+      {
+        "name": "user",
+        "type": "KunChatUser | null",
+        "required": false,
+        "default": "null",
+        "description": "Who sent the request."
+      }
+    ],
+    "events": [
+      {
+        "name": "accept",
+        "type": "",
+        "description": "Move the conversation into the inbox."
+      },
+      {
+        "name": "block",
+        "type": ""
+      },
+      {
+        "name": "delete",
+        "type": "",
+        "description": "Delete the conversation; the sender is not told."
+      },
+      {
+        "name": "report",
+        "type": ""
+      }
+    ],
+    "slots": []
+  },
+  "KunChatText": {
+    "props": [
+      {
+        "name": "text",
+        "type": "string",
+        "required": true,
+        "description": "Message text."
+      },
+      {
+        "name": "entities",
+        "type": "KunChatEntity[] | null",
+        "required": false,
+        "default": "null",
+        "description": "Formatting ranges over `text`, in UTF-16 code units. Normalized before rendering, so malformed input renders instead of throwing."
+      },
+      {
+        "name": "preview",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "One-line summary rendering for previews (conversation rows, reply and pinned bars): blocks flatten inline, links are plain text, spoilers are masked so their text is not in the DOM at all."
+      }
+    ],
+    "events": [
+      {
+        "name": "link",
+        "type": "url: string, event: MouseEvent",
+        "description": "A link was clicked. It opens in a new tab unless you call `event.preventDefault()`, e.g. to route an in-site URL."
+      },
+      {
+        "name": "mention",
+        "type": "userId: string, event: MouseEvent",
+        "description": "A mention was clicked. It is a real link to the profile (`userLinkTemplate`); call `event.preventDefault()` to handle it yourself."
+      }
+    ],
+    "slots": []
+  },
+  "KunChatTyping": {
+    "props": [
+      {
+        "name": "events",
+        "type": "KunChatTypingEvent[]",
+        "required": false,
+        "default": "[]",
+        "description": "Typing notifications as received, each stamped with the receiving client's `Date.now()`. Each lapses 6 s after it arrived."
+      },
+      {
+        "name": "kind",
+        "type": "KunChatKind",
+        "required": false,
+        "default": "\"direct\"",
+        "description": "A direct chat says \"typing…\"; a group names who is typing."
+      },
+      {
+        "name": "showText",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Show the sentence beside the dots."
+      },
+      {
+        "name": "users",
+        "type": "KunChatUser[]",
+        "required": false,
+        "default": "[]",
+        "description": "Users, to name who is typing in a group."
+      }
+    ],
+    "events": [],
+    "slots": []
+  },
   "KunCheckBox": {
     "props": [
       {

@@ -12,6 +12,11 @@ export const WANT = {
     'rotate-cw', 'rotate-ccw', 'refresh-ccw', 'external-link', 'download',
     'copy', 'calendar', 'lollipop', 'eye', 'eye-off', 'search', 'filter',
     'heart',
+    // Chat: message status, message actions, the composer, conversation rows.
+    'clock', 'check-check', 'circle-alert', 'reply', 'quote', 'pencil', 'pin',
+    'pin-off', 'trash-2', 'flag', 'ban', 'paperclip', 'send-horizontal',
+    'smile-plus', 'image', 'at-sign', 'bell', 'bell-off', 'archive', 'mail',
+    'mail-open',
   ],
   'svg-spinners': ['90-ring-with-bg'],
 }

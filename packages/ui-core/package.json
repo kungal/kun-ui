@@ -47,6 +47,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
+    "test": "node --test \"src/**/*.test.ts\"",
     "gen:icons": "node scripts/gen-icons.mjs",
     "gen:icons:flutter": "node scripts/gen-icons-flutter.mjs",
     "gen:messages:flutter": "node scripts/gen-messages-flutter.mjs",

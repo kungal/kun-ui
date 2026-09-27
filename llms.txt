@@ -1,6 +1,6 @@
 # KunUI
 
-> Cross-framework component library — 73 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 85 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 Packages:
 - @kungal/ui-tokens: Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.
@@ -100,6 +100,20 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunLightbox: Image lightbox/viewer (v-model:is-open, images array).
 - KunLightboxGallery: Gallery wrapper; click an item to open the lightbox.
 - KunLightboxGalleryItem: A single gallery item (src + slot for the thumbnail).
+
+### Chat
+- KunChatLayout: Responsive chat shell: conversation list and conversation side by side from `md` up, one pane at a time below (`show-conversation`). Slots #sidebar / default / #empty.
+- KunChatMessageList: Conversation scrollback for NextMoe `/v2/chat` messages (string ids): sender runs, sticky day pills, unread divider (opens there), older/newer paging without jumps, stick-to-bottom, scroll-down button with unread count, `scrollToSeq(seq)` + highlight, right-click / long-press menu, swipe-left to reply. Emits load-older, load-newer, read, jump, action, react, retry.
+- KunChatBubble: One message: own (right, primary tint) or theirs; reply / quote preview, photo or Telegram-mosaic album (lightbox), context card, reactions, time / edited / status (failed → `retry`). A service message renders as a centred pill. Photos need `resolve-media-url`.
+- KunChatText: Renders message `text` + `entities` (UTF-16 ranges): bold, italic, underline, strike, spoiler (click reveals all), code, pre (language + copy), blockquote, links, mentions. No v-html. `preview` = one-line form with masked spoilers.
+- KunChatComposer: Message input: auto-grow, Enter sends (touch: newline), composer markdown → `send({ text, entities })`, v-model:reply-to / quote / editing bars, attachments (paste / drop / pick → `attach(files)`), 4096 counter, throttled `typing`.
+- KunChatConversationItem: Conversation-list row: avatar, title, time + status, preview (typing › draft › last message), unread / @ badges, muted, pinned, selected; touch swipe actions.
+- KunChatHeader: Conversation top bar: back (mobile), avatar, title, subtitle that becomes "typing…"; #actions slot.
+- KunChatPinnedBar: Pinned-message bar: newest first, each click emits `jump(seq)` and steps to the next older one.
+- KunChatRequestBar: Message-request bar: accept / delete / block / report, with a per-action loading state.
+- KunChatMessageMenu: Message context menu at a point: quick-reaction row (expands to the full picker) + site-chosen actions (reply, quote, copy, edit, pin, unpin, delete, report, retry, or custom items).
+- KunChatReactionPicker: Reaction vocabulary grid (v-model key | null); animated `image_url` art or native emoji; one reaction per person.
+- KunChatTyping: Three-dot typing indicator + "X is typing…"; takes raw typing events and expires each after 6 s (useKunChatTyping).
 
 ### Forms
 - KunInput: Text input (v-model) with label/helper/error, sizes, variants.

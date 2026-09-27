@@ -4,6 +4,9 @@
     "rootDir": "src",
     "outDir": "dist",
     "noEmit": true,
+    // The chat modules import each other as `./x.ts`, so their unit tests run
+    // straight from source under Node's type stripping, with no build step.
+    "allowImportingTsExtensions": true,
     // process.env.NODE_ENV is the one Node global ui-core names: it is the
     // bundler define token every dev-only warning has to be gated on.
     "types": ["node"]

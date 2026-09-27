@@ -56,7 +56,21 @@ const LINK_MODE =
 const NUXT_IMAGE =
   'An @nuxt/image optimisation prop, forwarded only to an injected <NuxtImg>; in Flutter the ImageProvider the app configures (KunUIConfig.imageProvider) owns resizing, formats and caching.'
 
+const SSR_TIME_ZONE =
+  'Pins date formatting to one IANA zone so the server-rendered HTML and the page hydrated in the reader’s browser agree; a Flutter app formats on the device, in its own zone.'
+
 export const WEB_ONLY_PROPS = {
+  KunChatBubble: { timeZone: SSR_TIME_ZONE },
+  KunChatComposer: {
+    accept:
+      'The `accept` attribute of the hidden <input type=file>; the Flutter port picks images with the platform picker and filters there.',
+  },
+  KunChatConversationItem: { href: LINK_MODE, timeZone: SSR_TIME_ZONE },
+  KunChatLayout: {
+    sidebarWidth:
+      'A CSS length string for the list pane; the capability crosses as a plain double in the Flutter layout.',
+  },
+  KunChatMessageList: { timeZone: SSR_TIME_ZONE },
   KunButton: {
     href: LINK_MODE,
     rel: '<a> rel attribute — link mode only.',

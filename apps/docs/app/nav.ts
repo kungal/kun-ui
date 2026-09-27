@@ -86,6 +86,23 @@ const componentCategories: { title: string; slugs: string[] }[] = [
     ],
   },
   {
+    title: '聊天',
+    slugs: [
+      'chatlayout',
+      'chatmessagelist',
+      'chatbubble',
+      'chattext',
+      'chatcomposer',
+      'chatconversationitem',
+      'chatheader',
+      'chatpinnedbar',
+      'chatrequestbar',
+      'chatmessagemenu',
+      'chatreactionpicker',
+      'chattyping',
+    ],
+  },
+  {
     title: '反馈',
     slugs: ['feedback', 'info', 'banner', 'loading', 'progress', 'skeleton', 'null'],
   },

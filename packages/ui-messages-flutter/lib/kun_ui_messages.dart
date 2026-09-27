@@ -111,6 +111,487 @@ class KunCarouselStrings {
   String goto({required Object index}) => _goto.replaceAll('{index}', '$index');
 }
 
+/// Strings for `KunChat`.
+class KunChatStrings {
+  const KunChatStrings({
+    required this.deletedUser,
+    required this.you,
+    required String senderPrefix,
+    required this.today,
+    required this.yesterday,
+    required this.unreadDivider,
+    required this.edited,
+    required this.deletedMessage,
+    required this.photo,
+    required String album,
+    required this.media,
+    required this.draft,
+    required this.messages,
+    required this.empty,
+    required this.loading,
+    required this.scrollToBottom,
+    required String scrollToBottomUnread,
+    required String unreadCount,
+    required this.mentioned,
+    required this.pinned,
+    required this.muted,
+    required String photoFrom,
+    required String openLink,
+    required this.reactions,
+    required String reactionCount,
+    required this.back,
+    required String members,
+  })  : _senderPrefix = senderPrefix,
+        _album = album,
+        _scrollToBottomUnread = scrollToBottomUnread,
+        _unreadCount = unreadCount,
+        _photoFrom = photoFrom,
+        _openLink = openLink,
+        _reactionCount = reactionCount,
+        _members = members;
+
+  /// `en`: Deleted account
+  final String deletedUser;
+
+  /// `en`: You
+  final String you;
+
+  /// `en`: Today
+  final String today;
+
+  /// `en`: Yesterday
+  final String yesterday;
+
+  /// `en`: Unread messages
+  final String unreadDivider;
+
+  /// `en`: edited
+  final String edited;
+
+  /// `en`: Deleted message
+  final String deletedMessage;
+
+  /// `en`: Photo
+  final String photo;
+
+  /// `en`: Media
+  final String media;
+
+  /// `en`: Draft: 
+  final String draft;
+
+  /// `en`: Messages
+  final String messages;
+
+  /// `en`: No messages yet
+  final String empty;
+
+  /// `en`: Loading…
+  final String loading;
+
+  /// `en`: Scroll to bottom
+  final String scrollToBottom;
+
+  /// `en`: You were mentioned
+  final String mentioned;
+
+  /// `en`: Pinned
+  final String pinned;
+
+  /// `en`: Muted
+  final String muted;
+
+  /// `en`: Reactions
+  final String reactions;
+
+  /// `en`: Back
+  final String back;
+
+  final String _senderPrefix;
+
+  final String _album;
+
+  final String _scrollToBottomUnread;
+
+  final String _unreadCount;
+
+  final String _photoFrom;
+
+  final String _openLink;
+
+  final String _reactionCount;
+
+  final String _members;
+
+  /// `en`: {name}: 
+  String senderPrefix({required Object name}) =>
+      _senderPrefix.replaceAll('{name}', '$name');
+
+  /// `en`: {count} photos
+  String album({required Object count}) =>
+      _album.replaceAll('{count}', '$count');
+
+  /// `en`: Scroll to bottom, {count} new messages
+  String scrollToBottomUnread({required Object count}) =>
+      _scrollToBottomUnread.replaceAll('{count}', '$count');
+
+  /// `en`: {count} unread messages
+  String unreadCount({required Object count}) =>
+      _unreadCount.replaceAll('{count}', '$count');
+
+  /// `en`: Photo from {name}
+  String photoFrom({required Object name}) =>
+      _photoFrom.replaceAll('{name}', '$name');
+
+  /// `en`: Open link {url}
+  String openLink({required Object url}) =>
+      _openLink.replaceAll('{url}', '$url');
+
+  /// `en`: {label}, {count}
+  String reactionCount({required Object label, required Object count}) =>
+      _reactionCount.replaceAll('{label}', '$label').replaceAll('{count}', '$count');
+
+  /// `en`: {count} members
+  String members({required Object count}) =>
+      _members.replaceAll('{count}', '$count');
+}
+
+/// Strings for `KunChatComposer`.
+class KunChatComposerStrings {
+  const KunChatComposerStrings({
+    required this.placeholder,
+    required this.send,
+    required this.save,
+    required this.attach,
+    required this.removeAttachment,
+    required this.retryAttachment,
+    required String replyTo,
+    required String quoteFrom,
+    required this.editing,
+    required this.cancelReply,
+    required this.cancelEdit,
+    required String remaining,
+    required String overLimit,
+    required this.dropHint,
+  })  : _replyTo = replyTo,
+        _quoteFrom = quoteFrom,
+        _remaining = remaining,
+        _overLimit = overLimit;
+
+  /// `en`: Message…
+  final String placeholder;
+
+  /// `en`: Send
+  final String send;
+
+  /// `en`: Save
+  final String save;
+
+  /// `en`: Add photos
+  final String attach;
+
+  /// `en`: Remove attachment
+  final String removeAttachment;
+
+  /// `en`: Upload failed, tap to retry
+  final String retryAttachment;
+
+  /// `en`: Edit message
+  final String editing;
+
+  /// `en`: Cancel reply
+  final String cancelReply;
+
+  /// `en`: Cancel editing
+  final String cancelEdit;
+
+  /// `en`: Drop to add photos
+  final String dropHint;
+
+  final String _replyTo;
+
+  final String _quoteFrom;
+
+  final String _remaining;
+
+  final String _overLimit;
+
+  /// `en`: Reply to {name}
+  String replyTo({required Object name}) =>
+      _replyTo.replaceAll('{name}', '$name');
+
+  /// `en`: Quote from {name}
+  String quoteFrom({required Object name}) =>
+      _quoteFrom.replaceAll('{name}', '$name');
+
+  /// `en`: {count} characters left
+  String remaining({required Object count}) =>
+      _remaining.replaceAll('{count}', '$count');
+
+  /// `en`: {count} characters over the limit
+  String overLimit({required Object count}) =>
+      _overLimit.replaceAll('{count}', '$count');
+}
+
+/// Strings for `KunChatMenu`.
+class KunChatMenuStrings {
+  const KunChatMenuStrings({
+    required this.label,
+    required this.reply,
+    required this.quote,
+    required this.copy,
+    required this.copied,
+    required this.edit,
+    required this.pin,
+    required this.unpin,
+    required this.delete,
+    required this.report,
+    required this.retry,
+    required this.moreReactions,
+    required this.fewerReactions,
+  });
+
+  /// `en`: Message actions
+  final String label;
+
+  /// `en`: Reply
+  final String reply;
+
+  /// `en`: Quote
+  final String quote;
+
+  /// `en`: Copy
+  final String copy;
+
+  /// `en`: Copied
+  final String copied;
+
+  /// `en`: Edit
+  final String edit;
+
+  /// `en`: Pin
+  final String pin;
+
+  /// `en`: Unpin
+  final String unpin;
+
+  /// `en`: Delete
+  final String delete;
+
+  /// `en`: Report
+  final String report;
+
+  /// `en`: Resend
+  final String retry;
+
+  /// `en`: More reactions
+  final String moreReactions;
+
+  /// `en`: Fewer reactions
+  final String fewerReactions;
+}
+
+/// Strings for `KunChatPinned`.
+class KunChatPinnedStrings {
+  const KunChatPinnedStrings({
+    required this.label,
+    required String indexed,
+    required this.unpin,
+  }) : _indexed = indexed;
+
+  /// `en`: Pinned message
+  final String label;
+
+  /// `en`: Unpin
+  final String unpin;
+
+  final String _indexed;
+
+  /// `en`: Pinned message #{index}
+  String indexed({required Object index}) =>
+      _indexed.replaceAll('{index}', '$index');
+}
+
+/// Strings for `KunChatRequest`.
+class KunChatRequestStrings {
+  const KunChatRequestStrings({
+    required this.title,
+    required String description,
+    required this.accept,
+    required this.delete,
+    required this.block,
+    required this.report,
+  }) : _description = description;
+
+  /// `en`: Message request
+  final String title;
+
+  /// `en`: Accept
+  final String accept;
+
+  /// `en`: Delete
+  final String delete;
+
+  /// `en`: Block
+  final String block;
+
+  /// `en`: Report
+  final String report;
+
+  final String _description;
+
+  /// `en`: {name} wants to message you. Until you accept, they can't see whether you've read it.
+  String description({required Object name}) =>
+      _description.replaceAll('{name}', '$name');
+}
+
+/// Strings for `KunChatService`.
+class KunChatServiceStrings {
+  const KunChatServiceStrings({
+    required String groupCreated,
+    required String groupCreatedTitled,
+    required String membersAdded,
+    required String memberJoined,
+    required String memberLeft,
+    required String memberRemoved,
+    required String titleChanged,
+    required String photoChanged,
+    required String messagePinned,
+    required String messagePinnedMedia,
+    required String joinedByLink,
+  })  : _groupCreated = groupCreated,
+        _groupCreatedTitled = groupCreatedTitled,
+        _membersAdded = membersAdded,
+        _memberJoined = memberJoined,
+        _memberLeft = memberLeft,
+        _memberRemoved = memberRemoved,
+        _titleChanged = titleChanged,
+        _photoChanged = photoChanged,
+        _messagePinned = messagePinned,
+        _messagePinnedMedia = messagePinnedMedia,
+        _joinedByLink = joinedByLink;
+
+  final String _groupCreated;
+
+  final String _groupCreatedTitled;
+
+  final String _membersAdded;
+
+  final String _memberJoined;
+
+  final String _memberLeft;
+
+  final String _memberRemoved;
+
+  final String _titleChanged;
+
+  final String _photoChanged;
+
+  final String _messagePinned;
+
+  final String _messagePinnedMedia;
+
+  final String _joinedByLink;
+
+  /// `en`: {actor} created the group
+  String groupCreated({required Object actor}) =>
+      _groupCreated.replaceAll('{actor}', '$actor');
+
+  /// `en`: {actor} created the group “{title}”
+  String groupCreatedTitled({required Object actor, required Object title}) =>
+      _groupCreatedTitled.replaceAll('{actor}', '$actor').replaceAll('{title}', '$title');
+
+  /// `en`: {actor} added {users}
+  String membersAdded({required Object actor, required Object users}) =>
+      _membersAdded.replaceAll('{actor}', '$actor').replaceAll('{users}', '$users');
+
+  /// `en`: {actor} joined the group
+  String memberJoined({required Object actor}) =>
+      _memberJoined.replaceAll('{actor}', '$actor');
+
+  /// `en`: {actor} left the group
+  String memberLeft({required Object actor}) =>
+      _memberLeft.replaceAll('{actor}', '$actor');
+
+  /// `en`: {actor} removed {user}
+  String memberRemoved({required Object actor, required Object user}) =>
+      _memberRemoved.replaceAll('{actor}', '$actor').replaceAll('{user}', '$user');
+
+  /// `en`: {actor} renamed the group to “{title}”
+  String titleChanged({required Object actor, required Object title}) =>
+      _titleChanged.replaceAll('{actor}', '$actor').replaceAll('{title}', '$title');
+
+  /// `en`: {actor} changed the group photo
+  String photoChanged({required Object actor}) =>
+      _photoChanged.replaceAll('{actor}', '$actor');
+
+  /// `en`: {actor} pinned “{text}”
+  String messagePinned({required Object actor, required Object text}) =>
+      _messagePinned.replaceAll('{actor}', '$actor').replaceAll('{text}', '$text');
+
+  /// `en`: {actor} pinned a message
+  String messagePinnedMedia({required Object actor}) =>
+      _messagePinnedMedia.replaceAll('{actor}', '$actor');
+
+  /// `en`: {actor} joined via invite link
+  String joinedByLink({required Object actor}) =>
+      _joinedByLink.replaceAll('{actor}', '$actor');
+}
+
+/// Strings for `KunChatStatus`.
+class KunChatStatusStrings {
+  const KunChatStatusStrings({
+    required this.sending,
+    required this.sent,
+    required this.read,
+    required this.failed,
+  });
+
+  /// `en`: Sending
+  final String sending;
+
+  /// `en`: Sent
+  final String sent;
+
+  /// `en`: Read
+  final String read;
+
+  /// `en`: Not sent, tap to retry
+  final String failed;
+}
+
+/// Strings for `KunChatTyping`.
+class KunChatTypingStrings {
+  const KunChatTypingStrings({
+    required this.typing,
+    required String one,
+    required String several,
+    required String many,
+  })  : _one = one,
+        _several = several,
+        _many = many;
+
+  /// `en`: typing…
+  final String typing;
+
+  final String _one;
+
+  final String _several;
+
+  final String _many;
+
+  /// `en`: {name} is typing…
+  String one({required Object name}) => _one.replaceAll('{name}', '$name');
+
+  /// `en`: {names} are typing…
+  String several({required Object names}) =>
+      _several.replaceAll('{names}', '$names');
+
+  /// `en`: {name} and {count} others are typing…
+  String many({required Object name, required Object count}) =>
+      _many.replaceAll('{name}', '$name').replaceAll('{count}', '$count');
+}
+
 /// Strings for `KunChip`.
 class KunChipStrings {
   const KunChipStrings({
@@ -705,6 +1186,14 @@ class KunMessages {
     required this.avatarGroup,
     required this.banner,
     required this.carousel,
+    required this.chat,
+    required this.chatComposer,
+    required this.chatMenu,
+    required this.chatPinned,
+    required this.chatRequest,
+    required this.chatService,
+    required this.chatStatus,
+    required this.chatTyping,
     required this.chip,
     required this.commandPalette,
     required this.copy,
@@ -750,6 +1239,22 @@ class KunMessages {
   final KunBannerStrings banner;
 
   final KunCarouselStrings carousel;
+
+  final KunChatStrings chat;
+
+  final KunChatComposerStrings chatComposer;
+
+  final KunChatMenuStrings chatMenu;
+
+  final KunChatPinnedStrings chatPinned;
+
+  final KunChatRequestStrings chatRequest;
+
+  final KunChatServiceStrings chatService;
+
+  final KunChatStatusStrings chatStatus;
+
+  final KunChatTypingStrings chatTyping;
 
   final KunChipStrings chip;
 
@@ -831,6 +1336,104 @@ class KunMessages {
       next: '下一张',
       nav: '轮播导航',
       goto: '跳到第 {index} 张',
+    ),
+    chat: KunChatStrings(
+      deletedUser: '已注销用户',
+      you: '你',
+      senderPrefix: '{name}：',
+      today: '今天',
+      yesterday: '昨天',
+      unreadDivider: '以下为未读消息',
+      edited: '已编辑',
+      deletedMessage: '消息已删除',
+      photo: '图片',
+      album: '{count} 张图片',
+      media: '媒体',
+      draft: '草稿：',
+      messages: '消息',
+      empty: '还没有消息',
+      loading: '加载中…',
+      scrollToBottom: '回到底部',
+      scrollToBottomUnread: '回到底部，{count} 条新消息',
+      unreadCount: '{count} 条未读消息',
+      mentioned: '有人提到了你',
+      pinned: '已置顶',
+      muted: '已静音',
+      photoFrom: '{name} 发送的图片',
+      openLink: '打开链接 {url}',
+      reactions: '回应',
+      reactionCount: '{label}，{count} 人',
+      back: '返回',
+      members: '{count} 位成员',
+    ),
+    chatComposer: KunChatComposerStrings(
+      placeholder: '发消息…',
+      send: '发送',
+      save: '保存',
+      attach: '添加图片',
+      removeAttachment: '移除附件',
+      retryAttachment: '上传失败，点击重试',
+      replyTo: '回复 {name}',
+      quoteFrom: '引用 {name}',
+      editing: '编辑消息',
+      cancelReply: '取消回复',
+      cancelEdit: '取消编辑',
+      remaining: '还可输入 {count} 字',
+      overLimit: '超出 {count} 字',
+      dropHint: '松开以添加图片',
+    ),
+    chatMenu: KunChatMenuStrings(
+      label: '消息操作',
+      reply: '回复',
+      quote: '引用',
+      copy: '复制',
+      copied: '已复制',
+      edit: '编辑',
+      pin: '置顶',
+      unpin: '取消置顶',
+      delete: '删除',
+      report: '举报',
+      retry: '重新发送',
+      moreReactions: '更多回应',
+      fewerReactions: '收起回应',
+    ),
+    chatPinned: KunChatPinnedStrings(
+      label: '置顶消息',
+      indexed: '置顶消息 #{index}',
+      unpin: '取消置顶',
+    ),
+    chatRequest: KunChatRequestStrings(
+      title: '消息请求',
+      description: '{name} 想给你发消息。接受之前，对方看不到你是否已读。',
+      accept: '接受',
+      delete: '删除',
+      block: '拉黑',
+      report: '举报',
+    ),
+    chatService: KunChatServiceStrings(
+      groupCreated: '{actor} 创建了群组',
+      groupCreatedTitled: '{actor} 创建了群组「{title}」',
+      membersAdded: '{actor} 邀请了 {users}',
+      memberJoined: '{actor} 加入了群组',
+      memberLeft: '{actor} 退出了群组',
+      memberRemoved: '{actor} 将 {user} 移出了群组',
+      titleChanged: '{actor} 将群名改为「{title}」',
+      photoChanged: '{actor} 更换了群头像',
+      messagePinned: '{actor} 置顶了「{text}」',
+      messagePinnedMedia: '{actor} 置顶了一条消息',
+      joinedByLink: '{actor} 通过邀请链接加入了群组',
+    ),
+    chatStatus: KunChatStatusStrings(
+      sending: '发送中',
+      sent: '已发送',
+      read: '已读',
+      failed: '发送失败，点击重试',
+    ),
+    chatTyping: KunChatTypingStrings(
+      typing: '正在输入…',
+      one: '{name} 正在输入…',
+      several: '{names} 正在输入…',
+      many: '{name} 等 {count} 人正在输入…',
     ),
     chip: KunChipStrings(
       remove: '移除',
@@ -1003,6 +1606,104 @@ class KunMessages {
       next: 'Next slide',
       nav: 'Carousel navigation',
       goto: 'Go to slide {index}',
+    ),
+    chat: KunChatStrings(
+      deletedUser: 'Deleted account',
+      you: 'You',
+      senderPrefix: '{name}: ',
+      today: 'Today',
+      yesterday: 'Yesterday',
+      unreadDivider: 'Unread messages',
+      edited: 'edited',
+      deletedMessage: 'Deleted message',
+      photo: 'Photo',
+      album: '{count} photos',
+      media: 'Media',
+      draft: 'Draft: ',
+      messages: 'Messages',
+      empty: 'No messages yet',
+      loading: 'Loading…',
+      scrollToBottom: 'Scroll to bottom',
+      scrollToBottomUnread: 'Scroll to bottom, {count} new messages',
+      unreadCount: '{count} unread messages',
+      mentioned: 'You were mentioned',
+      pinned: 'Pinned',
+      muted: 'Muted',
+      photoFrom: 'Photo from {name}',
+      openLink: 'Open link {url}',
+      reactions: 'Reactions',
+      reactionCount: '{label}, {count}',
+      back: 'Back',
+      members: '{count} members',
+    ),
+    chatComposer: KunChatComposerStrings(
+      placeholder: 'Message…',
+      send: 'Send',
+      save: 'Save',
+      attach: 'Add photos',
+      removeAttachment: 'Remove attachment',
+      retryAttachment: 'Upload failed, tap to retry',
+      replyTo: 'Reply to {name}',
+      quoteFrom: 'Quote from {name}',
+      editing: 'Edit message',
+      cancelReply: 'Cancel reply',
+      cancelEdit: 'Cancel editing',
+      remaining: '{count} characters left',
+      overLimit: '{count} characters over the limit',
+      dropHint: 'Drop to add photos',
+    ),
+    chatMenu: KunChatMenuStrings(
+      label: 'Message actions',
+      reply: 'Reply',
+      quote: 'Quote',
+      copy: 'Copy',
+      copied: 'Copied',
+      edit: 'Edit',
+      pin: 'Pin',
+      unpin: 'Unpin',
+      delete: 'Delete',
+      report: 'Report',
+      retry: 'Resend',
+      moreReactions: 'More reactions',
+      fewerReactions: 'Fewer reactions',
+    ),
+    chatPinned: KunChatPinnedStrings(
+      label: 'Pinned message',
+      indexed: 'Pinned message #{index}',
+      unpin: 'Unpin',
+    ),
+    chatRequest: KunChatRequestStrings(
+      title: 'Message request',
+      description: '{name} wants to message you. Until you accept, they can\'t see whether you\'ve read it.',
+      accept: 'Accept',
+      delete: 'Delete',
+      block: 'Block',
+      report: 'Report',
+    ),
+    chatService: KunChatServiceStrings(
+      groupCreated: '{actor} created the group',
+      groupCreatedTitled: '{actor} created the group “{title}”',
+      membersAdded: '{actor} added {users}',
+      memberJoined: '{actor} joined the group',
+      memberLeft: '{actor} left the group',
+      memberRemoved: '{actor} removed {user}',
+      titleChanged: '{actor} renamed the group to “{title}”',
+      photoChanged: '{actor} changed the group photo',
+      messagePinned: '{actor} pinned “{text}”',
+      messagePinnedMedia: '{actor} pinned a message',
+      joinedByLink: '{actor} joined via invite link',
+    ),
+    chatStatus: KunChatStatusStrings(
+      sending: 'Sending',
+      sent: 'Sent',
+      read: 'Read',
+      failed: 'Not sent, tap to retry',
+    ),
+    chatTyping: KunChatTypingStrings(
+      typing: 'typing…',
+      one: '{name} is typing…',
+      several: '{names} are typing…',
+      many: '{name} and {count} others are typing…',
     ),
     chip: KunChipStrings(
       remove: 'Remove',

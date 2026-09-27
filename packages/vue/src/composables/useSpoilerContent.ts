@@ -358,6 +358,27 @@ const destroyField = (el: HTMLElement) => {
   stopLoopIfIdle()
 }
 
+/**
+ * The particle cover for one spoiler element a component renders itself,
+ * rather than one found in v-html (KunChatText). `reveal` dissolves it the way
+ * a click in KunContent does; `destroy` removes it at once.
+ */
+export const mountKunSpoilerParticles = (el: HTMLElement) => {
+  createField(el)
+  return {
+    reveal: () => {
+      const field = elToField.get(el)
+      if (field && field.animated && field.rects.length && !reducedMotion()) {
+        field.tStop = clock - field.bornAt
+        startLoop()
+      } else {
+        destroyField(el)
+      }
+    },
+    destroy: () => destroyField(el),
+  }
+}
+
 // ── code-block copy button ─────────────────────────────────────────────────
 // KunContent gives every code block a copy button so downstream doesn't have to
 // reimplement it. Self-styled inline (token-aware → adapts to light/dark), so it

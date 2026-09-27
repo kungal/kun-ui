@@ -13,8 +13,8 @@
 KunUI, the shared cross-framework component library for the NextMoe/KunGal ecosystem: one design language, multiple render layers. pnpm workspace, 4 packages versioned in lockstep (currently 2.22.x), released via changesets.
 
 - `@kungal/ui-tokens` — framework-agnostic Tailwind v4 theme (semantic colors, radius, OKLCH palette). `gen:tokens` asserts every solid/on-color pair clears WCAG AA in both modes and exits non-zero if one doesn't.
-- `@kungal/ui-core` — design types, `cn()`, variant matrix, radius system, the 30 inlined icons.
-- `@kungal/ui-vue` — the Vue 3 layer, Nuxt-decoupled: 71 SFCs, 70 registered in `KUN_COMPONENT_NAMES`, plus 22 exported composables.
+- `@kungal/ui-core` — design types, `cn()`, variant matrix, radius system, the inlined icons, and the NextMoe chat wire types plus the pure algorithms behind the KunChat* components (entity tree, composer markdown round trip, album mosaic, message grouping) — pure so the Flutter port reproduces them.
+- `@kungal/ui-vue` — the Vue 3 layer, Nuxt-decoupled: 86 SFCs, 85 registered in `KUN_COMPONENT_NAMES`, plus 26 exported composables.
 - `@kungal/ui-nuxt` — Nuxt layer wrapping ui-vue (auto-imports, injection). Ships `nuxt.config.ts` + `app/` as *source*: no build, no typecheck of its own — building `apps/docs` is the only thing that exercises it.
 
 React (`@kungal/ui-react`) is a planned future layer — `docs/architecture.md` carries the honest constraint analysis (no technology runs `.vue` inside React) and the phased roadmap.
@@ -28,6 +28,7 @@ pnpm install
 pnpm build                 # all packages (this must precede any typecheck on a bare checkout)
 pnpm typecheck             # packages
 pnpm typecheck:apps        # ./apps/* — only apps/playground defines the script today
+pnpm test                  # ui-core unit tests (node:test, no build needed)
 pnpm build:docs
 pnpm gen                   # ALL generators, in dependency order — run after any component change
 pnpm changeset             # record a changeset for the release train
@@ -51,7 +52,7 @@ pnpm changeset             # record a changeset for the release train
 
 `check.yml` has two jobs; both exist because each trap below actually shipped once.
 
-**Typecheck and build** — `pnpm build` → `typecheck` → `typecheck:apps` → `build:docs`.
+**Typecheck and build** — `pnpm build` → `typecheck` → `typecheck:apps` → `test` → `build:docs`.
 - Build **first**: every internal dep is `workspace:*` and resolves to the dependency's `dist`, *including for type resolution*. `pnpm typecheck` on a bare checkout fails with `Cannot find module '@kungal/ui-core'`. You never see this locally, where `dist` is lying around from the last build.
 - `typecheck` is not redundant with the build's vue-tsc pass: that one runs `tsconfig.build.json` (src only), this one covers `tsconfig.json` (src + `vite.config.ts`) and gives ui-core a real `tsc --noEmit`, which its tsup `dts: true` is not.
 
@@ -78,7 +79,7 @@ English, and short. Never write restatements, section banners, or `TODO` without
 - All frontend functions are arrow functions; compose classes with `cn()`.
 - A new component must be added to `KUN_COMPONENT_NAMES` (`packages/vue/src/componentNames.ts`) — the single source the Nuxt layer auto-registers from, and typed against `Record<KunComponentName, Component>` in `index.ts`, which fails typecheck if you forget.
 - A theme value a component relies on is **published to `kun_ui_tokens` by `gen-tokens.mjs`**, never restated — `tokens.css`'s own, and the Tailwind defaults (spacing, `text-*`, `font-*` weights, `rounded-*`, `max-w-*`, breakpoints, `blur-*`, `shadow-lg`, the default transition, `animate-pulse`, `animate-spin`) read from `tailwindcss/theme.css`. `gen-tokens.mjs` scans the components with Tailwind's own compiler and **fails when one uses a value it does not generate**, including through a `var()` in a `<style>` block: generate it, or list it in `NOT_GENERATED` (`packages/ui-tokens/scripts/theme-coverage.mjs`) with a reason written for the Flutter port. Use the named step, not a deprecated bare alias (`backdrop-blur` is `blur(8px)` hardcoded, outside the theme; `backdrop-blur-sm` is the same 8px through `--blur-sm`).
-- Icons are **bundled, never fetched**: only the 31 names in `WANT` in `packages/ui-core/scripts/icons-manifest.mjs` exist (30 lucide + the animated `svg-spinners:90-ring-with-bg`). Using an unbundled name renders nothing. Add it there and run `pnpm gen:icons && pnpm gen:icons:flutter` — the same list feeds the web data and the `kun_ui_icons` pub package, and the Flutter generator hard-fails on a name that is not a legal Dart identifier. (`apps/docs` registers ~15 extra ones for its own pages — those are not available to consumers.)
+- Icons are **bundled, never fetched**: only the 53 names in `WANT` in `packages/ui-core/scripts/icons-manifest.mjs` exist (52 lucide + the animated `svg-spinners:90-ring-with-bg`). Using an unbundled name renders nothing. Add it there and run `pnpm gen:icons && pnpm gen:icons:flutter` — the same list feeds the web data and the `kun_ui_icons` pub package, and the Flutter generator hard-fails on a name that is not a legal Dart identifier. (`apps/docs` registers ~15 extra ones for its own pages — those are not available to consumers.)
 - KunUI's own strings live in **`packages/ui-core/src/locale/*.json`**, not in a render layer — the same catalogs feed the web bundle and the generated `kun_ui_messages` pub package, and they are JSON so a Node generator can read them without evaluating TypeScript. Adding a key means the JSON *and* `KunMessages` in `locale/types.ts` (the annotation on each catalog is what type-checks the two against each other); `gen-messages-flutter.mjs` hard-fails when a key or a `{placeholder}` exists in one language and not another. An interpolated string stays **one template** — a value's position moves between languages, so it is never assembled at the call site.
 - KunShatter's ballistic feel and the sheets' drag-to-dismiss feel are **shared motion tokens**: the model constants live in `packages/ui-tokens/scripts/motion-physics.mjs` and generate both the ui-core constants the web consumes (`KUN_SHATTER_PHYSICS`, `KUN_SWIPE_DISMISS_PHYSICS`) and their `kun_ui_tokens` twins (`KunShatterPhysics`, `KunSwipeDismissPhysics`). Tune the feel there and run `pnpm gen`; a literal re-inlined in Shatter.vue or useKunSwipeDismiss.ts silently forks web from Flutter. Only the *feel* is shared — a component's own choreography (Pagination's pop, Select's type-ahead reset) and constants tuned to browser mechanics stay in the component, and the Flutter port copies them. The two prop defaults (`duration: 1100`, `rotation: 140`) stay literals in the SFC — vue-component-meta reads the literal for the docs PropsTable — and `gen-motion.mjs` asserts they agree with the manifest.
 - `contracts/component-contracts.json` is the Flutter port's **generated acceptance list** (from component-meta.json, via `pnpm gen`). A new component or prop enters it as *portable* by default; if it is a web artifact (class pass-through, link mode, `<form>` name, ARIA plumbing, v-html, …), record the exclusion with a reason in `contracts/flutter-portability.mjs` — otherwise the parity report (`scripts/flutter-parity.mjs`) will ask the Flutter port to answer for it. The generator hard-fails on exclusions naming a component or prop that no longer exists.
@@ -96,7 +97,7 @@ English, and short. Never write restatements, section banners, or `TODO` without
 
 ## Verifying work
 
-There is **no test runner in this repo.** Verification is (a) the CI gate and (b) measuring the real thing in a real browser — Playwright/CDP against `apps/docs` or `apps/playground`, or a purpose-built harness page. State what was measured and what the numbers were; do not report a behaviour you reasoned about as if you had observed it. When a claim turns out to be wrong, retract it explicitly.
+The only unit tests are for ui-core's pure algorithms: `node:test` on the TypeScript sources through Node's type stripping (`pnpm test`, run by the CI gate), which is why the `src/chat` modules import each other as `./x.ts`. Components have no test runner. Verification is (a) the CI gate and (b) measuring the real thing in a real browser — Playwright/CDP against `apps/docs` or `apps/playground`, or a purpose-built harness page. State what was measured and what the numbers were; do not report a behaviour you reasoned about as if you had observed it. When a claim turns out to be wrong, retract it explicitly.
 
 Recurring traps in that loop:
 

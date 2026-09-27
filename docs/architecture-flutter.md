@@ -235,7 +235,7 @@ spirit holds on the Dart side too, and `flutter/physics` +
 | Motion: 4 easings + 4 durations + sampled curves | 🟢 generate | §3.4 |
 | The 30 icons in `WANT` | 🟢 generate | one SVG source → both |
 | Component *contracts* (props/events/slots) | 🟡 spec only | `apps/docs/app/generated/component-meta.json`, 70 entries |
-| Vue SFC render layer (70 registered components) | 🔴 0% | rewrite |
+| Vue SFC render layer (85 registered components) | 🔴 0% | rewrite |
 | Tailwind: `cn()`, tailwind-merge, `@source`, utility classes | 🔴 0% | no analogue exists |
 
 ### 4.1 What does not cross — and that Flutter does not need

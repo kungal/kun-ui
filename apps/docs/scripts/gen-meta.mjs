@@ -164,8 +164,11 @@ const emitDocs = (file) => {
   }
   const body = src.slice(open + 1, end)
   const map = new Map()
+  // Names may be kebab-case (`'reply-click'`). A block must not run past its
+  // own `*/`: when the name after it failed to match, the lazy body used to
+  // stretch across the next member and glue two descriptions together.
   const re =
-    /\/\*\*([\s\S]*?)\*\/\s*(?:\(\s*(?:e|event)\s*:\s*'([\w:]+)'|'?([\w:]+)'?\s*:)/g
+    /\/\*\*((?:(?!\*\/)[\s\S])*?)\*\/\s*(?:\(\s*(?:e|event)\s*:\s*'([\w:-]+)'|'?([\w:-]+)'?\s*:)/g
   for (const m of body.matchAll(re)) {
     const name = m[2] ?? m[3]
     const text = m[1]

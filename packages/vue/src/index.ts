@@ -14,6 +14,18 @@ import KunButtonGroup from './components/ButtonGroup.vue'
 import KunCard from './components/Card.vue'
 import KunCarousel from './components/Carousel.vue'
 import KunCarouselItem from './components/CarouselItem.vue'
+import KunChatBubble from './components/ChatBubble.vue'
+import KunChatComposer from './components/ChatComposer.vue'
+import KunChatConversationItem from './components/ChatConversationItem.vue'
+import KunChatHeader from './components/ChatHeader.vue'
+import KunChatLayout from './components/ChatLayout.vue'
+import KunChatMessageList from './components/ChatMessageList.vue'
+import KunChatMessageMenu from './components/ChatMessageMenu.vue'
+import KunChatPinnedBar from './components/ChatPinnedBar.vue'
+import KunChatReactionPicker from './components/ChatReactionPicker.vue'
+import KunChatRequestBar from './components/ChatRequestBar.vue'
+import KunChatText from './components/ChatText.vue'
+import KunChatTyping from './components/ChatTyping.vue'
 import KunCheckBox from './components/CheckBox.vue'
 import KunCheckBoxGroup from './components/CheckBoxGroup.vue'
 import KunChip from './components/Chip.vue'
@@ -91,6 +103,18 @@ export {
   KunCard,
   KunCarousel,
   KunCarouselItem,
+  KunChatBubble,
+  KunChatComposer,
+  KunChatConversationItem,
+  KunChatHeader,
+  KunChatLayout,
+  KunChatMessageList,
+  KunChatMessageMenu,
+  KunChatPinnedBar,
+  KunChatReactionPicker,
+  KunChatRequestBar,
+  KunChatText,
+  KunChatTyping,
   KunCheckBox,
   KunCheckBoxGroup,
   KunChip,
@@ -188,6 +212,12 @@ export {
   type KunCopyMessages,
 } from './composables/useKunCopy'
 export { useSpoilerContent } from './composables/useSpoilerContent'
+// Who is typing and the sentence for it, with the 6 s expiry — what
+// KunChatTyping, KunChatHeader and KunChatConversationItem show.
+export {
+  useKunChatTyping,
+  type UseKunChatTypingSource,
+} from './composables/useKunChatTyping'
 export { useContentLightbox } from './composables/useContentLightbox'
 export { useContentBlurUp } from './composables/useContentBlurUp'
 // Refcounted body scroll-lock shared across overlays (Modal/Drawer/Lightbox
@@ -243,6 +273,33 @@ export {
 export { useKunLoliInfo, useKunLoliState } from './composables/useKunLoliInfo'
 // Re-export framework-agnostic helpers consumers commonly reach for.
 export { pickAvatarFallback, getRandomSticker, KUN_AVATAR_FALLBACK, decodeIfEncoded } from '@kungal/ui-core'
+// The chat wire types and the composer's markdown pair (a draft is stored as
+// `parseKunChatMarkdown(input)` and restored with `formatKunChatMarkdown`).
+export {
+  parseKunChatMarkdown,
+  formatKunChatMarkdown,
+  KUN_CHAT_TEXT_LIMIT,
+  KUN_CHAT_ALBUM_LIMIT,
+  KUN_CHAT_TYPING_INTERVAL,
+  KUN_CHAT_TYPING_TIMEOUT,
+} from '@kungal/ui-core'
+export type {
+  KunChatEntity,
+  KunChatEntityType,
+  KunChatMessage,
+  KunChatMedia,
+  KunChatPhoto,
+  KunChatReplyTo,
+  KunChatReplyQuote,
+  KunChatServiceAction,
+  KunChatContext,
+  KunChatReaction,
+  KunChatReactionOption,
+  KunChatSendStatus,
+  KunChatUser,
+  KunChatTypingEvent,
+  KunChatFormattedText,
+} from '@kungal/ui-core'
 
 // Message (toast) system — imperative trigger + read store. Mount
 // <KunMessageProvider/> once near your app root.
@@ -281,6 +338,18 @@ const components: Record<KunComponentName, Component> = {
   KunCard,
   KunCarousel,
   KunCarouselItem,
+  KunChatBubble,
+  KunChatComposer,
+  KunChatConversationItem,
+  KunChatHeader,
+  KunChatLayout,
+  KunChatMessageList,
+  KunChatMessageMenu,
+  KunChatPinnedBar,
+  KunChatReactionPicker,
+  KunChatRequestBar,
+  KunChatText,
+  KunChatTyping,
   KunCheckBox,
   KunCheckBoxGroup,
   KunChip,

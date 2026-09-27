@@ -4,6 +4,14 @@ import type {
   KunUISize,
   KunUIRounded,
   KunUser,
+  KunChatEntity,
+  KunChatMedia,
+  KunChatMessage,
+  KunChatReactionOption,
+  KunChatSendStatus,
+  KunChatTypingEvent,
+  KunChatUser,
+  KunChatFormattedText,
 } from '@kungal/ui-core'
 
 // These JSDoc blocks are extracted verbatim into the docs PropsTable. An `@` at
@@ -2027,4 +2035,337 @@ export interface KunCommandPaletteProps<
   highlight?: boolean
   /** Accessible name for the dialog. */
   ariaLabel?: string
+}
+
+// The KunChat* components take the NextMoe `/v2/chat` JSON as it comes (types
+// in @kungal/ui-core, snake_case and string ids included). Everything a site
+// decides — permissions, URLs, what an action does — comes in through props
+// and goes out through events.
+
+/** Turns a media object into an image URL: `preview` for the bubble,
+ *  `original` for the lightbox. KunUI never builds an image URL itself. */
+export type KunChatMediaUrlResolver = (
+  media: KunChatMedia,
+  variant: 'preview' | 'original'
+) => string
+
+/** A conversation's kind: a direct chat shows no names or avatars on
+ *  messages, a group shows both. */
+export type KunChatKind = 'direct' | 'group'
+
+export interface KunChatTextProps {
+  /** Message text. */
+  text: string
+  /** Formatting ranges over `text`, in UTF-16 code units. Normalized before
+   *  rendering, so malformed input renders instead of throwing. */
+  entities?: KunChatEntity[] | null
+  /** One-line summary rendering for previews (conversation rows, reply and
+   *  pinned bars): blocks flatten inline, links are plain text, spoilers are
+   *  masked so their text is not in the DOM at all. */
+  preview?: boolean
+}
+
+/** Where a bubble sits in a run of consecutive messages from one sender. It
+ *  shapes the corners; `last` and `single` draw the tail. */
+export type KunChatBubblePosition = 'single' | 'first' | 'middle' | 'last'
+
+export interface KunChatBubbleProps {
+  /** The message. For an album, the one it acts as (reactions, replies). */
+  message: KunChatMessage
+  /** Every photo of an album, in order; omitted for anything else. */
+  album?: KunChatMessage[] | null
+  /** Sent by the viewer: right-aligned, in the primary tint. */
+  own?: boolean
+  /** Users the message refers to — its sender, a reply's sender, a service
+   *  message's actors. A missing or `deleted` user shows as deleted. */
+  users?: KunChatUser[]
+  /** The viewer's id, so a service message can say "you". */
+  currentUserId?: string
+  /** Show the sender's name on top: group chats, first of a run. */
+  showSender?: boolean
+  /** Where the bubble sits in its sender's run: it rounds the corners on the
+   *  sender's side, and `single` / `last` draw the tail. */
+  position?: KunChatBubblePosition
+  /** Delivery state of an own message. The clock / tick / double tick at the
+   *  bottom corner; `failed` is a button that emits `retry`. */
+  status?: KunChatSendStatus
+  /** The reaction vocabulary, to draw each reaction key. */
+  reactionOptions?: KunChatReactionOption[]
+  /** Required to show photos. */
+  resolveMediaUrl?: KunChatMediaUrlResolver
+  /** Finds a loaded message by seq — the text a "pinned a message" service
+   *  line quotes. */
+  resolveMessage?: (seq: number) => KunChatMessage | undefined
+  /** IANA zone for the timestamp. Pass it when server-rendering, or the
+   *  server's zone and the reader's disagree and hydration mismatches. */
+  timeZone?: string
+  /** Open photos in a built-in KunLightbox on click. The message list turns
+   *  this off and shows every loaded photo in one lightbox instead. */
+  lightbox?: boolean
+  /** Swallow clicks on the sender, reply and reactions, e.g. under a
+   *  selection mode. */
+  disabled?: boolean
+}
+
+export interface KunChatMessageListProps {
+  /** Messages in display order, oldest first. Pending ones go last, carrying
+   *  `client_message_id` and `status`. */
+  messages: KunChatMessage[]
+  /** The `users` of the chat responses: senders, reply targets, actors. */
+  users?: KunChatUser[]
+  /** The viewer's id. Their messages sit on the right, and a pending one
+   *  they send (`status: 'sending'`) scrolls the list to the bottom. */
+  currentUserId: string
+  /** `group` shows names and avatars on others' messages; `direct` does not. */
+  kind?: KunChatKind
+  /** The viewer's read cursor as it was when the conversation opened. The
+   *  unread divider goes above the first later message someone else sent,
+   *  and the list opens there. Keep it fixed while the conversation is open,
+   *  or the divider walks down as messages get read. */
+  lastReadSeq?: number | null
+  /** The other side's read cursor: own messages at or below it show the
+   *  double tick, unless they carry their own `status`. */
+  peerReadSeq?: number | null
+  /** More history exists above: scrolling near the top emits `load-older`. */
+  hasOlder?: boolean
+  /** The list is a window that does not reach the newest message (after a
+   *  jump): scrolling near the bottom emits `load-newer`, and the scroll-down
+   *  button emits `latest`. */
+  hasNewer?: boolean
+  /** A `load-older` request is in flight: a spinner shows on top and no
+   *  second request goes out. Without it, the list waits for the first
+   *  message to change before asking again. */
+  loadingOlder?: boolean
+  /** The same for `load-newer`, at the bottom. */
+  loadingNewer?: boolean
+  /** Longest gap, in seconds, inside one run of a sender's messages. */
+  groupWindow?: number
+  /** The reaction vocabulary: the menu's quick row, and the art on reaction
+   *  chips. */
+  reactionOptions?: KunChatReactionOption[]
+  /** Turns a photo's hash into a URL. Required to show photos. */
+  resolveMediaUrl?: KunChatMediaUrlResolver
+  /** Which actions the menu offers for a message — permissions are the
+   *  site's call. `quote` shows only while text of the message is selected,
+   *  `copy` only for a message with text. Default `['reply', 'copy']`. */
+  actions?: (message: KunChatMessage, own: boolean) => KunChatMessageAction[]
+  /** Unread count on the scroll-down button. Defaults to the messages of
+   *  others below the read position that the list has seen. */
+  unreadCount?: number
+  /** Swipe a bubble left to reply, on touch screens. */
+  swipeToReply?: boolean
+  /** IANA zone for times and day boundaries. Pass it when server-rendering,
+   *  or the server's zone and the reader's disagree and hydration
+   *  mismatches. */
+  timeZone?: string
+  /** Accessible name of the scroll region.
+   *  @default locale chat.messages */
+  ariaLabel?: string
+}
+
+/** A built-in message action. Each has its own label and icon. */
+export type KunChatMessageActionKey =
+  | 'reply'
+  | 'quote'
+  | 'copy'
+  | 'edit'
+  | 'pin'
+  | 'unpin'
+  | 'delete'
+  | 'report'
+  | 'retry'
+
+/** An action of the site's own. */
+export interface KunChatMessageMenuItem {
+  key: string
+  label: string
+  icon?: string
+  color?: KunUIColor
+  disabled?: boolean
+}
+
+export type KunChatMessageAction = KunChatMessageActionKey | KunChatMessageMenuItem
+
+export interface KunChatMessageMenuProps {
+  /** Whether the menu is open. It asks to close — Escape, a click outside,
+   *  the page scrolling, a choice made — by emitting `close`. */
+  visible: boolean
+  /** Viewport point to open at — the cursor, or the long-press point. */
+  position?: { x: number; y: number } | null
+  /** The actions, in order: built-in keys, or items of your own. */
+  actions?: KunChatMessageAction[]
+  /** The quick-reaction row on top; empty hides it. */
+  reactions?: KunChatReactionOption[]
+  /** The viewer's current reaction on the message, highlighted. */
+  currentReaction?: string | null
+  /** How many reactions the row shows before the expand button. */
+  quickReactions?: number
+}
+
+export interface KunChatReactionPickerProps {
+  /** The reaction vocabulary, as `GET /v2/chat/reactions` serves it. */
+  options: KunChatReactionOption[]
+  /** Columns of the grid. */
+  columns?: number
+  /** Accessible name of the grid.
+   *  @default locale chat.reactions */
+  ariaLabel?: string
+}
+
+/** A file the site is uploading for the next message. */
+export interface KunChatAttachment {
+  key: string
+  /** Preview image URL, e.g. from `URL.createObjectURL`. */
+  url?: string
+  name?: string
+  /** Upload progress from 0 to 1; omitted when unknown or done. */
+  progress?: number
+  error?: boolean
+}
+
+export interface KunChatComposerProps {
+  /** Placeholder text.
+   *  @default locale chatComposer.placeholder */
+  placeholder?: string
+  /** Replace the input with `disabledText`, e.g. for a deleted peer. */
+  disabled?: boolean
+  /** Why sending is not possible, shown in place of the input. */
+  disabledText?: string
+  /** Enter sends and Shift+Enter breaks the line, or the reverse. `auto`:
+   *  Enter sends with a fine pointer, breaks the line on a touch screen. */
+  enterToSend?: boolean | 'auto'
+  /** Longest message, counted on the parsed text. The counter shows in the
+   *  last 200. */
+  maxLength?: number
+  /** Photos being uploaded for this message, shown above the input. */
+  attachments?: KunChatAttachment[]
+  /** `accept` of the attach button's file picker. Pasted and dropped files
+   *  are passed on unfiltered. */
+  accept?: string
+  /** Users, to name whoever a reply is to. */
+  users?: KunChatUser[]
+  /** Growth limit of the input, in lines, before it scrolls. */
+  maxRows?: number
+}
+
+/** A swipe or menu action on a conversation row, e.g. archive or mute. */
+export interface KunChatSwipeAction {
+  key: string
+  label: string
+  icon?: string
+  color?: KunUIColor
+}
+
+export interface KunChatConversationItemProps {
+  /** Row title. Defaults to `user`'s name. */
+  title?: string
+  /** The other person of a direct chat: title, avatar and deleted state. */
+  user?: KunChatUser | null
+  /** Avatar URL, e.g. a group photo. Defaults to `user`'s. */
+  avatar?: string | null
+  /** A group prefixes the preview with its sender and names who is typing;
+   *  a direct chat does neither. */
+  kind?: KunChatKind
+  /** The newest message, previewed on the second line. */
+  lastMessage?: KunChatMessage | null
+  /** Who sent `lastMessage`, as the preview prefix ("你：", "鲲：").
+   *  Omitted in a direct chat for the other side's messages. */
+  lastMessageSender?: string | null
+  /** An unsent draft replaces the preview with "草稿：…". */
+  draft?: KunChatFormattedText | null
+  /** Typing notifications; while one is live it replaces the preview. */
+  typing?: KunChatTypingEvent[]
+  /** Users, to name who is typing in a group and who acted in a service
+   *  message. */
+  users?: KunChatUser[]
+  /** The viewer's id, so a service message can say "you". */
+  currentUserId?: string
+  /** Defaults to `lastMessage.created_at`. */
+  time?: string | number | Date | null
+  /** Unread messages; the badge caps at 999+. */
+  unreadCount?: number
+  /** "Mark as unread" was used: a badge with no number. */
+  markedUnread?: boolean
+  /** Unread mentions: an @ badge. */
+  mentionCount?: number
+  /** A muted conversation's badge is grey. */
+  muted?: boolean
+  /** A pin icon where the badge would be. */
+  pinned?: boolean
+  /** Delivery state of `lastMessage` when the viewer sent it. */
+  status?: KunChatSendStatus
+  /** The open conversation. */
+  selected?: boolean
+  /** Render the row as a link. Without it the row is a button. */
+  href?: string
+  /** Revealed by swiping right on a touch screen. */
+  leadingActions?: KunChatSwipeAction[]
+  /** Revealed by swiping left on a touch screen. */
+  trailingActions?: KunChatSwipeAction[]
+  /** IANA zone for times and day boundaries. Pass it when server-rendering,
+   *  or the server's zone and the reader's disagree and hydration
+   *  mismatches. */
+  timeZone?: string
+}
+
+export interface KunChatPinnedBarProps {
+  /** Pinned messages, in any order. The bar starts at the newest and each
+   *  click moves to the next older one, as Telegram does. */
+  messages: KunChatMessage[]
+  /** Turns a pinned photo's hash into a URL, for the thumbnail. */
+  resolveMediaUrl?: KunChatMediaUrlResolver
+  /** Show the × that emits `unpin`. */
+  unpinnable?: boolean
+}
+
+/** A button of the message-request bar. */
+export type KunChatRequestAction = 'accept' | 'delete' | 'block' | 'report'
+
+export interface KunChatRequestBarProps {
+  /** Who sent the request. */
+  user?: KunChatUser | null
+  /** The buttons, in order. */
+  actions?: KunChatRequestAction[]
+  /** The action in flight: its button spins and the others wait. */
+  loading?: KunChatRequestAction | null
+}
+
+export interface KunChatTypingProps {
+  /** Typing notifications as received, each stamped with the receiving
+   *  client's `Date.now()`. Each lapses 6 s after it arrived. */
+  events?: KunChatTypingEvent[]
+  /** Users, to name who is typing in a group. */
+  users?: KunChatUser[]
+  /** A direct chat says "typing…"; a group names who is typing. */
+  kind?: KunChatKind
+  /** Show the sentence beside the dots. */
+  showText?: boolean
+}
+
+export interface KunChatHeaderProps {
+  /** Title. Defaults to `user`'s name. */
+  title?: string
+  /** The other person of a direct chat: title and avatar. */
+  user?: KunChatUser | null
+  /** Avatar URL, e.g. a group photo. */
+  avatar?: string | null
+  /** A direct chat says "typing…"; a group names who is typing. */
+  kind?: KunChatKind
+  /** Second line, e.g. a member count. Replaced while someone types. */
+  subtitle?: string
+  /** Typing notifications as received; while one is live it replaces the
+   *  subtitle. */
+  typing?: KunChatTypingEvent[]
+  /** Users, to name who is typing in a group. */
+  users?: KunChatUser[]
+  /** The back button: `mobile` below the `md` breakpoint only. */
+  back?: boolean | 'mobile'
+}
+
+export interface KunChatLayoutProps {
+  /** Which pane a narrow screen shows: the conversation, or the list. From
+   *  `md` up both panes show. */
+  showConversation?: boolean
+  /** Width of the list pane from `md` up, as CSS. */
+  sidebarWidth?: string
 }

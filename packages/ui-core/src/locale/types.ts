@@ -28,6 +28,104 @@ export interface KunMessages {
     nav: string
     goto: string
   }
+  /** The KunChat* components. `senderPrefix` takes `{name}` and includes its
+   *  punctuation, as does `draft`; `album`, `scrollToBottomUnread`,
+   *  `unreadCount` and `members` take `{count}`; `photoFrom` takes `{name}`; `openLink` takes
+   *  `{url}`; `reactionCount` takes `{label}` and `{count}`. */
+  chat: {
+    deletedUser: string
+    you: string
+    senderPrefix: string
+    today: string
+    yesterday: string
+    unreadDivider: string
+    edited: string
+    deletedMessage: string
+    photo: string
+    album: string
+    media: string
+    draft: string
+    messages: string
+    empty: string
+    loading: string
+    scrollToBottom: string
+    scrollToBottomUnread: string
+    unreadCount: string
+    mentioned: string
+    pinned: string
+    muted: string
+    photoFrom: string
+    openLink: string
+    reactions: string
+    reactionCount: string
+    back: string
+    members: string
+  }
+  /** `replyTo` and `quoteFrom` take `{name}`; `remaining` and `overLimit`
+   *  take `{count}`. */
+  chatComposer: {
+    placeholder: string
+    send: string
+    save: string
+    attach: string
+    removeAttachment: string
+    retryAttachment: string
+    replyTo: string
+    quoteFrom: string
+    editing: string
+    cancelReply: string
+    cancelEdit: string
+    remaining: string
+    overLimit: string
+    dropHint: string
+  }
+  chatMenu: {
+    label: string
+    reply: string
+    quote: string
+    copy: string
+    copied: string
+    edit: string
+    pin: string
+    unpin: string
+    delete: string
+    report: string
+    retry: string
+    moreReactions: string
+    fewerReactions: string
+  }
+  /** `indexed` takes `{index}`, 1-based. */
+  chatPinned: { label: string; indexed: string; unpin: string }
+  /** `description` takes `{name}`. */
+  chatRequest: {
+    title: string
+    description: string
+    accept: string
+    delete: string
+    block: string
+    report: string
+  }
+  /** Service messages. Every key takes `{actor}`; `membersAdded` also takes
+   *  `{users}` (a locale-joined list), `memberRemoved` `{user}`,
+   *  `groupCreatedTitled` and `titleChanged` `{title}`, `messagePinned`
+   *  `{text}`. */
+  chatService: {
+    groupCreated: string
+    groupCreatedTitled: string
+    membersAdded: string
+    memberJoined: string
+    memberLeft: string
+    memberRemoved: string
+    titleChanged: string
+    photoChanged: string
+    messagePinned: string
+    messagePinnedMedia: string
+    joinedByLink: string
+  }
+  chatStatus: { sending: string; sent: string; read: string; failed: string }
+  /** `one` takes `{name}`; `several` takes `{names}` (a locale-joined list);
+   *  `many` takes `{name}` and `{count}`, the number of others. */
+  chatTyping: { typing: string; one: string; several: string; many: string }
   chip: { remove: string }
   /** `resultCount` takes `{count}`. */
   commandPalette: {
