@@ -1571,8 +1571,9 @@ export interface KunDatePickerProps {
    *  from the keyboard, Backspace or Delete on the focused trigger clears it,
    *  and the panel's Clear button is the path for a screen reader. */
   clearable?: boolean
-  /** date-fns pattern for the text shown in the trigger. Defaults follow
-   *  `precision`.
+  /** date-fns pattern for the text shown in the trigger, formatted in the
+   *  picker's locale, so `MMMM` or `EEEE` give month and weekday names in
+   *  that language. Defaults follow `precision`.
    *  @default 'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy' */
   format?: string
   /** date-fns pattern for the emitted v-model string. Defaults follow

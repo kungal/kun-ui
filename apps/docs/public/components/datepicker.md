@@ -178,7 +178,7 @@ const date = ref('')
 | `darkBorder` | `boolean` | `true` | Legacy dark-mode border toggle. **已废弃**：No-op since 0.18.0. Every neutral border now resolves to the unified `--color-kun-border` token (the `border-kun` utility), which already flips light↔dark — so the old light-translucent / dark-solid split this prop toggled is gone. Safe to remove from call sites. |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` |  |
-| `format` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the text shown in the trigger. Defaults follow `precision`. |
+| `format` | `string` | `'yyyy-MM-dd' \| 'yyyy-MM' \| 'yyyy'` | date-fns pattern for the text shown in the trigger, formatted in the picker's locale, so `MMMM` or `EEEE` give month and weekday names in that language. Defaults follow `precision`. |
 | `fullWidth` | `boolean` | `true` | Stretch the control to its container. Turn it off in a filter bar, so the trigger shrinks to its own content. The wrapper shrink-wraps its widest child, so a long `label` or `error` widens it too — a filter pill wants neither. |
 | `icon` | `string` | `""` | Icon rendered before the value in the trigger — a filter glyph for a filter bar, a category glyph for a field. The trailing calendar glyph is the disclosure indicator and stays either way. Must be one of the bundled icon names. |
 | `isDateDisabled` | `((date: Date) => boolean)` | — | Extra per-cell veto. Called with the FIRST instant of the period a cell covers — the day itself, the 1st of the month, or January 1st — so one predicate works at every precision. |

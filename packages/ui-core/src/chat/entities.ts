@@ -103,13 +103,12 @@ const mergeTouching = (ranges: Range[]): Range[] => {
 }
 
 // A quote is a block, so it must sit outside every inline entity: anything
-// that straddles a quote boundary is cut there.
-const splitAtQuotes = (ranges: Range[]): Range[] => {
-  const cuts = ranges
-    .filter((r) => r.entity.type === 'blockquote')
-    .flatMap((r) => [r.start, r.end])
+// that straddles a quote boundary is cut there. `quotes` must be the quotes
+// that survive nesting: cutting at one that is later dropped leaves a cut
+// with no cause, which the next pass merges away.
+const splitAtQuotes = (ranges: Range[], quotes: Range[]): Range[] => {
+  const cuts = quotes.flatMap((r) => [r.start, r.end])
   return ranges.flatMap((r) => {
-    if (r.entity.type === 'blockquote') return [r]
     const inner = cuts.filter((c) => c > r.start && c < r.end).sort((a, b) => a - b)
     const points = [r.start, ...new Set(inner), r.end]
     return points.slice(1).map((end, i) => ({ entity: r.entity, start: points[i]!, end }))
@@ -125,7 +124,8 @@ const splitAtQuotes = (ranges: Range[]): Range[] => {
  *    emoji) in half. Pull a blockquote's end in over trailing line breaks.
  * 2. Merge touching or overlapping runs of one inline format (bold, italic,
  *    underline, strikethrough, spoiler).
- * 3. Cut every other entity at the boundaries of a blockquote it straddles,
+ * 3. Settle the blockquotes among themselves (steps 5 and 6, quotes only),
+ *    then cut every other entity at the boundaries of a quote that survived,
  *    so quotes are always outermost.
  * 4. Pull the ends of an inline format in over line breaks, which draw
  *    nothing there (a blockquote's end, before step 3).
@@ -171,41 +171,50 @@ export const normalizeKunChatEntities = (
     }
     return r.start < r.end
   }
-  const queue = splitAtQuotes(mergeTouching(ranges)).filter(trimmed).sort(compareRanges)
-  const enqueue = (r: Range) => {
-    let i = 0
-    while (i < queue.length && compareRanges(queue[i]!, r) <= 0) i++
-    queue.splice(i, 0, r)
+  const nest = (ranges: Range[]): Range[] => {
+    const queue = ranges.filter(trimmed).sort(compareRanges)
+    const enqueue = (r: Range) => {
+      let i = 0
+      while (i < queue.length && compareRanges(queue[i]!, r) <= 0) i++
+      queue.splice(i, 0, r)
+    }
+
+    const out: Range[] = []
+    const stack: Range[] = []
+    while (queue.length) {
+      const r = queue.shift()!
+      while (stack.length && stack[stack.length - 1]!.end <= r.start) stack.pop()
+      const parent = stack[stack.length - 1]
+      if (parent && r.end > parent.end) {
+        // Crosses the parent's end: keep the part inside, requeue the rest.
+        const rest: Range = { entity: r.entity, start: parent.end, end: r.end }
+        if (trimmed(rest)) enqueue(rest)
+        r.end = parent.end
+        if (!trimmed(r)) continue
+        // Shorter now, it may sort after entities still waiting.
+        if (queue.length && compareRanges(r, queue[0]!) > 0) {
+          enqueue(r)
+          continue
+        }
+      }
+      const blocked = stack.some(
+        (a) =>
+          LEAF_TYPES.has(a.entity.type) ||
+          a.entity.type === r.entity.type ||
+          (LINK_TYPES.has(a.entity.type) && LINK_TYPES.has(r.entity.type))
+      )
+      if (blocked) continue
+      stack.push(r)
+      out.push(r)
+    }
+    return out
   }
 
-  const out: Range[] = []
-  const stack: Range[] = []
-  while (queue.length) {
-    const r = queue.shift()!
-    while (stack.length && stack[stack.length - 1]!.end <= r.start) stack.pop()
-    const parent = stack[stack.length - 1]
-    if (parent && r.end > parent.end) {
-      // Crosses the parent's end: keep the part inside, requeue the rest.
-      const rest: Range = { entity: r.entity, start: parent.end, end: r.end }
-      if (trimmed(rest)) enqueue(rest)
-      r.end = parent.end
-      if (!trimmed(r)) continue
-      // Shorter now, it may sort after entities still waiting.
-      if (queue.length && compareRanges(r, queue[0]!) > 0) {
-        enqueue(r)
-        continue
-      }
-    }
-    const blocked = stack.some(
-      (a) =>
-        LEAF_TYPES.has(a.entity.type) ||
-        a.entity.type === r.entity.type ||
-        (LINK_TYPES.has(a.entity.type) && LINK_TYPES.has(r.entity.type))
-    )
-    if (blocked) continue
-    stack.push(r)
-    out.push(r)
-  }
+  // Everything else is cut at the quotes' boundaries, so only a quote can
+  // hold a quote: nesting the quotes alone settles which ones survive.
+  const quotes = nest(ranges.filter((r) => r.entity.type === 'blockquote'))
+  const inline = mergeTouching(ranges.filter((r) => r.entity.type !== 'blockquote'))
+  const out = nest([...quotes, ...splitAtQuotes(inline, quotes)])
 
   return out.map((r) => cleanEntity(r.entity, r.start, r.end - r.start))
 }

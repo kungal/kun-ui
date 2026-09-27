@@ -110,6 +110,31 @@ test('format writes back what parse reads', () => {
   assert.equal(formatKunChatMarkdown('bold', [e('bold', 0, 4)]), '**bold**')
 })
 
+test('a link label ending in a line break leaves the next line to the parser', () => {
+  // The parser checks for `> ` and `\\>` after the label's `](…)`, where the
+  // new line's text begins, so the writer escapes there too.
+  const cases: [string, KunChatEntity[], string][] = [
+    ['a\n\\>b', [e('mention', 1, 1, { user_id: '12' })], 'a[\n](mention:12)\\\\>b'],
+    [
+      ')\n>',
+      [e('blockquote', 0, 1), e('blockquote', 1, 2), e('mention', 1, 1, { user_id: '12' })],
+      '> )[\n](mention:12)\\>',
+    ],
+    ['a\n> b', [e('text_link', 0, 2, { url: 'https://a' })], '[a\n](https://a)\\> b'],
+    // a quote that starts there is read as one
+    ['a\nb', [e('mention', 0, 2, { user_id: '1' }), e('blockquote', 2, 1)], '[a\n](mention:1)> b'],
+    // inside a quote the `> ` prefix sits in the label, and the check is spent
+    ['x\n\\>y', [e('blockquote', 0, 5), e('mention', 0, 2, { user_id: '1' })], '> [x\n> ](mention:1)\\>y'],
+  ]
+  for (const [text, entities, source] of cases) {
+    assert.equal(formatKunChatMarkdown(text, entities), source)
+    const kept = normalizeKunChatEntities(text, entities).filter(
+      (x) => !(x.type === 'blockquote' && x.offset === 1)
+    )
+    assert.deepEqual(parseKunChatMarkdown(source), { text, entities: kept }, source)
+  }
+})
+
 test('format drops url entities and quotes that are not whole lines', () => {
   assert.equal(formatKunChatMarkdown('https://a.b', [e('url', 0, 11)]), 'https://a.b')
   assert.equal(formatKunChatMarkdown('a b', [e('blockquote', 2, 1)]), 'a b')
@@ -117,9 +142,14 @@ test('format drops url entities and quotes that are not whole lines', () => {
 
 // Property: parse(format(m)) === m for every message the syntax can spell.
 
+// mulberry32. The LCG this replaced, `seed * 1103515245 + 12345` in doubles,
+// overflowed the 53-bit mantissa and cycled after about 10,000 draws, so the
+// random tests replayed the same few hundred cases.
 const rng = (seed: number) => () => {
-  seed = (seed * 1103515245 + 12345) & 0x7fffffff
-  return seed / 0x7fffffff
+  seed = (seed + 0x6d2b79f5) | 0
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
 }
 // Every character the syntax treats specially, and a few it does not.
 const CHARS = ['a', 'b', ' ', '\n', '\n', '中', '😀', '*', '_', '+', '~', '|', '`', '[', ']', '(', ')', '>', '\\', '\\', '#']

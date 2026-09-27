@@ -8,6 +8,7 @@ import {
   kunPanelRoundedClass,
   kunControlSizeClasses,
   kunFocusRingClasses,
+  type KunUIColor,
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useTransformOrigin } from '../composables/useTransformOrigin'
@@ -242,6 +243,27 @@ watch(viewingDate, (val) => {
   activeDate.value = new Date(val)
 })
 
+// DOM focus stays on the trigger while the arrows move `aria-activedescendant`,
+// so no cell ever matches :focus-visible and a sighted keyboard user saw
+// nothing move until the page turned. The active cell draws the focus ring
+// itself, after a key and not after a click, as React Aria's useOption shows a
+// virtually focused option focus-visible only under keyboard modality.
+const keyboardActive = ref(false)
+watch(isOpen, (open) => {
+  if (!open) keyboardActive.value = false
+})
+const activeCellRing: Record<KunUIColor, string> = {
+  default: 'ring-2 ring-default/50',
+  primary: 'ring-2 ring-primary/50',
+  secondary: 'ring-2 ring-secondary/50',
+  success: 'ring-2 ring-success/50',
+  warning: 'ring-2 ring-warning/50',
+  danger: 'ring-2 ring-danger/50',
+  info: 'ring-2 ring-info/50',
+}
+const activeCellClass = (key: string) =>
+  keyboardActive.value && key === activeKey.value ? activeCellRing[props.color] : ''
+
 // The active cell is always a full Date; which of its fields a key moves
 // depends on the view. Both coarse grids are 3 columns wide, so a vertical step
 // is 3 cells there and 7 (a week) in the day grid.
@@ -307,9 +329,11 @@ const onKeydown = (e: KeyboardEvent) => {
     if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
       e.preventDefault()
       isOpen.value = true
+      keyboardActive.value = true
     }
     return
   }
+  if (e.key.startsWith('Arrow')) keyboardActive.value = true
   switch (e.key) {
     case 'ArrowLeft':
       e.preventDefault()
@@ -347,12 +371,12 @@ const displayValue = computed(() => {
     // function and froze the component on its last good DOM.
     const mv = props.modelValue
     const d = parseDate(Array.isArray(mv) ? mv[0] : mv)
-    return d ? formatDate(d, resolvedFormat.value) : ''
+    return d ? formatLocalized(d, resolvedFormat.value) : ''
   }
   if (!Array.isArray(props.modelValue)) return ''
   const start = parseDate(props.modelValue[0])
   const end = parseDate(props.modelValue[1])
-  const fmt = (d: Date) => formatDate(d, resolvedFormat.value)
+  const fmt = (d: Date) => formatLocalized(d, resolvedFormat.value)
   if (start && end) return `${fmt(start)} - ${fmt(end)}`
   // A half-open range is not hypothetical: `selectDate` emits `[start, null]` on
   // the FIRST click of every range selection. Rendering '' for it left the
@@ -424,6 +448,7 @@ const yearRows = computed(() => chunk(yearGrid.value, 3))
 // stands for. Literal strings so they survive into `dist/index.js` for the
 // consumer's Tailwind to find.
 const periodCellClass = (cell: {
+  key: string
   date: Date
   isNow: boolean
   isSelected: boolean
@@ -446,6 +471,7 @@ const periodCellClass = (cell: {
       'bg-primary/10 rounded-none',
     cell.isRangeStart && 'rounded-r-none',
     cell.isRangeEnd && 'rounded-l-none',
+    activeCellClass(cell.key),
     props.classNames?.cell
   )
 
@@ -568,6 +594,7 @@ const isInPreviewRange = (date: Date) => {
           :style="[floatingStyles, { minWidth: '260px', transformOrigin }]"
           tabindex="-1"
           @keydown="onPanelKeydown"
+          @pointerdown="keyboardActive = false"
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -664,6 +691,7 @@ const isInPreviewRange = (date: Date) => {
                         'bg-primary/10 rounded-none',
                       day.isRangeStart && 'rounded-r-none',
                       day.isRangeEnd && 'rounded-l-none',
+                      activeCellClass(day.key),
                       props.classNames?.cell
                     )
                   "

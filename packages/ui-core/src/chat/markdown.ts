@@ -377,6 +377,9 @@ interface LitAtom {
 interface MarkAtom {
   kind: 'mark'
   s: string
+  /** The parser jumps over it without a line-start check: a pair's closing
+   *  marker, and a link's `](`…`)` (whose target atoms are `url`). */
+  closer?: boolean
 }
 type Atom = LitAtom | MarkAtom
 
@@ -441,7 +444,7 @@ export const formatKunChatMarkdown = (
   }
 
   const atoms: Atom[] = []
-  const mark = (s: string) => atoms.push({ kind: 'mark', s })
+  const mark = (s: string, closer = false) => atoms.push({ kind: 'mark', s, closer })
   const lit = (ch: string, ctx: Context, inLabel: boolean) =>
     atoms.push({ kind: 'lit', ch, ctx, inLabel, escape: false })
   let quoteDepth = 0
@@ -474,7 +477,7 @@ export const formatKunChatMarkdown = (
     if (pair) {
       mark(pair)
       walk(node, inLabel)
-      mark(pair)
+      mark(pair, true)
     } else if (e.type === 'code') {
       mark('`')
       emitRaw(node.start, node.end, 'code')
@@ -487,10 +490,10 @@ export const formatKunChatMarkdown = (
     } else if (e.type === 'text_link' || e.type === 'mention') {
       mark('[')
       walk(node, true)
-      mark('](')
+      mark('](', true)
       const target = e.type === 'mention' ? `mention:${e.user_id}` : e.url!
       for (const ch of target) lit(ch, 'url', false)
-      mark(')')
+      mark(')', true)
     } else if (e.type === 'blockquote') {
       mark('> ')
       quoteDepth++
@@ -545,10 +548,6 @@ const beforeSpecial = (atoms: Atom[], j: number, ctx: Context, out: string): boo
   return PAIR_CHARS.has(c) && (lastNonBackslash(out) === c || rawCharFrom(atoms, j + 1) === c)
 }
 
-/** Where the parser checks for a quote prefix and a leading `>`. */
-const atTextLineStart = (out: string) =>
-  out === '' || out.endsWith('\n') || out === '> ' || out.endsWith('\n> ')
-
 const serialize = (atoms: Atom[]): string => {
   // Which literals need a backslash.
   atoms.forEach((a, i) => {
@@ -585,16 +584,29 @@ const serialize = (atoms: Atom[]): string => {
     }
   })
 
+  // The parser's `atLineStart`, tracked over the atoms rather than read off
+  // the output: a line break that ends a link label is followed in the source
+  // by `](…)`, and the parser checks the line start after it. Reading the
+  // output lost the text after `[⏎](mention:12)` when it began `\>` or `>`.
+  // After a `> ` prefix the parser checks only the very next character.
+  let lineStart = true
+  let afterPrefix = false
   let out = ''
   let i = 0
   while (i < atoms.length) {
     const a = atoms[i]!
+    const skipped = a.kind === 'mark' ? a.closer === true : a.ctx === 'url'
+    const checked = lineStart && !skipped
+    const leading = afterPrefix || checked
+    afterPrefix = false
+    if (!skipped) lineStart = false
     if (a.kind === 'mark') {
       out += a.s
+      afterPrefix = checked && a.s === '> '
       i++
       continue
     }
-    if (a.ctx === 'text' && atTextLineStart(out)) {
+    if (a.ctx === 'text' && leading) {
       let j = i
       while (isLit(atoms[j], '\\', 'text')) j++
       if (isLit(atoms[j], '>', 'text')) out += '\\'
@@ -607,6 +619,7 @@ const serialize = (atoms: Atom[]): string => {
       continue
     }
     out += a.escape ? `\\${a.ch}` : a.ch
+    if (a.ctx === 'text' && a.ch === '\n') lineStart = true
     i++
   }
   return out

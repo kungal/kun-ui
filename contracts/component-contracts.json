@@ -2495,7 +2495,7 @@
           "type": "string",
           "required": false,
           "default": "'yyyy-MM-dd' | 'yyyy-MM' | 'yyyy'",
-          "description": "date-fns pattern for the text shown in the trigger. Defaults follow `precision`."
+          "description": "date-fns pattern for the text shown in the trigger, formatted in the picker's locale, so `MMMM` or `EEEE` give month and weekday names in that language. Defaults follow `precision`."
         },
         {
           "name": "fullWidth",

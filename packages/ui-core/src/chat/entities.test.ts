@@ -144,6 +144,30 @@ test('quotes stay outermost; formats lose line breaks at their ends', () => {
   assert.deepEqual(normalizeKunChatEntities('\nab\n', [e('spoiler', 0, 4)]), [e('spoiler', 1, 2)])
 })
 
+test('a quote that does not survive nesting cuts nothing', () => {
+  // The quote at 5 is inside the one at 2 and is dropped, so the spoiler must
+  // not keep a cut at 5: a second pass would have merged it away.
+  const text = '中中b*bab'
+  const once = normalizeKunChatEntities(text, [
+    e('blockquote', 2, 8),
+    e('url', 6, 2),
+    e('blockquote', 5, 5),
+    e('spoiler', 1, 6),
+  ])
+  assert.deepEqual(once, [
+    e('spoiler', 1, 1),
+    e('blockquote', 2, 5),
+    e('spoiler', 2, 5),
+    e('url', 6, 1),
+  ])
+  assert.deepEqual(normalizeKunChatEntities(text, once), once)
+  // Crossing quotes: the second keeps only its part past the first.
+  assert.deepEqual(
+    normalizeKunChatEntities('abcdefgh', [e('blockquote', 0, 5), e('blockquote', 3, 5), e('bold', 1, 6)]),
+    [e('blockquote', 0, 5), e('bold', 1, 4), e('blockquote', 5, 3), e('bold', 5, 2)]
+  )
+})
+
 test('one line break on each side of a block is left out of the tree', () => {
   const text = 'look:\ncode\nok'
   const tree = buildKunChatEntityTree(text, [e('pre', 6, 4, { language: 'go' })])
@@ -159,9 +183,14 @@ test('one line break on each side of a block is left out of the tree', () => {
 
 // Property: normalization is a fixed point, and the tree covers the text.
 
+// mulberry32. The LCG this replaced, `seed * 1103515245 + 12345` in doubles,
+// overflowed the 53-bit mantissa and cycled after about 10,000 draws, so the
+// random tests replayed the same few hundred cases.
 const rng = (seed: number) => () => {
-  seed = (seed * 1103515245 + 12345) & 0x7fffffff
-  return seed / 0x7fffffff
+  seed = (seed + 0x6d2b79f5) | 0
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
 }
 const TYPES: KunChatEntity['type'][] = [
   'bold',
@@ -180,9 +209,9 @@ const CHARS = ['a', 'b', ' ', '\n', '中', '😀', '*']
 
 test('normalize is idempotent and the tree reproduces the text (random)', () => {
   const r = rng(42)
-  for (let round = 0; round < 3000; round++) {
+  for (let round = 0; round < 20000; round++) {
     const text = Array.from({ length: Math.floor(r() * 16) }, () => CHARS[Math.floor(r() * CHARS.length)]).join('')
-    const entities = Array.from({ length: Math.floor(r() * 6) }, () => {
+    const entities = Array.from({ length: Math.floor(r() * 8) }, () => {
       const type = TYPES[Math.floor(r() * TYPES.length)]!
       return e(type, Math.floor(r() * 18) - 1, Math.floor(r() * 10), {
         url: 'https://x',
