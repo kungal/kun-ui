@@ -177,7 +177,7 @@ class KunChatStrings {
   /// `en`: Media
   final String media;
 
-  /// `en`: Draft: 
+  /// `en`: Draft:
   final String draft;
 
   /// `en`: Messages
@@ -223,7 +223,7 @@ class KunChatStrings {
 
   final String _members;
 
-  /// `en`: {name}: 
+  /// `en`: {name}:
   String senderPrefix({required Object name}) =>
       _senderPrefix.replaceAll('{name}', '$name');
 
@@ -249,7 +249,9 @@ class KunChatStrings {
 
   /// `en`: {label}, {count}
   String reactionCount({required Object label, required Object count}) =>
-      _reactionCount.replaceAll('{label}', '$label').replaceAll('{count}', '$count');
+      _reactionCount
+          .replaceAll('{label}', '$label')
+          .replaceAll('{count}', '$count');
 
   /// `en`: {count} members
   String members({required Object count}) =>
@@ -499,11 +501,15 @@ class KunChatServiceStrings {
 
   /// `en`: {actor} created the group “{title}”
   String groupCreatedTitled({required Object actor, required Object title}) =>
-      _groupCreatedTitled.replaceAll('{actor}', '$actor').replaceAll('{title}', '$title');
+      _groupCreatedTitled
+          .replaceAll('{actor}', '$actor')
+          .replaceAll('{title}', '$title');
 
   /// `en`: {actor} added {users}
   String membersAdded({required Object actor, required Object users}) =>
-      _membersAdded.replaceAll('{actor}', '$actor').replaceAll('{users}', '$users');
+      _membersAdded
+          .replaceAll('{actor}', '$actor')
+          .replaceAll('{users}', '$users');
 
   /// `en`: {actor} joined the group
   String memberJoined({required Object actor}) =>
@@ -515,11 +521,15 @@ class KunChatServiceStrings {
 
   /// `en`: {actor} removed {user}
   String memberRemoved({required Object actor, required Object user}) =>
-      _memberRemoved.replaceAll('{actor}', '$actor').replaceAll('{user}', '$user');
+      _memberRemoved
+          .replaceAll('{actor}', '$actor')
+          .replaceAll('{user}', '$user');
 
   /// `en`: {actor} renamed the group to “{title}”
   String titleChanged({required Object actor, required Object title}) =>
-      _titleChanged.replaceAll('{actor}', '$actor').replaceAll('{title}', '$title');
+      _titleChanged
+          .replaceAll('{actor}', '$actor')
+          .replaceAll('{title}', '$title');
 
   /// `en`: {actor} changed the group photo
   String photoChanged({required Object actor}) =>
@@ -527,7 +537,9 @@ class KunChatServiceStrings {
 
   /// `en`: {actor} pinned “{text}”
   String messagePinned({required Object actor, required Object text}) =>
-      _messagePinned.replaceAll('{actor}', '$actor').replaceAll('{text}', '$text');
+      _messagePinned
+          .replaceAll('{actor}', '$actor')
+          .replaceAll('{text}', '$text');
 
   /// `en`: {actor} pinned a message
   String messagePinnedMedia({required Object actor}) =>
@@ -1674,7 +1686,8 @@ class KunMessages {
     ),
     chatRequest: KunChatRequestStrings(
       title: 'Message request',
-      description: '{name} wants to message you. Until you accept, they can\'t see whether you\'ve read it.',
+      description:
+          '{name} wants to message you. Until you accept, they can\'t see whether you\'ve read it.',
       accept: 'Accept',
       delete: 'Delete',
       block: 'Block',

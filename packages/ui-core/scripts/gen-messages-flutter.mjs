@@ -145,6 +145,10 @@ const lit = (s) =>
     .replace(/\$/g, '\\$')
     .replace(/\n/g, '\\n')}'`
 
+// dart format strips trailing whitespace from a comment, and a value like
+// "Draft: " ends in a space.
+const docLine = (line) => line.trimEnd()
+
 const docOf = (ns, key) => {
   const doc = catalogs.find((c) => c.code === DOC_CATALOG) ?? base
   return doc.messages[ns][key]
@@ -203,7 +207,7 @@ for (const ns of namespaces) {
   }
   w('')
   for (const k of plain) {
-    w(`  /// \`${DOC_CATALOG}\`: ${docOf(ns, k)}`, `  final String ${ident(k, 'key')};`, '')
+    w(docLine(`  /// \`${DOC_CATALOG}\`: ${docOf(ns, k)}`), `  final String ${ident(k, 'key')};`, '')
   }
   for (const k of templated) {
     w(`  final String _${ident(k, 'key')};`, '')
@@ -216,13 +220,24 @@ for (const ns of namespaces) {
       .join('')
     // 80 columns, dart format's limit: it joins the body onto the signature
     // when the whole method fits and splits after `=>` when it does not.
+    // Past 80 there too, it breaks the `.replaceAll` chain one call per line
+    // (a two-placeholder chat string was the first to need it, and CI's
+    // `dart format --set-exit-if-changed` failed on 2.51.0).
     const head = `  String ${ident(k, 'key')}({${sig}}) =>`
     const tail = `_${ident(k, 'key')}${body};`
+    const chain = [
+      `      _${ident(k, 'key')}`,
+      ...names.map(
+        (p, i) => `          .replaceAll('{${p}}', '\$${p}')${i === names.length - 1 ? ';' : ''}`
+      ),
+    ]
     w(
-      `  /// \`${DOC_CATALOG}\`: ${docOf(ns, k)}`,
+      docLine(`  /// \`${DOC_CATALOG}\`: ${docOf(ns, k)}`),
       ...(`${head} ${tail}`.length <= 80
         ? [`${head} ${tail}`]
-        : [head, `      ${tail}`]),
+        : `      ${tail}`.length <= 80 || names.length < 2
+          ? [head, `      ${tail}`]
+          : [head, ...chain]),
       ''
     )
   }
@@ -270,7 +285,10 @@ for (const c of catalogs) {
   for (const ns of namespaces) {
     w(`    ${ident(ns, 'namespace')}: ${className(ns)}(`)
     for (const k of Object.keys(base.messages[ns])) {
-      w(`      ${ident(k, 'key')}: ${lit(c.messages[ns][k])},`)
+      // Past 80 columns dart format moves the value under its name.
+      const line = `      ${ident(k, 'key')}: ${lit(c.messages[ns][k])},`
+      if (line.length <= 80) w(line)
+      else w(`      ${ident(k, 'key')}:`, `          ${lit(c.messages[ns][k])},`)
     }
     w('    ),')
   }
