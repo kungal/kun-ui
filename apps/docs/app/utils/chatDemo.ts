@@ -15,7 +15,6 @@ import {
   type KunChatReactionOption,
   type KunChatUser,
 } from '@kungal/ui-core'
-import type { KunChatMediaUrlResolver } from '@kungal/ui-vue'
 import { KUN_AVATAR_POOL } from './avatarPool'
 
 export const DEMO_TZ = 'Asia/Shanghai'
@@ -71,17 +70,13 @@ export const demoReactions: KunChatReactionOption[] = REACTIONS.map(([key, emoji
   image_url: `https://www.kungal.com/emoji/${key}.webp`,
 }))
 
-// `image_hash` here is a path on kungal.com; a real site maps its image
-// service's hash to a URL the same way.
-export const resolveDemoMedia: KunChatMediaUrlResolver = (media) =>
-  `https://www.kungal.com/${media.image_hash}.webp`
-
 export const demoPhoto = (path: string, width: number, height: number) => ({
   type: 'photo' as const,
   image_hash: path,
   width,
   height,
   thumbhash: DEMO_THUMBHASH[path] ?? null,
+  url: `https://www.kungal.com/${path}.webp`,
 })
 
 // Computed from the images themselves with thumbhash's rgbaToThumbHash, as

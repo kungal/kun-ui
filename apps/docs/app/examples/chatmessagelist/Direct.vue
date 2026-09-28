@@ -6,7 +6,6 @@ import {
   demoReactions,
   demoUsers,
   makeDirectConversation,
-  resolveDemoMedia,
 } from '~/utils/chatDemo'
 
 // A direct chat opened with unread messages: it opens at the "unread" divider,
@@ -26,7 +25,6 @@ const readUpTo = ref(16)
       :last-read-seq="16"
       :peer-read-seq="14"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
       :time-zone="DEMO_TZ"
       @read="(seq) => (readUpTo = seq)"
     />

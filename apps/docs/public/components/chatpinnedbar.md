@@ -9,7 +9,7 @@
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ME, demoMessage, demoPhoto, demoTime, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoMessage, demoPhoto, demoTime } from '~/utils/chatDemo'
 
 // Three pinned messages. The bar starts at the newest; each click emits `jump`
 // for the one shown and moves on to the next older one, round and round.
@@ -25,7 +25,6 @@ const log = ref<number[]>([])
   <div class="w-full border-default/20 flex flex-col overflow-hidden rounded-kun-lg border">
     <KunChatPinnedBar
       :messages="pinned"
-      :resolve-media-url="resolveDemoMedia"
       unpinnable
       @jump="(seq) => log.unshift(seq)"
       @unpin="(seq) => log.unshift(-seq)"
@@ -42,7 +41,7 @@ const log = ref<number[]>([])
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `messages` * | `KunChatMessage[]` | — | Pinned messages, in any order. The bar starts at the newest and each click moves to the next older one, as Telegram does. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a pinned photo's hash into a URL, for the thumbnail. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a pinned photo into the thumbnail's URL. Without it the photo's own `url` is used. |
 | `unpinnable` | `boolean` | `false` | Show the × that emits `unpin`. |
 
 ## Events

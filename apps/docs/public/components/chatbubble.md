@@ -85,12 +85,12 @@ const clicked = ref<number | null>(null)
 
 ```vue
 <script setup lang="ts">
-import { DEMO_TZ, demoMessage, demoPhoto, demoTime, demoUsers, resolveDemoMedia } from '~/utils/chatDemo'
+import { DEMO_TZ, demoMessage, demoPhoto, demoTime, demoUsers } from '~/utils/chatDemo'
 
 // A photo keeps its shape inside 320 × 420; photos sharing a `media_group_id`
 // are one album, laid out with Telegram's mosaic. A thumbhash shows while the
-// image loads; a click opens the lightbox. `resolve-media-url` turns the image
-// hash into a URL — KunUI never builds one.
+// image loads; a click opens the lightbox. The photo's `url` is shown as the
+// server sends it; pass `resolve-media-url` to serve a smaller preview.
 const photo = demoMessage('1002', demoTime(0, '09:13'), '', { media: demoPhoto('bg/bg36', 1920, 1080) })
 const captioned = demoMessage('1002', demoTime(0, '09:14'), '片头曲好好听,这张是开场动画的截图', {
   media: demoPhoto('ren/2337', 290, 599),
@@ -108,13 +108,12 @@ const album = [
 
 <template>
   <div class="w-full bg-default-100 flex flex-col gap-2 rounded-kun-lg p-3">
-    <KunChatBubble :message="photo" :users="demoUsers" :resolve-media-url="resolveDemoMedia" :time-zone="DEMO_TZ" />
-    <KunChatBubble :message="captioned" :users="demoUsers" :resolve-media-url="resolveDemoMedia" :time-zone="DEMO_TZ" />
+    <KunChatBubble :message="photo" :users="demoUsers" :time-zone="DEMO_TZ" />
+    <KunChatBubble :message="captioned" :users="demoUsers" :time-zone="DEMO_TZ" />
     <KunChatBubble
       :message="album[4]!"
       :album="album"
       :users="demoUsers"
-      :resolve-media-url="resolveDemoMedia"
       :time-zone="DEMO_TZ"
     />
   </div>
@@ -246,7 +245,7 @@ const withContext = demoMessage('1002', demoTime(0, '21:16'), '这个补丁的�
 | `own` | `boolean` | `false` | Sent by the viewer: right-aligned, in the primary tint. |
 | `position` | `KunChatBubblePosition` | `"single"` | Where the bubble sits in its sender's run: it rounds the corners on the sender's side, and `single` / `last` draw the tail. |
 | `reactionOptions` | `KunChatReactionOption[]` | `[]` | The reaction vocabulary, to draw each reaction key. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Required to show photos. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown. |
 | `resolveMessage` | `((seq: number) => KunChatMessage)` | — | Finds a loaded message by seq — the text a "pinned a message" service line quotes. |
 | `showSender` | `boolean` | `false` | Show the sender's name on top: group chats, first of a run. |
 | `status` | `KunChatSendStatus` | — | Delivery state of an own message. The clock / tick / double tick at the bottom corner; `failed` is a button that emits `retry`. |

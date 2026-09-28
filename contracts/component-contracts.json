@@ -954,7 +954,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Required to show photos."
+          "description": "Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown."
         },
         {
           "name": "resolveMessage",
@@ -1564,7 +1564,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Turns a photo's hash into a URL. Required to show photos."
+          "description": "Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown."
         },
         {
           "name": "swipeToReply",
@@ -1743,7 +1743,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Turns a pinned photo's hash into a URL, for the thumbnail."
+          "description": "Turns a pinned photo into the thumbnail's URL. Without it the photo's own `url` is used."
         },
         {
           "name": "unpinnable",

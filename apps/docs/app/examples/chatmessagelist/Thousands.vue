@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, shallowRef } from 'vue'
 import type { KunChatMessage } from '@kungal/ui-vue'
-import { ME, demoReactions, demoUsers, makeHistory, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoReactions, demoUsers, makeHistory } from '~/utils/chatDemo'
 
 // Three thousand messages in one list. Rows off screen skip layout and paint
 // (`content-visibility: auto`), so scrolling stays smooth without a
@@ -31,7 +31,6 @@ const load = async (count: number) => {
       :users="demoUsers"
       :current-user-id="ME"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
     >
       <template #empty>点上面的按钮载入 3000 条消息</template>
     </KunChatMessageList>

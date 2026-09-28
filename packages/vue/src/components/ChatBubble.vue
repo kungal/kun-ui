@@ -137,7 +137,7 @@ const bubbleStyle = computed(() => {
 })
 
 const src = (p: KunChatPhoto, variant: 'preview' | 'original') =>
-  props.resolveMediaUrl?.(p, variant) ?? ''
+  props.resolveMediaUrl?.(p, variant) ?? p.url ?? ''
 
 const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)

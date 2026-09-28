@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, shallowRef } from 'vue'
 import type { KunChatMessage } from '@kungal/ui-vue'
-import { ME, demoUsers, makeHistory, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoUsers, makeHistory } from '~/utils/chatDemo'
 
 // Paging both ways, as the API does it (`before_seq`, `after_seq`,
 // `around_seq`). Scroll up: older pages arrive above you and the view does not
@@ -70,7 +70,6 @@ const latest = async () => {
       :has-newer="hasNewer"
       :loading-older="loadingOlder"
       :loading-newer="loadingNewer"
-      :resolve-media-url="resolveDemoMedia"
       @load-older="loadOlder"
       @load-newer="loadNewer"
       @jump="jump"

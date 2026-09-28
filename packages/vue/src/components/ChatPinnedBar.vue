@@ -63,7 +63,8 @@ const segments = computed(() => {
 
 const thumb = computed(() => {
   const media = current.value?.media
-  return media?.type === 'photo' && props.resolveMediaUrl ? props.resolveMediaUrl(media, 'preview') : null
+  if (media?.type !== 'photo') return null
+  return props.resolveMediaUrl?.(media, 'preview') ?? media.url ?? null
 })
 const title = computed(() =>
   stack.value.length > 1

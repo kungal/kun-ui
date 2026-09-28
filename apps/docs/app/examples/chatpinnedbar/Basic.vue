@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ME, demoMessage, demoPhoto, demoTime, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoMessage, demoPhoto, demoTime } from '~/utils/chatDemo'
 
 // Three pinned messages. The bar starts at the newest; each click emits `jump`
 // for the one shown and moves on to the next older one, round and round.
@@ -16,7 +16,6 @@ const log = ref<number[]>([])
   <div class="w-full border-default/20 flex flex-col overflow-hidden rounded-kun-lg border">
     <KunChatPinnedBar
       :messages="pinned"
-      :resolve-media-url="resolveDemoMedia"
       unpinnable
       @jump="(seq) => log.unshift(seq)"
       @unpin="(seq) => log.unshift(-seq)"

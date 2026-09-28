@@ -716,7 +716,7 @@ const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)
 const lightboxImages = computed(() =>
   photos.value.map((m) => ({
-    src: props.resolveMediaUrl?.(m.media, 'original') ?? '',
+    src: props.resolveMediaUrl?.(m.media, 'original') ?? m.media.url ?? '',
     alt: t('chat.photoFrom', { name: sender(m.sender_id).name }),
   }))
 )

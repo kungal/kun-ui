@@ -2044,7 +2044,8 @@ export interface KunCommandPaletteProps<
 // and goes out through events.
 
 /** Turns a media object into an image URL: `preview` for the bubble,
- *  `original` for the lightbox. KunUI never builds an image URL itself. */
+ *  `original` for the lightbox. Without one the components show the media's
+ *  own `url`; KunUI never builds a URL from `image_hash`. */
 export type KunChatMediaUrlResolver = (
   media: KunChatMedia,
   variant: 'preview' | 'original'
@@ -2092,7 +2093,8 @@ export interface KunChatBubbleProps {
   status?: KunChatSendStatus
   /** The reaction vocabulary, to draw each reaction key. */
   reactionOptions?: KunChatReactionOption[]
-  /** Required to show photos. */
+  /** Turns a photo into a URL, e.g. a smaller preview. Without it the
+   *  photo's own `url` is shown. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Finds a loaded message by seq — the text a "pinned a message" service
    *  line quotes. */
@@ -2144,7 +2146,8 @@ export interface KunChatMessageListProps {
   /** The reaction vocabulary: the menu's quick row, and the art on reaction
    *  chips. */
   reactionOptions?: KunChatReactionOption[]
-  /** Turns a photo's hash into a URL. Required to show photos. */
+  /** Turns a photo into a URL, e.g. a smaller preview. Without it the
+   *  photo's own `url` is shown. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Which actions the menu offers for a message — permissions are the
    *  site's call. `quote` shows only while text of the message is selected,
@@ -2313,7 +2316,8 @@ export interface KunChatPinnedBarProps {
   /** Pinned messages, in any order. The bar starts at the newest and each
    *  click moves to the next older one, as Telegram does. */
   messages: KunChatMessage[]
-  /** Turns a pinned photo's hash into a URL, for the thumbnail. */
+  /** Turns a pinned photo into the thumbnail's URL. Without it the photo's
+   *  own `url` is used. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Show the × that emits `unpin`. */
   unpinnable?: boolean

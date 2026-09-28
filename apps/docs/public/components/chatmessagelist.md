@@ -15,7 +15,6 @@ import {
   demoReactions,
   demoUsers,
   makeDirectConversation,
-  resolveDemoMedia,
 } from '~/utils/chatDemo'
 
 // A direct chat opened with unread messages: it opens at the "unread" divider,
@@ -35,7 +34,6 @@ const readUpTo = ref(16)
       :last-read-seq="16"
       :peer-read-seq="14"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
       :time-zone="DEMO_TZ"
       @read="(seq) => (readUpTo = seq)"
     />
@@ -57,7 +55,6 @@ import {
   demoReactions,
   demoUsers,
   makeGroupConversation,
-  resolveDemoMedia,
 } from '~/utils/chatDemo'
 
 // A group: names on the first message of each run, the avatar beside the last,
@@ -79,7 +76,6 @@ const list = ref<{ scrollToSeq: (seq: number) => boolean } | null>(null)
       :users="demoUsers"
       :current-user-id="ME"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
       :time-zone="DEMO_TZ"
     />
   </div>
@@ -92,7 +88,7 @@ const list = ref<{ scrollToSeq: (seq: number) => boolean } | null>(null)
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, shallowRef } from 'vue'
 import type { KunChatMessage } from '@kungal/ui-vue'
-import { ME, demoUsers, makeHistory, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoUsers, makeHistory } from '~/utils/chatDemo'
 
 // Paging both ways, as the API does it (`before_seq`, `after_seq`,
 // `around_seq`). Scroll up: older pages arrive above you and the view does not
@@ -161,7 +157,6 @@ const latest = async () => {
       :has-newer="hasNewer"
       :loading-older="loadingOlder"
       :loading-newer="loadingNewer"
-      :resolve-media-url="resolveDemoMedia"
       @load-older="loadOlder"
       @load-newer="loadNewer"
       @jump="jump"
@@ -181,7 +176,7 @@ const latest = async () => {
 <script setup lang="ts">
 import { nextTick, ref, shallowRef } from 'vue'
 import type { KunChatMessage } from '@kungal/ui-vue'
-import { ME, demoReactions, demoUsers, makeHistory, resolveDemoMedia } from '~/utils/chatDemo'
+import { ME, demoReactions, demoUsers, makeHistory } from '~/utils/chatDemo'
 
 // Three thousand messages in one list. Rows off screen skip layout and paint
 // (`content-visibility: auto`), so scrolling stays smooth without a
@@ -211,7 +206,6 @@ const load = async (count: number) => {
       :users="demoUsers"
       :current-user-id="ME"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
     >
       <template #empty>点上面的按钮载入 3000 条消息</template>
     </KunChatMessageList>
@@ -236,7 +230,7 @@ const load = async (count: number) => {
 | `loadingOlder` | `boolean` | `false` | A `load-older` request is in flight: a spinner shows on top and no second request goes out. Without it, the list waits for the first message to change before asking again. |
 | `peerReadSeq` | `number \| null` | `null` | The other side's read cursor: own messages at or below it show the double tick, unless they carry their own `status`. |
 | `reactionOptions` | `KunChatReactionOption[]` | `[]` | The reaction vocabulary: the menu's quick row, and the art on reaction chips. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo's hash into a URL. Required to show photos. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown. |
 | `swipeToReply` | `boolean` | `true` | Swipe a bubble left to reply, on touch screens. |
 | `timeZone` | `string` | — | IANA zone for times and day boundaries. Pass it when server-rendering, or the server's zone and the reader's disagree and hydration mismatches. |
 | `unreadCount` | `number` | — | Unread count on the scroll-down button. Defaults to the messages of others below the read position that the list has seen. |

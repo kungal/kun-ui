@@ -38,11 +38,15 @@ export interface KunChatEntity {
 
 export interface KunChatPhoto {
   type: 'photo'
-  /** Image-service hash. The site turns it into a URL; KunUI never builds one. */
+  /** Image-service hash. KunUI never builds a URL from it. */
   image_hash: string
   width: number
   height: number
   thumbhash?: string | null
+  /** Where the image is served, as the server sends it (chat spec 1.1.0).
+   *  Shown when no `resolveMediaUrl` is passed. Optional so payloads from
+   *  before 1.1.0 still type-check. */
+  url?: string | null
 }
 
 /** Media attached to a message. Only `photo` exists today; sticker and file

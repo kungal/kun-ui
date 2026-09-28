@@ -6,7 +6,6 @@ import {
   demoReactions,
   demoUsers,
   makeGroupConversation,
-  resolveDemoMedia,
 } from '~/utils/chatDemo'
 
 // A group: names on the first message of each run, the avatar beside the last,
@@ -28,7 +27,6 @@ const list = ref<{ scrollToSeq: (seq: number) => boolean } | null>(null)
       :users="demoUsers"
       :current-user-id="ME"
       :reaction-options="demoReactions"
-      :resolve-media-url="resolveDemoMedia"
       :time-zone="DEMO_TZ"
     />
   </div>

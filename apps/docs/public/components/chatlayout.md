@@ -25,7 +25,6 @@ import {
   demoUsers,
   makeDirectConversation,
   makeGroupConversation,
-  resolveDemoMedia,
 } from '~/utils/chatDemo'
 
 // A whole chat screen: list and conversation side by side from `md` up, one at
@@ -195,7 +194,6 @@ const unread = (c: (typeof conversations.value)[number]) =>
         <KunChatPinnedBar
           v-if="pinned.length"
           :messages="pinned"
-          :resolve-media-url="resolveDemoMedia"
           @jump="(seq) => list?.scrollToSeq(seq)"
         />
         <KunChatMessageList
@@ -209,7 +207,6 @@ const unread = (c: (typeof conversations.value)[number]) =>
           :last-read-seq="open.lastReadSeq"
           :peer-read-seq="open.peerReadSeq"
           :reaction-options="demoReactions"
-          :resolve-media-url="resolveDemoMedia"
           :actions="actions"
           :time-zone="DEMO_TZ"
           @action="onAction"
