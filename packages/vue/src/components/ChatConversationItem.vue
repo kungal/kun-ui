@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, type CSSProperties } from 'vue'
 import { cn, kunSolidClasses } from '@kungal/ui-core'
 import KunAvatar from './Avatar.vue'
 import KunIcon from './Icon.vue'
@@ -110,6 +110,16 @@ const offset = ref(0)
 const dragging = ref(false)
 const leadingW = computed(() => props.leadingActions.length * ACTION_W)
 const trailingW = computed(() => props.trailingActions.length * ACTION_W)
+
+// `overflow: hidden` (which clips the swipe) makes the root a scroll container,
+// and a flex item that is one gets an automatic min-height of 0 (CSS Flexbox
+// §4.5). In a scrolling flex column the rows shrank instead of the list
+// scrolling: moyu's 41 conversations came out 17px each. Inline, so a
+// consumer's Tailwind cannot drop it.
+const rootStyle = computed<CSSProperties>(() => ({
+  flexShrink: 0,
+  touchAction: leadingW.value || trailingW.value ? 'pan-y' : undefined,
+}))
 let press: { id: number; x: number; y: number; base: number; mode: 'pending' | 'swipe' | 'scroll' } | null =
   null
 let swallowClick = false
@@ -165,7 +175,7 @@ const onAction = (action: KunChatSwipeAction) => {
 <template>
   <div
     class="kun-chat-conversation-item relative overflow-hidden rounded-kun-md"
-    :style="{ touchAction: leadingW || trailingW ? 'pan-y' : undefined }"
+    :style="rootStyle"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
