@@ -82,11 +82,15 @@ and dividers. `KunColors.globalOpacity` is the alpha the web draws
 `background` and `neutral.shade100` at; the schemes store both opaque.
 
 `scheme.foregroundMuted` is secondary text — descriptions, helper text,
-timestamps, counts — the web's `text-foreground-muted`. It is `neutral`'s
-`shade600` in light and `shade500` in dark, and the generator fails the
-build unless it clears 4.5:1 on `background` and `content1` in both modes.
-`neutral.shade500` is 3.33:1 on the light background, so it is not a text
-color.
+timestamps, counts — the web's `text-foreground-muted`. It is a grey of
+`neutral`'s hue between `shade600` and `shade700` in light and between
+`shade500` and `shade600` in dark, and the generator fails the build unless
+it clears 4.5:1 in both modes on `background`, on `content1`, on
+`neutral.solid` at 20% over either (a hovered or highlighted row), and on
+`neutral.shade100` (a keycap). `neutral.shade500` is 3.33:1 on the light
+background, so it is not a text color. Text on a neutral tint laid over
+another tinted fill (a band on the chat wallpaper, a code-block header inside
+a coloured bubble) takes `neutral.text`, as a flat chip's label does.
 
 `scale.text` is the hue as text on a surface — light and bordered buttons,
 flat chips, selected tabs, links, error messages — the web's

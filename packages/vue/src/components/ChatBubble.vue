@@ -229,6 +229,11 @@ const surfaceClass = computed(() =>
   props.own ? 'bg-primary-100 fill-primary-100' : 'bg-content1 fill-content1'
 )
 const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foreground-muted'))
+// The time over a photo sits on its own scrim, and the photo under it is often a
+// white screenshot: white on black/45 over white is 3.35:1, and /55 is the least
+// that clears 4.5:1 over any image.
+const mediaMetaClass =
+  'pointer-events-none absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full bg-black/55 px-1.5 py-px text-[11px] text-white [:where(&)_*]:text-inherit'
 </script>
 
 <template>
@@ -293,7 +298,7 @@ const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foregr
         <KunIcon v-if="quote" name="lucide:quote" class="shrink-0 text-xs" />
         <span class="truncate">{{ replySender?.name }}</span>
       </span>
-      <span v-if="reply.deleted" class="text-default-500 italic">
+      <span v-if="reply.deleted" class="text-foreground-muted italic">
         {{ t('chat.deletedMessage') }}
       </span>
       <span v-else class="text-foreground/80 block max-w-full truncate [:where(&)_*]:text-inherit">
@@ -339,7 +344,7 @@ const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foregr
       </button>
       <span
         v-if="mediaOnly && !message.reactions.length"
-        class="pointer-events-none absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full bg-black/45 px-1.5 py-px text-[11px] text-white [:where(&)_*]:text-inherit"
+        :class="mediaMetaClass"
       >
         <span v-if="message.edited_at">{{ t('chat.edited') }}</span>
         <time :datetime="message.created_at" :title="fullTime">{{ time }}</time>
@@ -378,7 +383,7 @@ const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foregr
       </button>
       <span
         v-if="mediaOnly && !message.reactions.length"
-        class="pointer-events-none absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full bg-black/45 px-1.5 py-px text-[11px] text-white [:where(&)_*]:text-inherit"
+        :class="mediaMetaClass"
       >
         <time :datetime="message.created_at" :title="fullTime">{{ time }}</time>
         <KunIcon v-if="statusIcon" :name="statusIcon" class="text-xs" />

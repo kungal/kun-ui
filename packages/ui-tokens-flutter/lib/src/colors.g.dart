@@ -81,8 +81,9 @@ class KunColorScale {
   ///
   /// The ramp step closest to `solid` that clears 4.5:1 (WCAG AA) against
   /// [KunColorScheme.background], [KunColorScheme.content1], and the hue's own
-  /// 20% tint over each (hover, keyboard focus, flat fills), in both modes. The
-  /// generator measures every case and fails the build when one misses.
+  /// 20% tint over each (hover, keyboard focus, flat fills) and its `shade100`
+  /// (the own chat bubble), in both modes. The generator measures every case
+  /// and fails the build when one misses.
   final Color text;
 }
 
@@ -120,10 +121,12 @@ class KunColorScheme {
   /// Web token `--color-foreground-muted`, for secondary text: descriptions,
   /// helper text, timestamps, counts.
   ///
-  /// [neutral]'s `shade600` in light and `shade500` in dark. Contrast against
-  /// [background] and [content1] is at least 4.5:1 (WCAG AA) in both modes by
-  /// construction: the generator measures it and fails the build when one
-  /// misses.
+  /// A grey of [neutral]'s hue between `shade600` and `shade700` in light and
+  /// between `shade500` and `shade600` in dark. Contrast is at least 4.5:1
+  /// (WCAG AA) on [background], on [content1], on [neutral]'s `solid` at 20%
+  /// over either (a hovered or highlighted row), and on its `shade100` (a
+  /// keycap), in both modes by construction: the generator measures it and
+  /// fails the build when one misses.
   final Color foregroundMuted;
 
   /// Web token `--color-content1`, the raised surface: cards, popovers,
@@ -192,9 +195,9 @@ abstract final class KunColors {
     foreground: Color.from(alpha: 1, red: 0.0684, green: 0.0958, blue: 0.1116),
     foregroundMuted: Color.from(
       alpha: 1,
-      red: 0.4072,
-      green: 0.4071,
-      blue: 0.4449,
+      red: 0.3629,
+      green: 0.3628,
+      blue: 0.3998,
     ),
     content1: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
     content2: Color.from(alpha: 1, red: 0.958, green: 0.958, blue: 0.9621),
@@ -320,9 +323,9 @@ abstract final class KunColors {
     foreground: Color.from(alpha: 1, red: 0.9258, green: 0.9299, blue: 0.934),
     foregroundMuted: Color.from(
       alpha: 1,
-      red: 0.5215,
-      green: 0.5216,
-      blue: 0.5611,
+      red: 0.5686,
+      green: 0.5687,
+      blue: 0.6088,
     ),
     content1: Color.from(alpha: 1, red: 0.094, green: 0.094, blue: 0.106),
     content2: Color.from(alpha: 1, red: 0.1536, green: 0.1536, blue: 0.1664),

@@ -127,7 +127,7 @@
   :root {
     --background: 0.968 0.004 286.33;
     --foreground: 0.2057 0.0132 233.66;
-    --foreground-muted: 0.52 0.015 285.9;
+    --foreground-muted: 0.48 0.015 285.9;
     --content1: 1 0 0;
     --content2: 0.9683 0.0014 286.37;
     --content3: 0.9197 0.0041 286.32;
@@ -249,7 +249,7 @@
   .kun-dark-mode {
     --background: 0.1448 0 0;
     --foreground: 0.946 0.0018 247.84;
-    --foreground-muted: 0.62 0.015 285.9;
+    --foreground-muted: 0.66 0.015 285.9;
     --content1: 0.2102 0.006 285.87;
     --content2: 0.2747 0.006 286;
     --content3: 0.3701 0.0113 285.84;

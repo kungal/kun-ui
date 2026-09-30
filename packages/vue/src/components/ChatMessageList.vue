@@ -822,7 +822,7 @@ defineExpose({
             <div
               v-if="row.type === 'unread'"
               data-kun-unread
-              class="bg-default/15 text-default-600 my-2 py-1 text-center text-xs font-medium"
+              class="bg-default/15 text-default-text my-2 py-1 text-center text-xs font-medium"
             >
               {{ t('chat.unreadDivider') }}
             </div>

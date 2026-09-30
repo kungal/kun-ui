@@ -1337,7 +1337,16 @@
       },
       "foreground-muted": {
         "$type": "color",
-        "$value": "{color.light.default.600}"
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.48,
+            0.015,
+            285.9
+          ],
+          "alpha": 1,
+          "hex": "#5d5d66"
+        }
       }
     },
     "dark": {
@@ -2650,7 +2659,16 @@
       },
       "foreground-muted": {
         "$type": "color",
-        "$value": "{color.dark.default.500}"
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.66,
+            0.015,
+            285.9
+          ],
+          "alpha": 1,
+          "hex": "#91919b"
+        }
       }
     }
   },

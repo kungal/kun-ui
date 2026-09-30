@@ -168,7 +168,7 @@ const renderPre = (node: KunChatEntityNode): VNodeChild => {
   const copied = copiedAt.value === node.entity.offset
   return h('div', { class: 'kun-chat-pre my-1 overflow-hidden rounded-kun-md bg-default/15' }, [
     h('div', { class: 'flex h-7 items-center justify-between gap-2 pr-1 pl-3 text-xs' }, [
-      h('span', { class: 'text-foreground-muted truncate font-medium' }, node.entity.language ?? ''),
+      h('span', { class: 'text-default-text truncate font-medium' }, node.entity.language ?? ''),
       h(
         'button',
         {

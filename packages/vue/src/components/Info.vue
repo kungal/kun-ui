@@ -158,7 +158,9 @@ const titleColor = computed(() => {
       <slot name="title" />
     </h3>
 
-    <div v-if="description || $slots.default" class="text-sm opacity-90">
+    <!-- A fill's on-colour has no room for alpha: white on primary is 4.59:1, and
+         the description at 90% measured 4.02:1. -->
+    <div v-if="description || $slots.default" :class="cn('text-sm', !inheritColor && 'opacity-90')">
       <p v-if="description">{{ description }}</p>
       <slot />
     </div>

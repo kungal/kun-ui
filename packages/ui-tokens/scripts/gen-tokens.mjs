@@ -151,24 +151,39 @@ for (const mode of ['light', 'dark']) {
   }
 }
 
-// ── secondary text: a step of the neutral ramp per mode, AA on the page and cards ──
+// ── secondary text: a lightness per mode, AA on the page, cards and neutral fills ──
 // The ramp is mirrored with 500 fixed, and no one grey clears 4.5:1 against both
-// the light and the dark page. `text-default-500` was 3.33:1 on the light page, so
-// the muted text colour is a step per mode: 600 in light, 500 in dark.
-const MUTED_STEP = { light: 600, dark: 500 }
-const MUTED_ON = ['background', 'content1']
-const mutedChan = (mode) => data[mode].default.shades[MUTED_STEP[mode]]
+// the light and the dark page (`text-default-500` was 3.33:1 on the light page).
+// The ramp steps first chosen, 600 in light and 500 in dark, cleared the page and
+// cards but not the neutral fills muted text also sits on: a hovered or
+// highlighted row (`bg-default/20`), a code-block header or divider
+// (`bg-default/15`), a keycap (`bg-default-100`) — down to 3.95:1 in light and
+// 3.93:1 in dark. The lightness is its own value between steps, the least move
+// from 600/500 that clears all of them. The 20% tint bounds 15% and lighter;
+// default-100 is measured opaque, and the global opacity it is drawn at over the
+// page or a card only raises the ratio.
+const MUTED_L = { light: 0.48, dark: 0.66 }
+const MUTED_TINT = 0.2
+const mutedChan = (mode) =>
+  chan({ mode: 'oklch', l: MUTED_L[mode], c: HUES.default.c, h: HUES.default.h })
 const mutedReport = []
 let mutedFail = false
 for (const mode of ['light', 'dark']) {
   const idx = mode === 'light' ? 0 : 1
-  const ratios = MUTED_ON.map((n) => {
-    const ratio = wcagContrast(ofChan(mutedChan(mode)), ofChan(neutralChan(NEUTRALS[n][idx])))
-    if (ratio < AA_NORMAL) mutedFail = true
-    return `${n} ${ratio.toFixed(2)}${ratio >= AA_NORMAL ? ' AA' : ' ✗FAIL'}`
+  const text = ofChan(mutedChan(mode))
+  const tint = ofChan(data[mode].default.accent)
+  const ratios = ['background', 'content1'].flatMap((n) => {
+    const surface = ofChan(neutralChan(NEUTRALS[n][idx]))
+    return [
+      [n, wcagContrast(text, surface)],
+      [`default/20 on ${n}`, wcagContrast(text, interpolate([surface, tint], 'rgb')(MUTED_TINT))],
+    ]
   })
+  ratios.push(['default-100', wcagContrast(text, ofChan(data[mode].default.shades[100]))])
+  if (Math.min(...ratios.map(([, r]) => r)) < AA_NORMAL) mutedFail = true
   mutedReport.push(
-    `  ${mode.padEnd(5)} foreground-muted (default-${MUTED_STEP[mode]})   on ${ratios.join('   on ')}`
+    `  ${mode.padEnd(5)} foreground-muted (L ${MUTED_L[mode]})   ` +
+      ratios.map(([n, r]) => `${n} ${r.toFixed(2)}${r >= AA_NORMAL ? '' : ' ✗FAIL'}`).join('   ')
   )
 }
 
@@ -178,7 +193,8 @@ for (const mode of ['light', 'dark']) {
 // primary and danger fell to 3.87 and 3.66:1 on dark cards. `--color-{c}-text`
 // is the ramp step closest to the fill that clears 4.5:1 on the page, on
 // content1, and on the hue's own 20% tint over each — the hover and keyboard-
-// focus fill of a light item and the fill of a flat chip.
+// focus fill of a light item and the fill of a flat chip — and on its 100 step,
+// the fill of the viewer's own chat bubble.
 const TEXT_STEP = {
   light: { default: 700, primary: 700, secondary: 600, success: 700, warning: 600, danger: 700, info: 700 },
   dark: { default: 600, primary: 600, secondary: 700, success: 600, warning: 600, danger: 600, info: 600 },
@@ -200,6 +216,7 @@ for (const mode of ['light', 'dark']) {
         [`${key}/20 on ${n}`, wcagContrast(text, tinted)],
       ]
     })
+    ratios.push([`${key}-100`, wcagContrast(text, ofChan(data[mode][key].shades[100]))])
     const low = Math.min(...ratios.map(([, r]) => r))
     if (low < AA_NORMAL) textFail = true
     textReport.push(
@@ -630,8 +647,9 @@ SCALE_DOCS.text = [
   '',
   'The ramp step closest to `solid` that clears 4.5:1 (WCAG AA) against',
   '[KunColorScheme.background], [KunColorScheme.content1], and the hue\'s own',
-  '20% tint over each (hover, keyboard focus, flat fills), in both modes. The',
-  'generator measures every case and fails the build when one misses.',
+  '20% tint over each (hover, keyboard focus, flat fills) and its `shade100`',
+  '(the own chat bubble), in both modes. The generator measures every case',
+  'and fails the build when one misses.',
 ]
 const SCHEME_FIELDS = [
   ['background', 'Color', [
@@ -646,9 +664,11 @@ const SCHEME_FIELDS = [
     'helper text, timestamps, counts.',
     '',
     ...wrapDoc(
-      `[${DART_HUE_NAMES.default}]'s \`shade${MUTED_STEP.light}\` in light and \`shade${MUTED_STEP.dark}\` ` +
-        'in dark. Contrast against [background] and [content1] is at least 4.5:1 ' +
-        '(WCAG AA) in both modes by construction: the generator measures it and ' +
+      `A grey of [${DART_HUE_NAMES.default}]'s hue between \`shade600\` and \`shade700\` in light ` +
+        'and between `shade500` and `shade600` in dark. Contrast is at least 4.5:1 ' +
+        `(WCAG AA) on [background], on [content1], on [${DART_HUE_NAMES.default}]'s \`solid\` ` +
+        'at 20% over either (a hovered or highlighted row), and on its `shade100` ' +
+        '(a keycap), in both modes by construction: the generator measures it and ' +
         'fails the build when one misses.'
     ),
   ]],
@@ -1356,7 +1376,7 @@ const dtcgMode = (mode) => {
   for (const n of Object.keys(NEUTRALS))
     group[n] = dtcgColor(neutralChan(NEUTRALS[n][idx]))
   group.border = { $type: 'color', $value: `{color.${mode}.${borderStep[1]}.${borderStep[2]}}` }
-  group['foreground-muted'] = { $type: 'color', $value: `{color.${mode}.default.${MUTED_STEP[mode]}}` }
+  group['foreground-muted'] = dtcgColor(mutedChan(mode))
   return group
 }
 
@@ -1499,11 +1519,11 @@ console.log('\n— secondary text AA audit —')
 console.log(mutedReport.join('\n'))
 if (mutedFail) {
   console.error(
-    '\n✗ AA FAILURE: foreground-muted is below 4.5:1 on a surface. Move MUTED_STEP or the ramp and rerun.'
+    '\n✗ AA FAILURE: foreground-muted is below 4.5:1 on a surface. Move MUTED_L and rerun.'
   )
   process.exit(1)
 }
-console.log(`✓ foreground-muted ≥ 4.5:1 (WCAG AA) on ${MUTED_ON.join(' and ')} in both modes`)
+console.log('✓ foreground-muted ≥ 4.5:1 (WCAG AA) on background, content1, default/20 over each and default-100, in both modes')
 
 console.log('\n— coloured text AA audit ({c}-text) —')
 console.log(textReport.join('\n'))
@@ -1513,7 +1533,7 @@ if (textFail) {
   )
   process.exit(1)
 }
-console.log('✓ every {c}-text ≥ 4.5:1 (WCAG AA) on background, content1 and its 20% tint over each, in both modes')
+console.log('✓ every {c}-text ≥ 4.5:1 (WCAG AA) on background, content1, its 20% tint over each and its 100 step, in both modes')
 
 const coverage = await checkThemeCoverage(published)
 if (coverage.problems.length) {
