@@ -181,7 +181,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           </span>
           <span class="flex flex-col">
             <span class="text-foreground">{{ option.label }}</span>
-            <span v-if="option.description" class="text-default-500 text-xs">
+            <span v-if="option.description" class="text-foreground-muted text-xs">
               {{ option.description }}
             </span>
           </span>
@@ -274,7 +274,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
           />
           <div class="flex flex-col">
             <span class="text-foreground font-medium">{{ option.label }}</span>
-            <span v-if="option.description" class="text-default-500 mt-0.5 text-xs">
+            <span v-if="option.description" class="text-foreground-muted mt-0.5 text-xs">
               {{ option.description }}
             </span>
           </div>

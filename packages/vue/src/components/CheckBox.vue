@@ -166,7 +166,7 @@ const markFg = computed(() => kunSolidFgClasses[props.color])
     <p
       v-else-if="description"
       :id="`${kunUniqueId}-desc`"
-      class="text-default-500 mt-1 text-sm"
+      class="text-foreground-muted mt-1 text-sm"
     >
       {{ description }}
     </p>

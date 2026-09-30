@@ -125,7 +125,7 @@ const handleApplyCrop = () => {
         class="absolute inset-0 flex flex-col items-center justify-center"
       >
         <KunIcon name="lucide:plus" class="text-default-500 text-3xl" />
-        <span v-if="helper" class="text-default-500 mt-2 text-sm">{{ helper }}</span>
+        <span v-if="helper" class="text-foreground-muted mt-2 text-sm">{{ helper }}</span>
       </div>
 
       <img

@@ -84,6 +84,7 @@ class KunColorScheme {
   const KunColorScheme({
     required this.background,
     required this.foreground,
+    required this.foregroundMuted,
     required this.content1,
     required this.content2,
     required this.content3,
@@ -105,6 +106,15 @@ class KunColorScheme {
 
   /// Web token `--color-foreground`, the default text color.
   final Color foreground;
+
+  /// Web token `--color-foreground-muted`, for secondary text: descriptions,
+  /// helper text, timestamps, counts.
+  ///
+  /// [neutral]'s `shade600` in light and `shade500` in dark. Contrast against
+  /// [background] and [content1] is at least 4.5:1 (WCAG AA) in both modes by
+  /// construction: the generator measures it and fails the build when one
+  /// misses.
+  final Color foregroundMuted;
 
   /// Web token `--color-content1`, the raised surface: cards, popovers,
   /// menus, inputs.
@@ -170,6 +180,12 @@ abstract final class KunColors {
   static const KunColorScheme light = KunColorScheme(
     background: Color.from(alpha: 1, red: 0.9569, green: 0.9569, blue: 0.9687),
     foreground: Color.from(alpha: 1, red: 0.0684, green: 0.0958, blue: 0.1116),
+    foregroundMuted: Color.from(
+      alpha: 1,
+      red: 0.4072,
+      green: 0.4071,
+      blue: 0.4449,
+    ),
     content1: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
     content2: Color.from(alpha: 1, red: 0.958, green: 0.958, blue: 0.9621),
     content3: Color.from(alpha: 1, red: 0.8941, green: 0.8941, blue: 0.906),
@@ -285,6 +301,12 @@ abstract final class KunColors {
   static const KunColorScheme dark = KunColorScheme(
     background: Color.from(alpha: 1, red: 0.0392, green: 0.0392, blue: 0.0392),
     foreground: Color.from(alpha: 1, red: 0.9258, green: 0.9299, blue: 0.934),
+    foregroundMuted: Color.from(
+      alpha: 1,
+      red: 0.5215,
+      green: 0.5216,
+      blue: 0.5611,
+    ),
     content1: Color.from(alpha: 1, red: 0.094, green: 0.094, blue: 0.106),
     content2: Color.from(alpha: 1, red: 0.1536, green: 0.1536, blue: 0.1664),
     content3: Color.from(alpha: 1, red: 0.247, green: 0.247, blue: 0.2731),

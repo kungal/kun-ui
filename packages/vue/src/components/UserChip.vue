@@ -49,7 +49,7 @@ const linkProps = computed(() => {
 
     <div class="flex min-w-0 flex-col text-sm">
       <span class="truncate">{{ user?.name || t('avatar.unknownUser') }}</span>
-      <span v-if="description" class="text-default-500 truncate">{{ description }}</span>
+      <span v-if="description" class="text-foreground-muted truncate">{{ description }}</span>
     </div>
   </component>
 </template>

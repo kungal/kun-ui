@@ -28,6 +28,6 @@ withDefaults(defineProps<KunNullProps>(), {
       class-name="w-72 h-auto rounded-kun-lg"
       alt=""
     />
-    <span class="text-default-500">{{ description ?? t('null.description') }}</span>
+    <span class="text-foreground-muted">{{ description ?? t('null.description') }}</span>
   </div>
 </template>

@@ -239,7 +239,7 @@ defineExpose({
     <p
       v-else-if="helper"
       :id="`${kunUniqueId}-desc`"
-      class="text-default-500 mt-1 text-sm"
+      class="text-foreground-muted mt-1 text-sm"
     >
       {{ helper }}
     </p>

@@ -500,7 +500,7 @@ const resolvedAlign = computed(
 
 // `:hover` matches a disabled button too, so a disabled tab lit up under the
 // pointer.
-const unselected = 'text-default-500 not-aria-disabled:hover:text-foreground'
+const unselected = 'text-foreground-muted not-aria-disabled:hover:text-foreground'
 
 const tabClasses = (item: KunTabItem) => {
   const selected = isSelected(item)

@@ -47,7 +47,7 @@ const colorClasses: Record<KunUIColor, string> = {
     <div
       v-if="$slots.default"
       :class="[
-        'text-default-500 text-sm',
+        'text-foreground-muted text-sm',
         orientation === 'horizontal' ? 'px-4 whitespace-nowrap' : 'py-4',
       ]"
     >

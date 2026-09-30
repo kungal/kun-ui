@@ -33,7 +33,7 @@ const headingClass = computed(() => {
 
         <p
           v-if="description"
-          class="text-default-500 text-sm whitespace-pre-wrap sm:text-base"
+          class="text-foreground-muted text-sm whitespace-pre-wrap sm:text-base"
         >
           {{ description }}
         </p>

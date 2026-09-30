@@ -324,7 +324,7 @@ onKeyStroke('ArrowRight', (e) => {
         </KunButton>
       </div>
 
-      <div class="text-default-500 hidden items-center gap-2 text-sm sm:flex">
+      <div class="text-foreground-muted hidden items-center gap-2 text-sm sm:flex">
         {{ t('pagination.hintBefore') }} <KunIcon name="lucide:arrow-left" />
         <KunIcon name="lucide:arrow-right" /> {{ t('pagination.hintAfter') }}
       </div>

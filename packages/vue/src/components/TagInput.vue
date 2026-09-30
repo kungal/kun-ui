@@ -410,7 +410,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
 
       <span
         v-if="showCounter && maxTags !== Number.POSITIVE_INFINITY"
-        class="text-default-400 ml-auto text-xs tabular-nums"
+        class="text-foreground-muted ml-auto text-xs tabular-nums"
       >
         {{ tags.length }}/{{ maxTags }}
       </span>
@@ -422,7 +422,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
     <p
       v-else-if="helper"
       :id="`${kunUniqueId}-msg`"
-      class="text-default-500 mt-1 text-sm"
+      class="text-foreground-muted mt-1 text-sm"
     >
       {{ helper }}
     </p>

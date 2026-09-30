@@ -81,6 +81,13 @@ step to use it.
 and dividers. `KunColors.globalOpacity` is the alpha the web draws
 `background` and `neutral.shade100` at; the schemes store both opaque.
 
+`scheme.foregroundMuted` is secondary text — descriptions, helper text,
+timestamps, counts — the web's `text-foreground-muted`. It is `neutral`'s
+`shade600` in light and `shade500` in dark, and the generator fails the
+build unless it clears 4.5:1 on `background` and `content1` in both modes.
+`neutral.shade500` is 3.33:1 on the light background, so it is not a text
+color.
+
 Blur needs care in one direction only. A `KunBlur` step is a Gaussian
 standard deviation, which is what both CSS `blur()` and `ImageFilter.blur`
 take, so it passes straight through. `BoxShadow.blurRadius` is not a CSS

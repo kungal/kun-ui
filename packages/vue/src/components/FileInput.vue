@@ -99,12 +99,12 @@ const handlePick = () => {
       </slot>
       <span
         v-if="showFileName && displayName"
-        class="text-default-500 truncate text-sm"
+        class="text-foreground-muted truncate text-sm"
       >
         {{ displayName }}
       </span>
     </div>
-    <p v-if="helper && !error" class="text-default-400 text-xs">{{ helper }}</p>
+    <p v-if="helper && !error" class="text-foreground-muted text-xs">{{ helper }}</p>
     <p v-if="error" class="text-danger text-xs">{{ error }}</p>
   </div>
 </template>

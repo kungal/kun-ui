@@ -125,7 +125,7 @@ const circleClass = (i: number) => {
     'z-10 inline-flex shrink-0 items-center justify-center rounded-full font-medium transition-colors',
     sz.value.circle,
     state === 'pending'
-      ? 'border-2 border-default-200 text-default-400 bg-transparent'
+      ? 'border-2 border-default-200 text-foreground-muted bg-transparent'
       : cn(kunSolidBgClasses[tone], kunSolidFgClasses[tone]),
     i === props.current && cn('ring-4', activeRing[tone]),
     isClickable(i) &&
@@ -152,7 +152,7 @@ const titleClass = (i: number) => {
     'font-medium',
     sz.value.title,
     state === 'pending'
-      ? 'text-default-400'
+      ? 'text-foreground-muted'
       : state === 'error'
         ? kunTextClasses.danger
         : state === 'active'
@@ -232,7 +232,7 @@ const connectorClass = (i: number) =>
         <p
           v-if="item.description"
           :id="`${baseId}-${i}-desc`"
-          class="text-default-500 mt-0.5 text-xs"
+          class="text-foreground-muted mt-0.5 text-xs"
         >
           {{ item.description }}
         </p>

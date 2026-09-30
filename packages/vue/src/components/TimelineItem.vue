@@ -59,7 +59,7 @@ const hasIcon = computed(() => !!props.icon)
         <p v-if="title || $slots.title" class="text-foreground font-medium">
           <slot name="title">{{ title }}</slot>
         </p>
-        <span v-if="time || $slots.time" class="text-default-400 text-xs">
+        <span v-if="time || $slots.time" class="text-foreground-muted text-xs">
           <slot name="time">{{ time }}</slot>
         </span>
       </div>

@@ -329,7 +329,7 @@ defineExpose({
       </div>
     </div>
 
-    <div v-if="disabled" class="text-default-500 px-3 py-2.5 text-center text-sm">
+    <div v-if="disabled" class="text-foreground-muted px-3 py-2.5 text-center text-sm">
       {{ disabledText }}
     </div>
     <div v-else class="flex items-end gap-1">
@@ -369,7 +369,7 @@ defineExpose({
       <slot name="suffix" />
       <span
         v-if="showCounter"
-        :class="cn('shrink-0 self-center px-1 text-xs tabular-nums', remaining < 0 ? 'text-danger' : 'text-default-500')"
+        :class="cn('shrink-0 self-center px-1 text-xs tabular-nums', remaining < 0 ? 'text-danger' : 'text-foreground-muted')"
       >
         <span aria-hidden="true">{{ remaining }}</span>
         <span :id="counterId" class="sr-only">

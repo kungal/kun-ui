@@ -187,7 +187,7 @@ onUnmounted(() => {
       >
         {{ label }}
       </label>
-      <span v-if="showValue" class="text-default-500 text-sm tabular-nums">
+      <span v-if="showValue" class="text-foreground-muted text-sm tabular-nums">
         {{ display }}
       </span>
     </div>
@@ -276,7 +276,7 @@ onUnmounted(() => {
           v-for="(mark, i) in normalizedMarks"
           v-show="mark.label"
           :key="i"
-          class="text-default-500 absolute -translate-x-1/2 text-xs whitespace-nowrap"
+          class="text-foreground-muted absolute -translate-x-1/2 text-xs whitespace-nowrap"
           :style="{ left: mark.percent + '%' }"
         >
           {{ mark.label }}
@@ -285,7 +285,7 @@ onUnmounted(() => {
     </div>
 
     <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-default-500 mt-1 text-sm">
+    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>

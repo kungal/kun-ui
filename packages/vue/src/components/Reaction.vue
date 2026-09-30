@@ -116,7 +116,7 @@ const rootClasses = computed(() =>
       ? isPaletteColor.value
         ? kunTextClasses[props.color as KunUIColor]
         : ''
-      : 'text-default-500'
+      : 'text-foreground-muted'
   )
 )
 </script>

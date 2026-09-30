@@ -228,7 +228,7 @@ const cornerClass = computed(() => {
 const surfaceClass = computed(() =>
   props.own ? 'bg-primary-100 fill-primary-100' : 'bg-content1 fill-content1'
 )
-const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-default-500'))
+const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-foreground-muted'))
 </script>
 
 <template>
@@ -400,7 +400,7 @@ const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-default
       "
       @click="(e: MouseEvent) => context?.href && emit('link', context.href, e)"
     >
-      <span class="text-default-500 flex items-center gap-1 text-xs">
+      <span class="text-foreground-muted flex items-center gap-1 text-xs">
         <KunIcon name="lucide:external-link" class="shrink-0" />
         <span class="truncate">{{ context.host }}</span>
       </span>

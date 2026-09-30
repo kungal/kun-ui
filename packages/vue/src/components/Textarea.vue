@@ -161,13 +161,13 @@ defineExpose({
 
       <div
         v-if="showCharCount"
-        class="text-default-500 absolute right-2 bottom-2 text-xs"
+        class="text-foreground-muted absolute right-2 bottom-2 text-xs"
       >
         {{ maxlength ? `${modelValue.length}/${maxlength}` : modelValue.length }}
       </div>
     </div>
 
     <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="helper" class="text-default-500 mt-1 text-sm">{{ helper }}</p>
+    <p v-else-if="helper" class="text-foreground-muted mt-1 text-sm">{{ helper }}</p>
   </div>
 </template>

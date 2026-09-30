@@ -1306,6 +1306,10 @@
       "border": {
         "$type": "color",
         "$value": "{color.light.default.100}"
+      },
+      "foreground-muted": {
+        "$type": "color",
+        "$value": "{color.light.default.600}"
       }
     },
     "dark": {
@@ -2587,6 +2591,10 @@
       "border": {
         "$type": "color",
         "$value": "{color.dark.default.100}"
+      },
+      "foreground-muted": {
+        "$type": "color",
+        "$value": "{color.dark.default.500}"
       }
     }
   },

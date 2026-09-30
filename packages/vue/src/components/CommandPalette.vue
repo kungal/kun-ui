@@ -324,7 +324,7 @@ defineExpose({ open, close, toggle })
           >
             <template v-if="loading">
               <slot name="loading">
-                <p class="text-default-400 px-3 py-6 text-center text-sm">
+                <p class="text-foreground-muted px-3 py-6 text-center text-sm">
                   {{ t('commandPalette.loading') }}
                 </p>
               </slot>
@@ -334,7 +334,7 @@ defineExpose({ open, close, toggle })
               <div v-for="(group, gi) in rows" :key="gi" class="mb-1 last:mb-0">
                 <div
                   v-if="group.label"
-                  class="text-default-400 px-3 pt-2 pb-1 text-xs font-medium"
+                  class="text-foreground-muted px-3 pt-2 pb-1 text-xs font-medium"
                 >
                   {{ group.label }}
                 </div>
@@ -376,7 +376,7 @@ defineExpose({ open, close, toggle })
                     <span class="min-w-0 flex-1">
                       <span
                         v-if="row.item.section"
-                        class="text-default-400 mb-0.5 block text-xs"
+                        class="text-foreground-muted mb-0.5 block text-xs"
                         >{{ row.item.section }}</span
                       >
                       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -387,7 +387,7 @@ defineExpose({ open, close, toggle })
                       <!-- eslint-disable-next-line vue/no-v-html -->
                       <span
                         v-if="row.item.description"
-                        class="text-default-400 mt-0.5 block truncate text-xs"
+                        class="text-foreground-muted mt-0.5 block truncate text-xs"
                         v-html="highlight(row.item.description)"
                       />
                     </span>
@@ -398,12 +398,12 @@ defineExpose({ open, close, toggle })
 
             <template v-else>
               <slot v-if="query.trim()" name="no-result" :query="query">
-                <p class="text-default-400 px-3 py-6 text-center text-sm">
+                <p class="text-foreground-muted px-3 py-6 text-center text-sm">
                   {{ noResultText ?? t('commandPalette.noResult') }}:<span class="text-default-600">{{ query }}</span>
                 </p>
               </slot>
               <slot v-else name="empty">
-                <p class="text-default-400 px-3 py-6 text-center text-sm">
+                <p class="text-foreground-muted px-3 py-6 text-center text-sm">
                   {{ emptyText ?? t('commandPalette.empty') }}
                 </p>
               </slot>
@@ -413,11 +413,11 @@ defineExpose({ open, close, toggle })
           <!-- footer hints -->
           <slot name="footer">
             <div
-              class="border-kun text-default-400 flex items-center gap-4 border-t px-4 py-2 text-[11px]"
+              class="border-kun text-foreground-muted flex items-center gap-4 border-t px-4 py-2 text-[11px]"
             >
-              <span><kbd class="text-default-500">↑↓</kbd> {{ t('commandPalette.hintSelect') }}</span>
-              <span><kbd class="text-default-500">↵</kbd> {{ t('commandPalette.hintOpen') }}</span>
-              <span><kbd class="text-default-500">esc</kbd> {{ t('commandPalette.hintClose') }}</span>
+              <span><kbd class="text-foreground-muted">↑↓</kbd> {{ t('commandPalette.hintSelect') }}</span>
+              <span><kbd class="text-foreground-muted">↵</kbd> {{ t('commandPalette.hintOpen') }}</span>
+              <span><kbd class="text-foreground-muted">esc</kbd> {{ t('commandPalette.hintClose') }}</span>
               <span class="ml-auto">{{ t('commandPalette.resultCount', { count: flat.length }) }}</span>
             </div>
           </slot>

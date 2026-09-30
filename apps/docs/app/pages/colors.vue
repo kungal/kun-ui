@@ -97,6 +97,30 @@ onBeforeUnmount(() => observer?.disconnect())
       </div>
     </div>
 
+    <!-- Text on the page and on cards -->
+    <h2 class="mt-10 mb-1 text-xl font-semibold">文字</h2>
+    <p class="text-default-600 mb-4 text-sm">
+      正文用 <code>text-foreground</code>;说明、辅助文字、时间戳、计数等次要文字用
+      <code>text-foreground-muted</code>。它在浅色模式取 <code>default-600</code>、暗色模式取
+      <code>default-500</code>,在页面背景与卡片(<code>content1</code>)上两模式均 ≥ WCAG AA,
+      由生成器校验。<code>text-default-500</code> 在浅色页面背景上只有 3.33:1,不要用作可读文字。
+    </p>
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div
+        v-for="su in surfaces.slice(0, 2)"
+        :key="su.token"
+        class="rounded-kun-lg border-kun space-y-1 border p-4"
+        :style="{ backgroundColor: v(su.token) }"
+      >
+        <p class="text-sm font-medium" :style="{ color: v('foreground') }">
+          foreground · {{ su.label }}
+        </p>
+        <p class="text-sm" :style="{ color: v('foreground-muted') }">
+          foreground-muted · 发布于 3 分钟前 · 12 条回复
+        </p>
+      </div>
+    </div>
+
     <!-- Neutral surfaces / elevation -->
     <h2 class="mt-10 mb-1 text-xl font-semibold">表面 · 层级</h2>
     <p class="text-default-600 mb-4 text-sm">

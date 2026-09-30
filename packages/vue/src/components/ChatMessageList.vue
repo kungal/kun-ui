@@ -807,7 +807,7 @@ defineExpose({
           <KunIcon name="svg-spinners:90-ring-with-bg" class="text-xl" :aria-label="t('chat.loading')" />
         </div>
         <slot v-else-if="!hasOlder && messages.length" name="start" />
-        <div v-if="!messages.length && !loadingOlder" class="text-default-500 py-10 text-center text-sm">
+        <div v-if="!messages.length && !loadingOlder" class="text-foreground-muted py-10 text-center text-sm">
           <slot name="empty">{{ t('chat.empty') }}</slot>
         </div>
 

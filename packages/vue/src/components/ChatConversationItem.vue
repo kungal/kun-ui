@@ -248,7 +248,7 @@ const onAction = (action: KunChatSwipeAction) => {
             :class="
               cn(
                 'ml-auto flex shrink-0 items-center gap-1 text-xs',
-                selected ? 'text-primary-foreground/80' : 'text-default-500'
+                selected ? 'text-primary-foreground/80' : 'text-foreground-muted'
               )
             "
           >
@@ -263,7 +263,7 @@ const onAction = (action: KunChatSwipeAction) => {
         </span>
         <span class="flex items-center gap-1.5">
           <span
-            :class="cn('min-w-0 flex-1 truncate text-sm', selected ? 'text-primary-foreground/85' : 'text-default-500')"
+            :class="cn('min-w-0 flex-1 truncate text-sm', selected ? 'text-primary-foreground/85' : 'text-foreground-muted')"
           >
             <KunChatTyping
               v-if="typingActive"

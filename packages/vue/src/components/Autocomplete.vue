@@ -453,7 +453,7 @@ defineExpose({
 
               <li
                 v-if="!filtered.length"
-                class="text-default-400 px-3 py-6 text-center text-sm"
+                class="text-foreground-muted px-3 py-6 text-center text-sm"
               >
                 {{ noResultText ?? t('autocomplete.noResult') }}
               </li>
@@ -464,7 +464,7 @@ defineExpose({
     </Teleport>
 
     <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-default-500 mt-1 text-sm">
+    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>
