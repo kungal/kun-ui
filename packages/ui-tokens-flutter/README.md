@@ -13,7 +13,7 @@ widgets are written separately. Tokens are shared, and they are generated.
 
 ```yaml
 dependencies:
-  kun_ui_tokens: ^2.53.0
+  kun_ui_tokens: ^2.54.0
 ```
 
 Requires Flutter `>=3.27.0`: every color is a `const Color.from(...)`, the
@@ -121,7 +121,7 @@ how hard it resists an upward drag.
   value this package lacks.
 - **Version lockstep.** This package's version always equals the version of
   the four `@kungal/*` npm packages; they are bumped together and published
-  from one commit. This release is `kun_ui_tokens 2.53.0`.
+  from one commit. This release is `kun_ui_tokens 2.54.0`.
 
 ## Contributing
 
