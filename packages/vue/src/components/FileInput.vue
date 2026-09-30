@@ -105,6 +105,6 @@ const handlePick = () => {
       </span>
     </div>
     <p v-if="helper && !error" class="text-foreground-muted text-xs">{{ helper }}</p>
-    <p v-if="error" class="text-danger text-xs">{{ error }}</p>
+    <p v-if="error" class="text-danger-text text-xs">{{ error }}</p>
   </div>
 </template>

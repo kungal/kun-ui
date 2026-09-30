@@ -88,7 +88,7 @@ const copyPre = async (node: KunChatEntityNode) => {
 onBeforeUnmount(() => clearTimeout(copiedTimer))
 
 const linkClass =
-  'text-primary-600 underline decoration-primary-600/40 underline-offset-2 hover:decoration-primary-600'
+  'text-primary-text underline decoration-primary-text/40 underline-offset-2 hover:decoration-primary-text'
 const codeClass = 'kun-chat-code rounded-kun-sm bg-default/20 px-1 py-px text-[0.9em]'
 
 const renderNodes = (nodes: KunChatTextNode[]): VNodeChild[] => nodes.map(renderNode)
@@ -117,7 +117,7 @@ const renderMention = (node: KunChatEntityNode): VNodeChild => {
   if (props.preview || !id) return h('span', { class: 'font-medium' }, children)
   const href = config.userLinkTemplate.replace('{id}', encodeURIComponent(id))
   const attrs = {
-    class: 'text-primary-600 font-medium underline-offset-2 hover:underline',
+    class: 'text-primary-text font-medium underline-offset-2 hover:underline',
     // Capture: RouterLink (NuxtLink under Nuxt) navigates from its own click
     // listener, which runs before a fallthrough one, so a bubble-phase
     // handler's preventDefault came too late to stop it (vue-router 5.1).

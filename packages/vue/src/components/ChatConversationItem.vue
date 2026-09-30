@@ -255,7 +255,7 @@ const onAction = (action: KunChatSwipeAction) => {
             <KunIcon
               v-if="status"
               :name="statusIcon"
-              :class="cn('text-sm', status === 'failed' ? 'text-danger' : !selected && 'text-primary')"
+              :class="cn('text-sm', status === 'failed' ? 'text-danger-text' : !selected && 'text-primary-text')"
               :aria-label="t(`chatStatus.${status}`)"
             />
             {{ time }}
@@ -267,13 +267,13 @@ const onAction = (action: KunChatSwipeAction) => {
           >
             <KunChatTyping
               v-if="typingActive"
-              :class="selected ? 'text-primary-foreground' : 'text-primary'"
+              :class="selected ? 'text-primary-foreground' : 'text-primary-text'"
               :events="typing"
               :users="users"
               :kind="kind"
             />
             <template v-else-if="draftText">
-              <span :class="selected ? 'font-medium' : 'text-danger'">{{ t('chat.draft') }}</span>
+              <span :class="selected ? 'font-medium' : 'text-danger-text'">{{ t('chat.draft') }}</span>
               <KunChatText :text="draftText.text" :entities="draftText.entities" preview />
             </template>
             <template v-else-if="lastMessage">

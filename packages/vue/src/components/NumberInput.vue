@@ -191,7 +191,7 @@ defineExpose({
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
-      <span v-if="required" class="text-danger">*</span>
+      <span v-if="required" class="text-danger-text">*</span>
     </label>
 
     <div
@@ -274,7 +274,7 @@ defineExpose({
 
     <input v-if="name" type="hidden" :name="name" :value="modelValue ?? ''" />
 
-    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
     <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>

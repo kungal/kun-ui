@@ -18,7 +18,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { oklch, clampChroma, wcagContrast, formatHex, parse, rgb } from 'culori'
+import { oklch, clampChroma, wcagContrast, formatHex, interpolate, parse, rgb } from 'culori'
 import { SHATTER_PHYSICS, SWIPE_DISMISS_PHYSICS } from './motion-physics.mjs'
 import { checkThemeCoverage } from './theme-coverage.mjs'
 
@@ -172,6 +172,43 @@ for (const mode of ['light', 'dark']) {
   )
 }
 
+// ── coloured text: a step of each hue's ramp per mode, AA wherever it is used ──
+// The fill used as text (`text-primary`, the light and bordered variants, tabs,
+// links) measured 1.75–4.42:1 on the light page for every hue but default, and
+// primary and danger fell to 3.87 and 3.66:1 on dark cards. `--color-{c}-text`
+// is the ramp step closest to the fill that clears 4.5:1 on the page, on
+// content1, and on the hue's own 20% tint over each — the hover and keyboard-
+// focus fill of a light item and the fill of a flat chip.
+const TEXT_STEP = {
+  light: { default: 700, primary: 700, secondary: 600, success: 700, warning: 600, danger: 700, info: 700 },
+  dark: { default: 600, primary: 600, secondary: 700, success: 600, warning: 600, danger: 600, info: 600 },
+}
+const TEXT_TINT = 0.2
+const textChan = (mode, key) => data[mode][key].shades[TEXT_STEP[mode][key]]
+const textReport = []
+let textFail = false
+for (const mode of ['light', 'dark']) {
+  const idx = mode === 'light' ? 0 : 1
+  for (const key of Object.keys(HUES)) {
+    const text = ofChan(textChan(mode, key))
+    const tint = ofChan(data[mode][key].accent)
+    const ratios = ['background', 'content1'].flatMap((n) => {
+      const surface = ofChan(neutralChan(NEUTRALS[n][idx]))
+      const tinted = interpolate([surface, tint], 'rgb')(TEXT_TINT)
+      return [
+        [n, wcagContrast(text, surface)],
+        [`${key}/20 on ${n}`, wcagContrast(text, tinted)],
+      ]
+    })
+    const low = Math.min(...ratios.map(([, r]) => r))
+    if (low < AA_NORMAL) textFail = true
+    textReport.push(
+      `  ${mode.padEnd(5)} ${key.padEnd(10)} ${key}-${TEXT_STEP[mode][key]}   ` +
+        ratios.map(([n, r]) => `${n} ${r.toFixed(2)}${r >= AA_NORMAL ? '' : ' ✗FAIL'}`).join('   ')
+    )
+  }
+}
+
 // ── emit CSS ──
 const COLORS = Object.keys(HUES)
 const themeColorLines = []
@@ -187,6 +224,7 @@ themeColorLines.push('')
 for (const key of COLORS) {
   themeColorLines.push(`  --color-${key}: oklch(var(--${key}-accent));`)
   themeColorLines.push(`  --color-${key}-foreground: oklch(var(--${key}-on));`)
+  themeColorLines.push(`  --color-${key}-text: oklch(var(--${key}-text));`)
   for (const s of SHADES) {
     // default-100 keeps the global-opacity "glass" alpha used by surfaces.
     if (key === 'default' && s === 100) {
@@ -215,6 +253,7 @@ function channelBlock(mode) {
     lines.push(`    /* ${HUES[key].name} */`)
     lines.push(`    --${key}-accent: ${c.accent};`)
     lines.push(`    --${key}-on: ${c.on};`)
+    lines.push(`    --${key}-text: ${textChan(mode, key)};`)
     for (const s of SHADES) lines.push(`    --${key}-${s}: ${c.shades[s]};`)
   }
   return lines.join('\n')
@@ -555,7 +594,7 @@ const DART_HUE_NAMES = {
   info: 'info',
   default: 'neutral',
 }
-const SCALE_FIELDS = [...SHADES.map((s) => `shade${s}`), 'solid', 'onSolid']
+const SCALE_FIELDS = [...SHADES.map((s) => `shade${s}`), 'solid', 'onSolid', 'text']
 const SCALE_DOCS = Object.fromEntries(
   SHADES.map((s) => [`shade${s}`, [`Web token \`--color-<hue>-${s}\`.`]])
 )
@@ -584,6 +623,15 @@ SCALE_DOCS.onSolid = [
   'Contrast against `solid` is at least 4.5:1 (WCAG AA) in both modes by',
   'construction: the generator measures every pair and fails the build when',
   'one misses.',
+]
+SCALE_DOCS.text = [
+  'Web token `--color-<hue>-text`, the hue as text on a surface: light and',
+  'bordered buttons, flat chips, tabs, links.',
+  '',
+  'The ramp step closest to `solid` that clears 4.5:1 (WCAG AA) against',
+  '[KunColorScheme.background], [KunColorScheme.content1], and the hue\'s own',
+  '20% tint over each (hover, keyboard focus, flat fills), in both modes. The',
+  'generator measures every case and fails the build when one misses.',
 ]
 const SCHEME_FIELDS = [
   ['background', 'Color', [
@@ -638,6 +686,7 @@ const schemeLiteral = (mode) => {
     for (const s of SHADES) lines.push(dartField(6, `shade${s}`, c.shades[s]))
     lines.push(dartField(6, 'solid', c.accent))
     lines.push(dartField(6, 'onSolid', c.on))
+    lines.push(dartField(6, 'text', textChan(mode, web)))
     lines.push('    ),')
   }
   lines.push('  );')
@@ -1301,6 +1350,7 @@ const dtcgMode = (mode) => {
     for (const s of SHADES) scale[String(s)] = dtcgColor(c.shades[s])
     scale.solid = dtcgColor(c.accent)
     scale.on = dtcgColor(c.on)
+    scale.text = { $type: 'color', $value: `{color.${mode}.${key}.${TEXT_STEP[mode][key]}}` }
     group[key] = scale
   }
   for (const n of Object.keys(NEUTRALS))
@@ -1454,6 +1504,16 @@ if (mutedFail) {
   process.exit(1)
 }
 console.log(`✓ foreground-muted ≥ 4.5:1 (WCAG AA) on ${MUTED_ON.join(' and ')} in both modes`)
+
+console.log('\n— coloured text AA audit ({c}-text) —')
+console.log(textReport.join('\n'))
+if (textFail) {
+  console.error(
+    '\n✗ AA FAILURE: a {c}-text token is below 4.5:1 on a surface or its tint. Move TEXT_STEP or the ramp and rerun.'
+  )
+  process.exit(1)
+}
+console.log('✓ every {c}-text ≥ 4.5:1 (WCAG AA) on background, content1 and its 20% tint over each, in both modes')
 
 const coverage = await checkThemeCoverage(published)
 if (coverage.problems.length) {

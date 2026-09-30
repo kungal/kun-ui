@@ -19,6 +19,7 @@
 
   --color-primary: oklch(var(--primary-accent));
   --color-primary-foreground: oklch(var(--primary-on));
+  --color-primary-text: oklch(var(--primary-text));
   --color-primary-50: oklch(var(--primary-50));
   --color-primary-100: oklch(var(--primary-100));
   --color-primary-200: oklch(var(--primary-200));
@@ -33,6 +34,7 @@
 
   --color-secondary: oklch(var(--secondary-accent));
   --color-secondary-foreground: oklch(var(--secondary-on));
+  --color-secondary-text: oklch(var(--secondary-text));
   --color-secondary-50: oklch(var(--secondary-50));
   --color-secondary-100: oklch(var(--secondary-100));
   --color-secondary-200: oklch(var(--secondary-200));
@@ -47,6 +49,7 @@
 
   --color-success: oklch(var(--success-accent));
   --color-success-foreground: oklch(var(--success-on));
+  --color-success-text: oklch(var(--success-text));
   --color-success-50: oklch(var(--success-50));
   --color-success-100: oklch(var(--success-100));
   --color-success-200: oklch(var(--success-200));
@@ -61,6 +64,7 @@
 
   --color-warning: oklch(var(--warning-accent));
   --color-warning-foreground: oklch(var(--warning-on));
+  --color-warning-text: oklch(var(--warning-text));
   --color-warning-50: oklch(var(--warning-50));
   --color-warning-100: oklch(var(--warning-100));
   --color-warning-200: oklch(var(--warning-200));
@@ -75,6 +79,7 @@
 
   --color-danger: oklch(var(--danger-accent));
   --color-danger-foreground: oklch(var(--danger-on));
+  --color-danger-text: oklch(var(--danger-text));
   --color-danger-50: oklch(var(--danger-50));
   --color-danger-100: oklch(var(--danger-100));
   --color-danger-200: oklch(var(--danger-200));
@@ -89,6 +94,7 @@
 
   --color-info: oklch(var(--info-accent));
   --color-info-foreground: oklch(var(--info-on));
+  --color-info-text: oklch(var(--info-text));
   --color-info-50: oklch(var(--info-50));
   --color-info-100: oklch(var(--info-100));
   --color-info-200: oklch(var(--info-200));
@@ -103,6 +109,7 @@
 
   --color-default: oklch(var(--default-accent));
   --color-default-foreground: oklch(var(--default-on));
+  --color-default-text: oklch(var(--default-text));
   --color-default-50: oklch(var(--default-50));
   --color-default-100: oklch(var(--default-100) / var(--kun-global-opacity));
   --color-default-200: oklch(var(--default-200));
@@ -129,6 +136,7 @@
     /* Blue */
     --primary-accent: 0.57 0.2 257.9;
     --primary-on: 1 0 0;
+    --primary-text: 0.44 0.1622 257.9;
     --primary-50: 0.972 0.0133 257.9;
     --primary-100: 0.945 0.0264 257.9;
     --primary-200: 0.892 0.0528 257.9;
@@ -144,6 +152,7 @@
     /* Magenta */
     --secondary-accent: 0.8 0.1524 341.5;
     --secondary-on: 0.2 0.03 341.5;
+    --secondary-text: 0.52 0.2244 341.5;
     --secondary-50: 0.972 0.018 341.5;
     --secondary-100: 0.945 0.0362 341.5;
     --secondary-200: 0.892 0.0748 341.5;
@@ -159,6 +168,7 @@
     /* Green */
     --success-accent: 0.72 0.18 150.9;
     --success-on: 0.2 0.03 150.9;
+    --success-text: 0.44 0.1186 150.9;
     --success-50: 0.972 0.0446 150.9;
     --success-100: 0.945 0.0914 150.9;
     --success-200: 0.892 0.18 150.9;
@@ -174,6 +184,7 @@
     /* Amber */
     --warning-accent: 0.8 0.1686 72.2;
     --warning-on: 0.2 0.03 72.2;
+    --warning-text: 0.52 0.1112 72.2;
     --warning-50: 0.972 0.0211 72.2;
     --warning-100: 0.945 0.0421 72.2;
     --warning-200: 0.892 0.0855 72.2;
@@ -189,6 +200,7 @@
     /* Red */
     --danger-accent: 0.58 0.23 11.1;
     --danger-on: 1 0 0;
+    --danger-text: 0.44 0.1759 11.1;
     --danger-50: 0.972 0.0139 11.1;
     --danger-100: 0.945 0.028 11.1;
     --danger-200: 0.892 0.0577 11.1;
@@ -204,6 +216,7 @@
     /* Cyan */
     --info-accent: 0.7 0.1262 218.5;
     --info-on: 0.2 0.03 218.5;
+    --info-text: 0.44 0.0793 218.5;
     --info-50: 0.972 0.0201 218.5;
     --info-100: 0.945 0.0398 218.5;
     --info-200: 0.892 0.0796 218.5;
@@ -219,6 +232,7 @@
     /* Neutral */
     --default-accent: 0.55 0.015 285.9;
     --default-on: 1 0 0;
+    --default-text: 0.44 0.015 285.9;
     --default-50: 0.972 0.0137 285.9;
     --default-100: 0.945 0.015 285.9;
     --default-200: 0.892 0.015 285.9;
@@ -244,6 +258,7 @@
     /* Blue */
     --primary-accent: 0.57 0.2 257.9;
     --primary-on: 1 0 0;
+    --primary-text: 0.715 0.1495 257.9;
     --primary-50: 0.215 0.0792 257.9;
     --primary-100: 0.28 0.1032 257.9;
     --primary-200: 0.36 0.1327 257.9;
@@ -259,6 +274,7 @@
     /* Magenta */
     --secondary-accent: 0.8 0.1524 341.5;
     --secondary-on: 0.2 0.03 341.5;
+    --secondary-text: 0.82 0.1342 341.5;
     --secondary-50: 0.215 0.0928 341.5;
     --secondary-100: 0.28 0.1208 341.5;
     --secondary-200: 0.36 0.1554 341.5;
@@ -274,6 +290,7 @@
     /* Green */
     --success-accent: 0.72 0.18 150.9;
     --success-on: 0.2 0.03 150.9;
+    --success-text: 0.715 0.18 150.9;
     --success-50: 0.215 0.058 150.9;
     --success-100: 0.28 0.0755 150.9;
     --success-200: 0.36 0.0971 150.9;
@@ -289,6 +306,7 @@
     /* Amber */
     --warning-accent: 0.8 0.1686 72.2;
     --warning-on: 0.2 0.03 72.2;
+    --warning-text: 0.715 0.1529 72.2;
     --warning-50: 0.215 0.046 72.2;
     --warning-100: 0.28 0.0599 72.2;
     --warning-200: 0.36 0.077 72.2;
@@ -304,6 +322,7 @@
     /* Red */
     --danger-accent: 0.58 0.23 11.1;
     --danger-on: 1 0 0;
+    --danger-text: 0.715 0.1833 11.1;
     --danger-50: 0.215 0.0859 11.1;
     --danger-100: 0.28 0.1119 11.1;
     --danger-200: 0.36 0.1439 11.1;
@@ -319,6 +338,7 @@
     /* Cyan */
     --info-accent: 0.7 0.1262 218.5;
     --info-on: 0.2 0.03 218.5;
+    --info-text: 0.715 0.1289 218.5;
     --info-50: 0.215 0.0387 218.5;
     --info-100: 0.28 0.0505 218.5;
     --info-200: 0.36 0.0649 218.5;
@@ -334,6 +354,7 @@
     /* Neutral */
     --default-accent: 0.55 0.015 285.9;
     --default-on: 1 0 0;
+    --default-text: 0.715 0.015 285.9;
     --default-50: 0.215 0.015 285.9;
     --default-100: 0.28 0.015 285.9;
     --default-200: 0.36 0.015 285.9;

@@ -282,6 +282,6 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
       </template>
     </div>
 
-    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
   </div>
 </template>

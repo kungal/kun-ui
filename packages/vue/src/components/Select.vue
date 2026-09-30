@@ -618,7 +618,7 @@ watch(filtered, () => {
         </span>
 
         <!-- Single, nothing selected, or every chip collapsed (`maxVisibleTags: 0`) -->
-        <span v-else class="block min-w-0 flex-1 truncate" :class="!hasSelection && 'text-default-400'">
+        <span v-else class="block min-w-0 flex-1 truncate" :class="!hasSelection && 'text-foreground-muted'">
           {{ triggerText }}
         </span>
       </div>
@@ -785,7 +785,7 @@ watch(filtered, () => {
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
     <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>

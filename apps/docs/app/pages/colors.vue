@@ -121,6 +121,31 @@ onBeforeUnmount(() => observer?.disconnect())
       </div>
     </div>
 
+    <h3 class="mt-8 mb-1 text-base font-semibold">彩色文字</h3>
+    <p class="text-default-600 mb-4 text-sm">
+      彩色文字(light / bordered / flat 变体、选中的 Tab、链接、错误提示)用 <code>text-{color}-text</code>,
+      不要直接用填充色 <code>text-{color}</code>:填充色当文字在浅色页面背景上只有 1.75–4.42:1。
+      <code>{color}-text</code> 取色阶里离填充色最近、且在页面背景、卡片以及该颜色 20% 着色(悬停、键盘焦点、flat)
+      上两模式均 ≥ WCAG AA 的一级,由生成器校验。
+    </p>
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div
+        v-for="su in surfaces.slice(0, 2)"
+        :key="su.token"
+        class="rounded-kun-lg border-kun flex flex-wrap gap-2 border p-4"
+        :style="{ backgroundColor: v(su.token) }"
+      >
+        <span
+          v-for="c in colors.filter((x) => x !== 'default')"
+          :key="c"
+          class="rounded-kun-md px-2 py-1 text-sm font-medium"
+          :style="{ color: v(`${c}-text`), backgroundColor: `oklch(var(--${c}-accent) / 0.2)` }"
+        >
+          {{ c }}-text
+        </span>
+      </div>
+    </div>
+
     <!-- Neutral surfaces / elevation -->
     <h2 class="mt-10 mb-1 text-xl font-semibold">表面 · 层级</h2>
     <p class="text-default-600 mb-4 text-sm">

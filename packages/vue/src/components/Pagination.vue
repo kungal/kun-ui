@@ -195,7 +195,7 @@ onBeforeUnmount(() => {
   if (phaseTimer) clearTimeout(phaseTimer)
 })
 
-// White text on the pill once it's measured (the light variant's text-primary is
+// White text on the pill once it's measured (the light variant's text-primary-text is
 // overridden by tailwind-merge); match the pill's timing so text + pill land
 // together. Reserve `relative z-10` so buttons sit above the sliding pill.
 // When a number leaves it becomes `position: absolute` (so the row recenters at

@@ -540,7 +540,7 @@ const isInPreviewRange = (date: Date) => {
         @keydown="onKeydown"
       >
         <KunIcon v-if="icon" :name="icon" class="text-default-500 shrink-0" />
-        <span class="block min-w-0 flex-1 truncate" :class="{ 'text-default-400': !displayValue }">
+        <span class="block min-w-0 flex-1 truncate" :class="{ 'text-foreground-muted': !displayValue }">
           {{ displayValue || resolvedPlaceholder }}
         </span>
         <div class="flex shrink-0 items-center gap-2">
@@ -811,6 +811,6 @@ const isInPreviewRange = (date: Date) => {
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
   </div>
 </template>

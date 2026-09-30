@@ -274,7 +274,7 @@ defineExpose({
     <div v-if="bar" class="flex items-center gap-2 px-1 pb-2">
       <KunIcon :name="bar.icon" class="text-primary shrink-0 text-xl" />
       <div class="border-primary min-w-0 flex-1 border-l-2 pl-2">
-        <div class="text-primary truncate text-sm font-semibold">{{ bar.title }}</div>
+        <div class="text-primary-text truncate text-sm font-semibold">{{ bar.title }}</div>
         <div class="text-default-600 truncate text-sm [:where(&)_*]:text-inherit">
           <KunChatText
             v-if="quote && !editing ? quote.text : bar.message.text"
@@ -360,7 +360,7 @@ defineExpose({
         :placeholder="placeholder ?? t('chatComposer.placeholder')"
         :aria-label="placeholder ?? t('chatComposer.placeholder')"
         :aria-describedby="showCounter ? counterId : undefined"
-        class="bg-default/10 placeholder:text-default-400 focus:bg-default/15 min-w-0 flex-1 resize-none rounded-kun-lg px-3 py-2 text-base leading-6 outline-none transition-colors"
+        class="bg-default/10 placeholder:text-foreground-muted focus:bg-default/15 min-w-0 flex-1 resize-none rounded-kun-lg px-3 py-2 text-base leading-6 outline-none transition-colors"
         :style="{ overflowY: 'hidden' }"
         @keydown="onKeydown"
         @input="onInput"
@@ -398,7 +398,7 @@ defineExpose({
 
     <div
       v-if="dragging"
-      class="border-primary bg-content1/95 text-primary pointer-events-none absolute inset-1 flex items-center justify-center rounded-kun-lg border-2 border-dashed text-sm font-medium"
+      class="border-primary bg-content1/95 text-primary-text pointer-events-none absolute inset-1 flex items-center justify-center rounded-kun-lg border-2 border-dashed text-sm font-medium"
     >
       {{ t('chatComposer.dropHint') }}
     </div>

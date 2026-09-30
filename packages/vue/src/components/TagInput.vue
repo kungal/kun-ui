@@ -416,7 +416,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
       </span>
     </div>
 
-    <p v-if="error" :id="`${kunUniqueId}-msg`" class="text-danger mt-1 text-sm">
+    <p v-if="error" :id="`${kunUniqueId}-msg`" class="text-danger-text mt-1 text-sm">
       {{ error }}
     </p>
     <p

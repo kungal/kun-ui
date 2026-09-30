@@ -100,7 +100,7 @@ const title = computed(() =>
         decoding="async"
       />
       <span class="flex min-w-0 flex-col">
-        <span class="text-primary truncate text-sm font-semibold">{{ title }}</span>
+        <span class="text-primary-text truncate text-sm font-semibold">{{ title }}</span>
         <span class="text-default-600 truncate text-sm [:where(&)_*]:text-inherit">
           <KunChatText v-if="current.text" :text="current.text" :entities="current.entities" preview />
           <span v-else>{{ kunChatMediaLabel(current.media, t) }}</span>

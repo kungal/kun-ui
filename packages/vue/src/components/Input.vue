@@ -157,7 +157,7 @@ defineExpose({
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
-      <span v-if="required" class="text-danger">*</span>
+      <span v-if="required" class="text-danger-text">*</span>
     </label>
 
     <div class="relative">
@@ -232,7 +232,7 @@ defineExpose({
     <p
       v-if="error"
       :id="`${kunUniqueId}-desc`"
-      class="text-danger mt-1 text-sm"
+      class="text-danger-text mt-1 text-sm"
     >
       {{ error }}
     </p>

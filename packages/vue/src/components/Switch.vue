@@ -104,7 +104,7 @@ const size = computed(() => switchSizes[props.size])
     </span>
   </label>
 
-    <p v-if="error" :id="`${kunUniqueId}-desc`" class="text-danger mt-1 text-sm">
+    <p v-if="error" :id="`${kunUniqueId}-desc`" class="text-danger-text mt-1 text-sm">
       {{ error }}
     </p>
     <p

@@ -228,7 +228,7 @@ const cornerClass = computed(() => {
 const surfaceClass = computed(() =>
   props.own ? 'bg-primary-100 fill-primary-100' : 'bg-content1 fill-content1'
 )
-const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-foreground-muted'))
+const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foreground-muted'))
 </script>
 
 <template>
@@ -261,14 +261,14 @@ const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-foregro
     <!-- Sender (group chats, first of a run) -->
     <div
       v-if="showSender && !own"
-      :class="cn('truncate px-3 pt-1.5 text-sm font-semibold text-primary', mediaOnly && 'pb-1')"
+      :class="cn('truncate px-3 pt-1.5 text-sm font-semibold text-primary-text', mediaOnly && 'pb-1')"
     >
       <span v-if="sender.deleted">{{ sender.name }}</span>
       <component
         :is="config.linkComponent"
         v-else
         v-bind="linkBinding(profileHref(sender.id))"
-        class="text-primary hover:underline"
+        class="text-primary-text hover:underline"
         @click.capture="(e: MouseEvent) => emit('user-click', sender.id, e)"
       >
         {{ sender.name }}
@@ -289,7 +289,7 @@ const metaClass = computed(() => (props.own ? 'text-primary-600' : 'text-foregro
       "
       @click="emit('reply-click', reply.seq)"
     >
-      <span class="flex max-w-full items-center gap-1 font-semibold text-primary">
+      <span class="flex max-w-full items-center gap-1 font-semibold text-primary-text">
         <KunIcon v-if="quote" name="lucide:quote" class="shrink-0 text-xs" />
         <span class="truncate">{{ replySender?.name }}</span>
       </span>

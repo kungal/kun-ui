@@ -88,6 +88,14 @@ build unless it clears 4.5:1 on `background` and `content1` in both modes.
 `neutral.shade500` is 3.33:1 on the light background, so it is not a text
 color.
 
+`scale.text` is the hue as text on a surface — light and bordered buttons,
+flat chips, selected tabs, links, error messages — the web's
+`text-{hue}-text`. It is the ramp step closest to `solid` that clears 4.5:1
+on `background`, on `content1`, and on the hue's own 20% tint over each
+(hover, keyboard focus, flat fills), in both modes; the generator fails the
+build when one misses. `solid` itself is not a text color: as text on the
+light background it measured 1.75–4.42:1.
+
 Blur needs care in one direction only. A `KunBlur` step is a Gaussian
 standard deviation, which is what both CSS `blur()` and `ImageFilter.blur`
 take, so it passes straight through. `BoxShadow.blurRadius` is not a CSS

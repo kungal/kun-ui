@@ -24,6 +24,7 @@ class KunColorScale {
     required this.shade950,
     required this.solid,
     required this.onSolid,
+    required this.text,
   });
 
   /// Web token `--color-<hue>-50`, the ramp's faintest step — a tint that
@@ -74,6 +75,15 @@ class KunColorScale {
   /// construction: the generator measures every pair and fails the build when
   /// one misses.
   final Color onSolid;
+
+  /// Web token `--color-<hue>-text`, the hue as text on a surface: light and
+  /// bordered buttons, flat chips, tabs, links.
+  ///
+  /// The ramp step closest to `solid` that clears 4.5:1 (WCAG AA) against
+  /// [KunColorScheme.background], [KunColorScheme.content1], and the hue's own
+  /// 20% tint over each (hover, keyboard focus, flat fills), in both modes. The
+  /// generator measures every case and fails the build when one misses.
+  final Color text;
 }
 
 /// Every KunUI color for one mode.
@@ -204,6 +214,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.0001, green: 0.091, blue: 0.2386),
       solid: Color.from(alpha: 1, red: 0.0714, green: 0.4437, blue: 0.9166),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 0, green: 0.3023, blue: 0.664),
     ),
     secondary: KunColorScale(
       shade50: Color.from(alpha: 1, red: 1, green: 0.9462, blue: 0.9775),
@@ -219,6 +230,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.1987, green: 0, blue: 0.1465),
       solid: Color.from(alpha: 1, red: 1, green: 0.5808, blue: 0.8545),
       onSolid: Color.from(alpha: 1, red: 0.1229, green: 0.0645, blue: 0.1017),
+      text: Color.from(alpha: 1, red: 0.71, green: 0.0002, blue: 0.5526),
     ),
     success: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.8829, green: 1, blue: 0.905),
@@ -234,6 +246,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0, green: 0.1276, blue: 0.0401),
       solid: Color.from(alpha: 1, red: 0.1744, green: 0.7642, blue: 0.4),
       onSolid: Color.from(alpha: 1, red: 0.0441, green: 0.1015, blue: 0.0584),
+      text: Color.from(alpha: 1, red: 0.0004, green: 0.3918, blue: 0.178),
     ),
     warning: KunColorScale(
       shade50: Color.from(alpha: 1, red: 1, green: 0.9565, blue: 0.905),
@@ -249,6 +262,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.1498, green: 0.0835, blue: 0),
       solid: Color.from(alpha: 1, red: 0.9999, green: 0.6627, blue: 0.0637),
       onSolid: Color.from(alpha: 1, red: 0.1192, green: 0.0772, blue: 0.0241),
+      text: Color.from(alpha: 1, red: 0.5627, green: 0.3629, blue: 0.0003),
     ),
     danger: KunColorScale(
       shade50: Color.from(alpha: 1, red: 1, green: 0.9497, blue: 0.9542),
@@ -264,6 +278,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.2157, green: 0.0001, blue: 0.0598),
       solid: Color.from(alpha: 1, red: 0.8783, green: 0.0225, blue: 0.3429),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 0.6076, green: 0, blue: 0.2259),
     ),
     info: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.9086, green: 0.9782, blue: 1),
@@ -279,6 +294,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.0002, green: 0.1156, blue: 0.1465),
       solid: Color.from(alpha: 1, red: 0, green: 0.6911, blue: 0.8265),
       onSolid: Color.from(alpha: 1, red: 0.0161, green: 0.0989, blue: 0.1221),
+      text: Color.from(alpha: 1, red: 0.0001, green: 0.3626, blue: 0.4383),
     ),
     neutral: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.9592, green: 0.9594, blue: 0.9998),
@@ -294,6 +310,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.0967, green: 0.0961, blue: 0.1263),
       solid: Color.from(alpha: 1, red: 0.4409, green: 0.4409, blue: 0.4792),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 0.3196, green: 0.3194, blue: 0.3556),
     ),
   );
 
@@ -325,6 +342,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.9425, green: 0.9658, blue: 1),
       solid: Color.from(alpha: 1, red: 0.0714, green: 0.4437, blue: 0.9166),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 0.3953, green: 0.6405, blue: 1),
     ),
     secondary: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.1987, green: 0, blue: 0.1465),
@@ -340,6 +358,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 1, green: 0.9462, blue: 0.9775),
       solid: Color.from(alpha: 1, red: 1, green: 0.5808, blue: 0.8545),
       onSolid: Color.from(alpha: 1, red: 0.1229, green: 0.0645, blue: 0.1017),
+      text: Color.from(alpha: 1, red: 1, green: 0.6287, blue: 0.8674),
     ),
     success: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0, green: 0.1276, blue: 0.0401),
@@ -355,6 +374,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.8829, green: 1, blue: 0.905),
       solid: Color.from(alpha: 1, red: 0.1744, green: 0.7642, blue: 0.4),
       onSolid: Color.from(alpha: 1, red: 0.0441, green: 0.1015, blue: 0.0584),
+      text: Color.from(alpha: 1, red: 0.1637, green: 0.7578, blue: 0.394),
     ),
     warning: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.1498, green: 0.0835, blue: 0),
@@ -370,6 +390,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 1, green: 0.9565, blue: 0.905),
       solid: Color.from(alpha: 1, red: 0.9999, green: 0.6627, blue: 0.0637),
       onSolid: Color.from(alpha: 1, red: 0.1192, green: 0.0772, blue: 0.0241),
+      text: Color.from(alpha: 1, red: 0.8647, green: 0.5672, blue: 0.0008),
     ),
     danger: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.2157, green: 0.0001, blue: 0.0598),
@@ -385,6 +406,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 1, green: 0.9497, blue: 0.9542),
       solid: Color.from(alpha: 1, red: 0.8783, green: 0.0225, blue: 0.3429),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 1, green: 0.4121, blue: 0.5263),
     ),
     info: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.0002, green: 0.1156, blue: 0.1465),
@@ -400,6 +422,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.9086, green: 0.9782, blue: 1),
       solid: Color.from(alpha: 1, red: 0, green: 0.6911, blue: 0.8265),
       onSolid: Color.from(alpha: 1, red: 0.0161, green: 0.0989, blue: 0.1221),
+      text: Color.from(alpha: 1, red: 0, green: 0.7112, blue: 0.8502),
     ),
     neutral: KunColorScale(
       shade50: Color.from(alpha: 1, red: 0.0967, green: 0.0961, blue: 0.1263),
@@ -415,6 +438,7 @@ abstract final class KunColors {
       shade950: Color.from(alpha: 1, red: 0.9592, green: 0.9594, blue: 0.9998),
       solid: Color.from(alpha: 1, red: 0.4409, green: 0.4409, blue: 0.4792),
       onSolid: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      text: Color.from(alpha: 1, red: 0.6346, green: 0.6347, blue: 0.6756),
     ),
   );
 }

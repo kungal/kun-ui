@@ -81,11 +81,14 @@
     min-height: 100vh;
   }
 
-  /* Placeholder text — a muted neutral that flips with the theme (the browser
-   * default is a fixed grey that doesn't follow light/dark). `opacity: 1` since
-   * the colour already carries its own muting and UA sheets dim placeholders. */
+  /* Placeholder text — the secondary-text colour, which flips with the theme
+   * (the browser default is a fixed grey that doesn't follow light/dark).
+   * default-400 measured 2.31:1 on the light page and 3.21:1 on dark cards;
+   * foreground-muted is held at 4.5:1 by the token generator. A placeholder
+   * often carries the only label a field has ("全部平台"). `opacity: 1` since
+   * UA sheets dim placeholders. */
   ::placeholder {
-    color: oklch(var(--default-400));
+    color: oklch(var(--foreground-muted));
     opacity: 1;
   }
 }

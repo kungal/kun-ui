@@ -197,6 +197,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.primary.700}"
         }
       },
       "secondary": {
@@ -368,6 +372,10 @@
             "alpha": 1,
             "hex": "#1f101a"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.secondary.600}"
         }
       },
       "success": {
@@ -539,6 +547,10 @@
             "alpha": 1,
             "hex": "#0b1a0f"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.success.700}"
         }
       },
       "warning": {
@@ -710,6 +722,10 @@
             "alpha": 1,
             "hex": "#1e1406"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.warning.600}"
         }
       },
       "danger": {
@@ -881,6 +897,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.danger.700}"
         }
       },
       "info": {
@@ -1052,6 +1072,10 @@
             "alpha": 1,
             "hex": "#04191f"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.info.700}"
         }
       },
       "default": {
@@ -1223,6 +1247,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.light.default.700}"
         }
       },
       "background": {
@@ -1482,6 +1510,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.primary.600}"
         }
       },
       "secondary": {
@@ -1653,6 +1685,10 @@
             "alpha": 1,
             "hex": "#1f101a"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.secondary.700}"
         }
       },
       "success": {
@@ -1824,6 +1860,10 @@
             "alpha": 1,
             "hex": "#0b1a0f"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.success.600}"
         }
       },
       "warning": {
@@ -1995,6 +2035,10 @@
             "alpha": 1,
             "hex": "#1e1406"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.warning.600}"
         }
       },
       "danger": {
@@ -2166,6 +2210,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.danger.600}"
         }
       },
       "info": {
@@ -2337,6 +2385,10 @@
             "alpha": 1,
             "hex": "#04191f"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.info.600}"
         }
       },
       "default": {
@@ -2508,6 +2560,10 @@
             "alpha": 1,
             "hex": "#ffffff"
           }
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{color.dark.default.600}"
         }
       },
       "background": {

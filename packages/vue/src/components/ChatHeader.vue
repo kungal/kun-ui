@@ -80,7 +80,7 @@ const { active: typingActive } = useKunChatTyping(() => ({
       <span class="flex min-w-0 flex-col">
         <span class="truncate leading-5 font-semibold">{{ name }}</span>
         <span class="text-foreground-muted truncate text-xs leading-4">
-          <KunChatTyping v-if="typingActive" class="text-primary" :events="typing" :users="users" :kind="kind" />
+          <KunChatTyping v-if="typingActive" class="text-primary-text" :events="typing" :users="users" :kind="kind" />
           <slot v-else name="subtitle">{{ subtitle }}</slot>
         </span>
       </span>

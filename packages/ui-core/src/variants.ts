@@ -30,32 +30,35 @@ const TABLE: Record<KunUIVariant, Record<KunUIColor, string>> = {
     danger: 'border border-transparent bg-danger text-danger-foreground',
     info: 'border border-transparent bg-info text-info-foreground',
   },
+  // `{c}-text`, not the fill: a fill used as text measured 1.75–4.42:1 on the
+  // light page. The generator holds `{c}-text` at 4.5:1 on the page, on cards
+  // and on the hue's 20% tint, so the hover fill and a flat chip stay readable.
   bordered: {
     default: 'border border-default bg-transparent',
-    primary: 'border border-primary bg-transparent text-primary',
-    secondary: 'border border-secondary bg-transparent text-secondary',
-    success: 'border border-success bg-transparent text-success',
-    warning: 'border border-warning bg-transparent text-warning',
-    danger: 'border border-danger bg-transparent text-danger',
-    info: 'border border-info bg-transparent text-info',
+    primary: 'border border-primary bg-transparent text-primary-text',
+    secondary: 'border border-secondary bg-transparent text-secondary-text',
+    success: 'border border-success bg-transparent text-success-text',
+    warning: 'border border-warning bg-transparent text-warning-text',
+    danger: 'border border-danger bg-transparent text-danger-text',
+    info: 'border border-info bg-transparent text-info-text',
   },
   light: {
     default: 'border border-transparent bg-transparent hover:bg-default/20',
-    primary: 'border border-transparent bg-transparent text-primary hover:bg-primary/20',
-    secondary: 'border border-transparent bg-transparent text-secondary hover:bg-secondary/20',
-    success: 'border border-transparent bg-transparent text-success hover:bg-success/20',
-    warning: 'border border-transparent bg-transparent text-warning hover:bg-warning/20',
-    danger: 'border border-transparent bg-transparent text-danger hover:bg-danger/20',
-    info: 'border border-transparent bg-transparent text-info hover:bg-info/20',
+    primary: 'border border-transparent bg-transparent text-primary-text hover:bg-primary/20',
+    secondary: 'border border-transparent bg-transparent text-secondary-text hover:bg-secondary/20',
+    success: 'border border-transparent bg-transparent text-success-text hover:bg-success/20',
+    warning: 'border border-transparent bg-transparent text-warning-text hover:bg-warning/20',
+    danger: 'border border-transparent bg-transparent text-danger-text hover:bg-danger/20',
+    info: 'border border-transparent bg-transparent text-info-text hover:bg-info/20',
   },
   flat: {
-    default: 'border border-transparent bg-default/20 text-default-700',
-    primary: 'border border-transparent bg-primary/20 text-primary-600',
-    secondary: 'border border-transparent bg-secondary/20 text-secondary-600',
-    success: 'border border-transparent bg-success/20 text-success-700 dark:text-success',
-    warning: 'border border-transparent bg-warning/20 text-warning-700 dark:text-warning',
-    danger: 'border border-transparent bg-danger/20 text-danger-600 dark:text-danger-500',
-    info: 'border border-transparent bg-info/20 text-info-700 dark:text-info-500',
+    default: 'border border-transparent bg-default/20 text-default-text',
+    primary: 'border border-transparent bg-primary/20 text-primary-text',
+    secondary: 'border border-transparent bg-secondary/20 text-secondary-text',
+    success: 'border border-transparent bg-success/20 text-success-text',
+    warning: 'border border-transparent bg-warning/20 text-warning-text',
+    danger: 'border border-transparent bg-danger/20 text-danger-text',
+    info: 'border border-transparent bg-info/20 text-info-text',
   },
   // Same fill logic as `solid` (see note above) plus a COLORED glow. The glow
   // needs both a size (`shadow-lg` — the geometry) AND a tint (`shadow-{color}/40`
@@ -139,12 +142,12 @@ export const kunSolidClasses: Record<KunUIColor, string> = {
 
 export const kunTextClasses: Record<KunUIColor, string> = {
   default: 'text-foreground',
-  primary: 'text-primary',
-  secondary: 'text-secondary',
-  success: 'text-success',
-  warning: 'text-warning',
-  danger: 'text-danger',
-  info: 'text-info',
+  primary: 'text-primary-text',
+  secondary: 'text-secondary-text',
+  success: 'text-success-text',
+  warning: 'text-warning-text',
+  danger: 'text-danger-text',
+  info: 'text-info-text',
 }
 
 export const kunBorderClasses: Record<KunUIColor, string> = {

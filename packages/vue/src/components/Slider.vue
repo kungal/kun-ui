@@ -284,7 +284,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <p v-if="error" class="text-danger mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
     <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>

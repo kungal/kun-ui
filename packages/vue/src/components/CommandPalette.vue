@@ -302,7 +302,7 @@ defineExpose({ open, close, toggle })
               :aria-controls="listId"
               :aria-expanded="isOpen"
               :aria-activedescendant="activeId"
-              class="text-foreground placeholder:text-default-400 flex-1 bg-transparent py-3.5 text-sm outline-none"
+              class="text-foreground placeholder:text-foreground-muted flex-1 bg-transparent py-3.5 text-sm outline-none"
               @keydown="onInputKeydown"
             />
             <button

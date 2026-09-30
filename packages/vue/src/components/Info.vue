@@ -54,12 +54,12 @@ const variantClasses = computed(() => {
 const colorVariants: Partial<Record<KunUIVariant, Record<KunUIColor, string>>> = {
   bordered: {
     default: 'bg-default/15 border-default',
-    primary: 'bg-primary/15 border-primary text-primary',
-    secondary: 'bg-secondary/15 border-secondary text-secondary',
-    success: 'bg-success/15 border-success-600 text-success',
-    warning: 'bg-warning/15 border-warning-600 text-warning',
-    danger: 'bg-danger/15 border-danger text-danger',
-    info: 'bg-info/15 border-info text-info',
+    primary: 'bg-primary/15 border-primary text-primary-text',
+    secondary: 'bg-secondary/15 border-secondary text-secondary-text',
+    success: 'bg-success/15 border-success-600 text-success-text',
+    warning: 'bg-warning/15 border-warning-600 text-warning-text',
+    danger: 'bg-danger/15 border-danger text-danger-text',
+    info: 'bg-info/15 border-info text-info-text',
   },
   light: {
     default: 'bg-transparent hover:bg-default/40',
@@ -76,8 +76,8 @@ const colorVariants: Partial<Record<KunUIVariant, Record<KunUIColor, string>>> =
     secondary: 'bg-secondary/15 text-secondary-800',
     success: 'bg-success/15 text-success-800 dark:text-success',
     warning: 'bg-warning/15 text-warning-800 dark:text-warning',
-    danger: 'bg-danger/15 text-danger-800 dark:text-danger-500',
-    info: 'bg-info/15 text-info-800 dark:text-info-500',
+    danger: 'bg-danger/15 text-danger-800 dark:text-danger-text',
+    info: 'bg-info/15 text-info-800 dark:text-info-text',
   },
 }
 

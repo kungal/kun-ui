@@ -159,7 +159,7 @@ const markFg = computed(() => kunSolidFgClasses[props.color])
     <p
       v-if="error"
       :id="`${kunUniqueId}-desc`"
-      class="text-danger mt-1 text-sm"
+      class="text-danger-text mt-1 text-sm"
     >
       {{ error }}
     </p>
