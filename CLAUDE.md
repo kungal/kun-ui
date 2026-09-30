@@ -14,7 +14,7 @@ KunUI, the shared cross-framework component library for the NextMoe/KunGal ecosy
 
 - `@kungal/ui-tokens` — framework-agnostic Tailwind v4 theme (semantic colors, radius, OKLCH palette). `gen:tokens` asserts every solid/on-color pair clears WCAG AA in both modes and exits non-zero if one doesn't.
 - `@kungal/ui-core` — design types, `cn()`, variant matrix, radius system, the inlined icons, and the NextMoe chat wire types plus the pure algorithms behind the KunChat* components (entity tree, composer markdown round trip, album mosaic, message grouping) — pure so the Flutter port reproduces them.
-- `@kungal/ui-vue` — the Vue 3 layer, Nuxt-decoupled: 89 SFCs, 86 registered in `KUN_COMPONENT_NAMES` (MenuList, MenuSubTrigger and MessageItem are internal), plus 27 exported composables.
+- `@kungal/ui-vue` — the Vue 3 layer, Nuxt-decoupled: 90 SFCs, 87 registered in `KUN_COMPONENT_NAMES` (MenuList, MenuSubTrigger and MessageItem are internal), plus 27 exported composables.
 - `@kungal/ui-nuxt` — Nuxt layer wrapping ui-vue (auto-imports, injection). Ships `nuxt.config.ts` + `app/` as *source*: no build, no typecheck of its own — building `apps/docs` is the only thing that exercises it.
 
 React (`@kungal/ui-react`) is a planned future layer — `docs/architecture.md` carries the honest constraint analysis (no technology runs `.vue` inside React) and the phased roadmap.

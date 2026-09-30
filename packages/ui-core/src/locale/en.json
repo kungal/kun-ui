@@ -261,6 +261,9 @@
       "clear": "Clear",
       "removeOption": "Remove {label}"
     },
+    "splitPane": {
+      "handle": "Resize panes"
+    },
     "spoiler": {
       "copyCode": "Copy code",
       "reveal": "Spoiler — click or press Enter to reveal"

@@ -217,6 +217,7 @@ export interface KunMessages {
     clear: string
     removeOption: string
   }
+  splitPane: { handle: string }
   spoiler: { copyCode: string; reveal: string }
   /** Visually hidden state prefix read before each step's title; all four
    *  take `{title}`. */

@@ -1,6 +1,6 @@
 # ChatLayout (聊天外壳)
 
-> 响应式聊天外壳:md 以上对话列表与会话两栏并排,手机上一次一栏,用 showConversation 切换;纯断点类,SSR 不猜屏幕。
+> 响应式聊天外壳:布局自身宽 48rem 以上对话列表与会话两栏并排,更窄时一次一栏,用 showConversation 切换;列表栏可设 resizable 拖动;纯 CSS 容器查询,SSR 不猜屏幕。
 
 ## 示例
 
@@ -27,14 +27,15 @@ import {
   makeGroupConversation,
 } from '~/utils/chatDemo'
 
-// A whole chat screen: list and conversation side by side from `md` up, one at
-// a time on a phone. Sending goes through a pending state, the third message
+// A whole chat screen: list and conversation side by side once the layout is
+// 48rem wide, one at a time below that; `resizable` makes the list draggable. Sending goes through a pending state, the third message
 // you send fails (retry it from the red button), and 雪之下小春 answers.
 const conversations = ref([
   { id: 'direct', kind: 'direct' as const, messages: makeDirectConversation(), lastReadSeq: 16, peerReadSeq: 14 },
   { id: 'group', kind: 'group' as const, messages: makeGroupConversation(), lastReadSeq: 210, peerReadSeq: 210 },
 ])
 const openId = ref<string | null>('direct')
+const sidebarSize = ref(320)
 const open = computed(() => conversations.value.find((c) => c.id === openId.value) ?? null)
 const peer = demoUsers[1]!
 
@@ -150,7 +151,7 @@ const unread = (c: (typeof conversations.value)[number]) =>
 
 <template>
   <div class="w-full border-default/20 h-[36rem] overflow-hidden rounded-kun-lg border">
-    <KunChatLayout :show-conversation="!!open">
+    <KunChatLayout v-model:sidebar-size="sidebarSize" resizable :show-conversation="!!open">
       <template #sidebar>
         <div class="bg-content1 flex h-full flex-col gap-0.5 overflow-y-auto p-1.5">
           <KunChatConversationItem
@@ -239,15 +240,26 @@ const unread = (c: (typeof conversations.value)[number]) =>
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `showConversation` | `boolean` | `false` | Which pane a narrow screen shows: the conversation, or the list. From `md` up both panes show. |
-| `sidebarWidth` | `string` | `"22rem"` | Width of the list pane from `md` up, as CSS. |
+| `resizable` | `boolean` | `false` | Let the reader drag the divider between the list and the conversation (or move it with the arrow keys), through KunSplitPane. |
+| `showConversation` | `boolean` | `false` | Which pane a narrow layout shows: the conversation, or the list. From 48rem (768px, the `md` step) of the layout's OWN width up, both panes show — a chat beside an app's side rail decides by the room it has, not by the window. |
+| `sidebarMaxSize` | `number` | `480` | Widest the list can be dragged, in px. Only with `resizable`. |
+| `sidebarMinSize` | `number` | `280` | Narrowest the list can be dragged, in px. Only with `resizable`. |
+| `sidebarSize` | `number` | `352` | Width of the list pane in px while `resizable`; persist it from `sidebar-resize-end`. |
+| `sidebarWidth` | `string` | `"22rem"` | Width of the list pane in the two-pane layout, as CSS. Ignored when `resizable`, which sizes the list in px through `v-model:sidebar-size`. |
+
+## Events
+
+| 事件 | 回调参数 | 说明 |
+| --- | --- | --- |
+| `sidebar-resize-end` | `size: number` | A drag or a key press on the divider finished with this list width. |
+| `update:sidebarSize` | `value: number` |  |
 
 ## Slots
 
 | 插槽 | 作用域 | 说明 |
 | --- | --- | --- |
 | `#default` | `any` | The open conversation. |
-| `#empty` | `any` | What the right pane shows with no conversation open, from `md` up. |
+| `#empty` | `any` | What the right pane shows with no conversation open, in the two-pane layout. |
 | `#sidebar` | `any` | The conversation list. |
 
 ---

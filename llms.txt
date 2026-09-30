@@ -1,6 +1,6 @@
 # KunUI
 
-> Cross-framework component library — 86 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 87 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 Packages:
 - @kungal/ui-tokens: Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.
@@ -53,6 +53,7 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunChip: Small tag/pill with color + variant.
 - KunKbd: Keyboard shortcut badge: `keys="Mod+K"` renders ⌘K on Apple and Ctrl K elsewhere (server renders Ctrl, a Mac switches after mount); screen readers hear key names. `variant="plain"` is the one-line menu form (⇧⌘Z / Ctrl+Shift+Z).
 - KunScrollShadow: Horizontal scroll container with edge fade shadows.
+- KunSplitPane: Two panes with a draggable, keyboard-adjustable divider (#start / #end slots). `v-model:size` is the primary pane width in px (server-rendered); `resize-end` is the event to persist; `min-size` / `max-size`, `snap-points` (pulled within `snap-threshold`), `primary="end"` for an auxiliary right column. Stacks to one pane (`show-pane`) below `stack-below` of its OWN width (container query, default md = 48rem).
 - KunFadeCard: Fade + expand transition wrapper for conditional content.
 - KunNull: Empty-state placeholder with a bundled mascot image + caption (`description`, `src`, `isShowSticker`).
 - KunAccordion: Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.
@@ -103,7 +104,7 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunLightboxGalleryItem: A single gallery item (src + slot for the thumbnail).
 
 ### Chat
-- KunChatLayout: Responsive chat shell: conversation list and conversation side by side from `md` up, one pane at a time below (`show-conversation`). Slots #sidebar / default / #empty.
+- KunChatLayout: Responsive chat shell: conversation list and conversation side by side once the layout ITSELF is 48rem wide (container query, not the window), one pane at a time below (`show-conversation`). `resizable` + `v-model:sidebar-size` (px) make the list draggable via KunSplitPane. Slots #sidebar / default / #empty.
 - KunChatMessageList: Conversation scrollback for NextMoe `/v2/chat` messages (string ids): sender runs, sticky day pills, unread divider (opens there), older/newer paging without jumps, stick-to-bottom, scroll-down button with unread count, `scrollToSeq(seq)` + highlight, right-click / long-press menu, swipe-left to reply. Emits load-older, load-newer, read, jump, action, react, retry.
 - KunChatBubble: One message: own (right, primary tint) or theirs; reply / quote preview, photo or Telegram-mosaic album (lightbox), context card, reactions, time / edited / status (failed → `retry`). A service message renders as a centred pill. Photos show `media.url` unless `resolve-media-url` is passed.
 - KunChatText: Renders message `text` + `entities` (UTF-16 ranges): bold, italic, underline, strike, spoiler (click reveals all), code, pre (language + copy), blockquote, links, mentions. No v-html. `preview` = one-line form with masked spoilers.

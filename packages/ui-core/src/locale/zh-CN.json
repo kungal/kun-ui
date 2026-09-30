@@ -261,6 +261,9 @@
       "clear": "清除",
       "removeOption": "移除 {label}"
     },
+    "splitPane": {
+      "handle": "调整分栏宽度"
+    },
     "spoiler": {
       "copyCode": "复制代码",
       "reveal": "剧透内容,点击或按回车显示"

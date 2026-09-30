@@ -18,14 +18,15 @@ import {
   makeGroupConversation,
 } from '~/utils/chatDemo'
 
-// A whole chat screen: list and conversation side by side from `md` up, one at
-// a time on a phone. Sending goes through a pending state, the third message
+// A whole chat screen: list and conversation side by side once the layout is
+// 48rem wide, one at a time below that; `resizable` makes the list draggable. Sending goes through a pending state, the third message
 // you send fails (retry it from the red button), and 雪之下小春 answers.
 const conversations = ref([
   { id: 'direct', kind: 'direct' as const, messages: makeDirectConversation(), lastReadSeq: 16, peerReadSeq: 14 },
   { id: 'group', kind: 'group' as const, messages: makeGroupConversation(), lastReadSeq: 210, peerReadSeq: 210 },
 ])
 const openId = ref<string | null>('direct')
+const sidebarSize = ref(320)
 const open = computed(() => conversations.value.find((c) => c.id === openId.value) ?? null)
 const peer = demoUsers[1]!
 
@@ -141,7 +142,7 @@ const unread = (c: (typeof conversations.value)[number]) =>
 
 <template>
   <div class="w-full border-default/20 h-[36rem] overflow-hidden rounded-kun-lg border">
-    <KunChatLayout :show-conversation="!!open">
+    <KunChatLayout v-model:sidebar-size="sidebarSize" resizable :show-conversation="!!open">
       <template #sidebar>
         <div class="bg-content1 flex h-full flex-col gap-0.5 overflow-y-auto p-1.5">
           <KunChatConversationItem

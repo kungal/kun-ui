@@ -1142,6 +1142,16 @@ class KunSelectStrings {
       _removeOption.replaceAll('{label}', '$label');
 }
 
+/// Strings for `KunSplitPane`.
+class KunSplitPaneStrings {
+  const KunSplitPaneStrings({
+    required this.handle,
+  });
+
+  /// `en`: Resize panes
+  final String handle;
+}
+
 /// Strings for `KunSpoiler`.
 class KunSpoilerStrings {
   const KunSpoilerStrings({
@@ -1321,6 +1331,7 @@ class KunMessages {
     required this.pinInput,
     required this.reaction,
     required this.select,
+    required this.splitPane,
     required this.spoiler,
     required this.steps,
     required this.tagInput,
@@ -1404,6 +1415,8 @@ class KunMessages {
   final KunReactionStrings reaction;
 
   final KunSelectStrings select;
+
+  final KunSplitPaneStrings splitPane;
 
   final KunSpoilerStrings spoiler;
 
@@ -1677,6 +1690,9 @@ class KunMessages {
       loading: '加载中…',
       clear: '清除',
       removeOption: '移除 {label}',
+    ),
+    splitPane: KunSplitPaneStrings(
+      handle: '调整分栏宽度',
     ),
     spoiler: KunSpoilerStrings(
       copyCode: '复制代码',
@@ -1972,6 +1988,9 @@ class KunMessages {
       loading: 'Loading…',
       clear: 'Clear',
       removeOption: 'Remove {label}',
+    ),
+    splitPane: KunSplitPaneStrings(
+      handle: 'Resize panes',
     ),
     spoiler: KunSpoilerStrings(
       copyCode: 'Copy code',

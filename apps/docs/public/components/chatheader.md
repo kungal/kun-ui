@@ -1,6 +1,6 @@
 # ChatHeader (会话头部)
 
-> 会话顶部栏:手机上的返回按钮、头像、标题,第二行在有人输入时变成「正在输入…」,右侧放操作按钮。
+> 会话顶部栏:单栏时的返回按钮、头像、标题,第二行在有人输入时变成「正在输入…」,右侧放操作按钮。
 
 ## 示例
 
@@ -47,7 +47,7 @@ const type = () => (typing.value = [{ user_id: haru.id, at: Date.now() }])
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `avatar` | `string \| null` | `null` | Avatar URL, e.g. a group photo. |
-| `back` | `boolean \| "mobile"` | `"mobile"` | The back button: `mobile` below the `md` breakpoint only. |
+| `back` | `boolean \| "mobile"` | `"mobile"` | The back button. `mobile` shows it only while the KunChatLayout around the header shows one pane (its own width below 48rem), or, outside a KunChatLayout, below the `md` window width. |
 | `kind` | `KunChatKind` | `"direct"` | A direct chat says "typing…"; a group names who is typing. |
 | `subtitle` | `string` | `""` | Second line, e.g. a member count. Replaced while someone types. |
 | `title` | `string` | — | Title. Defaults to `user`'s name. |

@@ -1361,7 +1361,7 @@
           "type": "boolean | \"mobile\"",
           "required": false,
           "default": "\"mobile\"",
-          "description": "The back button: `mobile` below the `md` breakpoint only."
+          "description": "The back button. `mobile` shows it only while the KunChatLayout around the header shows one pane (its own width below 48rem), or, outside a KunChatLayout, below the `md` window width."
         },
         {
           "name": "kind",
@@ -1435,17 +1435,55 @@
       "status": "portable",
       "props": [
         {
+          "name": "resizable",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Let the reader drag the divider between the list and the conversation (or move it with the arrow keys), through KunSplitPane."
+        },
+        {
           "name": "showConversation",
           "type": "boolean",
           "required": false,
           "default": "false",
-          "description": "Which pane a narrow screen shows: the conversation, or the list. From `md` up both panes show."
+          "description": "Which pane a narrow layout shows: the conversation, or the list. From 48rem (768px, the `md` step) of the layout's OWN width up, both panes show — a chat beside an app's side rail decides by the room it has, not by the window."
+        },
+        {
+          "name": "sidebarMaxSize",
+          "type": "number",
+          "required": false,
+          "default": "480",
+          "description": "Widest the list can be dragged, in px. Only with `resizable`."
+        },
+        {
+          "name": "sidebarMinSize",
+          "type": "number",
+          "required": false,
+          "default": "280",
+          "description": "Narrowest the list can be dragged, in px. Only with `resizable`."
+        },
+        {
+          "name": "sidebarSize",
+          "type": "number",
+          "required": false,
+          "default": "352",
+          "description": "Width of the list pane in px while `resizable`; persist it from `sidebar-resize-end`."
         }
       ],
       "webOnlyProps": {
         "sidebarWidth": "A CSS length string for the list pane; the capability crosses as a plain double in the Flutter layout."
       },
-      "events": [],
+      "events": [
+        {
+          "name": "sidebar-resize-end",
+          "type": "size: number",
+          "description": "A drag or a key press on the divider finished with this list width."
+        },
+        {
+          "name": "update:sidebarSize",
+          "type": "value: number"
+        }
+      ],
       "slots": [
         {
           "name": "default",
@@ -1455,7 +1493,7 @@
         {
           "name": "empty",
           "type": "any",
-          "description": "What the right pane shows with no conversation open, from `md` up."
+          "description": "What the right pane shows with no conversation open, in the two-pane layout."
         },
         {
           "name": "sidebar",
@@ -5097,6 +5135,110 @@
         }
       ],
       "slots": []
+    },
+    "KunSplitPane": {
+      "status": "portable",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "default": "locale splitPane.handle",
+          "description": "Accessible name of the divider.",
+          "defaultFrom": {
+            "locale": [
+              "splitPane.handle"
+            ]
+          }
+        },
+        {
+          "name": "maxSize",
+          "type": "number",
+          "required": false,
+          "default": "480",
+          "description": "Widest the primary pane can be dragged, in px."
+        },
+        {
+          "name": "minSize",
+          "type": "number",
+          "required": false,
+          "default": "240",
+          "description": "Narrowest the primary pane can be dragged, in px."
+        },
+        {
+          "name": "primary",
+          "type": "\"start\" | \"end\"",
+          "required": false,
+          "default": "\"start\"",
+          "description": "Which pane `size` belongs to; the other takes the rest. `end` suits a main area with an auxiliary column on the right."
+        },
+        {
+          "name": "showPane",
+          "type": "\"start\" | \"end\"",
+          "required": false,
+          "default": "\"start\"",
+          "description": "Which pane shows while stacked."
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "default": "360",
+          "description": "Width of the primary pane in px. Updated on every pointer move while dragging; persist from `resize-end`."
+        },
+        {
+          "name": "snapPoints",
+          "type": "number[]",
+          "required": false,
+          "default": "[]",
+          "description": "Widths the divider is pulled to when it comes within `snapThreshold`, e.g. `[360, 412]`. Any width in between stays reachable."
+        },
+        {
+          "name": "snapThreshold",
+          "type": "number",
+          "required": false,
+          "default": "8",
+          "description": "How close, in px, the divider must come to a snap point to be pulled to it."
+        },
+        {
+          "name": "stackBelow",
+          "type": "false | \"md\" | \"lg\"",
+          "required": false,
+          "default": "\"md\"",
+          "description": "Below this width of the component ITSELF (a container query, not the window), show one pane at a time: `md` is 48rem, `lg` 64rem. `false` keeps two panes at any width."
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "required": false,
+          "default": "10",
+          "description": "Arrow-key step in px; Shift moves five steps."
+        }
+      ],
+      "webOnlyProps": {},
+      "events": [
+        {
+          "name": "resize-end",
+          "type": "size: number",
+          "description": "A drag or a key press finished with this width — the one to persist."
+        },
+        {
+          "name": "update:size",
+          "type": "value: number"
+        }
+      ],
+      "slots": [
+        {
+          "name": "end",
+          "type": "any",
+          "description": "The right pane."
+        },
+        {
+          "name": "start",
+          "type": "any",
+          "description": "The left pane."
+        }
+      ]
     },
     "KunSteps": {
       "status": "portable",

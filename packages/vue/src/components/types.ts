@@ -2399,14 +2399,64 @@ export interface KunChatHeaderProps {
   typing?: KunChatTypingEvent[]
   /** Users, to name who is typing in a group. */
   users?: KunChatUser[]
-  /** The back button: `mobile` below the `md` breakpoint only. */
+  /** The back button. `mobile` shows it only while the KunChatLayout around
+   *  the header shows one pane (its own width below 48rem), or, outside a
+   *  KunChatLayout, below the `md` window width. */
   back?: boolean | 'mobile'
 }
 
 export interface KunChatLayoutProps {
-  /** Which pane a narrow screen shows: the conversation, or the list. From
-   *  `md` up both panes show. */
+  /** Which pane a narrow layout shows: the conversation, or the list. From
+   *  48rem (768px, the `md` step) of the layout's OWN width up, both panes
+   *  show — a chat beside an app's side rail decides by the room it has, not
+   *  by the window. */
   showConversation?: boolean
-  /** Width of the list pane from `md` up, as CSS. */
+  /** Width of the list pane in the two-pane layout, as CSS. Ignored when
+   *  `resizable`, which sizes the list in px through `v-model:sidebar-size`. */
   sidebarWidth?: string
+  /** Let the reader drag the divider between the list and the conversation
+   *  (or move it with the arrow keys), through KunSplitPane.
+   *  @default false */
+  resizable?: boolean
+  /** Narrowest the list can be dragged, in px. Only with `resizable`.
+   *  @default 280 */
+  sidebarMinSize?: number
+  /** Widest the list can be dragged, in px. Only with `resizable`.
+   *  @default 480 */
+  sidebarMaxSize?: number
+}
+
+// ── SplitPane ──────────────────────────────────────────────────────────
+export interface KunSplitPaneProps {
+  /** Which pane `size` belongs to; the other takes the rest. `end` suits a
+   *  main area with an auxiliary column on the right.
+   *  @default 'start' */
+  primary?: 'start' | 'end'
+  /** Narrowest the primary pane can be dragged, in px.
+   *  @default 240 */
+  minSize?: number
+  /** Widest the primary pane can be dragged, in px.
+   *  @default 480 */
+  maxSize?: number
+  /** Widths the divider is pulled to when it comes within `snapThreshold`,
+   *  e.g. `[360, 412]`. Any width in between stays reachable.
+   *  @default [] */
+  snapPoints?: number[]
+  /** How close, in px, the divider must come to a snap point to be pulled to it.
+   *  @default 8 */
+  snapThreshold?: number
+  /** Arrow-key step in px; Shift moves five steps.
+   *  @default 10 */
+  step?: number
+  /** Below this width of the component ITSELF (a container query, not the
+   *  window), show one pane at a time: `md` is 48rem, `lg` 64rem. `false`
+   *  keeps two panes at any width.
+   *  @default 'md' */
+  stackBelow?: 'md' | 'lg' | false
+  /** Which pane shows while stacked.
+   *  @default 'start' */
+  showPane?: 'start' | 'end'
+  /** Accessible name of the divider.
+   *  @default locale splitPane.handle */
+  ariaLabel?: string
 }

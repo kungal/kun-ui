@@ -75,6 +75,7 @@ export {
   type KunKbdKeyName,
 } from './shortcut'
 export { normalizeKunMenuSeparators } from './menu'
+export { resolveKunSplitSize, type KunSplitSizeOptions } from './splitPane'
 
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'

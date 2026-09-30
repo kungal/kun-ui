@@ -26,7 +26,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
   },
   {
     title: '布局',
-    slugs: ['card', 'divider', 'scrollshadow'],
+    slugs: ['card', 'divider', 'scrollshadow', 'splitpane'],
   },
   {
     title: '表单',

@@ -63,7 +63,7 @@ const { active: typingActive } = useKunChatTyping(() => ({
       :class="
         cn(
           'text-default-600 hover:text-foreground flex size-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-default/20',
-          back === 'mobile' && 'md:hidden'
+          back === 'mobile' && 'kun-chat-header__back--mobile'
         )
       "
       :aria-label="t('chat.back')"
@@ -90,3 +90,24 @@ const { active: typingActive } = useKunChatTyping(() => ({
     </div>
   </header>
 </template>
+
+<style scoped>
+/* `mobile` follows the KunChatLayout it sits in (its own width, 48rem), and
+   the window outside one. The container rules come second so they win where
+   both match: a narrow chat in a wide window keeps its back button. */
+@media (width >= 48rem) {
+  .kun-chat-header__back--mobile {
+    display: none;
+  }
+}
+@container kun-chat (width < 48rem) {
+  .kun-chat-header__back--mobile {
+    display: flex;
+  }
+}
+@container kun-chat (width >= 48rem) {
+  .kun-chat-header__back--mobile {
+    display: none;
+  }
+}
+</style>
