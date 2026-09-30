@@ -18,7 +18,7 @@ import meta from '~/generated/component-meta.json'
   <article class="mx-auto max-w-3xl">
     <DocTitle />
     <DocIntro />
-    <p class="text-default-500 mt-4 text-sm">
+    <p class="text-foreground-muted mt-4 text-sm">
       通常由 <code>KunChatMessageList</code> 渲染并排好位置;单独使用时自己决定左右对齐。
     </p>
 

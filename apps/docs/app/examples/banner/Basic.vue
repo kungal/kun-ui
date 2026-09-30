@@ -12,8 +12,8 @@ const open = ref(true)
       text="论坛将于 9 月 28 日 02:00–04:00 停机维护,期间无法发帖和上传图片。"
     />
     <header class="border-default-200 flex items-center justify-between border-b px-4 py-3">
-      <span class="font-bold">Kun<span class="text-primary">Gal</span></span>
-      <nav class="text-default-500 flex gap-4 text-sm">
+      <span class="font-bold">Kun<span class="text-primary-text">Gal</span></span>
+      <nav class="text-foreground-muted flex gap-4 text-sm">
         <span>话题</span><span>Galgame</span><span>排行</span>
       </nav>
     </header>

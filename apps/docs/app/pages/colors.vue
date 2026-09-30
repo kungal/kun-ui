@@ -91,7 +91,7 @@ onBeforeUnmount(() => observer?.disconnect())
               :style="{ backgroundColor: v(`${c}-${s}`) }"
               :title="`${c}-${s}`"
             />
-            <div class="text-default-500 mt-1 font-mono text-[10px]">{{ s }}</div>
+            <div class="text-foreground-muted mt-1 font-mono text-[10px]">{{ s }}</div>
           </div>
         </div>
       </div>
@@ -101,9 +101,10 @@ onBeforeUnmount(() => observer?.disconnect())
     <h2 class="mt-10 mb-1 text-xl font-semibold">文字</h2>
     <p class="text-default-600 mb-4 text-sm">
       正文用 <code>text-foreground</code>;说明、辅助文字、时间戳、计数等次要文字用
-      <code>text-foreground-muted</code>。它在浅色模式取 <code>default-600</code>、暗色模式取
-      <code>default-500</code>,在页面背景与卡片(<code>content1</code>)上两模式均 ≥ WCAG AA,
-      由生成器校验。<code>text-default-500</code> 在浅色页面背景上只有 3.33:1,不要用作可读文字。
+      <code>text-foreground-muted</code>。它是介于灰阶两级之间的一个灰(浅色介于 600 与 700、暗色介于
+      500 与 600),在页面背景、卡片(<code>content1</code>)、叠在二者之上的
+      <code>bg-default/20</code>(悬停、高亮行)以及 <code>bg-default-100</code>(键帽)上两模式均 ≥ WCAG
+      AA,由生成器校验。<code>text-default-500</code> 在浅色页面背景上只有 3.33:1,不要用作可读文字。
     </p>
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div
@@ -161,8 +162,8 @@ onBeforeUnmount(() => observer?.disconnect())
         :style="{ backgroundColor: v(su.token) }"
       >
         <span class="text-foreground font-mono text-xs">{{ su.token }}</span>
-        <span class="text-default-500 text-[11px]">{{ su.label }}</span>
-        <span class="text-default-500 font-mono text-[10px]">{{ hex[su.token] || '·' }}</span>
+        <span class="text-foreground-muted text-[11px]">{{ su.label }}</span>
+        <span class="text-foreground-muted font-mono text-[10px]">{{ hex[su.token] || '·' }}</span>
       </div>
     </div>
   </article>

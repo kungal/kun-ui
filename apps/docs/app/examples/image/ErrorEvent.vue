@@ -44,6 +44,6 @@ const onLoad = (src: string) => log.value.push(`load: ${src.slice(0, 40)}`)
         @load="onLoad"
       />
     </div>
-    <pre class="text-default-500 text-xs">{{ log.join('\n') || '等待中…' }}</pre>
+    <pre class="text-foreground-muted text-xs">{{ log.join('\n') || '等待中…' }}</pre>
   </div>
 </template>

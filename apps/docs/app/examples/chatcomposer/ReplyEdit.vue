@@ -30,7 +30,7 @@ const onEdit = (m: KunChatFormattedText) => (log.value = `edit:${m.text}`)
         引用一段
       </KunButton>
       <KunButton size="sm" variant="flat" @click="editing = mine">编辑我的消息</KunButton>
-      <span class="text-default-500 self-center text-xs">{{ log }}</span>
+      <span class="text-foreground-muted self-center text-xs">{{ log }}</span>
     </div>
     <KunChatComposer
       v-model="draft"

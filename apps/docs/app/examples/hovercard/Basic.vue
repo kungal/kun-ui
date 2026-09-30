@@ -18,7 +18,7 @@ const following = ref(false)
           <KunAvatar :user="user" size="lg" :is-navigation="false" />
           <div class="min-w-0 flex-1">
             <p class="font-semibold">{{ user.name }}</p>
-            <p class="text-default-500 text-xs">2019 年加入 · 管理员</p>
+            <p class="text-foreground-muted text-xs">2019 年加入 · 管理员</p>
           </div>
           <KunButton
             size="sm"
@@ -34,19 +34,19 @@ const following = ref(false)
         <div class="border-kun grid grid-cols-3 border-t pt-3 text-center">
           <div>
             <p class="font-semibold">128</p>
-            <p class="text-default-500 text-xs">话题</p>
+            <p class="text-foreground-muted text-xs">话题</p>
           </div>
           <div>
             <p class="font-semibold">2,301</p>
-            <p class="text-default-500 text-xs">回复</p>
+            <p class="text-foreground-muted text-xs">回复</p>
           </div>
           <div>
             <p class="font-semibold">12,480</p>
-            <p class="text-default-500 text-xs">萌萌点</p>
+            <p class="text-foreground-muted text-xs">萌萌点</p>
           </div>
         </div>
       </div>
     </KunHoverCard>
-    <span class="text-default-500">发布于 3 小时前</span>
+    <span class="text-foreground-muted">发布于 3 小时前</span>
   </div>
 </template>

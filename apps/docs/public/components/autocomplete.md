@@ -59,7 +59,7 @@ const options: KunAutocompleteOption[] = [
       placeholder="Pick or type…"
       :allow-custom-value="true"
     />
-    <p class="text-default-500 mt-2 text-sm">值: {{ value || '—' }}</p>
+    <p class="text-foreground-muted mt-2 text-sm">值: {{ value || '—' }}</p>
   </div>
 </template>
 ```
@@ -219,7 +219,7 @@ const onSelect = (opt: KunAutocompleteOption) => {
       @search="onSearch"
       @select="onSelect"
     />
-    <p class="text-default-500 mt-2 text-sm">
+    <p class="text-foreground-muted mt-2 text-sm">
       confirmed value: <code>{{ picked ?? '—' }}</code>
     </p>
   </div>
@@ -265,7 +265,7 @@ const options: CityOption[] = [
         <img :src="option.avatar" alt="" class="size-8 shrink-0 rounded-full" />
         <div class="min-w-0">
           <div class="truncate font-medium">{{ option.label }}</div>
-          <div class="text-default-500 truncate text-xs">{{ option.desc }}</div>
+          <div class="text-foreground-muted truncate text-xs">{{ option.desc }}</div>
         </div>
       </template>
     </KunAutocomplete>

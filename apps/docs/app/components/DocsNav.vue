@@ -8,7 +8,7 @@ import { nav } from '~/nav'
   <nav class="flex flex-col gap-6">
     <div v-for="section in nav" :key="section.title">
       <p
-        class="text-default-400 mb-2 text-xs font-semibold tracking-wide uppercase"
+        class="text-foreground-muted mb-2 text-xs font-semibold tracking-wide uppercase"
       >
         {{ section.title }}
       </p>

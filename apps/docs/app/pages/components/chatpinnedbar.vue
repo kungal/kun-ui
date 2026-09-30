@@ -10,7 +10,7 @@ import meta from '~/generated/component-meta.json'
     <DocIntro />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       把 <code>@jump</code> 接到 <code>KunChatMessageList</code> 的 <code>scrollToSeq</code>;
       没载入的消息 <code>scrollToSeq</code> 返回 false,按 <code>around_seq</code> 取一页再跳。
     </p>

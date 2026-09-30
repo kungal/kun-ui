@@ -20,7 +20,7 @@ const variants: KunTabVariant[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="v in variants" :key="v" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ v }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ v }}</span>
       <KunTab v-model="active" :items="items" :variant="v" />
     </div>
   </div>

@@ -79,7 +79,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="1 / 1"
         class-name="w-40 rounded-kun-lg bg-default-100"
       />
-      <span class="text-default-500 text-sm">cover</span>
+      <span class="text-foreground-muted text-sm">cover</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <KunImage
@@ -90,7 +90,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="1 / 1"
         class-name="w-40 rounded-kun-lg bg-default-100"
       />
-      <span class="text-default-500 text-sm">contain</span>
+      <span class="text-foreground-muted text-sm">contain</span>
     </div>
   </div>
 </template>
@@ -233,7 +233,7 @@ const onLoad = (src: string) => log.value.push(`load: ${src.slice(0, 40)}`)
         @load="onLoad"
       />
     </div>
-    <pre class="text-default-500 text-xs">{{ log.join('\n') || '等待中…' }}</pre>
+    <pre class="text-foreground-muted text-xs">{{ log.join('\n') || '等待中…' }}</pre>
   </div>
 </template>
 ```
@@ -261,7 +261,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="4 / 3"
         class-name="w-44 rounded-kun-lg"
       />
-      <span class="text-default-500 text-sm">eager（即时）</span>
+      <span class="text-foreground-muted text-sm">eager（即时）</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <KunImage
@@ -272,7 +272,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="4 / 3"
         class-name="w-44 rounded-kun-lg"
       />
-      <span class="text-default-500 text-sm">lazy（懒加载，默认）</span>
+      <span class="text-foreground-muted text-sm">lazy（懒加载，默认）</span>
     </div>
   </div>
 </template>

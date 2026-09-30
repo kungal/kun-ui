@@ -227,7 +227,7 @@ const unread = (c: (typeof conversations.value)[number]) =>
       </template>
 
       <template #empty>
-        <div class="bg-default-100 text-default-500 flex h-full items-center justify-center text-sm">
+        <div class="bg-default-100 text-foreground-muted flex h-full items-center justify-center text-sm">
           选择一个对话开始聊天
         </div>
       </template>

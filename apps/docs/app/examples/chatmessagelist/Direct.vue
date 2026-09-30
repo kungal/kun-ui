@@ -28,7 +28,7 @@ const readUpTo = ref(16)
       :time-zone="DEMO_TZ"
       @read="(seq) => (readUpTo = seq)"
     />
-    <p class="text-default-500 border-default/20 border-t px-3 py-1.5 text-xs">
+    <p class="text-foreground-muted border-default/20 border-t px-3 py-1.5 text-xs">
       已读到 seq {{ readUpTo }}
     </p>
   </div>

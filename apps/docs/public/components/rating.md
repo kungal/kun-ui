@@ -15,7 +15,7 @@ const rating = ref(3)
 <template>
   <div class="flex items-center gap-3">
     <KunRating v-model="rating" />
-    <span class="text-default-500 text-sm">{{ rating }} / 5</span>
+    <span class="text-foreground-muted text-sm">{{ rating }} / 5</span>
   </div>
 </template>
 ```
@@ -26,7 +26,7 @@ const rating = ref(3)
 <template>
   <div class="flex items-center gap-3">
     <KunRating :model-value="4" readonly />
-    <span class="text-default-500 text-sm">只读，固定为 4 / 5</span>
+    <span class="text-foreground-muted text-sm">只读，固定为 4 / 5</span>
   </div>
 </template>
 ```
@@ -37,7 +37,7 @@ const rating = ref(3)
 <template>
   <div class="flex items-center gap-3">
     <KunRating :model-value="3" disabled />
-    <span class="text-default-500 text-sm">禁用，无法交互</span>
+    <span class="text-foreground-muted text-sm">禁用，无法交互</span>
   </div>
 </template>
 ```
@@ -53,7 +53,7 @@ const rating = ref(7)
 <template>
   <div class="flex items-center gap-3">
     <KunRating v-model="rating" :max="10" />
-    <span class="text-default-500 text-sm">{{ rating }} / 10</span>
+    <span class="text-foreground-muted text-sm">{{ rating }} / 10</span>
   </div>
 </template>
 ```

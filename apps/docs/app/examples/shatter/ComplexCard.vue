@@ -34,7 +34,7 @@ const restore = () => {
             Galgame
           </span>
           <span
-            class="bg-warning absolute top-3 right-3 rounded-full px-2 py-0.5 text-xs font-semibold text-white"
+            class="bg-warning text-warning-foreground absolute top-3 right-3 rounded-full px-2 py-0.5 text-xs font-semibold"
           >
             NEW
           </span>
@@ -44,7 +44,7 @@ const restore = () => {
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
               <h3 class="text-default-900 truncate text-base font-semibold">星空下的约定</h3>
-              <p class="text-default-500 text-xs">Studio Moonlit · 2026</p>
+              <p class="text-foreground-muted text-xs">Studio Moonlit · 2026</p>
             </div>
             <KunRating :model-value="4" readonly size="sm" />
           </div>

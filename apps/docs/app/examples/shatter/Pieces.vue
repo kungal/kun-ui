@@ -8,7 +8,7 @@ const pieces = ref(28)
 
 <template>
   <div class="flex w-72 flex-col gap-3">
-    <label class="text-default-500 text-sm">碎片数:{{ pieces }}</label>
+    <label class="text-foreground-muted text-sm">碎片数:{{ pieces }}</label>
     <KunSlider v-model="pieces" :min="4" :max="120" :step="1" />
 
     <KunShatter

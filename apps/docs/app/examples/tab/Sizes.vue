@@ -14,7 +14,7 @@ const sizes: KunTabSize[] = ['sm', 'md', 'lg']
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="s in sizes" :key="s" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ s }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ s }}</span>
       <KunTab v-model="active" :items="items" :size="s" variant="solid" />
     </div>
   </div>

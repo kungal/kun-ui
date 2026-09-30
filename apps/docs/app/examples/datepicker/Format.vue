@@ -20,6 +20,6 @@ const isDateDisabled = (d: Date) => {
       :is-date-disabled="isDateDisabled"
     />
     <p class="text-default-600 mt-2 text-sm">Value: {{ date || '—' }}</p>
-    <p class="text-default-400 text-xs">已禁用过去的日期、周六与周日</p>
+    <p class="text-foreground-muted text-xs">已禁用过去的日期、周六与周日</p>
   </div>
 </template>

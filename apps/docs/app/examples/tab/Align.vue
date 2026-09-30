@@ -14,7 +14,7 @@ const aligns = ['start', 'center', 'end'] as const
 <template>
   <div class="flex flex-col gap-4 sm:flex-row">
     <div v-for="a in aligns" :key="a" class="flex w-40 flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ a }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ a }}</span>
       <KunTab
         v-model="active"
         :items="items"

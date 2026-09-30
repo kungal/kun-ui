@@ -22,7 +22,7 @@ const colors: KunTabColor[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="c in colors" :key="c" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ c }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ c }}</span>
       <KunTab v-model="active" :items="items" :color="c" variant="pills" />
     </div>
   </div>

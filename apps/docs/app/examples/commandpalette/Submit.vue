@@ -67,14 +67,14 @@ const onSubmit = (q: string) => {
            yours. Try a query that matches nothing, then press Enter. -->
       <template #no-result="{ query: q }">
         <div class="px-3 py-6 text-center">
-          <p class="text-default-500 text-sm">没有匹配的页面</p>
-          <p class="text-default-400 mt-1.5 text-xs">
+          <p class="text-foreground-muted text-sm">没有匹配的页面</p>
+          <p class="text-foreground-muted mt-1.5 text-xs">
             按 <kbd class="text-default-600">↵</kbd> 全站搜索「{{ q }}」
           </p>
         </div>
       </template>
     </KunCommandPalette>
 
-    <span class="text-default-500 text-sm">最近一次:{{ last || '—' }}</span>
+    <span class="text-foreground-muted text-sm">最近一次:{{ last || '—' }}</span>
   </div>
 </template>

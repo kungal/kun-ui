@@ -50,6 +50,6 @@ watch(query, async (q) => {
         <KunButton variant="bordered" @click="open">远程搜索</KunButton>
       </template>
     </KunCommandPalette>
-    <span class="text-default-500 text-sm">选中:{{ picked || '—' }}</span>
+    <span class="text-foreground-muted text-sm">选中:{{ picked || '—' }}</span>
   </div>
 </template>

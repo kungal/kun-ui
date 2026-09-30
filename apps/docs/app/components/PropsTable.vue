@@ -16,7 +16,7 @@ defineProps<{ rows: PropRow[] }>()
   <div class="border-default-200 rounded-kun-lg my-5 overflow-x-auto border">
     <table class="w-full border-collapse text-sm">
       <thead>
-        <tr class="border-default-200 text-default-500 border-b text-left">
+        <tr class="border-default-200 text-foreground-muted border-b text-left">
           <th class="px-4 py-2 font-medium">属性</th>
           <th class="px-4 py-2 font-medium">类型</th>
           <th class="px-4 py-2 font-medium">默认值</th>
@@ -34,7 +34,7 @@ defineProps<{ rows: PropRow[] }>()
             <span v-if="r.required" class="text-danger" title="required">&nbsp;*</span>
           </td>
           <td class="text-default-600 px-4 py-2 font-mono">{{ r.type }}</td>
-          <td class="text-default-500 px-4 py-2 font-mono whitespace-nowrap">
+          <td class="text-foreground-muted px-4 py-2 font-mono whitespace-nowrap">
             {{ r.default ?? '—' }}
           </td>
           <td class="text-default-600 px-4 py-2">

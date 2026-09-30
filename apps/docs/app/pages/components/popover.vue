@@ -32,7 +32,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="RichContent.vue" :source="RichContentSrc"><RichContent /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">悬停菜单(导航)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       <code>trigger="hover"</code> + 共享 <code>group</code> = 导航悬停菜单。横向移到兄弟项**瞬间切换**;
       下移到面板靠**坐标安全三角**不会中途关闭(且面板是 teleport 的也照样work);悬停**不抢焦点**;
       点击 / 键盘 / Esc 仍可用,**触屏自动退回点击**。动作菜单(<code>KunDropdown</code>)仍只用点击。
@@ -42,7 +42,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="HoverMenu.vue" :source="HoverMenuSrc"><HoverMenu /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">侧边飞出菜单(导航栏)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       <code>position="right-start"</code> 让菜单贴着 tile 顶部**向右**展开——侧边导航栏的
       经典交互。关键在于 <code>autoPosition</code>(默认开启)的**碰撞感知**:靠近视口底部的
       高菜单会由 <code>shift()</code> 上移、<code>size()</code> 把高度限制到**可用空间**并自动

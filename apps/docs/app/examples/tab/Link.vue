@@ -27,7 +27,7 @@ const active = computed({
          is marked with aria-current="page". -->
     <KunTab v-model="active" :items="items" variant="underlined" />
 
-    <p class="text-default-500 mt-3 text-sm">
+    <p class="text-foreground-muted mt-3 text-sm">
       当前:<code>?rank={{ active }}</code>
     </p>
   </div>

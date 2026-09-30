@@ -46,7 +46,7 @@ onBeforeUnmount(() => urls.forEach((u) => URL.revokeObjectURL(u)))
 
 <template>
   <div class="w-full border-default/20 overflow-hidden rounded-kun-lg border">
-    <p class="text-default-500 px-3 pt-3 text-xs">点回形针选图,或把图片粘贴 / 拖到输入区。</p>
+    <p class="text-foreground-muted px-3 pt-3 text-xs">点回形针选图,或把图片粘贴 / 拖到输入区。</p>
     <KunChatComposer
       v-model="draft"
       :attachments="attachments"

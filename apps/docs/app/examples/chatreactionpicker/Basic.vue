@@ -18,6 +18,6 @@ const plainCurrent = ref<string | null>(null)
     <div class="bg-content1 border-default/20 max-w-sm rounded-kun-lg border p-2">
       <KunChatReactionPicker v-model="plainCurrent" :options="plain" />
     </div>
-    <code class="text-default-500 text-xs">v-model: {{ current }} / {{ plainCurrent }}</code>
+    <code class="text-foreground-muted text-xs">v-model: {{ current }} / {{ plainCurrent }}</code>
   </div>
 </template>

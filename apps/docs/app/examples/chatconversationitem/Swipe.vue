@@ -25,6 +25,6 @@ const log = ref('')
       ]"
       @action="(key) => (log = `action → ${key}`)"
     />
-    <code class="text-default-500 px-2 text-xs">{{ log || '在触屏上左右滑动这一行' }}</code>
+    <code class="text-foreground-muted px-2 text-xs">{{ log || '在触屏上左右滑动这一行' }}</code>
   </div>
 </template>

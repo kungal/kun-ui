@@ -36,7 +36,7 @@ const run = (action: KunChatRequestAction) => {
       @block="run('block')"
       @report="run('report')"
     />
-    <p class="text-default-500 p-3 text-xs">{{ result || '选一个操作' }}</p>
+    <p class="text-foreground-muted p-3 text-xs">{{ result || '选一个操作' }}</p>
   </div>
 </template>
 ```

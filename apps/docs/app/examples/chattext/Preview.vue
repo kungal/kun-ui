@@ -12,7 +12,7 @@ const message = parseKunChatMarkdown(
 <template>
   <div class="w-full bg-content1 border-default/20 flex max-w-sm flex-col gap-1 rounded-kun-lg border p-3 text-sm">
     <span class="font-semibold">雪之下小春</span>
-    <span class="text-default-500 truncate">
+    <span class="text-foreground-muted truncate">
       <KunChatText :text="message.text" :entities="message.entities" preview />
     </span>
   </div>

@@ -18,8 +18,8 @@ const origins = ['center', 'top', 'pointer'] as const
       <div
         class="border-default-200 bg-content1 rounded-kun-lg flex h-28 w-36 flex-col items-center justify-center gap-1 border shadow-sm select-none"
       >
-        <span class="text-default-400 text-xs">origin</span>
-        <code class="text-primary text-sm font-semibold">{{ o }}</code>
+        <span class="text-foreground-muted text-xs">origin</span>
+        <code class="text-primary-text text-sm font-semibold">{{ o }}</code>
       </div>
     </KunShatter>
   </div>

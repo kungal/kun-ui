@@ -107,7 +107,7 @@ const qty = ref<number | null>(3)
       :min="0"
       :max="10"
     />
-    <p class="text-default-500 text-sm">值: {{ qty ?? '—' }}</p>
+    <p class="text-foreground-muted text-sm">值: {{ qty ?? '—' }}</p>
   </div>
 </template>
 ```

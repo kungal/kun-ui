@@ -17,7 +17,7 @@ const broken = ref(false)
         class="border-default-200 bg-content1 rounded-kun-lg flex w-64 flex-col gap-1 border p-4 shadow-sm select-none"
       >
         <p class="text-default-900 font-semibold">v-model 控制</p>
-        <p class="text-default-500 text-sm">设 shattered = true 即碎裂,false 复原。</p>
+        <p class="text-foreground-muted text-sm">设 shattered = true 即碎裂,false 复原。</p>
       </div>
     </KunShatter>
   </div>

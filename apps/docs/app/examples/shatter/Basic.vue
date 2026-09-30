@@ -13,7 +13,7 @@
       </div>
       <div>
         <p class="text-default-900 font-semibold">点击打碎我</p>
-        <p class="text-default-500 text-xs">从点击点炸开 · 自动复原</p>
+        <p class="text-foreground-muted text-xs">从点击点炸开 · 自动复原</p>
       </div>
     </div>
   </KunShatter>

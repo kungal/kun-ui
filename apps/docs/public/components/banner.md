@@ -21,8 +21,8 @@ const open = ref(true)
       text="论坛将于 9 月 28 日 02:00–04:00 停机维护,期间无法发帖和上传图片。"
     />
     <header class="border-default-200 flex items-center justify-between border-b px-4 py-3">
-      <span class="font-bold">Kun<span class="text-primary">Gal</span></span>
-      <nav class="text-default-500 flex gap-4 text-sm">
+      <span class="font-bold">Kun<span class="text-primary-text">Gal</span></span>
+      <nav class="text-foreground-muted flex gap-4 text-sm">
         <span>话题</span><span>Galgame</span><span>排行</span>
       </nav>
     </header>
@@ -113,7 +113,7 @@ const sizes = ['md', 'sm'] as const
 <template>
   <div class="w-full space-y-4">
     <figure v-for="size in sizes" :key="size" class="space-y-2">
-      <figcaption class="text-default-500 text-xs">
+      <figcaption class="text-foreground-muted text-xs">
         size="{{ size }}"{{ size === 'md' ? '(默认)' : '' }}
       </figcaption>
       <div class="border-default-200 bg-background overflow-hidden rounded-lg border">
@@ -126,8 +126,8 @@ const sizes = ['md', 'sm'] as const
           text="当前为全年龄模式,R18 内容已隐藏 — 可在右上角切换为「模糊」或「直接显示」。"
         />
         <header class="border-default-200 flex items-center justify-between border-b px-4 py-3">
-          <span class="font-bold">Kun<span class="text-primary">Gal</span></span>
-          <nav class="text-default-500 flex gap-4 text-sm">
+          <span class="font-bold">Kun<span class="text-primary-text">Gal</span></span>
+          <nav class="text-foreground-muted flex gap-4 text-sm">
             <span>话题</span><span>Galgame</span>
           </nav>
         </header>

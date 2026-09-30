@@ -24,7 +24,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Sizes.vue" :source="SizesSrc"><Sizes /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">贴纸兜底</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       没有头像的用户会从 <code>avatarFallbackPool</code> 里按名字哈希取一张，同一个人永远拿到同一张。
       这个池子由宿主应用提供（KunUI 不内置任何外部地址）——不配置的话，所有人都会渲染同一张内置兜底图。
       配置方法见
@@ -41,7 +41,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Navigation.vue" :source="NavigationSrc"><Navigation /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">头像框</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       <code>user.avatarDecoration</code> 是画在头像外面的头像框：素材是头像 1.2 倍的正方形画布，头像圆居中。
       头像框每边伸出 10%，不占布局、不接收点击。<code>decoration</code> 决定动图什么时候播放：默认
       <code>hover</code> 只在悬停或获得焦点时播放，<code>always</code> 一直播放，<code>static</code> 只用静态图，

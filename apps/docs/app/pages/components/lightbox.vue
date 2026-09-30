@@ -34,7 +34,7 @@ import meta from '~/generated/component-meta.json'
     <EventsTable :rows="meta.KunLightbox.events" />
     <SlotsTable :rows="meta.KunLightbox.slots" />
 
-    <p class="text-default-500 mt-6 text-sm">
+    <p class="text-foreground-muted mt-6 text-sm">
       <code class="text-primary">KunLightboxGallery</code> 没有属性 —— 它只是包裹这些项。
     </p>
   </article>

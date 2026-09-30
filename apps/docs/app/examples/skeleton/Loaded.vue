@@ -11,7 +11,7 @@ const loaded = ref(false)
     <KunSkeleton :loaded="loaded" variant="rect" height="4rem">
       <KunCard class-name="w-full">
         <p class="font-medium">内容已就绪</p>
-        <p class="text-default-500 text-sm">loaded 为 true 时渲染默认插槽。</p>
+        <p class="text-foreground-muted text-sm">loaded 为 true 时渲染默认插槽。</p>
       </KunCard>
     </KunSkeleton>
   </div>

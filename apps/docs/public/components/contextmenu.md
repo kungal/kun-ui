@@ -26,7 +26,7 @@ const onContext = (e: MouseEvent) => {
 
 <template>
   <div
-    class="border-default-200 text-default-500 rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
+    class="border-default-200 text-foreground-muted rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
     @contextmenu.prevent="onContext"
   >
     Right-click inside this box
@@ -64,7 +64,7 @@ const onContext = (e: MouseEvent) => {
 
 <template>
   <div
-    class="border-default-200 text-default-500 rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
+    class="border-default-200 text-foreground-muted rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
     @contextmenu.prevent="onContext"
   >
     右键这里
@@ -104,7 +104,7 @@ const onContext = (e: MouseEvent) => {
 
 <template>
   <div
-    class="border-default-200 text-default-500 rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
+    class="border-default-200 text-foreground-muted rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
     @contextmenu.prevent="onContext"
   >
     右键这里
@@ -144,7 +144,7 @@ const onContext = (e: MouseEvent) => {
 
 <template>
   <div
-    class="border-default-200 text-default-500 rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
+    class="border-default-200 text-foreground-muted rounded-kun-lg flex h-28 w-full max-w-md items-center justify-center border border-dashed text-sm"
     @contextmenu.prevent="onContext"
   >
     右键这里

@@ -10,7 +10,7 @@ import meta from '~/generated/component-meta.json'
     <DocIntro />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       快捷回应一排最多 7 个,更多的由右侧按钮展开成完整的选择器;↑↓ 在操作之间移动,←→ 在回应之间移动,
       Tab 在两组之间切换,Esc 关闭。
     </p>

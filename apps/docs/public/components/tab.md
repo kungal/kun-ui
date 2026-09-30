@@ -52,7 +52,7 @@ const variants: KunTabVariant[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="v in variants" :key="v" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ v }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ v }}</span>
       <KunTab v-model="active" :items="items" :variant="v" />
     </div>
   </div>
@@ -86,7 +86,7 @@ const colors: KunTabColor[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="c in colors" :key="c" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ c }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ c }}</span>
       <KunTab v-model="active" :items="items" :color="c" variant="pills" />
     </div>
   </div>
@@ -112,7 +112,7 @@ const sizes: KunTabSize[] = ['sm', 'md', 'lg']
 <template>
   <div class="flex flex-col gap-4">
     <div v-for="s in sizes" :key="s" class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ s }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ s }}</span>
       <KunTab v-model="active" :items="items" :size="s" variant="solid" />
     </div>
   </div>
@@ -228,7 +228,7 @@ const aligns = ['start', 'center', 'end'] as const
 <template>
   <div class="flex flex-col gap-4 sm:flex-row">
     <div v-for="a in aligns" :key="a" class="flex w-40 flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">{{ a }}</span>
+      <span class="text-foreground-muted text-xs uppercase">{{ a }}</span>
       <KunTab
         v-model="active"
         :items="items"
@@ -262,11 +262,11 @@ const items: KunTabItem[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">item disabled</span>
+      <span class="text-foreground-muted text-xs uppercase">item disabled</span>
       <KunTab v-model="active" :items="items" variant="solid" />
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">group disabled</span>
+      <span class="text-foreground-muted text-xs uppercase">group disabled</span>
       <KunTab v-model="active" :items="items" variant="solid" disabled />
     </div>
   </div>
@@ -461,7 +461,7 @@ const active = computed({
          is marked with aria-current="page". -->
     <KunTab v-model="active" :items="items" variant="underlined" />
 
-    <p class="text-default-500 mt-3 text-sm">
+    <p class="text-foreground-muted mt-3 text-sm">
       当前:<code>?rank={{ active }}</code>
     </p>
   </div>

@@ -25,6 +25,6 @@ const onMention = (id: string, event: MouseEvent) => {
 <template>
   <div class="w-full bg-content1 border-default/20 flex flex-col gap-2 rounded-kun-lg border p-4 text-[0.9375rem]">
     <KunChatText :text="message.text" :entities="message.entities" @link="onLink" @mention="onMention" />
-    <code class="text-default-500 text-xs">{{ log }}</code>
+    <code class="text-foreground-muted text-xs">{{ log }}</code>
   </div>
 </template>

@@ -125,13 +125,13 @@ function go(item: KunCommandItem) {
       <button
         type="button"
         aria-label="搜索文档"
-        class="border-default-300 text-default-400 hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
+        class="border-default-300 text-foreground-muted hover:border-primary hover:text-default-600 flex cursor-pointer items-center gap-2 rounded-kun-md border p-2 text-sm transition-colors md:w-56 md:px-3"
         @click="open"
       >
         <KunIcon name="lucide:search" class="shrink-0" />
         <span class="hidden flex-1 text-left md:inline">搜索文档…</span>
         <kbd
-          class="border-kun text-default-400 hidden rounded border px-1.5 py-0.5 text-[10px] font-medium md:inline"
+          class="border-kun text-foreground-muted hidden rounded border px-1.5 py-0.5 text-[10px] font-medium md:inline"
         >
           {{ shortcut }}
         </kbd>

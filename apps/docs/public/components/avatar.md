@@ -103,15 +103,15 @@ const user: KunUser = {
   <div class="flex flex-wrap items-center gap-8">
     <div class="flex flex-col items-center gap-3">
       <KunAvatar :user="user" size="original-sm" :is-navigation="false" />
-      <span class="text-default-500 text-xs">hover</span>
+      <span class="text-foreground-muted text-xs">hover</span>
     </div>
     <div class="flex flex-col items-center gap-3">
       <KunAvatar :user="user" size="original-sm" decoration="always" :is-navigation="false" />
-      <span class="text-default-500 text-xs">always</span>
+      <span class="text-foreground-muted text-xs">always</span>
     </div>
     <div class="flex flex-col items-center gap-3">
       <KunAvatar :user="user" size="original-sm" decoration="static" :is-navigation="false" />
-      <span class="text-default-500 text-xs">static</span>
+      <span class="text-foreground-muted text-xs">static</span>
     </div>
     <div class="flex items-center gap-4">
       <KunAvatar :user="user" size="sm" :is-navigation="false" />

@@ -13,6 +13,6 @@ const tags = ref<string[]>(['vue', 'nuxt'])
       :split-chars="[',', '，', ';', ' ']"
       :show-counter="true"
     />
-    <p class="text-default-400 mt-1 text-xs">最多 5 个标签，支持粘贴批量拆分</p>
+    <p class="text-foreground-muted mt-1 text-xs">最多 5 个标签，支持粘贴批量拆分</p>
   </div>
 </template>

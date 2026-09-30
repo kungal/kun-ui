@@ -6,6 +6,6 @@ const rating = ref(7)
 <template>
   <div class="flex items-center gap-3">
     <KunRating v-model="rating" :max="10" />
-    <span class="text-default-500 text-sm">{{ rating }} / 10</span>
+    <span class="text-foreground-muted text-sm">{{ rating }} / 10</span>
   </div>
 </template>

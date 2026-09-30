@@ -83,7 +83,7 @@ const options: KunSelectOption[] = [
       :multiple="true"
       :searchable="true"
     />
-    <p class="text-default-500 mt-2 text-sm">值: {{ value.join(', ') || '—' }}</p>
+    <p class="text-foreground-muted mt-2 text-sm">值: {{ value.join(', ') || '—' }}</p>
   </div>
 </template>
 ```
@@ -267,10 +267,10 @@ const onSearch = async (query: string) => {
       no-result-text="没有匹配的作品"
       @search="onSearch"
     />
-    <p class="text-default-500 mt-2 text-sm">
+    <p class="text-foreground-muted mt-2 text-sm">
       已选 {{ selected.length }} 项：{{ selected.join('、') || '—' }}
     </p>
-    <p class="text-default-500 mt-1 text-xs">
+    <p class="text-foreground-muted mt-1 text-xs">
       选中一项后再搜别的词——标签不会丢，组件为当前选中的值保留了最后一次见到的 option。
     </p>
   </div>
@@ -406,13 +406,13 @@ const reset = () => {
       >
         <div class="min-w-0">
           <p class="truncate font-medium">{{ work.title }}</p>
-          <p class="text-default-500 text-xs">
+          <p class="text-foreground-muted text-xs">
             {{ work.year }} · {{ work.platform }} · {{ work.tags.join('／') }}
           </p>
         </div>
         <KunChip size="sm" variant="flat">{{ work.status }}</KunChip>
       </li>
-      <li v-if="!results.length" class="text-default-500 py-6 text-center text-sm">
+      <li v-if="!results.length" class="text-foreground-muted py-6 text-center text-sm">
         没有符合条件的作品
       </li>
     </ul>
@@ -457,7 +457,7 @@ const options: UserOption[] = [
         <img :src="option.avatar" alt="" class="size-8 shrink-0 rounded-full" />
         <div class="min-w-0">
           <div class="truncate font-medium">{{ option.label }}</div>
-          <div class="text-default-500 truncate text-xs">{{ option.desc }}</div>
+          <div class="text-foreground-muted truncate text-xs">{{ option.desc }}</div>
         </div>
       </template>
     </KunSelect>

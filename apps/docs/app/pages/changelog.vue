@@ -58,7 +58,7 @@ const chip: Record<Type, { color: string; label: string }> = {
           class="kun-prose kun-prose-compact"
           v-html="entry.html"
         />
-        <p v-else class="text-default-400 text-sm">随依赖更新。</p>
+        <p v-else class="text-foreground-muted text-sm">随依赖更新。</p>
       </KunAccordionItem>
     </KunAccordion>
   </div>

@@ -11,7 +11,7 @@ const long =
       <KunText :content="long" class-name="text-sm" />
     </div>
     <div class="rounded-kun-md border-default-200 w-48 overflow-hidden border p-2">
-      <span class="text-default-400 text-sm">{{ long }}</span>
+      <span class="text-foreground-muted text-sm">{{ long }}</span>
     </div>
   </div>
 </template>

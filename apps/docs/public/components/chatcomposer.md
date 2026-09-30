@@ -26,7 +26,7 @@ const typingAt = ref<string | null>(null)
       v-if="sent"
       class="bg-default-100 max-h-48 overflow-auto p-3 text-xs"
     >{{ JSON.stringify(sent, null, 2) }}</pre>
-    <p v-if="typingAt" class="text-default-500 px-3 pt-2 text-xs">typing 事件:{{ typingAt }}</p>
+    <p v-if="typingAt" class="text-foreground-muted px-3 pt-2 text-xs">typing 事件:{{ typingAt }}</p>
     <KunChatComposer
       v-model="draft"
       @send="(m) => (sent = m)"
@@ -71,7 +71,7 @@ const onEdit = (m: KunChatFormattedText) => (log.value = `edit:${m.text}`)
         引用一段
       </KunButton>
       <KunButton size="sm" variant="flat" @click="editing = mine">编辑我的消息</KunButton>
-      <span class="text-default-500 self-center text-xs">{{ log }}</span>
+      <span class="text-foreground-muted self-center text-xs">{{ log }}</span>
     </div>
     <KunChatComposer
       v-model="draft"
@@ -138,7 +138,7 @@ onBeforeUnmount(() => urls.forEach((u) => URL.revokeObjectURL(u)))
 
 <template>
   <div class="w-full border-default/20 overflow-hidden rounded-kun-lg border">
-    <p class="text-default-500 px-3 pt-3 text-xs">点回形针选图,或把图片粘贴 / 拖到输入区。</p>
+    <p class="text-foreground-muted px-3 pt-3 text-xs">点回形针选图,或把图片粘贴 / 拖到输入区。</p>
     <KunChatComposer
       v-model="draft"
       :attachments="attachments"

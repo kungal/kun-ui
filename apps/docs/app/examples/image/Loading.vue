@@ -18,7 +18,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="4 / 3"
         class-name="w-44 rounded-kun-lg"
       />
-      <span class="text-default-500 text-sm">eager（即时）</span>
+      <span class="text-foreground-muted text-sm">eager（即时）</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <KunImage
@@ -29,7 +29,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="4 / 3"
         class-name="w-44 rounded-kun-lg"
       />
-      <span class="text-default-500 text-sm">lazy（懒加载，默认）</span>
+      <span class="text-foreground-muted text-sm">lazy（懒加载，默认）</span>
     </div>
   </div>
 </template>

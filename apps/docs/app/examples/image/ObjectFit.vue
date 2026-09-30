@@ -17,7 +17,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="1 / 1"
         class-name="w-40 rounded-kun-lg bg-default-100"
       />
-      <span class="text-default-500 text-sm">cover</span>
+      <span class="text-foreground-muted text-sm">cover</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <KunImage
@@ -28,7 +28,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
         aspect-ratio="1 / 1"
         class-name="w-40 rounded-kun-lg bg-default-100"
       />
-      <span class="text-default-500 text-sm">contain</span>
+      <span class="text-foreground-muted text-sm">contain</span>
     </div>
   </div>
 </template>

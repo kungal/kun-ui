@@ -43,7 +43,7 @@ const restore = () => {
             Galgame
           </span>
           <span
-            class="bg-warning absolute top-3 right-3 rounded-full px-2 py-0.5 text-xs font-semibold text-white"
+            class="bg-warning text-warning-foreground absolute top-3 right-3 rounded-full px-2 py-0.5 text-xs font-semibold"
           >
             NEW
           </span>
@@ -53,7 +53,7 @@ const restore = () => {
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
               <h3 class="text-default-900 truncate text-base font-semibold">星空下的约定</h3>
-              <p class="text-default-500 text-xs">Studio Moonlit · 2026</p>
+              <p class="text-foreground-muted text-xs">Studio Moonlit · 2026</p>
             </div>
             <KunRating :model-value="4" readonly size="sm" />
           </div>
@@ -98,7 +98,7 @@ const restore = () => {
       </div>
       <div>
         <p class="text-default-900 font-semibold">点击打碎我</p>
-        <p class="text-default-500 text-xs">从点击点炸开 · 自动复原</p>
+        <p class="text-foreground-muted text-xs">从点击点炸开 · 自动复原</p>
       </div>
     </div>
   </KunShatter>
@@ -155,7 +155,7 @@ const broken = ref(false)
         class="border-default-200 bg-content1 rounded-kun-lg flex w-64 flex-col gap-1 border p-4 shadow-sm select-none"
       >
         <p class="text-default-900 font-semibold">v-model 控制</p>
-        <p class="text-default-500 text-sm">设 shattered = true 即碎裂,false 复原。</p>
+        <p class="text-foreground-muted text-sm">设 shattered = true 即碎裂,false 复原。</p>
       </div>
     </KunShatter>
   </div>
@@ -185,8 +185,8 @@ const origins = ['center', 'top', 'pointer'] as const
       <div
         class="border-default-200 bg-content1 rounded-kun-lg flex h-28 w-36 flex-col items-center justify-center gap-1 border shadow-sm select-none"
       >
-        <span class="text-default-400 text-xs">origin</span>
-        <code class="text-primary text-sm font-semibold">{{ o }}</code>
+        <span class="text-foreground-muted text-xs">origin</span>
+        <code class="text-primary-text text-sm font-semibold">{{ o }}</code>
       </div>
     </KunShatter>
   </div>
@@ -206,7 +206,7 @@ const pieces = ref(28)
 
 <template>
   <div class="flex w-72 flex-col gap-3">
-    <label class="text-default-500 text-sm">碎片数:{{ pieces }}</label>
+    <label class="text-foreground-muted text-sm">碎片数:{{ pieces }}</label>
     <KunSlider v-model="pieces" :min="4" :max="120" :step="1" />
 
     <KunShatter

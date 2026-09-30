@@ -20,7 +20,7 @@ const log = ref<number[]>([])
       @jump="(seq) => log.unshift(seq)"
       @unpin="(seq) => log.unshift(-seq)"
     />
-    <p class="text-default-500 p-3 text-xs">
+    <p class="text-foreground-muted p-3 text-xs">
       jump → {{ log.length ? log.slice(0, 5).join(', ') : '点一下置顶条' }}
     </p>
   </div>

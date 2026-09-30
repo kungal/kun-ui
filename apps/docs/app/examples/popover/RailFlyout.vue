@@ -39,7 +39,7 @@ const groups = [
       </template>
 
       <div class="w-48 p-1">
-        <p class="text-default-500 px-2 py-1 text-xs font-medium">{{ g.label }}</p>
+        <p class="text-foreground-muted px-2 py-1 text-xs font-medium">{{ g.label }}</p>
         <button
           v-for="it in g.items"
           :key="it"

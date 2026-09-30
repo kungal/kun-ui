@@ -17,7 +17,7 @@ const typingAt = ref<string | null>(null)
       v-if="sent"
       class="bg-default-100 max-h-48 overflow-auto p-3 text-xs"
     >{{ JSON.stringify(sent, null, 2) }}</pre>
-    <p v-if="typingAt" class="text-default-500 px-3 pt-2 text-xs">typing 事件:{{ typingAt }}</p>
+    <p v-if="typingAt" class="text-foreground-muted px-3 pt-2 text-xs">typing 事件:{{ typingAt }}</p>
     <KunChatComposer
       v-model="draft"
       @send="(m) => (sent = m)"

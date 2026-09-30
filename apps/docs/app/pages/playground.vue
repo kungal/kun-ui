@@ -77,7 +77,7 @@ const liked = ref(false)
     <div class="flex items-center justify-between gap-3">
       <div>
         <h3 class="text-lg font-semibold">KunUI</h3>
-        <p class="text-default-500 text-sm">专为 ACGN 设计的无头 UI 组件库</p>
+        <p class="text-foreground-muted text-sm">专为 ACGN 设计的无头 UI 组件库</p>
       </div>
       <KunChip color="primary" variant="flat">v1.4</KunChip>
     </div>
@@ -154,7 +154,7 @@ onMounted(() => {
 
     <!-- Starter templates -->
     <div class="mb-4 flex flex-wrap items-center gap-2">
-      <span class="text-default-400 text-xs">模板:</span>
+      <span class="text-foreground-muted text-xs">模板:</span>
       <KunButton
         v-for="t in templates"
         :key="t.label"
@@ -171,7 +171,7 @@ onMounted(() => {
       <Playground v-model="source" height="500px" />
       <template #fallback>
         <div
-          class="border-default-200 rounded-kun-lg bg-content1/40 flex items-center justify-center border text-sm text-default-400"
+          class="border-default-200 rounded-kun-lg bg-content1/40 flex items-center justify-center border text-sm text-foreground-muted"
           style="height: 540px"
         >
           正在加载 Playground…

@@ -36,7 +36,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Skeleton.vue" :source="SkeletonSrc"><Skeleton /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">ThumbHash 模糊占位(blur-up)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       传入 <code class="text-primary">thumbhash</code>(后端随图片元数据下发的 ~25 字节 base64),
       加载前即显示解码出的模糊占位、加载完成后淡出——比纯骨架屏更贴近最终画面,且零额外网络请求。
       解码器仅在用到时才按需加载,客户端解码、SSR 安全。
@@ -47,7 +47,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Fallback.vue" :source="FallbackSrc"><Fallback /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">load / error 事件</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       两个事件的签名都是 <code class="text-primary">(src, event?)</code>。第一个参数是对应的图片地址——
       因为配了 <code class="text-primary">fallbackSrc</code> 时会有两次尝试,靠它才能区分是原图失败还是回退图也失败。
       <code class="text-primary">event</code> 是原生 DOM 事件;若失败/成功是从已缓存的图片状态直接判定出来的

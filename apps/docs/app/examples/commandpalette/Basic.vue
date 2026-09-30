@@ -41,6 +41,6 @@ const groups = computed<KunCommandGroup[]>(() => {
         <KunButton variant="bordered" @click="open">命令面板</KunButton>
       </template>
     </KunCommandPalette>
-    <span class="text-default-500 text-sm">选中:{{ picked || '—' }}</span>
+    <span class="text-foreground-muted text-sm">选中:{{ picked || '—' }}</span>
   </div>
 </template>

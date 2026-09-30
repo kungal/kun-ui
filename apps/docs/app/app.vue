@@ -142,7 +142,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 aria-label="关闭导航菜单"
-                class="text-default-500 hover:text-foreground cursor-pointer p-1"
+                class="text-foreground-muted hover:text-foreground cursor-pointer p-1"
                 @click="mobileNavOpen = false"
               >
                 <KunIcon name="lucide:x" />

@@ -19,25 +19,25 @@ import meta from '~/generated/component-meta.json'
     </p>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       静态命令,按 <code>query</code> 过滤并分组。默认 <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> 打开(本页顶部的搜索就是活例;这里的示例关掉了快捷键以免和它冲突,改用按钮触发)。
     </p>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">远程搜索(loading)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       监听 <code>query</code> 发请求,请求中传 <code>:loading</code> —— 面板显示加载态而非「无结果」。
     </p>
     <Demo title="Async.vue" :source="AsyncSrc"><Async /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">回车提交查询(@submit)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       回车落在某一条结果上时照常 <code>@select</code>。<strong>没有可选中的结果</strong>时(无结果,或结果全部
       <code>disabled</code>)才触发 <code>@submit</code>,带上去掉首尾空格的 <code>query</code> ——
       面板本身不含搜索,这是拿到原始查询去做「全站搜索」的出口。此时回车不会被
       <code>preventDefault</code> 吞掉。
     </p>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       想在<strong>有结果</strong>时也能提交,把动作项排在第 0 位当成一条普通结果 ——
       这也是 cmdk(<code>forceMount</code>)、GitHub、Linear 的做法,好处是这个动作看得见、能用鼠标点。
     </p>

@@ -124,13 +124,13 @@ const reset = () => {
       >
         <div class="min-w-0">
           <p class="truncate font-medium">{{ work.title }}</p>
-          <p class="text-default-500 text-xs">
+          <p class="text-foreground-muted text-xs">
             {{ work.year }} · {{ work.platform }} · {{ work.tags.join('／') }}
           </p>
         </div>
         <KunChip size="sm" variant="flat">{{ work.status }}</KunChip>
       </li>
-      <li v-if="!results.length" class="text-default-500 py-6 text-center text-sm">
+      <li v-if="!results.length" class="text-foreground-muted py-6 text-center text-sm">
         没有符合条件的作品
       </li>
     </ul>

@@ -35,19 +35,19 @@
   <!-- 默认带边框。 -->
   <KunCard class-name="w-40">
     <span class="font-medium">bordered</span>
-    <span class="text-default-500 text-sm">默认带边框</span>
+    <span class="text-foreground-muted text-sm">默认带边框</span>
   </KunCard>
 
   <!-- bordered=false：去掉边框。 -->
   <KunCard :bordered="false" color="default" class-name="w-40">
     <span class="font-medium">无边框</span>
-    <span class="text-default-500 text-sm">bordered=false</span>
+    <span class="text-foreground-muted text-sm">bordered=false</span>
   </KunCard>
 
   <!-- is-transparent：透明背景、无毛玻璃模糊。 -->
   <KunCard is-transparent class-name="w-40">
     <span class="font-medium">透明</span>
-    <span class="text-default-500 text-sm">is-transparent</span>
+    <span class="text-foreground-muted text-sm">is-transparent</span>
   </KunCard>
 </template>
 ```
@@ -59,17 +59,17 @@
   <!-- padding 控制内边距:默认 lg(24px);sm(12px)更紧凑,none 用于满铺(如纯封面图)。 -->
   <KunCard padding="sm" class-name="w-40">
     <span class="font-medium">sm</span>
-    <span class="text-default-500 text-sm">12px(紧凑)</span>
+    <span class="text-foreground-muted text-sm">12px(紧凑)</span>
   </KunCard>
 
   <KunCard padding="md" class-name="w-40">
     <span class="font-medium">md</span>
-    <span class="text-default-500 text-sm">20px</span>
+    <span class="text-foreground-muted text-sm">20px</span>
   </KunCard>
 
   <KunCard padding="lg" class-name="w-40">
     <span class="font-medium">lg(默认)</span>
-    <span class="text-default-500 text-sm">24px(舒适)</span>
+    <span class="text-foreground-muted text-sm">24px(舒适)</span>
   </KunCard>
 </template>
 ```

@@ -21,7 +21,7 @@ const load = async (count: number) => {
   <div class="w-full border-default/20 flex h-[30rem] flex-col overflow-hidden rounded-kun-lg border">
     <div class="border-default/20 flex items-center gap-2 border-b px-3 py-2 text-sm">
       <KunButton size="sm" variant="flat" @click="load(3000)">载入 3000 条</KunButton>
-      <span v-if="took !== null" class="text-default-500">
+      <span v-if="took !== null" class="text-foreground-muted">
         {{ messages.length }} 条,首次渲染 {{ took }} ms
       </span>
     </div>

@@ -23,6 +23,6 @@ const options: KunSelectOption[] = [
       :multiple="true"
       :searchable="true"
     />
-    <p class="text-default-500 mt-2 text-sm">值: {{ value.join(', ') || '—' }}</p>
+    <p class="text-foreground-muted mt-2 text-sm">值: {{ value.join(', ') || '—' }}</p>
   </div>
 </template>

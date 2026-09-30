@@ -14,6 +14,6 @@ const options: KunCheckBoxGroupOption[] = [
 <template>
   <div class="flex flex-col gap-3">
     <KunCheckBoxGroup v-model="platforms" :options="options" label="支持平台" />
-    <p class="text-default-500 text-sm">已选：{{ platforms.join('、') || '（无）' }}</p>
+    <p class="text-foreground-muted text-sm">已选：{{ platforms.join('、') || '（无）' }}</p>
   </div>
 </template>

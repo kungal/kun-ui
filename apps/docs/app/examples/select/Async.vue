@@ -54,10 +54,10 @@ const onSearch = async (query: string) => {
       no-result-text="没有匹配的作品"
       @search="onSearch"
     />
-    <p class="text-default-500 mt-2 text-sm">
+    <p class="text-foreground-muted mt-2 text-sm">
       已选 {{ selected.length }} 项：{{ selected.join('、') || '—' }}
     </p>
-    <p class="text-default-500 mt-1 text-xs">
+    <p class="text-foreground-muted mt-1 text-xs">
       选中一项后再搜别的词——标签不会丢，组件为当前选中的值保留了最后一次见到的 option。
     </p>
   </div>

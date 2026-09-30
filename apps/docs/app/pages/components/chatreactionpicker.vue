@@ -10,7 +10,7 @@ import meta from '~/generated/component-meta.json'
     <DocIntro />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       和 <code>KunReaction</code> 不同:那是一个点赞开关,这是一套词表里选一个。方向键在网格里移动。
     </p>
     <Demo title="Basic.vue" :source="BasicSrc"><Basic /></Demo>

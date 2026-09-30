@@ -15,11 +15,11 @@ const items: KunTabItem[] = [
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">item disabled</span>
+      <span class="text-foreground-muted text-xs uppercase">item disabled</span>
       <KunTab v-model="active" :items="items" variant="solid" />
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-default-500 text-xs uppercase">group disabled</span>
+      <span class="text-foreground-muted text-xs uppercase">group disabled</span>
       <KunTab v-model="active" :items="items" variant="solid" disabled />
     </div>
   </div>

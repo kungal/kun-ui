@@ -44,7 +44,7 @@ const files = ref<File[]>([])
     />
     <ul class="text-default-600 mt-2 text-sm">
       <li v-for="f in files" :key="f.name">{{ f.name }}</li>
-      <li v-if="files.length === 0" class="text-default-400">尚未选择文件</li>
+      <li v-if="files.length === 0" class="text-foreground-muted">尚未选择文件</li>
     </ul>
   </div>
 </template>

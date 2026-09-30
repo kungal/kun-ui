@@ -89,7 +89,7 @@ const icons = [
       class="rounded-kun-md border-default-200 flex flex-col items-center gap-2 border p-3"
     >
       <KunIcon :name="name" class="text-2xl" />
-      <span class="text-default-400 break-all text-center text-xs">{{ name }}</span>
+      <span class="text-foreground-muted break-all text-center text-xs">{{ name }}</span>
     </div>
   </div>
 </template>

@@ -106,10 +106,10 @@ const reset = () => {
       class="border-default-200 bg-content1/60 flex items-center justify-between gap-2 border-b px-3 py-1.5"
     >
       <div class="flex items-center gap-2">
-        <span class="text-default-500 text-xs">Playground.vue</span>
+        <span class="text-foreground-muted text-xs">Playground.vue</span>
         <span
           v-if="compiling"
-          class="text-default-400 text-xs"
+          class="text-foreground-muted text-xs"
           aria-live="polite"
           >编译中…</span
         >

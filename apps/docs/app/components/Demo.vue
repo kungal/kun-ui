@@ -29,7 +29,7 @@ const editInPlayground = () => {
     <div
       class="border-default-200 bg-content1/60 flex items-center justify-between border-t px-3 py-1.5"
     >
-      <span class="text-default-500 text-xs">{{ title }}</span>
+      <span class="text-foreground-muted text-xs">{{ title }}</span>
       <div class="flex items-center gap-1">
         <KunButton size="sm" variant="light" @click="editInPlayground">
           在 Playground 中编辑

@@ -63,7 +63,7 @@ const ratings = [
       class="border-default-200 bg-content1 rounded-kun-lg flex h-24 w-28 shrink-0 flex-col items-center justify-center gap-1 border shadow-sm select-none"
     >
       <span class="text-primary text-2xl font-bold tabular-nums">{{ r.score.toFixed(1) }}</span>
-      <span class="text-default-500 max-w-full truncate px-2 text-xs">{{ r.user }}</span>
+      <span class="text-foreground-muted max-w-full truncate px-2 text-xs">{{ r.user }}</span>
     </div>
   </KunScrollShadow>
 </template>

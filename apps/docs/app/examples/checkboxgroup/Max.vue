@@ -29,6 +29,6 @@ const onInvalid = (reason: KunCheckBoxGroupInvalidReason) => {
       label="题材标签（最多 3 个）"
       @invalid="onInvalid"
     />
-    <p class="text-warning h-5 text-sm">{{ blocked }}</p>
+    <p class="text-warning-text h-5 text-sm">{{ blocked }}</p>
   </div>
 </template>

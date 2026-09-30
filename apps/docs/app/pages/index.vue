@@ -118,13 +118,13 @@ const support = [
     <!-- Showcase -->
     <section class="mx-auto max-w-6xl px-6 py-14">
       <h2 class="text-center text-3xl font-bold tracking-tight">谁在使用 KunUI</h2>
-      <p class="text-default-500 mt-2 text-center">这些线上站点(包括本文档站)都由 KunUI 构建。</p>
+      <p class="text-foreground-muted mt-2 text-center">这些线上站点(包括本文档站)都由 KunUI 构建。</p>
       <div class="mt-8 grid gap-4 sm:grid-cols-2">
         <a v-for="s in showcase" :key="s.url" :href="s.url" target="_blank" rel="noopener" class="block">
           <KunCard is-hoverable class-name="h-full">
             <div class="flex items-center justify-between">
               <h3 class="text-lg font-semibold">{{ s.name }}</h3>
-              <KunIcon name="lucide:external-link" class="text-default-400" />
+              <KunIcon name="lucide:external-link" class="text-foreground-muted" />
             </div>
             <p class="text-primary mt-0.5 text-sm">{{ s.url.replace('https://', '') }}</p>
             <p class="text-default-600 mt-2 text-sm">{{ s.desc }}</p>
@@ -159,7 +159,7 @@ const support = [
     <!-- Get support -->
     <section class="mx-auto max-w-6xl px-6 py-14">
       <h2 class="text-center text-3xl font-bold tracking-tight">获取支持</h2>
-      <p class="text-default-500 mt-2 text-center">遇到问题?可以通过以下任一方式联系我们。</p>
+      <p class="text-foreground-muted mt-2 text-center">遇到问题?可以通过以下任一方式联系我们。</p>
       <div class="mt-8 grid gap-4 sm:grid-cols-3">
         <a v-for="c in support" :key="c.title" :href="c.to" target="_blank" rel="noopener" class="block">
           <KunCard is-hoverable class-name="h-full">
@@ -175,7 +175,7 @@ const support = [
     <!-- Footer -->
     <footer class="border-default-200 border-t">
       <div
-        class="text-default-500 mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm sm:flex-row"
+        class="text-foreground-muted mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm sm:flex-row"
       >
         <span>© 2026 KunUI · AGPL-3.0 · kungal</span>
         <span class="flex items-center gap-4">

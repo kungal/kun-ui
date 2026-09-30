@@ -76,7 +76,7 @@ const clicked = ref<number | null>(null)
     <KunChatBubble class="self-end" :message="reply" :users="demoUsers" own status="read" :time-zone="DEMO_TZ" @reply-click="(s) => (clicked = s)" />
     <KunChatBubble class="self-end" :message="quote" :users="demoUsers" own status="read" :time-zone="DEMO_TZ" @reply-click="(s) => (clicked = s)" />
     <KunChatBubble :message="gone" :users="demoUsers" :time-zone="DEMO_TZ" />
-    <code v-if="clicked" class="text-default-500 text-xs">reply-click → seq {{ clicked }}</code>
+    <code v-if="clicked" class="text-foreground-muted text-xs">reply-click → seq {{ clicked }}</code>
   </div>
 </template>
 ```

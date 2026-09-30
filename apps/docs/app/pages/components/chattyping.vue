@@ -10,7 +10,7 @@ import meta from '~/generated/component-meta.json'
     <DocIntro />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       群聊里显示名字(一人、两三人、「某某 等 N 人」),私聊只说「正在输入…」。
       <code>useKunChatTyping</code> 是同一套逻辑的组合式,自定义的地方用得上。
     </p>

@@ -15,17 +15,17 @@ const yearRange = ref<[string | null, string | null]>(['2018', '2024'])
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
       <KunDatePicker v-model="day" label="发售日" />
-      <p class="text-default-500 mt-1 font-mono text-xs">{{ day ?? 'null' }}</p>
+      <p class="text-foreground-muted mt-1 font-mono text-xs">{{ day ?? 'null' }}</p>
     </div>
 
     <div>
       <KunDatePicker v-model="month" precision="month" label="收录月份" />
-      <p class="text-default-500 mt-1 font-mono text-xs">{{ month ?? 'null' }}</p>
+      <p class="text-foreground-muted mt-1 font-mono text-xs">{{ month ?? 'null' }}</p>
     </div>
 
     <div>
       <KunDatePicker v-model="year" precision="year" label="出品年份" />
-      <p class="text-default-500 mt-1 font-mono text-xs">{{ year ?? 'null' }}</p>
+      <p class="text-foreground-muted mt-1 font-mono text-xs">{{ year ?? 'null' }}</p>
     </div>
 
     <div>
@@ -36,7 +36,7 @@ const yearRange = ref<[string | null, string | null]>(['2018', '2024'])
         label="年代区间"
         :min-date="new Date(1995, 0, 1)"
       />
-      <p class="text-default-500 mt-1 font-mono text-xs">
+      <p class="text-foreground-muted mt-1 font-mono text-xs">
         {{ yearRange[0] ?? 'null' }} → {{ yearRange[1] ?? 'null' }}
       </p>
     </div>

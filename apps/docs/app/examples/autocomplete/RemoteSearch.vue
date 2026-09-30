@@ -54,7 +54,7 @@ const onSelect = (opt: KunAutocompleteOption) => {
       @search="onSearch"
       @select="onSelect"
     />
-    <p class="text-default-500 mt-2 text-sm">
+    <p class="text-foreground-muted mt-2 text-sm">
       confirmed value: <code>{{ picked ?? '—' }}</code>
     </p>
   </div>

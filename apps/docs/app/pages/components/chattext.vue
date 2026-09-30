@@ -16,7 +16,7 @@ import meta from '~/generated/component-meta.json'
     <DocIntro />
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">基础用法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       entities 的偏移与长度按 UTF-16 code unit 计,嵌套任意层;交叉、越界、切开 emoji 的区间都会先被
       <code>normalizeKunChatEntities</code> 规整,所以任何数据都能渲染。
     </p>
@@ -32,7 +32,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Events.vue" :source="EventsSrc"><Events /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">输入框快捷写法</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       <code>parseKunChatMarkdown</code> 把输入框里的 <code>**粗**</code> <code>__斜__</code>
       <code>++下划线++</code> <code>~~删~~</code> <code>||剧透||</code> <code>`代码`</code>
       <code>```语言⏎代码⏎```</code> <code>[文字](链接)</code> <code>[文字](mention:ID)</code>

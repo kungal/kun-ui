@@ -5,5 +5,5 @@ const text = '第一行\n第二行(换行被保留)'
 </script>
 
 <template>
-  <KunText :content="text" class-name="text-lg font-semibold text-primary" />
+  <KunText :content="text" class-name="text-lg font-semibold text-primary-text" />
 </template>

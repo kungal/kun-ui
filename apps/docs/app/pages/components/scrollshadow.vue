@@ -20,7 +20,7 @@ import meta from '~/generated/component-meta.json'
     <Demo title="Vertical.vue" :source="VerticalSrc"><Vertical /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">鼠标滚轮 + 拖拽(横向)</h2>
-    <p class="text-default-500 mb-2 text-sm">
+    <p class="text-foreground-muted mb-2 text-sm">
       横向条上,鼠标用户既滚不动也不便拖动。开启 <code class="text-primary">wheel</code>
       后竖直滚轮即可左右滚;<code class="text-primary">draggable</code> 允许按住拖动。
       <code class="text-primary">wheel</code>(=true)到两端会「放手」交还页面滚动;本例用
@@ -29,12 +29,12 @@ import meta from '~/generated/component-meta.json'
     </p>
     <Demo title="Interactive.vue" :source="InteractiveSrc"><Interactive /></Demo>
 
-    <p class="text-default-500 mt-3 text-sm">
+    <p class="text-foreground-muted mt-3 text-sm">
       滚动条样式由 <code class="text-primary">scrollbar</code> 控制:<code>hide</code>(默认,仅靠边缘阴影)、
       <code>thin</code>(本例所用,细的、跟随主题色的滚动条,纯 CSS 零依赖)、<code>auto</code>(平台原生)。
     </p>
 
-    <p class="text-default-500 mt-6 text-sm">
+    <p class="text-foreground-muted mt-6 text-sm">
       建议为可滚动区域设置 <code class="text-primary">aria-label</code>，以便屏幕阅读器识别该区域。
     </p>
 

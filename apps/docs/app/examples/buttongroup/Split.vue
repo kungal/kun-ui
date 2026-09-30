@@ -22,6 +22,6 @@ const last = ref('')
         </template>
       </KunDropdown>
     </KunButtonGroup>
-    <p v-if="last" class="text-default-500 text-sm">上一次操作：{{ last }}</p>
+    <p v-if="last" class="text-foreground-muted text-sm">上一次操作：{{ last }}</p>
   </div>
 </template>

@@ -36,7 +36,7 @@ const replies: { user: KunUser; joined: string; text: string }[] = [
           <KunAvatar :user="reply.user" size="lg" :is-navigation="false" />
           <div class="min-w-0">
             <p class="truncate font-semibold">{{ reply.user.name }}</p>
-            <p class="text-default-500 text-xs">{{ reply.joined }}</p>
+            <p class="text-foreground-muted text-xs">{{ reply.joined }}</p>
           </div>
         </div>
       </KunHoverCard>

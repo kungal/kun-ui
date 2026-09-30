@@ -34,7 +34,7 @@ const options: CityOption[] = [
         <img :src="option.avatar" alt="" class="size-8 shrink-0 rounded-full" />
         <div class="min-w-0">
           <div class="truncate font-medium">{{ option.label }}</div>
-          <div class="text-default-500 truncate text-xs">{{ option.desc }}</div>
+          <div class="text-foreground-muted truncate text-xs">{{ option.desc }}</div>
         </div>
       </template>
     </KunAutocomplete>

@@ -25,7 +25,7 @@ const log = ref('')
     <div @contextmenu.prevent="(e) => (menu = { x: e.clientX, y: e.clientY })">
       <KunChatBubble :message="message" :users="demoUsers" :time-zone="DEMO_TZ" />
     </div>
-    <code class="text-default-500 text-xs">{{ log || '右键点击上面的消息' }}</code>
+    <code class="text-foreground-muted text-xs">{{ log || '右键点击上面的消息' }}</code>
     <KunChatMessageMenu
       :visible="!!menu"
       :position="menu"

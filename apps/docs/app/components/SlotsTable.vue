@@ -22,7 +22,7 @@ const described = computed(() => props.rows.some((r) => r.description))
     <div class="border-default-200 rounded-kun-lg my-5 overflow-x-auto border">
       <table class="w-full border-collapse text-sm">
         <thead>
-          <tr class="border-default-200 text-default-500 border-b text-left">
+          <tr class="border-default-200 text-foreground-muted border-b text-left">
             <th class="px-4 py-2 font-medium">插槽</th>
             <th class="px-4 py-2 font-medium">作用域</th>
             <th v-if="described" class="px-4 py-2 font-medium">说明</th>

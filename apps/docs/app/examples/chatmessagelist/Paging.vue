@@ -58,7 +58,7 @@ const latest = async () => {
   <div class="w-full border-default/20 flex h-[30rem] flex-col overflow-hidden rounded-kun-lg border">
     <div class="border-default/20 flex items-center gap-2 border-b px-3 py-2 text-sm">
       <KunButton size="sm" variant="flat" @click="jump(5)">跳到第 5 条</KunButton>
-      <span class="text-default-500">已载入 seq {{ first }}–{{ last }},共 {{ history.length }} 条</span>
+      <span class="text-foreground-muted">已载入 seq {{ first }}–{{ last }},共 {{ history.length }} 条</span>
     </div>
     <KunChatMessageList
       ref="list"
@@ -76,7 +76,7 @@ const latest = async () => {
       @latest="latest"
     >
       <template #start>
-        <p class="text-default-500 py-4 text-center text-xs">这是你们对话的开始</p>
+        <p class="text-foreground-muted py-4 text-center text-xs">这是你们对话的开始</p>
       </template>
     </KunChatMessageList>
   </div>
