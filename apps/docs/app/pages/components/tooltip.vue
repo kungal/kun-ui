@@ -9,6 +9,8 @@ import LongContent from '~/examples/tooltip/LongContent.vue'
 import LongContentSrc from '~/examples/tooltip/LongContent.vue?raw'
 import RichContent from '~/examples/tooltip/RichContent.vue'
 import RichContentSrc from '~/examples/tooltip/RichContent.vue?raw'
+import Shortcut from '~/examples/tooltip/Shortcut.vue'
+import ShortcutSrc from '~/examples/tooltip/Shortcut.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -31,6 +33,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">富内容</h2>
     <Demo title="RichContent.vue" :source="RichContentSrc"><RichContent /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">快捷键</h2>
+    <Demo title="Shortcut.vue" :source="ShortcutSrc"><Shortcut /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunTooltip.props" />

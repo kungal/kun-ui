@@ -233,7 +233,7 @@ const onSubmit = (q: string) => {
 | `#item` | `{ item: KunCommandItem; active: boolean; index: number; highlight: (text: string) => string; }` |
 | `#loading` | — |
 | `#no-result` | `{ query: string; }` |
-| `#trigger` | `{ open: () => void; shortcut: string; }` |
+| `#trigger` | `{ open: () => void; shortcut: string; keys: string; }` |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/commandpalette

@@ -14,6 +14,7 @@ import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
+import { useKunShortcutPlatform } from '../composables/useKunShortcutPlatform'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -221,14 +222,12 @@ const shortcutKey = computed(() =>
       ? props.shortcut.toLowerCase()
       : 'k'
 )
-const isMac = ref(false)
-onMounted(() => {
-  isMac.value = /mac/i.test(navigator.platform || navigator.userAgent)
-})
+const platform = useKunShortcutPlatform()
+const shortcutKeys = computed(() => (shortcutKey.value ? `Mod+${shortcutKey.value}` : ''))
 const shortcutLabel = computed(() => {
   const k = shortcutKey.value
   if (!k) return ''
-  return `${isMac.value ? '⌘' : 'Ctrl '}${k.toUpperCase()}`
+  return `${platform.value === 'apple' ? '⌘' : 'Ctrl '}${k.toUpperCase()}`
 })
 const onGlobalKeydown = (e: KeyboardEvent) => {
   const k = shortcutKey.value
@@ -268,9 +267,10 @@ defineExpose({ open, close, toggle })
 </script>
 
 <template>
-  <!-- Trigger (optional): the slot gets `open` + a platform shortcut label.
-       Omit it and drive the palette with `v-model:open` / the ⌘K shortcut. -->
-  <slot name="trigger" :open="open" :shortcut="shortcutLabel" />
+  <!-- Trigger (optional): the slot gets `open`, a platform shortcut label and
+       the same shortcut as KunKbd `keys`. Omit it and drive the palette with
+       `v-model:open` / the ⌘K shortcut. -->
+  <slot name="trigger" :open="open" :shortcut="shortcutLabel" :keys="shortcutKeys" />
 
   <Teleport to="body">
     <Transition name="kun-command">

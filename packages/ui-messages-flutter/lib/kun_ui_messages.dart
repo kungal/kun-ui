@@ -823,6 +823,100 @@ class KunInputStrings {
   final String hide;
 }
 
+/// Strings for `KunKbd`.
+class KunKbdStrings {
+  const KunKbdStrings({
+    required this.control,
+    required this.alt,
+    required this.option,
+    required this.shift,
+    required this.command,
+    required this.meta,
+    required this.enter,
+    required this.escape,
+    required this.backspace,
+    required this.delete,
+    required this.tab,
+    required this.space,
+    required this.up,
+    required this.down,
+    required this.left,
+    required this.right,
+    required this.pageUp,
+    required this.pageDown,
+    required this.home,
+    required this.end,
+    required this.plus,
+    required this.then,
+  });
+
+  /// `en`: Control
+  final String control;
+
+  /// `en`: Alt
+  final String alt;
+
+  /// `en`: Option
+  final String option;
+
+  /// `en`: Shift
+  final String shift;
+
+  /// `en`: Command
+  final String command;
+
+  /// `en`: Windows
+  final String meta;
+
+  /// `en`: Enter
+  final String enter;
+
+  /// `en`: Escape
+  final String escape;
+
+  /// `en`: Backspace
+  final String backspace;
+
+  /// `en`: Delete
+  final String delete;
+
+  /// `en`: Tab
+  final String tab;
+
+  /// `en`: Space
+  final String space;
+
+  /// `en`: Up Arrow
+  final String up;
+
+  /// `en`: Down Arrow
+  final String down;
+
+  /// `en`: Left Arrow
+  final String left;
+
+  /// `en`: Right Arrow
+  final String right;
+
+  /// `en`: Page Up
+  final String pageUp;
+
+  /// `en`: Page Down
+  final String pageDown;
+
+  /// `en`: Home
+  final String home;
+
+  /// `en`: End
+  final String end;
+
+  /// `en`: Plus
+  final String plus;
+
+  /// `en`: then
+  final String then;
+}
+
 /// Strings for `KunLightbox`.
 class KunLightboxStrings {
   const KunLightboxStrings({
@@ -1214,6 +1308,7 @@ class KunMessages {
     required this.fileInput,
     required this.filePicker,
     required this.input,
+    required this.kbd,
     required this.lightbox,
     required this.lightboxGallery,
     required this.loading,
@@ -1283,6 +1378,8 @@ class KunMessages {
   final KunFilePickerStrings filePicker;
 
   final KunInputStrings input;
+
+  final KunKbdStrings kbd;
 
   final KunLightboxStrings lightbox;
 
@@ -1497,6 +1594,30 @@ class KunMessages {
       clear: '清除',
       reveal: '显示密码',
       hide: '隐藏密码',
+    ),
+    kbd: KunKbdStrings(
+      control: 'Ctrl',
+      alt: 'Alt',
+      option: 'Option',
+      shift: 'Shift',
+      command: 'Command',
+      meta: 'Windows 键',
+      enter: '回车',
+      escape: 'Esc',
+      backspace: '退格',
+      delete: '删除',
+      tab: 'Tab',
+      space: '空格',
+      up: '上箭头',
+      down: '下箭头',
+      left: '左箭头',
+      right: '右箭头',
+      pageUp: '向上翻页',
+      pageDown: '向下翻页',
+      home: 'Home',
+      end: 'End',
+      plus: '加号',
+      then: '然后',
     ),
     lightbox: KunLightboxStrings(
       label: '图片查看器',
@@ -1768,6 +1889,30 @@ class KunMessages {
       clear: 'Clear',
       reveal: 'Show password',
       hide: 'Hide password',
+    ),
+    kbd: KunKbdStrings(
+      control: 'Control',
+      alt: 'Alt',
+      option: 'Option',
+      shift: 'Shift',
+      command: 'Command',
+      meta: 'Windows',
+      enter: 'Enter',
+      escape: 'Escape',
+      backspace: 'Backspace',
+      delete: 'Delete',
+      tab: 'Tab',
+      space: 'Space',
+      up: 'Up Arrow',
+      down: 'Down Arrow',
+      left: 'Left Arrow',
+      right: 'Right Arrow',
+      pageUp: 'Page Up',
+      pageDown: 'Page Down',
+      home: 'Home',
+      end: 'End',
+      plus: 'Plus',
+      then: 'then',
     ),
     lightbox: KunLightboxStrings(
       label: 'Image viewer',

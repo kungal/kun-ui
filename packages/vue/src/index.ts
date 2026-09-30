@@ -47,6 +47,7 @@ import KunImage from './components/Image.vue'
 import KunImageNative from './components/ImageNative.vue'
 import KunInfo from './components/Info.vue'
 import KunInput from './components/Input.vue'
+import KunKbd from './components/Kbd.vue'
 import KunLightbox from './components/Lightbox.vue'
 import KunLightboxGallery from './components/LightboxGallery.vue'
 import KunLightboxGalleryItem from './components/LightboxGalleryItem.vue'
@@ -135,6 +136,7 @@ export {
   KunImageNative,
   KunInfo,
   KunInput,
+  KunKbd,
   KunLightbox,
   KunLightboxGallery,
   KunLightboxGalleryItem,
@@ -202,6 +204,10 @@ export { default as kunLocaleZhCN } from './locale/zh-CN'
 export { useResolvedRounded } from './composables/useResolvedRounded'
 export { useRipple, type RippleType } from './composables/useRipple'
 export { useKunUniqueId } from './composables/useKunUniqueId'
+// The platform KunKbd renders shortcuts for, and the one-line formatter menus
+// use — for an app that shows a shortcut in its own markup or a `title`.
+export { useKunShortcutPlatform } from './composables/useKunShortcutPlatform'
+export { formatKunShortcut, type KunShortcutPlatform } from '@kungal/ui-core'
 export {
   useKunPointerMenu,
   type KunPointerMenu,
@@ -370,6 +376,7 @@ const components: Record<KunComponentName, Component> = {
   KunImageNative,
   KunInfo,
   KunInput,
+  KunKbd,
   KunLightbox,
   KunLightboxGallery,
   KunLightboxGalleryItem,

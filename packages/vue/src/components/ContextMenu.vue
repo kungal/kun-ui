@@ -5,13 +5,16 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  shallowRef,
+  useId,
   watch,
+  type ComponentPublicInstance,
 } from 'vue'
-import { cn, kunVariantClasses, type KunUIColor } from '@kungal/ui-core'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
-import KunIcon from './Icon.vue'
-import { useKunUIConfig } from '../config/useKunUIConfig'
+import KunMenuList from './MenuList.vue'
 import type { KunContextMenuItem, KunContextMenuProps } from './types'
+
+type KunMenuListApi = { focusFirst: () => void; focusLast: () => void; focusMenu: () => void }
 
 // Right-click style menu positioned at an x/y point, clamped into the viewport.
 // Controlled via `visible` + `position`. Implements the WAI-ARIA menu pattern
@@ -34,43 +37,24 @@ const emit = defineEmits<{
   (event: 'close'): void
 }>()
 
-const config = useKunUIConfig()
-
-const menuRef = ref<HTMLDivElement | null>(null)
+const menuRef = shallowRef<HTMLElement | null>(null)
+const list = shallowRef<KunMenuListApi | null>(null)
+const setList = (c: Element | ComponentPublicInstance | null) => {
+  list.value = c as unknown as KunMenuListApi | null
+  menuRef.value = ((c as ComponentPublicInstance | null)?.$el as HTMLElement | null) ?? null
+}
 useKunFloatingLayer(menuRef)
-const activeIndex = ref(-1)
+const treeId = `kun-context-menu-${useId()}`
 const menuPosition = ref({
   x: props.position?.x ?? 0,
   y: props.position?.y ?? 0,
 })
 let lastFocused: HTMLElement | null = null
 
+const hasItems = computed(() => props.items.some((entry) => entry.type !== 'separator'))
+
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), Math.max(max, min))
-
-const enabledIndices = () =>
-  props.items.reduce<number[]>((acc, item, i) => {
-    if (!item.disabled) acc.push(i)
-    return acc
-  }, [])
-
-const itemEls = () =>
-  Array.from(
-    menuRef.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []
-  )
-
-const focusItem = (index: number) => {
-  activeIndex.value = index
-  itemEls()[index]?.focus({ preventScroll: true })
-}
-
-const move = (delta: number) => {
-  const enabled = enabledIndices()
-  if (!enabled.length) return
-  const pos = enabled.indexOf(activeIndex.value)
-  const nextPos = (pos + delta + enabled.length) % enabled.length
-  focusItem(enabled[nextPos === -1 ? enabled.length - 1 : nextPos]!)
-}
 
 const updateMenuPosition = async () => {
   if (!props.visible || typeof window === 'undefined') return
@@ -96,35 +80,33 @@ const closeMenu = (returnFocus = false) => {
 watch(
   () => [props.visible, props.position?.x, props.position?.y],
   () => {
-    if (props.visible) {
-      updateMenuPosition().then(() => {
-        // The immediate watcher runs during setup(); guard the browser-only
-        // focus work so SSR with :visible="true" doesn't touch `document`.
-        if (typeof document === 'undefined') return
-        lastFocused = (document.activeElement as HTMLElement) ?? null
-        const first = enabledIndices()[0]
-        if (first !== undefined) focusItem(first)
-        else menuRef.value?.focus({ preventScroll: true })
-      })
-    } else {
-      activeIndex.value = -1
-    }
+    if (!props.visible) return
+    updateMenuPosition().then(() => {
+      // The immediate watcher runs during setup(); guard the browser-only
+      // focus work so SSR with :visible="true" doesn't touch `document`.
+      if (typeof document === 'undefined') return
+      lastFocused = (document.activeElement as HTMLElement) ?? null
+      list.value?.focusFirst()
+    })
   },
   { immediate: true }
 )
 
+// The submenu is teleported on its own, so "inside the menu" is the tree, not
+// the root element's subtree.
+const inMenu = (target: EventTarget | null) =>
+  target instanceof Element && !!target.closest(`[data-kun-menu-tree="${treeId}"]`)
+
 const handlePointerDown = (event: Event) => {
-  if (!props.visible) return
-  const target = event.target as Node
-  if (menuRef.value && !menuRef.value.contains(target)) closeMenu()
+  if (props.visible && !inMenu(event.target)) closeMenu()
 }
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (props.visible && event.key === 'Escape') closeMenu(true)
 }
 
-const handleScroll = () => {
-  if (props.visible) closeMenu()
+const handleScroll = (event: Event) => {
+  if (props.visible && !inMenu(event.target)) closeMenu()
 }
 
 onMounted(() => {
@@ -151,85 +133,9 @@ const menuStyle = computed(() => ({
 }))
 
 const handleSelect = (item: KunContextMenuItem) => {
-  if (item.disabled) return
   emit('select', item)
   closeMenu(true)
 }
-
-// Items with `href` render a real <a role="menuitem"> (crawlable); the link
-// navigates natively. Disabled links can't use [disabled], so block in JS.
-const itemBindings = (item: KunContextMenuItem) => {
-  if (!item.href) return { type: 'button', disabled: item.disabled }
-  return typeof config.linkComponent === 'string'
-    ? { href: item.href }
-    : { to: item.href }
-}
-
-const onItemClick = (e: MouseEvent, item: KunContextMenuItem) => {
-  if (item.disabled) {
-    e.preventDefault()
-    return
-  }
-  handleSelect(item)
-}
-
-const onMenuKeydown = (e: KeyboardEvent) => {
-  switch (e.key) {
-    case 'ArrowDown':
-      e.preventDefault()
-      move(1)
-      break
-    case 'ArrowUp':
-      e.preventDefault()
-      move(-1)
-      break
-    case 'Home': {
-      e.preventDefault()
-      const first = enabledIndices()[0]
-      if (first !== undefined) focusItem(first)
-      break
-    }
-    case 'End': {
-      e.preventDefault()
-      const enabled = enabledIndices()
-      if (enabled.length) focusItem(enabled[enabled.length - 1]!)
-      break
-    }
-    case 'Enter':
-    case ' ':
-      e.preventDefault()
-      if (activeIndex.value >= 0) handleSelect(props.items[activeIndex.value]!)
-      break
-    case 'Escape':
-      e.preventDefault()
-      closeMenu(true)
-      break
-    case 'Tab':
-      e.preventDefault()
-      closeMenu(true)
-      break
-  }
-}
-
-const focusTint: Record<KunUIColor, string> = {
-  default: 'focus:bg-default/20',
-  primary: 'focus:bg-primary/20',
-  secondary: 'focus:bg-secondary/20',
-  success: 'focus:bg-success/20',
-  warning: 'focus:bg-warning/20',
-  danger: 'focus:bg-danger/20',
-  info: 'focus:bg-info/20',
-}
-
-const itemClass = (item: KunContextMenuItem) =>
-  cn(
-    // `text-left`: a native <button> defaults to text-align:center, which the
-    // flex-1 label span inherits — so short labels would sit centered. Reset it.
-    'relative flex w-full cursor-pointer items-center justify-start gap-2 overflow-hidden rounded-kun-md px-3 py-1.5 text-left text-sm font-medium outline-none transition-colors',
-    kunVariantClasses('light', item.color || 'default'),
-    focusTint[item.color || 'default'],
-    item.disabled && 'pointer-events-none cursor-not-allowed opacity-50'
-  )
 </script>
 
 <template>
@@ -242,34 +148,19 @@ const itemClass = (item: KunContextMenuItem) =>
       leave-from-class="opacity-100 scale-100"
       leave-to-class="opacity-0 scale-95"
     >
-      <div
-        v-if="visible && items.length"
-        ref="menuRef"
+      <KunMenuList
+        v-if="visible && hasItems"
+        :ref="setList"
+        :entries="items"
+        :tree-id="treeId"
+        :min-width="width"
         data-kun-overlay
-        role="menu"
-        aria-orientation="vertical"
-        tabindex="-1"
         class="bg-content1 fixed z-kun-popover rounded-kun-lg p-1 text-sm shadow-kun-md outline-none"
         :style="menuStyle"
         @click.stop
-        @keydown="onMenuKeydown"
-      >
-        <component
-          :is="item.href ? config.linkComponent : 'button'"
-          v-for="(item, i) in items"
-          :key="item.key"
-          v-bind="itemBindings(item)"
-          role="menuitem"
-          :tabindex="i === activeIndex ? 0 : -1"
-          :aria-disabled="item.disabled || undefined"
-          :class="itemClass(item)"
-          @click="onItemClick($event, item)"
-          @mouseenter="!item.disabled && focusItem(i)"
-        >
-          <KunIcon v-if="item.icon" :name="item.icon" class="shrink-0 text-base" />
-          <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
-        </component>
-      </div>
+        @select="handleSelect"
+        @close="closeMenu"
+      />
     </Transition>
   </Teleport>
 </template>

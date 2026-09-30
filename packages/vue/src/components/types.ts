@@ -316,6 +316,23 @@ export interface KunTooltipProps {
   rounded?: KunUIRounded
   /** Render a caret pointing at the trigger. */
   showArrow?: boolean
+  /** A keyboard shortcut shown after the text as KunKbd keys, e.g. `'Mod+K'`
+   *  for "Search ⌘K". Display only — binding the key is yours. */
+  shortcut?: string
+}
+
+// ── Kbd ────────────────────────────────────────────────────────────────
+export interface KunKbdProps {
+  /** Key combination, rendered for the viewer's platform: `+` joins a chord
+   *  and a space separates a sequence (`'Mod+K'`, `'Shift+Delete'`, `'G G'`).
+   *  `Mod` is ⌘ on Apple and Ctrl elsewhere; the server renders Ctrl and a Mac
+   *  switches after mount. Screen readers hear key names, not glyphs. Without
+   *  it, the default slot is shown as one key. */
+  keys?: string
+  /** `keycap` draws each key as a cap. `plain` is one line of muted text, the
+   *  way a menu shows a shortcut: `⇧⌘Z` on Apple, `Ctrl+Shift+Z` elsewhere.
+   *  @default 'keycap' */
+  variant?: 'keycap' | 'plain'
 }
 
 // ── Popover ────────────────────────────────────────────────────────────
@@ -1263,6 +1280,7 @@ export interface KunSelectProps<
 
 // ── ContextMenu / Dropdown (shared item model) ─────────────────────────
 export interface KunContextMenuItem {
+  type?: 'item'
   key: string
   label: string
   icon?: string
@@ -1271,7 +1289,24 @@ export interface KunContextMenuItem {
   // When set, the item renders as a real <a>/link (crawlable) instead of a
   // button — for navigational menus. Omit for action items.
   href?: string
+  /** A keyboard shortcut shown at the item's end, e.g. `'Mod+C'` — ⌘C on
+   *  Apple, Ctrl+C elsewhere. Display only: the app binds the key. */
+  shortcut?: string
+  /** Items of a submenu, opened by hover, → or a tap. One level only: a
+   *  child cannot have children. An item with `children` never emits
+   *  `select`; with no child items left it shows disabled. */
+  children?: (Omit<KunContextMenuItem, 'children'> | KunMenuSeparator)[]
 }
+
+/** A dividing line between groups of items. Leading, trailing and repeated
+ *  separators are dropped, so a filtered list stays clean. */
+export interface KunMenuSeparator {
+  type: 'separator'
+  key?: string
+}
+
+/** One row of a KunContextMenu / KunDropdown: an item or a separator. */
+export type KunMenuEntry = KunContextMenuItem | KunMenuSeparator
 
 // Dropdown reuses the ContextMenu item model verbatim — one source of truth.
 export type KunDropdownItem = KunContextMenuItem
@@ -1279,7 +1314,8 @@ export type KunDropdownItem = KunContextMenuItem
 export interface KunContextMenuProps {
   visible: boolean
   position?: { x: number; y: number } | null
-  items?: KunContextMenuItem[]
+  /** Items and separators; an item with `children` opens a submenu. */
+  items?: KunMenuEntry[]
   width?: number
   padding?: number
 }

@@ -1,3 +1,5 @@
+import type { KunKbdKeyName } from '../shortcut'
+
 // Every user-visible string KunUI renders on its own — accessible names for
 // icon-only controls, empty/loading states, and the handful of built-in button
 // labels. A component prop that sets the same text always wins over the locale.
@@ -168,6 +170,9 @@ export interface KunMessages {
   /** `tooLarge` takes `{name}` and `{size}`. */
   filePicker: { tooLarge: string }
   input: { clear: string; reveal: string; hide: string }
+  /** Spoken key names for KunKbd, read in place of a glyph such as ⌘ or ↑;
+   *  `then` joins the chords of a sequence. */
+  kbd: Record<KunKbdKeyName, string> & { then: string }
   /** `goto` takes `{index}`, the 1-based image number. */
   lightbox: {
     label: string

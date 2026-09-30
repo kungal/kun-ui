@@ -57,6 +57,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
       'userchip',
       'badge',
       'chip',
+      'kbd',
       'accordion',
       'carousel',
       'image',

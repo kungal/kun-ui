@@ -15,6 +15,7 @@ import {
   size as sizeMiddleware,
   arrow as arrowMiddleware,
   type Middleware,
+  type OffsetOptions,
   type Placement,
   type ReferenceElement,
 } from '@floating-ui/vue'
@@ -33,7 +34,7 @@ import { useTransformOrigin } from './useTransformOrigin'
 export interface UseKunFloatingOptions {
   placement?: MaybeRefOrGetter<Placement>
   open?: Ref<boolean>
-  offset?: number
+  offset?: OffsetOptions
   padding?: number
   // Render a caret pointing at the reference. Bind the returned `arrowRef` to a
   // square element and `arrowStyles` to its style; the static side is offset so

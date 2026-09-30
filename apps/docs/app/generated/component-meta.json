@@ -2352,7 +2352,7 @@
       },
       {
         "name": "trigger",
-        "type": "{ open: () => void; shortcut: string; }"
+        "type": "{ open: () => void; shortcut: string; keys: string; }"
       }
     ]
   },
@@ -2390,9 +2390,10 @@
       },
       {
         "name": "items",
-        "type": "KunContextMenuItem[]",
+        "type": "KunMenuEntry[]",
         "required": false,
-        "default": "[]"
+        "default": "[]",
+        "description": "Items and separators; an item with `children` opens a submenu."
       },
       {
         "name": "padding",
@@ -2812,9 +2813,10 @@
       },
       {
         "name": "items",
-        "type": "KunContextMenuItem[]",
+        "type": "KunMenuEntry[]",
         "required": false,
-        "default": "[]"
+        "default": "[]",
+        "description": "Items and separators; an item with `children` opens a submenu."
       },
       {
         "name": "menuClass",
@@ -3589,6 +3591,32 @@
       {
         "name": "suffix",
         "type": "{}"
+      }
+    ]
+  },
+  "KunKbd": {
+    "props": [
+      {
+        "name": "keys",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Key combination, rendered for the viewer's platform: `+` joins a chord and a space separates a sequence (`'Mod+K'`, `'Shift+Delete'`, `'G G'`). `Mod` is ⌘ on Apple and Ctrl elsewhere; the server renders Ctrl and a Mac switches after mount. Screen readers hear key names, not glyphs. Without it, the default slot is shown as one key."
+      },
+      {
+        "name": "variant",
+        "type": "\"keycap\" | \"plain\"",
+        "required": false,
+        "default": "\"keycap\"",
+        "description": "`keycap` draws each key as a cap. `plain` is one line of muted text, the way a menu shows a shortcut: `⇧⌘Z` on Apple, `Ctrl+Shift+Z` elsewhere."
+      }
+    ],
+    "events": [],
+    "slots": [
+      {
+        "name": "default",
+        "type": "any",
+        "description": "A single key written out, shown when `keys` is not set."
       }
     ]
   },
@@ -6170,6 +6198,13 @@
         "name": "rounded",
         "type": "KunUIRounded",
         "required": false
+      },
+      {
+        "name": "shortcut",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "A keyboard shortcut shown after the text as KunKbd keys, e.g. `'Mod+K'` for \"Search ⌘K\". Display only — binding the key is yours."
       },
       {
         "name": "showArrow",

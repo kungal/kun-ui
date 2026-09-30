@@ -43,7 +43,7 @@ const emit = defineEmits<{
     <button
       v-if="closable"
       type="button"
-      class="-mr-0.5 ml-0.5 inline-flex shrink-0 items-center rounded-full opacity-70 transition hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
+      class="kun-chip-remove -mr-0.5 ml-0.5 inline-flex shrink-0 items-center rounded-full opacity-70 transition hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
       :aria-label="t('chip.remove')"
       :disabled="disabled"
       @click.stop="emit('close')"
@@ -53,3 +53,21 @@ const emit = defineEmits<{
     <slot name="end" />
   </span>
 </template>
+
+<style scoped>
+/* WCAG 2.2 SC 2.5.8 asks 24x24 CSS px of a target; the x is 14. The area is
+   centred on the button and must stay unclipped: a clipped ::after measured
+   worse than none in Chromium, where it switches off tap adjustment. */
+.kun-chip-remove {
+  position: relative;
+}
+.kun-chip-remove::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+}
+</style>

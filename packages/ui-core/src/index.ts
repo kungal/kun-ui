@@ -63,6 +63,19 @@ export type {
 export { translateKunMessage } from './locale/translate'
 export { KUN_CATALOG_ZH_CN } from './locale/zh-CN'
 
+// Keyboard-shortcut display (KunKbd, menu items, KunTooltip) and the menu
+// entry list — pure, so the Flutter port renders the same labels and order.
+export {
+  parseKunShortcut,
+  resolveKunShortcut,
+  formatKunShortcut,
+  speakKunShortcut,
+  type KunShortcutPlatform,
+  type KunShortcutKey,
+  type KunKbdKeyName,
+} from './shortcut'
+export { normalizeKunMenuSeparators } from './menu'
+
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'
 export { pickAvatarFallback, getRandomSticker } from './avatarFallback'

@@ -5,6 +5,7 @@ import { cn, kunRoundedClasses } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import KunKbd from './Kbd.vue'
 import type { KunTooltipProps } from './types'
 
 // Nuxt-decoupled Tooltip — explicit imports (vue / @floating-ui/vue /
@@ -21,6 +22,7 @@ const props = withDefaults(defineProps<KunTooltipProps>(), {
   hideOnMobile: true,
   rounded: undefined,
   showArrow: false,
+  shortcut: '',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -113,6 +115,7 @@ const hide = () => {
           :style="floatingStyles"
         >
           <slot name="content">{{ text }}</slot>
+          <KunKbd v-if="shortcut" :keys="shortcut" class="ml-2" />
           <div
             v-if="showArrow"
             ref="arrowRef"

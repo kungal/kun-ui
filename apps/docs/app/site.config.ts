@@ -96,6 +96,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/info': { title: 'Info', cn: '提示框', description: '带颜色、图标、标题与描述的内联提示框。' },
   '/components/banner': { title: 'Banner', cn: '横幅', description: '贴在页面顶部的整宽公告条,一句话加可选的操作与关闭按钮;可以记住关闭状态,刷新后不再出现。' },
   '/components/input': { title: 'Input', cn: '输入框', description: '文本输入框(v-model),带标签、辅助 / 错误文本与尺寸。' },
+  '/components/kbd': { title: 'Kbd', cn: '按键', description: '键盘快捷键徽标:Mod 在 Apple 上显示 ⌘、其它平台显示 Ctrl,读屏器读键名而不是符号。' },
   '/components/lightbox': { title: 'Lightbox', cn: '灯箱', description: '图片灯箱,可用画廊容器 + 项,或独立使用。' },
   '/components/link': { title: 'Link', cn: '链接', description: '样式化链接,经由注入的链接组件渲染(Nuxt 下为 NuxtLink)。' },
   '/components/loading': { title: 'Loading', cn: '加载', description: '加载态:覆盖内容的遮罩或独立加载器;内置图片。' },

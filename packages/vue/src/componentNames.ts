@@ -60,6 +60,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunImageNative',
   'KunInfo',
   'KunInput',
+  'KunKbd',
   'KunLightbox',
   'KunLightboxGallery',
   'KunLightboxGalleryItem',

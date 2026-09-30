@@ -376,7 +376,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
             type="button"
             tabindex="-1"
             :aria-label="t('tagInput.removeTag', { tag })"
-            class="hover:text-danger -mr-0.5 ml-1 inline-flex cursor-pointer rounded-full p-0.5 transition-colors"
+            class="kun-tag-remove hover:text-danger -mr-0.5 ml-1 inline-flex cursor-pointer rounded-full p-0.5 transition-colors"
             @click.stop="removeAt(index)"
           >
             <KunIcon name="lucide:x" class="size-3.5" />
@@ -428,3 +428,19 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
     </p>
   </div>
 </template>
+
+<style scoped>
+/* The same 24x24 target as KunChip's x (WCAG 2.2 SC 2.5.8); the button is 18. */
+.kun-tag-remove {
+  position: relative;
+}
+.kun-tag-remove::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+}
+</style>
