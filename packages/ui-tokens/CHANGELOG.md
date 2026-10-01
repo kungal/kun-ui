@@ -1,5 +1,7 @@
 # @kungal/ui-tokens
 
+## 2.56.2
+
 ## 2.56.1
 
 ### Patch Changes
