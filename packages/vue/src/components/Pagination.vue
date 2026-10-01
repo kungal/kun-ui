@@ -13,6 +13,7 @@ import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
+import { hasModifierKey } from '../utils/hasModifierKey'
 import type { KunPaginationProps } from './types'
 
 defineOptions({ name: 'KunPagination' })
@@ -71,6 +72,15 @@ const handlePageChange = (page: number) => {
   if (props.isLoading || page === props.currentPage) return
   if (props.totalPage <= 0) return
   emit('update:currentPage', page)
+}
+
+// A modified click on a link is the browser's open-in-a-new-tab / new-window /
+// download gesture, and this view stays on its page. Emitting for it moved the
+// current tab as well: a consumer following the event navigated here while the
+// browser opened the new tab.
+const handlePageClick = (e: MouseEvent, page: number) => {
+  if (props.pageHref && hasModifierKey(e)) return
+  handlePageChange(page)
 }
 
 const handleJumpToPage = () => {
@@ -214,7 +224,6 @@ const pageButtonClass = (page: number) =>
     props.currentPage === page && showIndicator.value && 'text-primary-foreground'
   )
 
-// Skip global arrow-key paging when a widget owns arrow keys itself.
 const KEY_OWNING_ROLES = new Set([
   'tab',
   'option',
@@ -227,34 +236,53 @@ const KEY_OWNING_ROLES = new Set([
   'tree',
   'treeitem',
 ])
-const isEditableTarget = (e: KeyboardEvent) => {
-  const t = e.target as HTMLElement | null
-  if (!t) return false
+const navRef = ref<HTMLElement | null>(null)
+
+// The arrow keys page from anywhere on the page, so this listener sees every
+// keystroke and has to leave alone the ones that are not a request to page:
+//   - with a modifier it is a browser or OS shortcut: Alt+ArrowLeft is Back,
+//     and it paged the list as well.
+//   - already `defaultPrevented`: another handler consumed it. An open
+//     KunLightbox paged its image and the list behind it on one keystroke.
+//   - in a field, or on a widget that owns the arrow keys itself.
+//   - inside a modal this pagination is not part of, or with this pagination
+//     `inert` behind one: the page behind a modal is out of reach.
+const isForeignKeystroke = (e: KeyboardEvent) => {
+  if (e.defaultPrevented || hasModifierKey(e)) return true
+  if (navRef.value?.closest('[inert]')) return true
+  const t = e.target
+  if (!(t instanceof HTMLElement)) return false
   if (t.isContentEditable) return true
   const tag = t.tagName
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true
   const role = t.getAttribute('role')
-  return !!role && KEY_OWNING_ROLES.has(role)
+  if (role && KEY_OWNING_ROLES.has(role)) return true
+  const modal = t.closest('[aria-modal="true"], dialog[open]')
+  return !!modal && !modal.contains(navRef.value)
 }
 
 onKeyStroke('ArrowLeft', (e) => {
-  if (isEditableTarget(e)) return
+  if (isForeignKeystroke(e)) return
   if (props.currentPage > 1) handlePageChange(props.currentPage - 1)
 })
 
 onKeyStroke('ArrowRight', (e) => {
-  if (isEditableTarget(e)) return
+  if (isForeignKeystroke(e)) return
   if (props.currentPage < props.totalPage) handlePageChange(props.currentPage + 1)
 })
 </script>
 
 <template>
   <nav
+    ref="navRef"
     :aria-label="t('pagination.nav')"
     class="flex w-full flex-wrap items-center justify-between gap-4"
   >
     <div class="flex flex-wrap items-center gap-2">
       <div class="flex items-center gap-2">
+        <!-- `aria-current` is cleared on prev / next: RouterLink sets it on any
+             link whose path is the current route's, ignoring the query, so with
+             `?page=N` hrefs both were announced as the current page. -->
         <KunButton
           :is-icon-only="true"
           variant="light"
@@ -263,7 +291,8 @@ onKeyStroke('ArrowRight', (e) => {
           :href="pageHref && currentPage > 1 ? pageHref(currentPage - 1) : undefined"
           :disabled="isLoading || currentPage <= 1"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage <= 1 }"
-          @click="handlePageChange(currentPage - 1)"
+          :aria-current="undefined"
+          @click="handlePageClick($event, currentPage - 1)"
         >
           <KunIcon name="lucide:chevron-left" />
         </KunButton>
@@ -301,7 +330,7 @@ onKeyStroke('ArrowRight', (e) => {
                 :aria-label="t('pagination.page', { page: it.page })"
                 :aria-current="currentPage === it.page ? 'page' : undefined"
                 :class-name="pageButtonClass(it.page)"
-                @click="handlePageChange(it.page)"
+                @click="handlePageClick($event, it.page)"
               >
                 {{ it.page }}
               </KunButton>
@@ -318,7 +347,8 @@ onKeyStroke('ArrowRight', (e) => {
           :href="pageHref && currentPage < totalPage ? pageHref(currentPage + 1) : undefined"
           :disabled="isLoading || currentPage >= totalPage"
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage >= totalPage }"
-          @click="handlePageChange(currentPage + 1)"
+          :aria-current="undefined"
+          @click="handlePageClick($event, currentPage + 1)"
         >
           <KunIcon name="lucide:chevron-right" />
         </KunButton>

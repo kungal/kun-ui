@@ -3,6 +3,7 @@ import { computed, onUnmounted, reactive, ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { wheelDeltaPx } from '../utils/wheelDeltaPx'
+import { hasModifierKey } from '../utils/hasModifierKey'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -527,6 +528,8 @@ const onThumbsWheel = (e: WheelEvent) => {
 const zoomPercent = computed(() => Math.round(scale.value * 100))
 
 const onDialogKeydown = (e: KeyboardEvent) => {
+  // Alt+ArrowLeft is the browser's Back; paging on it swallowed the shortcut.
+  if (hasModifierKey(e)) return
   if (e.key === 'ArrowLeft') {
     e.preventDefault()
     prev()

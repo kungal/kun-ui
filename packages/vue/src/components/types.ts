@@ -1519,8 +1519,11 @@ export interface KunPaginationProps {
   totalPage: number
   isLoading?: boolean
   /**
-   * Map a page number to its URL. When provided, the numbered page controls
-   * render real <a href> (crawlable pagination) instead of plain buttons.
+   * Map a page number to its URL. When provided, the page numbers and the
+   * prev / next controls render real <a href> (crawlable pagination) instead of
+   * plain buttons. A plain click still emits `update:currentPage` while the
+   * link navigates; a click with Ctrl, Cmd, Shift or Alt held does not, because
+   * the browser opens that page elsewhere and this view stays where it is.
    */
   pageHref?: (page: number) => string
 }
