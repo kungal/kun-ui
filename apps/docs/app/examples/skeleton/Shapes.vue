@@ -1,9 +1,9 @@
 <template>
   <div class="flex w-full max-w-sm items-center gap-4">
     <KunSkeleton variant="circle" height="3rem" />
-    <div class="flex flex-1 flex-col gap-2">
+    <div class="flex flex-1 flex-col">
       <KunSkeleton variant="text" width="40%" />
-      <KunSkeleton variant="text" width="70%" />
+      <KunSkeleton variant="text" width="70%" class-name="text-sm" />
     </div>
     <KunSkeleton variant="rect" width="5rem" height="3rem" />
   </div>

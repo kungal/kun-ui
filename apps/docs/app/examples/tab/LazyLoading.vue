@@ -56,10 +56,9 @@ onChange(active.value)
       >
         <!-- First load: nothing to dim yet, so show a skeleton (at full opacity
              — DON'T pass `loading` here, or the dim would fade the skeleton too). -->
-        <div v-if="state[item.value]!.data === null" class="flex flex-col gap-2">
+        <div v-if="state[item.value]!.data === null" class="flex flex-col gap-3 text-sm">
           <KunSkeleton variant="text" width="70%" />
-          <KunSkeleton variant="text" />
-          <KunSkeleton variant="text" width="40%" />
+          <KunSkeleton width="5.5rem" height="2.1rem" />
         </div>
 
         <!-- Loaded: real content. A refresh re-sets `loading`, which DIMS this

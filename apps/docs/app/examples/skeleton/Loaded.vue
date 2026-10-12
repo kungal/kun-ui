@@ -8,11 +8,13 @@ const loaded = ref(false)
     <KunButton size="sm" @click="loaded = !loaded">
       {{ loaded ? '重新加载' : '完成加载' }}
     </KunButton>
-    <KunSkeleton :loaded="loaded" variant="rect" height="4rem">
-      <KunCard class-name="w-full">
-        <p class="font-medium">内容已就绪</p>
-        <p class="text-foreground-muted text-sm">loaded 为 true 时渲染默认插槽。</p>
-      </KunCard>
-    </KunSkeleton>
+    <div class="w-full" aria-live="polite" :aria-busy="!loaded">
+      <KunSkeleton :loaded="loaded" variant="rect" height="4rem">
+        <KunCard class-name="w-full">
+          <p class="font-medium">内容已就绪</p>
+          <p class="text-foreground-muted text-sm">loaded 为 true 时渲染默认插槽。</p>
+        </KunCard>
+      </KunSkeleton>
+    </div>
   </div>
 </template>

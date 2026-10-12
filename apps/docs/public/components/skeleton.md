@@ -8,7 +8,7 @@
 
 ```vue
 <template>
-  <div class="flex w-full max-w-sm flex-col gap-3">
+  <div class="flex w-full max-w-sm flex-col">
     <KunSkeleton variant="text" width="60%" />
     <KunSkeleton variant="text" />
     <KunSkeleton variant="text" width="80%" />
@@ -22,9 +22,9 @@
 <template>
   <div class="flex w-full max-w-sm items-center gap-4">
     <KunSkeleton variant="circle" height="3rem" />
-    <div class="flex flex-1 flex-col gap-2">
+    <div class="flex flex-1 flex-col">
       <KunSkeleton variant="text" width="40%" />
-      <KunSkeleton variant="text" width="70%" />
+      <KunSkeleton variant="text" width="70%" class-name="text-sm" />
     </div>
     <KunSkeleton variant="rect" width="5rem" height="3rem" />
   </div>
@@ -44,12 +44,14 @@ const loaded = ref(false)
     <KunButton size="sm" @click="loaded = !loaded">
       {{ loaded ? '重新加载' : '完成加载' }}
     </KunButton>
-    <KunSkeleton :loaded="loaded" variant="rect" height="4rem">
-      <KunCard class-name="w-full">
-        <p class="font-medium">内容已就绪</p>
-        <p class="text-foreground-muted text-sm">loaded 为 true 时渲染默认插槽。</p>
-      </KunCard>
-    </KunSkeleton>
+    <div class="w-full" aria-live="polite" :aria-busy="!loaded">
+      <KunSkeleton :loaded="loaded" variant="rect" height="4rem">
+        <KunCard class-name="w-full">
+          <p class="font-medium">内容已就绪</p>
+          <p class="text-foreground-muted text-sm">loaded 为 true 时渲染默认插槽。</p>
+        </KunCard>
+      </KunSkeleton>
+    </div>
   </div>
 </template>
 ```
@@ -60,10 +62,10 @@ const loaded = ref(false)
 | --- | --- | --- | --- |
 | `animation` | `"none" \| "pulse"` | `"pulse"` | Pulse animation (auto-disabled under prefers-reduced-motion); `none` to turn off. |
 | `className` | `string` | `""` |  |
-| `height` | `string` | `""` | CSS height. Defaults: text 1em, rect 1.25rem, circle 2.5rem. |
+| `height` | `string` | `""` | CSS height. Defaults: text one line box (`1lh`) with a `1em` bar centred in it, rect 1.25rem, circle 2.5rem. An explicit height on `text` is the bar's own height, with no line box around it. |
 | `loaded` | `boolean` | `false` | When true, render the default slot (real content) instead of the placeholder. |
 | `rounded` | `KunUIRounded` | — |  |
-| `variant` | `"text" \| "circle" \| "rect"` | `"rect"` | Shape preset: `rect` block, `text` line, or `circle` (avatar). |
+| `variant` | `"text" \| "circle" \| "rect"` | `"rect"` | Shape preset: `rect` block, `text` line, or `circle` (avatar). A `text` placeholder is one line box of the font it inherits, so give it the text classes of the content it stands in for (`class-name="text-sm"`) and stack the lines of one paragraph without a gap. |
 | `width` | `string` | `""` | CSS width. Defaults: rect/text 100%, circle = height. |
 
 ## Slots

@@ -148,8 +148,8 @@ watch(open, async (isOpen) => {
         <p class="text-default-600 text-sm">{{ stats.followers }} 位关注者</p>
       </template>
       <template v-else>
-        <KunSkeleton variant="text" width="60%" />
-        <KunSkeleton variant="text" width="40%" />
+        <KunSkeleton variant="text" width="60%" class-name="text-sm" />
+        <KunSkeleton variant="text" width="40%" class-name="text-sm" />
       </template>
     </div>
   </KunHoverCard>

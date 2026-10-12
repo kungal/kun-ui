@@ -1914,11 +1914,16 @@ export interface KunLoliProps {
 
 // ── Skeleton ───────────────────────────────────────────────────────────
 export interface KunSkeletonProps {
-  /** Shape preset: `rect` block, `text` line, or `circle` (avatar). */
+  /** Shape preset: `rect` block, `text` line, or `circle` (avatar). A `text`
+   *  placeholder is one line box of the font it inherits, so give it the text
+   *  classes of the content it stands in for (`class-name="text-sm"`) and stack
+   *  the lines of one paragraph without a gap. */
   variant?: 'rect' | 'text' | 'circle'
   /** CSS width. Defaults: rect/text 100%, circle = height. */
   width?: string
-  /** CSS height. Defaults: text 1em, rect 1.25rem, circle 2.5rem. */
+  /** CSS height. Defaults: text one line box (`1lh`) with a `1em` bar centred
+   *  in it, rect 1.25rem, circle 2.5rem. An explicit height on `text` is the
+   *  bar's own height, with no line box around it. */
   height?: string
   rounded?: KunUIRounded
   /** When true, render the default slot (real content) instead of the placeholder. */

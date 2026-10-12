@@ -184,11 +184,10 @@ onLazyChange(lazyTab.value)
              dim the skeleton). The dim is only for revalidating existing content. -->
         <div
           v-if="lazyState[item.value]!.data === null"
-          class="flex flex-col gap-2"
+          class="flex flex-col gap-3 text-sm"
         >
           <KunSkeleton variant="text" width="70%" />
-          <KunSkeleton variant="text" />
-          <KunSkeleton variant="text" width="40%" />
+          <KunSkeleton width="5.5rem" height="2.1rem" />
         </div>
         <div v-else class="text-default-600 flex flex-col gap-3 text-sm">
           <p>{{ lazyState[item.value]!.data }}</p>
