@@ -135,7 +135,8 @@ const reload = () => (key.value += 1)
 import { ref } from 'vue'
 
 // ThumbHash 是一段 ~25 字节的紧凑哈希,通常由后端随图片元数据一起下发。
-// KunImage 在客户端把它解码成一张极小的图,放大成「模糊占位」,真实图片加载完成后淡出。
+// SSR 时 KunImage 只输出它的平均色;挂载后在客户端解码成一张极小的图,放大成「模糊占位」,
+// 真实图片加载完成后淡出。
 // (这串 base64 即 banner.webp 的 ThumbHash。)
 const thumbhash = 'eBeCA4AmyAaYeIcLy20KVwg3inaCelc='
 
@@ -302,7 +303,7 @@ const img = `data:image/svg+xml;utf8,${encodeURIComponent(
 | `quality` | `string \| number` | — | Compression quality passed to |
 | `sizes` | `string` | — | Responsive `sizes` hint for |
 | `skeleton` | `boolean` | `true` | Renders a sibling skeleton overlay while loading (Radix-Avatar 3-state machine). Default true; set false for a bare element. |
-| `thumbhash` | `string` | — | A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image loads, then cross-faded out. Decoded to a tiny image on the client; falls back to the pulse skeleton until decoded (or if the hash is invalid). Implies the wrapper even with `skeleton: false`. |
+| `thumbhash` | `string` | — | A ThumbHash (base64) → a placeholder shown until the image loads, then cross-faded out. Server-rendered HTML carries only the hash's average colour; after mount the client decodes the blurred preview and fades it in over that colour, skipping it when the image is already loaded. An invalid hash falls back to the pulse skeleton. Implies the wrapper even with `skeleton: false`. |
 | `width` | `string \| number` | — | Intrinsic width. Set it together with `height` so the browser reserves the box and the page does not shift as the image arrives. |
 
 ## Events

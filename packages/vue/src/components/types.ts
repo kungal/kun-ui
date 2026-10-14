@@ -468,10 +468,11 @@ export interface KunImageProps {
    * 3-state machine). Default true; set false for a bare element.
    */
   skeleton?: boolean
-  /** A ThumbHash (base64) → a blurred "blur-up" placeholder shown until the image
-   *  loads, then cross-faded out. Decoded to a tiny image on the client; falls back
-   *  to the pulse skeleton until decoded (or if the hash is invalid). Implies the
-   *  wrapper even with `skeleton: false`. */
+  /** A ThumbHash (base64) → a placeholder shown until the image loads, then
+   *  cross-faded out. Server-rendered HTML carries only the hash's average colour;
+   *  after mount the client decodes the blurred preview and fades it in over that
+   *  colour, skipping it when the image is already loaded. An invalid hash falls
+   *  back to the pulse skeleton. Implies the wrapper even with `skeleton: false`. */
   thumbhash?: string
   /**
    * CSS aspect-ratio on the wrapper, e.g. "16 / 9". When set the image

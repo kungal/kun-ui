@@ -39,7 +39,8 @@ import meta from '~/generated/component-meta.json'
     <p class="text-foreground-muted mb-2 text-sm">
       传入 <code class="text-primary">thumbhash</code>(后端随图片元数据下发的 ~25 字节 base64),
       加载前即显示解码出的模糊占位、加载完成后淡出——比纯骨架屏更贴近最终画面,且零额外网络请求。
-      解码器仅在用到时才按需加载,客户端解码、SSR 安全。
+      SSR 的 HTML 里只有这串哈希的平均色(一个纯色背景,约 20 字节),模糊图在挂载后由客户端解码并淡入;
+      挂载时图片已从缓存加载完成的,则不解码。
     </p>
     <Demo title="BlurUp.vue" :source="BlurUpSrc"><BlurUp /></Demo>
 

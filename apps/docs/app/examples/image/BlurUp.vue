@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 
 // ThumbHash 是一段 ~25 字节的紧凑哈希,通常由后端随图片元数据一起下发。
-// KunImage 在客户端把它解码成一张极小的图,放大成「模糊占位」,真实图片加载完成后淡出。
+// SSR 时 KunImage 只输出它的平均色;挂载后在客户端解码成一张极小的图,放大成「模糊占位」,
+// 真实图片加载完成后淡出。
 // (这串 base64 即 banner.webp 的 ThumbHash。)
 const thumbhash = 'eBeCA4AmyAaYeIcLy20KVwg3inaCelc='
 

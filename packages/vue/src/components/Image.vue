@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, watch, type ComponentPublicInstance } from 'vue'
-import { thumbHashToDataURL } from 'thumbhash'
+import {
+  computed,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+  type ComponentPublicInstance,
+} from 'vue'
+import { thumbHashToAverageRGBA, thumbHashToDataURL } from 'thumbhash'
 import { cn } from '@kungal/ui-core'
 import { useImageLoadingStatus } from '../composables/useImageLoadingStatus'
 import { useKunUIConfig } from '../config/useKunUIConfig'
@@ -183,31 +190,44 @@ const wrapperStyle = computed(() =>
   props.aspectRatio ? { aspectRatio: props.aspectRatio } : undefined
 )
 
-// ── ThumbHash blur-up placeholder ────────────────────────────────────────────
-// Decode the (base64) ThumbHash to a tiny data-URL image, upscaled by `bg-cover`
-// into a smooth blurred placeholder shown until the real image loads. Invalid
-// hash → no blur (the pulse skeleton covers it).
-//
-// Decoded during render, NOT in onMounted, so the blur is part of the SSR
-// markup and is in the very first paint — which is the entire point of shipping
-// a ThumbHash: a meaningful placeholder with zero extra requests. Deferring it
-// to mount meant SSR painted a grey pulse skeleton first and the blur only
-// appeared after hydration, i.e. exactly when it was least needed.
-//
-// This is safe despite the usual "no DOM work during render" instinct:
-// thumbhash's `rgbaToDataURL` hand-assembles the PNG bytes and only needs
-// `atob`/`btoa` — no canvas, no document — so it runs identically on the server
-// and the client, and hydration matches. (An earlier comment here claimed a
-// canvas was involved; it is not.)
-const decodeThumb = (hash?: string): string | null => {
-  if (!hash) return null
+// SSR paints only the hash's average colour; the blur is decoded on the client.
+// Decoding during render put the blur in the first paint, but each one is a
+// ~3.3 KB base64 PNG that compression cannot shrink: on kungal /galgame/4 the
+// 39 of them were 80 KB of a 142 KB brotli page.
+const thumbBytes = computed(() => {
+  if (!props.thumbhash) return null
   try {
-    return thumbHashToDataURL(Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)))
+    return Uint8Array.from(atob(props.thumbhash), (c) => c.charCodeAt(0))
   } catch {
     return null
   }
-}
-const thumbUrl = computed(() => decodeThumb(props.thumbhash))
+})
+
+const thumbColor = computed(() => {
+  if (!thumbBytes.value) return null
+  const { r, g, b, a } = thumbHashToAverageRGBA(thumbBytes.value)
+  const rgb = [r, g, b].map((c) => Math.round(c * 255)).join(' ')
+  return a < 1 ? `rgb(${rgb} / ${a.toFixed(2)})` : `rgb(${rgb})`
+})
+
+// An image that came out of cache never shows its placeholder, so its blur is
+// never decoded.
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
+const blurHash = ref<string>()
+watchEffect(() => {
+  if (mounted.value && status.value === 'loading') blurHash.value = props.thumbhash
+})
+const blurUrl = computed(() => {
+  if (!thumbBytes.value || blurHash.value !== props.thumbhash) return null
+  try {
+    return thumbHashToDataURL(thumbBytes.value)
+  } catch {
+    return null
+  }
+})
 
 // The placeholder stays under the image until the image has faded in, and
 // only then fades itself: removed the moment the image loaded, it left the
@@ -247,15 +267,19 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
     "
     :style="wrapperStyle"
   >
-    <!-- ThumbHash blur-up: the decoded placeholder, upscaled by bg-cover. Until
-         it decodes the pulse skeleton below shows. -->
     <div
-      v-if="thumbUrl"
+      v-if="thumbColor"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 bg-cover bg-center"
+      class="pointer-events-none absolute inset-0"
       :class="placeholderClass"
-      :style="{ backgroundImage: `url(${thumbUrl})`, ...placeholderStyle }"
-    />
+      :style="{ backgroundColor: thumbColor, ...placeholderStyle }"
+    >
+      <div
+        v-if="blurUrl"
+        class="kun-image-blur absolute inset-0 bg-cover bg-center"
+        :style="{ backgroundImage: `url(${blurUrl})` }"
+      />
+    </div>
     <!-- Sibling skeleton layer: animates the OVERLAY (not the painted image)
          and sits behind transparent PNGs. -->
     <div
@@ -288,3 +312,19 @@ const wrap = computed(() => props.skeleton || !!props.thumbhash)
     />
   </div>
 </template>
+
+<style scoped>
+.kun-image-blur {
+  animation: kun-image-blur-in var(--kun-dur-slow) var(--ease-kun-out);
+}
+@keyframes kun-image-blur-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kun-image-blur {
+    animation: none;
+  }
+}
+</style>
