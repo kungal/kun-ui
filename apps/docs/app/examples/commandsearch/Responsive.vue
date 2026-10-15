@@ -6,10 +6,10 @@ import type { KunCommandItem } from '@kungal/ui-vue'
 // icon button below it. Breakpoint classes pick which one is on screen, so the
 // server renders the right one for every width.
 const PAGES: KunCommandItem[] = [
-  { value: 'senren', label: '千恋＊万花', description: 'ゆずソフト · 2016', icon: 'lucide:book-open' },
-  { value: 'sabbat', label: '魔女的夜宴', description: 'ゆずソフト · 2015', icon: 'lucide:book-open' },
-  { value: 'pockets', label: 'Summer Pockets', description: 'Key · 2018', icon: 'lucide:book-open' },
-  { value: 'sakura', label: '樱之诗', description: '枕 · 2015', icon: 'lucide:book-open' },
+  { value: 'senren', label: '千恋＊万花', description: 'ゆずソフト · 2016', icon: 'lucide:image' },
+  { value: 'sabbat', label: '魔女的夜宴', description: 'ゆずソフト · 2015', icon: 'lucide:image' },
+  { value: 'pockets', label: 'Summer Pockets', description: 'Key · 2018', icon: 'lucide:image' },
+  { value: 'sakura', label: '樱之诗', description: '枕 · 2015', icon: 'lucide:image' },
 ]
 
 const query = ref('')

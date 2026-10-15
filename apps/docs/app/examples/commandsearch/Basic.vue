@@ -27,14 +27,33 @@ const query = ref('')
 const recents = ref(['千恋万花', 'Summer Pockets 汉化', 'ゆずソフト'])
 const last = ref('—')
 
-// The app owns the debounce and the request; the field only renders. Loading is
-// set at once so the field shows its spinner during the debounce too.
+// The app owns the debounce and the request; the field only renders. 200 ms is
+// the debounce Algolia recommends ("delays of over 300 ms will start degrading
+// the user experience"); FAKE_LATENCY_MS stands in for the network round trip.
+// Loading is set at once so the field shows its spinner during the debounce too.
+const DEBOUNCE_MS = 200
+const FAKE_LATENCY_MS = 250
 const loading = ref(false)
 const results = ref<KunCommandGroup<Row>[]>([])
 let timer: ReturnType<typeof setTimeout> | undefined
 
 const match = (q: string, rows: { label: string; description: string }[]) =>
   rows.filter((r) => `${r.label} ${r.description}`.toLowerCase().includes(q))
+
+const runSearch = (q: string) => {
+  const groups: [string, Kind, string, { label: string; description: string }[]][] = [
+    ['话题', 'topic', 'lucide:reply', match(q, TOPICS)],
+    ['Galgame', 'galgame', 'lucide:image', match(q, GALGAMES)],
+    ['用户', 'user', 'lucide:at-sign', match(q, USERS)],
+  ]
+  results.value = groups
+    .filter(([, , , hits]) => hits.length)
+    .map(([label, kind, icon, hits]) => ({
+      label: `${label} · ${hits.length}`,
+      items: hits.slice(0, 3).map((h) => ({ ...h, kind, icon, value: `${kind}:${h.label}` })),
+    }))
+  loading.value = false
+}
 
 watch(query, (raw) => {
   clearTimeout(timer)
@@ -46,19 +65,8 @@ watch(query, (raw) => {
   }
   loading.value = true
   timer = setTimeout(() => {
-    const groups: [string, Kind, string, { label: string; description: string }[]][] = [
-      ['话题', 'topic', 'lucide:messages-square', match(q, TOPICS)],
-      ['Galgame', 'galgame', 'lucide:book-open', match(q, GALGAMES)],
-      ['用户', 'user', 'lucide:at-sign', match(q, USERS)],
-    ]
-    results.value = groups
-      .filter(([, , , hits]) => hits.length)
-      .map(([label, kind, icon, hits]) => ({
-        label: `${label} · ${hits.length}`,
-        items: hits.slice(0, 3).map((h) => ({ ...h, kind, icon, value: `${kind}:${h.label}` })),
-      }))
-    loading.value = false
-  }, 450)
+    timer = setTimeout(() => runSearch(q), FAKE_LATENCY_MS)
+  }, DEBOUNCE_MS)
 })
 onBeforeUnmount(() => clearTimeout(timer))
 
