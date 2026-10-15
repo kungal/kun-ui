@@ -626,6 +626,8 @@ class KunCommandPaletteStrings {
     required this.hintOpen,
     required this.hintClose,
     required String resultCount,
+    required this.remove,
+    required this.clear,
   }) : _resultCount = resultCount;
 
   /// `en`: Search…
@@ -651,6 +653,12 @@ class KunCommandPaletteStrings {
 
   /// `en`: Close
   final String hintClose;
+
+  /// `en`: Remove
+  final String remove;
+
+  /// `en`: Clear
+  final String clear;
 
   final String _resultCount;
 
@@ -1570,6 +1578,8 @@ class KunMessages {
       hintOpen: '打开',
       hintClose: '关闭',
       resultCount: '{count} 条结果',
+      remove: '移除',
+      clear: '清除',
     ),
     copy: KunCopyStrings(
       copied: '已复制',
@@ -1868,6 +1878,8 @@ class KunMessages {
       hintOpen: 'Open',
       hintClose: 'Close',
       resultCount: '{count} results',
+      remove: 'Remove',
+      clear: 'Clear',
     ),
     copy: KunCopyStrings(
       copied: 'Copied',

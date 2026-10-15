@@ -129,7 +129,7 @@ export interface KunMessages {
    *  `many` takes `{name}` and `{count}`, the number of others. */
   chatTyping: { typing: string; one: string; several: string; many: string }
   chip: { remove: string }
-  /** `resultCount` takes `{count}`. */
+  /** `resultCount` takes `{count}`. KunCommandSearch reads these too. */
   commandPalette: {
     placeholder: string
     empty: string
@@ -140,6 +140,8 @@ export interface KunMessages {
     hintOpen: string
     hintClose: string
     resultCount: string
+    remove: string
+    clear: string
   }
   /** `success` / `failure` take `{text}`, the copied string. */
   copy: { copied: string; success: string; failure: string }

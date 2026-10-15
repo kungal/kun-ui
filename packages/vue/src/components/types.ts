@@ -2048,6 +2048,10 @@ export interface KunCommandItem {
   /** Render as a real crawlable link (`@select` still fires). */
   href?: string
   disabled?: boolean
+  /** Show a remove button on the row (a recent search, say) and let Shift+Delete
+   *  remove the highlighted row; both emit `@remove`. The shell removes nothing
+   *  itself: drop the item from `items`. */
+  removable?: boolean
 }
 
 export interface KunCommandGroup<T extends KunCommandItem = KunCommandItem> {
@@ -2081,6 +2085,46 @@ export interface KunCommandPaletteProps<
   highlight?: boolean
   /** Accessible name for the dialog. */
   ariaLabel?: string
+}
+export interface KunCommandSearchProps<
+  T extends KunCommandItem = KunCommandItem,
+> {
+  /** Results to show under the field: a flat item list (one unlabelled group) OR
+   *  grouped, the same shape KunCommandPalette takes. With an empty `query`
+   *  these are what focus shows (recent searches, say). You compute them from
+   *  `v-model:query`; the field does no matching itself. */
+  items?: readonly T[] | readonly KunCommandGroup<T>[]
+  /** Async search in flight: the field's search icon becomes a spinner. With no
+   *  rows to show, the panel shows a loading state instead of the no-result
+   *  text; rows already showing stay until new ones arrive, so the list does not
+   *  blink on every keystroke. */
+  loading?: boolean
+  /** Placeholder in the field; also its accessible name when `ariaLabel` is
+   *  unset.
+   *  @default locale commandPalette.placeholder */
+  placeholder?: string
+  /** Shown when `query` is non-empty but there are no results.
+   *  @default locale commandPalette.noResult */
+  noResultText?: string
+  /** Shortcut that focuses the field from anywhere. `true` (default) = ⌘K /
+   *  Ctrl-K; a single-char string sets a custom key (still with meta/ctrl);
+   *  `false` disables it. A hidden field ignores it, so a KunCommandPalette
+   *  shown in its place on narrow screens takes the same shortcut. */
+  shortcut?: boolean | string
+  /** Highlight the query terms in the default item render. */
+  highlight?: boolean
+  /** Field size. */
+  size?: KunUISize
+  /** Corner radius of the field; the panel follows it.
+   *  @default the KunUI config `rounded` */
+  rounded?: KunUIRounded
+  /** Upper bound on the panel's height in px. The panel is also never taller
+   *  than the room below the field. */
+  maxHeight?: number
+  /** Accessible name for the field. */
+  ariaLabel?: string
+  /** Classes for the root wrapper: give it the field's width here. */
+  className?: string
 }
 
 // The KunChat* components take the NextMoe `/v2/chat` JSON as it comes (types

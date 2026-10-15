@@ -30,6 +30,7 @@ import KunCheckBox from './components/CheckBox.vue'
 import KunCheckBoxGroup from './components/CheckBoxGroup.vue'
 import KunChip from './components/Chip.vue'
 import KunCommandPalette from './components/CommandPalette.vue'
+import KunCommandSearch from './components/CommandSearch.vue'
 import KunContent from './components/Content.vue'
 import KunContextMenu from './components/ContextMenu.vue'
 import KunDatePicker from './components/DatePicker.vue'
@@ -121,6 +122,7 @@ export {
   KunCheckBoxGroup,
   KunChip,
   KunCommandPalette,
+  KunCommandSearch,
   KunContent,
   KunContextMenu,
   KunCopy,
@@ -362,6 +364,7 @@ const components: Record<KunComponentName, Component> = {
   KunCheckBoxGroup,
   KunChip,
   KunCommandPalette,
+  KunCommandSearch,
   KunContent,
   KunContextMenu,
   KunCopy,

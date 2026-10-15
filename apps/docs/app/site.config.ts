@@ -79,6 +79,7 @@ export const pageMeta: Record<string, PageMeta> = {
   '/components/checkboxgroup': { title: 'CheckboxGroup', cn: '复选框组', description: '数组 v-model 的多选表单字段:classic / pill / card 三种外观,可设数量上限并在被拦下时发出 invalid。' },
   '/components/chip': { title: 'Chip', cn: '胶囊', description: '小巧的标签 / 胶囊,支持颜色、变体与尺寸。' },
   '/components/commandpalette': { title: 'CommandPalette', cn: '命令面板', description: '通用 ⌘K 命令面板外壳:触发器 + 快捷键、弹层、键盘导航、分组与高亮。搜索逻辑由你提供(v-model:query → items),库负责交互与无障碍。' },
+  '/components/commandsearch': { title: 'CommandSearch', cn: '顶栏搜索', description: '常驻的搜索框,聚焦时在下方展开分组结果:最近搜索、搜索建议、回车前往搜索页。和 CommandPalette 共用条目与渲染,但没有对话框,焦点始终留在输入框。' },
   '/components/content': { title: 'Content', cn: '内容', description: '渲染可信 HTML(支持剧透与内联图片灯箱)。不做 sanitize —— 不可信 HTML 请自行处理。' },
   '/components/contextmenu': { title: 'ContextMenu', cn: '右键菜单', description: '在指定坐标打开的菜单,例如右键菜单。' },
   '/components/copy': { title: 'Copy', cn: '复制', description: '一键复制到剪贴板,带成功反馈。' },

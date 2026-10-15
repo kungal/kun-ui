@@ -120,6 +120,7 @@ const components = [
   ['KunChatTyping', 'Chat', 'Three-dot typing indicator + "X is typing…"; takes raw typing events and expires each after 6 s (useKunChatTyping).'],
   ['KunContextMenu', 'Navigation & overlays', 'Right-click context menu (same items array as KunDropdown: separators, `shortcut`, one level of `children`).'],
   ['KunCommandPalette', 'Navigation & overlays', 'Command-palette SHELL (v-model:open + ⌘K/Ctrl-K, v-model:query): dialog, keyboard nav, grouped rendering, match highlighting, a11y. It does NOT search — YOU compute `items` (flat, or KunCommandGroup[]) from `query`; picking one emits @select.'],
+  ['KunCommandSearch', 'Navigation & overlays', 'Top-bar search FIELD (v-model:query): always visible, opens a panel of the same KunCommandItem rows under it on focus (recent searches when empty, grouped results while typing). Nothing is highlighted by default: Enter emits @submit(query) for the full search page; arrow onto a row + Enter (or click) emits @select. `removable` rows emit @remove. No dialog, no focus trap. Below md pair it with KunCommandPalette via breakpoint classes. It does NOT search — YOU compute `items` from `query`.'],
   ['KunPagination', 'Navigation & overlays', 'Page navigation (v-model:current-page, total-page) with quick-jump.'],
   ['KunLightbox', 'Navigation & overlays', 'Image lightbox/viewer (v-model:is-open, images array).'],
   ['KunLightboxGallery', 'Navigation & overlays', 'Gallery wrapper; click an item to open the lightbox.'],

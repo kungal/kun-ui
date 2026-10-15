@@ -348,8 +348,13 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   // Stand down for the same reason while a popup opened from inside this modal
   // is on screen — its own Escape handler is about to close it, and both
   // running took the modal down with the popover in one press.
+  //
+  // And for a keystroke a field inside already used: KunCommandSearch clears
+  // its text on Escape, KunChatComposer cancels its reply bar, and both took
+  // the modal down on the same press.
   if (
     e.key === 'Escape' &&
+    !e.defaultPrevented &&
     modelValue.value &&
     isTopmost.value &&
     isEscapeDismissable.value &&

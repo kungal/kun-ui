@@ -43,6 +43,14 @@ import meta from '~/generated/component-meta.json'
     </p>
     <Demo title="Submit.vue" :source="SubmitSrc"><Submit /></Demo>
 
+    <h2 class="mt-8 mb-1 text-xl font-semibold">可移除的条目(removable)</h2>
+    <p class="text-foreground-muted mb-2 text-sm">
+      条目带 <code>removable</code>(例如最近搜索)时行尾显示移除按钮;键盘上按 <kbd>Shift</kbd>+<kbd>Delete</kbd>
+      移除当前高亮行,高亮停在补位的那一行。两者都触发 <code>@remove</code>,由你把它从 <code>items</code> 里删掉。
+      要一个常驻在顶栏、聚焦即展开的搜索框,用
+      <NuxtLink to="/components/commandsearch" class="text-primary">KunCommandSearch</NuxtLink>,它和本组件共用条目与渲染。
+    </p>
+
     <h2 class="mt-10 mb-1 text-xl font-semibold">属性</h2>
     <PropsTable :rows="meta.KunCommandPalette.props" />
 

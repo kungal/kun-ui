@@ -83,6 +83,7 @@ const componentCategories: { title: string; slugs: string[] }[] = [
       'dropdown',
       'contextmenu',
       'commandpalette',
+      'commandsearch',
       'lightbox',
     ],
   },

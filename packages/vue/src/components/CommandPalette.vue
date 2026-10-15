@@ -9,7 +9,6 @@ import {
   watch,
 } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import { cn } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { warnTopLayerConflict } from '../utils/warnTopLayerConflict'
@@ -17,12 +16,10 @@ import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { useKunShortcutPlatform } from '../composables/useKunShortcutPlatform'
 import { isImeComposing } from '../utils/imeComposition'
 import KunIcon from './Icon.vue'
+import KunCommandResults from './CommandResults.vue'
 import { useKunLocale } from '../locale/useKunLocale'
-import type {
-  KunCommandGroup,
-  KunCommandItem,
-  KunCommandPaletteProps,
-} from './types'
+import { commandItemKey, createCommandHighlighter, toCommandRows } from '../utils/commandItems'
+import type { KunCommandItem, KunCommandPaletteProps } from './types'
 
 // The generic ⌘K command-palette SHELL. It owns the dialog, query input,
 // keyboard nav, grouped rendering, highlighting and a11y — NOT the search: you
@@ -51,6 +48,10 @@ const emit = defineEmits<{
    * still selects it; put an action row first if you want one that is visible.
    */
   submit: [query: string]
+
+  /** The remove button or Shift+Delete on a `removable` row. Drop the item from
+   *  `items`; the highlight stays on the row that takes its place. */
+  remove: [item: T]
 }>()
 
 const resolvedPlaceholder = computed(
@@ -68,22 +69,7 @@ const overlayRef = ref<HTMLElement | null>(null)
 useKunFloatingLayer(overlayRef)
 const activeIndex = ref(0)
 
-// ── normalise `items` (flat OR grouped) → groups, then a flat list that carries
-//    each item's GLOBAL index (for roving focus + aria-activedescendant) ──────
-const groups = computed<KunCommandGroup<T>[]>(() => {
-  const raw = props.items ?? []
-  if (!raw.length) return []
-  return 'items' in (raw[0] as object)
-    ? (raw as readonly KunCommandGroup<T>[]).slice()
-    : [{ items: raw as readonly T[] }]
-})
-const rows = computed(() => {
-  let i = 0
-  return groups.value.map((g) => ({
-    label: g.label,
-    items: g.items.map((item) => ({ item, index: i++ })),
-  }))
-})
+const rows = computed(() => toCommandRows<T>(props.items))
 const flat = computed(() => rows.value.flatMap((r) => r.items))
 const hasResults = computed(() => flat.value.length > 0)
 const activeId = computed(() =>
@@ -94,9 +80,25 @@ const firstEnabled = () => {
   const i = flat.value.findIndex((r) => !r.item.disabled)
   return i === -1 ? 0 : i
 }
-watch(flat, () => {
+let removed: { key: string | number; index: number } | null = null
+watch(query, () => {
+  removed = null
+})
+watch(flat, (list) => {
+  const r = removed
+  removed = null
+  if (r && list.length && !list.some((row) => commandItemKey(row.item) === r.key)) {
+    const i = Math.min(r.index, list.length - 1)
+    activeIndex.value = list[i]!.item.disabled ? firstEnabled() : i
+    return
+  }
   activeIndex.value = firstEnabled()
 })
+const removeItem = (item: T, index: number) => {
+  if (item.disabled) return
+  removed = { key: commandItemKey(item), index }
+  emit('remove', item)
+}
 
 // ── keyboard ────────────────────────────────────────────────────────────────
 const scrollActiveIntoView = () => {
@@ -161,6 +163,14 @@ const onInputKeydown = (e: KeyboardEvent) => {
       e.preventDefault()
       close()
       break
+    case 'Delete': {
+      const row = flat.value[activeIndex.value]
+      if (e.shiftKey && row?.item.removable) {
+        e.preventDefault()
+        removeItem(row.item, row.index)
+      }
+      break
+    }
   }
 }
 
@@ -230,6 +240,8 @@ const shortcutLabel = computed(() => {
   return `${platform.value === 'apple' ? '⌘' : 'Ctrl '}${k.toUpperCase()}`
 })
 const onGlobalKeydown = (e: KeyboardEvent) => {
+  // A visible KunCommandSearch answers the same shortcut first (capture phase).
+  if (e.defaultPrevented) return
   const k = shortcutKey.value
   if (k && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === k) {
     e.preventDefault()
@@ -239,29 +251,7 @@ const onGlobalKeydown = (e: KeyboardEvent) => {
 onMounted(() => window.addEventListener('keydown', onGlobalKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown))
 
-// ── safe match highlighting (split on terms → escape each piece → wrap) ──────
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const escapeHtml = (s: string) =>
-  s.replace(
-    /[&<>"]/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string
-  )
-const terms = computed(() =>
-  query.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
-)
-const highlight = (text: string): string => {
-  const valid = props.highlight ? terms.value.map(escapeRegExp).filter(Boolean) : []
-  if (!valid.length) return escapeHtml(text)
-  const re = new RegExp(`(${valid.join('|')})`, 'gi')
-  return text
-    .split(re)
-    .map((part, i) =>
-      i % 2
-        ? `<mark class="bg-primary/20 text-foreground rounded-sm px-0.5">${escapeHtml(part)}</mark>`
-        : escapeHtml(part)
-    )
-    .join('')
-}
+const highlight = computed(() => createCommandHighlighter(query.value, props.highlight))
 
 defineExpose({ open, close, toggle })
 </script>
@@ -331,69 +321,19 @@ defineExpose({ open, close, toggle })
             </template>
 
             <template v-else-if="hasResults">
-              <div v-for="(group, gi) in rows" :key="gi" class="mb-1 last:mb-0">
-                <div
-                  v-if="group.label"
-                  class="text-foreground-muted px-3 pt-2 pb-1 text-xs font-medium"
-                >
-                  {{ group.label }}
-                </div>
-                <component
-                  :is="row.item.href ? 'a' : 'button'"
-                  v-for="row in group.items"
-                  :id="`${uid}-opt-${row.index}`"
-                  :key="row.item.value ?? row.item.label"
-                  :href="row.item.href || undefined"
-                  :type="row.item.href ? undefined : 'button'"
-                  role="option"
-                  :data-active="row.index === activeIndex"
-                  :aria-selected="row.index === activeIndex"
-                  :aria-disabled="row.item.disabled || undefined"
-                  :class="
-                    cn(
-                      'flex w-full cursor-pointer items-center gap-3 rounded-kun-md px-3 py-2 text-left transition-colors',
-                      row.index === activeIndex
-                        ? 'bg-primary/10'
-                        : 'hover:bg-default-100',
-                      row.item.disabled && 'pointer-events-none opacity-50'
-                    )
-                  "
-                  @click="selectItem(row.item)"
-                  @mousemove="!row.item.disabled && (activeIndex = row.index)"
-                >
-                  <slot
-                    name="item"
-                    :item="row.item"
-                    :active="row.index === activeIndex"
-                    :index="row.index"
-                    :highlight="highlight"
-                  >
-                    <KunIcon
-                      v-if="row.item.icon"
-                      :name="row.item.icon"
-                      class="text-default-500 shrink-0"
-                    />
-                    <span class="min-w-0 flex-1">
-                      <span
-                        v-if="row.item.section"
-                        class="text-foreground-muted mb-0.5 block text-xs"
-                        >{{ row.item.section }}</span
-                      >
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span
-                        class="text-foreground block truncate text-sm font-medium"
-                        v-html="highlight(row.item.label)"
-                      />
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span
-                        v-if="row.item.description"
-                        class="text-foreground-muted mt-0.5 block truncate text-xs"
-                        v-html="highlight(row.item.description)"
-                      />
-                    </span>
-                  </slot>
-                </component>
-              </div>
+              <KunCommandResults
+                :rows="rows"
+                :active-index="activeIndex"
+                :uid="uid"
+                :highlight="highlight"
+                @select="selectItem"
+                @hover="(i) => (activeIndex = i)"
+                @remove="removeItem"
+              >
+                <template v-if="$slots.item" #item="{ item, active, index, highlight: hl }">
+                  <slot name="item" :item="item" :active="active" :index="index" :highlight="hl" />
+                </template>
+              </KunCommandResults>
             </template>
 
             <template v-else>

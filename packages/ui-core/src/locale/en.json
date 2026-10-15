@@ -139,7 +139,9 @@
       "hintSelect": "Select",
       "hintOpen": "Open",
       "hintClose": "Close",
-      "resultCount": "{count} results"
+      "resultCount": "{count} results",
+      "remove": "Remove",
+      "clear": "Clear"
     },
     "copy": {
       "copied": "Copied",

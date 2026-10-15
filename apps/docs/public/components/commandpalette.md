@@ -219,6 +219,7 @@ const onSubmit = (q: string) => {
 
 | 事件 | 回调参数 | 说明 |
 | --- | --- | --- |
+| `remove` | `item: KunCommandItem` | The remove button or Shift+Delete on a `removable` row. Drop the item from `items`; the highlight stays on the row that takes its place. |
 | `select` | `item: KunCommandItem` | The item the user activated. A disabled item never emits. |
 | `submit` | `query: string` | Enter with nothing to select — no results, or every result disabled. The shell has no search of its own, so this is the only way a consumer can act on the raw query ("search the whole site for …"). Enter over a real result still selects it; put an action row first if you want one that is visible. |
 | `update:open` | `value: boolean` |  |

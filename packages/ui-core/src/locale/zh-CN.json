@@ -139,7 +139,9 @@
       "hintSelect": "选择",
       "hintOpen": "打开",
       "hintClose": "关闭",
-      "resultCount": "{count} 条结果"
+      "resultCount": "{count} 条结果",
+      "remove": "移除",
+      "clear": "清除"
     },
     "copy": {
       "copied": "已复制",

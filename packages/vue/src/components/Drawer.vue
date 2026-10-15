@@ -239,9 +239,11 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   // only while no close watcher is live — Escape is a close request, so running
   // both handlers closes two layers at once (see useKunCloseRequest). A popup
   // opened from inside the drawer stands it down for the same reason (see
-  // useKunFloatingLayer).
+  // useKunFloatingLayer). Nor for an Escape a field inside already used (see
+  // KunModal).
   if (
     e.key === 'Escape' &&
+    !e.defaultPrevented &&
     modelValue.value &&
     isTopmost.value &&
     !isWatchingCloseRequests.value &&

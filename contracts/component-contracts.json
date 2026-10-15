@@ -2338,6 +2338,11 @@
       "webOnlyProps": {},
       "events": [
         {
+          "name": "remove",
+          "type": "item: KunCommandItem",
+          "description": "The remove button or Shift+Delete on a `removable` row. Drop the item from `items`; the highlight stays on the row that takes its place."
+        },
+        {
           "name": "select",
           "type": "item: KunCommandItem",
           "description": "The item the user activated. A disabled item never emits."
@@ -2380,6 +2385,143 @@
         {
           "name": "trigger",
           "type": "{ open: () => void; shortcut: string; keys: string; }"
+        }
+      ]
+    },
+    "KunCommandSearch": {
+      "status": "portable",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Accessible name for the field."
+        },
+        {
+          "name": "highlight",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "description": "Highlight the query terms in the default item render."
+        },
+        {
+          "name": "items",
+          "type": "readonly KunCommandItem[] | readonly KunCommandGroup<KunCommandItem>[]",
+          "required": false,
+          "default": "[]",
+          "description": "Results to show under the field: a flat item list (one unlabelled group) OR grouped, the same shape KunCommandPalette takes. With an empty `query` these are what focus shows (recent searches, say). You compute them from `v-model:query`; the field does no matching itself."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Async search in flight: the field's search icon becomes a spinner. With no rows to show, the panel shows a loading state instead of the no-result text; rows already showing stay until new ones arrive, so the list does not blink on every keystroke."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "required": false,
+          "default": "420",
+          "description": "Upper bound on the panel's height in px. The panel is also never taller than the room below the field."
+        },
+        {
+          "name": "noResultText",
+          "type": "string",
+          "required": false,
+          "default": "locale commandPalette.noResult",
+          "description": "Shown when `query` is non-empty but there are no results.",
+          "defaultFrom": {
+            "locale": [
+              "commandPalette.noResult"
+            ]
+          }
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "default": "locale commandPalette.placeholder",
+          "description": "Placeholder in the field; also its accessible name when `ariaLabel` is unset.",
+          "defaultFrom": {
+            "locale": [
+              "commandPalette.placeholder"
+            ]
+          }
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "required": false,
+          "default": "\"\""
+        },
+        {
+          "name": "rounded",
+          "type": "KunUIRounded",
+          "required": false,
+          "default": "the KunUI config `rounded`",
+          "description": "Corner radius of the field; the panel follows it."
+        },
+        {
+          "name": "shortcut",
+          "type": "string | boolean",
+          "required": false,
+          "default": "true",
+          "description": "Shortcut that focuses the field from anywhere. `true` (default) = ⌘K / Ctrl-K; a single-char string sets a custom key (still with meta/ctrl); `false` disables it. A hidden field ignores it, so a KunCommandPalette shown in its place on narrow screens takes the same shortcut."
+        },
+        {
+          "name": "size",
+          "type": "KunUISize",
+          "required": false,
+          "default": "\"md\"",
+          "description": "Field size."
+        }
+      ],
+      "webOnlyProps": {
+        "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters."
+      },
+      "events": [
+        {
+          "name": "remove",
+          "type": "item: KunCommandItem",
+          "description": "The remove button or Shift+Delete on a `removable` row. Drop the item from `items`; the highlight stays on the row that takes its place."
+        },
+        {
+          "name": "select",
+          "type": "item: KunCommandItem",
+          "description": "The row the user clicked, or highlighted with the arrow keys and confirmed with Enter. A disabled row never emits."
+        },
+        {
+          "name": "submit",
+          "type": "query: string",
+          "description": "Enter with no row highlighted, carrying the trimmed query: the way to the full search page. Nothing is highlighted until an arrow key moves onto a row, so Enter after typing always lands here."
+        },
+        {
+          "name": "update:query",
+          "type": "value: string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "empty",
+          "type": "{}"
+        },
+        {
+          "name": "footer",
+          "type": "{}"
+        },
+        {
+          "name": "item",
+          "type": "{ item: KunCommandItem; active: boolean; index: number; highlight: (text: string) => string; }"
+        },
+        {
+          "name": "loading",
+          "type": "{}"
+        },
+        {
+          "name": "no-result",
+          "type": "{ query: string; }"
         }
       ]
     },
