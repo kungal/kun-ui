@@ -33,7 +33,7 @@
     "@changesets/cli": "^2.31.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24.22.1"
   },
   "packageManager": "pnpm@10.28.2"
 }

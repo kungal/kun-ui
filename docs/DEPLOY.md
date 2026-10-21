@@ -8,7 +8,7 @@ via its built-in Traefik (auto-HTTPS).** The production server never builds.
 - **Domain:** `ui.kungal.com`
 - **Port:** `6757` (dev *and* prod — never 3000)
 - **Image:** `ghcr.io/kungal/kun-ui-docs:latest` (+ a `:<git-sha>` tag)
-- **Runtime:** Nuxt 4 Nitro node-server (`node:24-trixie-slim`, self-contained `.output`)
+- **Runtime:** Nuxt 4 Nitro node-server (`node:24.22.1-trixie-slim`, self-contained `.output`)
 
 ```
 push to main ─► GitHub Actions (docs-image.yml) build ─► push GHCR
