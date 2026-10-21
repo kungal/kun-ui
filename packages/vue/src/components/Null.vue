@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import KunImageNative from './ImageNative.vue'
 import { KUN_NULL_IMAGE } from '../assets/nullImage'
 import { useKunLocale } from '../locale/useKunLocale'
@@ -12,10 +13,21 @@ defineOptions({ name: 'KunNull' })
 
 const { t } = useKunLocale()
 
-withDefaults(defineProps<KunNullProps>(), {
+const props = withDefaults(defineProps<KunNullProps>(), {
   isShowSticker: true,
-  src: KUN_NULL_IMAGE,
 })
+
+// The bundled sticker's box is reserved before it decodes: with `w-72 h-auto`
+// alone the <img> is 0px tall until then, and its growth to 192px measured
+// CLS 0.12–0.16 on a letmoe profile page. Resolved here, not as a
+// withDefaults default, because telling the default apart from a consumer's
+// src then takes a second reference to KUN_NULL_IMAGE, and the bundler
+// inlined a second 30 KB copy of the data URI for it.
+const sticker = computed(() =>
+  props.src === undefined
+    ? { src: KUN_NULL_IMAGE, style: { aspectRatio: 'auto 500 / 333' } }
+    : { src: props.src, style: undefined }
+)
 </script>
 
 <template>
@@ -24,7 +36,8 @@ withDefaults(defineProps<KunNullProps>(), {
          announced an English "empty" before it in every locale. -->
     <KunImageNative
       v-if="isShowSticker"
-      :src="src"
+      :src="sticker.src"
+      :style="sticker.style"
       class-name="w-72 h-auto rounded-kun-lg"
       alt=""
     />

@@ -37,7 +37,7 @@
 | --- | --- | --- | --- |
 | `description` | `string` | `locale null.description` | The empty-state line. |
 | `isShowSticker` | `boolean` | `true` | Show the empty-state image. Default true. |
-| `src` | `string` | `KUN_NULL_IMAGE` | The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request). Pass any URL or data URI to override. |
+| `src` | `string` | `KUN_NULL_IMAGE` | The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request), whose box is reserved before it decodes. Pass any URL or data URI to override. |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/null

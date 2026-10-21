@@ -58,7 +58,7 @@ const loading = ref(true)
 | `loading` | `boolean` | `false` |  |
 | `size` | `KunUISize` | `"md"` | Spinner size (spinner mode only). Default 'md'. |
 | `spinner` | `boolean` | `false` | Render a compact spinner icon instead of the full mascot image — for small inline loading states (next to a button, a table cell, etc.). |
-| `src` | `string` | `KUN_LOADING_IMAGE` | Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed). Pass any URL or data URI to override. |
+| `src` | `string` | `KUN_LOADING_IMAGE` | Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed), whose box is reserved before it decodes. Pass any URL or data URI to override. |
 
 ## Slots
 

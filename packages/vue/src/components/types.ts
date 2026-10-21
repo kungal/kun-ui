@@ -699,8 +699,9 @@ export interface KunLoadingProps {
    *  @default locale loading.description */
   description?: string
   /** Image shown while loading. Defaults to a bundled mascot (base64 data
-   *  URI — no network request, no consumer asset needed). Pass any URL or
-   *  data URI to override. */
+   *  URI — no network request, no consumer asset needed), whose box is
+   *  reserved before it decodes. Pass any URL or data URI to override.
+   *  @default KUN_LOADING_IMAGE */
   src?: string
   /**
    * Render a compact spinner icon instead of the full mascot image — for
@@ -1471,7 +1472,9 @@ export interface KunNullProps {
   /** Show the empty-state image. Default true. */
   isShowSticker?: boolean
   /** The empty-state image. Defaults to a bundled mascot (base64 data URI —
-   *  no network/CDN request). Pass any URL or data URI to override. */
+   *  no network/CDN request), whose box is reserved before it decodes. Pass
+   *  any URL or data URI to override.
+   *  @default KUN_NULL_IMAGE */
   src?: string
 }
 

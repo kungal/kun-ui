@@ -20,10 +20,18 @@ const { t } = useKunLocale()
 
 const props = withDefaults(defineProps<KunLoadingProps>(), {
   loading: false,
-  src: KUN_LOADING_IMAGE,
   spinner: false,
   size: 'md',
 })
+
+// Reserved and resolved as KunNull's sticker is, for the same two reasons:
+// unreserved, the mascot is 0px tall until it decodes and then pushes the
+// text below it down by 213px.
+const image = computed(() =>
+  props.src === undefined
+    ? { src: KUN_LOADING_IMAGE, style: { aspectRatio: 'auto 500 / 333' } }
+    : { src: props.src, style: undefined }
+)
 
 const slots = useSlots()
 const isWrapperMode = computed(() => !!slots.default)
@@ -68,7 +76,8 @@ const spinnerSize: Record<KunUISize, string> = {
               v-else
               alt=""
               aria-hidden="true"
-              :src="src"
+              :src="image.src"
+              :style="image.style"
               class-name="w-80 h-auto rounded-kun-md"
             />
             <span :class="spinner ? 'text-default-600 text-sm' : 'info text-xl'">
@@ -96,7 +105,8 @@ const spinnerSize: Record<KunUISize, string> = {
         v-else
         alt=""
         aria-hidden="true"
-        :src="src"
+        :src="image.src"
+        :style="image.style"
         class-name="w-80 h-auto rounded-kun-md"
       />
       <span :class="spinner ? 'text-default-600 text-sm' : 'info'">{{ description ?? t('loading.description') }}</span>

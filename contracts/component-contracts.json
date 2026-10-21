@@ -3748,7 +3748,7 @@
           "type": "string",
           "required": false,
           "default": "KUN_LOADING_IMAGE",
-          "description": "Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed). Pass any URL or data URI to override."
+          "description": "Image shown while loading. Defaults to a bundled mascot (base64 data URI — no network request, no consumer asset needed), whose box is reserved before it decodes. Pass any URL or data URI to override."
         }
       ],
       "webOnlyProps": {},
@@ -4002,7 +4002,7 @@
           "type": "string",
           "required": false,
           "default": "KUN_NULL_IMAGE",
-          "description": "The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request). Pass any URL or data URI to override."
+          "description": "The empty-state image. Defaults to a bundled mascot (base64 data URI — no network/CDN request), whose box is reserved before it decodes. Pass any URL or data URI to override."
         }
       ],
       "webOnlyProps": {},
