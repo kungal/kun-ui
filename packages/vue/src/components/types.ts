@@ -1515,6 +1515,12 @@ export interface KunScrollShadowProps {
    *  alternative to an overlay-scrollbar library); `auto` shows the platform
    *  default. */
   scrollbar?: 'hide' | 'thin' | 'auto'
+  /** When `axis='horizontal'`, float a chevron button on each edge that can
+   *  still scroll — the same control KunTab shows on an overflowing strip. A
+   *  click scrolls ~80% of the viewport. Use it where the edge shadow alone
+   *  doesn't tell users the strip scrolls (narrow screens, toolbars). Ignored
+   *  for `axis='vertical'`. Default false. */
+  scrollButtons?: boolean
 }
 
 // ── Pagination ─────────────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { useScroll, useElementSize, useEventListener } from '@vueuse/core'
 import { cn } from '@kungal/ui-core'
 import { wheelDeltaPx } from '../utils/wheelDeltaPx'
+import KunScrollEdgeButton from './ScrollEdgeButton.vue'
 import type { KunScrollShadowProps } from './types'
 
 // Edge fade-out shadows that appear when content is scrolled off either end of a
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<KunScrollShadowProps>(), {
   wheel: false,
   draggable: false,
   scrollbar: 'hide',
+  scrollButtons: false,
 })
 
 const scrollContainer = ref<HTMLElement | null>(null)
@@ -166,6 +168,10 @@ useEventListener(dragTarget, 'pointercancel', endDrag)
 useEventListener(dragTarget, 'dragstart', onDragStart)
 useEventListener(dragTarget, 'click', onClickCapture, { capture: true })
 
+const showButtons = computed(
+  () => props.scrollButtons && props.axis === 'horizontal'
+)
+
 // ── shadow presentation ──────────────────────────────────────────────────────
 const startShadowClasses = computed(() =>
   props.axis === 'horizontal' ? 'left-0 top-0 bottom-0' : 'top-0 left-0 right-0'
@@ -248,6 +254,17 @@ const shadowStyles = computed(() => {
         )
       "
       :style="shadowStyles.end"
+    />
+
+    <KunScrollEdgeButton
+      v-if="showButtons && showStartShadow"
+      side="left"
+      :target="scrollContainer"
+    />
+    <KunScrollEdgeButton
+      v-if="showButtons && showEndShadow"
+      side="right"
+      :target="scrollContainer"
     />
   </div>
 </template>

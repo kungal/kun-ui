@@ -4960,6 +4960,13 @@
         "description": "Scrollbar style. `hide` (default) hides it — the edge shadows are the affordance; `thin` shows a slim, theme-coloured scrollbar (a dependency-free alternative to an overlay-scrollbar library); `auto` shows the platform default."
       },
       {
+        "name": "scrollButtons",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "When `axis='horizontal'`, float a chevron button on each edge that can still scroll — the same control KunTab shows on an overflowing strip. A click scrolls ~80% of the viewport. Use it where the edge shadow alone doesn't tell users the strip scrolls (narrow screens, toolbars). Ignored for `axis='vertical'`. Default false."
+      },
+      {
         "name": "shadowColor",
         "type": "string",
         "required": false,

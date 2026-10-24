@@ -5,6 +5,8 @@ import Vertical from '~/examples/scrollshadow/Vertical.vue'
 import VerticalSrc from '~/examples/scrollshadow/Vertical.vue?raw'
 import Interactive from '~/examples/scrollshadow/Interactive.vue'
 import InteractiveSrc from '~/examples/scrollshadow/Interactive.vue?raw'
+import Buttons from '~/examples/scrollshadow/Buttons.vue'
+import ButtonsSrc from '~/examples/scrollshadow/Buttons.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -33,6 +35,14 @@ import meta from '~/generated/component-meta.json'
       滚动条样式由 <code class="text-primary">scrollbar</code> 控制:<code>hide</code>(默认,仅靠边缘阴影)、
       <code>thin</code>(本例所用,细的、跟随主题色的滚动条,纯 CSS 零依赖)、<code>auto</code>(平台原生)。
     </p>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">翻页按钮(横向)</h2>
+    <p class="text-foreground-muted mb-2 text-sm">
+      边缘阴影不足以提示「还能滚」时(窄屏、工具栏),开启
+      <code class="text-primary">scroll-buttons</code>:可滚动的一侧浮出与 KunTab 相同的箭头按钮,点击翻过约 80% 的宽度。
+      内容在挂载后变宽(例如动态插入按钮)也会自动出现。箭头是冗余的辅助入口,不进入 Tab 顺序与无障碍树。
+    </p>
+    <Demo title="Buttons.vue" :source="ButtonsSrc"><Buttons /></Demo>
 
     <p class="text-foreground-muted mt-6 text-sm">
       建议为可滚动区域设置 <code class="text-primary">aria-label</code>，以便屏幕阅读器识别该区域。

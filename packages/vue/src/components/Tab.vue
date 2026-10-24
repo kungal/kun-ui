@@ -18,6 +18,7 @@ import {
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import { kunTabId, kunTabPanelId } from '../composables/tabPanelsContext'
 import KunIcon from './Icon.vue'
+import KunScrollEdgeButton from './ScrollEdgeButton.vue'
 import type { KunTabItem, KunTabColor, KunTabSize, KunTabProps } from './types'
 
 // Nuxt-decoupled Tab. Two coupling points fixed:
@@ -196,17 +197,6 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Chevron scrolls ~80% of the viewport — a page-turn that leaves one tab of
-// overlap for context.
-const scrollByStep = (dir: 1 | -1) => {
-  const vp = scrollRef.value
-  if (!vp) return
-  vp.scrollBy({
-    left: dir * vp.clientWidth * 0.8,
-    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-  })
-}
-
 // Keep the active tab inside the viewport, padded so it never hides under the
 // fade / chevron. Called on selection change, mount and item changes.
 const SCROLL_PAD = 44
@@ -250,14 +240,6 @@ const maskStyle = computed(() => {
   const gradient = `linear-gradient(to right, ${stops.join(', ')})`
   return { maskImage: gradient, WebkitMaskImage: gradient }
 })
-
-const scrollBtnClasses = (side: 'left' | 'right') =>
-  cn(
-    'absolute top-1/2 z-20 inline-flex size-7 -translate-y-1/2 items-center justify-center',
-    'rounded-full border border-kun bg-background/80 text-default-600 shadow-kun-sm backdrop-blur-sm',
-    'opacity-80 transition-[color,opacity] hover:text-foreground hover:opacity-100',
-    side === 'left' ? 'left-0.5' : 'right-0.5'
-  )
 
 const focusTab = (idx: number) => {
   const el = tabRefs.value[idx]
@@ -669,18 +651,11 @@ const indicatorMergedStyle = computed(() => {
 
 <template>
   <div :class="rootClasses">
-    <!-- Left chevron — a redundant affordance (arrow keys / swipe also scroll),
-         so it's hidden from the a11y tree and the tab order. -->
-    <button
+    <KunScrollEdgeButton
       v-if="showButtons && canScrollLeft"
-      type="button"
-      tabindex="-1"
-      aria-hidden="true"
-      :class="scrollBtnClasses('left')"
-      @click="scrollByStep(-1)"
-    >
-      <KunIcon name="lucide:chevron-left" />
-    </button>
+      side="left"
+      :target="scrollRef"
+    />
 
     <div
       ref="scrollRef"
@@ -726,16 +701,10 @@ const indicatorMergedStyle = computed(() => {
       </div>
     </div>
 
-    <!-- Right chevron -->
-    <button
+    <KunScrollEdgeButton
       v-if="showButtons && canScrollRight"
-      type="button"
-      tabindex="-1"
-      aria-hidden="true"
-      :class="scrollBtnClasses('right')"
-      @click="scrollByStep(1)"
-    >
-      <KunIcon name="lucide:chevron-right" />
-    </button>
+      side="right"
+      :target="scrollRef"
+    />
   </div>
 </template>
