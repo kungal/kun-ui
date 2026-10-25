@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, onUnmounted, reactive, ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
+import { thumbHashToApproximateAspectRatio, thumbHashToDataURL } from 'thumbhash'
 import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 import { wheelDeltaPx } from '../utils/wheelDeltaPx'
 import { hasModifierKey } from '../utils/hasModifierKey'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
-import type { KunLightboxProps } from './types'
+import type { KunLightboxImage, KunLightboxProps } from './types'
 
 // Modern <dialog>-based image viewer (focus trap / ESC / inert / ::backdrop
 // from the browser; we own scroll-lock, ←/→ nav, backdrop-click close, and
@@ -32,6 +33,14 @@ const props = defineProps<KunLightboxProps>()
 
 const emit = defineEmits<{
   'update:isOpen': [value: boolean]
+  /** A veiled image was revealed; `index` is its position in `images`. */
+  reveal: [index: number]
+}>()
+
+defineSlots<{
+  /** Drawn over a veiled image, above its thumbhash. Call `reveal` to load
+   *  and show the picture. Defaults to a "Show image" button. */
+  veil?(props: { index: number; image: KunLightboxImage; reveal: () => void }): unknown
 }>()
 
 const MIN_SCALE = 1
@@ -73,6 +82,55 @@ const thumbsRef = ref<HTMLElement | null>(null)
 const currentImage = computed(() => props.images[currentIndex.value]?.src || '')
 const currentAlt = computed(() => props.images[currentIndex.value]?.alt || '')
 
+interface Placeholder {
+  url: string
+  ratio: number
+  maxWidth?: number
+}
+
+const decodePlaceholder = (img: KunLightboxImage): Placeholder | null => {
+  if (!img.thumbhash) return null
+  try {
+    const bytes = Uint8Array.from(atob(img.thumbhash), (c) => c.charCodeAt(0))
+    const sized = !!img.width && !!img.height && img.width > 0 && img.height > 0
+    return {
+      url: thumbHashToDataURL(bytes),
+      ratio: sized ? img.width! / img.height! : thumbHashToApproximateAspectRatio(bytes),
+      maxWidth: sized ? img.width : undefined,
+    }
+  } catch {
+    return null
+  }
+}
+
+const placeholders = computed(() => props.images.map(decodePlaceholder))
+const currentPlaceholder = computed(() => placeholders.value[currentIndex.value] ?? null)
+
+// The image is `max-h-full max-w-full` of the slide, so the placeholder takes
+// the same box: contain-fit, never past the intrinsic width.
+const placeholderFrame = (p: Placeholder) => ({
+  width: p.maxWidth
+    ? `min(100cqw, calc(100cqh * ${p.ratio}), ${p.maxWidth}px)`
+    : `min(100cqw, calc(100cqh * ${p.ratio}))`,
+  aspectRatio: `${p.ratio}`,
+  backgroundImage: `url("${p.url}")`,
+  backgroundSize: '100% 100%',
+})
+
+const loadedSrcs = reactive(new Set<string>())
+const onImageLoad = (src: string) => {
+  loadedSrcs.add(src)
+}
+
+const revealed = reactive(new Set<number>())
+const isVeiled = (i: number) => !!props.images[i]?.veiled && !revealed.has(i)
+const currentVeiled = computed(() => isVeiled(currentIndex.value))
+const reveal = (i: number) => {
+  if (!isVeiled(i)) return
+  revealed.add(i)
+  emit('reveal', i)
+}
+
 const transformStyle = computed(() => ({
   transform: `translate3d(${position.x}px, ${position.y}px, 0) scale(${scale.value}) rotate(${rotation.value}deg)`,
   transition:
@@ -87,6 +145,7 @@ const resetTransform = () => {
 }
 
 const zoomIn = () => {
+  if (currentVeiled.value) return
   const next = Math.min(MAX_SCALE, scale.value + ZOOM_STEP)
   if (next === scale.value) return
   scale.value = next
@@ -95,6 +154,7 @@ const zoomIn = () => {
   position.y = c.y
 }
 const zoomOut = () => {
+  if (currentVeiled.value) return
   const next = Math.max(MIN_SCALE, scale.value - ZOOM_STEP)
   if (next === scale.value) return
   scale.value = next
@@ -104,9 +164,11 @@ const zoomOut = () => {
 }
 
 const rotateRight = () => {
+  if (currentVeiled.value) return
   rotation.value += 90
 }
 const rotateLeft = () => {
+  if (currentVeiled.value) return
   rotation.value -= 90
 }
 
@@ -131,6 +193,7 @@ watch(
     if (!dlg) return
     if (open && !dlg.open) {
       resetTransform()
+      revealed.clear()
       withViewTransition(() => dlg.showModal())
       if (!locked) {
         lock()
@@ -217,6 +280,7 @@ const constrainPosition = (x: number, y: number) => {
 
 const handleWheel = (e: WheelEvent) => {
   e.preventDefault()
+  if (currentVeiled.value) return
   const delta = -e.deltaY
   const zoomFactor = 0.2
   const newScale = scale.value + (delta > 0 ? zoomFactor : -zoomFactor)
@@ -290,6 +354,7 @@ const stopDrag = (e: MouseEvent | TouchEvent) => {
 }
 
 const handleDoubleClickAt = (clientX: number, clientY: number) => {
+  if (currentVeiled.value) return
   const rect = containerRef.value?.getBoundingClientRect()
   if (!rect) return
   if (scale.value > MIN_SCALE) {
@@ -354,6 +419,7 @@ const handleTouchStart = (e: TouchEvent) => {
 const handleTouchMove = (e: TouchEvent) => {
   lastTouchTime = Date.now()
   if (e.touches.length >= 2 && isPinching.value) {
+    if (currentVeiled.value) return
     const [t1, t2] = [e.touches[0]!, e.touches[1]!]
     const currentDistance = Math.hypot(
       t2.clientX - t1.clientX,
@@ -433,7 +499,7 @@ const onTouchEnd = (e: TouchEvent) => {
 // Image download with CORS-aware fallback (open in new tab when blocked).
 const downloadImage = async () => {
   const url = currentImage.value
-  if (!url) return
+  if (!url || currentVeiled.value) return
   const filename = url.split('/').pop() || 'image'
 
   try {
@@ -573,16 +639,60 @@ onUnmounted(() => {
           <div
             :key="currentIndex"
             class="kun-lightbox-slide absolute inset-0 flex items-center justify-center"
+            style="container-type: size"
           >
+            <!-- A veiled image renders no <img> at all: the src must not be
+                 requested until the reader asks for it. -->
             <img
+              v-if="!currentVeiled"
               ref="imageRef"
               :src="currentImage"
               :alt="currentAlt"
               class="kun-lightbox-image max-h-full max-w-full will-change-transform"
+              :class="currentPlaceholder && !loadedSrcs.has(currentImage) && 'opacity-0'"
               :style="transformStyle"
               draggable="false"
+              @load="onImageLoad(currentImage)"
               @click.stop
             />
+            <div
+              v-if="currentPlaceholder && (currentVeiled || !loadedSrcs.has(currentImage))"
+              class="pointer-events-none absolute inset-0 flex items-center justify-center"
+              aria-hidden="true"
+            >
+              <div :style="[placeholderFrame(currentPlaceholder), transformStyle]" />
+            </div>
+            <div
+              v-if="currentVeiled"
+              class="pointer-events-none absolute inset-0 flex items-center justify-center"
+            >
+              <div
+                class="pointer-events-auto"
+                @click.stop
+                @mousedown.stop
+                @touchstart.stop
+                @dblclick.stop
+              >
+                <slot
+                  name="veil"
+                  :index="currentIndex"
+                  :image="images[currentIndex]!"
+                  :reveal="() => reveal(currentIndex)"
+                >
+                  <KunButton
+                    color="default"
+                    variant="light"
+                    size="lg"
+                    rounded="lg"
+                    class-name="bg-black/70 backdrop-blur-md border border-white/10 shadow-lg text-white"
+                    @click="reveal(currentIndex)"
+                  >
+                    <KunIcon name="lucide:eye" class="text-white" />
+                    {{ t('lightbox.reveal') }}
+                  </KunButton>
+                </slot>
+              </div>
+            </div>
           </div>
         </Transition>
       </div>
@@ -663,13 +773,27 @@ onUnmounted(() => {
                  gallery from fetching all of them to fill the strip: measured
                  in Chrome 151, a 100-image strip fetches 26 on open. -->
             <img
+              v-if="!isVeiled(i)"
               :src="img.src"
               :alt="img.alt ?? ''"
               class="size-12 object-cover md:size-14"
+              :style="
+                placeholders[i]
+                  ? { backgroundImage: `url(&quot;${placeholders[i]!.url}&quot;)`, backgroundSize: 'cover' }
+                  : undefined
+              "
               draggable="false"
               loading="lazy"
               decoding="async"
             />
+            <img
+              v-else-if="placeholders[i]"
+              :src="placeholders[i]!.url"
+              :alt="img.alt ?? ''"
+              class="size-12 object-cover md:size-14"
+              draggable="false"
+            />
+            <span v-else class="block size-12 bg-white/10 md:size-14" />
           </button>
         </div>
 
@@ -677,27 +801,27 @@ onUnmounted(() => {
           class="kun-lightbox-toolbar pointer-events-auto flex items-center gap-1 rounded-full border border-white/10 bg-black/70 px-2 py-1.5 shadow-lg backdrop-blur-md"
           @click.stop
         >
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomOut')" @click="zoomOut">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomOut')" :disabled="currentVeiled" @click="zoomOut">
             <KunIcon name="lucide:zoom-out" class="text-white" />
           </KunButton>
           <span class="min-w-[3.5rem] text-center text-sm font-medium tabular-nums text-white" aria-live="polite">
             {{ zoomPercent }}%
           </span>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomIn')" @click="zoomIn">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.zoomIn')" :disabled="currentVeiled" @click="zoomIn">
             <KunIcon name="lucide:zoom-in" class="text-white" />
           </KunButton>
           <span class="mx-1 h-5 w-px bg-default-200/30" aria-hidden="true" />
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateLeft')" @click="rotateLeft">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateLeft')" :disabled="currentVeiled" @click="rotateLeft">
             <KunIcon name="lucide:rotate-ccw" class="text-white" />
           </KunButton>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateRight')" @click="rotateRight">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.rotateRight')" :disabled="currentVeiled" @click="rotateRight">
             <KunIcon name="lucide:rotate-cw" class="text-white" />
           </KunButton>
           <span class="mx-1 h-5 w-px bg-default-200/30" aria-hidden="true" />
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.reset')" @click="resetTransform">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.reset')" :disabled="currentVeiled" @click="resetTransform">
             <KunIcon name="lucide:refresh-ccw" class="text-white" />
           </KunButton>
-          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.download')" @click="downloadImage">
+          <KunButton :is-icon-only="true" color="default" variant="light" size="lg" rounded="full" :aria-label="t('lightbox.download')" :disabled="currentVeiled" @click="downloadImage">
             <KunIcon name="lucide:download" class="text-white" />
           </KunButton>
         </div>

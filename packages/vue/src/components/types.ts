@@ -1542,6 +1542,23 @@ export interface KunPaginationProps {
 export interface KunLightboxImage {
   src: string
   alt?: string
+  /** A ThumbHash (base64), drawn in the image's own frame until `src` has
+   *  loaded, and as the thumbnail and preview of a veiled image. An invalid
+   *  hash draws nothing. */
+  thumbhash?: string
+  /** Intrinsic width in px. With `height`, the placeholder takes the image's
+   *  shape and size before it decodes; without them it takes the hash's
+   *  approximate aspect ratio and fills the viewer. */
+  width?: number
+  /** Intrinsic height in px. See `width`. */
+  height?: number
+  /** Withhold the picture until the reader asks for it. While veiled, `src`
+   *  is never requested, neither for the stage nor for the thumbnail: the
+   *  viewer draws the thumbhash and the `veil` slot over it, and zoom,
+   *  rotation, pan and download are off. Paging and closing still work.
+   *  `reveal` lifts it until the viewer closes; to keep it lifted, set
+   *  `veiled: false` from the `reveal` event. */
+  veiled?: boolean
 }
 
 export interface KunLightboxProps {

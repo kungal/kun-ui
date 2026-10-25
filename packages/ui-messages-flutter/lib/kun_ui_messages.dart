@@ -939,6 +939,7 @@ class KunLightboxStrings {
     required this.rotateRight,
     required this.reset,
     required this.download,
+    required this.reveal,
   }) : _goto = goto;
 
   /// `en`: Image viewer
@@ -970,6 +971,9 @@ class KunLightboxStrings {
 
   /// `en`: Download
   final String download;
+
+  /// `en`: Show image
+  final String reveal;
 
   final String _goto;
 
@@ -1654,6 +1658,7 @@ class KunMessages {
       rotateRight: '向右旋转 90°',
       reset: '重置缩放/旋转/位置',
       download: '下载',
+      reveal: '显示图片',
     ),
     lightboxGallery: KunLightboxGalleryStrings(
       view: '查看大图',
@@ -1954,6 +1959,7 @@ class KunMessages {
       rotateRight: 'Rotate 90° right',
       reset: 'Reset zoom, rotation and position',
       download: 'Download',
+      reveal: 'Show image',
     ),
     lightboxGallery: KunLightboxGalleryStrings(
       view: 'View full size',

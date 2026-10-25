@@ -215,7 +215,8 @@
       "rotateLeft": "向左旋转 90°",
       "rotateRight": "向右旋转 90°",
       "reset": "重置缩放/旋转/位置",
-      "download": "下载"
+      "download": "下载",
+      "reveal": "显示图片"
     },
     "lightboxGallery": {
       "view": "查看大图"

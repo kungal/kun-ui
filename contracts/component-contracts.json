@@ -3651,11 +3651,22 @@
       "webOnlyProps": {},
       "events": [
         {
+          "name": "reveal",
+          "type": "index: number",
+          "description": "A veiled image was revealed; `index` is its position in `images`."
+        },
+        {
           "name": "update:isOpen",
           "type": "value: boolean"
         }
       ],
-      "slots": []
+      "slots": [
+        {
+          "name": "veil",
+          "type": "{ index: number; image: KunLightboxImage; reveal: () => void; }",
+          "description": "Drawn over a veiled image, above its thumbhash. Call `reveal` to load and show the picture. Defaults to a \"Show image\" button."
+        }
+      ]
     },
     "KunLightboxGallery": {
       "status": "portable",

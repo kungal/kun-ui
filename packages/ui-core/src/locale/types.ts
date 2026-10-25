@@ -175,7 +175,8 @@ export interface KunMessages {
   /** Spoken key names for KunKbd, read in place of a glyph such as ⌘ or ↑;
    *  `then` joins the chords of a sequence. */
   kbd: Record<KunKbdKeyName, string> & { then: string }
-  /** `goto` takes `{index}`, the 1-based image number. */
+  /** `goto` takes `{index}`, the 1-based image number. `reveal` labels the
+   *  default button over a veiled image. */
   lightbox: {
     label: string
     close: string
@@ -188,6 +189,7 @@ export interface KunMessages {
     rotateRight: string
     reset: string
     download: string
+    reveal: string
   }
   lightboxGallery: { view: string }
   loading: { description: string }

@@ -215,7 +215,8 @@
       "rotateLeft": "Rotate 90° left",
       "rotateRight": "Rotate 90° right",
       "reset": "Reset zoom, rotation and position",
-      "download": "Download"
+      "download": "Download",
+      "reveal": "Show image"
     },
     "lightboxGallery": {
       "view": "View full size"

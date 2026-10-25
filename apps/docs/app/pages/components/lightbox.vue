@@ -5,6 +5,8 @@ import Gallery from '~/examples/lightbox/Gallery.vue'
 import GallerySrc from '~/examples/lightbox/Gallery.vue?raw'
 import Standalone from '~/examples/lightbox/Standalone.vue'
 import StandaloneSrc from '~/examples/lightbox/Standalone.vue?raw'
+import Veiled from '~/examples/lightbox/Veiled.vue'
+import VeiledSrc from '~/examples/lightbox/Veiled.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -21,6 +23,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">独立用法</h2>
     <Demo title="Standalone.vue" :source="StandaloneSrc"><Standalone /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">占位与遮罩</h2>
+    <Demo title="Veiled.vue" :source="VeiledSrc"><Veiled /></Demo>
 
     <h2 class="mt-10 mb-1 text-xl font-semibold">KunLightboxGalleryItem 属性</h2>
     <PropsTable :rows="meta.KunLightboxGalleryItem.props" />
