@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.61.1",
+    "type": "patch",
+    "html": "<ul>\n<li><strong>KunTextarea: the character counter no longer covers the last line of text.</strong> With <code>showCharCount</code>, the counter sat over the bottom-right corner of the text area. A long, auto-growing entry ran its last line under it. The textarea now reserves 24px of bottom padding for the counter, so the text stops above it.</li>\n</ul>\n"
+  },
+  {
     "version": "2.61.0",
     "type": "minor",
     "html": "<ul>\n<li><p><strong>KunLightbox: the picture opens inside the backdrop, and thumbnails keep their shape.</strong></p>\n<ul>\n<li>On open, the picture fits within 90% of the viewer on each axis (<code>max-h-[90%] max-w-[90%]</code>), where it used to fill the whole viewer. On a desktop window, a screenshot no longer covers the page edge to edge: the dimmed backdrop stays visible around it, as a frame and as somewhere to click to close. A small picture still stays at its intrinsic size. Zoom starts from this size, and the thumbhash placeholder takes the same frame.</li>\n<li>Thumbnails are as tall as before (<code>h-12</code>, <code>md:h-14</code>) and as wide as their picture, where they used to be square crops. The ratio comes from <code>width</code>/<code>height</code>, else the thumbhash, else 1. It is clamped to between 1:2 and 2:1, so a panorama cannot take over the strip, and anything beyond that is cropped. It is known before the thumbnail loads, so the strip never shifts as pictures arrive.</li>\n</ul>\n<p>Asked by the kungal app.</p>\n</li>\n</ul>\n"
