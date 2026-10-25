@@ -104,14 +104,26 @@ const decodePlaceholder = (img: KunLightboxImage): Placeholder | null => {
 }
 
 const placeholders = computed(() => props.images.map(decodePlaceholder))
+
+// A thumbnail is as tall as the strip and as wide as its picture, so it shows
+// the picture's shape. The ratio is fixed before anything loads, so the strip
+// never shifts as thumbnails arrive; a panorama is held to 2:1.
+const THUMB_RATIO_MIN = 0.5
+const THUMB_RATIO_MAX = 2
+const thumbRatio = (i: number) => {
+  const img = props.images[i]
+  const sized = !!img?.width && !!img?.height && img.width > 0 && img.height > 0
+  const ratio = sized ? img!.width! / img!.height! : (placeholders.value[i]?.ratio ?? 1)
+  return Math.min(THUMB_RATIO_MAX, Math.max(THUMB_RATIO_MIN, ratio))
+}
 const currentPlaceholder = computed(() => placeholders.value[currentIndex.value] ?? null)
 
-// The image is `max-h-full max-w-full` of the slide, so the placeholder takes
-// the same box: contain-fit, never past the intrinsic width.
+// The image is `max-h-[90%] max-w-[90%]` of the slide, so the placeholder
+// takes the same box: contain-fit, never past the intrinsic width.
 const placeholderFrame = (p: Placeholder) => ({
   width: p.maxWidth
-    ? `min(100cqw, calc(100cqh * ${p.ratio}), ${p.maxWidth}px)`
-    : `min(100cqw, calc(100cqh * ${p.ratio}))`,
+    ? `min(90cqw, calc(90cqh * ${p.ratio}), ${p.maxWidth}px)`
+    : `min(90cqw, calc(90cqh * ${p.ratio}))`,
   aspectRatio: `${p.ratio}`,
   backgroundImage: `url("${p.url}")`,
   backgroundSize: '100% 100%',
@@ -648,7 +660,7 @@ onUnmounted(() => {
               ref="imageRef"
               :src="currentImage"
               :alt="currentAlt"
-              class="kun-lightbox-image max-h-full max-w-full will-change-transform"
+              class="kun-lightbox-image max-h-[90%] max-w-[90%] will-change-transform"
               :class="currentPlaceholder && !loadedSrcs.has(currentImage) && 'opacity-0'"
               :style="transformStyle"
               draggable="false"
@@ -782,12 +794,13 @@ onUnmounted(() => {
               v-if="!isVeiled(i)"
               :src="img.src"
               :alt="img.alt ?? ''"
-              class="size-12 object-cover md:size-14"
-              :style="
-                placeholders[i]
+              class="block h-12 object-cover md:h-14"
+              :style="{
+                aspectRatio: `${thumbRatio(i)}`,
+                ...(placeholders[i]
                   ? { backgroundImage: `url(&quot;${placeholders[i]!.url}&quot;)`, backgroundSize: 'cover' }
-                  : undefined
-              "
+                  : {}),
+              }"
               draggable="false"
               loading="lazy"
               decoding="async"
@@ -796,10 +809,15 @@ onUnmounted(() => {
               v-else-if="placeholders[i]"
               :src="placeholders[i]!.url"
               :alt="img.alt ?? ''"
-              class="size-12 object-cover md:size-14"
+              class="block h-12 object-cover md:h-14"
+              :style="{ aspectRatio: `${thumbRatio(i)}` }"
               draggable="false"
             />
-            <span v-else class="block size-12 bg-white/10 md:size-14" />
+            <span
+              v-else
+              class="block h-12 bg-white/10 md:h-14"
+              :style="{ aspectRatio: `${thumbRatio(i)}` }"
+            />
           </button>
         </div>
 

@@ -1547,8 +1547,8 @@ export interface KunLightboxImage {
    *  hash draws nothing. */
   thumbhash?: string
   /** Intrinsic width in px. With `height`, the placeholder takes the image's
-   *  shape and size before it decodes; without them it takes the hash's
-   *  approximate aspect ratio and fills the viewer. */
+   *  shape and size before it decodes, and the thumbnail its shape; without
+   *  them both take the hash's approximate aspect ratio. */
   width?: number
   /** Intrinsic height in px. See `width`. */
   height?: number
