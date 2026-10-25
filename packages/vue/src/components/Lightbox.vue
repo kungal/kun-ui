@@ -660,7 +660,13 @@ onUnmounted(() => {
               class="pointer-events-none absolute inset-0 flex items-center justify-center"
               aria-hidden="true"
             >
-              <div :style="[placeholderFrame(currentPlaceholder), transformStyle]" />
+              <!-- Takes clicks like the image it stands in for: a click on
+                   a veiled preview closed the viewer. -->
+              <div
+                class="pointer-events-auto"
+                :style="[placeholderFrame(currentPlaceholder), transformStyle]"
+                @click.stop
+              />
             </div>
             <div
               v-if="currentVeiled"
