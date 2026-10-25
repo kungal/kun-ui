@@ -140,6 +140,7 @@ defineExpose({
           cn(
             'scrollbar-hide w-full bg-content1 shadow-kun-sm border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
             kunControlSizeClasses[props.size],
+            showCharCount && 'pb-6',
             roundedClass,
             error
               ? cn('border-danger-300', kunFocusRingClasses.danger)
