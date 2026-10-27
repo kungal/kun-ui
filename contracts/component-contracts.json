@@ -5187,6 +5187,47 @@
         }
       ]
     },
+    "KunSkeletonSwap": {
+      "status": "portable",
+      "props": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": true,
+          "description": "True while the region's data is loading. If it is false when the component is created, the default slot renders straight away, with no skeleton and no fade."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "required": false,
+          "default": "150",
+          "description": "ms of loading before the skeleton shows. A load that ends sooner never shows it. While it waits, previous content stays as it is; with no content yet, the skeleton is laid out invisibly, so its arrival does not move the page. A server render and the hydration that follows skip the delay: they cannot wait it out."
+        },
+        {
+          "name": "minDuration",
+          "type": "number",
+          "required": false,
+          "default": "300",
+          "description": "ms a shown skeleton stays before the content replaces it, so it does not flash on and off."
+        }
+      ],
+      "webOnlyProps": {
+        "className": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters."
+      },
+      "events": [],
+      "slots": [
+        {
+          "name": "default",
+          "type": "any",
+          "description": "The real content. Also rendered while a reload waits out `delay`, so it must render from the previous data."
+        },
+        {
+          "name": "skeleton",
+          "type": "any",
+          "description": "The placeholder layout, built from KunSkeleton, in the content's shape."
+        }
+      ]
+    },
     "KunSlider": {
       "status": "portable",
       "props": [

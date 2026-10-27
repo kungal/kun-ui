@@ -76,6 +76,14 @@ export {
 } from './shortcut'
 export { normalizeKunMenuSeparators } from './menu'
 export { resolveKunSplitSize, type KunSplitSizeOptions } from './splitPane'
+export {
+  initialKunSkeletonSwap,
+  nextKunSkeletonSwap,
+  type KunSkeletonSwapState,
+  type KunSkeletonSwapStep,
+  type KunSkeletonSwapTiming,
+  type KunSkeletonSwapView,
+} from './skeletonSwap'
 
 export { randomNum } from './random'
 export { decodeIfEncoded } from './decodeIfEncoded'

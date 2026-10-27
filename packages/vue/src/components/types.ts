@@ -1960,6 +1960,27 @@ export interface KunSkeletonProps {
   className?: string
 }
 
+// ── SkeletonSwap ───────────────────────────────────────────────────────
+export interface KunSkeletonSwapProps {
+  /** True while the region's data is loading. If it is false when the
+   *  component is created, the default slot renders straight away, with no
+   *  skeleton and no fade. */
+  loading: boolean
+  /** ms of loading before the skeleton shows. A load that ends sooner never
+   *  shows it. While it waits, previous content stays as it is; with no
+   *  content yet, the skeleton is laid out invisibly, so its arrival does not
+   *  move the page. A server render and the hydration that follows skip the
+   *  delay: they cannot wait it out. */
+  delay?: number
+  /** ms a shown skeleton stays before the content replaces it, so it does not
+   *  flash on and off. */
+  minDuration?: number
+  /** Classes for the root. Its display is an inline grid that stacks the two
+   *  layers, so a display class has no effect; lay the content out inside the
+   *  slots. */
+  className?: string
+}
+
 // ── Steps ──────────────────────────────────────────────────────────────
 export type KunStepsSize = 'sm' | 'md' | 'lg'
 export interface KunStepItem {

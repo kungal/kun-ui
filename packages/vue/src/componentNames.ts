@@ -87,6 +87,7 @@ export const KUN_COMPONENT_NAMES = [
   'KunSelect',
   'KunShatter',
   'KunSkeleton',
+  'KunSkeletonSwap',
   'KunSlider',
   'KunSplitPane',
   'KunSteps',

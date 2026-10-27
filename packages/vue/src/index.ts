@@ -73,6 +73,7 @@ import KunShatter from './components/Shatter.vue'
 import KunRipple from './components/Ripple.vue'
 import KunScrollShadow from './components/ScrollShadow.vue'
 import KunSkeleton from './components/Skeleton.vue'
+import KunSkeletonSwap from './components/SkeletonSwap.vue'
 import KunSlider from './components/Slider.vue'
 import KunSplitPane from './components/SplitPane.vue'
 import KunSteps from './components/Steps.vue'
@@ -165,6 +166,7 @@ export {
   KunSelect,
   KunShatter,
   KunSkeleton,
+  KunSkeletonSwap,
   KunSlider,
   KunSplitPane,
   KunSteps,
@@ -407,6 +409,7 @@ const components: Record<KunComponentName, Component> = {
   KunSelect,
   KunShatter,
   KunSkeleton,
+  KunSkeletonSwap,
   KunSlider,
   KunSplitPane,
   KunSteps,

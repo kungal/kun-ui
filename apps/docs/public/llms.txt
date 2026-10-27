@@ -1,6 +1,6 @@
 # KunUI
 
-> Cross-framework component library — 88 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 89 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 Packages:
 - @kungal/ui-tokens: Tailwind v4 design tokens (CSS): semantic colors, radius, z-index, animations, dark variant, optional base layer.
@@ -59,6 +59,7 @@ In Nuxt all are auto-imported. In plain Vue import them from @kungal/ui-vue (or 
 - KunAccordion: Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.
 - KunAccordionItem: One accordion section: `value` (required), `title`/`icon` or the `title` slot, `disabled`.
 - KunSkeleton: Loading placeholder (variant text/circle/rect, width/height); set `loaded` to swap in the real content.
+- KunSkeletonSwap: Region-level swap between a skeleton (#skeleton slot) and the content (default slot) on `loading`: the skeleton shows only after `delay` (150 ms) and then stays at least `minDuration` (300 ms); with no content yet it is laid out invisibly while it waits, so its arrival does not move the page. Previous content stays interactive through the delay and fades out inert. `loading` false at creation renders the content directly (SSR, hydration); a loading server render shows the skeleton at once. Root is a real div with aria-busy; layers share one grid cell, no z-index; the crossfade is motion-safe only.
 - KunSteps: Step / progress indicator (items array, `current` index; horizontal or vertical). Bind `v-model:current` to make steps clickable (`linear` keeps clicks backward-only); per-item `disabled` and `status: 'error'`.
 - KunTimeline: Vertical timeline container for KunTimelineItem.
 - KunTimelineItem: One timeline entry (title, time, icon, color + default slot for the body).

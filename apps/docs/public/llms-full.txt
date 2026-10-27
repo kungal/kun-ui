@@ -1,6 +1,6 @@
 # KunUI — full documentation for LLMs
 
-> Cross-framework component library — 88 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
+> Cross-framework component library — 89 Tailwind v4 Vue components, framework-agnostic design tokens + core, with a Nuxt layer. Published on npm under the @kungal scope; the four packages are versioned in lockstep.
 
 This file inlines the integration guide plus a component reference. For the compact index see llms.txt.
 
@@ -46,7 +46,7 @@ version** (lockstep semver — always install matching versions).
 | --- | --- | --- |
 | `@kungal/ui-tokens` | Framework-agnostic Tailwind v4 theme: semantic colors, radius, z-index, animations, optional base layer. **Pure CSS.** | Always (you `@import` it in your stylesheet). |
 | `@kungal/ui-core` | Framework-agnostic TypeScript core: `cn()`, the variant/class matrix, the radius system, the bundled-icon registry, shared types (`KunUIColor`, `KunUser`, …). **No Vue/React.** | Pulled in automatically; you import from it only for icon registration or shared types. |
-| `@kungal/ui-vue` | The Vue 3 component layer (88 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
+| `@kungal/ui-vue` | The Vue 3 component layer (89 components). Works in **any** Vue 3.5+ app. Decoupled from Nuxt. | Plain Vue / Vite apps. |
 | `@kungal/ui-nuxt` | A **Nuxt 4 layer** that wraps `@kungal/ui-vue`: auto-imports all components & composables and injects `NuxtLink` + `@nuxt/icon` + `@nuxt/image`. | Nuxt apps. |
 
 `@kungal/ui-nuxt` depends on `@kungal/ui-vue` + `@kungal/ui-tokens`, and
@@ -738,9 +738,9 @@ three fields. `KunAvatar` navigates to `userLinkTemplate` (§7) on click.
 ---
 
 <!-- AUTO-GENERATED component reference (pnpm gen:llms) — do not edit -->
-## 12. Component reference (88)
+## 12. Component reference (89)
 
-**Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunBanner` · `KunProgress` · `KunBadge` · `KunChip` · `KunKbd` · `KunScrollShadow` · `KunSplitPane` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
+**Layout & display:** `KunCard` · `KunDivider` · `KunHeader` · `KunInfo` · `KunBanner` · `KunProgress` · `KunBadge` · `KunChip` · `KunKbd` · `KunScrollShadow` · `KunSplitPane` · `KunFadeCard` · `KunNull` · `KunAccordion` · `KunAccordionItem` · `KunSkeleton` · `KunSkeletonSwap` · `KunSteps` · `KunTimeline` · `KunTimelineItem`
 
 **Buttons & feedback:** `KunButton` · `KunButtonGroup` · `KunRipple` · `KunLoading` · `KunCopy` · `KunRating` · `KunReaction` · `KunShatter`
 
@@ -816,6 +816,7 @@ when upgrading. Release process: see [`RELEASING.md`](./RELEASING.md).
 - **KunAccordion** — Collapsible sections (v-model string | string[]; `multiple`, variants light/bordered/splitted). Wraps KunAccordionItem.
 - **KunAccordionItem** — One accordion section: `value` (required), `title`/`icon` or the `title` slot, `disabled`.
 - **KunSkeleton** — Loading placeholder (variant text/circle/rect, width/height); set `loaded` to swap in the real content.
+- **KunSkeletonSwap** — Region-level swap between a skeleton (#skeleton slot) and the content (default slot) on `loading`: the skeleton shows only after `delay` (150 ms) and then stays at least `minDuration` (300 ms); with no content yet it is laid out invisibly while it waits, so its arrival does not move the page. Previous content stays interactive through the delay and fades out inert. `loading` false at creation renders the content directly (SSR, hydration); a loading server render shows the skeleton at once. Root is a real div with aria-busy; layers share one grid cell, no z-index; the crossfade is motion-safe only.
 - **KunSteps** — Step / progress indicator (items array, `current` index; horizontal or vertical). Bind `v-model:current` to make steps clickable (`linear` keeps clicks backward-only); per-item `disabled` and `status: 'error'`.
 - **KunTimeline** — Vertical timeline container for KunTimelineItem.
 - **KunTimelineItem** — One timeline entry (title, time, icon, color + default slot for the body).
