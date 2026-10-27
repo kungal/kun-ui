@@ -219,6 +219,13 @@ const scrollActiveIntoView = (smooth = true) => {
 
 const onViewportScroll = () => updateOverflow()
 
+// The indicator is absolutely positioned inside the list, so it counted toward
+// the viewport's scrollWidth. A resize measured it mid-slide at its old, wider
+// spot (scrollWidth 360 against clientWidth 344), showed the chevron, and
+// nothing re-measured once it settled. Clipping the list keeps the indicator
+// out of the overflow, in flight or a rounding pixel past the last tab.
+const listStyle = computed(() => (isVertical.value ? undefined : { overflowX: 'clip' as const }))
+
 // Chevrons show only when the consumer opted in (default) AND that side can
 // scroll. `scrollButtons=false` keeps the fade but drops the buttons.
 const showButtons = computed(
@@ -663,7 +670,7 @@ const indicatorMergedStyle = computed(() => {
       :style="maskStyle"
       @scroll.passive="onViewportScroll"
     >
-      <div ref="listRef" :class="listClasses" v-bind="listA11y">
+      <div ref="listRef" :class="listClasses" :style="listStyle" v-bind="listA11y">
         <div
           v-if="showIndicator"
           aria-hidden="true"
