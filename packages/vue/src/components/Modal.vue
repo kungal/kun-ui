@@ -54,6 +54,8 @@ const props = withDefaults(defineProps<KunModalProps>(), {
   scrollBehavior: 'inside',
   placement: 'auto',
   role: 'dialog',
+  initialFocus: undefined,
+  returnFocus: true,
 })
 
 // An `alertdialog` interrupts the user to demand an answer, and a click that
@@ -242,7 +244,7 @@ const applyInert = (shouldInert: boolean) => {
 
 // Focus trap on the modal container — focus can't escape via Tab/Shift+Tab
 // while open. `escapeDeactivates: false` because Modal owns the Escape
-// handler below. `returnFocusOnDeactivate` restores focus on close.
+// handler below. `returnFocus` decides where focus goes on close.
 //
 // `fallbackFocus` is what lets the backdrop stay OUT of the tab order. focus-trap
 // refuses to activate on a container with no tabbable node, and a modal whose
@@ -270,6 +272,33 @@ const { panels: floatingPanels, hasOpenLayer } =
 const trapContainers = computed(() =>
   trapEl.value ? [trapEl.value, ...floatingPanels.value] : []
 )
+// focus-trap throws when an `initialFocus` or `setReturnFocus` function returns
+// null, and resolves a selector string against the whole document; both are
+// resolved here instead, and `undefined` hands the choice back to focus-trap.
+const resolveInitialFocus = (): HTMLElement | undefined => {
+  const target = props.initialFocus
+  const root = trapEl.value
+  if (typeof target === 'function') return target() ?? undefined
+  if (typeof target === 'string') {
+    const el = root?.querySelector<HTMLElement>(target)
+    if (el) return el
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[KunModal] initialFocus "${target}" matched nothing inside the dialog.`)
+    }
+  } else if (target) return target
+  return root?.querySelector<HTMLElement>('[autofocus]') ?? undefined
+}
+
+// focus-trap records the return target when it activates, after the panel has
+// mounted. A KunInput `autofocus` has focused itself by then, and closing sent
+// focus back to that removed input, so it fell to <body> (measured). The opener
+// is captured before the panel renders instead.
+let opener: HTMLElement | null = null
+const captureOpener = () => {
+  const active = document.activeElement
+  opener = active instanceof HTMLElement && !trapEl.value?.contains(active) ? active : null
+}
+
 const { activate, deactivate } = useFocusTrap(trapContainers, {
   immediate: false,
   escapeDeactivates: false,
@@ -277,7 +306,15 @@ const { activate, deactivate } = useFocusTrap(trapContainers, {
   returnFocusOnDeactivate: true,
   preventScroll: true,
   fallbackFocus: () => panelEl.value ?? (trapEl.value as HTMLElement),
+  initialFocus: resolveInitialFocus,
+  setReturnFocus: (previous) => {
+    const target = props.returnFocus
+    const fallback = opener?.isConnected ? opener : previous
+    if (typeof target === 'function') return target() ?? fallback
+    return typeof target === 'object' ? target : fallback
+  },
 })
+const releaseFocus = () => deactivate({ returnFocus: props.returnFocus !== false })
 
 const dismiss = () => {
   modelValue.value = false
@@ -369,6 +406,7 @@ watch(modelValue, async (v) => {
   applyLock(v)
   applyZIndex(v)
   if (v) {
+    captureOpener()
     // nextTick so the trap element is mounted before activate() walks its
     // children for focusable nodes. inert AFTER activate() so the focus trap
     // captures the trigger as its return target before inert blurs it.
@@ -377,9 +415,11 @@ watch(modelValue, async (v) => {
     applyInert(true)
   } else {
     applyInert(false)
-    deactivate()
+    releaseFocus()
   }
 })
+
+if (modelValue.value && typeof document !== 'undefined') captureOpener()
 
 onMounted(async () => {
   if (modelValue.value) {
@@ -395,7 +435,7 @@ onUnmounted(() => {
   applyLock(false)
   applyZIndex(false)
   applyInert(false)
-  deactivate()
+  releaseFocus()
 })
 </script>
 

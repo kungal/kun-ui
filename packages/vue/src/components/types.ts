@@ -189,7 +189,32 @@ export interface KunModalProps {
    *  instead of passing `title`. Ignored when `title` is set (that wins, via
    *  `aria-labelledby`). With neither, KunUI warns in dev. */
   ariaLabel?: string
+  /** Where focus goes when the dialog opens: a CSS selector matched inside the
+   *  dialog, an element, or a function returning one. Without it, or when it
+   *  finds nothing focusable, focus goes to the first element inside with an
+   *  `autofocus` attribute (as a native `<dialog>` does), then to the first
+   *  tabbable element. */
+  initialFocus?: KunFocusTarget
+  /** Where focus goes when the dialog closes. `true` returns it to the element
+   *  that was focused when the dialog opened; `false` leaves it alone, so you
+   *  can place it yourself; an element or a function returning one sends it
+   *  there (falling back to `true` when the function returns nothing). Place
+   *  it after a `nextTick` or an `await`: until the close is applied, the page
+   *  outside the dialog is still inert and trapped, and a `focus()` made
+   *  synchronously in `@close` is lost.
+   *  @default true */
+  returnFocus?: boolean | KunFocusElement | (() => HTMLElement | null | undefined)
 }
+
+// `& object` is for vue/compiler-sfc, which cannot resolve DOM types: it dropped
+// a bare HTMLElement from the runtime prop types, and the production build drops
+// the matching skipCheck, so a consumer's dev build warned "Expected Boolean |
+// Function, got HTMLButtonElement". The intersection compiles to Object.
+export type KunFocusElement = HTMLElement & object
+
+/** A focus destination: a CSS selector matched inside the component, an
+ *  element, or a function returning one. */
+export type KunFocusTarget = string | KunFocusElement | (() => HTMLElement | null | undefined)
 
 // ── Tab ────────────────────────────────────────────────────────────────
 export type KunTabItem = {

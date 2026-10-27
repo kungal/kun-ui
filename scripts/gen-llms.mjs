@@ -101,7 +101,7 @@ const components = [
   ['KunTab', 'Navigation & overlays', 'Tab bar (v-model value, items array; variants, orientation). Items with `href` render real <a> for crawlable tab-as-route.'],
   ['KunTabPanel', 'Navigation & overlays', "One tab's content. SEO-first: mount=eager (default) SSRs every panel and hides inactive ones with hidden=\"until-found\" (indexable + findable); mount=lazy/unmount opt out. Pairs with KunTab via `value`/`name`."],
   ['KunTabPanels', 'Navigation & overlays', 'Optional wrapper sharing active (v-model) + mount/hiddenStrategy defaults across KunTabPanels, and auto-wiring find-in-page reveal.'],
-  ['KunModal', 'Navigation & overlays', 'Dialog teleported to body, focus-trapped, body-scroll-locked, Escape to close (v-model boolean).'],
+  ['KunModal', 'Navigation & overlays', 'Dialog teleported to body, focus-trapped, body-scroll-locked, Escape to close (v-model boolean). `initial-focus` (selector inside the dialog, element or getter) picks where focus lands on open; `:return-focus="false"` leaves focus alone on close so the host places it (after nextTick), or pass an element or getter.'],
   ['KunDrawer', 'Navigation & overlays', 'Slide-in panel from any edge (placement, size; v-model boolean).'],
   ['KunTooltip', 'Navigation & overlays', 'Hover/focus tooltip (text + trigger slot); `shortcut="Mod+K"` appends KunKbd keys.'],
   ['KunPopover', 'Navigation & overlays', 'Floating popover anchored to a trigger slot.'],

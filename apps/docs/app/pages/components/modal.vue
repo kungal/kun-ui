@@ -11,6 +11,8 @@ import NonDismissable from '~/examples/modal/NonDismissable.vue'
 import NonDismissableSrc from '~/examples/modal/NonDismissable.vue?raw'
 import AlertDialog from '~/examples/modal/AlertDialog.vue'
 import AlertDialogSrc from '~/examples/modal/AlertDialog.vue?raw'
+import Focus from '~/examples/modal/Focus.vue'
+import FocusSrc from '~/examples/modal/Focus.vue?raw'
 import meta from '~/generated/component-meta.json'
 </script>
 
@@ -40,6 +42,16 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">警告对话框</h2>
     <Demo title="AlertDialog.vue" :source="AlertDialogSrc"><AlertDialog /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">打开与关闭时的焦点</h2>
+    <p class="text-default-600 mb-3 text-sm">
+      打开时焦点默认落在对话框里第一个可 Tab 的元素上,通常是关闭按钮。<code>initial-focus</code>
+      指定另一个目标:在对话框内部匹配的 CSS 选择器、元素,或返回元素的函数;找不到时退回默认。没有它时,带原生
+      <code>autofocus</code> 属性的元素优先,与原生 <code>&lt;dialog&gt;</code> 一致。关闭时焦点默认回到打开前聚焦的元素;
+      <code>:return-focus="false"</code> 不动焦点,由你自己放回去,例如编辑器把光标放回原处。在关闭之后(<code>nextTick</code>
+      或 <code>await</code> 之后)再聚焦:关闭生效前,对话框外的页面还是 <code>inert</code>,聚焦会落空。
+    </p>
+    <Demo title="Focus.vue" :source="FocusSrc"><Focus /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">手机端下滑关闭</h2>
     <KunInfo

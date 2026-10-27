@@ -220,6 +220,66 @@ const open = ref(false)
 </template>
 ```
 
+### Focus.vue
+
+```vue
+<script setup lang="ts">
+import { nextTick, ref } from 'vue'
+
+const text = ref('把光标放到想插入链接的位置,再点上面的按钮。')
+const url = ref('')
+const open = ref(false)
+const editor = ref<{
+  focus: (options?: FocusOptions) => void
+  insertAtCaret: (text: string) => void
+} | null>(null)
+
+// `return-focus` is false, so the dialog leaves focus alone and the editor
+// takes it back, caret and all, once the close has been applied.
+const backToEditor = (insert?: string) =>
+  nextTick(() => {
+    editor.value?.focus({ preventScroll: true })
+    if (insert) editor.value?.insertAtCaret(insert)
+  })
+
+const confirm = () => {
+  const link = url.value.trim()
+  open.value = false
+  url.value = ''
+  backToEditor(link && `[链接](${link})`)
+}
+
+const cancel = () => {
+  open.value = false
+  backToEditor()
+}
+</script>
+
+<template>
+  <div class="flex w-full max-w-lg flex-col gap-2">
+    <div>
+      <KunButton size="sm" variant="bordered" @click="open = true">插入链接</KunButton>
+    </div>
+    <KunTextarea ref="editor" v-model="text" label="正文" />
+    <KunModal
+      v-model="open"
+      title="插入链接"
+      initial-focus="input"
+      :return-focus="false"
+      @close="backToEditor()"
+    >
+      <form class="flex flex-col gap-4" @submit.prevent="confirm">
+        <KunInput v-model="url" label="链接地址" placeholder="https://www.kungal.com" />
+        <div class="flex justify-end gap-2">
+          <KunButton variant="light" @click="cancel">取消</KunButton>
+          <KunButton type="submit" color="primary">插入</KunButton>
+        </div>
+      </form>
+    </KunModal>
+  </div>
+</template>
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -228,12 +288,14 @@ const open = ref(false)
 | `ariaLabel` | `string` | `""` | Accessible name for a dialog that draws its own heading inside the slot instead of passing `title`. Ignored when `title` is set (that wins, via `aria-labelledby`). With neither, KunUI warns in dev. |
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` | Rendered under the title and wired to `aria-describedby` — the supporting line a `role="alertdialog"` is required to point at. |
+| `initialFocus` | `KunFocusTarget` | — | Where focus goes when the dialog opens: a CSS selector matched inside the dialog, an element, or a function returning one. Without it, or when it finds nothing focusable, focus goes to the first element inside with an `autofocus` attribute (as a native `<dialog>` does), then to the first tabbable element. |
 | `innerClassName` | `string` | `""` |  |
 | `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the dialog — in practice Android's back button and back gesture, which close the dialog instead of leaving the page (the behaviour a native `<dialog>` already has). Desktop is unaffected: its only close request is Escape, handled separately. Turn this off for a dialog that is bound to a route and should let back navigate. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `true (backdrop excluded when role="alertdialog")` | Whether a backdrop click or Escape closes the dialog. `role="alertdialog"` stops the BACKDROP from dismissing (a click that lands on the dim area is not an answer) while Escape still cancels, matching Radix and Reka. Pass `true` to opt the backdrop back in, `false` to turn both off. |
 | `isShowCloseButton` | `boolean` | `true` |  |
 | `isSwipeDismissable` | `boolean` | `true` | Whether dragging the phone sheet downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies where the sheet exists — `placement="auto"` below `md`, on a touch-primary pointer — and only while the content is scrolled to the top, so a swipe over scrollable content still scrolls it. Follows `isDismissable`, so a `role="alertdialog"` cannot be swiped away any more than it can be clicked away. |
 | `placement` | `KunModalPlacement` | `"auto"` | Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones, a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of centring at every width. |
+| `returnFocus` | `boolean \| KunFocusElement \| (() => HTMLElement \| null)` | `true` | Where focus goes when the dialog closes. `true` returns it to the element that was focused when the dialog opened; `false` leaves it alone, so you can place it yourself; an element or a function returning one sends it there (falling back to `true` when the function returns nothing). Place it after a `nextTick` or an `await`: until the close is applied, the page outside the dialog is still inert and trapped, and a `focus()` made synchronously in `@close` is lost. |
 | `role` | `"dialog" \| "alertdialog"` | `"dialog"` | ARIA role of the panel. Use 'alertdialog' for confirm/destructive prompts that need an immediate response — it also flips the isDismissable default. Default 'dialog'. |
 | `rounded` | `KunUIRounded` | — |  |
 | `scrollBehavior` | `"inside" \| "outside"` | `"inside"` | inside (default): the panel body scrolls, capped at 90dvh — 85dvh for an `auto` sheet below `md`, which needs a wider tap-to-dismiss strip above it — and never taller than the visible viewport, so the on-screen keyboard can't bury it. outside: the whole overlay scrolls — for panels taller than the viewport. |

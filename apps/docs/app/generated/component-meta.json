@@ -4049,6 +4049,12 @@
         "description": "Rendered under the title and wired to `aria-describedby` — the supporting line a `role=\"alertdialog\"` is required to point at."
       },
       {
+        "name": "initialFocus",
+        "type": "KunFocusTarget",
+        "required": false,
+        "description": "Where focus goes when the dialog opens: a CSS selector matched inside the dialog, an element, or a function returning one. Without it, or when it finds nothing focusable, focus goes to the first element inside with an `autofocus` attribute (as a native `<dialog>` does), then to the first tabbable element."
+      },
+      {
         "name": "innerClassName",
         "type": "string",
         "required": false,
@@ -4087,6 +4093,13 @@
         "required": false,
         "default": "\"auto\"",
         "description": "Vertical alignment of the panel. Default 'auto' — a bottom sheet on phones, a centred dialog from `md` up. Pass 'center' for the pre-2.19 behaviour of centring at every width."
+      },
+      {
+        "name": "returnFocus",
+        "type": "boolean | KunFocusElement | (() => HTMLElement | null)",
+        "required": false,
+        "default": "true",
+        "description": "Where focus goes when the dialog closes. `true` returns it to the element that was focused when the dialog opened; `false` leaves it alone, so you can place it yourself; an element or a function returning one sends it there (falling back to `true` when the function returns nothing). Place it after a `nextTick` or an `await`: until the close is applied, the page outside the dialog is still inert and trapped, and a `focus()` made synchronously in `@close` is lost."
       },
       {
         "name": "role",
