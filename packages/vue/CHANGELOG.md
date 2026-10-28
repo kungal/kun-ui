@@ -1,5 +1,47 @@
 # @kungal/ui-vue
 
+## 2.62.0
+
+### Minor Changes
+
+- 4082ae7: `KunModal` gains `initialFocus` and `returnFocus`, so a dialog can choose where focus lands when it opens and where it goes when it closes. Without them a modal behaves as before, with two fixes noted at the end.
+
+  ```vue
+  <KunModal v-model="open" initial-focus="input" :return-focus="false" @close="restoreEditor">
+  ```
+
+  - **`initialFocus`** takes a CSS selector matched inside the dialog, an element, or a function returning one. It runs while the open transition plays, with `preventScroll`, on the centred dialog and the phone sheet alike. If it resolves to nothing focusable, the old order applies: the first tabbable element, usually the close button. A selector that matches nothing warns in development.
+  - **`returnFocus`** defaults to `true`: focus returns to the element focused when the dialog opened. `false` leaves focus alone, for a host such as a rich-text editor that puts its own caret back. An element or a function returning one sends focus there; a function returning nothing falls back to `true`.
+  - **Place focus yourself after a `nextTick` or an `await`.** Until the close is applied, the page behind the dialog is still inert and inside the focus trap, so a `focus()` made synchronously in `@close` is lost.
+  - **New default: native `autofocus`.** With no `initialFocus`, an element inside carrying the `autofocus` attribute now takes focus first, as in a native `<dialog>`. Before, the trap ignored it and focused the first tabbable element.
+  - **Fix: return focus with an autofocused field.** A field that focused itself on mount, such as `<KunInput autofocus>`, used to become the return target. Closing then sent focus to the removed field, and it fell to `<body>`. The opener is now recorded before the dialog renders.
+
+  The new `KunFocusTarget` and `KunFocusElement` types are exported.
+
+- ab9331b: New `KunSkeletonSwap`: a region-level switch between a skeleton and the real content, for pages that fetch without `await` in setup and so render while their data is still loading on client-side navigation. `KunSkeleton` stays the single placeholder block you build the skeleton from; nothing about it changes.
+
+  ```vue
+  <KunSkeletonSwap :loading="pending">
+    <TopicList :topics="data" />
+    <template #skeleton><TopicListSkeleton /></template>
+  </KunSkeletonSwap>
+  ```
+
+  - **No flash for fast loads.** The skeleton shows only after `loading` has lasted `delay` (default 150 ms), and once shown it stays at least `minDuration` (default 300 ms, React's fallback throttle), so a response arriving just after it appeared does not blink it off again.
+  - **No jump when it arrives.** With no content yet, the skeleton is laid out invisibly during the delay, so the page already has its shape when it fades in. The two layers share one grid cell and crossfade (motion-safe only); there is no positioning and no `z-index`, so a region never paints outside its own box.
+  - **Reloading existing content.** Through the delay the previous content stays as it is and stays interactive: making it inert would drop the focus of the control that started the load on every fast refetch. Once the skeleton takes over, the old content fades out inert. The default slot therefore keeps rendering during a reload and must render from the previous data.
+  - **Server rendering.** `loading` false at creation renders the content directly, with no skeleton phase and no fade, so a server render that waited for its data hydrates without a flash. A server render that is still loading shows the skeleton at once, since it cannot wait out a delay; hydration matches it.
+  - **Accessibility.** The root is a real `div` with `aria-busy="true"` while loading; the skeleton layer is `aria-hidden` and `inert`. Add `aria-live="polite"` yourself on a region small enough to be announced. Do not add it to a whole page.
+  - The root's `display` is an inline grid, so a display class on it has no effect; lay the content out inside the slots.
+
+  The schedule is `nextKunSkeletonSwap` / `initialKunSkeletonSwap` in `@kungal/ui-core`, pure and tested, so the Flutter port shows and hides its skeleton at the same moments.
+
+### Patch Changes
+
+- b96a569: `KunTab` no longer leaves a "›" scroll chevron on a strip whose tabs fit. The sliding indicator is absolutely positioned inside the tab list, and it counted toward the strip's scroll width. When the strip narrowed with a later tab active, the measurement caught the indicator mid-slide at its old, wider position: 360 px of content in a 344 px strip, measured in a sticker panel resized from a 1280 to a 360 px window. The chevron appeared, and nothing measured again once the indicator settled. The tab list now clips the indicator horizontally (`overflow-x: clip`, inline), so neither a sliding indicator nor a rounding pixel past the last tab can register as overflow. The indicator's appearance is unchanged, and strips that really overflow keep their fade and chevrons.
+- Updated dependencies [ab9331b]
+  - @kungal/ui-core@2.62.0
+
 ## 2.61.1
 
 ### Patch Changes
