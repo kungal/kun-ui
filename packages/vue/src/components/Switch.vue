@@ -8,6 +8,7 @@ defineOptions({ name: 'KunSwitch' })
 
 const props = withDefaults(defineProps<KunSwitchProps>(), {
   label: '',
+  ariaLabel: '',
   className: '',
   disabled: false,
   labelClassName: '',
@@ -50,43 +51,59 @@ const size = computed(() => switchSizes[props.size])
       )
     "
   >
-    <input
-      :id="kunUniqueId"
-      type="checkbox"
-      role="switch"
-      class="peer sr-only"
-      :checked="modelValue"
-      :disabled="disabled"
-      :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
-      @change="(event) => (modelValue = (event.target as HTMLInputElement).checked)"
-    />
+    <!-- The input is laid over the track only, not sr-only: an sr-only input sat
+         under the track, so Playwright's getByRole('switch').click() failed its
+         hit-target check. Covering the label text too broke getByText(label).click(). -->
+    <span class="inline-flex" :style="{ position: 'relative' }">
+      <input
+        :id="kunUniqueId"
+        type="checkbox"
+        role="switch"
+        class="peer"
+        :style="{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          margin: 0,
+          opacity: 0,
+          zIndex: 1,
+          cursor: 'inherit',
+        }"
+        :checked="modelValue"
+        :disabled="disabled"
+        :aria-label="label ? undefined : ariaLabel || undefined"
+        :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
+        @change="(event) => (modelValue = (event.target as HTMLInputElement).checked)"
+      />
 
-    <!-- The ring sits here, on the input's sibling: `peer-*` matches siblings
-         only, and on the track nested below it never showed. -->
-    <div
-      class="relative rounded-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
-    >
+      <!-- The ring sits here, on the input's sibling: `peer-*` matches siblings
+           only, and on the track nested below it never showed. -->
       <div
-        class="rounded-full transition-colors duration-kun-fast ease-kun-standard"
-        :class="[
-          size.track,
-          // bg-primary is the mode-correct accent (no dark: pin needed); the
-          // white knob reads on it in both themes.
-          modelValue ? 'bg-primary' : 'bg-default-500',
-          disabled ? 'opacity-50' : '',
-          modelValue && disabled ? 'bg-primary-300' : '',
-        ]"
-      />
-      <div
-        :class="
-          cn(
-            'absolute top-0.5 left-0.5 transform rounded-full bg-white transition-transform duration-kun-fast ease-kun-emphasized',
-            size.thumb,
-            modelValue ? size.translate : 'translate-x-0'
-          )
-        "
-      />
-    </div>
+        class="relative rounded-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50"
+      >
+        <div
+          class="rounded-full transition-colors duration-kun-fast ease-kun-standard"
+          :class="[
+            size.track,
+            // bg-primary is the mode-correct accent (no dark: pin needed); the
+            // white knob reads on it in both themes.
+            modelValue ? 'bg-primary' : 'bg-default-500',
+            disabled ? 'opacity-50' : '',
+            modelValue && disabled ? 'bg-primary-300' : '',
+          ]"
+        />
+        <div
+          :class="
+            cn(
+              'absolute top-0.5 left-0.5 transform rounded-full bg-white transition-transform duration-kun-fast ease-kun-emphasized',
+              size.thumb,
+              modelValue ? size.translate : 'translate-x-0'
+            )
+          "
+        />
+      </div>
+    </span>
 
     <span
       v-if="label"

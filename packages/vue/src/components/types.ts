@@ -993,7 +993,14 @@ export interface KunAutocompleteProps<
 
 // ── Switch ─────────────────────────────────────────────────────────────
 export interface KunSwitchProps {
+  /** Visible text beside the switch; the `<label>` wraps the input, so it is also the switch's accessible name. */
   label?: string
+  /**
+   * Accessible name when there is no visible `label` — e.g. a switch in a
+   * table cell whose column header says what it toggles. Without one of the
+   * two, a screen reader announces only "switch".
+   */
+  ariaLabel?: string
   disabled?: boolean
   className?: string
   labelClassName?: string

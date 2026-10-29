@@ -2978,6 +2978,13 @@
   "KunDropdown": {
     "props": [
       {
+        "name": "asChild",
+        "type": "boolean",
+        "required": false,
+        "default": "undefined",
+        "description": "Make the trigger slot's root element the menu button itself, instead of wrapping it in a focusable `role=\"button\"` element. Unset, this happens automatically when the root is a `KunButton`, `<button>` or `<a>` — a button inside a button is two tab stops and invalid HTML. Set `true` for your own button component (it must render one focusable element and forward attrs and `ref` to it); `false` keeps the wrapper."
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
@@ -3032,12 +3039,7 @@
         "description": "The item the user activated. A disabled item never emits."
       }
     ],
-    "slots": [
-      {
-        "name": "trigger",
-        "type": "{}"
-      }
-    ]
+    "slots": []
   },
   "KunFadeCard": {
     "props": [],
@@ -5753,6 +5755,13 @@
         "required": true
       },
       {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Accessible name when there is no visible `label` — e.g. a switch in a table cell whose column header says what it toggles. Without one of the two, a screen reader announces only \"switch\"."
+      },
+      {
         "name": "className",
         "type": "string",
         "required": false,
@@ -5782,7 +5791,8 @@
         "name": "label",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Visible text beside the switch; the `<label>` wraps the input, so it is also the switch's accessible name."
       },
       {
         "name": "labelClassName",

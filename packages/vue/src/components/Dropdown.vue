@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, shallowRef, useId, type ComponentPublicInstance } from 'vue'
-import { onClickOutside, useEventListener } from '@vueuse/core'
+import {
+  Comment,
+  Fragment,
+  Text,
+  cloneVNode,
+  computed,
+  h,
+  nextTick,
+  onMounted,
+  ref,
+  shallowRef,
+  useId,
+  useSlots,
+  type ComponentPublicInstance,
+  type FunctionalComponent,
+  type VNode,
+} from 'vue'
+import { onClickOutside, unrefElement, useEventListener } from '@vueuse/core'
 import { type Placement } from '@floating-ui/vue'
 import { cn } from '@kungal/ui-core'
+import KunButton from './Button.vue'
 import KunMenuList from './MenuList.vue'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
@@ -26,6 +43,16 @@ const props = withDefaults(
     menuClass?: string
     minWidth?: number
     disabled?: boolean
+    /**
+     * Make the trigger slot's root element the menu button itself, instead of
+     * wrapping it in a focusable `role="button"` element. Unset, this happens
+     * automatically when the root is a `KunButton`, `<button>` or `<a>` — a
+     * button inside a button is two tab stops and invalid HTML. Set `true` for
+     * your own button component (it must render one focusable element and
+     * forward attrs and `ref` to it); `false` keeps the wrapper.
+     * @default undefined
+     */
+    asChild?: boolean
   }>(),
   {
     items: () => [],
@@ -34,6 +61,7 @@ const props = withDefaults(
     menuClass: '',
     minWidth: 192,
     disabled: false,
+    asChild: undefined,
   }
 )
 
@@ -110,6 +138,77 @@ const onTriggerKeydown = (e: KeyboardEvent) => {
   }
 }
 
+const slots = useSlots()
+const setTrigger = (el: Element | ComponentPublicInstance | null) => {
+  triggerRef.value = (unrefElement(el as HTMLElement | ComponentPublicInstance | null) as HTMLElement | null) ?? null
+}
+
+const flatten = (nodes: VNode[]): VNode[] =>
+  nodes.flatMap((node) => {
+    if (node.type === Fragment && Array.isArray(node.children)) return flatten(node.children as VNode[])
+    if (node.type === Comment) return []
+    if (node.type === Text && !String(node.children).trim()) return []
+    return [node]
+  })
+
+const isInteractive = (node: VNode) =>
+  node.type === KunButton || node.type === 'button' || node.type === 'a'
+
+let renderedAsChild = false
+
+const TriggerRoot: FunctionalComponent = () => {
+  const nodes = flatten(slots.trigger?.() ?? [])
+  const child = nodes.length === 1 ? nodes[0] : undefined
+  const asChild = props.asChild ?? (!!child && isInteractive(child))
+  renderedAsChild = asChild && !!child
+  const menuButton = {
+    'aria-haspopup': 'menu',
+    'aria-expanded': isOpen.value,
+    'aria-controls': isOpen.value ? menuId : undefined,
+    onClick: () => props.disabled || toggle(),
+    onKeydown: onTriggerKeydown,
+  }
+  if (asChild && child) {
+    return cloneVNode(
+      child,
+      {
+        ...menuButton,
+        ref: setTrigger,
+        class: props.triggerClass || undefined,
+        ...(props.disabled ? { disabled: true, 'aria-disabled': true } : {}),
+      },
+      true
+    )
+  }
+  return h(
+    'div',
+    {
+      ...menuButton,
+      ref: setTrigger,
+      role: 'button',
+      tabindex: props.disabled ? -1 : 0,
+      class: cn(
+        'inline-flex cursor-pointer items-center',
+        props.disabled && 'cursor-not-allowed opacity-50',
+        props.triggerClass
+      ),
+      'aria-disabled': props.disabled || undefined,
+    },
+    nodes
+  )
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  onMounted(() => {
+    if (props.asChild !== undefined || renderedAsChild) return
+    if (triggerRef.value?.querySelector('button, a[href], input, select, textarea, [tabindex]')) {
+      console.warn(
+        '[KunDropdown] the trigger slot holds a focusable element, which ends up nested inside the dropdown\'s own role="button" wrapper (two tab stops, invalid HTML). Make it the slot\'s single root and pass `as-child`, or slot non-interactive content.'
+      )
+    }
+  })
+}
+
 const inMenu = (target: EventTarget | null) =>
   target instanceof Element && !!target.closest(`[data-kun-menu-tree="${menuId}"]`)
 
@@ -131,26 +230,7 @@ defineExpose({
 
 <template>
   <div class="relative inline-flex">
-    <div
-      ref="triggerRef"
-      role="button"
-      :tabindex="disabled ? -1 : 0"
-      :class="
-        cn(
-          'inline-flex cursor-pointer items-center',
-          disabled && 'cursor-not-allowed opacity-50',
-          triggerClass
-        )
-      "
-      aria-haspopup="menu"
-      :aria-expanded="isOpen"
-      :aria-disabled="disabled || undefined"
-      :aria-controls="isOpen ? menuId : undefined"
-      @click="disabled || toggle()"
-      @keydown="onTriggerKeydown"
-    >
-      <slot name="trigger" />
-    </div>
+    <TriggerRoot />
 
     <Teleport to="body">
       <Transition

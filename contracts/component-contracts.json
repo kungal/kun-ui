@@ -2976,6 +2976,7 @@
         }
       ],
       "webOnlyProps": {
+        "asChild": "Chooses whether the slotted element or a wrapping role=\"button\" element carries the menu-button semantics, so a button never nests inside a button in the DOM; a Flutter trigger widget is wrapped by Semantics without adding a focus stop.",
         "menuClass": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters.",
         "triggerClass": "CSS class pass-through; Dart has no class strings — styling enters through the widget’s own parameters."
       },
@@ -2996,12 +2997,7 @@
           "description": "The item the user activated. A disabled item never emits."
         }
       ],
-      "slots": [
-        {
-          "name": "trigger",
-          "type": "{}"
-        }
-      ]
+      "slots": []
     },
     "KunFadeCard": {
       "status": "web-only",
@@ -5520,6 +5516,13 @@
           "required": true
         },
         {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Accessible name when there is no visible `label` — e.g. a switch in a table cell whose column header says what it toggles. Without one of the two, a screen reader announces only \"switch\"."
+        },
+        {
           "name": "description",
           "type": "string",
           "required": false,
@@ -5543,7 +5546,8 @@
           "name": "label",
           "type": "string",
           "required": false,
-          "default": "\"\""
+          "default": "\"\"",
+          "description": "Visible text beside the switch; the `<label>` wraps the input, so it is also the switch's accessible name."
         },
         {
           "name": "size",

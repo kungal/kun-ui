@@ -96,11 +96,12 @@ const accept = ref(false)
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `modelValue` * | `boolean` | — |  |
+| `ariaLabel` | `string` | `""` | Accessible name when there is no visible `label` — e.g. a switch in a table cell whose column header says what it toggles. Without one of the two, a screen reader announces only "switch". |
 | `className` | `string` | `""` |  |
 | `description` | `string` | `""` | Helper text below the switch (hidden when `error` is set). |
 | `disabled` | `boolean` | `false` |  |
 | `error` | `string` | `""` | Error message (red text below). Takes precedence over description. |
-| `label` | `string` | `""` |  |
+| `label` | `string` | `""` | Visible text beside the switch; the `<label>` wraps the input, so it is also the switch's accessible name. |
 | `labelClassName` | `string` | `""` |  |
 | `size` | `KunUISize` | `"md"` |  |
 

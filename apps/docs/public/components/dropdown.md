@@ -204,6 +204,7 @@ const items: KunMenuEntry[] = [
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| `asChild` | `boolean` | `undefined` | Make the trigger slot's root element the menu button itself, instead of wrapping it in a focusable `role="button"` element. Unset, this happens automatically when the root is a `KunButton`, `<button>` or `<a>` — a button inside a button is two tab stops and invalid HTML. Set `true` for your own button component (it must render one focusable element and forward attrs and `ref` to it); `false` keeps the wrapper. |
 | `disabled` | `boolean` | `false` |  |
 | `items` | `KunMenuEntry[]` | `[]` | Items and separators; an item with `children` opens a submenu. |
 | `menuClass` | `string` | `""` |  |
@@ -218,12 +219,6 @@ const items: KunMenuEntry[] = [
 | `close` | — | The menu closed, for any reason. |
 | `open` | — | The menu opened. |
 | `select` | `item: KunContextMenuItem` | The item the user activated. A disabled item never emits. |
-
-## Slots
-
-| 插槽 | 作用域 |
-| --- | --- |
-| `#trigger` | — |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/dropdown
