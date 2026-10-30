@@ -1,5 +1,7 @@
 # @kungal/ui-core
 
+## 2.64.1
+
 ## 2.64.0
 
 ### Minor Changes
