@@ -160,13 +160,13 @@ const open = ref(false)
 | `isCloseRequestDismissable` | `boolean` | `true` | Whether a platform close request dismisses the drawer — in practice Android's back button and back gesture, which close the drawer instead of leaving the page. Desktop is unaffected: its only close request is Escape, handled separately. Ignored when `isDismissable` is `false`. |
 | `isDismissable` | `boolean` | `true` |  |
 | `isShowCloseButton` | `boolean` | `true` |  |
-| `isSwipeDismissable` | `boolean` | `true` | Whether dragging the drawer downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies to a drawer sitting on the bottom edge — including a `responsive` one that becomes a bottom sheet below `md` — on a touch-primary pointer, and only while the content is scrolled to the top. Ignored when `isDismissable` is `false`. |
+| `isSwipeDismissable` | `boolean` | `true` | Whether swiping the drawer toward the edge it sits on dismisses it: down for `bottom` (including a `responsive` drawer that becomes a bottom sheet below `md`), up for `top`, left for `left`, right for `right`. Touch-primary pointers only. A swipe mostly across that axis is left alone, so a side drawer's list still scrolls; content that can still scroll the swipe's way keeps it, and so does an element whose `touch-action` reserves that axis for its own gesture, such as KunChatConversationItem's swipe actions. The bottom sheet also draws a drag handle. Ignored when `isDismissable` is `false`. |
 | `placement` | `KunDrawerPlacement` | `"right"` |  |
 | `responsive` | `boolean` | `true` |  |
 | `rounded` | `KunUIRounded` | — |  |
 | `size` | `KunDrawerSize` | `"md"` |  |
 | `title` | `string` | `""` | Rendered in the header and wired to `aria-labelledby`. Prefer it over `ariaLabel`. |
-| `withContainer` | `boolean` | `true` |  |
+| `withContainer` | `boolean` | `true` | Wrap the default slot in a scrolling `p-6` body. Turn it off to lay out the panel yourself, e.g. a navigation or history list that runs edge to edge: the panel is a flex column, so give your scroller `flex-1 overflow-y-auto`. |
 
 ## Events
 

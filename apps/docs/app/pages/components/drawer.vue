@@ -34,13 +34,13 @@ import meta from '~/generated/component-meta.json'
       <NonDismissable />
     </Demo>
 
-    <h2 class="mt-8 mb-1 text-xl font-semibold">手机端下滑关闭</h2>
+    <h2 class="mt-8 mb-1 text-xl font-semibold">手机端滑动关闭</h2>
     <KunInfo
       class="mt-3"
       color="primary"
       icon="lucide:chevron-down"
-      title="底部抽屉可以往下拖着关掉"
-      description="贴着底边的抽屉(包括 responsive 在 md 以下自动变成的底部 sheet)在触屏上可以往下拖关闭,拖过高度的 25% 或快速一甩即可,不够则回弹,遮罩的暗度跟着手指走。内容还没滚回顶部时,下滑仍然是滚动。左/右/上方向的抽屉、桌面端和鼠标都不受影响;isDismissable=false 拖不动,也可用 isSwipeDismissable=false 单独关掉。"
+      title="把抽屉推回它来的那条边就能关掉"
+      description="触屏上,底部抽屉(包括 responsive 在 md 以下自动变成的底部 sheet)往下拖、顶部往上、左侧往左、右侧往右,拖过尺寸的 25% 或快速一甩即可关闭,不够则回弹;拖出去后又快速往回甩,不管拖了多远都会留下,和原生 Android 抽屉一致。遮罩的暗度跟着手指走。只看这条轴:侧边抽屉里列表的上下滑动照常滚动;还能往同方向滚动的内容(没滚回顶部的列表、没滚到头的横向标签栏)先拿走手势;用 touch-action 声明自己处理这条轴的元素(例如带滑动操作的 KunChatConversationItem)也不会被抢。只有底部 sheet 画拖动把手。桌面端和鼠标不受影响;isDismissable=false 拖不动,也可用 isSwipeDismissable=false 单独关掉。"
     />
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">Android 返回键</h2>

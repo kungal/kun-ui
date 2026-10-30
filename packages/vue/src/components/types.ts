@@ -1374,14 +1374,23 @@ export interface KunDrawerProps {
    *  handled separately. Ignored when `isDismissable` is `false`.
    *  @default true */
   isCloseRequestDismissable?: boolean
-  /** Whether dragging the drawer downwards dismisses it, and whether the drag
-   *  handle that advertises the gesture is drawn. Only applies to a drawer
-   *  sitting on the bottom edge — including a `responsive` one that becomes a
-   *  bottom sheet below `md` — on a touch-primary pointer, and only while the
-   *  content is scrolled to the top. Ignored when `isDismissable` is `false`.
+  /** Whether swiping the drawer toward the edge it sits on dismisses it: down
+   *  for `bottom` (including a `responsive` drawer that becomes a bottom sheet
+   *  below `md`), up for `top`, left for `left`, right for `right`. Touch-primary
+   *  pointers only. A swipe mostly across that axis is left alone, so a side
+   *  drawer's list still scrolls; content that can still scroll the swipe's way
+   *  keeps it, and so does an element whose `touch-action` reserves that axis
+   *  for its own gesture, such as KunChatConversationItem's swipe actions. The
+   *  bottom sheet also draws a drag handle. Ignored when `isDismissable` is
+   *  `false`.
    *  @default true */
   isSwipeDismissable?: boolean
   isShowCloseButton?: boolean
+  /** Wrap the default slot in a scrolling `p-6` body. Turn it off to lay out
+   *  the panel yourself, e.g. a navigation or history list that runs edge to
+   *  edge: the panel is a flex column, so give your scroller `flex-1
+   *  overflow-y-auto`.
+   *  @default true */
   withContainer?: boolean
   rounded?: KunUIRounded
   className?: string
@@ -2066,6 +2075,9 @@ export interface KunAccordionProps {
   /** Allow multiple sections open at once (default single-open). */
   multiple?: boolean
   variant?: 'light' | 'bordered' | 'splitted'
+  /** Padding of every item's header and panel. `sm` fits a one-line row,
+   *  e.g. a list of steps nested in another accordion's panel. */
+  size?: 'sm' | 'md'
   /** Initially-open value(s) when uncontrolled (no v-model). */
   defaultValue?: string | string[]
   className?: string
@@ -2429,8 +2441,17 @@ export interface KunChatSwipeAction {
 }
 
 export interface KunChatConversationItemProps {
+  /** `compact` is one line of title for a list of conversation titles, such
+   *  as an AI assistant's history: no avatar, time, preview, delivery status
+   *  or badges, a regular-weight title, and a light selected background in
+   *  place of the primary fill. Swipe actions, `href` and the `actions` slot
+   *  work in both. */
+  variant?: 'default' | 'compact'
   /** Row title. Defaults to `user`'s name. */
   title?: string
+  /** Work is still running in this conversation, e.g. an assistant is
+   *  replying: a spinner after the title. */
+  busy?: boolean
   /** The other person of a direct chat: title, avatar and deleted state. */
   user?: KunChatUser | null
   /** Avatar URL, e.g. a group photo. Defaults to `user`'s. */

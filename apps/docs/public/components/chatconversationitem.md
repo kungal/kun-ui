@@ -126,6 +126,7 @@ const log = ref('')
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `avatar` | `string \| null` | `null` | Avatar URL, e.g. a group photo. Defaults to `user`'s. |
+| `busy` | `boolean` | `false` | Work is still running in this conversation, e.g. an assistant is replying: a spinner after the title. |
 | `currentUserId` | `string` | — | The viewer's id, so a service message can say "you". |
 | `draft` | `KunChatFormattedText \| null` | `null` | An unsent draft replaces the preview with "草稿：…". |
 | `href` | `string` | — | Render the row as a link. Without it the row is a button. |
@@ -147,6 +148,7 @@ const log = ref('')
 | `unreadCount` | `number` | `0` | Unread messages; the badge caps at 999+. |
 | `user` | `KunChatUser \| null` | `null` | The other person of a direct chat: title, avatar and deleted state. |
 | `users` | `KunChatUser[]` | `[]` | Users, to name who is typing in a group and who acted in a service message. |
+| `variant` | `"default" \| "compact"` | `"default"` | `compact` is one line of title for a list of conversation titles, such as an AI assistant's history: no avatar, time, preview, delivery status or badges, a regular-weight title, and a light selected background in place of the primary fill. Swipe actions, `href` and the `actions` slot work in both. |
 
 ## Events
 
@@ -154,6 +156,12 @@ const log = ref('')
 | --- | --- | --- |
 | `action` | `key: string` | A swipe action was tapped. |
 | `click` | `event: MouseEvent` | The row was activated. With `href` it also navigates. |
+
+## Slots
+
+| 插槽 | 作用域 | 说明 |
+| --- | --- | --- |
+| `#actions` | `any` | Buttons laid over the row's right end, e.g. a menu. Kept outside the row's own button or link so they never nest inside it. Shown on hover and keyboard focus, and while a menu they open is expanded; on a touch screen they are always shown, unless swipe actions are given. |
 
 ---
 本页来源 · KunUI · https://ui.kungal.com/components/chatconversationitem

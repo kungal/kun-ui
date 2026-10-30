@@ -107,7 +107,7 @@
 | `placement` | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left"` | `"top-right"` |  |
 | `show` | `boolean` | `true` |  |
 | `showZero` | `boolean` | `false` |  |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` |  |
+| `size` | `"md" \| "sm" \| "lg"` | `"md"` |  |
 | `variant` | `"count" \| "dot"` | `"count"` |  |
 
 ## Slots

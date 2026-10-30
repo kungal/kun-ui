@@ -18,7 +18,10 @@ import { useKunOverlayZIndex } from '../composables/useKunOverlayZIndex'
 import { useKunBackgroundInert } from '../composables/useKunBackgroundInert'
 import { useKunCloseRequest } from '../composables/useKunCloseRequest'
 import { useKunFloatingLayerStack } from '../composables/useKunFloatingLayer'
-import { useKunSwipeDismiss } from '../composables/useKunSwipeDismiss'
+import {
+  useKunSwipeDismiss,
+  type KunSwipeDismissDirection,
+} from '../composables/useKunSwipeDismiss'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -203,21 +206,26 @@ const handleCloseButton = () => {
   emits('close')
 }
 
-// Drag the bottom sheet down to dismiss it — see the same block in Modal.vue.
-// Only for the bottom edge: the gesture reads as "push it back where it came
-// from", which is only true when the panel came from below. `effectivePlacement`
-// already folds in `responsive`, so a right-hand drawer that becomes a bottom
-// sheet on a phone gets the gesture there and not on desktop.
+// Drag the drawer back toward the edge it sits on to dismiss it — see the same
+// block in Modal.vue. The gesture reads as "push it back where it came from", so
+// it follows the panel's edge. `effectivePlacement` already folds in
+// `responsive`, so a right-hand drawer that becomes a bottom sheet on a phone is
+// swiped down there and right on a tablet.
 //
 // Unlike the modal there IS a separate backdrop element here, so it can fade
 // with the drag the way vaul's overlay does.
-const isSwipeEnabled = () =>
-  props.isSwipeDismissable &&
-  props.isDismissable &&
-  effectivePlacement.value === 'bottom'
+const swipeDirectionMap: Record<KunDrawerPlacement, KunSwipeDismissDirection> = {
+  left: 'left',
+  right: 'right',
+  top: 'up',
+  bottom: 'down',
+}
+
+const isSwipeEnabled = () => props.isSwipeDismissable && props.isDismissable
 
 useKunSwipeDismiss(panelEl, {
   enabled: isSwipeEnabled,
+  direction: () => swipeDirectionMap[effectivePlacement.value],
   fade: backdropEl,
   onDismiss: handleClose,
 })

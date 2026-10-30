@@ -135,6 +135,7 @@ class KunChatStrings {
     required this.mentioned,
     required this.pinned,
     required this.muted,
+    required this.replying,
     required String photoFrom,
     required String openLink,
     required this.reactions,
@@ -200,6 +201,9 @@ class KunChatStrings {
 
   /// `en`: Muted
   final String muted;
+
+  /// `en`: Replying
+  final String replying;
 
   /// `en`: Reactions
   final String reactions;
@@ -1493,6 +1497,7 @@ class KunMessages {
       mentioned: '有人提到了你',
       pinned: '已置顶',
       muted: '已静音',
+      replying: '正在回复',
       photoFrom: '{name} 发送的图片',
       openLink: '打开链接 {url}',
       reactions: '回应',
@@ -1793,6 +1798,7 @@ class KunMessages {
       mentioned: 'You were mentioned',
       pinned: 'Pinned',
       muted: 'Muted',
+      replying: 'Replying',
       photoFrom: 'Photo from {name}',
       openLink: 'Open link {url}',
       reactions: 'Reactions',

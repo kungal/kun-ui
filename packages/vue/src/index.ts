@@ -243,11 +243,12 @@ export { useKunOverlayZIndex } from './composables/useKunOverlayZIndex'
 // overlay closes instead of the page navigating away (Modal/Drawer use it);
 // exported so apps can give their own overlays the same behaviour.
 export { useKunCloseRequest } from './composables/useKunCloseRequest'
-// Drag-down-to-dismiss for a bottom sheet (Modal/Drawer use it); exported, with
-// the coarse-pointer test it uses, so apps can put the gesture on their own.
+// Drag-to-dismiss toward a sheet's own edge (Modal/Drawer use it); exported,
+// with the coarse-pointer test it uses, so apps can put the gesture on their own.
 export {
   useKunSwipeDismiss,
   isKunCoarsePointer,
+  type KunSwipeDismissDirection,
   type UseKunSwipeDismissOptions,
 } from './composables/useKunSwipeDismiss'
 // Shared floating-ui setup (offset/flip/shift + transform-origin + optional

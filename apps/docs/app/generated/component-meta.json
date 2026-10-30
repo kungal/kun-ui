@@ -26,6 +26,13 @@
         "description": "Allow multiple sections open at once (default single-open)."
       },
       {
+        "name": "size",
+        "type": "\"md\" | \"sm\"",
+        "required": false,
+        "default": "\"md\"",
+        "description": "Padding of every item's header and panel. `sm` fits a one-line row, e.g. a list of steps nested in another accordion's panel."
+      },
+      {
         "name": "variant",
         "type": "\"light\" | \"bordered\" | \"splitted\"",
         "required": false,
@@ -412,7 +419,7 @@
       },
       {
         "name": "size",
-        "type": "\"sm\" | \"md\" | \"lg\"",
+        "type": "\"md\" | \"sm\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       },
@@ -482,7 +489,7 @@
       },
       {
         "name": "size",
-        "type": "\"sm\" | \"md\"",
+        "type": "\"md\" | \"sm\"",
         "required": false,
         "default": "\"md\"",
         "description": "`md` is a 40px strip with `text-sm`. `sm` is a 32px strip with `text-xs` and tighter padding, for a standing notice (a content-mode reminder) that should not take a phone screen's worth of space once it wraps. In `sm`, put a `size=\"xs\"` button in `#actions` so it fits the strip."
@@ -1226,6 +1233,13 @@
         "description": "Avatar URL, e.g. a group photo. Defaults to `user`'s."
       },
       {
+        "name": "busy",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Work is still running in this conversation, e.g. an assistant is replying: a spinner after the title."
+      },
+      {
         "name": "currentUserId",
         "type": "string",
         "required": false,
@@ -1366,6 +1380,13 @@
         "required": false,
         "default": "[]",
         "description": "Users, to name who is typing in a group and who acted in a service message."
+      },
+      {
+        "name": "variant",
+        "type": "\"default\" | \"compact\"",
+        "required": false,
+        "default": "\"default\"",
+        "description": "`compact` is one line of title for a list of conversation titles, such as an AI assistant's history: no avatar, time, preview, delivery status or badges, a regular-weight title, and a light selected background in place of the primary fill. Swipe actions, `href` and the `actions` slot work in both."
       }
     ],
     "events": [
@@ -1380,7 +1401,13 @@
         "description": "The row was activated. With `href` it also navigates."
       }
     ],
-    "slots": []
+    "slots": [
+      {
+        "name": "actions",
+        "type": "any",
+        "description": "Buttons laid over the row's right end, e.g. a menu. Kept outside the row's own button or link so they never nest inside it. Shown on hover and keyboard focus, and while a menu they open is expanded; on a touch screen they are always shown, unless swipe actions are given."
+      }
+    ]
   },
   "KunChatHeader": {
     "props": [
@@ -2911,7 +2938,7 @@
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Whether dragging the drawer downwards dismisses it, and whether the drag handle that advertises the gesture is drawn. Only applies to a drawer sitting on the bottom edge — including a `responsive` one that becomes a bottom sheet below `md` — on a touch-primary pointer, and only while the content is scrolled to the top. Ignored when `isDismissable` is `false`."
+        "description": "Whether swiping the drawer toward the edge it sits on dismisses it: down for `bottom` (including a `responsive` drawer that becomes a bottom sheet below `md`), up for `top`, left for `left`, right for `right`. Touch-primary pointers only. A swipe mostly across that axis is left alone, so a side drawer's list still scrolls; content that can still scroll the swipe's way keeps it, and so does an element whose `touch-action` reserves that axis for its own gesture, such as KunChatConversationItem's swipe actions. The bottom sheet also draws a drag handle. Ignored when `isDismissable` is `false`."
       },
       {
         "name": "placement",
@@ -2947,7 +2974,8 @@
         "name": "withContainer",
         "type": "boolean",
         "required": false,
-        "default": "true"
+        "default": "true",
+        "description": "Wrap the default slot in a scrolling `p-6` body. Turn it off to lay out the panel yourself, e.g. a navigation or history list that runs edge to edge: the panel is a flex column, so give your scroller `flex-1 overflow-y-auto`."
       }
     ],
     "events": [
@@ -4829,7 +4857,7 @@
       },
       {
         "name": "size",
-        "type": "\"sm\" | \"md\" | \"lg\"",
+        "type": "\"md\" | \"sm\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       }
@@ -4896,7 +4924,7 @@
       },
       {
         "name": "size",
-        "type": "\"sm\" | \"md\" | \"lg\"",
+        "type": "\"md\" | \"sm\" | \"lg\"",
         "required": false,
         "default": "\"md\""
       },

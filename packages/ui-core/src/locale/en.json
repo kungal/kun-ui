@@ -51,6 +51,7 @@
       "mentioned": "You were mentioned",
       "pinned": "Pinned",
       "muted": "Muted",
+      "replying": "Replying",
       "photoFrom": "Photo from {name}",
       "openLink": "Open link {url}",
       "reactions": "Reactions",

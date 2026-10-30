@@ -13,6 +13,7 @@ defineOptions({ name: 'KunAccordion' })
 const props = withDefaults(defineProps<KunAccordionProps>(), {
   multiple: false,
   variant: 'light',
+  size: 'md',
   defaultValue: undefined,
   className: '',
 })
@@ -48,6 +49,7 @@ provide(KUN_ACCORDION, {
   isOpen: (value: string) => openValues.value.includes(value),
   toggle,
   variant: computed(() => props.variant),
+  size: computed(() => props.size),
 })
 
 const containerClass = computed(() => {

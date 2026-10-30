@@ -1,5 +1,7 @@
-// Drag a bottom sheet down to dismiss it — the gesture every native sheet has,
-// and the one a KunModal/KunDrawer in its phone form was missing.
+// Drag a sheet back toward the edge it came from to dismiss it — down for a
+// bottom sheet, the gesture every native sheet has, and left/right/up for a
+// KunDrawer on that edge, as Material's modal navigation drawer and vaul's
+// `direction` do.
 //
 // The whole design question is how the gesture shares a finger with the sheet's
 // own scrolling, and the answer the field converged on is: the CONTENT WINS
@@ -9,7 +11,11 @@
 // start edge is allowed when scrolled to the start". This does the same, with
 // one deliberate difference: it checks EVERY scroller between the touch and the
 // panel rather than only the innermost, so an inner list at the top nested in an
-// already-scrolled panel still can't start a drag.
+// already-scrolled panel still can't start a drag. Only scrolling on the swipe's
+// own axis counts — a side drawer's vertical list never blocks a horizontal
+// swipe — and toward an end edge (up, left) the content must be at its END, as
+// in Base UI. vaul skips the scroll check for side drawers entirely, which hands
+// a horizontal tab strip's swipe to the drawer.
 //
 // Touch only, on purpose. A mouse drag on a sheet is not a real gesture, and
 // supporting it is what makes the reference implementations big: they have to
@@ -25,7 +31,7 @@
 // only because its panel never scrolls (a child does); ours does, so the
 // non-passive listener is the mechanism and `touch-action` stays out of it.
 
-import { onScopeDispose, watch, type Ref } from 'vue'
+import { onScopeDispose, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { KUN_SWIPE_DISMISS_PHYSICS } from '@kungal/ui-core'
 
@@ -70,7 +76,11 @@ const prefersReducedMotion = () =>
 export const isKunCoarsePointer = () =>
   typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
 
-// Every scroller above the touch must be at the top for the panel to move.
+/** The way the finger travels to dismiss: toward the edge the panel sits on. */
+export type KunSwipeDismissDirection = 'up' | 'down' | 'left' | 'right'
+
+// Every scroller above the touch must be unable to scroll the way the finger
+// is going for the panel to move.
 //
 // The walk deliberately runs all the way to <body> rather than stopping at the
 // panel: with `scrollBehavior="outside"` the scroller is the OVERLAY, outside
@@ -82,19 +92,62 @@ export const isKunCoarsePointer = () =>
 // non-zero on a box that is no longer scrollable (content shrank, or the
 // element was switched to `overflow: hidden`), and that stale value must not
 // veto the gesture forever.
-const isScrolledAnywhere = (from: Element | null) => {
+//
+// RTL flips `scrollLeft` to run from 0 at the start down to −max, so "can still
+// scroll left" is not `scrollLeft < max` there.
+const canScrollToward = (el: HTMLElement, direction: KunSwipeDismissDirection) => {
+  const vertical = direction === 'up' || direction === 'down'
+  const max = vertical
+    ? el.scrollHeight - el.clientHeight
+    : el.scrollWidth - el.clientWidth
+  if (max < 1) return false
+  const style = getComputedStyle(el)
+  const overflow = vertical ? style.overflowY : style.overflowX
+  if (overflow !== 'auto' && overflow !== 'scroll' && overflow !== 'overlay') {
+    return false
+  }
+  if (direction === 'down') return el.scrollTop > 0
+  if (direction === 'up') return el.scrollTop < max - 1
+  const rtl = style.direction === 'rtl'
+  const [lo, hi] = rtl ? [-max, 0] : [0, max]
+  // A finger moving right pulls the content toward its left edge.
+  return direction === 'right' ? el.scrollLeft > lo + 1 : el.scrollLeft < hi - 1
+}
+
+const isScrollableToward = (
+  from: Element | null,
+  direction: KunSwipeDismissDirection
+) => {
   let el: Element | null = from
   while (el && el !== document.body) {
-    if (el instanceof HTMLElement && el.scrollTop > 0) {
-      const overflowY = getComputedStyle(el).overflowY
-      if (
-        overflowY === 'auto' ||
-        overflowY === 'scroll' ||
-        overflowY === 'overlay'
-      ) {
-        return true
-      }
+    if (el instanceof HTMLElement && canScrollToward(el, direction)) return true
+    el = el.parentElement
+  }
+  return false
+}
+
+// An element whose `touch-action` withholds panning on the swipe's axis has
+// declared that axis its own JS gesture: KunChatConversationItem's swipe actions
+// set `pan-y`, so in a left drawer a leftward swipe on a row would otherwise
+// reveal the row's actions AND drag the drawer shut. The walk stops at the
+// panel: `touch-action` set outside it is not about its content.
+const ownsAxisGesture = (
+  from: Element | null,
+  panel: HTMLElement,
+  direction: KunSwipeDismissDirection
+) => {
+  const pans =
+    direction === 'up' || direction === 'down'
+      ? ['pan-y', 'pan-up', 'pan-down']
+      : ['pan-x', 'pan-left', 'pan-right']
+  let el: Element | null = from
+  while (el) {
+    const value = getComputedStyle(el).touchAction
+    if (value !== 'auto' && value !== 'manipulation') {
+      const tokens = value.split(/\s+/)
+      if (!pans.some((p) => tokens.includes(p))) return true
     }
+    if (el === panel) return false
     el = el.parentElement
   }
   return false
@@ -104,6 +157,10 @@ export interface UseKunSwipeDismissOptions {
   /** Whether the gesture is available at all — the caller's "am I a sheet, and
    *  may I be dismissed" check. Read fresh at the start of every gesture. */
   enabled: () => boolean
+  /** The way the finger travels to dismiss — toward the edge the panel sits
+   *  on. Read fresh at the start of every gesture.
+   *  @default 'down' */
+  direction?: MaybeRefOrGetter<KunSwipeDismissDirection>
   /** Backdrop to fade out as the sheet travels. Omit when the backdrop is the
    *  same element as the one hosting the panel. */
   fade?: Ref<HTMLElement | null>
@@ -112,17 +169,21 @@ export interface UseKunSwipeDismissOptions {
 
 export const useKunSwipeDismiss = (
   panel: Ref<HTMLElement | null>,
-  { enabled, fade, onDismiss }: UseKunSwipeDismissOptions
+  { enabled, direction = 'down', fade, onDismiss }: UseKunSwipeDismissOptions
 ) => {
   let phase: 'idle' | 'pending' | 'dragging' = 'idle'
   let touchId = 0
   let startX = 0
   let startY = 0
+  // Fixed per gesture: a viewport crossing `md` mid-drag must not turn it.
+  let dir: KunSwipeDismissDirection = 'down'
+  // Travel along `dir`, positive toward dismissal.
   let offset = 0
-  let panelHeight = 0
+  // The panel's extent along `dir`.
+  let panelSize = 0
   let openedAt = 0
   let lastScrollAt = 0
-  let samples: { t: number; y: number }[] = []
+  let samples: { t: number; d: number }[] = []
 
   const now = () => performance.now()
 
@@ -135,14 +196,22 @@ export const useKunSwipeDismiss = (
   // event dispatched with no timestamp at all.
   const eventTime = (e: Event) => (e.timeStamp > 0 ? e.timeStamp : now())
 
-  const setStyles = (y: number) => {
+  const isVertical = () => dir === 'up' || dir === 'down'
+  const sign = () => (dir === 'down' || dir === 'right' ? 1 : -1)
+  // The finger's position along `dir`: grows as it moves toward dismissal.
+  const along = (t: Touch) => sign() * (isVertical() ? t.clientY : t.clientX)
+
+  const setStyles = (d: number) => {
     const el = panel.value
     if (!el) return
-    offset = y
-    el.style.transform = `translate3d(0, ${y}px, 0)`
+    offset = d
+    const px = sign() * d
+    el.style.transform = isVertical()
+      ? `translate3d(0, ${px}px, 0)`
+      : `translate3d(${px}px, 0, 0)`
     const backdrop = fade?.value
-    if (backdrop && panelHeight > 0) {
-      const progress = Math.min(Math.max(y / panelHeight, 0), 1)
+    if (backdrop && panelSize > 0) {
+      const progress = Math.min(Math.max(d / panelSize, 0), 1)
       backdrop.style.opacity = String(1 - progress)
     }
   }
@@ -180,7 +249,7 @@ export const useKunSwipeDismiss = (
           backdrop.style.transition = 'opacity var(--kun-dur-exit, 180ms) var(--ease-kun-in, ease-in)'
         }
       }
-      setStyles(panelHeight)
+      setStyles(panelSize)
       onDismiss()
       return
     }
@@ -205,7 +274,7 @@ export const useKunSwipeDismiss = (
     const last = samples[samples.length - 1]!
     const first = samples.find((s) => last.t - s.t <= VELOCITY_WINDOW) ?? samples[0]!
     const dt = last.t - first.t
-    return dt > 0 ? (last.y - first.y) / dt : 0
+    return dt > 0 ? (last.d - first.d) / dt : 0
   }
 
   // The finger that started the gesture owns it until it lifts, as the Flutter
@@ -231,9 +300,10 @@ export const useKunSwipeDismiss = (
     if (target instanceof Element && target.closest(NO_DRAG_SELECTOR)) return
 
     touchId = t.identifier
+    dir = toValue(direction)
     startX = t.clientX
     startY = t.clientY
-    samples = [{ t: at, y: t.clientY }]
+    samples = [{ t: at, d: along(t) }]
     phase = 'pending'
   }
 
@@ -251,28 +321,34 @@ export const useKunSwipeDismiss = (
     }
 
     const at = eventTime(e)
-    samples.push({ t: at, y: t.clientY })
+    samples.push({ t: at, d: along(t) })
     while (samples.length > 2 && at - samples[0]!.t > VELOCITY_WINDOW) samples.shift()
 
-    const dy = t.clientY - startY
     const dx = t.clientX - startX
+    const dy = t.clientY - startY
+    // Travel toward dismissal, and across it.
+    const main = sign() * (isVertical() ? dy : dx)
+    const cross = isVertical() ? dx : dy
 
     if (phase === 'pending') {
       if (Math.abs(dy) < DRAG_START_THRESHOLD && Math.abs(dx) < DRAG_START_THRESHOLD) {
         return
       }
-      // A mostly-horizontal move belongs to a carousel, a slider or text.
-      if (Math.abs(dx) > Math.abs(dy)) {
+      // A move mostly across the axis belongs to something else: a carousel,
+      // a slider or text under a bottom sheet, the list's own vertical scroll
+      // in a side drawer.
+      if (Math.abs(cross) > Math.abs(main)) {
         phase = 'idle'
         return
       }
-      // Upward is always the content's — it scrolls, or it doesn't.
-      if (dy <= 0) {
+      // Away from the edge is always the content's — it scrolls, or it doesn't.
+      if (main <= 0) {
         phase = 'idle'
         return
       }
-      // The content keeps a downward swipe until it is back at the top.
-      if (isScrolledAnywhere(t.target instanceof Element ? t.target : null)) {
+      const target = t.target instanceof Element ? t.target : null
+      // The content keeps the swipe until it can scroll no further that way.
+      if (isScrollableToward(target, dir) || ownsAxisGesture(target, el, dir)) {
         phase = 'idle'
         return
       }
@@ -280,10 +356,10 @@ export const useKunSwipeDismiss = (
       // Clamped to the viewport, as vaul clamps it: with
       // `scrollBehavior="outside"` the panel can be taller than the screen, and
       // a quarter of an 1800px panel is a swipe no thumb can finish.
-      panelHeight = Math.min(
-        el.getBoundingClientRect().height,
-        window.innerHeight
-      )
+      const rect = el.getBoundingClientRect()
+      panelSize = isVertical()
+        ? Math.min(rect.height, window.innerHeight)
+        : Math.min(rect.width, window.innerWidth)
       el.style.transition = 'none'
       el.style.willChange = 'transform'
       const backdrop = fade?.value
@@ -292,7 +368,7 @@ export const useKunSwipeDismiss = (
 
     // Ours now: stop the browser scrolling/overscrolling underneath the drag.
     if (e.cancelable) e.preventDefault()
-    setStyles(dy > 0 ? dy : -rubberBand(-dy))
+    setStyles(main > 0 ? main : -rubberBand(-main))
   }
 
   const onTouchEnd = (e: TouchEvent) => {
@@ -306,10 +382,16 @@ export const useKunSwipeDismiss = (
     // dismisses the sheet AND fires that button on the way out.
     if (e.cancelable) e.preventDefault()
 
+    // A flick decides on its own, either way: AndroidX DrawerLayout keeps a
+    // drawer open on any fling back toward open however far it was dragged,
+    // where vaul and MUI let distance alone close it, so a reader who drags
+    // half way, changes their mind and flicks back still lost the sheet.
+    const v = velocity()
     const shouldClose =
       offset > 0 &&
-      (velocity() > CLOSE_VELOCITY ||
-        offset >= Math.max(panelHeight, 1) * CLOSE_DISTANCE_RATIO)
+      (v > CLOSE_VELOCITY ||
+        (v >= -CLOSE_VELOCITY &&
+          offset >= Math.max(panelSize, 1) * CLOSE_DISTANCE_RATIO))
     settle(shouldClose)
   }
 

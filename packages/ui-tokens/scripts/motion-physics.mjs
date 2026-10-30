@@ -87,10 +87,14 @@ export const SHATTER_PHYSICS = {
 // ─────────────────────────────────────────────────────────────────────────────
 // Drag-to-dismiss on a bottom sheet (KunModal / KunDrawer in their phone form,
 // packages/vue/src/composables/useKunSwipeDismiss.ts): the release rule and the
-// overdrag resistance, which are what a user feels. Per gesture:
+// overdrag resistance, which are what a user feels. A KunDrawer on another edge
+// uses the same rule along its own axis (width for left/right). Per gesture:
 //   panelHeight = min(panel height, viewport height)
 //   dismiss on release when offset > 0 and
-//     (velocity > closeVelocity or offset ≥ panelHeight × closeDistanceRatio)
+//     (velocity > closeVelocity or
+//      (velocity ≥ −closeVelocity and offset ≥ panelHeight × closeDistanceRatio))
+//   so a flick back toward open keeps the sheet however far it was dragged,
+//   as AndroidX DrawerLayout does
 //   an upward drag of d px moves the panel rubberBandLimit × (1 − e^(−d / rubberBandLimit))
 //
 // Only the feel is shared. The composable's other constants — the claim
@@ -102,7 +106,8 @@ export const SHATTER_PHYSICS = {
 export const SWIPE_DISMISS_PHYSICS = {
   // vaul's CLOSE_THRESHOLD, and close to Base UI's flat 40px on a typical sheet.
   closeDistanceRatio: 0.25,
-  // px/ms — a flick past this dismisses regardless of distance. vaul's
+  // px/ms — a flick past this decides regardless of distance: toward the edge
+  // dismisses, back toward open keeps the sheet. vaul's
   // VELOCITY_THRESHOLD.
   closeVelocity: 0.4,
   // px. Slope 1 at zero, so the sheet yields at first and then firmly refuses

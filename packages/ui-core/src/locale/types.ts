@@ -56,6 +56,7 @@ export interface KunMessages {
     mentioned: string
     pinned: string
     muted: string
+    replying: string
     photoFrom: string
     openLink: string
     reactions: string

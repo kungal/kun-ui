@@ -24,6 +24,7 @@ const ctx = inject(KUN_ACCORDION, null)
 
 const open = computed(() => ctx?.isOpen(props.value) ?? false)
 const splitted = computed(() => ctx?.variant.value === 'splitted')
+const small = computed(() => ctx?.size.value === 'sm')
 
 // SSR-stable, globally-unique ids (Vue useId) so two accordions that happen to
 // reuse the same item `value`s never collide. `name` is an optional readable
@@ -49,7 +50,8 @@ const onToggle = () => {
         :disabled="disabled"
         :class="
           cn(
-            'flex w-full items-center gap-3 px-4 py-4 text-left font-medium transition-colors',
+            'flex w-full items-center text-left font-medium transition-colors',
+            small ? 'gap-2 px-2 py-1.5 text-sm' : 'gap-3 px-4 py-4',
             disabled
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-default/5 cursor-pointer'
@@ -58,7 +60,7 @@ const onToggle = () => {
         @click="onToggle"
       >
         <span v-if="icon" class="text-default-500 inline-flex shrink-0">
-          <KunIcon :name="icon" class="size-5" />
+          <KunIcon :name="icon" :class="small ? 'size-4' : 'size-5'" />
         </span>
         <span class="min-w-0 flex-1">
           <slot name="title">{{ title }}</slot>
@@ -67,7 +69,8 @@ const onToggle = () => {
           name="lucide:chevron-down"
           :class="
             cn(
-              'text-default-500 size-5 shrink-0 transition-transform duration-kun-base',
+              'text-default-500 shrink-0 transition-transform duration-kun-base',
+              small ? 'size-4' : 'size-5',
               open && 'rotate-180'
             )
           "
@@ -89,7 +92,7 @@ const onToggle = () => {
       "
     >
       <div class="overflow-hidden">
-        <div class="text-default-600 px-4 pb-4 text-sm">
+        <div :class="cn('text-default-600 text-sm', small ? 'px-2 pb-2' : 'px-4 pb-4')">
           <slot />
         </div>
       </div>

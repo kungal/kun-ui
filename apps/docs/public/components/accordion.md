@@ -70,6 +70,7 @@ const open = ref<string[]>(['a'])
 | `defaultValue` | `string \| string[]` | — | Initially-open value(s) when uncontrolled (no v-model). |
 | `modelValue` | `string \| string[]` | — |  |
 | `multiple` | `boolean` | `false` | Allow multiple sections open at once (default single-open). |
+| `size` | `"md" \| "sm"` | `"md"` | Padding of every item's header and panel. `sm` fits a one-line row, e.g. a list of steps nested in another accordion's panel. |
 | `variant` | `"light" \| "bordered" \| "splitted"` | `"light"` |  |
 
 ## Events

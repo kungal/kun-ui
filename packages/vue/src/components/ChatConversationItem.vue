@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type CSSProperties } from 'vue'
+import { computed, ref, useSlots, type CSSProperties } from 'vue'
 import { cn, kunSolidClasses } from '@kungal/ui-core'
 import KunAvatar from './Avatar.vue'
 import KunIcon from './Icon.vue'
@@ -23,7 +23,9 @@ import type { KunChatConversationItemProps, KunChatSwipeAction } from './types'
 defineOptions({ name: 'KunChatConversationItem' })
 
 const props = withDefaults(defineProps<KunChatConversationItemProps>(), {
+  variant: 'default',
   title: undefined,
+  busy: false,
   user: null,
   avatar: null,
   kind: 'direct',
@@ -54,6 +56,16 @@ const emit = defineEmits<{
   action: [key: string]
 }>()
 
+defineSlots<{
+  /** Buttons laid over the row's right end, e.g. a menu. Kept outside the
+   *  row's own button or link so they never nest inside it. Shown on hover
+   *  and keyboard focus, and while a menu they open is expanded; on a touch
+   *  screen they are always shown, unless swipe actions are given. */
+  actions?: () => unknown
+}>()
+
+const slots = useSlots()
+const compact = computed(() => props.variant === 'compact')
 const config = useKunUIConfig()
 const { t, locale } = useKunLocale()
 
@@ -166,6 +178,16 @@ const onRowClick = (event: MouseEvent) => {
   }
   emit('click', event)
 }
+const slideStyle = computed<CSSProperties | undefined>(() =>
+  offset.value ? { transform: `translateX(${offset.value}px)` } : undefined
+)
+const rowTone = computed(() => {
+  if (!compact.value) return props.selected ? 'bg-primary text-primary-foreground' : 'bg-content1 hover:bg-default/10'
+  // A compact row is see-through at rest, but over the swipe actions it must be opaque.
+  if (offset.value || dragging.value) return 'bg-content1 text-foreground'
+  return props.selected ? 'bg-default-100 text-foreground' : 'text-default-700 hover:bg-default-50'
+})
+
 const onAction = (action: KunChatSwipeAction) => {
   offset.value = 0
   emit('action', action.key)
@@ -174,7 +196,7 @@ const onAction = (action: KunChatSwipeAction) => {
 
 <template>
   <div
-    class="kun-chat-conversation-item relative overflow-hidden rounded-kun-md"
+    class="kun-chat-conversation-item group/conversation relative overflow-hidden rounded-kun-md"
     :style="rootStyle"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
@@ -226,109 +248,142 @@ const onAction = (action: KunChatSwipeAction) => {
       :aria-current="selected ? 'true' : undefined"
       :class="
         cn(
-          'relative flex w-full items-center gap-3 px-3 py-2 text-left [:where(&)_*]:text-inherit',
-          selected ? 'bg-primary text-primary-foreground' : 'bg-content1 hover:bg-default/10',
+          'relative flex w-full items-center text-left [:where(&)_*]:text-inherit',
+          compact ? 'gap-2 px-2.5 py-2 text-sm' : 'gap-3 px-3 py-2',
+          slots.actions && 'pr-10',
+          rowTone,
           !dragging && 'transition-[transform,background-color] duration-kun-base ease-kun-out'
         )
       "
-      :style="offset ? { transform: `translateX(${offset}px)` } : undefined"
+      :style="slideStyle"
       @click.capture="onRowClick"
     >
-      <KunAvatar :user="avatarUser" size="xl" :is-navigation="false" class="shrink-0" />
-      <span class="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span class="flex items-center gap-1.5">
-          <span class="truncate font-semibold">{{ name }}</span>
-          <KunIcon
-            v-if="muted"
-            name="lucide:bell-off"
-            :class="cn('shrink-0 text-xs', selected ? 'opacity-80' : 'text-default-400')"
-            :aria-label="t('chat.muted')"
-          />
-          <span
-            :class="
-              cn(
-                'ml-auto flex shrink-0 items-center gap-1 text-xs',
-                selected ? 'text-primary-foreground' : 'text-foreground-muted'
-              )
-            "
-          >
+      <template v-if="compact">
+        <span class="min-w-0 flex-1 truncate">{{ name }}</span>
+        <span v-if="busy" role="img" :aria-label="t('chat.replying')" class="text-default-400 inline-flex shrink-0">
+          <KunIcon name="svg-spinners:90-ring-with-bg" class="text-base" />
+        </span>
+      </template>
+      <template v-else>
+        <KunAvatar :user="avatarUser" size="xl" :is-navigation="false" class="shrink-0" />
+        <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span class="flex items-center gap-1.5">
+            <span class="truncate font-semibold">{{ name }}</span>
+            <span
+              v-if="busy"
+              role="img"
+              :aria-label="t('chat.replying')"
+              :class="cn('inline-flex shrink-0', selected ? 'opacity-80' : 'text-default-400')"
+            >
+              <KunIcon name="svg-spinners:90-ring-with-bg" class="text-sm" />
+            </span>
             <KunIcon
-              v-if="status"
-              :name="statusIcon"
-              :class="cn('text-sm', status === 'failed' ? 'text-danger-text' : !selected && 'text-primary-text')"
-              :aria-label="t(`chatStatus.${status}`)"
+              v-if="muted"
+              name="lucide:bell-off"
+              :class="cn('shrink-0 text-xs', selected ? 'opacity-80' : 'text-default-400')"
+              :aria-label="t('chat.muted')"
             />
-            {{ time }}
+            <span
+              :class="
+                cn(
+                  'ml-auto flex shrink-0 items-center gap-1 text-xs',
+                  selected ? 'text-primary-foreground' : 'text-foreground-muted'
+                )
+              "
+            >
+              <KunIcon
+                v-if="status"
+                :name="statusIcon"
+                :class="cn('text-sm', status === 'failed' ? 'text-danger-text' : !selected && 'text-primary-text')"
+                :aria-label="t(`chatStatus.${status}`)"
+              />
+              {{ time }}
+            </span>
           </span>
-        </span>
-        <span class="flex items-center gap-1.5">
-          <span
-            :class="cn('min-w-0 flex-1 truncate text-sm', selected ? 'text-primary-foreground' : 'text-foreground-muted')"
-          >
-            <KunChatTyping
-              v-if="typingActive"
-              :class="selected ? 'text-primary-foreground' : 'text-primary-text'"
-              :events="typing"
-              :users="users"
-              :kind="kind"
-            />
-            <template v-else-if="draftText">
-              <span :class="selected ? 'font-medium' : 'text-danger-text'">{{ t('chat.draft') }}</span>
-              <KunChatText :text="draftText.text" :entities="draftText.entities" preview />
-            </template>
-            <template v-else-if="lastMessage">
-              <template v-if="lastMessage.kind === 'service'">{{ serviceText }}</template>
-              <template v-else>
-                <span v-if="lastMessageSender" :class="!selected && 'text-foreground/80'">
-                  {{ t('chat.senderPrefix', { name: lastMessageSender }) }}
-                </span>
-                <KunIcon v-if="lastMessage.media" name="lucide:image" class="mr-0.5 inline align-[-2px] text-xs" />
-                <KunChatText
-                  v-if="lastMessage.text"
-                  :text="lastMessage.text"
-                  :entities="lastMessage.entities"
-                  preview
-                />
-                <span v-else>{{ kunChatMediaLabel(lastMessage.media, t) }}</span>
+          <span class="flex items-center gap-1.5">
+            <span
+              :class="cn('min-w-0 flex-1 truncate text-sm', selected ? 'text-primary-foreground' : 'text-foreground-muted')"
+            >
+              <KunChatTyping
+                v-if="typingActive"
+                :class="selected ? 'text-primary-foreground' : 'text-primary-text'"
+                :events="typing"
+                :users="users"
+                :kind="kind"
+              />
+              <template v-else-if="draftText">
+                <span :class="selected ? 'font-medium' : 'text-danger-text'">{{ t('chat.draft') }}</span>
+                <KunChatText :text="draftText.text" :entities="draftText.entities" preview />
               </template>
-            </template>
+              <template v-else-if="lastMessage">
+                <template v-if="lastMessage.kind === 'service'">{{ serviceText }}</template>
+                <template v-else>
+                  <span v-if="lastMessageSender" :class="!selected && 'text-foreground/80'">
+                    {{ t('chat.senderPrefix', { name: lastMessageSender }) }}
+                  </span>
+                  <KunIcon v-if="lastMessage.media" name="lucide:image" class="mr-0.5 inline align-[-2px] text-xs" />
+                  <KunChatText
+                    v-if="lastMessage.text"
+                    :text="lastMessage.text"
+                    :entities="lastMessage.entities"
+                    preview
+                  />
+                  <span v-else>{{ kunChatMediaLabel(lastMessage.media, t) }}</span>
+                </template>
+              </template>
+            </span>
+            <span
+              v-if="mentionCount > 0"
+              :class="
+                cn(
+                  'flex size-5 shrink-0 items-center justify-center rounded-full',
+                  selected ? 'bg-primary-foreground text-primary' : 'bg-primary text-primary-foreground'
+                )
+              "
+              :aria-label="t('chat.mentioned')"
+            >
+              <KunIcon name="lucide:at-sign" class="text-xs" />
+            </span>
+            <span
+              v-if="unreadCount > 0 || markedUnread"
+              :class="
+                cn(
+                  'flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-xs font-medium tabular-nums',
+                  selected
+                    ? 'bg-primary-foreground text-primary'
+                    : muted
+                      ? 'bg-default text-default-foreground'
+                      : 'bg-primary text-primary-foreground'
+                )
+              "
+              :aria-label="unreadCount > 0 ? t('chat.unreadCount', { count: unreadCount }) : undefined"
+            >
+              {{ unreadCount > 0 ? badge : '' }}
+            </span>
+            <KunIcon
+              v-else-if="pinned"
+              name="lucide:pin"
+              :class="cn('shrink-0 rotate-45 text-sm', selected ? 'opacity-80' : 'text-default-400')"
+              :aria-label="t('chat.pinned')"
+            />
           </span>
-          <span
-            v-if="mentionCount > 0"
-            :class="
-              cn(
-                'flex size-5 shrink-0 items-center justify-center rounded-full',
-                selected ? 'bg-primary-foreground text-primary' : 'bg-primary text-primary-foreground'
-              )
-            "
-            :aria-label="t('chat.mentioned')"
-          >
-            <KunIcon name="lucide:at-sign" class="text-xs" />
-          </span>
-          <span
-            v-if="unreadCount > 0 || markedUnread"
-            :class="
-              cn(
-                'flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-xs font-medium tabular-nums',
-                selected
-                  ? 'bg-primary-foreground text-primary'
-                  : muted
-                    ? 'bg-default text-default-foreground'
-                    : 'bg-primary text-primary-foreground'
-              )
-            "
-            :aria-label="unreadCount > 0 ? t('chat.unreadCount', { count: unreadCount }) : undefined"
-          >
-            {{ unreadCount > 0 ? badge : '' }}
-          </span>
-          <KunIcon
-            v-else-if="pinned"
-            name="lucide:pin"
-            :class="cn('shrink-0 rotate-45 text-sm', selected ? 'opacity-80' : 'text-default-400')"
-            :aria-label="t('chat.pinned')"
-          />
         </span>
-      </span>
+      </template>
     </component>
+
+    <div
+      v-if="slots.actions"
+      :class="
+        cn(
+          'absolute inset-y-0 right-1 flex items-center',
+          'focus-within:opacity-100 has-[[aria-expanded=true]]:opacity-100 group-hover/conversation:opacity-100 [@media(hover:hover)]:opacity-0',
+          (leadingW || trailingW) && '[@media(hover:none)]:hidden',
+          !dragging && 'transition-[transform,opacity] duration-kun-base ease-kun-out'
+        )
+      "
+      :style="slideStyle"
+    >
+      <slot name="actions" />
+    </div>
   </div>
 </template>

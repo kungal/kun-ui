@@ -191,12 +191,15 @@ abstract final class KunShatterPhysics {
 /// Drag-to-dismiss on a bottom sheet — the feel of the web `KunModal` and
 /// `KunDrawer` sheets, as data.
 ///
-/// On release the sheet dismisses when it moved down and either
+/// On release the sheet dismisses when it moved toward its edge and either
 /// ```
 /// velocity > closeVelocity
-/// offset  >= min(panelHeight, viewportHeight) × closeDistanceRatio
+/// velocity >= -closeVelocity and
+///   offset >= min(panelExtent, viewportExtent) × closeDistanceRatio
 /// ```
-/// An upward drag of d px moves the panel
+/// with velocity and offset measured toward the edge, so a flick back toward
+/// open keeps the sheet however far it was dragged. A drag of d px the other
+/// way moves the panel
 /// `rubberBandLimit × (1 − e^(−d / rubberBandLimit))`: it yields at first
 /// and then firmly stops.
 ///
@@ -208,7 +211,7 @@ abstract final class KunSwipeDismissPhysics {
   /// dismisses on release.
   static const double closeDistanceRatio = 0.25;
 
-  /// The release velocity that dismisses regardless of distance, in logical
+  /// The release velocity that decides regardless of distance, in logical
   /// pixels per second — the unit of `DragEndDetails.primaryVelocity`. The
   /// web states it as 0.4 px/ms.
   static const double closeVelocity = 400;

@@ -51,6 +51,7 @@
       "mentioned": "有人提到了你",
       "pinned": "已置顶",
       "muted": "已静音",
+      "replying": "正在回复",
       "photoFrom": "{name} 发送的图片",
       "openLink": "打开链接 {url}",
       "reactions": "回应",

@@ -31,10 +31,12 @@ export const KUN_SHATTER_PHYSICS = {
 } as const
 
 /**
- * Drag-to-dismiss on a bottom sheet, as data: dismiss on release when the
- * sheet moved down and either the release velocity exceeds `closeVelocity`
- * (px/ms) or the offset reaches `closeDistanceRatio` of the panel height
- * (capped at the viewport); an upward drag of d px moves the panel
+ * Drag-to-dismiss on a sheet, as data: dismiss on release when the sheet
+ * moved toward its edge and either the release velocity toward the edge
+ * exceeds `closeVelocity` (px/ms), or the offset reaches
+ * `closeDistanceRatio` of the panel's size along the drag (capped at the
+ * viewport) without a flick back faster than `closeVelocity`; a drag of d px
+ * the other way moves the panel
  * `rubberBandLimit × (1 − e^(−d / rubberBandLimit))`. The same manifest
  * generates `KunSwipeDismissPhysics` in kun_ui_tokens.
  */

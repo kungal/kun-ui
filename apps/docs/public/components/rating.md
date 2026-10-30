@@ -86,7 +86,7 @@ const lg = ref(3)
 | `max` | `number` | `5` |
 | `modelValue` | `number` | `0` |
 | `readonly` | `boolean` | `false` |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` |
+| `size` | `"md" \| "sm" \| "lg"` | `"md"` |
 
 ## Events
 
