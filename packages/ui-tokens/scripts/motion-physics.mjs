@@ -95,7 +95,8 @@ export const SHATTER_PHYSICS = {
 //      (velocity ≥ −closeVelocity and offset ≥ panelHeight × closeDistanceRatio))
 //   so a flick back toward open keeps the sheet however far it was dragged,
 //   as AndroidX DrawerLayout does
-//   an upward drag of d px moves the panel rubberBandLimit × (1 − e^(−d / rubberBandLimit))
+//   an upward drag of d px moves a bottom sheet rubberBandLimit × (1 − e^(−d / rubberBandLimit));
+//   a drawer on another edge stops at its open position instead
 //
 // Only the feel is shared. The composable's other constants — the claim
 // threshold under Chrome's touch slop, the velocity sampling window, the

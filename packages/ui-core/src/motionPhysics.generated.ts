@@ -36,8 +36,9 @@ export const KUN_SHATTER_PHYSICS = {
  * exceeds `closeVelocity` (px/ms), or the offset reaches
  * `closeDistanceRatio` of the panel's size along the drag (capped at the
  * viewport) without a flick back faster than `closeVelocity`; a drag of d px
- * the other way moves the panel
- * `rubberBandLimit × (1 − e^(−d / rubberBandLimit))`. The same manifest
+ * the other way moves a bottom sheet
+ * `rubberBandLimit × (1 − e^(−d / rubberBandLimit))`, while a drawer on
+ * another edge stops at its open position. The same manifest
  * generates `KunSwipeDismissPhysics` in kun_ui_tokens.
  */
 export const KUN_SWIPE_DISMISS_PHYSICS = {

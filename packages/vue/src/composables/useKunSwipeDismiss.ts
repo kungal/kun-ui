@@ -368,7 +368,11 @@ export const useKunSwipeDismiss = (
 
     // Ours now: stop the browser scrolling/overscrolling underneath the drag.
     if (e.cancelable) e.preventDefault()
-    setStyles(main > 0 ? main : -rubberBand(-main))
+    // Past the open position only a bottom sheet yields. A drawer on any other
+    // edge is anchored to it, so moving it further translated it off that edge
+    // and opened a gap behind it (letmoe's left drawer, 2.64.0); AndroidX
+    // DrawerLayout clamps there too.
+    setStyles(main > 0 ? main : dir === 'down' ? -rubberBand(-main) : 0)
   }
 
   const onTouchEnd = (e: TouchEvent) => {
