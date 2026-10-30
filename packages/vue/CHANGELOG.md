@@ -1,5 +1,40 @@
 # @kungal/ui-vue
 
+## 2.64.0
+
+### Minor Changes
+
+- 91067e4: **KunChatConversationItem: `variant="compact"`, `busy`, and an `actions` slot.** These cover a list of conversation titles, such as an AI assistant's history sidebar, which the direct-message layout could not render.
+
+  - **`variant="compact"`** gives one line per row: a regular-weight title that truncates, at `text-sm`. There is no avatar, time, preview, delivery status or badge. The selected row uses a light `bg-default-100` instead of the primary fill. At rest the row is see-through, so it sits on your sidebar's own background. While it is being swiped it turns opaque, so the swipe actions behind it don't show through. Swipe actions and `href` work unchanged.
+  - **`busy`** shows a spinner after the title, in both variants. Screen readers announce it as "Replying" (`chat.replying`, a new message in both catalogs), so a row reads "<title> Replying".
+  - **The `actions` slot** lays buttons, typically a menu trigger, over the row's right end. They sit outside the row's own link or button, so they never nest inside it, and the row reserves space so they don't cover the title. On a device that can hover, they appear on hover, on keyboard focus, and while a menu they opened is expanded (anything inside with `aria-expanded="true"`). On a touch screen they stay visible, unless the row has swipe actions, in which case swiping replaces them.
+
+  **KunAccordion: `size`.** `size="sm"` gives every item a 32px header (`px-2 py-1.5 text-sm`, 16px icons) and a `px-2 pb-2` panel. It fits a list of one-line steps nested in another accordion's panel, where the default 56px header made one line of text three lines tall. `md` is the default and is unchanged.
+
+  Nothing changes for existing usage: every new prop defaults to today's rendering.
+
+- 91067e4: **KunDrawer: swipe toward its own edge to dismiss, on every placement.** Until now only a drawer on the bottom edge could be dragged shut. On a touch-primary pointer, a `left` drawer now closes on a leftward swipe, a `right` drawer on a rightward one, and a `top` drawer on an upward one. The physics are the bottom sheet's: release past 25% of the panel's width (or height), or flick faster than 0.4 px/ms. Anything less springs back, and the backdrop dims in step with the finger. Material's modal navigation drawer and vaul's `direction` behave the same way.
+
+  The gesture shares the finger with the content the way the bottom sheet already does, judged on the swipe's own axis:
+
+  - A move mostly across the axis is left alone, so the vertical list in a side drawer still scrolls natively.
+  - Content that can still scroll the way the finger is going keeps the swipe. In a left drawer, a horizontal tag strip takes leftward swipes until it reaches its end. RTL scrollers are handled. Vertical scroll position never blocks a horizontal swipe.
+  - New for every placement: an element whose `touch-action` withholds panning on the swipe's axis keeps the swipe. KunChatConversationItem's swipe actions declare `pan-y`, so in a left drawer a leftward swipe on such a row opens the row's actions instead of also closing the drawer. A bottom sheet still drags down from that row. An element with `touch-action: none` no longer starts a sheet drag in any direction.
+
+  **Every swipe-to-dismiss sheet: a flick back toward open now keeps it open.** This applies to KunModal's phone sheet and to KunDrawer on any edge. Previously, a sheet dragged past 25% closed on release even when the finger flicked back first. Now a release faster than 0.4 px/ms decides on its own: a flick toward the edge dismisses, a flick back keeps the sheet open, and only a slower release falls back to the 25% distance rule. This is how AndroidX `DrawerLayout` and iOS sheets behave. vaul and MUI's `SwipeableDrawer` don't do this, which is how this case slipped through. `KunSwipeDismissPhysics` in kun_ui_tokens documents the new rule for the Flutter port. Its values are unchanged.
+
+  Only the bottom sheet draws a drag handle. `isSwipeDismissable={false}` turns the gesture off, as before. Desktop and mouse input are unaffected.
+
+  `useKunSwipeDismiss` takes a new `direction` option (`'down'` by default) and exports the `KunSwipeDismissDirection` type, so an app's own panel can use the gesture on any edge.
+
+  `withContainer` now has JSDoc. For a navigation or history list that runs edge to edge, set it to `false` and give your own scroller `flex-1 overflow-y-auto`.
+
+### Patch Changes
+
+- Updated dependencies [91067e4]
+  - @kungal/ui-core@2.64.0
+
 ## 2.63.0
 
 ### Minor Changes
