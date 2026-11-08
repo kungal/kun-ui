@@ -1,3 +1,7 @@
+## 2.65.0
+
+- Version bump only, to stay in lockstep with the KunUI release train.
+
 ## 2.64.1
 
 ### Patch Changes
