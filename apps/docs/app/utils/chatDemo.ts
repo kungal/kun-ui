@@ -79,6 +79,26 @@ export const demoPhoto = (path: string, width: number, height: number) => ({
   url: `https://www.kungal.com/${path}.webp`,
 })
 
+// Stickers from the KUN Galgame sticker packs, at their full size on the image
+// service. Thumbhashes computed as for the photos below.
+const DEMO_STICKERS = {
+  knife: ['c6/97/c697c3b779ad6c034a538516395a678f068afc1b24203e57d516f71bb09f070f', 465, 436, 'ntYNF4IHZneEh3l4eEeHV4h2d1CIRoAJ'],
+  wave: ['29/13/2913c14bb5ffcde877a936520e2c1585a84dbba0afaf2d388058c22203d62b6c', 470, 438, 'rWkGH4IZdkmgmJdjc0d4SHeFlrkJUqAA'],
+  pout: ['dc/8f/dc8fd453f42d3edd7d51ac8a4ae1c7b698fb24d3166628d3560c5d4386bbf320', 372, 378, '7jgGFwZZmlh6Z5WAeJdmJ7mJeMcJOHAA'],
+} as const
+
+export const demoSticker = (name: keyof typeof DEMO_STICKERS) => {
+  const [path, width, height, thumbhash] = DEMO_STICKERS[name]
+  return {
+    type: 'sticker' as const,
+    image_hash: path.split('/').pop()!,
+    width,
+    height,
+    thumbhash,
+    url: `https://image.kungal.iloveren.link/${path}.webp`,
+  }
+}
+
 // Computed from the images themselves with thumbhash's rgbaToThumbHash, as
 // the image service does on upload.
 export const DEMO_THUMBHASH: Record<string, string> = {
@@ -222,7 +242,8 @@ export const makeDirectConversation = () => {
       media: demoPhoto('bg/bg36', 1920, 1080),
     })
   )
-  push(demoMessage(her, demoTime(0, '09:14'), `对了,[@鲲](mention:${ME}) 周末的线下聚会你去吗?`))
+  const meetup = push(demoMessage(her, demoTime(0, '09:14'), `对了,[@鲲](mention:${ME}) 周末的线下聚会你去吗?`))
+  push(demoMessage(ME, demoTime(0, '09:20'), '', { media: demoSticker('wave'), reply_to: demoReplyTo(meetup) }))
   return m
 }
 

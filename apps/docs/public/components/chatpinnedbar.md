@@ -41,7 +41,7 @@ const log = ref<number[]>([])
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `messages` * | `KunChatMessage[]` | — | Pinned messages, in any order. The bar starts at the newest and each click moves to the next older one, as Telegram does. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a pinned photo into the thumbnail's URL. Without it the photo's own `url` is used. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a pinned photo or sticker into the thumbnail's URL. Without it the media's own `url` is used. |
 | `unpinnable` | `boolean` | `false` | Show the × that emits `unpin`. |
 
 ## Events

@@ -148,3 +148,22 @@ test('an album holds at most KUN_CHAT_ALBUM_LIMIT photos', () => {
     [10, 2]
   )
 })
+
+test('only photos form an album: a sticker sharing a media_group_id stays its own row', () => {
+  const photo = { type: 'photo' as const, image_hash: 'h', width: 1, height: 1 }
+  const sticker = { type: 'sticker' as const, image_hash: 's', width: 512, height: 512 }
+  const rows = groupKunChatMessages(
+    [
+      msg('2', '2026-09-27T10:00:00+08:00', { media: photo, media_group_id: '7', text: '' }),
+      msg('2', '2026-09-27T10:00:00+08:00', { media: sticker, media_group_id: '7', text: '' }),
+      msg('2', '2026-09-27T10:00:00+08:00', { media: photo, media_group_id: '7', text: '' }),
+      msg('2', '2026-09-27T10:00:00+08:00', { media: sticker, media_group_id: '8', text: '' }),
+      msg('2', '2026-09-27T10:00:00+08:00', { media: sticker, media_group_id: '8', text: '' }),
+    ],
+    { currentUserId: '1' }
+  )[0]!.rows
+  assert.deepEqual(
+    rows.map((r) => (r.type === 'message' ? r.messages.length : 0)),
+    [1, 1, 1, 1, 1]
+  )
+})

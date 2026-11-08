@@ -63,8 +63,9 @@ const segments = computed(() => {
 
 const thumb = computed(() => {
   const media = current.value?.media
-  if (media?.type !== 'photo') return null
-  return props.resolveMediaUrl?.(media, 'preview') ?? media.url ?? null
+  if (!media) return null
+  const src = props.resolveMediaUrl?.(media, 'preview') ?? media.url
+  return src ? { src, sticker: media.type === 'sticker' } : null
 })
 const title = computed(() =>
   stack.value.length > 1
@@ -93,9 +94,9 @@ const title = computed(() =>
       <span v-else class="bg-primary h-8 w-0.5 shrink-0 rounded-full" aria-hidden="true" />
       <img
         v-if="thumb"
-        :src="thumb"
+        :src="thumb.src"
         alt=""
-        class="size-8 shrink-0 rounded-kun-sm object-cover"
+        :class="cn('size-8 shrink-0', thumb.sticker ? 'object-contain' : 'rounded-kun-sm object-cover')"
         loading="lazy"
         decoding="async"
       />

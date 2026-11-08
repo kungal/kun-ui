@@ -10,6 +10,7 @@ import { useKunLocale } from '../locale/useKunLocale'
 import { useKunChatTyping } from '../composables/useKunChatTyping'
 import {
   formatKunChatListTime,
+  kunChatMediaIcon,
   kunChatMediaLabel,
   kunChatServiceText,
   kunChatUserMap,
@@ -321,7 +322,7 @@ const onAction = (action: KunChatSwipeAction) => {
                   <span v-if="lastMessageSender" :class="!selected && 'text-foreground/80'">
                     {{ t('chat.senderPrefix', { name: lastMessageSender }) }}
                   </span>
-                  <KunIcon v-if="lastMessage.media" name="lucide:image" class="mr-0.5 inline align-[-2px] text-xs" />
+                  <KunIcon v-if="lastMessage.media" :name="kunChatMediaIcon(lastMessage.media)" class="mr-0.5 inline align-[-2px] text-xs" />
                   <KunChatText
                     v-if="lastMessage.text"
                     :text="lastMessage.text"

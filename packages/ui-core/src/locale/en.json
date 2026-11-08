@@ -39,6 +39,7 @@
       "edited": "edited",
       "deletedMessage": "Deleted message",
       "photo": "Photo",
+      "sticker": "Sticker",
       "album": "{count} photos",
       "media": "Media",
       "draft": "Draft: ",

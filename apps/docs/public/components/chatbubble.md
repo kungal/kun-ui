@@ -120,6 +120,43 @@ const album = [
 </template>
 ```
 
+### Sticker.vue
+
+```vue
+<script setup lang="ts">
+import { DEMO_TZ, ME, demoMessage, demoReactions, demoReplyTo, demoSticker, demoTime, demoUsers } from '~/utils/chatDemo'
+
+// A sticker has no bubble: it is drawn at a fixed size (its long side 160 px),
+// with the time on its corner and reactions below. Sender name and reply
+// preview sit on a small card of their own above it. A reply to a sticker
+// reads "贴纸". Stickers never join an album and never open the lightbox.
+const question = demoMessage('1002', demoTime(0, '21:02'), '通宵推完了?')
+const sticker = demoMessage(ME, demoTime(0, '21:03'), '', {
+  media: demoSticker('knife'),
+  reply_to: demoReplyTo(question),
+})
+const answer = demoMessage('1003', demoTime(0, '21:04'), '', {
+  media: demoSticker('pout'),
+  reactions: [
+    { reaction: 'sob', count: 2, reacted: false },
+    { reaction: 'heart', count: 1, reacted: true },
+  ],
+})
+const replyToSticker = demoMessage('1002', demoTime(0, '21:05'), '这个表情包哪里来的,我也要', {
+  reply_to: demoReplyTo(answer),
+})
+</script>
+
+<template>
+  <div class="w-full bg-default-100 flex flex-col gap-1.5 rounded-kun-lg p-3">
+    <KunChatBubble :message="question" :users="demoUsers" :time-zone="DEMO_TZ" />
+    <KunChatBubble class="self-end" :message="sticker" :users="demoUsers" own status="read" :time-zone="DEMO_TZ" />
+    <KunChatBubble :message="answer" :users="demoUsers" :reaction-options="demoReactions" show-sender :time-zone="DEMO_TZ" />
+    <KunChatBubble :message="replyToSticker" :users="demoUsers" :time-zone="DEMO_TZ" />
+  </div>
+</template>
+```
+
 ### Status.vue
 
 ```vue
@@ -245,7 +282,7 @@ const withContext = demoMessage('1002', demoTime(0, '21:16'), '这个补丁的�
 | `own` | `boolean` | `false` | Sent by the viewer: right-aligned, in the primary tint. |
 | `position` | `KunChatBubblePosition` | `"single"` | Where the bubble sits in its sender's run: it rounds the corners on the sender's side, and `single` / `last` draw the tail. |
 | `reactionOptions` | `KunChatReactionOption[]` | `[]` | The reaction vocabulary, to draw each reaction key. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo or sticker into a URL, e.g. a smaller preview. Without it the media's own `url` is shown. |
 | `resolveMessage` | `((seq: number) => KunChatMessage)` | — | Finds a loaded message by seq — the text a "pinned a message" service line quotes. |
 | `showSender` | `boolean` | `false` | Show the sender's name on top: group chats, first of a run. |
 | `status` | `KunChatSendStatus` | — | Delivery state of an own message. The clock / tick / double tick at the bottom corner; `failed` is a button that emits `retry`. |

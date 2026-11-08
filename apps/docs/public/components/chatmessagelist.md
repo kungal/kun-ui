@@ -219,7 +219,7 @@ const load = async (count: number) => {
 | --- | --- | --- | --- |
 | `currentUserId` * | `string` | — | The viewer's id. Their messages sit on the right, and a pending one they send (`status: 'sending'`) scrolls the list to the bottom. |
 | `messages` * | `KunChatMessage[]` | — | Messages in display order, oldest first. Pending ones go last, carrying `client_message_id` and `status`. |
-| `actions` | `((message: KunChatMessage, own: boolean) => KunChatMessageAction[])` | — | Which actions the menu offers for a message — permissions are the site's call. `quote` shows only while text of the message is selected, `copy` only for a message with text. Default `['reply', 'copy']`. |
+| `actions` | `((message: KunChatMessage, own: boolean) => KunChatMessageAction[])` | — | Which actions the menu offers for a message — permissions are the site's call. `quote` shows only while text of the message is selected, `copy` only for a message with text, and a sticker never offers `edit`, `quote` or `copy`. Default `['reply', 'copy']`. |
 | `ariaLabel` | `string` | `locale chat.messages` | Accessible name of the scroll region. |
 | `groupWindow` | `number` | `600` | Longest gap, in seconds, inside one run of a sender's messages. |
 | `hasNewer` | `boolean` | `false` | The list is a window that does not reach the newest message (after a jump): scrolling near the bottom emits `load-newer`, and the scroll-down button emits `latest`. |
@@ -230,7 +230,7 @@ const load = async (count: number) => {
 | `loadingOlder` | `boolean` | `false` | A `load-older` request is in flight: a spinner shows on top and no second request goes out. Without it, the list waits for the first message to change before asking again. |
 | `peerReadSeq` | `number \| null` | `null` | The other side's read cursor: own messages at or below it show the double tick, unless they carry their own `status`. |
 | `reactionOptions` | `KunChatReactionOption[]` | `[]` | The reaction vocabulary: the menu's quick row, and the art on reaction chips. |
-| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown. |
+| `resolveMediaUrl` | `KunChatMediaUrlResolver` | — | Turns a photo or sticker into a URL, e.g. a smaller preview. Without it the media's own `url` is shown. |
 | `swipeToReply` | `boolean` | `true` | Swipe a bubble left to reply, on touch screens. |
 | `timeZone` | `string` | — | IANA zone for times and day boundaries. Pass it when server-rendering, or the server's zone and the reader's disagree and hydration mismatches. |
 | `unreadCount` | `number` | — | Unread count on the scroll-down button. Defaults to the messages of others below the read position that the list has seen. |

@@ -5,6 +5,8 @@ import Reply from '~/examples/chatbubble/Reply.vue'
 import ReplySrc from '~/examples/chatbubble/Reply.vue?raw'
 import Media from '~/examples/chatbubble/Media.vue'
 import MediaSrc from '~/examples/chatbubble/Media.vue?raw'
+import Sticker from '~/examples/chatbubble/Sticker.vue'
+import StickerSrc from '~/examples/chatbubble/Sticker.vue?raw'
 import Status from '~/examples/chatbubble/Status.vue'
 import StatusSrc from '~/examples/chatbubble/Status.vue?raw'
 import Reactions from '~/examples/chatbubble/Reactions.vue'
@@ -30,6 +32,9 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">照片与相册</h2>
     <Demo title="Media.vue" :source="MediaSrc"><Media /></Demo>
+
+    <h2 class="mt-8 mb-1 text-xl font-semibold">贴纸</h2>
+    <Demo title="Sticker.vue" :source="StickerSrc"><Sticker /></Demo>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">发送状态</h2>
     <Demo title="Status.vue" :source="StatusSrc"><Status /></Demo>

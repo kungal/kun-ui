@@ -302,6 +302,8 @@ export type {
   KunChatMessage,
   KunChatMedia,
   KunChatPhoto,
+  KunChatSticker,
+  KunChatMediaType,
   KunChatReplyTo,
   KunChatReplyQuote,
   KunChatServiceAction,

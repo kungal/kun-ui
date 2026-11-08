@@ -140,8 +140,19 @@ export const kunChatSafeUrl = (raw: string): string | null => {
 }
 
 
-export const kunChatMediaLabel = (media: KunChatMedia | { type: string } | null, t: KunTranslate) =>
-  media?.type === 'photo' ? t('chat.photo') : t('chat.media')
+export const kunChatMediaLabel = (media: KunChatMedia | { type: string } | null, t: KunTranslate) => {
+  switch (media?.type) {
+    case 'photo':
+      return t('chat.photo')
+    case 'sticker':
+      return t('chat.sticker')
+    default:
+      return t('chat.media')
+  }
+}
+
+export const kunChatMediaIcon = (media: KunChatMedia | { type: string } | null) =>
+  media?.type === 'sticker' ? 'lucide:sticker' : 'lucide:image'
 
 /** One line of plain text standing for a message: its text, or what it
  *  carries. For screen-reader announcements and service messages. Spoilers

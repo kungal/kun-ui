@@ -2273,8 +2273,8 @@ export interface KunChatBubbleProps {
   status?: KunChatSendStatus
   /** The reaction vocabulary, to draw each reaction key. */
   reactionOptions?: KunChatReactionOption[]
-  /** Turns a photo into a URL, e.g. a smaller preview. Without it the
-   *  photo's own `url` is shown. */
+  /** Turns a photo or sticker into a URL, e.g. a smaller preview. Without
+   *  it the media's own `url` is shown. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Finds a loaded message by seq — the text a "pinned a message" service
    *  line quotes. */
@@ -2326,12 +2326,13 @@ export interface KunChatMessageListProps {
   /** The reaction vocabulary: the menu's quick row, and the art on reaction
    *  chips. */
   reactionOptions?: KunChatReactionOption[]
-  /** Turns a photo into a URL, e.g. a smaller preview. Without it the
-   *  photo's own `url` is shown. */
+  /** Turns a photo or sticker into a URL, e.g. a smaller preview. Without
+   *  it the media's own `url` is shown. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Which actions the menu offers for a message — permissions are the
    *  site's call. `quote` shows only while text of the message is selected,
-   *  `copy` only for a message with text. Default `['reply', 'copy']`. */
+   *  `copy` only for a message with text, and a sticker never offers `edit`,
+   *  `quote` or `copy`. Default `['reply', 'copy']`. */
   actions?: (message: KunChatMessage, own: boolean) => KunChatMessageAction[]
   /** Unread count on the scroll-down button. Defaults to the messages of
    *  others below the read position that the list has seen. */
@@ -2505,8 +2506,8 @@ export interface KunChatPinnedBarProps {
   /** Pinned messages, in any order. The bar starts at the newest and each
    *  click moves to the next older one, as Telegram does. */
   messages: KunChatMessage[]
-  /** Turns a pinned photo into the thumbnail's URL. Without it the photo's
-   *  own `url` is used. */
+  /** Turns a pinned photo or sticker into the thumbnail's URL. Without it
+   *  the media's own `url` is used. */
   resolveMediaUrl?: KunChatMediaUrlResolver
   /** Show the × that emits `unpin`. */
   unpinnable?: boolean

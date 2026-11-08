@@ -961,7 +961,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown."
+          "description": "Turns a photo or sticker into a URL, e.g. a smaller preview. Without it the media's own `url` is shown."
         },
         {
           "name": "resolveMessage",
@@ -1548,7 +1548,7 @@
           "name": "actions",
           "type": "((message: KunChatMessage, own: boolean) => KunChatMessageAction[])",
           "required": false,
-          "description": "Which actions the menu offers for a message — permissions are the site's call. `quote` shows only while text of the message is selected, `copy` only for a message with text. Default `['reply', 'copy']`."
+          "description": "Which actions the menu offers for a message — permissions are the site's call. `quote` shows only while text of the message is selected, `copy` only for a message with text, and a sticker never offers `edit`, `quote` or `copy`. Default `['reply', 'copy']`."
         },
         {
           "name": "ariaLabel",
@@ -1629,7 +1629,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Turns a photo into a URL, e.g. a smaller preview. Without it the photo's own `url` is shown."
+          "description": "Turns a photo or sticker into a URL, e.g. a smaller preview. Without it the media's own `url` is shown."
         },
         {
           "name": "swipeToReply",
@@ -1808,7 +1808,7 @@
           "name": "resolveMediaUrl",
           "type": "KunChatMediaUrlResolver",
           "required": false,
-          "description": "Turns a pinned photo into the thumbnail's URL. Without it the photo's own `url` is used."
+          "description": "Turns a pinned photo or sticker into the thumbnail's URL. Without it the media's own `url` is used."
         },
         {
           "name": "unpinnable",

@@ -15,7 +15,7 @@ export const WANT = {
     // Chat: message status, message actions, the composer, conversation rows.
     'clock', 'check-check', 'circle-alert', 'reply', 'quote', 'pencil', 'pin',
     'pin-off', 'trash-2', 'flag', 'ban', 'paperclip', 'send-horizontal',
-    'smile-plus', 'image', 'at-sign', 'bell', 'bell-off', 'archive', 'mail',
+    'smile-plus', 'image', 'sticker', 'at-sign', 'bell', 'bell-off', 'archive', 'mail',
     'mail-open',
   ],
   'svg-spinners': ['90-ring-with-bg'],

@@ -546,8 +546,10 @@ const openMenu = (el: HTMLElement, row: MessageRow, x: number, y: number) => {
     ? { ...sliceKunChatEntities(message.text, message.entities, range[0], range[1]), offset: range[0] }
     : null
   const status = statusOf(row)
+  const sticker = message.media?.type === 'sticker'
   const actions = allowed.filter((a) => {
     const key = typeof a === 'string' ? a : a.key
+    if (sticker && (key === 'edit' || key === 'quote' || key === 'copy')) return false
     if (key === 'copy') return !!message.text
     if (key === 'quote') return !!quote
     if (key === 'retry') return status === 'failed'

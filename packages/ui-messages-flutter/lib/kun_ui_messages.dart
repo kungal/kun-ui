@@ -123,6 +123,7 @@ class KunChatStrings {
     required this.edited,
     required this.deletedMessage,
     required this.photo,
+    required this.sticker,
     required String album,
     required this.media,
     required this.draft,
@@ -174,6 +175,9 @@ class KunChatStrings {
 
   /// `en`: Photo
   final String photo;
+
+  /// `en`: Sticker
+  final String sticker;
 
   /// `en`: Media
   final String media;
@@ -1485,6 +1489,7 @@ class KunMessages {
       edited: '已编辑',
       deletedMessage: '消息已删除',
       photo: '图片',
+      sticker: '贴纸',
       album: '{count} 张图片',
       media: '媒体',
       draft: '草稿：',
@@ -1786,6 +1791,7 @@ class KunMessages {
       edited: 'edited',
       deletedMessage: 'Deleted message',
       photo: 'Photo',
+      sticker: 'Sticker',
       album: '{count} photos',
       media: 'Media',
       draft: 'Draft: ',

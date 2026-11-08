@@ -131,11 +131,12 @@ export const groupKunChatMessages = (
     }
 
     let group = [message]
-    if (message.media_group_id != null) {
+    if (message.media_group_id != null && message.media?.type === 'photo') {
       while (
         group.length < KUN_CHAT_ALBUM_LIMIT &&
         i + 1 < messages.length &&
         messages[i + 1]!.kind === 'message' &&
+        messages[i + 1]!.media?.type === 'photo' &&
         messages[i + 1]!.media_group_id === message.media_group_id &&
         messages[i + 1]!.sender_id === message.sender_id
       ) {

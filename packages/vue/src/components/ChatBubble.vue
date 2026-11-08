@@ -6,6 +6,7 @@ import {
   type KunChatMessage,
   type KunChatPhoto,
   type KunChatReaction,
+  type KunChatSticker,
 } from '@kungal/ui-core'
 import KunIcon from './Icon.vue'
 import KunImage from './Image.vue'
@@ -16,6 +17,7 @@ import { useKunLocale } from '../locale/useKunLocale'
 import {
   formatKunChatFullTime,
   formatKunChatTime,
+  kunChatMediaIcon,
   kunChatMediaLabel,
   kunChatSafeUrl,
   kunChatServiceText,
@@ -24,7 +26,7 @@ import {
 } from '../utils/chat'
 import type { KunChatBubbleProps } from './types'
 
-// One message: text, photo or album, with its reply preview, context card,
+// One message: text, photo, album or sticker, with its reply preview, context card,
 // reactions and meta. A service message renders as a centred pill instead.
 // Positioning in a row (left / right, avatar column) is the list's job.
 defineOptions({ name: 'KunChatBubble' })
@@ -93,7 +95,23 @@ const photos = computed(() =>
     .filter((m): m is KunChatPhoto => m?.type === 'photo')
 )
 const isAlbum = computed(() => photos.value.length > 1)
-const hasText = computed(() => !!props.message.text)
+
+// Telegram draws a sticker without a bubble, its long side a fixed size
+// (telegram-tt: 13rem desktop, 11rem mobile); 160 px is the smaller one the
+// NextMoe sites asked for.
+const STICKER_SIZE = 160
+const sticker = computed(() => {
+  const media = props.message.media
+  if (media?.type !== 'sticker' || props.album?.length) return null
+  const ratio = media.width > 0 && media.height > 0 ? media.width / media.height : 1
+  return {
+    media,
+    width: Math.round(ratio >= 1 ? STICKER_SIZE : STICKER_SIZE * ratio),
+    height: Math.round(ratio >= 1 ? STICKER_SIZE / ratio : STICKER_SIZE),
+  }
+})
+
+const hasText = computed(() => !!props.message.text && !sticker.value)
 const mediaOnly = computed(() => photos.value.length > 0 && !hasText.value)
 
 // A lone photo keeps its shape within bounds: at most 320 × 420 CSS px, at
@@ -136,7 +154,7 @@ const bubbleStyle = computed(() => {
   return undefined
 })
 
-const src = (p: KunChatPhoto, variant: 'preview' | 'original') =>
+const src = (p: KunChatPhoto | KunChatSticker, variant: 'preview' | 'original') =>
   props.resolveMediaUrl?.(p, variant) ?? p.url ?? ''
 
 const lightboxOpen = ref(false)
@@ -196,7 +214,9 @@ const statusIcon = computed(() => {
 
 // A photo with nothing around it is its own bubble: no surface, no tail.
 const bare = computed(
-  () => mediaOnly.value && !reply.value && !context.value && !(props.showSender && !props.own)
+  () =>
+    !!sticker.value ||
+    (mediaOnly.value && !reply.value && !context.value && !(props.showSender && !props.own))
 )
 const tail = computed(
   () => !bare.value && (props.position === 'last' || props.position === 'single')
@@ -229,6 +249,15 @@ const surfaceClass = computed(() =>
   props.own ? 'bg-primary-100 fill-primary-100' : 'bg-content1 fill-content1'
 )
 const metaClass = computed(() => (props.own ? 'text-primary-text' : 'text-foreground-muted'))
+// A sticker keeps what surrounds it — sender, reply, context card — on small
+// cards of their own, above and below the sticker.
+const stickerCardClass = computed(() =>
+  cn(
+    'relative min-w-0 max-w-[min(100%,18rem)] rounded-kun-lg pb-1.5',
+    surfaceClass.value,
+    !props.own && 'shadow-kun-sm'
+  )
+)
 // The time over a photo sits on its own scrim, and the photo under it is often a
 // white screenshot: white on black/45 over white is 3.35:1, and /55 is the least
 // that clears 4.5:1 over any image.
@@ -253,7 +282,7 @@ const mediaMetaClass =
         'kun-chat-bubble relative w-fit min-w-0 max-w-[min(85%,34rem)] text-[0.9375rem] leading-5',
         !bare && surfaceClass,
         !bare && !own && 'shadow-kun-sm',
-        cornerClass
+        sticker ? cn('flex flex-col gap-1', own ? 'items-end' : 'items-start') : cornerClass
       )
     "
     :style="bubbleStyle"
@@ -263,6 +292,10 @@ const mediaMetaClass =
       {{ t('chat.senderPrefix', { name: own ? t('chat.you') : sender.name }) }}
     </span>
 
+    <div
+      v-if="!sticker || (showSender && !own) || reply"
+      :class="sticker ? stickerCardClass : 'contents'"
+    >
     <!-- Sender (group chats, first of a run) -->
     <div
       v-if="showSender && !own"
@@ -309,11 +342,37 @@ const mediaMetaClass =
           preview
         />
         <span v-else class="inline-flex items-center gap-1">
-          <KunIcon name="lucide:image" class="text-xs" />
+          <KunIcon :name="kunChatMediaIcon(reply.media_type ? { type: reply.media_type } : null)" class="text-xs" />
           {{ kunChatMediaLabel(reply.media_type ? { type: reply.media_type } : null, t) }}
         </span>
       </span>
     </button>
+    </div>
+
+    <!-- A sticker: no bubble, the meta on its corner -->
+    <div
+      v-if="sticker"
+      class="relative shrink-0 overflow-hidden rounded-kun-md"
+      :style="{ width: `${sticker.width}px`, height: `${sticker.height}px` }"
+    >
+      <KunImage
+        :src="src(sticker.media, 'preview')"
+        :thumbhash="sticker.media.thumbhash ?? undefined"
+        :aspect-ratio="`${sticker.width} / ${sticker.height}`"
+        :width="sticker.width"
+        :height="sticker.height"
+        :skeleton="false"
+        object-fit="contain"
+        :alt="t('chat.sticker')"
+        class-name="block size-full"
+        image-class-name="block size-full object-contain"
+        draggable="false"
+      />
+      <span :class="mediaMetaClass">
+        <time :datetime="message.created_at" :title="fullTime">{{ time }}</time>
+        <KunIcon v-if="own && statusIcon" :name="statusIcon" class="text-xs" :aria-label="t(`chatStatus.${status!}`)" />
+      </span>
+    </div>
 
     <!-- A single photo -->
     <div
@@ -391,9 +450,9 @@ const mediaMetaClass =
     </div>
 
     <!-- Cross-site context card -->
+    <div v-if="context" :class="sticker ? stickerCardClass : 'contents'">
     <component
       :is="context.href ? 'a' : 'div'"
-      v-if="context"
       :href="context.href ?? undefined"
       :target="context.href ? '_blank' : undefined"
       :rel="context.href ? 'noopener noreferrer' : undefined"
@@ -411,6 +470,7 @@ const mediaMetaClass =
       </span>
       <span class="truncate font-medium">{{ context.title }}</span>
     </component>
+    </div>
 
     <!-- Text, with the meta tucked into its last line -->
     <div v-if="hasText" class="relative px-3 pt-1.5 pb-1.5">
@@ -437,7 +497,7 @@ const mediaMetaClass =
     <!-- Reactions -->
     <div
       v-if="message.reactions.length"
-      :class="cn('flex flex-wrap items-center gap-1 px-2 pb-1.5', !hasText && 'pt-1.5')"
+      :class="cn('flex flex-wrap items-center gap-1', sticker ? 'max-w-[min(100%,18rem)]' : 'px-2 pb-1.5', !hasText && !sticker && 'pt-1.5')"
       role="group"
       :aria-label="t('chat.reactions')"
     >
@@ -453,7 +513,7 @@ const mediaMetaClass =
             'inline-flex h-7 items-center gap-1 rounded-full px-2 text-sm tabular-nums transition-colors',
             r.reacted
               ? 'bg-primary text-primary-foreground'
-              : own
+              : own && !sticker
                 ? 'bg-primary-200 text-primary-700 hover:bg-primary-300'
                 : 'bg-primary/10 text-primary-700 hover:bg-primary/20'
           )
@@ -473,7 +533,7 @@ const mediaMetaClass =
         </span>
         <span>{{ r.count }}</span>
       </button>
-      <span :class="cn('ml-auto inline-flex items-center gap-1 pl-1 text-[11px] [:where(&)_*]:text-inherit', metaClass)">
+      <span v-if="!sticker" :class="cn('ml-auto inline-flex items-center gap-1 pl-1 text-[11px] [:where(&)_*]:text-inherit', metaClass)">
         <span v-if="message.edited_at">{{ t('chat.edited') }}</span>
         <time :datetime="message.created_at" :title="fullTime">{{ time }}</time>
         <KunIcon v-if="own && statusIcon" :name="statusIcon" class="text-sm" />

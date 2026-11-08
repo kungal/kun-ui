@@ -344,6 +344,13 @@ abstract final class KunIcons {
     fontPackage: _package,
   );
 
+  /// lucide: sticker
+  static const IconData sticker = IconData(
+    0xE035,
+    fontFamily: _family,
+    fontPackage: _package,
+  );
+
   /// lucide: at-sign
   static const IconData atSign = IconData(
     0xE02F,

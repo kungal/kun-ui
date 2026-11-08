@@ -44,6 +44,7 @@ export interface KunMessages {
     edited: string
     deletedMessage: string
     photo: string
+    sticker: string
     album: string
     media: string
     draft: string

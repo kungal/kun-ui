@@ -49,9 +49,28 @@ export interface KunChatPhoto {
   url?: string | null
 }
 
-/** Media attached to a message. Only `photo` exists today; sticker and file
- *  arrive later, and every consumer switches on `type`. */
-export type KunChatMedia = KunChatPhoto
+/** A sticker (chat spec 1.2.0): drawn on its own, without a bubble, at a
+ *  small fixed size, never cropped. The server rejects text, a
+ *  `media_group_id`, a context card and edits on a sticker message. A legacy
+ *  sticker imported with text or in an album arrives typed `photo`. */
+export interface KunChatSticker {
+  type: 'sticker'
+  /** Image-service hash. KunUI never builds a URL from it. */
+  image_hash: string
+  /** The original image's size; `url` is a smaller variant, so only the
+   *  ratio is meaningful. */
+  width: number
+  height: number
+  thumbhash?: string | null
+  /** Where the image is served, as the server sends it: a 320 px variant. */
+  url?: string | null
+}
+
+/** Media attached to a message. File arrives later; every consumer switches
+ *  on `type`. */
+export type KunChatMedia = KunChatPhoto | KunChatSticker
+
+export type KunChatMediaType = KunChatMedia['type']
 
 /** The message a reply points at, embedded by the server so a reply renders
  *  without fetching its target. */
