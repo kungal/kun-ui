@@ -1,5 +1,13 @@
 # @kungal/ui-nuxt
 
+## 2.65.1
+
+### Patch Changes
+
+- Updated dependencies [6c83736]
+  - @kungal/ui-vue@2.65.1
+  - @kungal/ui-tokens@2.65.1
+
 ## 2.65.0
 
 ### Patch Changes
