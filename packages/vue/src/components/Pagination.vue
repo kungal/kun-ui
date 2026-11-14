@@ -290,6 +290,7 @@ onKeyStroke('ArrowRight', (e) => {
           :aria-label="t('pagination.prev')"
           :href="pageHref && currentPage > 1 ? pageHref(currentPage - 1) : undefined"
           :disabled="isLoading || currentPage <= 1"
+          focusable-when-disabled
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage <= 1 }"
           :aria-current="undefined"
           @click="handlePageClick($event, currentPage - 1)"
@@ -326,6 +327,7 @@ onKeyStroke('ArrowRight', (e) => {
                 :variant="currentPage === it.page && !showIndicator ? 'solid' : 'light'"
                 size="sm"
                 :disabled="isLoading"
+                focusable-when-disabled
                 :href="pageHref ? pageHref(it.page) : undefined"
                 :aria-label="t('pagination.page', { page: it.page })"
                 :aria-current="currentPage === it.page ? 'page' : undefined"
@@ -346,6 +348,7 @@ onKeyStroke('ArrowRight', (e) => {
           :aria-label="t('pagination.next')"
           :href="pageHref && currentPage < totalPage ? pageHref(currentPage + 1) : undefined"
           :disabled="isLoading || currentPage >= totalPage"
+          focusable-when-disabled
           :class="{ 'cursor-not-allowed opacity-50': isLoading || currentPage >= totalPage }"
           :aria-current="undefined"
           @click="handlePageClick($event, currentPage + 1)"
@@ -362,12 +365,16 @@ onKeyStroke('ArrowRight', (e) => {
 
     <div class="flex items-center gap-2">
       <label :for="kunUniqueId" class="text-sm">{{ t('pagination.jumpLabel') }}</label>
+      <!-- `readonly`, not `disabled`: Enter here starts the load that sets
+           `isLoading`, and a natively disabled field drops focus to <body> in
+           Firefox. -->
       <input
         :id="kunUniqueId"
         v-model="jumpToPage"
         type="number"
         enterkeyhint="go"
-        :disabled="isLoading"
+        :readonly="isLoading"
+        :aria-disabled="isLoading || undefined"
         min="1"
         :max="totalPage"
         :class="
@@ -381,7 +388,7 @@ onKeyStroke('ArrowRight', (e) => {
         "
         @keyup.enter="handleJumpToPage"
       />
-      <KunButton size="sm" :disabled="isLoading" @click="handleJumpToPage">
+      <KunButton size="sm" :disabled="isLoading" focusable-when-disabled @click="handleJumpToPage">
         {{ t('pagination.jump') }}
       </KunButton>
     </div>

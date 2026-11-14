@@ -87,6 +87,7 @@
 | `className` | `string` | `""` | Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. |
 | `color` | `KunUIColor` | `"primary"` | Semantic colour the variant is painted in. |
 | `disabled` | `boolean` | `false` | Blocks clicks and dims the button. In link mode the block is a JS guard, because `disabled` is a no-op on an `<a>` and the link would still navigate. |
+| `focusableWhenDisabled` | `boolean` | `false` | Keep the button focusable while it is `disabled` or `loading`: it is marked `aria-disabled="true"` instead of the native `disabled`, and clicks are still blocked. Use it on a control that disables itself in response to its own activation (a pagination button while the next page loads) — a natively disabled button drops keyboard focus to `<body>` in Firefox. |
 | `fullWidth` | `boolean` | `false` | Stretch to the container's full width. |
 | `href` | `string` | `""` | Render an `<a>` (NuxtLink under Nuxt) instead of a `<button>`, keeping the button's appearance. |
 | `icon` | `boolean` | `false` | Render the `#icon` slot beside the label. Without it that slot is not rendered at all. |

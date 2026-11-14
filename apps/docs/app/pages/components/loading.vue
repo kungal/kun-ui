@@ -18,6 +18,10 @@ import meta from '~/generated/component-meta.json'
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">遮罩覆盖</h2>
     <Demo title="Overlay.vue" :source="OverlaySrc"><Overlay /></Demo>
+    <p class="text-foreground-muted mt-3 text-sm">
+      遮罩里的图片和文字居中在被包裹的盒子里。盒子比视口还高时（一整页长列表），它改为贴在视口中部附近、
+      且不离开盒子，所以在列表底部触发加载也看得见。
+    </p>
 
     <h2 class="mt-8 mb-1 text-xl font-semibold">旋转图标与尺寸</h2>
     <Demo title="Spinner.vue" :source="SpinnerSrc"><Spinner /></Demo>

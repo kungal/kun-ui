@@ -621,6 +621,13 @@
         "description": "Blocks clicks and dims the button. In link mode the block is a JS guard, because `disabled` is a no-op on an `<a>` and the link would still navigate."
       },
       {
+        "name": "focusableWhenDisabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Keep the button focusable while it is `disabled` or `loading`: it is marked `aria-disabled=\"true\"` instead of the native `disabled`, and clicks are still blocked. Use it on a control that disables itself in response to its own activation (a pagination button while the next page loads) — a natively disabled button drops keyboard focus to `<body>` in Firefox."
+      },
+      {
         "name": "fullWidth",
         "type": "boolean",
         "required": false,

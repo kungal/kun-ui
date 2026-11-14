@@ -19,7 +19,7 @@ const editInPlayground = () => {
 </script>
 
 <template>
-  <div class="border-default-200 rounded-kun-lg my-5 overflow-hidden border">
+  <div class="border-default-200 rounded-kun-lg my-5 overflow-clip border">
     <!-- Live render — a soft panel (content1 @ 60% over the page) for the demo. -->
     <div class="bg-content1/60 flex flex-wrap items-center gap-3 p-6">
       <slot />

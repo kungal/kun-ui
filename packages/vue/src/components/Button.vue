@@ -34,6 +34,7 @@ const props = withDefaults(defineProps<KunButtonProps>(), {
   type: 'button',
   disabled: false,
   loading: false,
+  focusableWhenDisabled: false,
   fullWidth: false,
   isIconOnly: false,
   icon: false,
@@ -110,12 +111,15 @@ const rootBindings = computed<Record<string, unknown>>(() => {
       // `rel=""` on a real <a> — see resolveExternalRel.
       rel: isNativeAnchor ? rel || undefined : rel,
       role: 'link',
+      'aria-disabled': isInactive.value ? 'true' : undefined,
       'aria-label': computedAriaLabel.value,
     }
   }
+  const keepFocus = props.focusableWhenDisabled && isInactive.value
   return {
     type: props.type,
-    disabled: props.disabled || props.loading,
+    disabled: isInactive.value && !props.focusableWhenDisabled,
+    'aria-disabled': keepFocus ? 'true' : undefined,
     role: 'button',
     'aria-label': computedAriaLabel.value,
   }

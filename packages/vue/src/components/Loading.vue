@@ -61,11 +61,12 @@ const spinnerSize: Record<KunUISize, string> = {
         <div
           v-if="loading"
           class="bg-background/50 absolute inset-0 z-50 flex items-center justify-center rounded-kun-md"
+          :style="{ containerType: 'size', containerName: 'kun-loading' }"
           role="status"
           aria-live="polite"
           :aria-busy="loading"
         >
-          <div class="flex flex-col items-center gap-3">
+          <div class="kun-loading-indicator flex flex-col items-center gap-3">
             <KunIcon
               v-if="spinner"
               name="svg-spinners:90-ring-with-bg"
@@ -115,6 +116,20 @@ const spinnerSize: Record<KunUISize, string> = {
 </template>
 
 <style scoped>
+/* Centred in the box, a wrapped list taller than the viewport put the mascot
+   off screen: paged from the bottom of a 2904px list, it sat 582-795px above
+   the viewport. Over that height it sticks near the middle of the scrollport
+   (a sticky inset percentage resolves against the scrollport, measured in
+   Chrome 153 and Firefox 155) and stays inside the box. Gated on the
+   container's height so a shorter box keeps its box-centred indicator. */
+@container kun-loading (min-height: 100vh) {
+  .kun-loading-indicator {
+    position: sticky;
+    top: max(0px, calc(50% - 8rem));
+    bottom: max(0px, calc(50% - 8rem));
+  }
+}
+
 .info {
   color: var(--color-white);
   text-shadow:

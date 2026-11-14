@@ -41,6 +41,12 @@ export interface KunButtonProps {
   /** Prepends a spinner and blocks clicks. The label stays in place, so a row
    *  of buttons does not reflow mid-request. */
   loading?: boolean
+  /** Keep the button focusable while it is `disabled` or `loading`: it is
+   *  marked `aria-disabled="true"` instead of the native `disabled`, and clicks
+   *  are still blocked. Use it on a control that disables itself in response
+   *  to its own activation (a pagination button while the next page loads) —
+   *  a natively disabled button drops keyboard focus to `<body>` in Firefox. */
+  focusableWhenDisabled?: boolean
   /** Stretch to the container's full width. */
   fullWidth?: boolean
   /** Fixed square button, sized to the same-`size` text button's height so
