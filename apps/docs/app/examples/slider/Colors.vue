@@ -19,7 +19,7 @@ const colors: KunUIColor[] = [
   <div class="grid w-full max-w-md gap-5">
     <div v-for="c in colors" :key="c">
       <p class="text-default-600 mb-1 text-sm">{{ c }}</p>
-      <KunSlider v-model="v" :color="c" />
+      <KunSlider v-model="v" :color="c" :aria-label="c" />
     </div>
   </div>
 </template>

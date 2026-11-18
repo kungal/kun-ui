@@ -77,8 +77,9 @@ export interface KunButtonProps {
    * @default undefined
    */
   rel?: string
-  /** Accessible name. Falls back to the slot text, or to `"button"` for
-   *  `isIconOnly`; set it whenever the button carries no readable text. */
+  /** Accessible name, for a button with no readable text (`isIconOnly`).
+   *  Unset, no `aria-label` is rendered and the visible text is the name; a
+   *  button with neither warns in development. */
   ariaLabel?: string
 }
 
@@ -795,6 +796,14 @@ export interface KunTextareaProps {
   /** Visible label above the field, tied to it by `id` so a click focuses the
    *  textarea. */
   label?: string
+  /**
+   * Accessible name when there is no visible `label` (`aria-label` is the same
+   * prop). Every other attribute you pass — `aria-describedby`, `autocomplete`,
+   * `spellcheck`, `enterkeyhint`, `id`, `data-*`, listeners — lands on the
+   * `<textarea>`; only `class` and `style` stay on the wrapper, so
+   * `[&_textarea]:…` selectors and flex sizing keep working.
+   */
+  ariaLabel?: string
   /** Native form field name, for an uncontrolled `<form>` submit. */
   name?: string
   /** Helper text below the field.
@@ -1621,6 +1630,9 @@ export interface KunContentProps {
    * (KunUI does not sanitize; see docs/architecture.md).
    */
   content: string
+  /** Classes for the `.kun-prose` container. A utility here beats
+   *  `prose.css` (it lives in `@layer components`), so `max-w-none` lifts
+   *  the 40rem measure. */
   className?: string
   /**
    * Tighter density for comment / reply streams (adds `.kun-prose-compact`).

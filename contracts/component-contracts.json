@@ -610,7 +610,7 @@
           "type": "string",
           "required": false,
           "default": "\"\"",
-          "description": "Accessible name. Falls back to the slot text, or to `\"button\"` for `isIconOnly`; set it whenever the button carries no readable text."
+          "description": "Accessible name, for a button with no readable text (`isIconOnly`). Unset, no `aria-label` is rendered and the visible text is the name; a button with neither warns in development."
         },
         {
           "name": "color",
@@ -6021,6 +6021,13 @@
     "KunTextarea": {
       "status": "portable",
       "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "default": "\"\"",
+          "description": "Accessible name when there is no visible `label` (`aria-label` is the same prop). Every other attribute you pass — `aria-describedby`, `autocomplete`, `spellcheck`, `enterkeyhint`, `id`, `data-*`, listeners — lands on the `<textarea>`; only `class` and `style` stay on the wrapper, so `[&_textarea]:…` selectors and flex sizing keep working."
+        },
         {
           "name": "autofocus",
           "type": "boolean",

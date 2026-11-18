@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, onMounted, ref, type ComponentPublicInstance } from 'vue'
 import {
   cn,
   kunVariantClasses,
@@ -10,16 +10,16 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useRipple } from '../composables/useRipple'
-import { extractTextFromVNodes } from '../utils/extractTextFromVNodes'
 import { useKunUIConfig } from '../config/useKunUIConfig'
 import { resolveExternalRel } from '../utils/resolveExternalRel'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import KunIcon from './Icon.vue'
 import KunRipple from './Ripple.vue'
 import type { KunButtonProps } from './types'
 
 // Nuxt-decoupled Button. Every dependency that used to come from Nuxt
 // auto-imports is now explicit:
-//   - vue primitives (computed/useSlots) imported from 'vue'
+//   - vue primitives imported from 'vue'
 //   - cn / variant matrix / radius map from @kungal/ui-core
 //   - KunIcon / KunRipple imported as real components (not global refs)
 //   - the NuxtLink (`defineNuxtLink`) is replaced by config.linkComponent
@@ -50,21 +50,18 @@ const emits = defineEmits<{
   click: [event: MouseEvent]
 }>()
 
-const slots = useSlots()
 const config = useKunUIConfig()
 
-const computedAriaLabel = computed(() => {
-  if (props.ariaLabel) {
-    return props.ariaLabel
-  }
-  if (props.isIconOnly) {
-    return 'button'
-  }
-  if (slots.default) {
-    const slotText = extractTextFromVNodes(slots.default()).trim()
-    return slotText || ''
-  }
-  return ''
+// No aria-label unless one is passed: the visible text already names the
+// button. A label copied from the slot was cached by `computed`, which cannot
+// see a slot re-render — a row button whose list was refetched read
+// "解除封禁" on screen and "封禁" to a screen reader.
+const ariaLabel = computed(() => props.ariaLabel || undefined)
+
+const rootRef = ref<HTMLElement | ComponentPublicInstance | null>(null)
+onMounted(() => {
+  const el = rootRef.value
+  warnUnnamed('KunButton', el instanceof Element ? el : (el?.$el as Element | undefined))
 })
 
 const sizeClasses = computed(() => {
@@ -112,7 +109,7 @@ const rootBindings = computed<Record<string, unknown>>(() => {
       rel: isNativeAnchor ? rel || undefined : rel,
       role: 'link',
       'aria-disabled': isInactive.value ? 'true' : undefined,
-      'aria-label': computedAriaLabel.value,
+      'aria-label': ariaLabel.value,
     }
   }
   const keepFocus = props.focusableWhenDisabled && isInactive.value
@@ -121,7 +118,7 @@ const rootBindings = computed<Record<string, unknown>>(() => {
     disabled: isInactive.value && !props.focusableWhenDisabled,
     'aria-disabled': keepFocus ? 'true' : undefined,
     role: 'button',
-    'aria-label': computedAriaLabel.value,
+    'aria-label': ariaLabel.value,
   }
 })
 
@@ -141,6 +138,7 @@ const handleKunButtonClick = (event: MouseEvent) => {
 <template>
   <component
     :is="rootIs"
+    ref="rootRef"
     v-bind="rootBindings"
     :class="
       cn(

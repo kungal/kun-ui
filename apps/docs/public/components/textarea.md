@@ -90,6 +90,7 @@ const text = ref('')
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| `ariaLabel` | `string` | `""` | Accessible name when there is no visible `label` (`aria-label` is the same prop). Every other attribute you pass — `aria-describedby`, `autocomplete`, `spellcheck`, `enterkeyhint`, `id`, `data-*`, listeners — lands on the `<textarea>`; only `class` and `style` stay on the wrapper, so `[&_textarea]:…` selectors and flex sizing keep working. |
 | `autofocus` | `boolean` | `false` | Focus the field on mount. Focus is moved with `preventScroll`, so it never jogs the page: an autofocused input inside a popover is at the document origin until Floating UI has positioned it, and letting the browser scroll to it there threw the page to the top. |
 | `autoGrow` | `boolean` | `false` | Grow the field with its content up to `maxHeight`, instead of scrolling at a fixed `rows`. |
 | `color` | `KunUIColor` | `"default"` | Focus-ring accent (the resting border/text stay neutral). Default 'default'. |

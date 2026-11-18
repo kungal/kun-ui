@@ -5,7 +5,7 @@ const v = ref(40)
 
 <template>
   <div class="w-full max-w-md">
-    <KunSlider v-model="v" :min="0" :max="100" :step="1" />
+    <KunSlider v-model="v" aria-label="Value" :min="0" :max="100" :step="1" />
     <p class="text-default-600 mt-2 text-sm">Value: {{ v }}</p>
   </div>
 </template>

@@ -2,9 +2,10 @@
 import { computed } from 'vue'
 import { cn, type KunUISize } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
 import type { KunSwitchProps } from './types'
 
-defineOptions({ name: 'KunSwitch' })
+defineOptions({ name: 'KunSwitch', inheritAttrs: false })
 
 const props = withDefaults(defineProps<KunSwitchProps>(), {
   label: '',
@@ -19,6 +20,12 @@ const props = withDefaults(defineProps<KunSwitchProps>(), {
 
 const modelValue = defineModel<boolean>({ required: true })
 const kunUniqueId = useKunUniqueId('kun-switch')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 
 // Clean-step scale: thumb = track height − 4 (2px inset all round); the on-state
 // translate = trackWidth − thumb − 4, so every value lands on a real Tailwind
@@ -41,7 +48,7 @@ const size = computed(() => switchSizes[props.size])
 </script>
 
 <template>
-  <div>
+  <div v-bind="field.rootAttrs()">
   <label
     :class="
       cn(
@@ -73,7 +80,7 @@ const size = computed(() => switchSizes[props.size])
         :checked="modelValue"
         :disabled="disabled"
         :aria-label="label ? undefined : ariaLabel || undefined"
-        :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
+        v-bind="field.controlAttrs()"
         @change="(event) => (modelValue = (event.target as HTMLInputElement).checked)"
       />
 
@@ -121,12 +128,12 @@ const size = computed(() => switchSizes[props.size])
     </span>
   </label>
 
-    <p v-if="error" :id="`${kunUniqueId}-desc`" class="text-danger-text mt-1 text-sm">
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">
       {{ error }}
     </p>
     <p
       v-else-if="description"
-      :id="`${kunUniqueId}-desc`"
+      :id="messageId"
       class="text-foreground-muted mt-1 text-sm"
     >
       {{ description }}

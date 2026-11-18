@@ -83,7 +83,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `ariaLabel` | `string` | `""` | Accessible name. Falls back to the slot text, or to `"button"` for `isIconOnly`; set it whenever the button carries no readable text. |
+| `ariaLabel` | `string` | `""` | Accessible name, for a button with no readable text (`isIconOnly`). Unset, no `aria-label` is rendered and the visible text is the name; a button with neither warns in development. |
 | `className` | `string` | `""` | Extra classes, merged after the component's own classes so yours wins the conflict — KunUI's `rounded-kun-*` / `shadow-kun-*` scales included. |
 | `color` | `KunUIColor` | `"primary"` | Semantic colour the variant is painted in. |
 | `disabled` | `boolean` | `false` | Blocks clicks and dims the button. In link mode the block is a JS guard, because `disabled` is a no-op on an `<a>` and the link would still navigate. |

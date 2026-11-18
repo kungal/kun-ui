@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends KunSelectValue = KunSelectValue, O extends KunSelectOption<T> = KunSelectOption<T>">
-import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { onClickOutside, useEventListener } from '@vueuse/core'
 import { size } from '@floating-ui/vue'
 import {
@@ -13,6 +13,8 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import { isImeComposing, useImeComposition } from '../utils/imeComposition'
@@ -21,7 +23,7 @@ import KunLoading from './Loading.vue'
 import { useKunLocale } from '../locale/useKunLocale'
 import type { KunSelectOption, KunSelectProps, KunSelectValue } from './types'
 
-defineOptions({ name: 'KunSelect' })
+defineOptions({ name: 'KunSelect', inheritAttrs: false })
 
 const { t } = useKunLocale()
 
@@ -74,12 +76,19 @@ const emit = defineEmits<{
 }>()
 
 const kunUniqueId = useKunUniqueId('kun-select')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 const listId = computed(() => `${kunUniqueId.value}-listbox`)
 const isOpen = ref(false)
 const query = ref('')
 const activeIndex = ref(-1)
 const triggerRef = ref<HTMLElement | null>(null)
 const buttonRef = ref<HTMLElement | null>(null)
+onMounted(() => warnUnnamed('KunSelect', buttonRef.value))
 const dropdownRef = ref<HTMLElement | null>(null)
 useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
 const listRef = ref<HTMLElement | null>(null)
@@ -508,6 +517,7 @@ watch(filtered, () => {
 
 <template>
   <div
+    v-bind="field.rootAttrs()"
     :class="
       cn(
         'relative',
@@ -565,13 +575,14 @@ watch(filtered, () => {
         :id="kunUniqueId"
         role="combobox"
         :tabindex="disabled ? -1 : 0"
-        :aria-label="ariaLabel || (label ? undefined : 'select')"
+        :aria-label="ariaLabel || undefined"
         :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
         :aria-expanded="isOpen"
         aria-haspopup="listbox"
         :aria-controls="listId"
         :aria-activedescendant="isOpen ? activeId : undefined"
         :aria-disabled="disabled || undefined"
+        v-bind="field.controlAttrs()"
         class="flex min-w-0 flex-1 items-center outline-none"
         @keydown="onKeydown"
       >
@@ -785,8 +796,8 @@ watch(filtered, () => {
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="description" :id="messageId" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>

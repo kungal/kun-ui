@@ -14,7 +14,7 @@ const v = ref(40)
 
 <template>
   <div class="w-full max-w-md">
-    <KunSlider v-model="v" :min="0" :max="100" :step="1" />
+    <KunSlider v-model="v" aria-label="Value" :min="0" :max="100" :step="1" />
     <p class="text-default-600 mt-2 text-sm">Value: {{ v }}</p>
   </div>
 </template>
@@ -44,7 +44,7 @@ const colors: KunUIColor[] = [
   <div class="grid w-full max-w-md gap-5">
     <div v-for="c in colors" :key="c">
       <p class="text-default-600 mb-1 text-sm">{{ c }}</p>
-      <KunSlider v-model="v" :color="c" />
+      <KunSlider v-model="v" :color="c" :aria-label="c" />
     </div>
   </div>
 </template>
@@ -66,7 +66,7 @@ const sizes: KunUISize[] = ['xs', 'sm', 'md', 'lg', 'xl']
   <div class="grid w-full max-w-md gap-6">
     <div v-for="s in sizes" :key="s">
       <p class="text-default-600 mb-1 text-sm">{{ s }}</p>
-      <KunSlider v-model="v" :size="s" />
+      <KunSlider v-model="v" :size="s" :aria-label="s" />
     </div>
   </div>
 </template>
@@ -93,11 +93,11 @@ const labelledMarks: KunSliderMark[] = [
   <div class="grid w-full max-w-md gap-8">
     <div>
       <p class="text-default-600 mb-1 text-sm">number[] 刻度</p>
-      <KunSlider v-model="a" :marks="[0, 25, 50, 75, 100]" />
+      <KunSlider v-model="a" aria-label="number[] 刻度" :marks="[0, 25, 50, 75, 100]" />
     </div>
     <div>
       <p class="text-default-600 mb-1 text-sm">带标签的刻度</p>
-      <KunSlider v-model="b" :marks="labelledMarks" />
+      <KunSlider v-model="b" aria-label="带标签的刻度" :marks="labelledMarks" />
     </div>
   </div>
 </template>

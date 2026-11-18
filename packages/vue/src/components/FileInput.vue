@@ -5,6 +5,7 @@ import { useFilePicker } from '../composables/useFilePicker'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
+import { useKunUniqueId } from '../composables/useKunUniqueId'
 import type { KunFileInputProps } from './types'
 
 // Thin declarative wrapper over useFilePicker. Two named v-models:
@@ -47,6 +48,7 @@ const emit = defineEmits<{
 
 // `description` is the canonical helper name; `hint` is the deprecated alias.
 const helper = computed(() => props.description || props.hint)
+const messageId = useKunUniqueId('kun-file-input-desc')
 
 const { pickFiles, files: pickedFiles } = useFilePicker({
   accept: props.accept || undefined,
@@ -91,6 +93,7 @@ const handlePick = () => {
           :disabled="disabled"
           :full-width="fullWidth"
           type="button"
+          :aria-describedby="error || helper ? messageId : undefined"
           @click="handlePick"
         >
           <KunIcon v-if="triggerIcon" :name="triggerIcon" class="mr-1 size-4" />
@@ -104,7 +107,9 @@ const handlePick = () => {
         {{ displayName }}
       </span>
     </div>
-    <p v-if="helper && !error" class="text-foreground-muted text-xs">{{ helper }}</p>
-    <p v-if="error" class="text-danger-text text-xs">{{ error }}</p>
+    <p v-if="helper && !error" :id="messageId" class="text-foreground-muted text-xs">
+      {{ helper }}
+    </p>
+    <p v-if="error" :id="messageId" class="text-danger-text text-xs">{{ error }}</p>
   </div>
 </template>

@@ -11,6 +11,7 @@ import { useKunUniqueId } from '../composables/useKunUniqueId'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
 import { useImeComposition } from '../utils/imeComposition'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
 import type { KunInputProps } from './types'
 
 defineOptions({ name: 'KunInput', inheritAttrs: false })
@@ -83,6 +84,12 @@ const emits = defineEmits<{
 const input = ref<HTMLInputElement | null>(null)
 const isFocused = ref(false)
 const kunUniqueId = useKunUniqueId('kun-input')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'all',
+  messageId: () => (helper.value || props.error ? messageId : undefined),
+  invalid: () => invalid.value,
+})
 
 const sizeClasses = computed(() => {
   // Shared form-control scale, so a button + input in the same row line up.
@@ -153,7 +160,7 @@ defineExpose({
   <div class="w-full">
     <label
       v-if="label"
-      :for="kunUniqueId"
+      :for="field.controlId(kunUniqueId)"
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
@@ -164,14 +171,12 @@ defineExpose({
       <input
         :id="kunUniqueId"
         ref="input"
-        v-bind="$attrs"
+        v-bind="field.controlAttrs()"
         :value="composingText ?? modelValue"
         :type="resolvedType"
         :placeholder="placeholder"
         :disabled="disabled"
         :required="required"
-        :aria-invalid="invalid || undefined"
-        :aria-describedby="(helper || error) ? `${kunUniqueId}-desc` : undefined"
         :class="
           cn(
             'block w-full bg-content1 shadow-kun-sm border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
@@ -231,14 +236,14 @@ defineExpose({
 
     <p
       v-if="error"
-      :id="`${kunUniqueId}-desc`"
+      :id="messageId"
       class="text-danger-text mt-1 text-sm"
     >
       {{ error }}
     </p>
     <p
       v-else-if="helper"
-      :id="`${kunUniqueId}-desc`"
+      :id="messageId"
       class="text-foreground-muted mt-1 text-sm"
     >
       {{ helper }}

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends KunRadioValue = KunRadioValue">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import {
   cn,
   kunBgClasses,
@@ -13,6 +13,8 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import KunIcon from './Icon.vue'
 import type {
   KunRadioGroupProps,
@@ -20,7 +22,7 @@ import type {
   KunRadioValue,
 } from './types'
 
-defineOptions({ name: 'KunRadioGroup' })
+defineOptions({ name: 'KunRadioGroup', inheritAttrs: false })
 
 const props = withDefaults(defineProps<KunRadioGroupProps<T>>(), {
   variant: 'classic',
@@ -51,6 +53,14 @@ const cardRoundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const kunUniqueId = useKunUniqueId('kun-radio-group')
 const labelId = computed(() => `${kunUniqueId.value}-label`)
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error ? messageId : undefined),
+  invalid: () => !!props.error,
+})
+const groupRef = ref<HTMLElement | null>(null)
+onMounted(() => warnUnnamed('KunRadioGroup', groupRef.value))
 const itemRefs = ref<Array<HTMLElement | null>>([])
 
 const isOptionDisabled = (option: KunRadioOption<T>) =>
@@ -120,7 +130,7 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
 </script>
 
 <template>
-  <div :class="cn('w-full', className)">
+  <div v-bind="field.rootAttrs()" :class="cn('w-full', className)">
     <div
       v-if="label"
       :id="labelId"
@@ -130,10 +140,12 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
     </div>
 
     <div
+      ref="groupRef"
       role="radiogroup"
-      :aria-label="label ? undefined : ariaLabel || 'radio group'"
+      :aria-label="label ? undefined : ariaLabel || undefined"
       :aria-labelledby="label ? labelId : undefined"
       :aria-disabled="disabled || undefined"
+      v-bind="field.controlAttrs()"
       :class="
         cn(
           'flex',
@@ -282,6 +294,6 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
       </template>
     </div>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
   </div>
 </template>

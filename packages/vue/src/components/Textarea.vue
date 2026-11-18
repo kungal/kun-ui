@@ -8,9 +8,10 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
 import type { KunTextareaProps } from './types'
 
-defineOptions({ name: 'KunTextarea' })
+defineOptions({ name: 'KunTextarea', inheritAttrs: false })
 
 const props = withDefaults(defineProps<KunTextareaProps>(), {
   placeholder: '',
@@ -33,6 +34,7 @@ const props = withDefaults(defineProps<KunTextareaProps>(), {
   rounded: undefined,
   size: 'md',
   color: 'default',
+  ariaLabel: '',
 })
 
 const rounded = useResolvedRounded(() => props.rounded)
@@ -45,6 +47,12 @@ const helper = computed(() => props.description || props.hint)
 const modelValue = defineModel<string>({ default: '' })
 
 const kunUniqueId = useKunUniqueId('kun-textarea')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'control',
+  messageId: () => (props.error || helper.value ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 const emits = defineEmits<{
@@ -112,10 +120,10 @@ defineExpose({
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="w-full" v-bind="field.rootAttrs()">
     <label
       v-if="label"
-      :for="kunUniqueId"
+      :for="field.controlId(kunUniqueId)"
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
@@ -124,7 +132,7 @@ defineExpose({
 
     <div class="relative">
       <textarea
-        :id="kunUniqueId"
+        :id="field.controlId(kunUniqueId)"
         ref="textareaRef"
         v-model="modelValue"
         :name="name"
@@ -136,6 +144,8 @@ defineExpose({
         :minlength="minlength"
         :rows="rows"
         :autofocus="autofocus"
+        :aria-label="ariaLabel || undefined"
+        v-bind="field.controlAttrs()"
         :class="
           cn(
             'scrollbar-hide w-full bg-content1 shadow-kun-sm border transition-[color,box-shadow] duration-kun-fast ease-kun-standard',
@@ -168,7 +178,9 @@ defineExpose({
       </div>
     </div>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="helper" class="text-foreground-muted mt-1 text-sm">{{ helper }}</p>
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="helper" :id="messageId" class="text-foreground-muted mt-1 text-sm">
+      {{ helper }}
+    </p>
   </div>
 </template>

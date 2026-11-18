@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import {
   cn,
   kunChipSizeClasses,
@@ -10,11 +10,13 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
 import type { KunTagInputInvalidReason, KunTagInputProps } from './types'
 
-defineOptions({ name: 'KunTagInput' })
+defineOptions({ name: 'KunTagInput', inheritAttrs: false })
 
 const { t } = useKunLocale()
 
@@ -70,6 +72,11 @@ const emit = defineEmits<{
 }>()
 
 const inputEl = ref<HTMLInputElement | null>(null)
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error || helper.value ? `${kunUniqueId.value}-msg` : undefined),
+})
+onMounted(() => warnUnnamed('KunTagInput', inputEl.value))
 const chipRefs = ref<HTMLElement[]>([])
 const inputValue = ref('')
 const isComposing = ref(false)
@@ -342,7 +349,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
 </script>
 
 <template>
-  <div :class="cn('w-full', props.classNames?.root)">
+  <div v-bind="field.rootAttrs()" :class="cn('w-full', props.classNames?.root)">
     <label
       v-if="label"
       :for="kunUniqueId"
@@ -353,7 +360,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
 
     <div
       role="group"
-      :aria-label="label || 'tag input'"
+      :aria-label="label || undefined"
       :aria-invalid="!!error"
       :aria-disabled="disabled"
       :class="containerClasses"
@@ -394,7 +401,7 @@ const isAtMax = computed(() => tags.value.length >= props.maxTags)
         :placeholder="tags.length === 0 ? placeholder : ''"
         :disabled="disabled"
         :readonly="isAtMax"
-        :aria-describedby="error || helper ? `${kunUniqueId}-msg` : undefined"
+        v-bind="field.controlAttrs()"
         :class="
           cn(
             'placeholder-default-400 min-w-[80px] flex-1 bg-transparent outline-none disabled:cursor-not-allowed read-only:cursor-not-allowed',

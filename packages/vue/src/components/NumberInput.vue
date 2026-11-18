@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import {
   cn,
   kunRoundedClasses,
@@ -8,6 +8,8 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import KunIcon from './Icon.vue'
 import { useKunLocale } from '../locale/useKunLocale'
 import type { KunNumberInputProps } from './types'
@@ -53,6 +55,12 @@ const emit = defineEmits<{
 const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const kunUniqueId = useKunUniqueId('kun-number')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'all',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => invalid.value,
+})
 
 const invalid = computed(() => !!props.error || props.isInvalid)
 
@@ -69,6 +77,7 @@ const sizeMap: Record<KunUISize, { text: string; py: string; btn: string }> = {
 const sz = computed(() => sizeMap[props.size])
 
 const inputRef = ref<HTMLInputElement | null>(null)
+onMounted(() => warnUnnamed('KunNumberInput', inputRef.value))
 const focused = ref(false)
 const display = ref('')
 
@@ -187,7 +196,7 @@ defineExpose({
   <div class="w-full">
     <label
       v-if="label"
-      :for="kunUniqueId"
+      :for="field.controlId(kunUniqueId)"
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
@@ -227,16 +236,15 @@ defineExpose({
       <input
         :id="kunUniqueId"
         ref="inputRef"
-        v-bind="$attrs"
+        v-bind="field.controlAttrs()"
         :value="display"
         type="text"
         inputmode="decimal"
         role="spinbutton"
-        :aria-label="ariaLabel || (label ? undefined : 'number input')"
+        :aria-label="ariaLabel || undefined"
         :aria-valuenow="modelValue ?? undefined"
         :aria-valuemin="Number.isFinite(min) ? min : undefined"
         :aria-valuemax="Number.isFinite(max) ? max : undefined"
-        :aria-invalid="invalid || undefined"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
@@ -274,8 +282,8 @@ defineExpose({
 
     <input v-if="name" type="hidden" :name="name" :value="modelValue ?? ''" />
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="description" :id="messageId" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>

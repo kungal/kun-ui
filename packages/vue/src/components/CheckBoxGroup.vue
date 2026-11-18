@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends KunCheckBoxGroupValue = KunCheckBoxGroupValue">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   cn,
   kunBorderClasses,
@@ -14,6 +14,8 @@ import {
 } from '@kungal/ui-core'
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import KunIcon from './Icon.vue'
 import type {
   KunCheckBoxGroupInvalidReason,
@@ -22,7 +24,7 @@ import type {
   KunCheckBoxGroupValue,
 } from './types'
 
-defineOptions({ name: 'KunCheckBoxGroup' })
+defineOptions({ name: 'KunCheckBoxGroup', inheritAttrs: false })
 
 const props = withDefaults(defineProps<KunCheckBoxGroupProps<T>>(), {
   variant: 'classic',
@@ -60,6 +62,13 @@ const cardRoundedClass = computed(() => kunRoundedClasses[rounded.value])
 
 const kunUniqueId = useKunUniqueId('kun-checkbox-group')
 const labelId = computed(() => `${kunUniqueId.value}-label`)
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error ? messageId : undefined),
+})
+const groupRef = ref<HTMLElement | null>(null)
+onMounted(() => warnUnnamed('KunCheckBoxGroup', groupRef.value))
 
 // Selection scale shared with KunCheckBox/KunRadioGroup so equal `size` props
 // render identically across the three.
@@ -113,7 +122,7 @@ const onKeydown = (event: KeyboardEvent, option: KunCheckBoxGroupOption<T>) => {
 </script>
 
 <template>
-  <div :class="cn('w-full', className)">
+  <div v-bind="field.rootAttrs()" :class="cn('w-full', className)">
     <div
       v-if="label"
       :id="labelId"
@@ -123,10 +132,12 @@ const onKeydown = (event: KeyboardEvent, option: KunCheckBoxGroupOption<T>) => {
     </div>
 
     <div
+      ref="groupRef"
       role="group"
-      :aria-label="label ? undefined : ariaLabel || 'checkbox group'"
+      :aria-label="label ? undefined : ariaLabel || undefined"
       :aria-labelledby="label ? labelId : undefined"
       :aria-disabled="disabled || undefined"
+      v-bind="field.controlAttrs()"
       :class="
         cn(
           'flex',
@@ -280,6 +291,6 @@ const onKeydown = (event: KeyboardEvent, option: KunCheckBoxGroupOption<T>) => {
       </template>
     </div>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
   </div>
 </template>

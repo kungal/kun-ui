@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends KunAutocompleteOption = KunAutocompleteOption">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { onClickOutside, useEventListener } from '@vueuse/core'
 import { size as floatingSize } from '@floating-ui/vue'
 import {
@@ -12,6 +12,8 @@ import {
 import { useResolvedRounded } from '../composables/useResolvedRounded'
 import { useKunFloating } from '../composables/useKunFloating'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import { scrollItemIntoView } from '../utils/scrollItemIntoView'
 import { isImeComposing, useImeComposition } from '../utils/imeComposition'
@@ -67,6 +69,12 @@ const rounded = useResolvedRounded(() => props.rounded)
 const roundedClass = computed(() => kunRoundedClasses[rounded.value])
 const panelRoundedClass = computed(() => kunPanelRoundedClass(rounded.value))
 const kunUniqueId = useKunUniqueId('kun-autocomplete')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'all',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => invalid.value,
+})
 const listId = computed(() => `${kunUniqueId.value}-listbox`)
 
 const invalid = computed(() => !!props.error || props.isInvalid)
@@ -76,6 +84,7 @@ const activeIndex = ref(-1)
 // `dirty` = the user typed since the last selection/open, so we should filter.
 const dirty = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
+onMounted(() => warnUnnamed('KunAutocomplete', inputRef.value))
 const triggerRef = ref<HTMLElement | null>(null)
 const dropdownRef = ref<HTMLElement | null>(null)
 useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
@@ -320,7 +329,7 @@ defineExpose({
   <div :class="cn('relative w-full')">
     <label
       v-if="label"
-      :for="kunUniqueId"
+      :for="field.controlId(kunUniqueId)"
       class="text-default-700 mb-1 block text-sm font-medium"
     >
       {{ label }}
@@ -331,7 +340,7 @@ defineExpose({
         :id="kunUniqueId"
         ref="inputRef"
         enterkeyhint="done"
-        v-bind="$attrs"
+        v-bind="field.controlAttrs()"
         :value="composingText ?? modelValue"
         type="text"
         role="combobox"
@@ -339,8 +348,7 @@ defineExpose({
         :aria-controls="listId"
         :aria-expanded="isOpen"
         :aria-activedescendant="isOpen ? activeId : undefined"
-        :aria-label="ariaLabel || (label ? undefined : 'autocomplete')"
-        :aria-invalid="invalid || undefined"
+        :aria-label="ariaLabel || undefined"
         :placeholder="placeholder"
         :disabled="disabled"
         autocomplete="off"
@@ -463,8 +471,8 @@ defineExpose({
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="description" :id="messageId" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>

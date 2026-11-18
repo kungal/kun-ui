@@ -597,7 +597,7 @@
         "type": "string",
         "required": false,
         "default": "\"\"",
-        "description": "Accessible name. Falls back to the slot text, or to `\"button\"` for `isIconOnly`; set it whenever the button carries no readable text."
+        "description": "Accessible name, for a button with no readable text (`isIconOnly`). Unset, no `aria-label` is rendered and the visible text is the name; a button with neither warns in development."
       },
       {
         "name": "className",
@@ -2574,7 +2574,8 @@
         "name": "className",
         "type": "string",
         "required": false,
-        "default": "\"\""
+        "default": "\"\"",
+        "description": "Classes for the `.kun-prose` container. A utility here beats `prose.css` (it lives in `@layer components`), so `max-w-none` lifts the 40rem measure."
       },
       {
         "name": "compact",
@@ -6308,6 +6309,13 @@
   },
   "KunTextarea": {
     "props": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Accessible name when there is no visible `label` (`aria-label` is the same prop). Every other attribute you pass — `aria-describedby`, `autocomplete`, `spellcheck`, `enterkeyhint`, `id`, `data-*`, listeners — lands on the `<textarea>`; only `class` and `style` stay on the wrapper, so `[&_textarea]:…` selectors and flex sizing keep working."
+      },
       {
         "name": "autofocus",
         "type": "boolean",

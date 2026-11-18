@@ -18,6 +18,7 @@ import {
   KUN_CALENDAR_VALUE_FORMATS,
 } from '../composables/useCalendar'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
 import { useKunFloatingLayer } from '../composables/useKunFloatingLayer'
 import KunButton from './Button.vue'
 import KunIcon from './Icon.vue'
@@ -27,7 +28,7 @@ import type { KunMessagePath } from '../locale/types'
 
 // Nuxt-decoupled date picker (single + range), @floating-ui positioned,
 // date-fns powered. All icons bundled; no Nuxt coupling.
-defineOptions({ name: 'KunDatePicker' })
+defineOptions({ name: 'KunDatePicker', inheritAttrs: false })
 
 const { t, locale: kunLocale } = useKunLocale()
 
@@ -89,6 +90,12 @@ useKunFloatingLayer(dropdownRef, { trigger: triggerRef })
 const hoveredDate = ref<Date | null>(null)
 
 const kunUniqueId = useKunUniqueId('kun-datepicker')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 const panelId = computed(() => `${kunUniqueId.value}-panel`)
 // The trigger's `aria-controls` names the GRID, not the panel around it. ARIA
 // 1.2 lets a combobox keep DOM focus and point `aria-activedescendant` into its
@@ -487,6 +494,7 @@ const isInPreviewRange = (date: Date) => {
 <template>
   <div
     ref="datePickerRef"
+    v-bind="field.rootAttrs()"
     :class="
       cn(
         'relative',
@@ -522,6 +530,7 @@ const isInPreviewRange = (date: Date) => {
         :aria-label="label ? undefined : resolvedPlaceholder"
         :aria-disabled="disabled || undefined"
         :aria-activedescendant="isOpen ? cellId(activeKey) : undefined"
+        v-bind="field.controlAttrs()"
         :class="
           cn(
             'flex cursor-pointer items-center justify-between gap-2 text-left transition-[color,box-shadow]',
@@ -811,6 +820,6 @@ const isInPreviewRange = (date: Date) => {
       </Transition>
     </Teleport>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
   </div>
 </template>

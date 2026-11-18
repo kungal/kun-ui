@@ -9,10 +9,11 @@ import {
 } from '@kungal/ui-core'
 import { computed, ref, watchEffect } from 'vue'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
 import KunIcon from './Icon.vue'
 import type { KunCheckBoxProps } from './types'
 
-defineOptions({ name: 'KunCheckBox' })
+defineOptions({ name: 'KunCheckBox', inheritAttrs: false })
 
 const props = withDefaults(defineProps<KunCheckBoxProps>(), {
   color: 'default',
@@ -48,6 +49,12 @@ const emit = defineEmits<{
 }>()
 
 const kunUniqueId = useKunUniqueId('kun-checkbox')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 
 // `indeterminate` is a DOM property, not an attribute — it can't be bound in
 // the template, so mirror the prop onto the element directly.
@@ -92,7 +99,7 @@ const markFg = computed(() => kunSolidFgClasses[props.color])
 </script>
 
 <template>
-  <div>
+  <div v-bind="field.rootAttrs()">
     <div :class="cn('flex cursor-pointer items-center', size.gap, className)">
       <div class="relative flex items-center">
         <input
@@ -103,7 +110,7 @@ const markFg = computed(() => kunSolidFgClasses[props.color])
           :value="value"
           :checked="modelValue"
           :disabled="disabled"
-          :aria-describedby="error || description ? `${kunUniqueId}-desc` : undefined"
+          v-bind="field.controlAttrs()"
           :class="
             cn(
               'peer cursor-pointer appearance-none border-2 text-white transition-all disabled:cursor-not-allowed disabled:opacity-50',
@@ -158,14 +165,14 @@ const markFg = computed(() => kunSolidFgClasses[props.color])
 
     <p
       v-if="error"
-      :id="`${kunUniqueId}-desc`"
+      :id="messageId"
       class="text-danger-text mt-1 text-sm"
     >
       {{ error }}
     </p>
     <p
       v-else-if="description"
-      :id="`${kunUniqueId}-desc`"
+      :id="messageId"
       class="text-foreground-muted mt-1 text-sm"
     >
       {{ description }}

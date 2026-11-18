@@ -11,7 +11,7 @@ const sizes: KunUISize[] = ['xs', 'sm', 'md', 'lg', 'xl']
   <div class="grid w-full max-w-md gap-6">
     <div v-for="s in sizes" :key="s">
       <p class="text-default-600 mb-1 text-sm">{{ s }}</p>
-      <KunSlider v-model="v" :size="s" />
+      <KunSlider v-model="v" :size="s" :aria-label="s" />
     </div>
   </div>
 </template>

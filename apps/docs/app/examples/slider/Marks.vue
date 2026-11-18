@@ -16,11 +16,11 @@ const labelledMarks: KunSliderMark[] = [
   <div class="grid w-full max-w-md gap-8">
     <div>
       <p class="text-default-600 mb-1 text-sm">number[] 刻度</p>
-      <KunSlider v-model="a" :marks="[0, 25, 50, 75, 100]" />
+      <KunSlider v-model="a" aria-label="number[] 刻度" :marks="[0, 25, 50, 75, 100]" />
     </div>
     <div>
       <p class="text-default-600 mb-1 text-sm">带标签的刻度</p>
-      <KunSlider v-model="b" :marks="labelledMarks" />
+      <KunSlider v-model="b" aria-label="带标签的刻度" :marks="labelledMarks" />
     </div>
   </div>
 </template>

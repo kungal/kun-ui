@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { cn, type KunUIColor, type KunUISize } from '@kungal/ui-core'
 import { useKunUniqueId } from '../composables/useKunUniqueId'
+import { useKunFieldAttrs } from '../utils/fieldAttrs'
+import { warnUnnamed } from '../utils/warnUnnamed'
 import type { KunSliderMark, KunSliderProps } from './types'
 
-defineOptions({ name: 'KunSlider' })
+defineOptions({ name: 'KunSlider', inheritAttrs: false })
 
 const value = defineModel<number>({ required: true })
 const props = withDefaults(defineProps<KunSliderProps>(), {
@@ -27,6 +29,12 @@ const emit = defineEmits<{
 }>()
 
 const kunUniqueId = useKunUniqueId('kun-slider')
+const messageId = `${kunUniqueId.value}-desc`
+const field = useKunFieldAttrs({
+  forward: 'aria',
+  messageId: () => (props.error || props.description ? messageId : undefined),
+  invalid: () => !!props.error,
+})
 
 // Track thickness + thumb scale on clean Tailwind steps; `md` is the original
 // slider size. The thumb auto-centers (translate(-50%,-50%)), so only the
@@ -55,6 +63,7 @@ const colorClasses: Record<KunUIColor, { fill: string; thumb: string; halo: stri
 const tone = computed(() => colorClasses[props.error ? 'danger' : props.color])
 
 const sliderRef = ref<HTMLElement | null>(null)
+onMounted(() => warnUnnamed('KunSlider', sliderRef.value?.querySelector('[role="slider"]')))
 const dragging = ref(false)
 const interacting = ref(false)
 
@@ -175,7 +184,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="cn('w-full', disabled && 'opacity-50')">
+  <div v-bind="field.rootAttrs()" :class="cn('w-full', disabled && 'opacity-50')">
     <div
       v-if="label || showValue"
       class="mb-1.5 flex items-center justify-between gap-2"
@@ -253,7 +262,7 @@ onUnmounted(() => {
             ]"
             role="slider"
             :tabindex="disabled ? -1 : 0"
-            :aria-label="ariaLabel || (label ? undefined : 'slider')"
+            :aria-label="ariaLabel || undefined"
             :aria-labelledby="label ? `${kunUniqueId}-label` : undefined"
             :aria-valuenow="value"
             :aria-valuemin="min"
@@ -261,6 +270,7 @@ onUnmounted(() => {
             :aria-valuetext="formatValue ? display : undefined"
             :aria-disabled="disabled || undefined"
             aria-orientation="horizontal"
+            v-bind="field.controlAttrs()"
             @mousedown.passive="startDrag"
             @touchstart.passive.stop="startDrag"
             @keydown="onKeydown"
@@ -284,8 +294,8 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <p v-if="error" class="text-danger-text mt-1 text-sm">{{ error }}</p>
-    <p v-else-if="description" class="text-foreground-muted mt-1 text-sm">
+    <p v-if="error" :id="messageId" class="text-danger-text mt-1 text-sm">{{ error }}</p>
+    <p v-else-if="description" :id="messageId" class="text-foreground-muted mt-1 text-sm">
       {{ description }}
     </p>
   </div>
