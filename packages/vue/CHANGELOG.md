@@ -1,5 +1,23 @@
 # @kungal/ui-vue
 
+## 2.66.0
+
+### Minor Changes
+
+- b56608c: Form fields now pass their ARIA attributes to the control that has the role, and link their error and description text to it. KunButton no longer copies its text into `aria-label`, and `prose.css` can be overridden with utilities. All numbers below are from Chromium's accessibility tree.
+
+  - **KunTextarea** passes your attributes to the `<textarea>`. Before this change, `aria-label`, `aria-describedby`, `autocomplete`, `spellcheck`, `enterkeyhint`, `id`, `data-*` and listeners all landed on the wrapper `<div>`, so a textarea without a visible label had no accessible name. Every `aria-label="…"` you had written on one did nothing. Now only `class` and `style` stay on the wrapper, so `class="[&_textarea]:border-0"` and `class="flex-1"` keep working. Everything else goes to the textarea. Listeners now fire on the textarea: bubbling events behave as before, but `event.currentTarget` is the `<textarea>` rather than the `<div>`. A passed `id` becomes the textarea's id, and the `label` follows it. The new `ariaLabel` prop (the same prop as `aria-label`) names a textarea that has no `label`. When `error` is set the textarea is `aria-invalid="true"`, and the error or `description` is linked by `aria-describedby`. Before, it was announced as valid and the message was never read.
+  - **Error and description text is linked on every field.** It was announced on KunInput, KunCheckBox, KunSwitch and KunTagInput only. KunNumberInput, KunAutocomplete, KunSelect, KunSlider, KunDatePicker, KunRadioGroup, KunCheckBoxGroup and KunFileInput now link it with `aria-describedby`. KunCheckBox, KunSwitch, KunSelect, KunSlider, KunDatePicker and KunRadioGroup now also set `aria-invalid` when `error` is set. KunCheckBoxGroup is the exception: its `role="group"` does not take `aria-invalid` in ARIA 1.3.
+  - **`aria-*` attributes reach the control.** On KunCheckBox, KunSwitch, KunSelect, KunTagInput, KunSlider, KunDatePicker, KunRadioGroup and KunCheckBoxGroup, an `aria-describedby` or `aria-labelledby` you passed landed on a generic wrapper `<div>`, where it names and describes nothing. It now lands on the input, combobox, slider or group. Every other attribute, `class` and `style` included, stays where it was.
+  - **Your `aria-describedby` is merged with the field's own instead of replacing it**, the way React Aria's `useField` joins them. KunInput, KunNumberInput and KunAutocomplete were dropping yours whenever they showed a message. Passing `id` to one of them no longer disconnects its `label`: KunInput with `id` and `label="Email"` computed an empty name, because the label still pointed at the internal id.
+  - **No more English placeholder names.** Unnamed controls used to fall back to `aria-label`s that repeated the role: KunButton `isIconOnly` → "button", KunSelect → "select", KunSlider → "slider", KunRadioGroup → "radio group", KunCheckBoxGroup → "checkbox group", KunNumberInput → "number input", KunAutocomplete → "autocomplete", KunTagInput → "tag input". These added nothing to what a screen reader already says, and they kept axe and Lighthouse from reporting the missing name. On KunButton they also overrode a real name: an icon-only button with sr-only "Close" text computed as "button". Those names are gone. Each of these components now warns in development when it renders with no accessible name; the warning is the same idea as React Aria's `useLabel` warning. Give it a `label`, or `aria-label` / `aria-labelledby`.
+  - **KunButton** renders `aria-label` only when you pass `ariaLabel`, and otherwise the visible text is the name. The old label was copied from the slot inside a `computed`, which cannot see the slot re-render. A row button in a refetched list showed "解除封禁" on screen while a screen reader still read "封禁".
+  - **`@kungal/ui-vue/prose.css` is in `@layer components`**, which is where Tailwind's docs put component classes that utilities should be able to override. `class-name="max-w-none"` on KunContent now lifts the 40rem measure. Before, it measured 640px, because unlayered CSS beats every layer, utilities included. The file also declares `@layer theme, base, components, utilities;`, the same order as Tailwind's, so importing it before Tailwind still places it above preflight. Computed styles of a full sample document are unchanged, with the file imported both after and before Tailwind (33 of 33 elements identical). One side effect: your own unlayered CSS now wins over a `.kun-prose` rule regardless of specificity. Overrides written for the old file still win.
+
+### Patch Changes
+
+- @kungal/ui-core@2.66.0
+
 ## 2.65.1
 
 ### Patch Changes
